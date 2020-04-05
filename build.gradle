@@ -10,6 +10,7 @@ repositories {
 processResources {
     from ('src/main/java') {
         include '**/*.fxml'
+        include '**/*.css'
     }
 }
 
