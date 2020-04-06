@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Main class of the application
@@ -24,6 +25,7 @@ public class Main extends Application {
     @Override
     public void init() throws Exception {
         addSystemProperties();
+
     }
 
     @Override

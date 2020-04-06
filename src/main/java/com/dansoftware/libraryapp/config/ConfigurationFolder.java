@@ -10,6 +10,7 @@ import java.io.File;
  * <code>{@link ConfigurationFolderFactory}</code> class.
  * @author Daniel Gyorffy
  */
+@Deprecated
 public abstract class ConfigurationFolder {
 
     private static final String LOG_FILE = "messages.log";
@@ -46,19 +47,43 @@ public abstract class ConfigurationFolder {
         return createAndGetFile(new File(createAndGetFile(getRootConfigDirectory(), true), PLUGIN_FOLDER), true);
     }
 
+    protected void createNewConfigurationFile() {
+        makeOldFileOf(getConfigurationFile());
+    }
+
+    /**
+     * This method renames the given file
+     * @param file
+     */
+    private void makeOldFileOf(File file) {
+
+        File directoryOfFile = file.getParentFile();
+        String nameOfFile = file.getName();
+
+        File temp;
+        do {
+            int random = (int) (Math.random() * Math.pow(10, 5));
+            temp = new File(directoryOfFile, String.format("%s_%s%d", nameOfFile, "old",  random));
+        } while (temp.exists());
+
+        if (!file.renameTo(temp)) {
+            throw new UnableToCreateFileException(String.format("%s: %s %s %s", "The file called", file, "cannot be renamed to", temp));
+        }
+    }
+
     private File createAndGetFile(File file, boolean directory) {
         if (!file.exists()) {
             if (directory) {
                 if (!file.mkdir()) {
-                    throw new CannotCreateConfigurationFileException("Directory cannot be created: " + file.getAbsolutePath());
+                    throw new UnableToCreateFileException("Directory cannot be created: " + file.getAbsolutePath());
                 }
             } else {
                 try {
                     if (!file.createNewFile()) {
-                        throw new CannotCreateConfigurationFileException("File cannot be created: " + file.getAbsolutePath());
+                        throw new UnableToCreateFileException("File cannot be created: " + file.getAbsolutePath());
                     }
                 } catch (Exception ex) {
-                    throw new CannotCreateConfigurationFileException(ex);
+                    throw new UnableToCreateFileException(ex);
                 }
             }
         }
@@ -66,12 +91,12 @@ public abstract class ConfigurationFolder {
         return file;
     }
 
-    static final class CannotCreateConfigurationFileException extends RuntimeException {
-        public CannotCreateConfigurationFileException(String message) {
+    static final class UnableToCreateFileException extends RuntimeException {
+        public UnableToCreateFileException(String message) {
             super(message);
         }
 
-        public CannotCreateConfigurationFileException(Throwable cause) {
+        public UnableToCreateFileException(Throwable cause) {
             super(cause);
         }
     }

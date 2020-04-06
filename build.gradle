@@ -7,6 +7,17 @@ repositories {
     mavenCentral()
 }
 
+
+compileJava {
+    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
+    options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
+}
+
+compileTestJava {
+    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
+    options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
+}
+
 processResources {
     from ('src/main/java') {
         include '**/*.fxml'
@@ -28,5 +39,8 @@ jar {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
 	compile fileTree(dir: 'external-libraries', include: '*.jar')
 }
