@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * This class represents the Configuration folder of the application
@@ -14,6 +15,8 @@ import java.util.Properties;
  * @author Daniel Gyorffy
  */
 public abstract class ApplicationDataFolder {
+
+    private static final Logger logger = Logger.getLogger(ApplicationDataFolder.class.getName());
 
     /**
      * This properties object contains the names of application data folder elements
@@ -27,17 +30,31 @@ public abstract class ApplicationDataFolder {
     static {
         applicationDataFolderElementProperties = new Properties();
 
-        try (InputStream inputStream = ApplicationDataFolder.class.getResourceAsStream("appdatafoldersettings.properties")) {
+        String resource = "appdatafoldersettings.properties";
+
+        try (InputStream inputStream = ApplicationDataFolder.class.getResourceAsStream(resource)) {
             applicationDataFolderElementProperties.load(inputStream);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            putDefaultApplicationDataFolderElementProperties();
+            logger.warning("Couldn't read resource: " + resource);
         }
     }
 
     /**
+     * This method puts the default values to <code>applicationDataFolderElementProperties</code>
+     * This method should be called if the resource file called 'appdatafoldersettings.properties'
+     * cannot be readed for some reason.
+     */
+    private static void putDefaultApplicationDataFolderElementProperties() {
+        applicationDataFolderElementProperties.put("CONFIG_FILE", "settings.configuration");
+        applicationDataFolderElementProperties.put("DB_FILE", "d0f0u0l0.lbadb");
+        applicationDataFolderElementProperties.put("PLUGIN_FOLDER", "plugins");
+    }
+
+    /**
      * This enum represents the folders/files in the application data folder of this program
-     * It reads the concrete names of the elements from the static properties object called
-     * 'applicationDataFolderElementProperties' from this class
+     * It reads the concrete names of the elements from the static properties object:
+     * <code>{@link ApplicationDataFolder#applicationDataFolderElementProperties}</code>
      */
     private enum ApplicationDataFolderElement {
 
@@ -54,13 +71,7 @@ public abstract class ApplicationDataFolder {
         /**
          * Represents the folder of plugins
          */
-        PLUGIN_FOLDER(Boolean.TRUE),
-
-        /**
-         * Represents the folder of log files
-         */
-        LOGS_DIRECTORY(Boolean.TRUE);
-
+        PLUGIN_FOLDER(Boolean.TRUE);
 
         /**
          * Defines the concrete file name
@@ -95,13 +106,6 @@ public abstract class ApplicationDataFolder {
      * @return the object representation of the directory
      */
     protected abstract File getRootConfigDirectory();
-
-    /**
-     * @return the object representation of the directory that contains logs
-     */
-    public final File getLogDirectory() {
-        return getFileOf(ApplicationDataFolderElement.LOGS_DIRECTORY);
-    }
 
     /**
      * @return the object representation of the directory that contains logs
@@ -203,6 +207,9 @@ public abstract class ApplicationDataFolder {
     }
 
 
+    /**
+     * Exception class for cases when this class can't create/modify files
+     */
     static final class UnableToCreateFileException extends RuntimeException {
         public UnableToCreateFileException(String message) {
             super(message);

@@ -5,8 +5,7 @@ import com.sun.javafx.PlatformUtil;
 import java.io.File;
 
 /**
- * With this factory class can be used for creating instances of the <code>{@link ApplicationDataFolder}</code> class
- * dependent on what OS that the application runs on.
+ * Factory class for creating object of <code>{@link ApplicationDataFolder}</code>
  *
  * @author Daniel Gyorffy
  */
@@ -35,7 +34,13 @@ public final class ApplicationDataFolderFactory {
         }
     }
 
-    public static ApplicationDataFolder getConfigurationFolder() {
+    /**
+     * This method creates am instance of <code>{@link ApplicationDataFolder}</code>
+     * dependent on what OS that the application runs on.
+     *
+     * @return an <code>{@link ApplicationDataFolder}</code> instance
+     */
+    public static ApplicationDataFolder getApplicationDataFolder() {
         if (instance == null) {
             if (PlatformUtil.isWindows())
                 instance = new WindowsApplicationDataFolder();
