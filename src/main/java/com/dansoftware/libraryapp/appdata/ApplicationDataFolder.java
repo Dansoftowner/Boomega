@@ -1,9 +1,6 @@
 package com.dansoftware.libraryapp.appdata;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 /**
@@ -12,6 +9,7 @@ import java.util.logging.Logger;
  * To access these things located in the config folder, you can get them by calling
  * the right method of this class. This class can be instantiated only by the
  * <code>{@link ApplicationDataFolderFactory}</code> class.
+ *
  * @author Daniel Gyorffy
  */
 public abstract class ApplicationDataFolder {
@@ -19,59 +17,24 @@ public abstract class ApplicationDataFolder {
     private static final Logger logger = Logger.getLogger(ApplicationDataFolder.class.getName());
 
     /**
-     * This properties object contains the names of application data folder elements
-     * It's used by the <code>{@link ApplicationDataFolderElement}</code> enum
-     */
-    private static Properties applicationDataFolderElementProperties;
-
-    /*
-     * We use the static block to load the appdatafolder properties from the ClassPath
-     */
-    static {
-        applicationDataFolderElementProperties = new Properties();
-
-        String resource = "appdatafoldersettings.properties";
-
-        try (InputStream inputStream = ApplicationDataFolder.class.getResourceAsStream(resource)) {
-            applicationDataFolderElementProperties.load(inputStream);
-        } catch (IOException e) {
-            putDefaultApplicationDataFolderElementProperties();
-            logger.warning("Couldn't read resource: " + resource);
-        }
-    }
-
-    /**
-     * This method puts the default values to <code>applicationDataFolderElementProperties</code>
-     * This method should be called if the resource file called 'appdatafoldersettings.properties'
-     * cannot be readed for some reason.
-     */
-    private static void putDefaultApplicationDataFolderElementProperties() {
-        applicationDataFolderElementProperties.put("CONFIG_FILE", "settings.configuration");
-        applicationDataFolderElementProperties.put("DB_FILE", "d0f0u0l0.lbadb");
-        applicationDataFolderElementProperties.put("PLUGIN_FOLDER", "plugins");
-    }
-
-    /**
      * This enum represents the folders/files in the application data folder of this program
-     * It reads the concrete names of the elements from the static properties object:
-     * <code>{@link ApplicationDataFolder#applicationDataFolderElementProperties}</code>
      */
     private enum ApplicationDataFolderElement {
 
         /**
          * Represents the configuration file of the program
          */
-        CONFIG_FILE(Boolean.FALSE),
+        CONFIG_FILE("settings.configuration", Boolean.FALSE),
 
         /**
          * Represents the default database file for the program
          */
-        DB_FILE(Boolean.FALSE),
+        DB_FILE("d0f0u0l0.lbadb", Boolean.FALSE),
 
         /**
          * Represents the folder of plugins
          */
-        PLUGIN_FOLDER(Boolean.TRUE);
+        PLUGIN_FOLDER("plugins", Boolean.TRUE);
 
         /**
          * Defines the concrete file name
@@ -84,10 +47,8 @@ public abstract class ApplicationDataFolder {
         private final boolean directory;
 
 
-        ApplicationDataFolderElement(boolean directory) {
-            String key = this.toString();
-
-            this.fileName = applicationDataFolderElementProperties.getProperty(key);
+        ApplicationDataFolderElement(String name, boolean directory) {
+            this.fileName = name;
             this.directory = directory;
         }
     }
@@ -96,16 +57,15 @@ public abstract class ApplicationDataFolder {
      * Package-private constructor
      */
     ApplicationDataFolder() {
-        //get rid of unnecessary object(s)
-        applicationDataFolderElementProperties = null;
     }
 
     /**
      * This method should return the root configurations folder
      * of the application.
+     *
      * @return the object representation of the directory
      */
-    protected abstract File getRootConfigDirectory();
+    protected abstract File getRootApplicationDataDirectory();
 
     /**
      * @return the object representation of the directory that contains logs
@@ -132,12 +92,13 @@ public abstract class ApplicationDataFolder {
      * This method returns the File object version of the
      * <code>{@link ApplicationDataFolderElement}</code> type,
      * and also creates the file on the disk.
+     *
      * @param element the <code>{@link ApplicationDataFolderElement}</code> constant
      * @return <code>{@link File}</code> object that represents the given directory/file
      * from the Appdata folder
      */
     private File getFileOf(ApplicationDataFolderElement element) {
-        File rootDirectory = createFile(getRootConfigDirectory(), true);
+        File rootDirectory = createFile(getRootApplicationDataDirectory(), true);
         return createFile(new File(rootDirectory, element.fileName), element.directory);
     }
 
@@ -146,6 +107,8 @@ public abstract class ApplicationDataFolder {
      */
     void createNewConfigurationFile() {
         makeOldFileOf(getConfigurationFile());
+
+        logger.info("New configuration file created!");
     }
 
     /**
@@ -161,6 +124,7 @@ public abstract class ApplicationDataFolder {
      * This is good practise because we don't delete completely the old file,
      * we just rename it and then the program can use a new file with the
      * original name
+     *
      * @param file the file that we want to rename
      */
     private void makeOldFileOf(File file) {
@@ -181,6 +145,7 @@ public abstract class ApplicationDataFolder {
 
     /**
      * This method creates the file and then returns the file.
+     *
      * @param file the object that represents the file that we want to create
      * @param directory a boolean value that represents what kind of 'file' that we want to create.
      *                  True if we want to create a directory, false if we want to create a regular file.

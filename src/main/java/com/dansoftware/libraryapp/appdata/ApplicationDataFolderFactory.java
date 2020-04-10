@@ -15,21 +15,21 @@ public final class ApplicationDataFolderFactory {
 
     private static class LinuxApplicationDataFolder extends ApplicationDataFolder {
         @Override
-        protected File getRootConfigDirectory() {
+        protected File getRootApplicationDataDirectory() {
             return new File(System.getProperty("user.home"), ".libraryapp2020/profiles/");
         }
     }
 
     private static class WindowsApplicationDataFolder extends ApplicationDataFolder {
         @Override
-        protected File getRootConfigDirectory() {
+        protected File getRootApplicationDataDirectory() {
             return new File(System.getenv("APPDATA"), "Dansoftware/libraryapp_2020");
         }
     }
 
     private static class MacApplicationDataFolder extends ApplicationDataFolder {
         @Override
-        protected File getRootConfigDirectory() {
+        protected File getRootApplicationDataDirectory() {
             return new File("~/Library/Application Support", "Dansoftware/libraryapp_2020");
         }
     }

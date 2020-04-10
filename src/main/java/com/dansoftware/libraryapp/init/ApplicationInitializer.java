@@ -13,7 +13,9 @@ import java.util.logging.Logger;
 /**
  * This class is used to initialize some important thing
  * when the application starts.
+ *
  * @see Main#init()
+ * @author Daniel Gyorffy
  */
 public final class ApplicationInitializer {
 
