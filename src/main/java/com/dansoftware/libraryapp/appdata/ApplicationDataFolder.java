@@ -105,7 +105,7 @@ public abstract class ApplicationDataFolder {
     /**
      * Creates a new Configuration file for the program
      */
-    void createNewConfigurationFile() {
+    void createNewConfigurationFile() throws UnableToCreateFileException {
         makeOldFileOf(getConfigurationFile());
 
         logger.info("New configuration file created!");

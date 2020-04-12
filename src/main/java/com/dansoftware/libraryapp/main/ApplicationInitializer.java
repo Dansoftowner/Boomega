@@ -1,21 +1,21 @@
-package com.dansoftware.libraryapp.init;
+package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.ConfigurationHandler;
-import com.dansoftware.libraryapp.log.LoggerConfigurator;
-import com.dansoftware.libraryapp.main.Main;
+import com.dansoftware.libraryapp.appdata.PredefinedConfigurationKey;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
  * This class is used to initialize some important thing
  * when the application starts.
  *
- * @see Main#init()
  * @author Daniel Gyorffy
+ * @see Main#init()
  */
 public final class ApplicationInitializer {
 
@@ -29,20 +29,24 @@ public final class ApplicationInitializer {
         alreadyInstantiated = true;
     }
 
-    @Step(step = 0)
-    private void configureLogger() {
-        LoggerConfigurator loggerConfigurator = LoggerConfigurator.getInstance();
-        loggerConfigurator.configureRootLogger();
-    }
-
     @Step(step = 1)
     @SuppressWarnings("all")
     private void readConfigurations() {
         ConfigurationHandler.getInstance();
     }
 
+    @Step(step = 2)
+    private void setDefaultLocale() {
+        Locale.setDefault(
+                new Locale(
+                        ConfigurationHandler
+                                .getInstance()
+                                .getConfiguration(PredefinedConfigurationKey.DEFAULT_LOCALE)
+                )
+        );
+    }
+
     public void init() {
-        configureLogger();
         readConfigurations();
     }
 

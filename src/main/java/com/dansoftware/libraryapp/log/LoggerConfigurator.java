@@ -13,8 +13,11 @@ import java.util.logging.*;
 public final class LoggerConfigurator {
 
     private static final LoggerConfigurator INSTANCE = new LoggerConfigurator();
+
     private static final Logger logger = Logger.getLogger(LoggerConfigurator.class.getName());
     private static File logFile;
+
+    private boolean configurated;
 
     /**
      * Don't let anyone to create an instance of this class
@@ -47,6 +50,8 @@ public final class LoggerConfigurator {
      * This method configures the root logger
      */
     public void configureRootLogger() {
+        if (configurated) return;
+
         Logger rootLogger = getRootLogger();
 
         try {
@@ -58,18 +63,23 @@ public final class LoggerConfigurator {
             removeDefaultHandlers();
 
             rootLogger.addHandler(fileHandler);
+
+            configurated = true;
         } catch (IOException e) {
             logger.log(Level.WARNING, "Couldn't create FileHandler for root logger", e);
         }
     }
 
     /**
-     * @return the log file of the program
+     * @return the file that the application logs to
      */
     public static File getLogFile() {
         return logFile;
     }
 
+    /**
+     * @return the instance of the {@link LoggerConfigurator} class
+     */
     public static LoggerConfigurator getInstance() {
         return INSTANCE;
     }

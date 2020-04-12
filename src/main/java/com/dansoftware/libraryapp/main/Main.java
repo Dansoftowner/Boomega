@@ -1,13 +1,10 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.init.ApplicationInitializer;
+import com.dansoftware.libraryapp.exception.ExceptionUtils;
+import com.dansoftware.libraryapp.log.LoggerConfigurator;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.util.Properties;
-import java.util.logging.Logger;
 
 /**
  * Main class of the application
@@ -15,9 +12,20 @@ import java.util.logging.Logger;
  */
 public class Main extends Application {
 
+    static {
+        //Configure the logger
+        LoggerConfigurator loggerConfigurator = LoggerConfigurator.getInstance();
+        loggerConfigurator.configureRootLogger();
+
+        //Set the default uncaught exception handler
+        Thread.setDefaultUncaughtExceptionHandler(ExceptionUtils.getExceptionHandler());
+    }
+
     private static Stage primaryStage;
 
     public static void main(String[] args) {
+        new ApplicationArgumentHandler(args);
+
         LauncherImpl.launchApplication(Main.class, args);
     }
 

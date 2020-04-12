@@ -24,33 +24,41 @@ public final class ConfigurationHandler {
     /**
      * The actual data holder object
      */
-    private Properties properties;
+    private Properties properties = new Properties();
 
     /**
      * Don't let anyone to create an instance of this class
      */
     private ConfigurationHandler() {
         this.applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
-        this.properties = readConfigurations();
+
+        putDefaultConfigurations();
+        readConfigurations();
+    }
+
+    private void putDefaultConfigurations() {
+        properties.put(PredefinedConfigurationKey.DEFAULT_LOCALE, "en");
     }
 
     /**
      * This method reads the configurations from the config file located in the application data folder
      * @return the data holder object
      */
-    private synchronized Properties readConfigurations() {
-        var properties = new Properties();
+    private void readConfigurations() {
         try (InputStream configFileReader = new BufferedInputStream(new FileInputStream(applicationDataFolder.getConfigurationFile()))) {
             properties.loadFromXML(configFileReader);
         } catch (InvalidPropertiesFormatException e) {
             logger.log(Level.SEVERE, "The configuration file of the application couldn't be read", e);
 
-            applicationDataFolder.createNewConfigurationFile();
+            try {
+                applicationDataFolder.createNewConfigurationFile();
+            } catch (ApplicationDataFolder.UnableToCreateFileException ex) {
+                throw new CouldntReadConfigurationsException(ex);
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return properties;
     }
 
     public synchronized void writeConfigurations() throws IOException {
@@ -75,5 +83,11 @@ public final class ConfigurationHandler {
 
     public static ConfigurationHandler getInstance() {
         return INSTANCE;
+    }
+
+    public static final class CouldntReadConfigurationsException extends RuntimeException {
+        CouldntReadConfigurationsException(Throwable e) {
+            super("",e);
+        }
     }
 }
