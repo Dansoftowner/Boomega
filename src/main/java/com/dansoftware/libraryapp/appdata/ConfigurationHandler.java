@@ -9,6 +9,7 @@ import java.util.logging.*;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public final class ConfigurationHandler {
 
     private static final Logger logger = Logger.getLogger(ApplicationDataFolder.class.getName());
@@ -45,18 +46,24 @@ public final class ConfigurationHandler {
     private void readConfigurations() {
         try (InputStream configFileReader = new BufferedInputStream(new FileInputStream(applicationDataFolder.getConfigurationFile()))) {
             properties.loadFromXML(configFileReader);
-        } catch (InvalidPropertiesFormatException e) {
-            logger.log(Level.SEVERE, "The configuration file of the application couldn't be read", e);
+        } catch (IOException ex) {
 
             try {
-                applicationDataFolder.createNewConfigurationFile();
-            } catch (ApplicationDataFolder.UnableToCreateFileException ex) {
+
+            } catch (ApplicationDataFolder.UnableToCreateFileException unableToCreateFileException) {
                 throw new RuntimeException(ex);
             }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
+/*
+        logger.log(Level.SEVERE, "The configuration file of the application couldn't be read", e);
+
+        try {
+            applicationDataFolder.createNewConfigurationFile();
+        } catch (ApplicationDataFolder.UnableToCreateFileException ex) {
+            throw new RuntimeException(ex);
+        }*/
     }
 
     public synchronized void writeConfigurations() throws IOException {

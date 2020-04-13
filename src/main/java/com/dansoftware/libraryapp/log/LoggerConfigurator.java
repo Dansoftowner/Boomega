@@ -13,11 +13,12 @@ import java.util.logging.*;
 public final class LoggerConfigurator {
 
     private static final LoggerConfigurator INSTANCE = new LoggerConfigurator();
-
     private static final Logger logger = Logger.getLogger(LoggerConfigurator.class.getName());
+    private static final String EMPTY_STRING = "";
     private static File logFile;
 
     private boolean configurated;
+
 
     /**
      * Don't let anyone to create an instance of this class
@@ -43,7 +44,7 @@ public final class LoggerConfigurator {
      * @return the root logger
      */
     private Logger getRootLogger() {
-        return LogManager.getLogManager().getLogger("");
+        return LogManager.getLogManager().getLogger(EMPTY_STRING);
     }
 
     /**
@@ -63,6 +64,7 @@ public final class LoggerConfigurator {
             removeDefaultHandlers();
 
             rootLogger.addHandler(fileHandler);
+            rootLogger.addHandler(new GuiHandler());
 
             configurated = true;
         } catch (IOException e) {

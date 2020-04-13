@@ -15,6 +15,10 @@ public class Bundles {
     private Bundles() {
     }
 
+    public static ResourceBundle getCommonBundle() {
+        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.CommonBundle");
+    }
+
     public static ResourceBundle getExceptionBundle() {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.ExceptionBundle");
     }

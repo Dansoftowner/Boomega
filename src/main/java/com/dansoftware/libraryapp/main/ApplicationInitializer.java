@@ -29,13 +29,13 @@ public final class ApplicationInitializer {
         alreadyInstantiated = true;
     }
 
-    @Step(step = 1)
+    @Step
     @SuppressWarnings("all")
     private void readConfigurations() {
         ConfigurationHandler.getInstance();
     }
 
-    @Step(step = 2)
+    @Step
     private void setDefaultLocale() {
         Locale.setDefault(
                 new Locale(
@@ -54,6 +54,5 @@ public final class ApplicationInitializer {
     @Retention(RetentionPolicy.SOURCE)
     @Target(ElementType.METHOD)
     private @interface Step {
-        int step();
     }
 }
