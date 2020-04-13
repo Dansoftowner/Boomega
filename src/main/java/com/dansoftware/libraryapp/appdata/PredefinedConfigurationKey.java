@@ -14,6 +14,7 @@ public class PredefinedConfigurationKey {
     private PredefinedConfigurationKey() {
     }
 
-    public static final String DEFAULT_LOCALE = "";
+    public static final String DEFAULT_LOCALE = "locale";
+
 
 }

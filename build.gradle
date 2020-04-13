@@ -45,6 +45,6 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
 
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
-
+    compile group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
 	compile fileTree(dir: 'external-libraries', include: '*.jar')
 }

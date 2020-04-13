@@ -1,10 +1,8 @@
 package com.dansoftware.libraryapp.appdata;
 
 import java.io.*;
-import java.util.InvalidPropertiesFormatException;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
 
 /**
  * This class can handle and store the application configurations
@@ -53,7 +51,7 @@ public final class ConfigurationHandler {
             try {
                 applicationDataFolder.createNewConfigurationFile();
             } catch (ApplicationDataFolder.UnableToCreateFileException ex) {
-                throw new CouldntReadConfigurationsException(ex);
+                throw new RuntimeException(ex);
             }
 
         } catch (IOException e) {
@@ -83,11 +81,5 @@ public final class ConfigurationHandler {
 
     public static ConfigurationHandler getInstance() {
         return INSTANCE;
-    }
-
-    public static final class CouldntReadConfigurationsException extends RuntimeException {
-        CouldntReadConfigurationsException(Throwable e) {
-            super("",e);
-        }
     }
 }

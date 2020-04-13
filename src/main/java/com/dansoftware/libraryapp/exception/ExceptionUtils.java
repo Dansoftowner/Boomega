@@ -1,7 +1,10 @@
 package com.dansoftware.libraryapp.exception;
 
-import java.util.Optional;
-import java.util.ResourceBundle;
+import com.dansoftware.libraryapp.main.Main;
+import com.dansoftware.libraryapp.util.Alerts;
+import javafx.geometry.Pos;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 
 /**
  * This class contains some utilities for exception handling
@@ -15,6 +18,17 @@ public class ExceptionUtils {
     }
 
     private static final Thread.UncaughtExceptionHandler EXCEPTION_HANDLER = (var thread, var exception) -> {
+        if (exception instanceof UnsupportedOperationException) {
+            exception.printStackTrace();
+            return;
+        }
+
+        Main.runAfterStart(() -> Notifications.create()
+                .hideAfter(Duration.INDEFINITE)
+                .position(Pos.BOTTOM_RIGHT)
+                .owner(Main.getPrimaryStage())
+                .onAction(event -> Alerts.showErrorAlertDialog(exception))
+                .showError());
 
     };
 
@@ -23,7 +37,4 @@ public class ExceptionUtils {
         return EXCEPTION_HANDLER;
     }
 
-    public static ResourceBundle getExceptionResourceBundle() {
-        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.ExceptionBundle");
-    }
 }
