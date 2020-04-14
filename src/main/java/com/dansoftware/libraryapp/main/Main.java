@@ -26,7 +26,7 @@ public class Main extends Application {
         Locale.setDefault(Locale.ENGLISH);
 
         //Set the default uncaught exception handler
-        Thread.setDefaultUncaughtExceptionHandler(ExceptionUtils.getExceptionHandler());
+        Thread.setDefaultUncaughtExceptionHandler(ExceptionUtils.getDefaultExceptionHandler());
     }
 
     private static Stage primaryStage;

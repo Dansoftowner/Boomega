@@ -19,14 +19,14 @@ public class ExceptionUtils {
     private ExceptionUtils() {
     }
 
-    private static final Thread.UncaughtExceptionHandler EXCEPTION_HANDLER = (var thread, var exception) -> {
-        /*if (exception instanceof UnsupportedOperationException) {
-            exception.printStackTrace();
-            return;
-        }*/
-
+    /**
+     * This exception handler responsible for handling runtime exceptions
+     * If a runtime exception occurs, this handler will show that on the gui
+     * for the user.
+     */
+    public static final Thread.UncaughtExceptionHandler DEFAULT_EXCEPTION_HANDLER = (var thread, var exception) -> {
         Main.runAfterStart(() -> Notifications.create()
-                .title(exception.getMessage())
+                .title(getCommonBundle().getString("notifications.error.occured"))
                 .text(getCommonBundle().getString("notifications.clickfordetails"))
                 .hideAfter(Duration.INDEFINITE)
                 .position(Pos.BOTTOM_RIGHT)
@@ -34,11 +34,5 @@ public class ExceptionUtils {
                 .onAction(event -> Alerts.showErrorAlertDialog(exception))
                 .showError());
     };
-
-
-
-    public static Thread.UncaughtExceptionHandler getExceptionHandler() {
-        return EXCEPTION_HANDLER;
-    }
 
 }

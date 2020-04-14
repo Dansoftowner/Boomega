@@ -5,6 +5,9 @@ import javafx.scene.control.TextArea;
 
 import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
 
+/**
+ * This class responsible for creating alert popups for the user.
+ */
 public final class Alerts {
 
     /**

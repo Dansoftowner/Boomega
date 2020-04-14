@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.appdata;
 
+import com.dansoftware.libraryapp.log.GuiLog;
+
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -9,7 +11,6 @@ import java.util.logging.*;
  *
  * @author Daniel Gyorffy
  */
-@Deprecated
 public final class ConfigurationHandler {
 
     private static final Logger logger = Logger.getLogger(ApplicationDataFolder.class.getName());
@@ -17,6 +18,7 @@ public final class ConfigurationHandler {
 
     /**
      * Object, that represents the 'appdata' folder of the application
+     * Used for accessing the configuration file
      */
     private ApplicationDataFolder applicationDataFolder;
 
@@ -41,30 +43,25 @@ public final class ConfigurationHandler {
 
     /**
      * This method reads the configurations from the config file located in the application data folder
+     *
+     * If the configuration file cannot be read for some reason, this method tries to create a new
+     * configuration file
+     *
      * @return the data holder object
      */
     private void readConfigurations() {
         try (InputStream configFileReader = new BufferedInputStream(new FileInputStream(applicationDataFolder.getConfigurationFile()))) {
             properties.loadFromXML(configFileReader);
         } catch (IOException ex) {
-
             try {
-
+                applicationDataFolder.createNewConfigurationFile();
+                logger.log(new GuiLog(Level.WARNING, "confighandler.newfile", ex));
             } catch (ApplicationDataFolder.UnableToCreateFileException unableToCreateFileException) {
-                throw new RuntimeException(ex);
+                logger.log(new GuiLog(Level.SEVERE, "confighandler.cantread", unableToCreateFileException));
             }
-
-            //throw new RuntimeException(e);
         }
-/*
-        logger.log(Level.SEVERE, "The configuration file of the application couldn't be read", e);
-
-        try {
-            applicationDataFolder.createNewConfigurationFile();
-        } catch (ApplicationDataFolder.UnableToCreateFileException ex) {
-            throw new RuntimeException(ex);
-        }*/
     }
+
 
     public synchronized void writeConfigurations() throws IOException {
         try (OutputStream configFileWriter = new BufferedOutputStream(new FileOutputStream(applicationDataFolder.getConfigurationFile()))) {

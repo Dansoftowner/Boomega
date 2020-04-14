@@ -8,7 +8,7 @@ import java.util.logging.Logger;
  * which contains the logs, configurations, default db file and the plugins folder.
  * To access these things located in the config folder, you can get them by calling
  * the right method of this class. This class can be instantiated only by the
- * <code>{@link ApplicationDataFolderFactory}</code> class.
+ * {@link ApplicationDataFolderFactory} class.
  *
  * @author Daniel Gyorffy
  */
@@ -35,6 +35,8 @@ public abstract class ApplicationDataFolder {
          * Represents the folder of plugins
          */
         PLUGIN_FOLDER("plugins", Boolean.TRUE);
+
+        /*-------------------------------------------->*/
 
         /**
          * Defines the concrete file name
@@ -90,11 +92,11 @@ public abstract class ApplicationDataFolder {
 
     /**
      * This method returns the File object version of the
-     * <code>{@link ApplicationDataFolderElement}</code> type,
+     * {@link ApplicationDataFolderElement} type,
      * and also creates the file on the disk.
      *
-     * @param element the <code>{@link ApplicationDataFolderElement}</code> constant
-     * @return <code>{@link File}</code> object that represents the given directory/file
+     * @param element the {@link ApplicationDataFolderElement} constant
+     * @return {@link File} object that represents the given directory/file
      * from the Appdata folder
      */
     private File getFileOf(ApplicationDataFolderElement element) {
