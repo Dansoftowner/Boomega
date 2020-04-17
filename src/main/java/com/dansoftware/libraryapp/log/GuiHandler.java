@@ -13,6 +13,12 @@ import static com.dansoftware.libraryapp.util.Bundles.*;
 
 /**
  * Logging handler for displaying info and warning logs on the gui
+ * This handler is compatible only with the {@link GuiLog} logrecord,
+ * so if the LogRecord is not a GuiLog, it will do nothing
+ *
+ * @see LogRecord
+ * @see GuiLog
+ * @author Daniel Gyorffy
  */
 public class GuiHandler extends Handler {
 

@@ -46,5 +46,6 @@ dependencies {
 
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
+    compile group: 'org.json', name: 'json', version: '20190722'
 	compile fileTree(dir: 'external-libraries', include: '*.jar')
 }

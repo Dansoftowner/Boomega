@@ -13,7 +13,7 @@ import java.util.logging.*;
  */
 public final class ConfigurationHandler {
 
-    private static final Logger logger = Logger.getLogger(ApplicationDataFolder.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ApplicationDataFolder.class.getName());
     private static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
 
     /**
@@ -37,8 +37,13 @@ public final class ConfigurationHandler {
         readConfigurations();
     }
 
+    /**
+     * This method puts the default configurations/settings to the properties object
+     */
     private void putDefaultConfigurations() {
-        properties.put(PredefinedConfigurationKey.DEFAULT_LOCALE, "en");
+        for (PredefinedConfiguration predefinedConfiguration : PredefinedConfiguration.values()) {
+            properties.put(predefinedConfiguration.getKey(), predefinedConfiguration.getDefaultValue());
+        }
     }
 
     /**
@@ -55,34 +60,55 @@ public final class ConfigurationHandler {
         } catch (IOException ex) {
             try {
                 applicationDataFolder.createNewConfigurationFile();
-                logger.log(new GuiLog(Level.WARNING, "confighandler.newfile", ex));
+                LOGGER.log(new GuiLog(Level.WARNING, "confighandler.newfile", ex));
             } catch (ApplicationDataFolder.UnableToCreateFileException unableToCreateFileException) {
-                logger.log(new GuiLog(Level.SEVERE, "confighandler.cantread", unableToCreateFileException));
+                LOGGER.log(new GuiLog(Level.SEVERE, "confighandler.cantread", unableToCreateFileException));
             }
         }
     }
 
-
+    /**
+     * With this method, we can write the currently adjusted settings/configurations to
+     * the configuration file on the disk
+     * @throws IOException if som I/O problem occurs
+     */
     public synchronized void writeConfigurations() throws IOException {
         try (OutputStream configFileWriter = new BufferedOutputStream(new FileOutputStream(applicationDataFolder.getConfigurationFile()))) {
             properties.storeToXML(configFileWriter, null);
         }
     }
 
+    /**
+     * This method should be used if we want to modify some
+     * configuration
+     * @param key the key of the configuration
+     * @param newValue the new configuration
+     */
     public synchronized void setConfiguration(String key, String newValue) {
         this.properties.setProperty(key, newValue);
     }
 
+    /**
+     * This method can be used to put/create some configuration
+     * @param key the key of the configuration
+     * @param value the value of the configuration
+     */
     public synchronized void putConfiguration(String key, String value) {
         this.properties.put(key, value);
     }
 
+    /**
+     * This method return the configuration of the specified key
+     * @param key the key of the configuration
+     * @return the value of the configuration
+     */
     public synchronized String getConfiguration(String key) {
-        return properties
-                .get(key)
-                .toString();
+        return properties.get(key).toString();
     }
 
+    /**
+     * @return the single instance of this class
+     */
     public static ConfigurationHandler getInstance() {
         return INSTANCE;
     }

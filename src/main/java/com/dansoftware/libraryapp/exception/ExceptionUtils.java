@@ -20,7 +20,7 @@ public class ExceptionUtils {
     }
 
     /**
-     * This exception handler responsible for handling runtime exceptions
+     * This exception handler responsible for handling runtime exceptions.
      * If a runtime exception occurs, this handler will show that on the gui
      * for the user.
      */

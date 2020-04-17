@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 /**
  * This class represents the Configuration folder of the application
- * which contains the logs, configurations, default db file and the plugins folder.
+ * which contains the configurations, default db file and the plugins folder.
  * To access these things located in the config folder, you can get them by calling
  * the right method of this class. This class can be instantiated only by the
  * {@link ApplicationDataFolderFactory} class.
@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public abstract class ApplicationDataFolder {
 
-    private static final Logger logger = Logger.getLogger(ApplicationDataFolder.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ApplicationDataFolder.class.getName());
 
     /**
      * This enum represents the folders/files in the application data folder of this program
@@ -55,17 +55,37 @@ public abstract class ApplicationDataFolder {
         }
     }
 
+    private boolean firstCreated;
+
     /**
      * Package-private constructor
      */
     ApplicationDataFolder() {
+        firstCreated = !getRootApplicationDataDirectory().exists();
+    }
+
+    /**
+     * With this method, we can decide that the appdata folder created
+     * after the start of this program, or it is already created before
+     * the launch of the application.
+     *
+     * @return <code>true</code> if the application data folder created
+     * after the launch of the program
+     * <code>false</code> if the app data folder is already created before
+     * the launch of the program
+     */
+    public boolean isFirstCreated() {
+        return firstCreated;
     }
 
     /**
      * This method should return the root configurations folder
      * of the application.
      *
-     * @return the object representation of the directory
+     * For example in Windows:
+     * <em>C:\Users\<user>\Roaming\Dansoftware\libraryapp_2020</em>
+     *
+     * @return the file object representation of the directory
      */
     protected abstract File getRootApplicationDataDirectory();
 
@@ -110,7 +130,7 @@ public abstract class ApplicationDataFolder {
     void createNewConfigurationFile() throws UnableToCreateFileException {
         makeOldFileOf(getConfigurationFile());
 
-        logger.info("New configuration file created!");
+        LOGGER.info("New configuration file created!");
     }
 
     /**
@@ -122,7 +142,7 @@ public abstract class ApplicationDataFolder {
      * </ul>
      * If a file already exists with the generated file name, the process
      * will be repeated again
-     *
+     * <p>
      * This is good practise because we don't delete completely the old file,
      * we just rename it and then the program can use a new file with the
      * original name
@@ -137,7 +157,7 @@ public abstract class ApplicationDataFolder {
         File generated;
         do {
             int random = (int) (Math.random() * Math.pow(10, 5));
-            generated = new File(directoryOfFile, String.format("%s_%s%d", nameOfFile, "old",  random));
+            generated = new File(directoryOfFile, String.format("%s_%s%d", nameOfFile, "old", random));
         } while (generated.exists());
 
         if (!file.renameTo(generated)) {
@@ -148,7 +168,7 @@ public abstract class ApplicationDataFolder {
     /**
      * This method creates the file and then returns the file.
      *
-     * @param file the object that represents the file that we want to create
+     * @param file      the object that represents the file that we want to create
      * @param directory a boolean value that represents what kind of 'file' that we want to create.
      *                  True if we want to create a directory, false if we want to create a regular file.
      * @return the file that created <i>basically the same file object that passed as parameter</i>
