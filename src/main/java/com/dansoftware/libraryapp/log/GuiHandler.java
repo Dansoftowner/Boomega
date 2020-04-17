@@ -26,10 +26,13 @@ public class GuiHandler extends Handler {
     public void publish(LogRecord record) {
         if (record instanceof GuiLog) {
 
-            Notifications notificationBuilder = Notifications.create()
+            Optional<Throwable> throwableOptional = Optional.ofNullable(record.getThrown());
+            Optional<Duration> durationOptional = Optional.ofNullable(asGuiLog(record).getHideAfterDuration());
+
+            var notificationBuilder = Notifications.create()
                     .text(record.getMessage())
-                    .hideAfter(Duration.INDEFINITE)
-                    .onAction(event -> Optional.ofNullable(record.getThrown()).ifPresent(Alerts::showErrorAlertDialog))
+                    .hideAfter(durationOptional.orElse(Duration.INDEFINITE))
+                    .onAction(event -> throwableOptional.ifPresent(Alerts::showErrorAlertDialog))
                     .owner(getPrimaryStage())
                     .position(Pos.BOTTOM_RIGHT);
 

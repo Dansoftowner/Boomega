@@ -14,6 +14,10 @@ import java.util.logging.*;
 public final class ConfigurationHandler {
 
     private static final Logger LOGGER = Logger.getLogger(ApplicationDataFolder.class.getName());
+
+    /**
+     * This constant contains the single instance of this class
+     */
     private static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
 
     /**

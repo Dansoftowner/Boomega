@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.update;
 
+import com.dansoftware.libraryapp.appdata.ConfigurationHandler;
 import com.dansoftware.libraryapp.gui.update.UpdateDisplayer;
 import com.dansoftware.libraryapp.main.Main;
 import com.dansoftware.libraryapp.util.ApplicationMeta;
@@ -30,6 +31,10 @@ public class UpdateSearcher {
                                 .showInformation());
                     }
                 });
+    }
+
+    private boolean isThereIsNeedToSearch() {
+        return (Boolean) null;
     }
 
     private boolean isCurrentVersionOld() {

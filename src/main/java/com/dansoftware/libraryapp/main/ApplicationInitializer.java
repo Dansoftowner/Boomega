@@ -22,8 +22,16 @@ import java.util.stream.Stream;
  */
 public final class ApplicationInitializer {
 
+    /**
+     * This boolean-field contains that this class already instantiated or not
+     */
     private static boolean alreadyInstantiated;
 
+    /**
+     * A basic constructor for the object.
+     * Cannot be called more than once - otherwise throws
+     * an {@link UnsupportedOperationException}
+     */
     public ApplicationInitializer() {
         if (alreadyInstantiated)
             throw new UnsupportedOperationException("Application Initializer cannot be called more than once!");
@@ -32,29 +40,25 @@ public final class ApplicationInitializer {
     }
 
     @Step(step = 0)
-    @SuppressWarnings("all")
     private void readConfigurations() {
         ConfigurationHandler.getInstance();
     }
 
     @Step(step = 1)
     private void checkAppRunsFirst() {
-        var applicationRunsFirstAnalyzer = new ApplicationRunsFirstAnalyzer();
-        applicationRunsFirstAnalyzer.analyze();
+        new ApplicationRunsFirstAnalyzer().analyze();
     }
 
     @Step(step = 2)
     private void setDefaultLocale() {
         Locale.setDefault(
-                new Locale(ConfigurationHandler.getInstance()
-                        .getConfiguration(PredefinedConfiguration.DEFAULT_LOCALE))
+                new Locale(ConfigurationHandler.getInstance().getConfiguration(PredefinedConfiguration.DEFAULT_LOCALE.getKey()))
         );
     }
 
     @Step(step = 3)
     private void checkUpdates() {
-        UpdateSearcher updateSearcher = new UpdateSearcher();
-        updateSearcher.search();
+        new UpdateSearcher().search();
     }
 
     public void init() {

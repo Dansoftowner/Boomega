@@ -18,17 +18,21 @@ public class Main extends Application {
 
     static {
         //Configure the logger
-        LoggerConfigurator
-                .getInstance()
+        new LoggerConfigurator()
                 .configureRootLogger();
 
         //set the default locale
         Locale.setDefault(Locale.ENGLISH);
 
         //Set the default uncaught exception handler
-        Thread.setDefaultUncaughtExceptionHandler(ExceptionUtils.getDefaultExceptionHandler());
+        Thread.setDefaultUncaughtExceptionHandler(ExceptionUtils.DEFAULT_EXCEPTION_HANDLER);
     }
 
+    /**
+     * This field contains the primary window of the Window Hierarchy
+     *
+     * @see Main#start(Stage)
+     */
     private static Stage primaryStage;
 
     /**
@@ -39,7 +43,9 @@ public class Main extends Application {
      */
     private static List<Runnable> runAfterStart = new LinkedList<>();
 
-
+    /**
+     * MAIN
+     */
     public static void main(String[] args) {
         new ApplicationArgumentHandler(args);
 
@@ -48,8 +54,7 @@ public class Main extends Application {
 
     @Override
     public void init() {
-        ApplicationInitializer applicationInitializer = new ApplicationInitializer();
-        applicationInitializer.init();
+        new ApplicationInitializer().init();
     }
 
     @Override
@@ -73,17 +78,26 @@ public class Main extends Application {
      * If the application already started the {@link Runnable#run}
      * method will be executed immediately.
      *
-     * @param runnable
+     * @param runnable the thing that should be executed
      * @see Main#start
      */
     public synchronized static void runAfterStart(Runnable runnable) {
         //If the application already started
-        if (runAfterStart == null)
-            runnable.run();
-        else
-            runAfterStart.add(runnable);
+        if (alreadyStarted()) runnable.run(); else runAfterStart.add(runnable);
     }
 
+    /**
+     * Returns that the application already started
+     * @return <code>true</code> if the application already started
+     * <code>false</code> otherwise.
+     */
+    private static boolean alreadyStarted() {
+        return runAfterStart == null;
+    }
+
+    /**
+     * @return the primary stage of the window hierarchy
+     */
     public static Stage getPrimaryStage() {
         return primaryStage;
     }

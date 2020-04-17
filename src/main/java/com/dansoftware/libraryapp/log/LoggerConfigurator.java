@@ -5,39 +5,57 @@ import java.io.IOException;
 import java.util.logging.*;
 
 /**
- * This class deals with the log
- * settings of the application
+ * This class configures the root logger of
+ * the application
  *
  * @author Daniel Gyorffy
  */
 public final class LoggerConfigurator {
 
-    private static final LoggerConfigurator INSTANCE = new LoggerConfigurator();
-    private static final Logger logger = Logger.getLogger(LoggerConfigurator.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(LoggerConfigurator.class.getName());
+
+    /**
+     * Defines an empty string
+     */
     private static final String EMPTY_STRING = "";
+
+    /**
+     * This field should contain the log file
+     */
     private static File logFile;
 
-    private boolean configurated;
+    /**
+     * This field contains that the root logger already configured
+     */
+    private boolean configured;
 
 
     /**
-     * Don't let anyone to create an instance of this class
+     * Creates a basic logger configurator object
      */
-    private LoggerConfigurator() {
+    public LoggerConfigurator() {
     }
 
     /**
-     * This method removes the default handlers from the root logger
+     * This method removes the default handlers from the root logger (ConsoleHandler)
      */
     private void removeDefaultHandlers() {
-        LogManager logManager = LogManager.getLogManager();
-        logManager.reset();
+        LogManager.getLogManager().reset();
     }
 
+    /**
+     * Creates a file handler for the root logger
+     * @return the created {@link FileHandler} object
+     * @throws IOException if some I/O problem occurs
+     */
     private FileHandler getFileHandler() throws IOException {
         logFile = File.createTempFile("libraryapp2020", ".log");
 
-        return new FileHandler(logFile.getAbsolutePath());
+        FileHandler handler = new FileHandler(logFile.getAbsolutePath());
+        handler.setLevel(Level.INFO);
+        handler.setFormatter(new SimpleFormatter());
+
+        return handler;
     }
 
     /**
@@ -51,24 +69,19 @@ public final class LoggerConfigurator {
      * This method configures the root logger
      */
     public void configureRootLogger() {
-        if (configurated) return;
+        if (configured) return;
 
         Logger rootLogger = getRootLogger();
 
         try {
-
-            FileHandler fileHandler = getFileHandler();
-            fileHandler.setLevel(Level.INFO);
-            fileHandler.setFormatter(new SimpleFormatter());
-
             removeDefaultHandlers();
 
-            rootLogger.addHandler(fileHandler);
+            rootLogger.addHandler(getFileHandler());
             rootLogger.addHandler(new GuiHandler());
 
-            configurated = true;
+            configured = Boolean.TRUE;
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Couldn't create FileHandler for root logger", e);
+            LOGGER.log(Level.WARNING, "Couldn't create FileHandler for root logger", e);
         }
     }
 
@@ -79,10 +92,4 @@ public final class LoggerConfigurator {
         return logFile;
     }
 
-    /**
-     * @return the instance of the {@link LoggerConfigurator} class
-     */
-    public static LoggerConfigurator getInstance() {
-        return INSTANCE;
-    }
 }

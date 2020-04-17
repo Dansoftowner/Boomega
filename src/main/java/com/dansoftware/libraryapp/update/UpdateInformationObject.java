@@ -11,6 +11,9 @@ package com.dansoftware.libraryapp.update;
  */
 public class UpdateInformationObject {
 
+    /**
+     * Package-private constructor
+     */
     UpdateInformationObject() {
     }
 

@@ -6,16 +6,16 @@ package com.dansoftware.libraryapp.update;
 public enum UpdateInformationJSONKey {
     VERSION("version"),
     REVIEW_PAGE("review"),
-    DOWNLOADABLE_INSTALLER("installer");
+    DOWNLOADABLE_BINARIES("binaries");
 
     private String value;
 
     UpdateInformationJSONKey(String value) {
         this.value = value;
     }
+
     @Override
     public String toString() {
         return value;
     }
-
 }

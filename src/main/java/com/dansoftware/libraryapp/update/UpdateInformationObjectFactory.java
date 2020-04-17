@@ -34,7 +34,7 @@ public class UpdateInformationObjectFactory {
 
             String version = getValueFromJSON(parsedJSON, UpdateInformationJSONKey.VERSION);
             String reviewUrl = getValueFromJSON(parsedJSON, UpdateInformationJSONKey.REVIEW_PAGE);
-            String downloadableJarPath = getValueFromJSON(parsedJSON, UpdateInformationJSONKey.DOWNLOADABLE_INSTALLER);
+            String downloadableJarPath = getValueFromJSON(parsedJSON, UpdateInformationJSONKey.DOWNLOADABLE_BINARIES);
 
             return new UpdateInformationObject(version, downloadableJarPath, reviewUrl);
 
