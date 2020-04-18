@@ -1,9 +1,11 @@
 package com.dansoftware.libraryapp.update;
 
+import java.util.Map;
+
 /**
  * This class responsible for storing the information about
- * the update
- *
+ * the new update
+ * <p>
  * To fill this type of object with real information
  * you should use the {@link UpdateInformationObjectFactory}
  *
@@ -11,20 +13,27 @@ package com.dansoftware.libraryapp.update;
  */
 public class UpdateInformationObject {
 
-    /**
-     * Package-private constructor
-     */
-    UpdateInformationObject() {
-    }
-
     private String version;
-    private String downloadableInstallerPath;
     private String updateReviewHtmlPath;
+    private Map<String, String> downloadableBinaries;
 
-
-    public UpdateInformationObject(String version, String downloadableInstallerPath, String updateReviewHtmlPath) {
+    /**
+     * This constructor creates an UpdateInformationObject with the required values
+     *
+     * @param version              the new version of the update
+     * @param updateReviewHtmlPath the location of the review webpage that describes
+     *                             the features of the new update (http://example.com/libraryappreview.html).
+     * @param downloadableBinaries the Map that contains the binary types and the location
+     *                             of each downloadable binary on the web.
+     *                             For example (if the app runs on windows) :<br/>
+     *                             {<br/>
+     *                                   "Exe installer" : "http://example.com/download/libraryapp-installer.exe", <br/>
+     *                                   "Zip archive" :  "http://example.com/download/libraryapp.zip" <br/>
+     *                             }
+     */
+    UpdateInformationObject(String version, String updateReviewHtmlPath, Map<String, String> downloadableBinaries) {
         this.version = version;
-        this.downloadableInstallerPath = downloadableInstallerPath;
+        this.downloadableBinaries = downloadableBinaries;
         this.updateReviewHtmlPath = updateReviewHtmlPath;
     }
 
@@ -32,8 +41,8 @@ public class UpdateInformationObject {
         return version;
     }
 
-    public String getDownloadableInstallerPath() {
-        return downloadableInstallerPath;
+    public Map<String, String> getDownloadableBinaries() {
+        return downloadableBinaries;
     }
 
     public String getUpdateReviewHtmlPath() {

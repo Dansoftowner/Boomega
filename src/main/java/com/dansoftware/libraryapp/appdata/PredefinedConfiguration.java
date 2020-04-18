@@ -9,7 +9,8 @@ package com.dansoftware.libraryapp.appdata;
  */
 public enum PredefinedConfiguration {
     DEFAULT_LOCALE("locale", "en"),
-    SEARCH_FOR_UPDATES_AT_START("searchupdates", "true");
+    SEARCH_FOR_UPDATES_AT_START("searchupdates", "true"),
+    CUSTOM_DB_FILE("custom_db", null);
 
     private final String key;
     private final String defaultValue;

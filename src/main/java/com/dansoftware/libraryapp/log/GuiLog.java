@@ -56,7 +56,7 @@ public class GuiLog extends LogRecord {
      * @param msg       the key of the message from the {@link Bundles#getExceptionBundle()}
      * @param arguments the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      */
-    public GuiLog(Level level, Throwable cause, String msg, Object... arguments) {
+    public GuiLog(Level level, Throwable cause, String msg, Object[] arguments) {
         this(level, msg, arguments);
         setThrown(cause);
     }
@@ -70,7 +70,7 @@ public class GuiLog extends LogRecord {
      * @param hideAfterDuration the duration that defines how long time should be the Notification bar showed
      * @param arguments         the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      */
-    public GuiLog(Level level, Throwable cause, String msg, Duration hideAfterDuration, Object... arguments) {
+    public GuiLog(Level level, Throwable cause, String msg, Duration hideAfterDuration, Object[] arguments) {
         this(level, msg, hideAfterDuration, arguments);
         setThrown(cause);
 
@@ -86,7 +86,7 @@ public class GuiLog extends LogRecord {
      * @param arguments the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      * @see GuiLog#GuiLog(Level, String, Object...)
      */
-    public GuiLog(Level level, String title, String msg, Object... arguments) {
+    public GuiLog(Level level, String title, String msg, Object[] arguments) {
         this(level, msg, arguments);
         this.title = title;
     }
@@ -104,7 +104,7 @@ public class GuiLog extends LogRecord {
      * @param arguments         the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      * @see GuiLog#GuiLog(Level, String, Duration, Object...)
      */
-    public GuiLog(Level level, String title, String msg, Duration hideAfterDuration, Object... arguments) {
+    public GuiLog(Level level, String title, String msg, Duration hideAfterDuration, Object[] arguments) {
         this(level, msg, hideAfterDuration, arguments);
         this.title = title;
     }
@@ -119,7 +119,7 @@ public class GuiLog extends LogRecord {
      * @param msg       the key of the message from the {@link Bundles#getExceptionBundle()}
      * @param arguments the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      */
-    public GuiLog(Level level, Throwable cause, String title, String msg, Object... arguments) {
+    public GuiLog(Level level, Throwable cause, String title, String msg, Object[] arguments) {
         this(level, title, msg, arguments);
         setThrown(cause);
     }
@@ -136,7 +136,7 @@ public class GuiLog extends LogRecord {
      * @param hideAfterDuration the duration that defines how long time should be the Notification bar showed
      * @param arguments         the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      */
-    public GuiLog(Level level, Throwable cause, String title, String msg, Duration hideAfterDuration, Object... arguments) {
+    public GuiLog(Level level, Throwable cause, String title, String msg, Duration hideAfterDuration, Object[] arguments) {
         this(level, title, msg, hideAfterDuration, arguments);
         setThrown(cause);
     }
@@ -148,7 +148,7 @@ public class GuiLog extends LogRecord {
      * @param args the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      * @return the final message
      */
-    private static String getFinalMessage(String msg, Object... args) {
+    private static String getFinalMessage(String msg, Object[] args) {
         if (isEmpty(args))
             return getExceptionBundle().getString(msg);
 
