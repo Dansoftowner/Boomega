@@ -1,102 +1,106 @@
 package com.dansoftware.libraryapp.db;
 
-import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
-import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
-import com.dansoftware.libraryapp.appdata.ConfigurationHandler;
-import com.dansoftware.libraryapp.appdata.PredefinedConfiguration;
+import com.dansoftware.libraryapp.db.util.DataBaseFileRecognizer;
+import com.dansoftware.libraryapp.db.util.JDBCURLGenerator;
+import com.dansoftware.libraryapp.db.util.SqliteURLGenerator;
 import com.dansoftware.libraryapp.log.GuiLog;
-import com.dansoftware.libraryapp.main.ApplicationArgumentHandler;
 
-import java.io.*;
-import java.sql.*;
-import java.util.Optional;
+import java.io.File;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class DBConnection {
+/**
+ * This class is responsible for communicating with the database
+ *
+ * @author Daniel Gyorffy
+ */
+public final class DBConnection extends AbstractDBConnection {
 
     private static final Logger LOGGER = Logger.getLogger(DBConnection.class.getName());
 
+    /**
+     * The single-instance holder field
+     */
     private static DBConnection instance;
 
-    private final static String URL_PREFIX = "jdbc:sqlite:";
+    /**
+     * This constant represents the path on the Class-Path of the sql script that creates the necessary tables in the database
+     */
+    private final static String CREATE_TABLES_SCRIPT = "/com/dansoftware/libraryapp/db/create_tables.sql";
+
+    /**
+     * This constant represents the path on the Class-Path of the sql script that creates the necessary views in the database
+     */
+    private final static String CREATE_VIEWS_SCRIPT = "/com/dansoftware/libraryapp/db/create_views.sql";
+
+    /**
+     * Defines the class-name of the JDBC Driver
+     */
     private final static String JDBC_DRIVER = "org.sqlite.JDBC";
 
-    private Connection connection;
+    /**
+     * The file object of the db file
+     */
+    private static File databaseFile;
 
-    private DBConnection() {
-        connect();
-        createTablesAndViews(connection);
+    /**
+     * Don't let anyone to create an instance of this class.
+     *
+     * @throws SQLException if some sql exception occurs
+     */
+    private DBConnection() throws SQLException {
     }
 
-    private void connect() {
+
+
+
+
+    @Override
+    protected InputStream getTableCreatorScriptStream() {
+        return getClass().getResourceAsStream(CREATE_TABLES_SCRIPT);
+    }
+
+    @Override
+    protected InputStream getViewCreatorScriptStream() {
+        return getClass().getResourceAsStream(CREATE_VIEWS_SCRIPT);
+    }
+
+    @Override
+    protected String getJDBCDriver() {
+        return JDBC_DRIVER;
+    }
+
+    @Override
+    protected JDBCURLGenerator getJDBCUrlMaker() {
+        return new SqliteURLGenerator(databaseFile = new DataBaseFileRecognizer().getDBFile());
+    }
+
+    /**
+     * This method creates an instance of this class and handles the {@link SQLException}
+     *
+     * @return the database connection object
+     */
+    private static DBConnection createDBConnectionObject() {
         try {
-            Class.forName(JDBC_DRIVER);
-            connection = DriverManager.getConnection(getJDBCUrl());
+            return new DBConnection();
         } catch (SQLException e) {
-            LOGGER.log(new GuiLog(Level.SEVERE, e, "", null));
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void createTablesAndViews(Connection connection) {
-        executeSqlScript("/com/dansoftware/libraryapp/db/create_tables.sql", connection);
-        executeSqlScript("/com/dansoftware/libraryapp/db/create_views.sql", connection);
-    }
-
-    private String getJDBCUrl() {
-        ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
-        ApplicationDataFolder applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
-
-        StringBuilder jdbcUrlBuilder = new StringBuilder(URL_PREFIX);
-
-        Optional<File> launchedFile = ApplicationArgumentHandler.getLaunchedFile();
-        Optional<String> customConfiguredDB =
-                Optional.ofNullable(configurationHandler.getConfiguration(PredefinedConfiguration.CUSTOM_DB_FILE.getKey()));
-
-        if(launchedFile.isPresent()) {
-            jdbcUrlBuilder.append(launchedFile.get());
-        } else if (customConfiguredDB.isPresent()) {
-            jdbcUrlBuilder.append(customConfiguredDB.get());
-        } else {
-            jdbcUrlBuilder.append(applicationDataFolder.getConfigurationFile());
+            LOGGER.log(new GuiLog(Level.SEVERE, e, "dbconnection.failed", new Object[]{ databaseFile.getName() }));
         }
 
-        return jdbcUrlBuilder.toString();
+        return null;
     }
 
-    private void executeSqlScript(String resource, Connection connection) {
-        if (connection == null)
-            return;
-
-        try(var reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(resource)))) {
-
-            StringBuilder actualStatement = new StringBuilder();
-            String actualReadLine;
-            while((actualReadLine = reader.readLine()) != null) {
-                actualStatement.append(actualReadLine);
-
-                if (actualReadLine.endsWith(";")){
-                    PreparedStatement preparedStatement = connection.prepareStatement(actualStatement.toString());
-                    preparedStatement.execute();
-                    preparedStatement.close();
-
-                    actualStatement = new StringBuilder();
-                }
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void close() throws SQLException {
-        connection.close();
-    }
-
+    /**
+     * This static method creates the DBConnection if it isn't created yet, and
+     * returns it.
+     *
+     * @return the single instance of the DBConnection class
+     */
     public static DBConnection getInstance() {
-        if (instance == null) instance = new DBConnection();
+        if (instance == null)
+            instance = createDBConnectionObject();
 
         return instance;
     }

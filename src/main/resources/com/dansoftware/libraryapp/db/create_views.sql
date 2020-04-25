@@ -1,32 +1,32 @@
-CREATE VIEW BOOKS_JOINED AS
+CREATE VIEW books_joined AS
 
-SELECT Books.ID AS BookID, Books.TITLE, Books.PUBLISHED_YEAR, Books.LANG, Books.NOTES, Books.ISBN, Books.NUMBER_OF_PAGES, Books.NUMBER_OF_COPIES,
+SELECT books.id AS Bookid, books.title, books.published_year, books.lang, books.notes, books.isbn, books.number_of_pages, books.number_of_copies,
 
-Books.AUTHOR_ID01, Authors01.NAME AS AUTHOR_NAME01, Authors01.DESCRIPTION AS AUTHOR_DESCRIPTION01,
-Books.AUTHOR_ID02, Authors02.NAME AS AUTHOR_NAME02, Authors02.DESCRIPTION AS AUTHOR_DESCRIPTION02,
-Books.AUTHOR_ID03, Authors03.NAME AS AUTHOR_NAME03, Authors03.DESCRIPTION AS AUTHOR_DESCRIPTION03,
-Books.AUTHOR_ID04, Authors04.NAME AS AUTHOR_NAME04, Authors04.DESCRIPTION AS AUTHOR_DESCRIPTION04,
-Books.AUTHOR_ID05, Authors05.NAME AS AUTHOR_NAME05, Authors05.DESCRIPTION AS AUTHOR_DESCRIPTION05,
-Books.AUTHOR_ID06, Authors06.NAME AS AUTHOR_NAME06, Authors06.DESCRIPTION AS AUTHOR_DESCRIPTION06,
-Books.AUTHOR_ID07, Authors07.NAME AS AUTHOR_NAME07, Authors07.DESCRIPTION AS AUTHOR_DESCRIPTION07,
-Books.AUTHOR_ID08, Authors08.NAME AS AUTHOR_NAME08, Authors08.DESCRIPTION AS AUTHOR_DESCRIPTION08,
-Books.AUTHOR_ID09, Authors09.NAME AS AUTHOR_NAME09, Authors09.DESCRIPTION AS AUTHOR_DESCRIPTION09,
-Books.AUTHOR_ID10, Authors10.NAME AS AUTHOR_NAME10, Authors10.DESCRIPTION AS AUTHOR_DESCRIPTION10,
+books.author_id01, authors01.name AS author_name01, authors01.description AS author_description01,
+books.author_id02, authors02.name AS author_name02, authors02.description AS author_description02,
+books.author_id03, authors03.name AS author_name03, authors03.description AS author_description03,
+books.author_id04, authors04.name AS author_name04, authors04.description AS author_description04,
+books.author_id05, authors05.name AS author_name05, authors05.description AS author_description05,
+books.author_id06, authors06.name AS author_name06, authors06.description AS author_description06,
+books.author_id07, authors07.name AS author_name07, authors07.description AS author_description07,
+books.author_id08, authors08.name AS author_name08, authors08.description AS author_description08,
+books.author_id09, authors09.name AS author_name09, authors09.description AS author_description09,
+books.author_id10, authors10.name AS author_name10, authors10.description AS author_description10,
 
-Books.PUBLISHER_ID, Publishers.NAME AS PUBLISHER_NAME, Books.SUBJECT_ID, Subjects.NAME AS SUBJECT_NAME
+books.publisher_id, publishers.name AS publisher_name, books.subject_id, subjects.name AS subject_name
 
-FROM Books
+FROM books
 
-LEFT JOIN Authors Authors01 ON Authors01.ID = Books.AUTHOR_ID01
-LEFT JOIN Authors Authors02 ON Authors02.ID = Books.AUTHOR_ID02
-LEFT JOIN Authors Authors03 ON Authors03.ID = Books.AUTHOR_ID03
-LEFT JOIN Authors Authors04 ON Authors04.ID = Books.AUTHOR_ID04
-LEFT JOIN Authors Authors05 ON Authors05.ID = Books.AUTHOR_ID05
-LEFT JOIN Authors Authors06 ON Authors06.ID = Books.AUTHOR_ID06
-LEFT JOIN Authors Authors07 ON Authors07.ID = Books.AUTHOR_ID07
-LEFT JOIN Authors Authors08 ON Authors08.ID = Books.AUTHOR_ID08
-LEFT JOIN Authors Authors09 ON Authors09.ID = Books.AUTHOR_ID09
-LEFT JOIN Authors Authors10 ON Authors10.ID = Books.AUTHOR_ID10
+LEFT JOIN authors authors01 ON authors01.id = books.author_id01
+LEFT JOIN authors authors02 ON authors02.id = books.author_id02
+LEFT JOIN authors authors03 ON authors03.id = books.author_id03
+LEFT JOIN authors authors04 ON authors04.id = books.author_id04
+LEFT JOIN authors authors05 ON authors05.id = books.author_id05
+LEFT JOIN authors authors06 ON authors06.id = books.author_id06
+LEFT JOIN authors authors07 ON authors07.id = books.author_id07
+LEFT JOIN authors authors08 ON authors08.id = books.author_id08
+LEFT JOIN authors authors09 ON authors09.id = books.author_id09
+LEFT JOIN authors authors10 ON authors10.id = books.author_id10
 
-LEFT JOIN Publishers ON Publishers.ID = Books.PUBLISHER_ID
-LEFT JOIN Subjects ON Subjects.ID  = Books.SUBJECT_ID;
+LEFT JOIN publishers ON publishers.id = books.publisher_id
+LEFT JOIN subjects ON subjects.id  = books.subject_id;

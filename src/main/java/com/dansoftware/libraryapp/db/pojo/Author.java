@@ -1,8 +1,7 @@
 package com.dansoftware.libraryapp.db.pojo;
 
-public class Author {
+public class Author extends Record {
 
-    private int id;
     private String name;
     private String description;
 
@@ -19,17 +18,9 @@ public class Author {
     }
 
     public Author(int id, String name, String description) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

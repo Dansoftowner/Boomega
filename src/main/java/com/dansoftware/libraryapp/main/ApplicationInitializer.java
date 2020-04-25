@@ -5,13 +5,8 @@ import com.dansoftware.libraryapp.appdata.PredefinedConfiguration;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Comparator;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 /**
  * This class is used to initialize some important thing
@@ -39,46 +34,45 @@ public final class ApplicationInitializer {
         alreadyInstantiated = Boolean.TRUE;
     }
 
-    @Step(step = 0)
+    @Step
     private void readConfigurations() {
         ConfigurationHandler.getInstance();
     }
 
-    @Step(step = 1)
+    @Step
     private void checkAppRunsFirst() {
         new ApplicationRunsFirstAnalyzer().analyze();
     }
 
-    @Step(step = 2)
+    @Step
     private void setDefaultLocale() {
         Locale.setDefault(
                 new Locale(ConfigurationHandler.getInstance().getConfiguration(PredefinedConfiguration.DEFAULT_LOCALE.getKey()))
         );
     }
 
-    @Step(step = 3)
+    @Step
     private void checkUpdates() {
         new UpdateSearcher().search();
     }
 
+    /**
+     * This method executes all the tasks that are must be
+     * executed before the whole application starts.
+     */
     public void init() {
-        Stream.of(this.getClass().getDeclaredMethods())
-                .filter(method -> Objects.nonNull(method.getAnnotation(Step.class)))
-                .sorted(Comparator.comparingInt(method -> method.getAnnotation(Step.class).step()))
-                .forEach(method -> {
-                    method.setAccessible(true);
-
-                    try {
-                        method.invoke(this);
-                    } catch (ReflectiveOperationException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        readConfigurations();
+        checkAppRunsFirst();
+        setDefaultLocale();
+        checkUpdates();
     }
 
-    @Retention(RetentionPolicy.RUNTIME)
+    /**
+     * The {@link ApplicationInitializer} uses this annotation
+     * on methods that are responsible for executing a sub task in
+     * the initialization process
+     */
     @Target(ElementType.METHOD)
     private @interface Step {
-        int step();
     }
 }

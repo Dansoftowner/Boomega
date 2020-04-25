@@ -59,7 +59,7 @@ public class UpdateSearcher {
         try {
             informationObject = UpdateInformationObjectFactory.getInformation();
         } catch (IOException e) {
-            LOGGER.log(new GuiLog(Level.SEVERE, e, "LibraryApp Updater", "update.cantsearch"));
+            LOGGER.log(new GuiLog(Level.SEVERE, e, "LibraryApp Updater", "update.cantsearch", null));
         }
     }
 

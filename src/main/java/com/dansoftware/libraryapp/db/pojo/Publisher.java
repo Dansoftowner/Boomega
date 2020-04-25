@@ -1,8 +1,7 @@
 package com.dansoftware.libraryapp.db.pojo;
 
-public class Publisher {
+public class Publisher extends Record {
 
-    private int id;
     private String name;
 
     public Publisher() {
@@ -13,16 +12,8 @@ public class Publisher {
     }
 
     public Publisher(int id, String name) {
-        this.id = id;
+        super(id);
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

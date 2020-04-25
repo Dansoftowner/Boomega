@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.db.pojo;
 
-public class Subject {
-    private int id;
+public class Subject extends Record {
+
     private String name;
 
     public Subject() {
@@ -12,16 +12,8 @@ public class Subject {
     }
 
     public Subject(int id, String name) {
-        this.id = id;
+        super(id);
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

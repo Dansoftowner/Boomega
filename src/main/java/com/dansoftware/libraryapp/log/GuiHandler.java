@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.log;
 
-import com.dansoftware.libraryapp.util.Alerts;
+import com.dansoftware.libraryapp.gui.util.Alerts;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import javafx.geometry.Pos;

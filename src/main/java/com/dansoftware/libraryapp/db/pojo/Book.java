@@ -2,9 +2,8 @@ package com.dansoftware.libraryapp.db.pojo;
 
 import java.util.List;
 
-public class Book {
+public class Book extends Record {
 
-    private int id;
     private int publishedYear;
     private int numberOfPages;
     private int numberOfCopies;
@@ -23,7 +22,7 @@ public class Book {
     }
 
     private Book(Builder builder) {
-        this.id = builder.id;
+        super(builder.id);
         this.publishedYear = builder.publishedYear;
         this.numberOfCopies = builder.numberOfCopies;
         this.numberOfPages = builder.numberOfPages;
@@ -34,14 +33,6 @@ public class Book {
         this.publisher = builder.publisher;
         this.subject = builder.subject;
         this.authors = builder.authors;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getPublishedYear() {

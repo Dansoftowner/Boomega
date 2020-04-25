@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.exception;
 
 import com.dansoftware.libraryapp.main.Main;
-import com.dansoftware.libraryapp.util.Alerts;
+import com.dansoftware.libraryapp.gui.util.Alerts;
 import javafx.geometry.Pos;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;

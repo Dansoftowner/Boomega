@@ -5,6 +5,9 @@ import com.dansoftware.libraryapp.log.LoggerConfigurator;
 
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.css.Styleable;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -60,7 +63,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Main.primaryStage = primaryStage;
-
 
         runAfterStart.forEach(Runnable::run);
         runAfterStart = null;
