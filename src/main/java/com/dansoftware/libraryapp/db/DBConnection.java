@@ -1,18 +1,27 @@
 package com.dansoftware.libraryapp.db;
 
+import com.dansoftware.libraryapp.db.pojo.Author;
+import com.dansoftware.libraryapp.db.pojo.Book;
+import com.dansoftware.libraryapp.db.pojo.Publisher;
+import com.dansoftware.libraryapp.db.pojo.Subject;
 import com.dansoftware.libraryapp.db.util.DataBaseFileRecognizer;
 import com.dansoftware.libraryapp.db.util.JDBCURLGenerator;
+import com.dansoftware.libraryapp.db.util.RecordCollection;
 import com.dansoftware.libraryapp.db.util.SqliteURLGenerator;
 import com.dansoftware.libraryapp.log.GuiLog;
 
 import java.io.File;
 import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class is responsible for communicating with the database
+ * This class is responsible for communicating with the database.
+ * A concretion of the {@link AbstractDBConnection} class.
  *
  * @author Daniel Gyorffy
  */
@@ -54,8 +63,25 @@ public final class DBConnection extends AbstractDBConnection {
     }
 
 
+    public DataPackage loadAllData() throws SQLException {
 
+        RecordCollection<Author> authors = new RecordCollection<>();
+        RecordCollection<Book> books = new RecordCollection<>();
+        RecordCollection<Publisher> publishers = new RecordCollection<>();
+        RecordCollection<Subject> subjects = new RecordCollection<>();
 
+        DataPackage dataPackage = new DataPackage(authors, publishers, subjects, books);
+
+        String sql = "SELECT * FROM books_joined;";
+        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            
+
+        }
+
+        return null;
+    }
 
     @Override
     protected InputStream getTableCreatorScriptStream() {
@@ -105,4 +131,33 @@ public final class DBConnection extends AbstractDBConnection {
         return instance;
     }
 
+    public static class DataPackage {
+        private Collection<Author> authors;
+        private Collection<Publisher> publishers;
+        private Collection<Subject> subjects;
+        private Collection<Book> books;
+
+        private DataPackage(Collection<Author> authors, Collection<Publisher> publishers, Collection<Subject> subjects, Collection<Book> books) {
+            this.authors = authors;
+            this.publishers = publishers;
+            this.subjects = subjects;
+            this.books = books;
+        }
+
+        public Collection<Author> getAuthors() {
+            return authors;
+        }
+
+        public Collection<Publisher> getPublishers() {
+            return publishers;
+        }
+
+        public Collection<Subject> getSubjects() {
+            return subjects;
+        }
+
+        public Collection<Book> getBooks() {
+            return books;
+        }
+    }
 }

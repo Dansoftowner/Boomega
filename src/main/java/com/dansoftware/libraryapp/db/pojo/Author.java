@@ -1,8 +1,14 @@
 package com.dansoftware.libraryapp.db.pojo;
 
+import com.dansoftware.libraryapp.util.annotation.Optional;
+import com.dansoftware.libraryapp.util.annotation.Required;
+
 public class Author extends Record {
 
+    @Required
     private String name;
+
+    @Optional
     private String description;
 
     public Author() {

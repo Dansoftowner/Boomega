@@ -1,38 +1,61 @@
 package com.dansoftware.libraryapp.db.pojo;
 
+import com.dansoftware.libraryapp.util.annotation.Optional;
+import com.dansoftware.libraryapp.util.annotation.Required;
+
 import java.util.List;
+import java.util.Objects;
 
 public class Book extends Record {
 
+    @Required
+    private List<Author> authors;
+
+    @Required
+    private String title;
+
+    @Optional
     private int publishedYear;
+
+    @Optional
     private int numberOfPages;
+
+    @Optional
     private int numberOfCopies;
 
-    private String title;
+    @Optional
     private String language;
+
+    @Optional
     private String notes;
+
+    @Optional
     private String isbn;
 
+    @Optional
     private Publisher publisher;
+
+    @Optional
     private Subject subject;
 
-    private List<Author> authors;
+
 
     public Book() {
     }
 
     private Book(Builder builder) {
         super(builder.id);
+        this.title = Objects.requireNonNull(builder.title);
+        this.authors = Objects.requireNonNull(builder.authors);
         this.publishedYear = builder.publishedYear;
         this.numberOfCopies = builder.numberOfCopies;
         this.numberOfPages = builder.numberOfPages;
-        this.title = builder.title;
         this.language = builder.language;
         this.notes = builder.notes;
         this.isbn = builder.isbn;
         this.publisher = builder.publisher;
         this.subject = builder.subject;
-        this.authors = builder.authors;
+
     }
 
     public int getPublishedYear() {

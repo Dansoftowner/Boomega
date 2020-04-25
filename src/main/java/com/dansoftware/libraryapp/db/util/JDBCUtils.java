@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Objects;
 
+/**
+ * This class contains some utilities for database handling.
+ */
 public class JDBCUtils {
 
     /**
