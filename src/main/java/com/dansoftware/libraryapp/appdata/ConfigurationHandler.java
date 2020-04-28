@@ -11,6 +11,7 @@ import java.util.logging.*;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public final class ConfigurationHandler {
 
     private static final Logger LOGGER = Logger.getLogger(ApplicationDataFolder.class.getName());

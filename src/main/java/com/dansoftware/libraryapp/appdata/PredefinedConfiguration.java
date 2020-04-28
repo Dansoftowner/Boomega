@@ -7,6 +7,7 @@ package com.dansoftware.libraryapp.appdata;
  *
  * @see ConfigurationHandler
  */
+@Deprecated
 public enum PredefinedConfiguration {
     DEFAULT_LOCALE("locale", "en"),
     SEARCH_FOR_UPDATES_AT_START("searchupdates", "true"),
