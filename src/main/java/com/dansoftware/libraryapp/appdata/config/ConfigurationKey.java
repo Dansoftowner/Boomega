@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.appdata;
+package com.dansoftware.libraryapp.appdata.config;
 
 import java.io.File;
 import java.util.Objects;
@@ -28,8 +28,9 @@ public class ConfigurationKey<T> {
         this.transformer = transformer;
     }
 
-    public String getKey() {
-        return key;
+    @Override
+    public String toString() {
+        return this.key;
     }
 
     public T getDefaultValue() {
