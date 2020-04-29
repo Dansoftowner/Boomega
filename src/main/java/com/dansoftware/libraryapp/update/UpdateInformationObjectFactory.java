@@ -111,7 +111,7 @@ public class UpdateInformationObjectFactory {
     }
 
     /**
-     * Creates an {@link UpdateInformationObject} that contains all neccessary informations of the new
+     * Creates an {@link UpdateInformationObject} that contains all necessary information of the new
      * update.
      *
      * @return the object that contains the information

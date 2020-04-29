@@ -26,10 +26,12 @@ public class UpdateInformationObject {
      * @param downloadableBinaries the Map that contains the binary types and the location
      *                             of each downloadable binary on the web.
      *                             For example (if the app runs on windows) :<br/>
-     *                             {<br/>
-     *                                   "Exe installer" : "http://example.com/download/libraryapp-installer.exe", <br/>
-     *                                   "Zip archive" :  "http://example.com/download/libraryapp.zip" <br/>
-     *                             }
+     * <pre>
+     * {
+     * "Exe installer" : "http://example.com/download/libraryapp-installer.exe", <br/>
+     * "Zip archive" :  "http://example.com/download/libraryapp.zip" <br/>
+     * }
+     * </pre>
      */
     UpdateInformationObject(String version, String updateReviewHtmlPath, Map<String, String> downloadableBinaries) {
         this.version = version;

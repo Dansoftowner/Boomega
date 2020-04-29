@@ -30,3 +30,14 @@ LEFT JOIN authors authors10 ON authors10.id = books.author_id10
 
 LEFT JOIN publishers ON publishers.id = books.publisher_id
 LEFT JOIN subjects ON subjects.id  = books.subject_id;
+
+CREATE VIEW single_authors AS
+    SELECT * FROM authors WHERE (SELECT COUNT(*) FROM books WHERE authors.id IN (author_id01, author_id02, author_id03,
+                                                                                 author_id04, author_id05, author_id06,
+                                                                                 author_id07, author_id08, author_id09,
+                                                                                 author_id10)) IS 0;
+CREATE VIEW single_publishers AS
+    SELECT * FROM publishers WHERE (SELECT COUNT(*) FROM books WHERE publishers.id IS books.publisher_id);
+
+CREATE VIEW single_subjects AS
+    SELECT * FROM subjects WHERE (SELECT COUNT(*) FROM books WHERE subjects.id IS books.subject_id);

@@ -2,13 +2,14 @@ package com.dansoftware.libraryapp.db.util;
 
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
-import com.dansoftware.libraryapp.appdata.ConfigurationHandler;
-import com.dansoftware.libraryapp.appdata.PredefinedConfiguration;
-import com.dansoftware.libraryapp.db.DBConnection;
+import com.dansoftware.libraryapp.appdata.config.ConfigurationKey;
 import com.dansoftware.libraryapp.main.ApplicationArgumentHandler;
+import com.dansoftware.libraryapp.main.Globals;
 
 import java.io.File;
 import java.util.Optional;
+
+import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
 
 /**
  * This class is responsible for recognizing the right database file
@@ -30,18 +31,17 @@ public final class DataBaseFileRecognizer {
      * </ol>
      *
      * @see ApplicationArgumentHandler#getLaunchedFile
-     * @see ConfigurationHandler#getConfiguration
-     * @see PredefinedConfiguration#CUSTOM_DB_FILE
+     * @see Globals#getConfigurationHolder()
+     * @see ConfigurationKey#CUSTOM_DB_FILE
      * @see ApplicationDataFolder#getDefaultDatabaseFile
      */
     public final File getDBFile() {
-        ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
         ApplicationDataFolder applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
 
         Optional<File> launchedFile = ApplicationArgumentHandler.getLaunchedFile();
-        Optional<String> customConfiguredDB =
-                Optional.ofNullable(configurationHandler.getConfiguration(PredefinedConfiguration.CUSTOM_DB_FILE.getKey()));
+        Optional<File> customConfiguredDB =
+                Optional.ofNullable(getConfigurationHolder().getConfiguration(ConfigurationKey.CUSTOM_DB_FILE));
 
-        return launchedFile.orElseGet(() -> customConfiguredDB.map(File::new).orElseGet(applicationDataFolder::getDefaultDatabaseFile));
+        return launchedFile.orElseGet(() -> customConfiguredDB.orElseGet(applicationDataFolder::getDefaultDatabaseFile));
     }
 }

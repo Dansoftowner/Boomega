@@ -4,7 +4,10 @@ import java.io.*;
 
 /**
  * This class can convert the exception stack trace
- * to a string. To get the string of the exception stack trace
+ * to a string.
+ *
+ * <p>
+ * To get the string of the exception stack trace
  * you have to call the {@link ThrowableToStringAdapter#toString()} method.
  *
  * @author Daniel Gyorffy

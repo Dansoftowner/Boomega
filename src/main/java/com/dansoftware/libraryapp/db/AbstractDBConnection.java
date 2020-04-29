@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.db;
 
+import com.dansoftware.libraryapp.db.util.DataPackage;
 import com.dansoftware.libraryapp.db.util.JDBCURLGenerator;
 import com.dansoftware.libraryapp.db.util.JDBCUtils;
 
@@ -9,8 +10,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * This abstract database-handler class handles the base database operations
+ * An AbstractDBConnection can connect to a particular database.
  *
+ * <p>
  * @author Daniel Gyorffy
  */
 public abstract class AbstractDBConnection {
@@ -62,6 +64,7 @@ public abstract class AbstractDBConnection {
         this.connection.close();
     }
 
+    public abstract DataPackage loadAllData() throws SQLException;
 
     /**
      * Getter for the {@link AbstractDBConnection#connection} field.

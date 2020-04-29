@@ -8,6 +8,8 @@ import java.util.Objects;
 
 public class Book extends Record {
 
+    public static final int MAX_AUTHOR_COUNT = 10;
+
     @Required
     private List<Author> authors;
 
@@ -37,7 +39,6 @@ public class Book extends Record {
 
     @Optional
     private Subject subject;
-
 
 
     public Book() {
