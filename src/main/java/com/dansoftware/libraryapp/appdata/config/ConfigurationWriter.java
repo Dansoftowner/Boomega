@@ -9,8 +9,13 @@ import java.io.IOException;
 public interface ConfigurationWriter {
 
     /**
-     * This method writes the configurations from a {@link ConfigurationHolder}
-     * object to a particular target.
+     * Writes the configurations from a {@link ConfigurationHolder}
+     * object to a target.
+     *
+     * <p>
+     *  The type of the particular target depends
+     *  on what {@link ConfigurationWriter} used
+     *  to execute this task.
      *
      * @param holder to be wrote; must not be null
      * @throws NullPointerException if the {@param holder} is null

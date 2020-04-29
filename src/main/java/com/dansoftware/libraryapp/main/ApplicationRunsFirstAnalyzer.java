@@ -13,7 +13,9 @@ class ApplicationRunsFirstAnalyzer {
     }
 
     private boolean applicationRunsFirst() {
-        ApplicationDataFolder applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
+        ApplicationDataFolder applicationDataFolder =
+                ApplicationDataFolderFactory.getApplicationDataFolder();
+
         return applicationDataFolder.isFirstCreated();
     }
 

@@ -4,11 +4,17 @@ import java.util.*;
 
 import static java.util.Objects.isNull;
 
-public class ConfigurationPropertiesHolder implements ConfigurationHolder {
+/**
+ * A ConfigurationHashtableHolder stores the configurations within a Hashtable
+ * object <i>specifically a {@link Properties} object</i>
+ *
+ * @author Daniel Gyorffy
+ */
+public class ConfigurationHashtableHolder implements ConfigurationHolder {
 
     private Properties data;
 
-    public ConfigurationPropertiesHolder() {
+    public ConfigurationHashtableHolder() {
     }
 
     @Override
@@ -18,7 +24,13 @@ public class ConfigurationPropertiesHolder implements ConfigurationHolder {
         if (isNull(data)) this.data = new Properties();
 
         String keyAsString = key.toString();
-        String configAsString = data.get(keyAsString).toString();
+
+        Object configuration;
+        if (isNull(configuration = data.get(keyAsString))) {
+            return getDefaultConfiguration(key);
+        }
+
+        String configAsString = configuration.toString();
 
         return key.getTransformer().apply(configAsString);
     }
@@ -29,9 +41,19 @@ public class ConfigurationPropertiesHolder implements ConfigurationHolder {
     }
 
     @Override
+    public void removeConfiguration(ConfigurationKey<?> configurationKey) {
+        this.data.remove(configurationKey.toString());
+    }
+
+    @Override
     public void putConfigurations(Properties properties) {
         if (isNull(data)) this.data = properties;
         else loadFromProperties(properties);
+    }
+
+    @Override
+    public Properties toProperties() {
+        return data;
     }
 
     @Override

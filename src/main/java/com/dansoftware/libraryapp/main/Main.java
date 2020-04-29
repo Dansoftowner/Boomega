@@ -5,12 +5,11 @@ import com.dansoftware.libraryapp.log.LoggerConfigurator;
 
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
-import javafx.css.Styleable;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Main class of the application
@@ -32,7 +31,8 @@ public class Main extends Application {
     }
 
     /**
-     * This field contains the primary window of the Window Hierarchy
+     * Contains the primary window of the Window Hierarchy
+     * Should be initialized by the start() method
      *
      * @see Main#start(Stage)
      */
@@ -47,18 +47,28 @@ public class Main extends Application {
     private static List<Runnable> runAfterStart = new LinkedList<>();
 
     /**
-     * MAIN
+     * The main-method of the application;
+     *
+     * <p>
+     * Parses the application argument(s)
+     * and launch the application with a
+     * preloader.
+     *
+     * @see ApplicationArgumentHandler
+     * @see LauncherImpl#launchApplication(Class, Class, String[])
      */
     public static void main(String[] args) {
         new ApplicationArgumentHandler(args);
 
-        LauncherImpl.launchApplication(Main.class, null);
+        LauncherImpl.launchApplication(Main.class, Preloader.class, null);
     }
 
     @Override
     public void init() {
-        new ApplicationInitializer().init();
+        ApplicationInitializer initializer = new ApplicationInitializer();
+        initializer.initializeApplication();
     }
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -76,7 +86,7 @@ public class Main extends Application {
      * This method allows us to define tasks
      * that are must be executed after the application
      * starts.
-     *
+     * <p>
      * If the application already started the {@link Runnable#run}
      * method will be executed immediately.
      *
@@ -85,11 +95,13 @@ public class Main extends Application {
      */
     public synchronized static void runAfterStart(Runnable runnable) {
         //If the application already started
-        if (alreadyStarted()) runnable.run(); else runAfterStart.add(runnable);
+        if (alreadyStarted()) runnable.run();
+        else runAfterStart.add(runnable);
     }
 
     /**
      * Returns that the application already started
+     *
      * @return <code>true</code> if the application already started
      * <code>false</code> otherwise.
      */

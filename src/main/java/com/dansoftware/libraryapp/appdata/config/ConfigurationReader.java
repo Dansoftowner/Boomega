@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.appdata.config;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -9,7 +8,7 @@ import java.io.IOException;
 public interface ConfigurationReader {
 
     /**
-     * This method reads the configurations into a
+     * Reads the configurations into a
      * configuration holder object.
      *
      * @param holder the holder object to read to; must not be null

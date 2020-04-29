@@ -26,11 +26,35 @@ public class GuiLog extends LogRecord {
      *
      * @param level     the priority level of this log
      * @param msg       the key of the message from the {@link Bundles#getExceptionBundle()}
+     * @see LogRecord#LogRecord(Level, String)
+     */
+    public GuiLog(Level level, String msg) {
+        super(level, getFinalMessage(msg, null));
+    }
+
+    /**
+     * Creates a basic GuiLog object with the mandatory elements
+     *
+     * @param level     the priority level of this log
+     * @param msg       the key of the message from the {@link Bundles#getExceptionBundle()}
      * @param arguments the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      * @see LogRecord#LogRecord(Level, String)
      */
-    public GuiLog(Level level, String msg, Object... arguments) {
+    public GuiLog(Level level, String msg, Object[] arguments) {
         super(level, getFinalMessage(msg, arguments));
+    }
+
+    /**
+     * Creates a basic GuiLog object with an additional information: the {@link Duration} that defines
+     * that how long time the notification bar should be showed on the gui for the user
+     *
+     * @param level             the priority level of this log
+     * @param msg               the key of the message from the {@link Bundles#getExceptionBundle()}
+     * @param hideAfterDuration the duration that defines how long time should be the Notification bar showed
+     */
+    public GuiLog(Level level, String msg, Duration hideAfterDuration) {
+        this(level, msg, (Object[]) null);
+        this.hideAfterDuration = hideAfterDuration;
     }
 
     /**
@@ -42,9 +66,22 @@ public class GuiLog extends LogRecord {
      * @param hideAfterDuration the duration that defines how long time should be the Notification bar showed
      * @param arguments         the dynamic values that are should be placed into the messages by the {@link MessageFormat}
      */
-    public GuiLog(Level level, String msg, Duration hideAfterDuration, Object... arguments) {
+    public GuiLog(Level level, String msg, Duration hideAfterDuration, Object[] arguments) {
         this(level, msg, arguments);
         this.hideAfterDuration = hideAfterDuration;
+    }
+
+    /**
+     * Creates a basic GuiLog object but also allows to define that what Throwable is the cause that we logged
+     * In most cases this constructor should be used with a {@link Level#SEVERE} or {@link Level#WARNING} level.
+     *
+     * @param level     the priority level of this log
+     * @param cause     the throwable object
+     * @param msg       the key of the message from the {@link Bundles#getExceptionBundle()}
+     */
+    public GuiLog(Level level, Throwable cause, String msg) {
+        this(level, msg, (Object[]) null);
+        setThrown(cause);
     }
 
     /**
@@ -58,6 +95,19 @@ public class GuiLog extends LogRecord {
      */
     public GuiLog(Level level, Throwable cause, String msg, Object[] arguments) {
         this(level, msg, arguments);
+        setThrown(cause);
+    }
+
+    /**
+     * Creates a GuiLog object with mandatory elements and a Throwable cause + a Duration
+     *
+     * @param level             the priority level of this log
+     * @param cause             the throwable object
+     * @param msg               the key of the message from the {@link Bundles#getExceptionBundle()}
+     * @param hideAfterDuration the duration that defines how long time should be the Notification bar showed
+     */
+    public GuiLog(Level level, Throwable cause, String msg, Duration hideAfterDuration) {
+        this(level, msg, hideAfterDuration, null);
         setThrown(cause);
     }
 
