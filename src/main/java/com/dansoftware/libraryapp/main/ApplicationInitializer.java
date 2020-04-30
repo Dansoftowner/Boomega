@@ -23,7 +23,7 @@ import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
  *
  * <b>Should be instantiated and used only ONCE</b>
  *
- * @see Main#init()
+ * @see GuiApplicationStarter#init()
  */
 final class ApplicationInitializer {
 

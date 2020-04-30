@@ -8,7 +8,7 @@ import javafx.geometry.Pos;
 import java.util.Optional;
 import java.util.logging.*;
 
-import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
+import static com.dansoftware.libraryapp.main.GuiApplicationStarter.getPrimaryStage;
 import static com.dansoftware.libraryapp.util.Bundles.*;
 
 /**

@@ -1,21 +1,11 @@
+import org.gradle.nativeplatform.platform.internal.DefaultOperatingSystem
+
 apply plugin: 'java'
 
-sourceCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
-}
-
-
-compileJava {
-    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
-}
-
-compileTestJava {
-    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
 }
 
 processResources {
@@ -25,7 +15,7 @@ processResources {
     }
 }
 
-def mainClass = 'com.dansoftware.libraryapp.main.Main'
+def mainClass = 'com.dansoftware.libraryapp.main.LibraryAppLauncher'
 
 jar {
     manifest {
@@ -42,12 +32,25 @@ test {
 }
 
 dependencies {
-    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
-
-    implementation("org.xerial:sqlite-jdbc:3.30.1")
-
+    //libraries from maven
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2') //JUnit 5 for testing
+    implementation("org.xerial:sqlite-jdbc:3.30.1") //sqlite JDBC driver
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
     compile group: 'org.json', name: 'json', version: '20190722'
-	compile fileTree(dir: 'external-libraries', include: '*.jar')
+
+    //libraries from the local file system
+    compile fileTree(dir: 'external-libraries', include: '*.jar')
+    compile fileTree(dir: getJavaFXBinariesDir(), include:'*.jar') //JavaFX
+}
+
+static def getJavaFXBinariesDir() {
+    def globalPattern = 'external-libraries/javafx'
+    def os = org.gradle.internal.os.OperatingSystem.current()
+    if (os.isWindows())
+      return globalPattern + '/windows'
+    else if (os.isLinux())
+        return globalPattern + '/linux'
+    else if (os.isMacOsX())
+        return globalPattern + '/mac'
 }

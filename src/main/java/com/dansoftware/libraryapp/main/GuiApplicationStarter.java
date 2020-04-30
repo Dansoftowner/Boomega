@@ -1,40 +1,26 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.exception.ExceptionUtils;
-import com.dansoftware.libraryapp.log.LoggerConfigurator;
-
-import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 /**
- * Main class of the application
+ * The javafx application starter.
+ *
+ * <p>
+ * Responsible for initializing the application and launching the GUI
  *
  * @author Daniel Gyorffy
  */
-public class Main extends Application {
-
-    static {
-        //Configure the logger
-        new LoggerConfigurator()
-                .configureRootLogger();
-
-        //set the default locale
-        Locale.setDefault(Locale.ENGLISH);
-
-        //Set the default uncaught exception handler
-        Thread.setDefaultUncaughtExceptionHandler(ExceptionUtils.DEFAULT_EXCEPTION_HANDLER);
-    }
+public class GuiApplicationStarter extends Application {
 
     /**
      * Contains the primary window of the Window Hierarchy
      * Should be initialized by the start() method
      *
-     * @see Main#start(Stage)
+     * @see GuiApplicationStarter#start(Stage)
      */
     private static Stage primaryStage;
 
@@ -42,26 +28,9 @@ public class Main extends Application {
      * This list contains all the tasks that are should be executed after
      * the application finally starts
      *
-     * @see Main#start
+     * @see GuiApplicationStarter#start
      */
     private static List<Runnable> runAfterStart = new LinkedList<>();
-
-    /**
-     * The main-method of the application;
-     *
-     * <p>
-     * Parses the application argument(s)
-     * and launch the application with a
-     * preloader.
-     *
-     * @see ApplicationArgumentHandler
-     * @see LauncherImpl#launchApplication(Class, Class, String[])
-     */
-    public static void main(String[] args) {
-        new ApplicationArgumentHandler(args);
-
-        LauncherImpl.launchApplication(Main.class, Preloader.class, null);
-    }
 
     @Override
     public void init() {
@@ -72,12 +41,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Main.primaryStage = primaryStage;
+        GuiApplicationStarter.primaryStage = primaryStage;
 
         runAfterStart.forEach(Runnable::run);
         runAfterStart = null;
     }
-
+    
     @Override
     public void stop() {
     }
@@ -91,7 +60,7 @@ public class Main extends Application {
      * method will be executed immediately.
      *
      * @param runnable the thing that should be executed
-     * @see Main#start
+     * @see GuiApplicationStarter#start
      */
     public synchronized static void runAfterStart(Runnable runnable) {
         //If the application already started

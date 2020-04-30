@@ -1,160 +1,108 @@
 package com.dansoftware.libraryapp.db;
 
-import com.dansoftware.libraryapp.db.pojo.Author;
-import com.dansoftware.libraryapp.db.pojo.Book;
-import com.dansoftware.libraryapp.db.pojo.Publisher;
-import com.dansoftware.libraryapp.db.pojo.Subject;
-import com.dansoftware.libraryapp.db.util.*;
-import com.dansoftware.libraryapp.db.util.parse.*;
-import com.dansoftware.libraryapp.log.GuiLog;
+import com.dansoftware.libraryapp.db.util.DataPackage;
+import com.dansoftware.libraryapp.db.util.JDBCURLGenerator;
+import com.dansoftware.libraryapp.db.util.JDBCUtils;
 
-import java.io.File;
 import java.io.InputStream;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static java.util.Objects.isNull;
 
 /**
- * This class is responsible for communicating with the database.
+ * An AbstractDBConnection can connect to a particular database.
  *
+ * <p>
  * @author Daniel Gyorffy
  */
-public final class DBConnection extends AbstractDBConnection {
-
-    private static final Logger LOGGER = Logger.getLogger(DBConnection.class.getName());
+public abstract class DBConnection {
 
     /**
-     * The single-instance holder field
+     * Contains the database connection object
      */
-    private static DBConnection instance;
+    private Connection connection;
 
     /**
-     * This constant represents the path on the Class-Path of the sql script that creates the necessary tables in the database
-     */
-    private final static String CREATE_TABLES_SCRIPT = "/com/dansoftware/libraryapp/db/create_tables.sql";
-
-    /**
-     * This constant represents the path on the Class-Path of the sql script that creates the necessary views in the database
-     */
-    private final static String CREATE_VIEWS_SCRIPT = "/com/dansoftware/libraryapp/db/create_views.sql";
-
-    /**
-     * Defines the class-name of the JDBC Driver
-     */
-    private final static String JDBC_DRIVER = "org.sqlite.JDBC";
-
-    /**
-     * The file object of the db file
-     */
-    private static File databaseFile;
-
-    /**
-     * Don't let anyone to create an instance of this class.
+     * This constructor creates the database connection besides constructs the
+     * object.
      *
-     * @throws SQLException if some sql exception occurs
+     * @throws SQLException if some some exception occurs while trying to create the database connection
      */
-    private DBConnection() throws SQLException {
-    }
-
-
-    @Override
-    public DataPackage loadAllData() throws SQLException {
-
-        DataPackage dataPackage = new DataPackage(
-                new RecordCollection<>(),
-                new RecordCollection<>(),
-                new RecordCollection<>(),
-                new RecordCollection<>()
-        );
-
-        String sql;
-        ResultSetParser parser;
-
-        sql = "SELECT * FROM books_joined;";
-        parser = new JoinedTableParser();
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            parser.parse(resultSet, dataPackage);
-        }
-
-        sql = "SELECT * FROM single_authors";
-        parser = new AuthorTableParser();
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            parser.parse(resultSet, dataPackage);
-        }
-
-        sql = "SELECT * FROM single_publishers";
-        parser = new PublisherTableParser();
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            parser.parse(resultSet, dataPackage);
-        }
-
-        sql = "SELECT * FROM single_subjects";
-        parser = new SubjectTableParser();
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            parser.parse(resultSet, dataPackage);
-        }
-
-        return dataPackage;
-    }
-
-    @Override
-    protected InputStream getTableCreatorScriptStream() {
-        return getClass().getResourceAsStream(CREATE_TABLES_SCRIPT);
-    }
-
-    @Override
-    protected InputStream getViewCreatorScriptStream() {
-        return getClass().getResourceAsStream(CREATE_VIEWS_SCRIPT);
-    }
-
-    @Override
-    protected String getJDBCDriver() {
-        return JDBC_DRIVER;
-    }
-
-    @Override
-    protected JDBCURLGenerator getJDBCUrlMaker() {
-        return new SqliteURLGenerator(databaseFile = new DataBaseFileRecognizer().getDBFile());
+    protected DBConnection() throws SQLException {
+        createConnection();
+        createTablesAndViews();
     }
 
     /**
-     * This method creates an instance of this class and handles the {@link SQLException}
-     *
-     * @return the database connection object
-     * @see DBConnection#getInstance()
+     * This method creates the database connection and initialize the {@link DBConnection#connection} field.
      */
-    private static DBConnection createDBConnectionObject() {
+    private void createConnection() throws SQLException {
         try {
-            return new DBConnection();
-        } catch (SQLException e) {
-            LOGGER.log(new GuiLog(Level.SEVERE, e, "dbconnection.failed", new Object[]{databaseFile.getName()}));
+            Class.forName(getJDBCDriver());
+            JDBCURLGenerator urlGenerator = getJDBCUrlMaker();
+            connection = DriverManager.getConnection(urlGenerator.getJDBCUrl());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+    }
 
-        return null;
+
+    /**
+     * This method creates the necessary tables and views in the database
+     */
+    private void createTablesAndViews() {
+        JDBCUtils.executeSqlScript(connection, getTableCreatorScriptStream());
+        JDBCUtils.executeSqlScript(connection, getViewCreatorScriptStream());
     }
 
     /**
-     * This static method creates the DBConnection if it isn't created yet, and
-     * returns it.
+     * This method closes the database connection
      *
-     * @return the single instance of the DBConnection class
+     * @throws Exception if some exception occurs
      */
-    public static DBConnection getInstance() {
-        if (isNull(instance)) instance = createDBConnectionObject();
-
-        return instance;
+    public final void close() throws Exception {
+        this.connection.close();
     }
+
+    public abstract DataPackage loadAllData() throws SQLException;
+
+    /**
+     * Getter for the {@link DBConnection#connection} field.
+     * @return the {@link Connection} object
+     */
+    protected final Connection getConnection() {
+        return connection;
+    }
+
+    /**
+     * This method should return the input stream from the sql script
+     * that contains the table creations.
+     *
+     * @return the input stream of the sql script
+     */
+    protected abstract InputStream getTableCreatorScriptStream();
+
+    /**
+     * This method should return the input stream from the sql script
+     * that contains the view creations.
+     *
+     * @return the input stream of the sql script
+     */
+    protected abstract InputStream getViewCreatorScriptStream();
+
+    /**
+     * This method should return the JDBC Driver's class name
+     *
+     * @return the class name with the package 'prefix'. For example: "org.example.DRIVER"
+     */
+    protected abstract String getJDBCDriver();
+
+    /**
+     * This method should return a {@link JDBCURLGenerator} object that
+     * creates the right jdbc url.
+     *
+     * @return the JDBC url generator object.
+     */
+    protected abstract JDBCURLGenerator getJDBCUrlMaker();
 
 }
