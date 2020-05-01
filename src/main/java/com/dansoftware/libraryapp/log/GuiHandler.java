@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.log;
 
 import com.dansoftware.libraryapp.gui.util.Alerts;
+import com.dansoftware.libraryapp.main.GuiApplicationStarter;
+import javafx.application.Platform;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import javafx.geometry.Pos;
@@ -23,36 +25,39 @@ import static com.dansoftware.libraryapp.util.Bundles.*;
 public class GuiHandler extends Handler {
 
     @Override
-    public void publish(LogRecord record) {
+    public void publish(final LogRecord record) {
         if (record instanceof GuiLog) {
 
-            Optional<Throwable> throwableOptional = Optional.ofNullable(record.getThrown());
-            Optional<Duration> durationOptional = Optional.ofNullable(asGuiLog(record).getHideAfterDuration());
-
-            var notificationBuilder = Notifications.create()
-                    .text(record.getMessage())
-                    .hideAfter(durationOptional.orElse(Duration.INDEFINITE))
-                    .onAction(event -> throwableOptional.ifPresent(Alerts::showErrorAlertDialog))
-                    .owner(getPrimaryStage())
-                    .position(Pos.BOTTOM_RIGHT);
-
-            if (record.getLevel() == Level.SEVERE)
-                notificationBuilder
-                        .title(getCommonBundle().getString("notifications.error.occured"))
-                        .showError();
-
-            else if (record.getLevel() == Level.INFO)
-                notificationBuilder
-                        .title(getCommonBundle().getString("notifications.info"))
-                        .showInformation();
-
-            else if (record.getLevel() == Level.WARNING)
-                notificationBuilder
-                        .title(getCommonBundle().getString("notification.warning"))
-                        .showWarning();
+            final Optional<Throwable> throwableOptional = Optional.ofNullable(record.getThrown());
+            final Optional<Duration> durationOptional = Optional.ofNullable(asGuiLog(record).getHideAfterDuration());
 
 
-            asGuiLog(record).getTitle().ifPresent(notificationBuilder::title);
+            GuiApplicationStarter.runAfterStart(() -> {
+                var notificationBuilder = Notifications.create()
+                        .text(record.getMessage())
+                        .hideAfter(durationOptional.orElse(Duration.INDEFINITE))
+                        .onAction(event -> throwableOptional.ifPresent(Alerts::showErrorAlertDialog))
+                        .owner(getPrimaryStage())
+                        .position(Pos.BOTTOM_RIGHT);
+
+                if (record.getLevel() == Level.SEVERE)
+                    notificationBuilder
+                            .title(getCommonBundle().getString("notifications.error.occured"))
+                            .showError();
+
+                else if (record.getLevel() == Level.INFO)
+                    notificationBuilder
+                            .title(getCommonBundle().getString("notifications.info"))
+                            .showInformation();
+
+                else if (record.getLevel() == Level.WARNING)
+                    notificationBuilder
+                            .title(getCommonBundle().getString("notification.warning"))
+                            .showWarning();
+
+
+                asGuiLog(record).getTitle().ifPresent(notificationBuilder::title);
+            });
         }
     }
 

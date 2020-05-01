@@ -34,8 +34,13 @@ public class GuiApplicationStarter extends Application {
 
     @Override
     public void init() {
-        ApplicationInitializer initializer = new ApplicationInitializer();
-        initializer.initializeApplication();
+
+        try {
+            ApplicationInitializer initializer = new ApplicationInitializer();
+            initializer.initializeApplication();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

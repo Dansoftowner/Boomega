@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.db.util;
 
-import com.dansoftware.libraryapp.db.DBConnection;
+import com.dansoftware.libraryapp.db.AbstractDBConnection;
 import com.dansoftware.libraryapp.db.pojo.*;
 
 import java.util.Collection;
@@ -17,7 +17,7 @@ import java.util.Collection;
  *     <li>{@link Book} objects</li>
  * </ul>
  *
- * @see DBConnection#loadAllData() DBConnection objects uses DataPackgage
+ * @see AbstractDBConnection#loadAllData() DBConnection objects uses DataPackgage
  *                                                                       to store the read data from the database
  */
 public final class DataPackage {

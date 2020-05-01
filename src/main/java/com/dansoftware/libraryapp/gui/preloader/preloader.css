@@ -1,0 +1,9 @@
+.root {
+    -fx-background-color:  #f2efe4;
+    -fx-border-color: black;
+}
+
+.jfx-progress-bar .bar {
+    -fx-background-radius: 0;
+    -fx-background-color: #1fa1a7;
+}

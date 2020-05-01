@@ -8,6 +8,16 @@ repositories {
     mavenCentral()
 }
 
+compileJava {
+    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
+    options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
+}
+
+compileTestJava {
+    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
+    options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
+}
+
 processResources {
     from ('src/main/java') {
         include '**/*.fxml'
@@ -38,19 +48,8 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
     compile group: 'org.json', name: 'json', version: '20190722'
+    implementation 'com.jfoenix:jfoenix:9.0.9'
 
     //libraries from the local file system
     compile fileTree(dir: 'external-libraries', include: '*.jar')
-    compile fileTree(dir: getJavaFXBinariesDir(), include:'*.jar') //JavaFX
-}
-
-static def getJavaFXBinariesDir() {
-    def globalPattern = 'external-libraries/javafx'
-    def os = org.gradle.internal.os.OperatingSystem.current()
-    if (os.isWindows())
-      return globalPattern + '/windows'
-    else if (os.isLinux())
-        return globalPattern + '/linux'
-    else if (os.isMacOsX())
-        return globalPattern + '/mac'
 }

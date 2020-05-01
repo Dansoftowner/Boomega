@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
 import com.dansoftware.libraryapp.appdata.config.*;
+import com.dansoftware.libraryapp.db.DataStorage;
 import com.dansoftware.libraryapp.log.GuiLog;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.dansoftware.libraryapp.util.FileUtils;
@@ -89,6 +90,11 @@ final class ApplicationInitializer {
                 .getConfiguration(ConfigurationKey.DEFAULT_LOCALE);
 
         Locale.setDefault(configuredLocale);
+    }
+
+    @Step
+    private void setGlobalDataStorage() {
+        Globals.setDataStorage(new DataStorage());
     }
 
     @Step
