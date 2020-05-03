@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.update;
 
+import com.dansoftware.libraryapp.util.PlatformName;
 import com.sun.javafx.PlatformUtil;
 import org.apache.commons.io.IOUtils;
 import org.json.*;
@@ -70,7 +71,7 @@ public class UpdateInformationObjectFactory {
      * @return the version of the new update
      */
     private String getVersion(JSONObject json) {
-        return json.getString(UpdateJSONKey.VERSION);
+        return json.getString(JSONKey.VERSION);
     }
 
     /**
@@ -81,7 +82,7 @@ public class UpdateInformationObjectFactory {
      * @return the url of review wepage that contains the features of the new update (for example: http://example.com/review.html)
      */
     private String getReviewUrl(JSONObject json) {
-        return json.getString(UpdateJSONKey.REVIEW_PAGE);
+        return json.getString(JSONKey.REVIEW_PAGE);
     }
 
     /**
@@ -93,16 +94,12 @@ public class UpdateInformationObjectFactory {
      * @return the Map that contains the binary file locations with their type (for example: {EXE: http://example/download.exe}
      */
     private Map<String, String> getBinaries(JSONObject json) {
-        JSONObject binariesObject = json.getJSONObject(UpdateJSONKey.DOWNLOADABLE_BINARIES);
+        JSONObject binariesObject = json.getJSONObject(JSONKey.DOWNLOADABLE_BINARIES);
 
         Map<String, String> result = new HashMap<>();
 
-        String platformName = null;
-        if (PlatformUtil.isWindows()) platformName = "Windows";
-        else if (PlatformUtil.isLinux()) platformName = "Linux";
-        else if (PlatformUtil.isMac()) platformName = "Mac";
-
-        Optional.ofNullable(platformName).ifPresent((var platform) -> {
+        PlatformName platformName = new PlatformName();
+        Optional.ofNullable(platformName.toString()).ifPresent((var platform) -> {
             JSONObject platformBinaries = binariesObject.getJSONObject(platform);
             platformBinaries.keySet().forEach((var key) -> result.put(key, platformBinaries.getString(key)));
         });

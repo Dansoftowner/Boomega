@@ -4,7 +4,7 @@ import com.dansoftware.libraryapp.util.ThrowableToStringAdapter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 
-import static com.dansoftware.libraryapp.main.GuiApplicationStarter.getPrimaryStage;
+import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
 
 /**
  * This class contains some static methods for creating alert popups for the user.

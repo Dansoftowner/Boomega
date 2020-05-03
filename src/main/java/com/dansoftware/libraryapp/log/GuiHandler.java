@@ -1,8 +1,7 @@
 package com.dansoftware.libraryapp.log;
 
 import com.dansoftware.libraryapp.gui.util.Alerts;
-import com.dansoftware.libraryapp.main.GuiApplicationStarter;
-import javafx.application.Platform;
+import com.dansoftware.libraryapp.main.Main;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import javafx.geometry.Pos;
@@ -10,7 +9,7 @@ import javafx.geometry.Pos;
 import java.util.Optional;
 import java.util.logging.*;
 
-import static com.dansoftware.libraryapp.main.GuiApplicationStarter.getPrimaryStage;
+import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
 import static com.dansoftware.libraryapp.util.Bundles.*;
 
 /**
@@ -31,8 +30,7 @@ public class GuiHandler extends Handler {
             final Optional<Throwable> throwableOptional = Optional.ofNullable(record.getThrown());
             final Optional<Duration> durationOptional = Optional.ofNullable(asGuiLog(record).getHideAfterDuration());
 
-
-            GuiApplicationStarter.runAfterStart(() -> {
+            Main.runAfterStart(() -> {
                 var notificationBuilder = Notifications.create()
                         .text(record.getMessage())
                         .hideAfter(durationOptional.orElse(Duration.INDEFINITE))

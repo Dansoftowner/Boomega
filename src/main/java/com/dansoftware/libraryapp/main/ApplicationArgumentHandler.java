@@ -27,7 +27,7 @@ public class ApplicationArgumentHandler {
      * arguments
      *
      * @param args the application arguments
-     * @see GuiApplicationStarter#main(String[])
+     * @see Main#main(String[])
      */
     ApplicationArgumentHandler(String[] args) {
         if (isEmpty(args))

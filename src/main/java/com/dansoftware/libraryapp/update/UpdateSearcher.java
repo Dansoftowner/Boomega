@@ -2,8 +2,7 @@ package com.dansoftware.libraryapp.update;
 
 import com.dansoftware.libraryapp.gui.update.UpdateDisplayer;
 import com.dansoftware.libraryapp.log.GuiLog;
-import com.dansoftware.libraryapp.main.GuiApplicationStarter;
-import com.dansoftware.libraryapp.main.Globals;
+import com.dansoftware.libraryapp.main.Main;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
@@ -12,6 +11,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.dansoftware.libraryapp.main.Globals.BUILD_INFO;
 import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
 
 /**
@@ -61,7 +61,7 @@ public class UpdateSearcher {
         Optional.ofNullable(this.informationObject)
                 .ifPresent(informationObject -> {
                     if (isCurrentVersionOld())
-                        GuiApplicationStarter.runAfterStart(() -> Notifications.create()
+                        Main.runAfterStart(() -> Notifications.create()
                                 .title("LibraryApp Updater")
                                 .text(getCommonBundle().getString("updatesearcher.available"))
                                 .hideAfter(Duration.INDEFINITE)
@@ -78,7 +78,7 @@ public class UpdateSearcher {
      *         or <code>false</code> otherwise
      */
     private boolean isCurrentVersionOld() {
-        String currentVersion = Globals.APP_VERSION;
+        String currentVersion = BUILD_INFO.getVersion();
         String nextVersion = informationObject.getVersion();
 
         currentVersion = currentVersion.replace(".", "");

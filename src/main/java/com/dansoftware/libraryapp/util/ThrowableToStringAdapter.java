@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.util;
 
 import java.io.*;
+import java.util.Objects;
 
 /**
  * This class can convert the exception stack trace
@@ -14,7 +15,7 @@ import java.io.*;
  */
 public class ThrowableToStringAdapter {
 
-    private Throwable cause;
+    private final Throwable cause;
 
     public ThrowableToStringAdapter(Throwable cause) {
         this.cause = cause;

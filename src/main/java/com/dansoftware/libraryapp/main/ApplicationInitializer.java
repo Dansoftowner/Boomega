@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
 import com.dansoftware.libraryapp.appdata.config.*;
+import com.dansoftware.libraryapp.db.DBConnection;
 import com.dansoftware.libraryapp.db.DataStorage;
 import com.dansoftware.libraryapp.log.GuiLog;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
@@ -24,7 +25,7 @@ import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
  *
  * <b>Should be instantiated and used only ONCE</b>
  *
- * @see GuiApplicationStarter#init()
+ * @see Main#init()
  */
 final class ApplicationInitializer {
 
@@ -94,7 +95,7 @@ final class ApplicationInitializer {
 
     @Step
     private void setGlobalDataStorage() {
-        Globals.setDataStorage(new DataStorage());
+        Globals.setDataStorage(new DataStorage(DBConnection.getInstance()));
     }
 
     @Step

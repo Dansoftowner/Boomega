@@ -5,7 +5,7 @@ import com.sun.javafx.PlatformUtil;
 import java.io.File;
 
 /**
- * Factory class for creating object of <code>{@link ApplicationDataFolder}</code>
+ * Factory class for creating object of {@link ApplicationDataFolder}
  *
  * @author Daniel Gyorffy
  */
@@ -35,7 +35,7 @@ public final class ApplicationDataFolderFactory {
     }
 
     /**
-     * This method creates am instance of <code>{@link ApplicationDataFolder}</code>
+     * This method creates am instance of {@link ApplicationDataFolder}
      * dependent on what OS that the application runs on.
      *
      * @return an <code>{@link ApplicationDataFolder}</code> instance

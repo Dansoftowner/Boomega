@@ -3,9 +3,8 @@ package com.dansoftware.libraryapp.util;
 import java.util.ResourceBundle;
 
 /**
- * This class is used for accessing Resource Bundles
- *
- * @author Daniel Gyorffy
+ * This class is used for accessing the necessary
+ * Resource Bundles.
  */
 public class Bundles {
 

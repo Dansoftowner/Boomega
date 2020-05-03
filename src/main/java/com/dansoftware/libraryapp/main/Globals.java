@@ -28,16 +28,26 @@ public final class Globals {
         WINDOW_ICON = temp;
     }
 
-    public static final String APP_VERSION = "0.0.0";
-    public static final String BUILD_INFO = "";
+    public static final BuildInfo BUILD_INFO = new BuildInfo();
 
     private static ConfigurationHolder configurationHolder;
     private static DataStorage dataStorage;
 
+    /**
+     * Sets the default DataStorage.
+     *
+     * <p>
+     * Should be used by the {@link ApplicationInitializer}.
+     * <b>Should be called only ONCE</b>
+     *
+     * @param dataStorage the default DataStorage object
+     * @throws UnsupportedOperationException if the default configuration holder already instantiated
+     */
     static void setDataStorage(DataStorage dataStorage) {
-        if (nonNull(dataStorage))
+        if (nonNull(Globals.dataStorage))
             throw new UnsupportedOperationException("The default dataStorage" +
                     " cannot be initialized more than once.");
+        Globals.dataStorage = dataStorage;
     }
 
     /**
@@ -47,7 +57,7 @@ public final class Globals {
      * Should be used by the {@link ApplicationInitializer}.
      * <b>Should be called only ONCE</b>
      *
-     * @param holder the new configuration holder
+     * @param holder the default configuration holder
      * @throws UnsupportedOperationException if the default configuration holder already instantiated
      */
     static void setConfigurationHolder(ConfigurationHolder holder) {
@@ -58,12 +68,14 @@ public final class Globals {
         configurationHolder = holder;
     }
 
+
     public static DataStorage getDataStorage() {
         return dataStorage;
     }
 
     /**
      * Gives access to the default ConfigurationHolder
+     *
      * @return the default configuration holder
      */
     public static ConfigurationHolder getConfigurationHolder() {
