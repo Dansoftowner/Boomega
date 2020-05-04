@@ -24,7 +24,7 @@
       </ImageView>
       <ImageView fitHeight="126.0" fitWidth="654.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="/com/dansoftware/libraryapp/image/libraryapp-header.png" />
+            <Image url="/com/dansoftware/libraryapp/image/info/libraryapp-header.png" />
          </image>
       </ImageView>
       <StackPane layoutX="4.0" layoutY="136.0" prefHeight="35.0" prefWidth="679.0">
@@ -125,7 +125,7 @@
          <graphic>
             <ImageView fitHeight="21.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="/com/dansoftware/libraryapp/image/copy_to_clipboard.png" />
+                  <Image url="/com/dansoftware/libraryapp/image/util/copy_to_clipboard_white.png" />
                </image>
             </ImageView>
          </graphic>
@@ -143,7 +143,7 @@
                            <graphic>
                               <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="/com/dansoftware/libraryapp/image/github-icon.png" />
+                                    <Image url="/com/dansoftware/libraryapp/image/util/github-icon_white.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -155,7 +155,7 @@
                            <graphic>
                               <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="/com/dansoftware/libraryapp/image/code-icon.png" />
+                                    <Image url="/com/dansoftware/libraryapp/image/util/code-icon_white.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -164,7 +164,7 @@
                            <graphic>
                               <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="/com/dansoftware/libraryapp/image/code-icon.png" />
+                                    <Image url="/com/dansoftware/libraryapp/image/util/code-icon_white.png" />
                                  </image>
                               </ImageView>
                            </graphic>

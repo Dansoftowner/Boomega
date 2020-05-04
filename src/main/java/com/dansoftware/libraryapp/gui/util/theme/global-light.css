@@ -1,0 +1,28 @@
+/* STYLES OF THE WEB-BROWSER */
+.browser-toolbar {
+    -fx-background-color: whitesmoke;
+}
+
+.browser-toolbar .browser-previous-btn {
+
+}
+
+.browser-toolbar .browser-forward-btn {
+
+}
+
+.browser-toolbar .browser-url-indicator-field {
+
+}
+
+.browser-toolbar .browser-url-copier-btn {
+
+}
+
+.browser-toolbar .browser-default-opener-btn {
+
+}
+
+.browser-toolbar .browser-reload-btn {
+
+}

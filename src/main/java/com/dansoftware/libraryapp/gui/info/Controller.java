@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.main.Globals;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -39,11 +40,14 @@ public class Controller implements Initializable {
     private void onCopy(ActionEvent event) {
         String toCopy =
                 "Version: " + versionLabel.getText() + "\n" +
-                "Build: " + buildInfoLabel.getText() + "\n" +
-                "\n" +
-                "Java VM: " + javaVMLabel.getText() + " By" + javaVendorLabel.getText() + "\n" +
-                "Java version: " + javaVersionLabel.getText() + "\n" +
-                "JavaFX version: " + javaFXVersionLabel.getText() + "\n";
+                        "Build: " + buildInfoLabel.getText() + "\n" +
+                        "\n" +
+                        "OS: " + System.getProperty("os.name") + "\n" +
+                        "OS Version: " + System.getProperty("os.version") + "\n" +
+                        "\n" +
+                        "Java VM: " + javaVMLabel.getText() + " By " + javaVendorLabel.getText() + "\n" +
+                        "Java version: " + javaVersionLabel.getText() + "\n" +
+                        "JavaFX version: " + javaFXVersionLabel.getText() + "\n";
 
         ClipboardContent content = new ClipboardContent();
         content.putString(toCopy);
@@ -54,17 +58,17 @@ public class Controller implements Initializable {
 
     @FXML
     private void showDependencies(ActionEvent event) {
-
+        System.out.println(((Button) event.getSource()).getText());
     }
 
     @FXML
     private void showDevelopers(ActionEvent event) {
-
+        System.out.println(((Button) event.getSource()).getText());
     }
 
     @FXML
     private void showGithub(ActionEvent event) {
-
+        System.out.println(((Button) event.getSource()).getTooltip().getText());
     }
 
 

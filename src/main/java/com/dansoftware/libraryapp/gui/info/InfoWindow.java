@@ -12,8 +12,18 @@ import java.io.IOException;
 
 import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
 
+/**
+ * An InfoWindow can show all the information
+ * of the application in it's scene.
+ */
 public class InfoWindow extends Stage {
 
+    /**
+     * Creates the InfoWindow and loads the information-view
+     * into it's scene + sets some property of the window.
+     *
+     * @throws IOException if the FXML file couldn't be read
+     */
     public InfoWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("info-view.fxml"), Bundles.getCommonBundle());
 
@@ -23,9 +33,10 @@ public class InfoWindow extends Stage {
         this.setScene(scene);
         this.sizeToScene();
         this.setTitle("LibraryApp Info");
-        //this.initOwner(getPrimaryStage());
         this.initStyle(StageStyle.UNDECORATED);
         this.getIcons().add(Globals.WINDOW_ICON);
+
+        getPrimaryStage().ifPresent(this::initOwner);
     }
 
 }

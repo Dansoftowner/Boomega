@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
@@ -18,6 +19,7 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
 
@@ -89,7 +91,7 @@ public class Main extends Application {
 
         URL fxmlResource = getClass().getResource("");
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource, getCommonBundle());
-        Parent root = fxmlLoader.load();
+        Parent root = new StackPane();
 
         Scene scene = new Scene(root);
 
@@ -138,9 +140,11 @@ public class Main extends Application {
     }
 
     /**
-     * @return the primary stage of the window hierarchy
+     * Gives access to the primary stage (main window) through an Optional.
+     *
+     * @return the Optional of the primary stage
      */
-    public static Stage getPrimaryStage() {
-        return primaryStage;
+    public static Optional<Stage> getPrimaryStage() {
+        return Optional.ofNullable(primaryStage);
     }
 }

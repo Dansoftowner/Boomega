@@ -35,8 +35,7 @@ public class GuiHandler extends Handler {
                         .text(record.getMessage())
                         .hideAfter(durationOptional.orElse(Duration.INDEFINITE))
                         .onAction(event -> throwableOptional.ifPresent(Alerts::showErrorAlertDialog))
-                        .owner(getPrimaryStage())
-                        .position(Pos.BOTTOM_RIGHT);
+                        .position(Pos.TOP_LEFT);
 
                 if (record.getLevel() == Level.SEVERE)
                     notificationBuilder
@@ -53,7 +52,7 @@ public class GuiHandler extends Handler {
                             .title(getCommonBundle().getString("notification.warning"))
                             .showWarning();
 
-
+                getPrimaryStage().ifPresent(notificationBuilder::owner);
                 asGuiLog(record).getTitle().ifPresent(notificationBuilder::title);
             });
         }

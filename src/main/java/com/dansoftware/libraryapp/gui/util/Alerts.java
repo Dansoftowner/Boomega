@@ -26,9 +26,10 @@ public final class Alerts {
     public static void showErrorAlertDialog(Throwable cause) {
         Alert alert = new Alert(Alert.AlertType.ERROR, cause.getMessage());
         alert.setTitle("LibraryApp alert");
-        alert.initOwner(getPrimaryStage());
         alert.getDialogPane().setExpandableContent(
                 new TextArea(new ThrowableToStringAdapter(cause).toString()));
+
+        getPrimaryStage().ifPresent(alert::initOwner);
         alert.show();
     }
 
