@@ -1,21 +1,14 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
-import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
 import com.dansoftware.libraryapp.appdata.config.*;
 import com.dansoftware.libraryapp.db.DBConnection;
 import com.dansoftware.libraryapp.db.DataStorage;
-import com.dansoftware.libraryapp.log.GuiLog;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
-import com.dansoftware.libraryapp.util.FileUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
 
@@ -29,7 +22,7 @@ import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
  */
 final class ApplicationInitializer {
 
-    private static final Logger LOGGER = Logger.getLogger(ApplicationInitializer.class.getName());
+    //private static final Logger LOGGER = Logger.getLogger(ApplicationInitializer.class.getName());
 
     /**
      * Creates a basic ApplicationInitializer.
@@ -46,32 +39,13 @@ final class ApplicationInitializer {
      */
     @Step
     private void readConfigurations() {
-        ApplicationDataFolder applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
-        File configurationFile = applicationDataFolder.getConfigurationFile();
-
-
         ConfigurationHolder holder = new ConfigurationHashtableHolder();
-        ConfigurationReader reader = new ConfigurationXMLFileReader(configurationFile);
+        ConfigurationReader reader = new ConfigurationReader(new DefaultConfigurationFileReadingStrategy());
 
         try {
-            //try to read the configurations
             reader.readConfigurationsTo(holder);
         } catch (IOException e) {
-
-            try {
-                //if we couldn't read the configurations we try to create a new, blank one
-                FileUtils.makeOldFileOf(configurationFile);
-
-                //notify the user about that the configurations couldn't be read and new configuration file created
-                LOGGER.log(new GuiLog(Level.WARNING, e, "confighandler.newfile"));
-            } catch (FileUtils.UnableToCreateFileException unableToCreateFileException) {
-                /*
-                  if the new file creation was unsuccessful,
-                  we notify the user that the program
-                  couldn't read the configurations
-                */
-                LOGGER.log(new GuiLog(Level.SEVERE, unableToCreateFileException, "confighandler.cantread"));
-            }
+            throw new RuntimeException(e);
         }
 
         Globals.setConfigurationHolder(holder);

@@ -4,6 +4,8 @@ import com.dansoftware.libraryapp.db.util.DataPackage;
 
 import java.sql.SQLException;
 
+import static java.util.Objects.isNull;
+
 public class DataStorage implements AbstractDataStorage {
 
     private DataPackage dataPackage;
@@ -15,7 +17,7 @@ public class DataStorage implements AbstractDataStorage {
 
     @Override
     public DataPackage getDataPackage() throws SQLException {
-        if (dataPackage == null) {
+        if (isNull(dataPackage)) {
             dataPackage = dbConnection.loadAllData();
         }
 

@@ -1,12 +1,19 @@
 package com.dansoftware.libraryapp.appdata.config;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A ConfigurationWriter can write configurations from a {@link ConfigurationHolder} object
  * to a particular target (for example: a File).
  */
-public interface ConfigurationWriter {
+public abstract class ConfigurationWriter {
+
+    private final WritingStrategy writingStrategy;
+
+    public ConfigurationWriter(WritingStrategy strategy) {
+        this.writingStrategy = Objects.requireNonNull(strategy, "The writing strategy mustn't be null"::toString);
+    }
 
     /**
      * Writes the configurations from a {@link ConfigurationHolder}
@@ -21,5 +28,7 @@ public interface ConfigurationWriter {
      * @throws NullPointerException if the {@param holder} is null
      * @throws IOException if some I/O exception occurs during the file writing
      */
-    void writeConfigurations(ConfigurationHolder holder) throws IOException;
+    public void writeConfigurations(ConfigurationHolder holder) throws IOException {
+        writingStrategy.writeConfigurations(holder);
+    }
 }

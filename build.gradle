@@ -10,11 +10,13 @@ repositories {
 
 compileJava {
     options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
+    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx.runtime=ALL-UNNAMED"]
     options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
 }
 
 compileTestJava {
     options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
+    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx.runtime=ALL-UNNAMED"]
     options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
 }
 

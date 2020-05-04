@@ -5,30 +5,27 @@ import java.util.Objects;
 import java.util.Properties;
 
 /**
- * A ConfigurationXMLFileReader can read and parse XML-configuration files
- * and store the read configurations into a {@link ConfigurationHolder} object.
+ * An XMLFileReadingStrategy reads the configurations from an XML file
  */
-public class ConfigurationXMLFileReader implements ConfigurationReader {
+public class XMLFileReadingStrategy implements ReadingStrategy {
 
     private final File file;
 
-    /**
-     * Creates a normal xml file reader.
-     *
-     * @param file the file to read from
-     * @throws NullPointerException if the file is null
-     */
-    public ConfigurationXMLFileReader(File file) {
+    public XMLFileReadingStrategy(File file) {
         this.file = Objects.requireNonNull(file, "The 'file' argument must not be null"::toString);
+    }
+
+    protected File getReadedFile() {
+        return file;
     }
 
     @Override
     public void readConfigurationsTo(ConfigurationHolder holder) throws IOException {
         Objects.requireNonNull(holder, "The 'holder' argument must not be null"::toString);
 
-        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(this.file))) {
+        try(var reader = new BufferedReader(new FileReader(file))) {
             Properties properties = new Properties();
-            properties.loadFromXML(inputStream);
+            properties.load(reader);
             holder.putConfigurations(properties);
         }
     }
