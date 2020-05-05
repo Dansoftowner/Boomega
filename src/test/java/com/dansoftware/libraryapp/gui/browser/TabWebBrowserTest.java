@@ -17,7 +17,7 @@ public class TabWebBrowserTest extends Application {
         TabWebBrowser webBrowser = new TabWebBrowser(BrowserComponent.FX_WEBVIEW_SUPPLIER);
         webBrowser.load("Google pageee", "http://www.google.com");
         webBrowser.load("http://www.google.com");
-        webBrowser.load("Local page", new File("test.html").toURI().toURL());
+        webBrowser.load("Local page", new File("test.html"));
 
         Scene scene = new Scene(webBrowser);
         Theme.applyDefault(scene);

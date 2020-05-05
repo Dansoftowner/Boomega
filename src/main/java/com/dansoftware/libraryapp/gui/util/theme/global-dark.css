@@ -11,11 +11,11 @@
 }
 
 .browser-toolbar .browser-previous-btn {
-
+    -fx-graphic: url(/com/dansoftware/libraryapp/image/browser/arrow_prev_white.png);
 }
 
 .browser-toolbar .browser-forward-btn {
-
+    -fx-graphic: url(/com/dansoftware/libraryapp/image/browser/arrow_forw_white.png);
 }
 
 .browser-toolbar .browser-url-indicator-field {
@@ -24,17 +24,15 @@
 }
 
 .browser-toolbar .browser-url-copier-btn {
-
+    -fx-graphic: url(/com/dansoftware/libraryapp/image/browser/copy_to_clipboard_white.png);
 }
 
 .browser-toolbar .browser-default-opener-btn {
-
+    -fx-graphic: url(/com/dansoftware/libraryapp/image/browser/open_def_browser_white.png);
 }
 
-
-
 .browser-toolbar .browser-reload-btn {
-
+    -fx-graphic: url(/com/dansoftware/libraryapp/image/browser/reload_white.png);
 }
 
 /*Some tab pane trifles*/
