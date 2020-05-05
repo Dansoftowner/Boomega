@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.browser;
 
 import com.dansoftware.libraryapp.util.DocumentOpener;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -27,16 +28,16 @@ import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
  */
 public class BrowserToolBar extends BorderPane {
 
-    private final WebView webView;
+    private final BrowserComponent browserComponent;
 
     /**
      * Creates a normal BrowserToolBar
      *
-     * @param webView the webView that the toolbar should operate on
+     * @param browserComponent the webView that the toolbar should operate on
      * @throws NullPointerException if the webView is null
      */
-    public BrowserToolBar(WebView webView) {
-        this.webView = Objects.requireNonNull(webView, "The webView shouldn't be null"::toString);
+    public BrowserToolBar(BrowserComponent browserComponent) {
+        this.browserComponent = Objects.requireNonNull(browserComponent, "The webView shouldn't be null"::toString);
 
         this.setCenter(createUrlIndicatorField());
         this.setLeft(new HBox(2, createPreviousPageBtn(), createForwardPageBtn(), createReloadButton()));
@@ -48,7 +49,7 @@ public class BrowserToolBar extends BorderPane {
     private Button createPreviousPageBtn() {
         Button previousBtn = new Button();
         previousBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        previousBtn.setOnAction(event -> this.webView.getEngine().executeScript("window.history.back();"));
+        previousBtn.setOnAction(event -> browserComponent.goToPreviousPage());
 
         Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.backward"));
         previousBtn.setTooltip(tooltip);
@@ -61,7 +62,7 @@ public class BrowserToolBar extends BorderPane {
     private Button createForwardPageBtn() {
         Button forwardBtn = new Button();
         forwardBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        forwardBtn.setOnAction(event -> this.webView.getEngine().executeScript("window.history.forward();"));
+        forwardBtn.setOnAction(event -> this.browserComponent.goToForwardPage());
 
         Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.forward"));
         forwardBtn.setTooltip(tooltip);
@@ -71,16 +72,17 @@ public class BrowserToolBar extends BorderPane {
         return forwardBtn;
     }
 
-    private TextField createUrlIndicatorField() {
-        TextField textField = new TextField();
-        textField.setDisable(true);
-        textField.textProperty().bind(
-                webView.getEngine().locationProperty()
-        );
+    private Node createUrlIndicatorField() {
 
-        textField.getStyleClass().add("browser-url-indicator-field");
+        Label urlIndicator = new Label();
 
-        return textField;
+        urlIndicator.setText("LibraryApp Browser");
+        browserComponent.locationProperty().ifPresent(urlIndicator.textProperty()::bind);
+        urlIndicator.setDisable(true);
+
+        urlIndicator.getStyleClass().add("browser-url-indicator-field");
+
+        return urlIndicator;
     }
 
     private Button createURLCopyButton() {
@@ -88,7 +90,7 @@ public class BrowserToolBar extends BorderPane {
         copier.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         copier.setOnAction(event -> {
             ClipboardContent clipboardContent = new ClipboardContent();
-            clipboardContent.putString(this.webView.getEngine().getLocation());
+            clipboardContent.putString(this.browserComponent.getLocation());
 
             Clipboard clipboard = Clipboard.getSystemClipboard();
             clipboard.setContent(clipboardContent);
@@ -105,7 +107,7 @@ public class BrowserToolBar extends BorderPane {
     private Button createDefaultBrowserOpenerButton() {
         Button opener = new Button();
         opener.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        opener.setOnAction(event -> DocumentOpener.getOpener().browse(this.webView.getEngine().getLocation()));
+        opener.setOnAction(event -> DocumentOpener.getOpener().browse(this.browserComponent.getLocation()));
 
         Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.openSystemBrowser"));
         opener.setTooltip(tooltip);
@@ -122,7 +124,7 @@ public class BrowserToolBar extends BorderPane {
         Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.reloadpage"));
         reloadButton.setTooltip(tooltip);
 
-        reloadButton.setOnAction(event -> this.webView.getEngine().reload());
+        reloadButton.setOnAction(event -> this.browserComponent.reload());
 
         reloadButton.getStyleClass().add("browser-reload-btn");
 

@@ -1,4 +1,8 @@
 /* STYLES OF THE WEB-BROWSER */
+.browser {
+
+}
+
 .browser-toolbar {
     -fx-background-color: whitesmoke;
 }
@@ -12,7 +16,8 @@
 }
 
 .browser-toolbar .browser-url-indicator-field {
-
+    -fx-font-size: 16px;
+    -fx-padding: 5px;
 }
 
 .browser-toolbar .browser-url-copier-btn {
@@ -25,4 +30,9 @@
 
 .browser-toolbar .browser-reload-btn {
 
+}
+
+/*Some tab pane trifles*/
+.tab .tab-close-button:hover {
+    -fx-background-color: red;
 }

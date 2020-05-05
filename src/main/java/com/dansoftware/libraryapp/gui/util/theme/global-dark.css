@@ -1,6 +1,13 @@
 /* STYLES OF THE WEB-BROWSER */
+.browser {
+
+}
+
 .browser-toolbar {
-    -fx-background-color: whitesmoke;
+    -fx-padding: 0.5px;
+    -fx-background-color: #2f2e2e;
+    -fx-border-width: 0.45 0 0 0;
+    -fx-border-color: whitesmoke;
 }
 
 .browser-toolbar .browser-previous-btn {
@@ -12,7 +19,8 @@
 }
 
 .browser-toolbar .browser-url-indicator-field {
-
+    -fx-font-size: 16px;
+    -fx-padding: 5px;
 }
 
 .browser-toolbar .browser-url-copier-btn {
@@ -23,6 +31,17 @@
 
 }
 
+
+
 .browser-toolbar .browser-reload-btn {
 
+}
+
+/*Some tab pane trifles*/
+.tab .tab-close-button:hover {
+    -fx-background-color: red;
+}
+
+.tab-pane {
+    -fx-background-color: #2f2e2e;
 }

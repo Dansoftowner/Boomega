@@ -2,6 +2,8 @@ package com.dansoftware.libraryapp.gui.browser;
 
 import javafx.scene.layout.StackPane;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
@@ -10,6 +12,10 @@ import java.util.Objects;
  * web pages inside the application.
  */
 public abstract class Browser extends StackPane {
+
+    public Browser() {
+        this.getStyleClass().add("browser");
+    }
 
     /**
      * Loads the wep page with the specified url and sets a fixed title.
@@ -49,7 +55,6 @@ public abstract class Browser extends StackPane {
      * @throws NullPointerException if the url is null
      */
     public void load(String url) {
-        Objects.requireNonNull(url, "The url can't be null"::toString);
         this.load(null, url);
     }
 
@@ -64,7 +69,15 @@ public abstract class Browser extends StackPane {
      * @throws NullPointerException if the url is null
      */
     public void load(URL url) {
-        Objects.requireNonNull(url, "The url can't be null"::toString);
         this.load(null, url);
+    }
+
+    public void load(String title, File file) throws MalformedURLException {
+        Objects.requireNonNull(file, "The file mustn't be null");
+        this.load(title, file.toURI().toURL());
+    }
+
+    public void load(File file) throws MalformedURLException {
+        this.load(null, file);
     }
 }

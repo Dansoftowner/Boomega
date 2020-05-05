@@ -14,10 +14,13 @@ import static java.util.Objects.nonNull;
  */
 public class Theme {
 
+    private static Theme DEFAULT;
+
     /**
      * Specifies a dark theme
      */
     public static final Theme DARK = new Theme(
+            new ThemeIdentifier("dark", "theme.dark"),
             Collections.singletonList("/com/dansoftware/libraryapp/gui/util/theme/global-dark.css"),
             scene -> new JMetro(Style.DARK).setScene(scene)
     );
@@ -26,22 +29,28 @@ public class Theme {
      * Specifies a light theme
      */
     public static final Theme LIGHT = new Theme(
+            new ThemeIdentifier("light", "theme.light"),
             Collections.singletonList("/com/dansoftware/libraryapp/gui/util/theme/global-light.css"),
             scene -> new JMetro(Style.LIGHT).setScene(scene)
     );
 
+    private final ThemeIdentifier identifier;
     private final List<String> stylesheets;
     private final Consumer<Scene> onSceneApplier;
 
     /**
      * Creates an applicable theme.
      *
-     * @param stylesheets a list of stylesheets on the class-path; mustn't be null
+     * @param identifier     the identifier of the theme; it is used to define the name of the theme
+     *                       and the internationalized name (Resource Bundle key) of the theme name;
+     *                       mustn't be null
+     * @param stylesheets    a list of stylesheets on the class-path; mustn't be null
      * @param onSceneApplier an consumer that can later apply custom operations on a scene;
      *                       can be null
-     * @throws NullPointerException if the list of stylesheets is null
+     * @throws NullPointerException if the list of stylesheets or the identifier is null
      */
-    public Theme(List<String> stylesheets, Consumer<Scene> onSceneApplier) {
+    public Theme(ThemeIdentifier identifier, List<String> stylesheets, Consumer<Scene> onSceneApplier) {
+        this.identifier = Objects.requireNonNull(identifier, "The identifier mustn't be null");
         this.stylesheets = Objects.requireNonNull(stylesheets, "The list of stylesheets mustn't be null");
         this.onSceneApplier = onSceneApplier;
     }
@@ -52,6 +61,49 @@ public class Theme {
         if (nonNull(this.onSceneApplier)) this.onSceneApplier.accept(scene);
 
         scene.getStylesheets().addAll(stylesheets);
+    }
+
+    public ThemeIdentifier getIdentifier() {
+        return identifier;
+    }
+
+    public List<String> getStylesheets() {
+        return stylesheets;
+    }
+
+    public Consumer<Scene> getOnSceneApplier() {
+        return onSceneApplier;
+    }
+
+    public static Theme getDefault() {
+        if (DEFAULT == null) return LIGHT;
+        return DEFAULT;
+    }
+
+    public static void setDefault(Theme theme) {
+        Theme.DEFAULT = theme;
+    }
+
+    public static void applyDefault(Scene scene) {
+        Theme.getDefault().apply(scene);
+    }
+
+    public static final class ThemeIdentifier {
+        private final String id;
+        private final String bundleID;
+
+        public ThemeIdentifier(String id, String bundleID) {
+            this.id = id;
+            this.bundleID = bundleID;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getBundleID() {
+            return bundleID;
+        }
     }
 
 }

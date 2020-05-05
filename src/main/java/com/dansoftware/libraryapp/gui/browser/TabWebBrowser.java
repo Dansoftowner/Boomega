@@ -1,13 +1,16 @@
 package com.dansoftware.libraryapp.gui.browser;
 
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * A TabWebBrowser can load and show web pages in separate tabs
@@ -19,41 +22,45 @@ import java.util.Objects;
 public class TabWebBrowser extends Browser {
 
     private TabPane tabPane;
+    private Supplier<BrowserComponent> browserComponentSupplier;
 
-    public TabWebBrowser() {
+    public TabWebBrowser(Supplier<BrowserComponent> browserComponentSupplier) {
+        this.browserComponentSupplier = Objects.requireNonNull(browserComponentSupplier, "The supplier of BrowserComponent mustn't be null");
+
         this.tabPane = new TabPane();
         this.tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         this.getChildren().add(tabPane);
+
+       // this.widthProperty().addListener((o, old, n) -> System.out.println("TabWebBrowser width: " + n));
     }
 
     @Override
     public void load(String title, String url) {
-        Objects.requireNonNull(url, "The url can't be null"::toString);
+        Objects.requireNonNull(url, "The url can't be null");
 
         Tab tab = new Tab();
-        WebView webView = new WebView();
-        WebEngine engine = webView.getEngine();
-        engine.load(url);
+        BrowserComponent browserComponent = browserComponentSupplier.get();
+        browserComponent.load(url);
 
-        if (title == null) tab.textProperty().bind(engine.titleProperty());
+        if (title == null) browserComponent.titleProperty().ifPresent(tab.textProperty()::bind);
         else tab.textProperty().set(title);
 
-        tab.setContent(new Entry(webView));
+        tab.setContent(new Entry(browserComponent));
 
         this.tabPane.getTabs().add(tab);
     }
 
     private class Entry extends BorderPane {
         private BrowserToolBar toolBar;
-        private WebView webView;
+        private BrowserComponent browserComponent;
 
-        public Entry(WebView webView) {
-            this.webView = Objects.requireNonNull(webView, "The webView shouldn't be null"::toString);
-            this.toolBar = new BrowserToolBar(webView);
+        public Entry(BrowserComponent browserComponent) {
+            this.browserComponent = Objects.requireNonNull(browserComponent, "The browserComponent shouldn't be null");
+            this.toolBar = new BrowserToolBar(browserComponent);
 
-            this.setTop(this.toolBar);
-            this.setCenter(this.webView);
+            this.setTop(toolBar);
+            this.setCenter(browserComponent.toNode());
         }
     }
 }
