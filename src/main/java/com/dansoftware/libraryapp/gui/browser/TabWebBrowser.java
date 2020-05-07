@@ -1,38 +1,38 @@
 package com.dansoftware.libraryapp.gui.browser;
 
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.collections.ListChangeListener;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 
 import java.util.Objects;
 import java.util.function.Supplier;
+
+import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
 
 /**
  * A TabWebBrowser can load and show web pages in separate tabs
  *
  * <p>
- *  A TabWebBrowser creates a new tab for each
- *  webview on every load request.
+ *  A TabWebBrowser is a {@link Browser} that creates a new tab for each
+ *  web page on every load request.
  */
 public class TabWebBrowser extends Browser {
 
-    private TabPane tabPane;
-    private Supplier<BrowserComponent> browserComponentSupplier;
+    private final TabPane tabPane;
 
-    public TabWebBrowser(Supplier<BrowserComponent> browserComponentSupplier) {
-        this.browserComponentSupplier = Objects.requireNonNull(browserComponentSupplier, "The supplier of BrowserComponent mustn't be null");
+    public TabWebBrowser(Supplier<WebContentRenderer> browserComponentSupplier) {
+        super(browserComponentSupplier);
 
+        //creating the TabPane for the tabs
         this.tabPane = new TabPane();
         this.tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         this.getChildren().add(tabPane);
 
-       // this.widthProperty().addListener((o, old, n) -> System.out.println("TabWebBrowser width: " + n));
+        //if all tabs is closed the listener will generate a basic page to fill the void.
+        this.tabPane.getTabs().addListener((ListChangeListener<Tab>) change -> {
+            if (tabPane.getTabs().isEmpty()) load("Overview", getClass().getResource("browser_home.html"));
+        });
     }
 
     @Override
@@ -40,27 +40,39 @@ public class TabWebBrowser extends Browser {
         Objects.requireNonNull(url, "The url can't be null");
 
         Tab tab = new Tab();
-        BrowserComponent browserComponent = browserComponentSupplier.get();
-        browserComponent.load(url);
 
-        if (title == null) browserComponent.titleProperty().ifPresent(tab.textProperty()::bind);
-        else tab.textProperty().set(title);
+        MenuItem pageDuplicatorMenuItem = new MenuItem(
+                getCommonBundle().getString("browser.tab.duplicate")
+        );
+        pageDuplicatorMenuItem.setOnAction(event -> load(title, url));
 
-        tab.setContent(new Entry(browserComponent));
+        tab.setContextMenu(new ContextMenu(pageDuplicatorMenuItem));
+
+
+        WebContentRenderer webContentRenderer = Objects.requireNonNull(getWebRendererSupplier().get(), "The WebRendererSupplier shouldn't return null!");
+        webContentRenderer.load(url);
+
+        if (title == null) webContentRenderer.onTitleChanged(tab::setText);
+        else tab.setText(title);
+
+        tab.setContent(new Entry(webContentRenderer));
 
         this.tabPane.getTabs().add(tab);
     }
 
+    /**
+     * Represents a node that displays a WebContentRenderer with a BrowserToolbar
+     */
     private class Entry extends BorderPane {
         private BrowserToolBar toolBar;
-        private BrowserComponent browserComponent;
+        private WebContentRenderer webContentRenderer;
 
-        public Entry(BrowserComponent browserComponent) {
-            this.browserComponent = Objects.requireNonNull(browserComponent, "The browserComponent shouldn't be null");
-            this.toolBar = new BrowserToolBar(browserComponent);
+        private Entry(WebContentRenderer webContentRenderer) {
+            this.webContentRenderer = Objects.requireNonNull(webContentRenderer, "The browserComponent shouldn't be null");
+            this.toolBar = new BrowserToolBar(webContentRenderer);
 
             this.setTop(toolBar);
-            this.setCenter(browserComponent.toNode());
+            this.setCenter(webContentRenderer.toNode());
         }
     }
 }

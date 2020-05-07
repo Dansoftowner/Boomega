@@ -55,9 +55,20 @@ public class Theme {
         this.onSceneApplier = onSceneApplier;
     }
 
+    /**
+     * Applies the theme on the particular scene.
+     *
+     * <p>
+     * This method <b>will delete all previous stylesheets</b>
+     * before applying the new theme on the scene
+     *
+     * @param scene the scene to apply the theme to; must not be null
+     * @throws NullPointerException if the scene is null
+     */
     public void apply(Scene scene) {
         Objects.requireNonNull(scene, "The scene mustn't be null");
 
+        scene.getStylesheets().clear();
         if (nonNull(this.onSceneApplier)) this.onSceneApplier.accept(scene);
 
         scene.getStylesheets().addAll(stylesheets);
@@ -76,7 +87,8 @@ public class Theme {
     }
 
     public static Theme getDefault() {
-        if (DEFAULT == null) return LIGHT;
+        if (DEFAULT == null)
+            return LIGHT;
         return DEFAULT;
     }
 

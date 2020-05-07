@@ -12,17 +12,10 @@ import java.util.logging.*;
  */
 public final class LoggerConfigurator {
 
-    private static final Logger LOGGER = Logger.getLogger(LoggerConfigurator.class.getName());
+    //private static final Logger LOGGER = Logger.getLogger(LoggerConfigurator.class.getName());
 
-    /**
-     * Defines an empty string
-     */
+
     private static final String EMPTY_STRING = "";
-
-    /**
-     * This field should contain the log file
-     */
-    private static File logFile;
 
     /**
      * This field contains that the root logger already configured
@@ -69,6 +62,10 @@ public final class LoggerConfigurator {
      * This method configures the root logger
      */
     public void configureRootLogger() {
+
+    }
+
+    private void old0() {
         if (configured) return;
 
         Logger rootLogger = getRootLogger();
@@ -81,7 +78,7 @@ public final class LoggerConfigurator {
 
             configured = Boolean.TRUE;
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Couldn't create FileHandler for root logger", e);
+         //   LOGGER.log(Level.WARNING, "Couldn't create FileHandler for root logger", e);
         }
     }
 
