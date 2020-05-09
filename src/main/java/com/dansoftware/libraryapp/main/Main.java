@@ -4,15 +4,12 @@ import com.dansoftware.libraryapp.exception.ExceptionUtils;
 import com.dansoftware.libraryapp.log.LoggerConfigurator;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
-import org.controlsfx.control.TaskProgressView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
+import static com.dansoftware.libraryapp.locale.Bundles.*;
 
 /**
  * The main class and javafx application starter.
@@ -35,10 +32,9 @@ public class Main extends Application {
 
     static {
         //Configure the logger
-        new LoggerConfigurator()
-                .configureRootLogger();
+        LoggerConfigurator.configure();
 
-        //set the default locale
+        //set the initial locale
         Locale.setDefault(Locale.ENGLISH);
 
         //Set the default uncaught exception handler
@@ -57,7 +53,7 @@ public class Main extends Application {
      * @see LauncherImpl#launchApplication(Class, Class, String[])
      */
     public static void main(String[] args) {
-        new ApplicationArgumentHandler(args);
+        ApplicationArgumentHandler.scan(args);
 
         LauncherImpl.launchApplication(Main.class, Preloader.class, null);
     }
@@ -90,14 +86,14 @@ public class Main extends Application {
         Main.primaryStage = primaryStage;
 
         URL fxmlResource = getClass().getResource("");
-        FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource, getCommonBundle());
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource, getFXMLValues());
         Parent root = new StackPane();
 
         Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("LibraryApp");
-        primaryStage.setFullScreenExitHint(getCommonBundle().getString("window.fullscreen.hint"));
+        primaryStage.setFullScreenExitHint(getGeneralWord("window.fullscreen.hint"));
         primaryStage.getIcons().add(Globals.WINDOW_ICON);
         primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.setOnCloseRequest(null);

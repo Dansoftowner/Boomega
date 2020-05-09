@@ -1,11 +1,14 @@
 package com.dansoftware.libraryapp.gui.info;
 
+import com.dansoftware.libraryapp.log.LoggerConfigurator;
 import com.dansoftware.libraryapp.main.Globals;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -35,6 +38,9 @@ public class Controller implements Initializable {
 
     @FXML
     private Label javaFXVersionLabel;
+
+    @FXML
+    private TextField logsLocationLabel;
 
     @FXML
     private void onCopy(ActionEvent event) {
@@ -80,5 +86,6 @@ public class Controller implements Initializable {
         javaVendorLabel.setText(System.getProperty("java.vendor"));
         javaVersionLabel.setText(System.getProperty("java.version"));
         javaFXVersionLabel.setText(com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
+        logsLocationLabel.setText(LoggerConfigurator.getLogFilePath());
     }
 }

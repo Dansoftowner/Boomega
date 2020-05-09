@@ -1,12 +1,13 @@
 package com.dansoftware.libraryapp.appdata.config;
 
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
-import com.dansoftware.libraryapp.log.GuiLog;
+import com.dansoftware.libraryapp.gui.notification.Notification;
+import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
 import com.dansoftware.libraryapp.util.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A DefaultConfigurationFileReadingStrategy reads the configurations from the default configuration file
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class DefaultConfigurationFileReadingStrategy extends XMLFileReadingStrategy {
 
-    private static final Logger LOGGER = Logger.getLogger(DefaultConfigurationFileReadingStrategy.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConfigurationFileReadingStrategy.class);
 
     public DefaultConfigurationFileReadingStrategy() {
         super(ApplicationDataFolderFactory.getApplicationDataFolder().getConfigurationFile());
@@ -35,14 +36,26 @@ public class DefaultConfigurationFileReadingStrategy extends XMLFileReadingStrat
                 FileUtils.makeOldFileOf(getReadedFile());
 
                 //notify the user about that the configurations couldn't be read and new configuration file created
-                LOGGER.log(new GuiLog(Level.WARNING, e, "confighandler.newfile"));
+
+                Notification.create()
+                        .level(NotificationLevel.WARNING)
+                        .msg("config.handler.read.warning")
+                        .show();
+
+                LOGGER.warn("The configuration file couldn't be read. New configuration file created");
             } catch (FileUtils.UnableToCreateFileException unableToCreateFileException) {
-                /*
-                  if the new file creation was unsuccessful,
-                  we notify the user that the program
-                  couldn't read the configurations
-                */
-                LOGGER.log(new GuiLog(Level.SEVERE, unableToCreateFileException, "confighandler.cantread"));
+
+                //if the new file creation was unsuccessful,
+                //we notify the user that the program
+                //couldn't read the configurations
+
+                Notification.create()
+                        .level(NotificationLevel.ERROR)
+                        .msg("config.handler.read.error")
+                        .cause(unableToCreateFileException)
+                        .show();
+
+                LOGGER.warn("The configuration file couldn't be read", unableToCreateFileException);
             }
         }
     }

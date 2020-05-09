@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.info;
 
 import com.dansoftware.libraryapp.main.Globals;
-import com.dansoftware.libraryapp.util.Bundles;
+import com.dansoftware.libraryapp.locale.Bundles;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,7 +25,7 @@ public class InfoWindow extends Stage {
      * @throws IOException if the FXML file couldn't be read
      */
     public InfoWindow() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("info-view.fxml"), Bundles.getCommonBundle());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("info-view.fxml"), Bundles.getFXMLValues());
 
         Parent root = loader.load();
         Scene scene = new Scene(root);

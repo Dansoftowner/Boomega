@@ -10,24 +10,27 @@ import java.io.File;
 public class TestLogback {
 
 
+
     static final Logger LOGGER;
     static {
-        System.setProperty("logfile.path", ("C:\\Users\\judal\\Music\\LOOOG\\LOG_MOGI.log"));
+        //LoggerConfigurator.configure();
         LOGGER = LoggerFactory.getLogger(TestLogback.class);
     }
 
-    @Test
+    //@Test
     public void writeInfo() {
-
+        System.out.println(System.getProperty("java.io.tmpdir"));
         LOGGER.info("Logback info!");
+
+        System.out.println(LoggerConfigurator.getLogFilePath());
     }
 
-    @Test
+    //@Test
     public void writeWarning() {
         LOGGER.warn("Logback warn!");
     }
 
-    @Test
+    //@Test
     public void writeError() {
         LOGGER.error("Logback error!");
     }

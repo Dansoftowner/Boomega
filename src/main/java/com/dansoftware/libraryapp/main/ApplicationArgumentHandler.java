@@ -1,35 +1,39 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.log.GuiLog;
+import com.dansoftware.libraryapp.gui.notification.Notification;
+import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static com.dansoftware.libraryapp.util.CommonUtils.isEmpty;
 
 /**
  * This class responsible for checking the application arguments
  */
 public class ApplicationArgumentHandler {
 
-    private static final Logger LOGGER = Logger.getLogger(ApplicationInitializer.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationInitializer.class);
 
-    /**
-     * This field contains the launched file
-     */
     private static File launchedFile;
 
+    private ApplicationArgumentHandler() {
+    }
+
     /**
-     * This constructor should be called with the application arguments
-     * When this constructor called with the array, it does automatically the
-     * work so there is no need to invoke other method(s) to parse the application
-     * arguments
+     * Parses the String array as the application arguments.
      *
-     * @param args the application arguments
+     * <p>
+     * <b style='color:red'>Should be invoked by the main-method</b>
+     *
+     *
+     * @param args the application arguments to parse
      * @see Main#main(String[])
      */
-    ApplicationArgumentHandler(String[] args) {
+    public static void scan(String[] args) {
         if (isEmpty(args))
             return;
 
@@ -39,18 +43,17 @@ public class ApplicationArgumentHandler {
         if (file.exists()) {
             launchedFile = file;
         } else {
-            LOGGER.log(new GuiLog(Level.SEVERE, new FileNotFoundException(filePath), "appargumenthandler.cantopenfile", new Object[]{ file.getName() }));
-        }
-    }
+            var cause = new FileNotFoundException(filePath);
 
-    /**
-     * Returns that the array is empty
-     *
-     * @param args the array
-     * @return <code>true</code> - if the array is empty <code>false</code> - otherwise
-     */
-    private boolean isEmpty(String[] args) {
-        return args == null || args.length == 0;
+            Notification.create()
+                    .level(NotificationLevel.ERROR)
+                    .msg("argument.handler.file.error")
+                    .args(new Object[]{ file.getName() })
+                    .cause(cause)
+                    .show();
+
+            LOGGER.error("Couldn't open file: " + file.getAbsolutePath(), cause);
+        }
     }
 
     /**

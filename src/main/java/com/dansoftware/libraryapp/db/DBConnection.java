@@ -2,15 +2,16 @@ package com.dansoftware.libraryapp.db;
 
 import com.dansoftware.libraryapp.db.util.*;
 import com.dansoftware.libraryapp.db.util.parse.*;
-import com.dansoftware.libraryapp.log.GuiLog;
+import com.dansoftware.libraryapp.gui.notification.Notification;
+import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static java.util.Objects.isNull;
 
@@ -20,7 +21,7 @@ import static java.util.Objects.isNull;
  */
 public final class DBConnection extends AbstractDBConnection {
 
-    private static final Logger LOGGER = Logger.getLogger(DBConnection.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(DBConnection.class);
 
     private static DBConnection instance;
 
@@ -118,7 +119,14 @@ public final class DBConnection extends AbstractDBConnection {
         try {
             return new DBConnection();
         } catch (SQLException e) {
-            LOGGER.log(new GuiLog(Level.SEVERE, e, "dbconnection.failed", new Object[]{databaseFile.getName()}));
+            Notification.create()
+                    .level(NotificationLevel.ERROR)
+                    .msg("db.connection.failed")
+                    .args(new Object[]{databaseFile.getName()})
+                    .cause(e)
+                    .show();
+
+            LOGGER.error("Couldn't create the connection with database!", e);
         }
 
         return null;

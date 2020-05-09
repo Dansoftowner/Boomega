@@ -2,16 +2,18 @@ package com.dansoftware.libraryapp.gui.browser;
 
 import com.dansoftware.libraryapp.util.DocumentOpener;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.web.WebView;
 
 import java.util.Objects;
 
-import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
+import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
 
 /**
  * A BrowserToolBar is a GUI element for operating on a particular {@link WebContentRenderer}.
@@ -54,7 +56,7 @@ public class BrowserToolBar extends BorderPane {
         previousBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         previousBtn.setOnAction(event -> webContentRenderer.goToPreviousPage());
 
-        Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.backward"));
+        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.backward"));
         previousBtn.setTooltip(tooltip);
 
         previousBtn.getStyleClass().add("browser-previous-btn");
@@ -67,7 +69,7 @@ public class BrowserToolBar extends BorderPane {
         forwardBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         forwardBtn.setOnAction(event -> this.webContentRenderer.goToForwardPage());
 
-        Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.forward"));
+        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.forward"));
         forwardBtn.setTooltip(tooltip);
 
         forwardBtn.getStyleClass().add("browser-forward-btn");
@@ -99,7 +101,7 @@ public class BrowserToolBar extends BorderPane {
             clipboard.setContent(clipboardContent);
         });
 
-        Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.copyurl"));
+        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.copy.url"));
         copier.setTooltip(tooltip);
 
         copier.getStyleClass().add("browser-url-copier-btn");
@@ -112,7 +114,7 @@ public class BrowserToolBar extends BorderPane {
         opener.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         opener.setOnAction(event -> DocumentOpener.getOpener().browse(this.webContentRenderer.getLocation()));
 
-        Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.openSystemBrowser"));
+        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.open.browser"));
         opener.setTooltip(tooltip);
 
         opener.getStyleClass().add("browser-default-opener-btn");
@@ -124,7 +126,7 @@ public class BrowserToolBar extends BorderPane {
         Button reloadButton = new Button();
         reloadButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
-        Tooltip tooltip = new Tooltip(getCommonBundle().getString("browser.reloadpage"));
+        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.reload"));
         reloadButton.setTooltip(tooltip);
 
         reloadButton.setOnAction(event -> this.webContentRenderer.reload());

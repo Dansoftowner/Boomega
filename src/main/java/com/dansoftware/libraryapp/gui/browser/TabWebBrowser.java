@@ -7,7 +7,8 @@ import javafx.scene.layout.*;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
+import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWords;
 
 /**
  * A TabWebBrowser can load and show web pages in separate tabs
@@ -42,7 +43,7 @@ public class TabWebBrowser extends Browser {
         Tab tab = new Tab();
 
         MenuItem pageDuplicatorMenuItem = new MenuItem(
-                getCommonBundle().getString("browser.tab.duplicate")
+                getGeneralWord("browser.tab.duplicate")
         );
         pageDuplicatorMenuItem.setOnAction(event -> load(title, url));
 

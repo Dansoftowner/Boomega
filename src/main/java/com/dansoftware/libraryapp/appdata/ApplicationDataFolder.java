@@ -3,7 +3,6 @@ package com.dansoftware.libraryapp.appdata;
 import com.dansoftware.libraryapp.util.FileUtils;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 /**
  * This class represents the Configuration folder of the application
@@ -16,26 +15,12 @@ import java.util.logging.Logger;
  */
 public abstract class ApplicationDataFolder {
 
-    private static final Logger LOGGER = Logger.getLogger(ApplicationDataFolder.class.getName());
-
     /**
      * Represents the folders/files in the application data folder
      */
     public enum ApplicationDataFolderElement {
-
-        /**
-         * Represents the configuration file of the program
-         */
         CONFIG_FILE("settings.configuration", Boolean.FALSE),
-
-        /**
-         * Represents the default database file for the program
-         */
         DB_FILE("d0f0u0l0.lbadb", Boolean.FALSE),
-
-        /**
-         * Represents the folder of plugins
-         */
         PLUGIN_FOLDER("plugins", Boolean.TRUE);
 
         /*-------------------------------------------->*/
@@ -57,7 +42,7 @@ public abstract class ApplicationDataFolder {
         }
     }
 
-    private boolean firstCreated;
+    private final boolean firstCreated;
 
     /**
      * Package-private constructor

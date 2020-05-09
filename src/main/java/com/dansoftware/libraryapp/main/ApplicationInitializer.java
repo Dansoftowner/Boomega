@@ -3,6 +3,8 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.appdata.config.*;
 import com.dansoftware.libraryapp.db.DBConnection;
 import com.dansoftware.libraryapp.db.DataStorage;
+import com.dansoftware.libraryapp.gui.notification.GuiNotificationStrategy;
+import com.dansoftware.libraryapp.gui.notification.Notification;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 
 import java.io.IOException;
@@ -22,12 +24,17 @@ import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
  */
 final class ApplicationInitializer {
 
-    //private static final Logger LOGGER = Logger.getLogger(ApplicationInitializer.class.getName());
-
     /**
      * Creates a basic ApplicationInitializer.
      */
     ApplicationInitializer() {
+    }
+
+
+    @Step
+    private void setNotificationStrategy() {
+        //we set a gui notification behaviour
+        Notification.setStrategy(new GuiNotificationStrategy());
     }
 
     /**
@@ -86,6 +93,7 @@ final class ApplicationInitializer {
      * executed before the whole application starts.
      */
     public void initializeApplication() {
+        setNotificationStrategy();
         readConfigurations();
         checkAppRunsFirst();
         setDefaultLocale();

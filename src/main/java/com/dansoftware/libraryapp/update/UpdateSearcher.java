@@ -1,18 +1,15 @@
 package com.dansoftware.libraryapp.update;
 
+import com.dansoftware.libraryapp.gui.notification.Notification;
+import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
 import com.dansoftware.libraryapp.gui.update.UpdateDisplayer;
-import com.dansoftware.libraryapp.log.GuiLog;
-import com.dansoftware.libraryapp.main.Main;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.dansoftware.libraryapp.main.Globals.BUILD_INFO;
-import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
 
 /**
  * An UpdateSearcher can search for updates.
@@ -26,7 +23,7 @@ import static com.dansoftware.libraryapp.util.Bundles.getCommonBundle;
  */
 public class UpdateSearcher {
 
-    private static final Logger LOGGER = Logger.getLogger(UpdateSearcher.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateSearcher.class);
 
     /**
      * This field should contain the InformationObject that contains
@@ -45,7 +42,14 @@ public class UpdateSearcher {
         try {
             informationObject = UpdateInformationObjectFactory.getInformation();
         } catch (IOException e) {
-            LOGGER.log(new GuiLog(Level.SEVERE, e, "LibraryApp Updater", "update.cantsearch", null));
+            Notification.create()
+                    .level(NotificationLevel.ERROR)
+                    .title("update.searcher.title")
+                    .msg("update.searcher.error")
+                    .cause(e)
+                    .show();
+
+            LOGGER.error("Couldn't download the information about the update", e);
         }
     }
 
@@ -61,13 +65,12 @@ public class UpdateSearcher {
         Optional.ofNullable(this.informationObject)
                 .ifPresent(informationObject -> {
                     if (isCurrentVersionOld())
-                        Main.runAfterStart(() -> Notifications.create()
-                                .title("LibraryApp Updater")
-                                .text(getCommonBundle().getString("updatesearcher.available"))
-                                .hideAfter(Duration.INDEFINITE)
-                                .onAction(event -> new UpdateDisplayer().display(informationObject))
-                                .showInformation()
-                        );
+                        Notification.create()
+                                .level(NotificationLevel.INFO)
+                                .title("update.searcher.title")
+                                .msg("update.searcher.available")
+                                .eventHandler(event -> new UpdateDisplayer().display(informationObject))
+                                .show();
                 });
     }
 
@@ -75,7 +78,7 @@ public class UpdateSearcher {
      * Queries the current version of the running application and compares to the new update's version.
      *
      * @return <code>true</code> if the current version of the application is old (so it's need to be updated)
-     *         or <code>false</code> otherwise
+     * or <code>false</code> otherwise
      */
     private boolean isCurrentVersionOld() {
         String currentVersion = BUILD_INFO.getVersion();

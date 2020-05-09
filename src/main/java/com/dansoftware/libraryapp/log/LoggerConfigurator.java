@@ -5,88 +5,41 @@ import java.io.IOException;
 import java.util.logging.*;
 
 /**
- * This class configures the root logger of
- * the application
+ * This class is responsible for
+ * configuring the necessary system
+ * properties for the LogBack loggers.
  *
- * @author Daniel Gyorffy
+ * <p>
+ *
  */
 public final class LoggerConfigurator {
 
-    //private static final Logger LOGGER = Logger.getLogger(LoggerConfigurator.class.getName());
+    private static final File LOG_FILE;
 
+    static {
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        String logFileName = "libraryapp";
 
-    private static final String EMPTY_STRING = "";
-
-    /**
-     * This field contains that the root logger already configured
-     */
-    private boolean configured;
-
-
-    /**
-     * Creates a basic logger configurator object
-     */
-    public LoggerConfigurator() {
+        LOG_FILE = new File(tmpDir, logFileName);
     }
 
     /**
-     * This method removes the default handlers from the root logger (ConsoleHandler)
+     * Sets the necessary system-properties for LogBack
+     *
+     * <p>
+     * <b>Should be called before any logger is created</b>
      */
-    private void removeDefaultHandlers() {
-        LogManager.getLogManager().reset();
+    public static void configure() {
+        System.setProperty("logfile.path", LOG_FILE.getAbsolutePath());
     }
 
     /**
-     * Creates a file handler for the root logger
-     * @return the created {@link FileHandler} object
-     * @throws IOException if some I/O problem occurs
+     * Gives access to the path of the log file.
+     *
+     * @return the absolute path of the log file
      */
-    private FileHandler getFileHandler() throws IOException {
-        logFile = File.createTempFile("libraryapp2020", ".log");
-
-        FileHandler handler = new FileHandler(logFile.getAbsolutePath());
-        handler.setLevel(Level.INFO);
-        handler.setFormatter(new SimpleFormatter());
-
-        return handler;
-    }
-
-    /**
-     * @return the root logger
-     */
-    private Logger getRootLogger() {
-        return LogManager.getLogManager().getLogger(EMPTY_STRING);
-    }
-
-    /**
-     * This method configures the root logger
-     */
-    public void configureRootLogger() {
-
-    }
-
-    private void old0() {
-        if (configured) return;
-
-        Logger rootLogger = getRootLogger();
-
-        try {
-            removeDefaultHandlers();
-
-            rootLogger.addHandler(getFileHandler());
-            rootLogger.addHandler(new GuiHandler());
-
-            configured = Boolean.TRUE;
-        } catch (IOException e) {
-         //   LOGGER.log(Level.WARNING, "Couldn't create FileHandler for root logger", e);
-        }
-    }
-
-    /**
-     * @return the file that the application logs to
-     */
-    public static File getLogFile() {
-        return logFile;
+    public static String getLogFilePath() {
+        return LOG_FILE.getAbsolutePath() + ".log";
     }
 
 }
