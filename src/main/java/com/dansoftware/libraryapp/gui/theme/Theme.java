@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.util.theme;
+package com.dansoftware.libraryapp.gui.theme;
 
 import javafx.scene.Scene;
 import jfxtras.styles.jmetro.JMetro;
@@ -21,7 +21,7 @@ public class Theme {
      */
     public static final Theme DARK = new Theme(
             new ThemeIdentifier("dark", "theme.dark"),
-            Collections.singletonList("/com/dansoftware/libraryapp/gui/util/theme/global-dark.css"),
+            Collections.singletonList("/com/dansoftware/libraryapp/gui/theme/global-dark.css"),
             scene -> new JMetro(Style.DARK).setScene(scene)
     );
 
@@ -30,7 +30,7 @@ public class Theme {
      */
     public static final Theme LIGHT = new Theme(
             new ThemeIdentifier("light", "theme.light"),
-            Collections.singletonList("/com/dansoftware/libraryapp/gui/util/theme/global-light.css"),
+            Collections.singletonList("/com/dansoftware/libraryapp/gui/theme/global-light.css"),
             scene -> new JMetro(Style.LIGHT).setScene(scene)
     );
 

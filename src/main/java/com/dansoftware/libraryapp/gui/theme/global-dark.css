@@ -36,6 +36,9 @@
 }
 
 /*Some tab pane trifles*/
+.tab .tab-close-button {
+    -fx-background-color: whitesmoke;
+}
 .tab .tab-close-button:hover {
     -fx-background-color: red;
 }

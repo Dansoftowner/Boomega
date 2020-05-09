@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.browser;
+package com.dansoftware.libraryapp.gui.tool.browser;
 
 import javafx.scene.layout.StackPane;
 
@@ -15,10 +15,12 @@ import java.util.function.Supplier;
  * <p>
  *  A Browser provides a GUI toolset to give the ability to the user
  *  to do operations with the web page (such as reloading, url copying etc..)
+ *
+ * @author Daniel Gyorffy
  */
 public abstract class Browser extends StackPane {
 
-    private Supplier<WebContentRenderer> rendererSupplier;
+    private final Supplier<WebContentRenderer> rendererSupplier;
 
     /**
      * Creates a Browser with a Supplier of WebContentRenderer

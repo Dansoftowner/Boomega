@@ -1,6 +1,6 @@
-package com.dansoftware.libraryapp.gui.browser;
+package com.dansoftware.libraryapp.gui.tool.browser;
 
-import com.dansoftware.libraryapp.gui.util.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,7 +8,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.util.Locale;
 
 public class TabWebBrowserTest extends Application {
@@ -28,7 +27,6 @@ public class TabWebBrowserTest extends Application {
         TabWebBrowser webBrowser = new TabWebBrowser(WebViewWrapper.WEBVIEW_SUPPLIER);
         webBrowser.load("Google pageee", "http://www.google.com");
         webBrowser.load("http://www.google.com");
-        webBrowser.load("Local page", new File("test.html"));
 
         Scene scene = new Scene(new BorderPane(webBrowser,
                 new HBox(10, dark, light),

@@ -21,7 +21,6 @@ public class MenuBuilder {
 
     public MenuBuilder text(String text) {
         this.text = text;
-
         return this;
     }
 

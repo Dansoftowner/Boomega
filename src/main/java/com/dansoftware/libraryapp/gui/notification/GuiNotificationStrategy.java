@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.notification;
 
 import com.dansoftware.libraryapp.gui.util.Alerts;
-import com.dansoftware.libraryapp.gui.util.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Main;
 import javafx.geometry.Pos;
 import org.controlsfx.control.Notifications;

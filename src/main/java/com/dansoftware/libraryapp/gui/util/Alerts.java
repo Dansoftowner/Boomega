@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.gui.util;
 
-import com.dansoftware.libraryapp.gui.util.theme.Theme;
 import com.dansoftware.libraryapp.util.ThrowableToStringAdapter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;

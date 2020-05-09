@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.browser;
+package com.dansoftware.libraryapp.gui.tool.browser;
 
 import javafx.scene.Node;
 

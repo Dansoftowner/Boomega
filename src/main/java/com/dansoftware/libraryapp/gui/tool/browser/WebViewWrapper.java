@@ -1,12 +1,9 @@
-package com.dansoftware.libraryapp.gui.browser;
+package com.dansoftware.libraryapp.gui.tool.browser;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.web.WebView;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 

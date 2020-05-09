@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.browser;
+package com.dansoftware.libraryapp.gui.tool.browser;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.*;
@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
-import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWords;
 
 /**
  * A TabWebBrowser can load and show web pages in separate tabs
@@ -16,6 +15,8 @@ import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWords;
  * <p>
  *  A TabWebBrowser is a {@link Browser} that creates a new tab for each
  *  web page on every load request.
+ *
+ * @author Daniel Gyorffy
  */
 public class TabWebBrowser extends Browser {
 
