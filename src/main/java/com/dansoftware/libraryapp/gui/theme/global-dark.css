@@ -35,6 +35,33 @@
     -fx-graphic: url(/com/dansoftware/libraryapp/image/browser/reload_white.png);
 }
 
+.browser-place-holder {
+}
+
+.browser-place-holder .center-image-view {
+    -fx-image: url(/com/dansoftware/libraryapp/image/util/empty_white.png);
+    -fx-opacity: 0.7;
+}
+
+.browser-place-holder .label {
+    -fx-text-fill: whitesmoke;
+    -fx-font-size: 15px;
+    -fx-text-alignment: center;
+}
+
+/* Document Viewer styles */
+.document-viewer-place-holder .center-image-view {
+    -fx-image: url(/com/dansoftware/libraryapp/image/util/empty_white.png);
+    -fx-opacity: 0.7;
+}
+
+.document-viewer-place-holder .label {
+    -fx-text-fill: whitesmoke;
+    -fx-font-size: 15px;
+    -fx-text-alignment: center;
+}
+
+
 /*Some tab pane trifles*/
 .tab .tab-close-button {
     -fx-background-color: whitesmoke;

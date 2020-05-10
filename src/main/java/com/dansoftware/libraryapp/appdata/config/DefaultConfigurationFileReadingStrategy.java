@@ -23,6 +23,7 @@ public class DefaultConfigurationFileReadingStrategy extends XMLFileReadingStrat
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConfigurationFileReadingStrategy.class);
 
     public DefaultConfigurationFileReadingStrategy() {
+        //we call the parent's constructor with the configuration file placed in the appdata folder
         super(ApplicationDataFolderFactory.getApplicationDataFolder().getConfigurationFile());
     }
 

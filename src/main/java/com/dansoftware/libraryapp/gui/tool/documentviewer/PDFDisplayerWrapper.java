@@ -21,8 +21,8 @@ public class PDFDisplayerWrapper implements DocumentRenderer {
     }
 
     @Override
-    public void load(String url) {
-        throw new UnsupportedOperationException("The PDFDisplayer cannot render pdf documents from a plain-String url yet");
+    public void load(String url) throws IOException {
+        this.load(new URL(url));
     }
 
     @Override

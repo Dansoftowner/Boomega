@@ -10,26 +10,45 @@ import java.util.function.Consumer;
 import static java.util.Objects.nonNull;
 
 /**
- * A Theme can change the appearance of the GUI.
+ * A Theme is used for changing the appearance of the GUI.
+ *
+ * @author Daniel Gyorffy
  */
 public class Theme {
+
+    /**
+     * Contains all created themes
+     */
+    private static final Map<String, Theme> themesContainer =
+            new HashMap<>();
 
     private static Theme DEFAULT;
 
     /**
-     * Specifies a dark theme
+     * Specifies a dark theme.
+     *
+     * <p>
+     * Uses JMetro's DARK style and some additional stylesheets.
+     *
+     * @see JMetro
+     * @see jfxtras.styles.jmetro.Style#DARK
      */
     public static final Theme DARK = new Theme(
-            new ThemeIdentifier("dark", "theme.dark"),
+            new ThemeIdentifier("libraryapp_dark", "theme.dark"),
             Collections.singletonList("/com/dansoftware/libraryapp/gui/theme/global-dark.css"),
             scene -> new JMetro(Style.DARK).setScene(scene)
     );
 
     /**
      * Specifies a light theme
+     * <p>
+     * Uses JMetro's LIGHT style and some additional stylesheets.
+     *
+     * @see JMetro
+     * @see jfxtras.styles.jmetro.Style#LIGHT
      */
     public static final Theme LIGHT = new Theme(
-            new ThemeIdentifier("light", "theme.light"),
+            new ThemeIdentifier("libraryapp_light", "theme.light"),
             Collections.singletonList("/com/dansoftware/libraryapp/gui/theme/global-light.css"),
             scene -> new JMetro(Style.LIGHT).setScene(scene)
     );
@@ -53,6 +72,8 @@ public class Theme {
         this.identifier = Objects.requireNonNull(identifier, "The identifier mustn't be null");
         this.stylesheets = Objects.requireNonNull(stylesheets, "The list of stylesheets mustn't be null");
         this.onSceneApplier = onSceneApplier;
+
+        themesContainer.put(this.identifier.id, this);
     }
 
     /**
@@ -100,12 +121,22 @@ public class Theme {
         Theme.getDefault().apply(scene);
     }
 
+    public static Theme getByID(String id) {
+        return themesContainer.get(id);
+    }
+
+    /**
+     * A ThemeIdentifier used for identify a {@link Theme}.
+     *
+     * Contains a specific id and a bundleID <b>-></b>
+     * that defines the theme name's internationalized key
+     */
     public static final class ThemeIdentifier {
         private final String id;
         private final String bundleID;
 
         public ThemeIdentifier(String id, String bundleID) {
-            this.id = id;
+            this.id = Objects.requireNonNull(id, "The theme-id mustn't be null!");
             this.bundleID = bundleID;
         }
 
@@ -116,6 +147,8 @@ public class Theme {
         public String getBundleID() {
             return bundleID;
         }
+
+
     }
 
 }

@@ -9,9 +9,9 @@ import static java.util.Objects.isNull;
 public class DataStorage implements AbstractDataStorage {
 
     private DataPackage dataPackage;
-    private AbstractDBConnection dbConnection;
+    private final DBConnection dbConnection;
 
-    public DataStorage(AbstractDBConnection dbConnection) {
+    public DataStorage(DBConnection dbConnection) {
         this.dbConnection = dbConnection;
     }
 

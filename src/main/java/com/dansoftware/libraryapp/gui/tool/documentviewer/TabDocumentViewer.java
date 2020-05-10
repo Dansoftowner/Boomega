@@ -1,11 +1,14 @@
 package com.dansoftware.libraryapp.gui.tool.documentviewer;
 
 import com.dansoftware.libraryapp.util.DocumentOpener;
-import com.sun.jdi.event.MethodEntryEvent;
+import com.dansoftware.libraryapp.util.function.UnhandledConsumer;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.TransferMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,79 +36,86 @@ public class TabDocumentViewer extends DocumentViewer {
         this.tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         this.getChildren().add(tabPane);
+
+        //set file-dragging functionality
+        this.tabPane.setOnDragOver(event -> {
+            if (event.getDragboard().hasFiles()) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+        });
+        this.tabPane.setOnDragDropped(event -> {
+            if (event.getDragboard().hasFiles()) {
+                event.getDragboard().getFiles().forEach(file -> {
+                    try {
+                        load(file.getName(), file);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+        });
+
+        //if all tabs is closed the place holder will appears
+        DocumentViewerPlaceHolderGUI placeHolder = new DocumentViewerPlaceHolderGUI();
+        BooleanBinding isEmptyProperty = Bindings.isEmpty(tabPane.getTabs());
+        placeHolder.visibleProperty().bind(isEmptyProperty);
+
+        this.getChildren().add(placeHolder);
+    }
+
+    /**
+     * Creates a tab on the tab pane
+     *
+     * @param title the title of the tab; can be null
+     * @param titlePlaceHolderSupplier the supplier that returns a title that will be
+     *                                 displayed if the title parameter is null; mustn't be null
+     * @param loader the loader that defines how to load to the {@link DocumentRenderer};
+     *               mustn't be null
+     * @param contextMenu the contextmenu for the tab; can be null
+     * @throws IOException if some I/O exception occurs during the loading of the content
+     */
+    private void createTab(String title, Supplier<String> titlePlaceHolderSupplier, UnhandledConsumer<DocumentRenderer, IOException> loader, ContextMenu contextMenu) throws IOException {
+        Objects.requireNonNull(loader, "The loader mustn't be null");
+        Objects.requireNonNull(titlePlaceHolderSupplier, "The titlePlaceHolderSupplier mustn't be null");
+
+        Tab tab = new Tab();
+
+        if (isNull(title)) tab.setText(titlePlaceHolderSupplier.get());
+        else tab.setText(title);
+
+        DocumentRenderer documentRenderer = Objects.requireNonNull(getDocumentRendererSupplier().get(), "The DocumentRenderer supplier shouldn't return null!");
+        loader.accept(documentRenderer);
+
+        tab.setContent(documentRenderer.toNode());
+        tab.setContextMenu(contextMenu);
+
+        this.tabPane.getTabs().add(tab);
     }
 
     @Override
     public void load(String title, String url) throws IOException {
-        Objects.requireNonNull(url, "The url can't be null");
+        MenuItem openInDefaultViewerItem = new MenuItem(getGeneralWord("document.viewer.tab.open.default"));
+        openInDefaultViewerItem.setOnAction(e -> DocumentOpener.getOpener().browse(url));
 
-        Tab tab = new Tab();
-
-        if (isNull(title)) tab.setText(url);
-        else tab.setText(title);
-
-        DocumentRenderer documentRenderer = Objects.requireNonNull(getDocumentRendererSupplier().get(), "The DocumentRenderer supplier shouldn't return null!");
-        documentRenderer.load(url);
-
-        tab.setContent(documentRenderer.toNode());
-
-        this.tabPane.getTabs().add(tab);
+        this.createTab(title, () -> url, renderer -> renderer.load(url), new ContextMenu(openInDefaultViewerItem));
     }
 
     @Override
     public void load(String title, InputStream inputStream) throws IOException {
-        Objects.requireNonNull(inputStream, "The inputStream can't be null");
-
-        Tab tab = new Tab();
-
-        if (isNull(title)) tab.setText(getGeneralWord("document.viewer.tab.untitled"));
-        else tab.setText(title);
-
-        DocumentRenderer documentRenderer = Objects.requireNonNull(getDocumentRendererSupplier().get(), "The DocumentRenderer supplier shouldn't return null!");
-        documentRenderer.load(inputStream);
-
-        tab.setContent(documentRenderer.toNode());
-
-        this.tabPane.getTabs().add(tab);
+        this.createTab(title, () -> getGeneralWord("document.viewer.tab.untitled"), renderer -> renderer.load(inputStream), null);
     }
 
     @Override
     public void load(String title, File file) throws IOException {
-        Objects.requireNonNull(file, "The file can't be null");
-
-        Tab tab = new Tab();
-
-        /*
-        MenuItem openInDefaultViewerItem = new MenuItem("Open in default viewer");
+        MenuItem openInDefaultViewerItem = new MenuItem(getGeneralWord("document.viewer.tab.open.default"));
         openInDefaultViewerItem.setOnAction(e -> DocumentOpener.getOpener().open(file));
 
-        tab.setContextMenu(new ContextMenu(openInDefaultViewerItem));
-
-         */
-        if (isNull(title)) tab.setText(file.getName());
-        else tab.setText(title);
-
-        DocumentRenderer documentRenderer = Objects.requireNonNull(getDocumentRendererSupplier().get(), "The DocumentRenderer supplier shouldn't return null!");
-        documentRenderer.load(file);
-
-        tab.setContent(documentRenderer.toNode());
-        this.tabPane.getTabs().add(tab);
+        this.createTab(title, file::getName, renderer -> renderer.load(file), new ContextMenu(openInDefaultViewerItem));
     }
 
     @Override
     public void load(String title, URL url) throws IOException {
-        Objects.requireNonNull(url, "The url can't be null");
-
-        Tab tab = new Tab();
-
-        if (isNull(title)) tab.setText(url.toString());
-        else tab.setText(title);
-
-        DocumentRenderer documentRenderer = Objects.requireNonNull(getDocumentRendererSupplier().get(), "The DocumentRenderer supplier shouldn't return null!");
-        documentRenderer.load(url);
-
-        tab.setContent(documentRenderer.toNode());
-        this.tabPane.getTabs().add(tab);
+        this.createTab(title, url::toString, renderer -> renderer.load(url), null);
     }
 
 

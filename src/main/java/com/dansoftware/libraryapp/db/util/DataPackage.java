@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.db.util;
 
-import com.dansoftware.libraryapp.db.AbstractDBConnection;
 import com.dansoftware.libraryapp.db.pojo.*;
 
 import java.util.Collection;
@@ -17,8 +16,8 @@ import java.util.Collection;
  *     <li>{@link Book} objects</li>
  * </ul>
  *
- * @see AbstractDBConnection#loadAllData() DBConnection objects uses DataPackgage
- *                                                                       to store the read data from the database
+ * @see DBConnection#loadAllData() DBConnection objects uses DataPackgage
+ * to store the read data from the database
  */
 public final class DataPackage {
 
@@ -28,12 +27,28 @@ public final class DataPackage {
     private final Collection<Book> books;
 
     /**
+     * Calls the {@link DataPackage#DataPackage(Collection, Collection, Collection, Collection)}
+     * constructor with {@link RecordCollection} objects.
+     *
+     * @see DataPackage#DataPackage(Collection, Collection, Collection, Collection)
+     * @see RecordCollection
+     */
+    public DataPackage() {
+        this(
+                new RecordCollection<>(),
+                new RecordCollection<>(),
+                new RecordCollection<>(),
+                new RecordCollection<>()
+        );
+    }
+
+    /**
      * Creates a DataPackage with initial data.
      *
-     * @param authors the initial list of authors
+     * @param authors    the initial list of authors
      * @param publishers the initial list of publishers
-     * @param subjects the initial list of subjects
-     * @param books the initial list of books
+     * @param subjects   the initial list of subjects
+     * @param books      the initial list of books
      */
     public DataPackage(Collection<Author> authors, Collection<Publisher> publishers, Collection<Subject> subjects, Collection<Book> books) {
         this.authors = authors;

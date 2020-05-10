@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.appdata.config;
 
+import com.dansoftware.libraryapp.gui.theme.Theme;
+
 import java.io.File;
 import java.util.Locale;
 import java.util.Objects;
@@ -65,19 +67,21 @@ public class ConfigurationKey<T> {
     public static final ConfigurationKey<File> CUSTOM_DB_FILE =
             new ConfigurationKey<>("custom_db", File::new, null);
 
+    public static final ConfigurationKey<Theme> DEFAULT_THEME =
+            new ConfigurationKey<>("configured_theme", Theme::getByID, Theme.LIGHT);
+
     // <------
 
     private final String key;
     private final T defaultValue;
-
-    private Function<String, T> transformer;
+    private final Function<String, T> transformer;
 
     public ConfigurationKey(String key, Function<String, T> transformer) {
         this(key, transformer, null);
     }
 
     public ConfigurationKey(String key, Function<String, T> transformer, T defaultValue) {
-        Objects.requireNonNull(key, "The 'key' parameter must not be null."::toString);
+        Objects.requireNonNull(key, "The 'key' parameter must not be null.");
 
         this.key = key;
         this.defaultValue = defaultValue;

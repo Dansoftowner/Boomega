@@ -1,9 +1,12 @@
 package com.dansoftware.libraryapp.main;
 
+import com.dansoftware.libraryapp.appdata.config.ConfigurationKey;
 import com.dansoftware.libraryapp.exception.ExceptionUtils;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.log.LoggerConfigurator;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,6 +22,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static com.dansoftware.libraryapp.locale.Bundles.*;
+import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
 
 /**
  * The main class and javafx application starter.
@@ -90,6 +94,8 @@ public class Main extends Application {
         Parent root = new StackPane();
 
         Scene scene = new Scene(root);
+
+        Theme.applyDefault(scene);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("LibraryApp");

@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.tool.browser;
 
-import javafx.collections.ListChangeListener;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -31,10 +32,12 @@ public class TabWebBrowser extends Browser {
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         this.getChildren().add(tabPane);
 
-        //if all tabs is closed the listener will generate a basic page to fill the void.
-        this.tabPane.getTabs().addListener((ListChangeListener<Tab>) change -> {
-            if (tabPane.getTabs().isEmpty()) load("Overview", getClass().getResource("browser_home.html"));
-        });
+        //if all tabs is closed the place holder will appears
+        BrowserPlaceHolderGUI placeHolder = new BrowserPlaceHolderGUI();
+        BooleanBinding isEmptyProperty = Bindings.isEmpty(tabPane.getTabs());
+        placeHolder.visibleProperty().bind(isEmptyProperty);
+
+        this.getChildren().add(placeHolder);
     }
 
     @Override

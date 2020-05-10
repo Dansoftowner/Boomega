@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.db.util;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
 import com.dansoftware.libraryapp.appdata.config.ConfigurationKey;
+import com.dansoftware.libraryapp.db.DefaultDBConnection;
 import com.dansoftware.libraryapp.main.ApplicationArgumentHandler;
 import com.dansoftware.libraryapp.main.Globals;
 
@@ -16,6 +17,7 @@ import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
  * considerate the application parameters and the user settings.
  *
  * @author Daniel Gyorffy
+ * @see DefaultDBConnection
  */
 public final class DataBaseFileRecognizer {
 

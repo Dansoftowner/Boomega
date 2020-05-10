@@ -1,10 +1,11 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.config.*;
-import com.dansoftware.libraryapp.db.DBConnection;
 import com.dansoftware.libraryapp.db.DataStorage;
+import com.dansoftware.libraryapp.db.DefaultDBConnection;
 import com.dansoftware.libraryapp.gui.notification.GuiNotificationStrategy;
 import com.dansoftware.libraryapp.gui.notification.Notification;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import static com.dansoftware.libraryapp.main.Globals.getConfigurationHolder;
 
 /**
  * This class is used to initialize some important thing
- * before the application actually starts.
+ * before the application-gui actually starts.
  *
  * <b>Should be instantiated and used only ONCE</b>
  *
@@ -30,7 +31,9 @@ final class ApplicationInitializer {
     ApplicationInitializer() {
     }
 
-
+    /**
+     * Sets the notification's strategy.
+     */
     @Step
     private void setNotificationStrategy() {
         //we set a gui notification behaviour
@@ -47,7 +50,9 @@ final class ApplicationInitializer {
     @Step
     private void readConfigurations() {
         ConfigurationHolder holder = new ConfigurationHashtableHolder();
-        ConfigurationReader reader = new ConfigurationReader(new DefaultConfigurationFileReadingStrategy());
+        ConfigurationReader reader = new ConfigurationReader(
+                new DefaultConfigurationFileReadingStrategy()
+        );
 
         try {
             reader.readConfigurationsTo(holder);
@@ -58,6 +63,10 @@ final class ApplicationInitializer {
         Globals.setConfigurationHolder(holder);
     }
 
+    /**
+     * Calls the {@link ApplicationRunsFirstAnalyzer} to welcome the
+     * new user of the application.
+     */
     @Step
     private void checkAppRunsFirst() {
         ApplicationRunsFirstAnalyzer applicationRunsFirstAnalyzer
@@ -66,6 +75,9 @@ final class ApplicationInitializer {
         applicationRunsFirstAnalyzer.analyze();
     }
 
+    /**
+     * Sets the default locale read from the user-configurations
+     */
     @Step
     private void setDefaultLocale() {
         Locale configuredLocale = getConfigurationHolder()
@@ -74,11 +86,26 @@ final class ApplicationInitializer {
         Locale.setDefault(configuredLocale);
     }
 
+    /**
+     * Sets the default theme of the UI.
+     */
     @Step
-    private void setGlobalDataStorage() {
-        Globals.setDataStorage(new DataStorage(DBConnection.getInstance()));
+    private void setDefaultTheme() {
+        Theme.setDefault(getConfigurationHolder().getConfiguration(ConfigurationKey.DEFAULT_THEME));
     }
 
+    /**
+     * Sets the global data storage
+     */
+    @Step
+    private void setGlobalDataStorage() {
+        Globals.setDataStorage(new DataStorage(new DefaultDBConnection()));
+    }
+
+    /**
+     * Calls the {@link UpdateSearcher} if the automatic update searching
+     * turned on by the user.
+     */
     @Step
     private void checkUpdates() {
         //if automatic update searching is allowed by the user
@@ -97,6 +124,8 @@ final class ApplicationInitializer {
         readConfigurations();
         checkAppRunsFirst();
         setDefaultLocale();
+        setDefaultTheme();
+        setGlobalDataStorage();
         checkUpdates();
     }
 
