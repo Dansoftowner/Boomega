@@ -4,6 +4,8 @@ import com.dansoftware.libraryapp.util.ThrowableToStringAdapter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 
+import java.rmi.UnexpectedException;
+
 import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
 
 /**
@@ -27,10 +29,16 @@ public final class Alerts {
         Alert alert = new Alert(Alert.AlertType.ERROR, cause.getMessage());
         alert.setTitle("LibraryApp alert");
         alert.getDialogPane().setExpandableContent(
-                new TextArea(new ThrowableToStringAdapter(cause).toString()));
+                new UnEditableTextArea(new ThrowableToStringAdapter(cause).toString()));
 
         getPrimaryStage().ifPresent(alert::initOwner);
         alert.show();
     }
 
+    private static class UnEditableTextArea extends TextArea {
+        private UnEditableTextArea(String text) {
+            super(text);
+            this.setEditable(false);
+        }
+    }
 }

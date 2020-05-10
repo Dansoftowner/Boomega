@@ -60,6 +60,7 @@ dependencies {
 
     //Apache libraries
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    //compile group: 'org.mybatis', name: 'mybatis', version: '3.4.5'
 
     //libraries for javaFX
     implementation 'com.jfoenix:jfoenix:9.0.9'

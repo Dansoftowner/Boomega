@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 
 import java.io.IOException;
 import java.net.URL;
@@ -92,6 +93,7 @@ public class Main extends Application {
         URL fxmlResource = getClass().getResource("");
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource, getFXMLValues());
         Parent root = new StackPane();
+        root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 
         Scene scene = new Scene(root);
 

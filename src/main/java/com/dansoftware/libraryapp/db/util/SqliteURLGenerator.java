@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class SqliteURLGenerator implements JDBCURLGenerator {
 
-    private static final String PREFIX = "jdbc:sqlite";
+    private static final String PREFIX = "jdbc:sqlite:";
 
     private File dbFile;
 

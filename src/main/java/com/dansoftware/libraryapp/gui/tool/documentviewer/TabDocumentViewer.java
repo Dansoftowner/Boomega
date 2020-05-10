@@ -9,6 +9,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.TransferMode;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class TabDocumentViewer extends DocumentViewer {
         this.tabPane = new TabPane();
         this.tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+        this.tabPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.getChildren().add(tabPane);
 
         //set file-dragging functionality

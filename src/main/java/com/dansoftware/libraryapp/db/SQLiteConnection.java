@@ -5,7 +5,11 @@ import com.dansoftware.libraryapp.db.util.JDBCUtils;
 import com.dansoftware.libraryapp.db.util.SqliteURLGenerator;
 import com.dansoftware.libraryapp.db.util.parse.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.Buffer;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,8 +44,18 @@ public class SQLiteConnection extends DBConnection {
     }
 
     private void createTablesAndViews() {
-        JDBCUtils.executeSqlScript(getConnection(), getClass().getResourceAsStream("/com/dansoftware/libraryapp/db/create_tables.sql"));
-        JDBCUtils.executeSqlScript(getConnection(), getClass().getResourceAsStream("/com/dansoftware/libraryapp/db/create_views.sql"));
+        try(var input = getClass().getResourceAsStream("/com/dansoftware/libraryapp/db/create_tables.sql")) {
+            JDBCUtils.executeSqlScript(getConnection(), input);
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try(var input = getClass().getResourceAsStream("/com/dansoftware/libraryapp/db/create_views.sql")) {
+            JDBCUtils.executeSqlScript(getConnection(), input);
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

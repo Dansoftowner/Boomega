@@ -1,10 +1,12 @@
 package com.dansoftware.libraryapp.db.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Objects;
 
 /**
@@ -27,29 +29,27 @@ public class JDBCUtils {
      * @param connection          the Connection object that we want to execute on
      * @throws NullPointerException if the {@param connection} or the {@param resourceInputStream} is null.
      */
-    public static void executeSqlScript(Connection connection, InputStream resourceInputStream) throws NullPointerException {
+    public static void executeSqlScript(Connection connection, InputStream resourceInputStream) throws IOException, SQLException {
         Objects.requireNonNull(connection);
         Objects.requireNonNull(resourceInputStream);
 
-        try (var reader = new BufferedReader(new InputStreamReader(resourceInputStream))) {
-            StringBuilder actualStatement = new StringBuilder();
+        var reader = new BufferedReader(new InputStreamReader(resourceInputStream));
+        var actualStatement = new StringBuilder();
 
-            String actualReadLine;
-            while ((actualReadLine = reader.readLine()) != null) {
-                actualStatement.append(actualReadLine);
+        int actualReadChar;
+        while ((actualReadChar = reader.read()) != -1) {
+            char asChar = (char) actualReadChar;
+            actualStatement.append(asChar);
 
-                if (actualReadLine.endsWith(";")) {
+            if (actualReadChar == ';') {
 
-                    try (PreparedStatement preparedStatement = connection.prepareStatement(actualStatement.toString())) {
-                        preparedStatement.execute();
-                    }
-
-                    actualStatement = new StringBuilder();
+                try(var preparedStatement = connection.prepareStatement(actualStatement.toString())) {
+                    preparedStatement.execute();
                 }
-            }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+                actualStatement = new StringBuilder();
+
+            }
         }
     }
 }

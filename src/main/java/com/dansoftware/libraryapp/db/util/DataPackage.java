@@ -16,7 +16,7 @@ import java.util.Collection;
  *     <li>{@link Book} objects</li>
  * </ul>
  *
- * @see DBConnection#loadAllData() DBConnection objects uses DataPackgage
+ * @see com.dansoftware.libraryapp.db.DBConnection#loadAllData() DBConnection objects uses DataPackgage
  * to store the read data from the database
  */
 public final class DataPackage {

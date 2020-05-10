@@ -4,6 +4,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -30,6 +32,7 @@ public class TabWebBrowser extends Browser {
         this.tabPane = new TabPane();
         this.tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+        this.tabPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.getChildren().add(tabPane);
 
         //if all tabs is closed the place holder will appears

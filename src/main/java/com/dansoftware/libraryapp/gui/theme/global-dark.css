@@ -69,7 +69,3 @@
 .tab .tab-close-button:hover {
     -fx-background-color: red;
 }
-
-.tab-pane {
-    -fx-background-color: #2f2e2e;
-}
