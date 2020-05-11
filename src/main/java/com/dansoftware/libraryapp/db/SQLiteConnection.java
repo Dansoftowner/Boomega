@@ -4,12 +4,11 @@ import com.dansoftware.libraryapp.db.util.DataPackage;
 import com.dansoftware.libraryapp.db.util.JDBCUtils;
 import com.dansoftware.libraryapp.db.util.SqliteURLGenerator;
 import com.dansoftware.libraryapp.db.util.parse.*;
+import com.dansoftware.libraryapp.gui.util.concurrency.LocalizedTask;
+import javafx.concurrent.Task;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.Buffer;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,8 +27,8 @@ public class SQLiteConnection extends DBConnection {
      * Creates an SQLIteConnection that connects to the
      * sqlite database file.
      *
-     * @param databaseFile the sqlite-database file to connect to;
-     *             must not be null
+     * @param databaseFile     the sqlite-database file to connect to;
+     *                         must not be null
      * @param exceptionHandler the consumer that handles
      *                         the sql exception that occurs
      *                         during the connection-creation;
@@ -43,14 +42,24 @@ public class SQLiteConnection extends DBConnection {
         this.createTablesAndViews();
     }
 
+    /**
+     * This method reads some resource (SQL Script) from the classpath
+     * and executes them on the database connection.
+     *
+     * <p>
+     * This is important because it creates all necessary tables and views
+     * if they are not exists yet.
+     */
     private void createTablesAndViews() {
-        try(var input = getClass().getResourceAsStream("/com/dansoftware/libraryapp/db/create_tables.sql")) {
+        //executing the table creator script
+        try (var input = getClass().getResourceAsStream("/com/dansoftware/libraryapp/db/create_tables.sql")) {
             JDBCUtils.executeSqlScript(getConnection(), input);
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
 
-        try(var input = getClass().getResourceAsStream("/com/dansoftware/libraryapp/db/create_views.sql")) {
+        //executing the view creator script
+        try (var input = getClass().getResourceAsStream("/com/dansoftware/libraryapp/db/create_views.sql")) {
             JDBCUtils.executeSqlScript(getConnection(), input);
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
@@ -59,45 +68,71 @@ public class SQLiteConnection extends DBConnection {
     }
 
     @Override
-    public DataPackage loadAllData() throws SQLException {
-        DataPackage dataPackage = new DataPackage();
+    public Task<DataPackage> loadAllData() {
+        return new LocalizedTask<>() {
+            @Override
+            protected DataPackage call() throws SQLException {
+                DataPackage dataPackage = new DataPackage();
 
-        String sql;
-        ResultSetParser parser;
+                String sql;
+                ResultSetParser parser;
 
-        sql = "SELECT * FROM books_joined;";
-        parser = new JoinedTableParser();
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+                this.updateLocalizedTitle("db.connection.load.title");
+                this.updateMessage("0%");
+                this.updateProgress(0, 100);
 
-            parser.parse(resultSet, dataPackage);
-        }
 
-        sql = "SELECT * FROM single_authors";
-        parser = new AuthorTableParser();
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+                //Selecting all the books and other records that are can be joined to the books table
+                sql = "SELECT * FROM books_joined;";
+                parser = new JoinedTableParser();
+                try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+                     ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            parser.parse(resultSet, dataPackage);
-        }
+                    parser.parse(resultSet, dataPackage);
+                }
 
-        sql = "SELECT * FROM single_publishers";
-        parser = new PublisherTableParser();
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+                this.updateMessage("25%");
+                this.updateProgress(25, 100);
 
-            parser.parse(resultSet, dataPackage);
-        }
+                //selecting the authors that are can't be joined with the books table
+                sql = "SELECT * FROM single_authors";
+                parser = new AuthorTableParser();
+                try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+                     ResultSet resultSet = preparedStatement.executeQuery()) {
 
-        sql = "SELECT * FROM single_subjects";
-        parser = new SubjectTableParser();
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+                    parser.parse(resultSet, dataPackage);
+                }
 
-            parser.parse(resultSet, dataPackage);
-        }
+                this.updateMessage("50%");
+                this.updateProgress(50, 100);
 
-        return dataPackage;
+                //selecting the publishers that are can't be joined with the books table
+                sql = "SELECT * FROM single_publishers";
+                parser = new PublisherTableParser();
+                try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+                     ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                    parser.parse(resultSet, dataPackage);
+                }
+
+                this.updateMessage("75%");
+                this.updateProgress(75, 100);
+
+                //selecting the subjects that are can't be joined with the books table
+                sql = "SELECT * FROM single_subjects";
+                parser = new SubjectTableParser();
+                try (PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+                     ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                    parser.parse(resultSet, dataPackage);
+                }
+
+                this.updateMessage("100%");
+                this.updateProgress(100, 100);
+
+                return dataPackage;
+            }
+        };
     }
 
 }

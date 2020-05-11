@@ -18,6 +18,10 @@ public class Bundles {
         return getGeneralWords().getString(key);
     }
 
+    public static ResourceBundle getProgressMessages() {
+        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.ProgressMessages");
+    }
+
     public static ResourceBundle getFXMLValues() {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.FXMLValues");
     }

@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.db;
 
 import com.dansoftware.libraryapp.db.util.DataPackage;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -93,12 +95,12 @@ public abstract class DBConnection {
     }
 
     /**
-     * Loads all data (Authors, Books, Subjects, Publishers) from the database
+     * Returns a {@link Task} that loads all data (Authors, Books, Subjects, Publishers) from the database
      * and puts them into a DataPackage.
      *
      * @return the {@link DataPackage} that contains the data
      * @throws SQLException if some SQLException occurs during the execution
      */
-    public abstract DataPackage loadAllData() throws SQLException;
+    public abstract Task<DataPackage> loadAllData();
 
 }
