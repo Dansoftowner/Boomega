@@ -7,7 +7,6 @@ import javafx.util.Duration;
 
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import static com.dansoftware.libraryapp.locale.Bundles.getNotificationMessages;
 import static com.dansoftware.libraryapp.util.CommonUtils.isEmpty;
@@ -39,7 +38,6 @@ public class Notification {
     private final NotificationLevel level;
     private final String msg;
     private final String title;
-    private final Object[] args;
     private final Throwable throwable;
     private final Duration visibilityDuration;
     private final EventHandler<ActionEvent> eventHandler;
@@ -47,8 +45,7 @@ public class Notification {
 
     private Notification(Builder builder) {
         this.level = builder.level;
-        this.msg = getFinalMessage(builder.msg,
-                this.args = builder.args);
+        this.msg = getFinalMessage(builder.msgBuilder.getMsg(), builder.msgBuilder.getArgs());
         this.title = getFinalMessage(builder.title);
         this.throwable = builder.throwable;
         this.visibilityDuration = builder.visibilityDuration;
@@ -109,10 +106,6 @@ public class Notification {
         return msg;
     }
 
-    public Object[] getArgs() {
-        return args;
-    }
-
     public Throwable getThrowable() {
         return throwable;
     }
@@ -131,9 +124,8 @@ public class Notification {
 
     public static final class Builder {
         private NotificationLevel level;
-        private String msg;
+        private MessageBuilder msgBuilder;
         private String title;
-        private Object[] args;
         private Throwable throwable;
         private Duration visibilityDuration;
         private EventHandler<ActionEvent> eventHandler;
@@ -144,17 +136,17 @@ public class Notification {
         }
 
         public Builder msg(String msg) {
-            this.msg = msg;
+            this.msgBuilder = MessageBuilder.create(msg);
+            return this;
+        }
+
+        public Builder msg(MessageBuilder msgBuilder) {
+            this.msgBuilder = msgBuilder;
             return this;
         }
 
         public Builder title(String title) {
             this.title = title;
-            return this;
-        }
-
-        public Builder args(Object[] args) {
-            this.args = args;
             return this;
         }
 

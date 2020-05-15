@@ -16,8 +16,8 @@ import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
  * A TabWebBrowser can load and show web pages in separate tabs
  *
  * <p>
- *  A TabWebBrowser is a {@link Browser} that creates a new tab for each
- *  web page on every load request.
+ * A TabWebBrowser is a {@link Browser} that creates a new tab for each
+ * web page on every load request.
  *
  * @author Daniel Gyorffy
  */
@@ -71,13 +71,11 @@ public class TabWebBrowser extends Browser {
     /**
      * Represents a node that displays a WebContentRenderer with a BrowserToolbar
      */
-    private class Entry extends BorderPane {
-        private BrowserToolBar toolBar;
-        private WebContentRenderer webContentRenderer;
-
+    private static class Entry extends BorderPane {
         private Entry(WebContentRenderer webContentRenderer) {
-            this.webContentRenderer = Objects.requireNonNull(webContentRenderer, "The browserComponent shouldn't be null");
-            this.toolBar = new BrowserToolBar(webContentRenderer);
+            Objects.requireNonNull(webContentRenderer, "The browserComponent shouldn't be null");
+
+            BrowserToolBar toolBar = new BrowserToolBar(webContentRenderer);
 
             this.setTop(toolBar);
             this.setCenter(webContentRenderer.toNode());

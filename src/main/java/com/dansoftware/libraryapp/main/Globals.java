@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.config.ConfigurationHolder;
-import com.dansoftware.libraryapp.db.DataStorage;
+import com.dansoftware.libraryapp.db.DataProcessor;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public final class Globals {
     public static final BuildInfo BUILD_INFO = new BuildInfo();
 
     private static ConfigurationHolder configurationHolder;
-    private static DataStorage dataStorage;
+    private static DataProcessor dataProcessor;
 
     /**
      * Sets the default DataStorage.
@@ -40,14 +40,14 @@ public final class Globals {
      * Should be used by the {@link ApplicationInitializer}.
      * <b>Should be called only ONCE</b>
      *
-     * @param dataStorage the default DataStorage object
+     * @param dataProcessor the default DataStorage object
      * @throws UnsupportedOperationException if the default configuration holder already instantiated
      */
-    static void setDataStorage(DataStorage dataStorage) {
-        if (nonNull(Globals.dataStorage))
+    static void setDataProcessor(DataProcessor dataProcessor) {
+        if (nonNull(Globals.dataProcessor))
             throw new UnsupportedOperationException("The default dataStorage" +
                     " cannot be initialized more than once.");
-        Globals.dataStorage = dataStorage;
+        Globals.dataProcessor = dataProcessor;
     }
 
     /**
@@ -69,8 +69,8 @@ public final class Globals {
     }
 
 
-    public static DataStorage getDataStorage() {
-        return dataStorage;
+    public static DataProcessor getDataProcessor() {
+        return dataProcessor;
     }
 
     /**

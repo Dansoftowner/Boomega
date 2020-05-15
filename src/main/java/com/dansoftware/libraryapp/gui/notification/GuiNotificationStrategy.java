@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.notification;
 import com.dansoftware.libraryapp.gui.util.Alerts;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Main;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import org.controlsfx.control.Notifications;
 
@@ -20,7 +21,7 @@ import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
 public class GuiNotificationStrategy implements NotificationStrategy {
     @Override
     public void handle(Notification notification) {
-        Main.runAfterStart(() -> {
+        Main.runAfterStart(() -> Platform.runLater(() -> {
             var notificationBuilder = Notifications.create()
                     .hideAfter(notification.getVisibilityDuration())
                     .position(Pos.BOTTOM_RIGHT)
@@ -37,7 +38,7 @@ public class GuiNotificationStrategy implements NotificationStrategy {
 
             themeSettings(notificationBuilder);
             show(notification, notificationBuilder);
-        });
+        }));
     }
 
     private void themeSettings(Notifications notificationBuilder) {

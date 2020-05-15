@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.config.*;
-import com.dansoftware.libraryapp.db.DataStorage;
+import com.dansoftware.libraryapp.db.DataProcessor;
 import com.dansoftware.libraryapp.db.DefaultDBConnection;
 import com.dansoftware.libraryapp.gui.notification.GuiNotificationStrategy;
 import com.dansoftware.libraryapp.gui.notification.Notification;
@@ -99,7 +99,7 @@ final class ApplicationInitializer {
      */
     @Step
     private void setGlobalDataStorage() {
-        Globals.setDataStorage(new DataStorage(new DefaultDBConnection()));
+        Globals.setDataProcessor(new DataProcessor(new DefaultDBConnection()));
     }
 
     /**
