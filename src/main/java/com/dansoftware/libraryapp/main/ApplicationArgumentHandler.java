@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.main;
 
+import com.dansoftware.libraryapp.gui.notification.MessageBuilder;
 import com.dansoftware.libraryapp.gui.notification.Notification;
 import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
 import org.slf4j.Logger;
@@ -47,8 +48,9 @@ public class ApplicationArgumentHandler {
 
             Notification.create()
                     .level(NotificationLevel.ERROR)
-                    .msg("argument.handler.file.error")
-                    .args(new Object[]{ file.getName() })
+                    .msg(new MessageBuilder()
+                            .msg("argument.handler.file.error")
+                            .args(new Object[]{ file.getName() }))
                     .cause(cause)
                     .show();
 

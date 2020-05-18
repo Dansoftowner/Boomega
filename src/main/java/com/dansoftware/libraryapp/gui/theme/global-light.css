@@ -58,6 +58,36 @@
     -fx-text-alignment: center;
 }
 
+/* Dock-styles */
+.border-button {
+    -fx-background-color: transparent;
+}
+
+.border-button .h-box {
+    -fx-spacing: 10;
+    -fx-padding: 0 5 0 0;
+}
+
+.border-button :hover {
+    -fx-background-color: #656976;
+}
+
+.border-edge, .border-toolbar {
+    -fx-background-color: whitesmoke;
+    -fx-padding: 0;
+}
+
+.border-edge {
+    -fx-border-color: #656976;
+}
+
+.border-edge :vertical {
+}
+
+.border-edge :horizontal {
+    -fx-padding: 0 20 0 20;
+}
+
 /*Some tab pane trifles*/
 .tab .tab-close-button:hover {
     -fx-background-color: red;

@@ -1,58 +1,81 @@
 package com.dansoftware.libraryapp.gui.dock.border;
 
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.geometry.NodeOrientation;
-import javafx.geometry.Orientation;
+import com.dansoftware.libraryapp.gui.dock.border.toolbar.BorderToolbar;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.css.PseudoClass;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BorderEdge extends BorderPane {
 
-    private BorderToolbar toolBar0;
-    private BorderToolbar toolBar1;
+    private EdgeOrientation orientation;
+
+    private final BorderToolbar toolBar0;
+    private final BorderToolbar toolBar1;
+
+    private final BooleanBinding emptyProperty;
+
+    private final PseudoClass verticalPseudoClass = PseudoClass.getPseudoClass("vertical");
+    private final PseudoClass horizontalPseudoClass = PseudoClass.getPseudoClass("horizontal");
 
     public BorderEdge() {
         this.toolBar0 = new BorderToolbar();
         this.toolBar1 = new BorderToolbar();
+
+        this.emptyProperty = Bindings.isEmpty(toolBar0.getChildrenUnmodifiable()).and(Bindings.isEmpty(toolBar1.getChildrenUnmodifiable()));
+        this.getStyleClass().add("border-edge");
     }
 
-    public void setOrientation(Orientation orientation) {
-        this.toolBar0.setOrientation(orientation.toolBarOrientation);
-        this.toolBar1.setOrientation(orientation.toolBarOrientation);
+    public void setOrientation(EdgeOrientation orientation) {
+        this.orientation = orientation;
+        this.toolBar0.setToolbarOrientation(orientation.toolbar0Orientation);
+        this.toolBar1.setToolbarOrientation(orientation.toolbar1Orientation);
 
         switch (orientation) {
-            case LEFT_AND_RIGHT:
-                this.setLeft(toolBar0);
-                this.setRight(toolBar1);
+            case HORIZONTAL:
+                this.setLeft(this.toolBar0);
+                this.setRight(this.toolBar1);
+                this.pseudoClassStateChanged(horizontalPseudoClass, true);
+                this.pseudoClassStateChanged(verticalPseudoClass, false);
                 break;
-            case TOP_AND_BOTTOM:
-                this.setTop(toolBar0);
-                this.setBottom(toolBar1);
+            case LEFT:
+            case RIGHT:
+                this.setTop(this.toolBar0);
+                this.setBottom(this.toolBar1);
+                this.pseudoClassStateChanged(horizontalPseudoClass, false);
+                this.pseudoClassStateChanged(verticalPseudoClass, true);
                 break;
         }
     }
 
-    public ToolBar getToolBar0() {
+    public BooleanBinding emptyProperty() {
+        return emptyProperty;
+    }
+
+    public EdgeOrientation getOrientation() {
+        return orientation;
+    }
+
+    public BorderToolbar getToolBar0() {
         return toolBar0;
     }
 
-    public ToolBar getToolBar1() {
+    public BorderToolbar getToolBar1() {
         return toolBar1;
     }
 
-    enum Orientation {
-        TOP_AND_BOTTOM(javafx.geometry.Orientation.VERTICAL), LEFT_AND_RIGHT(javafx.geometry.Orientation.HORIZONTAL);
+    enum EdgeOrientation {
+        LEFT(BorderToolbar.ToolbarOrientation.LEFT_TOP, BorderToolbar.ToolbarOrientation.LEFT_BOTTOM),
+        RIGHT(BorderToolbar.ToolbarOrientation.RIGHT_TOP, BorderToolbar.ToolbarOrientation.RIGHT_BOTTOM),
+        HORIZONTAL(BorderToolbar.ToolbarOrientation.HORIZONTAL_LEFT, BorderToolbar.ToolbarOrientation.HORIZONTAL_RIGHT);
 
-        private javafx.geometry.Orientation toolBarOrientation;
+        private final BorderToolbar.ToolbarOrientation toolbar0Orientation;
+        private final BorderToolbar.ToolbarOrientation toolbar1Orientation;
 
-        Orientation(javafx.geometry.Orientation toolBarOrientation) {
-            this.toolBarOrientation = toolBarOrientation;
+        EdgeOrientation(BorderToolbar.ToolbarOrientation toolbar0Orientation, BorderToolbar.ToolbarOrientation toolbar1Orientation) {
+            this.toolbar0Orientation = toolbar0Orientation;
+            this.toolbar1Orientation = toolbar1Orientation;
         }
     }
 }

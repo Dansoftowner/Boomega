@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.db;
 
 import com.dansoftware.libraryapp.db.util.DataBaseFileRecognizer;
+import com.dansoftware.libraryapp.gui.notification.MessageBuilder;
 import com.dansoftware.libraryapp.gui.notification.Notification;
 import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
 import org.slf4j.Logger;
@@ -34,8 +35,9 @@ public final class DefaultDBConnection extends SQLiteConnection {
                     .level(NotificationLevel.ERROR)
                     .cause(exception)
                     .title("db.connection.failed.title")
-                    .msg("db.connection.failed")
-                    .args(new Object[] { databaseFile.getName() })
+                    .msg(new MessageBuilder()
+                            .msg("db.connection.failed")
+                            .args(new Object[]{databaseFile.getName()}))
                     .show();
         });
     }
