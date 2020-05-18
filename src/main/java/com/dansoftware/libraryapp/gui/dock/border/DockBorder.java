@@ -12,6 +12,9 @@ public class DockBorder extends BorderPane {
     private BorderEdge right;
     private BorderEdge bottom;
 
+    public DockBorder() {
+    }
+
     public void allocate(DockPosition pos, BorderButton borderButton) {
         Objects.requireNonNull(pos, "The pos mustn't be null");
         Objects.requireNonNull(borderButton, "The borderButton mustn't be null");
@@ -49,6 +52,35 @@ public class DockBorder extends BorderPane {
                 this.setTop(createTop());
                 this.top.getToolBar0().addBorderButton(borderButton);
                 break;
+        }
+    }
+
+    public void deAllocate(DockPosition pos, BorderButton borderButton) {
+        switch(pos) {
+
+            case LEFT_TOP:
+            case LEFT_BOTTOM:
+                removeFrom(this.left, borderButton);
+                break;
+            case BOTTOM_LEFT:
+            case BOTTOM_RIGHT:
+                removeFrom(this.bottom, borderButton);
+                break;
+            case RIGHT_TOP:
+            case RIGHT_BOTTOM:
+                removeFrom(this.right, borderButton);
+                break;
+            case TOP_RIGHT:
+            case TOP_LEFT:
+                removeFrom(this.top, borderButton);
+                break;
+        }
+    }
+
+    private void removeFrom(BorderEdge borderEdge, BorderButton borderButton) {
+        if (borderEdge != null) {
+            borderEdge.getToolBar0().removeBorderButton(borderButton);
+            borderEdge.getToolBar1().removeBorderButton(borderButton);
         }
     }
 

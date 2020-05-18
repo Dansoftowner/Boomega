@@ -63,22 +63,26 @@
     -fx-background-color: transparent;
 }
 
+.border-button .label {
+    -fx-font-size: 12;
+}
+
 .border-button .h-box {
     -fx-spacing: 10;
     -fx-padding: 0 5 0 0;
 }
 
 .border-button :hover {
-    -fx-background-color: #656976;
+    -fx-background-color: #D9D9D9;
 }
 
 .border-edge, .border-toolbar {
-    -fx-background-color: whitesmoke;
+    -fx-background-color: #F2F2F2;
     -fx-padding: 0;
 }
 
 .border-edge {
-    -fx-border-color: #656976;
+    -fx-border-color: #D1D1D1;
 }
 
 .border-edge :vertical {

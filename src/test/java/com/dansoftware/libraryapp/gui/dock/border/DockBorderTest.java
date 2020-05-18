@@ -8,6 +8,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class DockBorderTest extends Application {
+
+    static {
+        Theme.setDefault(Theme.LIGHT);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         BorderButton borderButton = new BorderButton(new Rectangle(20, 20), "BorderButton1");
@@ -52,5 +57,13 @@ public class DockBorderTest extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        dockBorder.deAllocate(DockPosition.LEFT_TOP, borderButton);
+        dockBorder.deAllocate(DockPosition.LEFT_TOP, borderButton2);
+
+        dockBorder.deAllocate(DockPosition.TOP_LEFT, borderButton9);
+        dockBorder.deAllocate(DockPosition.TOP_LEFT, borderButton10);
+        dockBorder.deAllocate(DockPosition.TOP_LEFT, borderButton11);
+        dockBorder.deAllocate(DockPosition.TOP_LEFT, borderButton12);
     }
 }

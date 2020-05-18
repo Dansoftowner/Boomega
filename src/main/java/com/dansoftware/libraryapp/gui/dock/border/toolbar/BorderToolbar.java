@@ -1,17 +1,37 @@
 package com.dansoftware.libraryapp.gui.dock.border.toolbar;
 
 import com.dansoftware.libraryapp.gui.dock.border.BorderButton;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ToolBar;
 
 import java.util.function.Consumer;
 
+/**
+ * A BorderToolbar is a {@link ToolBar} usually located on a
+ * {@link com.dansoftware.libraryapp.gui.dock.border.BorderEdge}
+ * that displays {@link BorderButton} objects.
+ *
+ * <p>
+ * A BorderToolbar has multiple orientations that are represented by the enum: {@link ToolbarOrientation}
+ *
+ *
+ */
 public class BorderToolbar extends ToolBar {
 
+    private static final String STYLE_CLASS_NAME = "border-toolbar";
+
+    private BooleanBinding emptyProperty;
     private ToolbarOrientation toolbarOrientation;
 
     public BorderToolbar() {
-        this.getStyleClass().add("border-toolbar");
+        this.getStyleClass().add(STYLE_CLASS_NAME);
+        this.emptyProperty = Bindings.isEmpty(this.getItems());
+    }
+
+    public void removeBorderButton(BorderButton borderButton) {
+        this.getItems().remove(borderButton);
     }
 
     public void addBorderButton(BorderButton borderButton) {
@@ -24,6 +44,13 @@ public class BorderToolbar extends ToolBar {
         this.toolbarOrientation.toolbarConfigurator.accept(this);
     }
 
+    public BooleanBinding emptyProperty() {
+        return emptyProperty;
+    }
+
+    /**
+     * Represents the orientations of a {@link BorderToolbar}
+     */
     public enum ToolbarOrientation {
         LEFT_TOP(toolBar -> {
             toolBar.setOrientation(javafx.geometry.Orientation.VERTICAL);

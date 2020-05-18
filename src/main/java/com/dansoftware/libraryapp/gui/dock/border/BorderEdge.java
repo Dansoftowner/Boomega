@@ -1,13 +1,25 @@
 package com.dansoftware.libraryapp.gui.dock.border;
 
 import com.dansoftware.libraryapp.gui.dock.border.toolbar.BorderToolbar;
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.css.PseudoClass;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 
+/**
+ * A BorderEdge is a narrow area on the edges of a {@link DockBorder}.
+ *
+ * <p>
+ * It has two {@link BorderToolbar} elements on the left and right side
+ * <b>OR</b> on the top and bottom side (it can be chosen by changing the
+ * orientation)
+ *
+ * <p>
+ * A BorderEdge has multiple orientations that are represented by the enum: {@link EdgeOrientation}.
+ *
+ */
 public class BorderEdge extends BorderPane {
+
+    private static final String STYLE_CLASS_NAME = "border-edge";
 
     private EdgeOrientation orientation;
 
@@ -23,8 +35,9 @@ public class BorderEdge extends BorderPane {
         this.toolBar0 = new BorderToolbar();
         this.toolBar1 = new BorderToolbar();
 
-        this.emptyProperty = Bindings.isEmpty(toolBar0.getChildrenUnmodifiable()).and(Bindings.isEmpty(toolBar1.getChildrenUnmodifiable()));
-        this.getStyleClass().add("border-edge");
+        this.emptyProperty = this.toolBar0.emptyProperty()
+                .and(toolBar1.emptyProperty());
+        this.getStyleClass().add(STYLE_CLASS_NAME);
     }
 
     public void setOrientation(EdgeOrientation orientation) {
@@ -65,6 +78,9 @@ public class BorderEdge extends BorderPane {
         return toolBar1;
     }
 
+    /**
+     * Represents the orientations of a {@link BorderEdge}
+     */
     enum EdgeOrientation {
         LEFT(BorderToolbar.ToolbarOrientation.LEFT_TOP, BorderToolbar.ToolbarOrientation.LEFT_BOTTOM),
         RIGHT(BorderToolbar.ToolbarOrientation.RIGHT_TOP, BorderToolbar.ToolbarOrientation.RIGHT_BOTTOM),
