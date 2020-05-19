@@ -4,10 +4,7 @@ import com.dansoftware.libraryapp.gui.dock.DockPosition;
 import com.dansoftware.libraryapp.gui.dock.border.BorderButton;
 import com.dansoftware.libraryapp.gui.dock.docksystem.DockSystem;
 import javafx.beans.property.*;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -26,6 +23,9 @@ public class DockNode extends BorderPane {
     private final BorderButton borderButton;
 
     //
+    private final DockNodeMenu menu;
+
+    //
     private ViewMode viewMode = ViewMode.PINNED;
 
     //
@@ -34,17 +34,21 @@ public class DockNode extends BorderPane {
     private final BooleanProperty showing = new SimpleBooleanProperty(this, "showing");
 
     public DockNode(String title) {
-        this.setTop(this.dockTitleBar = new DockTitleBar(this));
-        this.borderButton = new BorderButton();
-        this.borderButton.graphicProperty().bind(this.graphic);
+        this.dockTitleBar = new DockTitleBar(this);
+        this.borderButton = new BorderButton(title);
+        this.menu = new DockNodeMenu(this);
 
-        this.title.addListener((observable, oldName, newName) -> {
-            this.borderButton.setText(newName);
-            this.dockTitleBar.setTitle(newName);
-        });
+        this.borderButton.graphicProperty().bind(this.graphic);
+        this.borderButton.textProperty().bind(this.title);
+        this.borderButton.selectedProperty().bind(this.showing);
+        this.borderButton.setContextMenu(this.menu);
+        this.borderButton.setOnAction(event -> setShowing(!isShowing()));
+
+        this.dockTitleBar.titleProperty().bind(this.title);
 
         this.title.set(title);
 
+        this.setTop(this.dockTitleBar);
         this.getStyleClass().add(STYLE_CLASS_NAME);
     }
 
@@ -53,11 +57,20 @@ public class DockNode extends BorderPane {
         this.setGraphic(graphic);
     }
 
+    public DockNode(Node graphic, String title, Node content) {
+        this(graphic, title);
+        this.setCenter(content);
+    }
+
     public void setViewMode(ViewMode viewMode) {
         this.viewMode = viewMode;
     }
 
-    public void show() {
+    public void setShowing(boolean value) {
+        if (value) show(); else hide();
+    }
+
+    private void show() {
         switch (this.viewMode) {
 
             case PINNED:
@@ -72,7 +85,7 @@ public class DockNode extends BorderPane {
         this.showing.set(true);
     }
 
-    public void hide() {
+    private void hide() {
         switch (this.viewMode) {
 
             case PINNED:
@@ -85,6 +98,10 @@ public class DockNode extends BorderPane {
         }
 
         this.showing.set(false);
+    }
+
+    public void setContent(Node value) {
+        this.setCenter(value);
     }
 
     public String getTitle() {
@@ -101,10 +118,6 @@ public class DockNode extends BorderPane {
 
     public boolean isShowing() {
         return showing.get();
-    }
-
-    public BooleanProperty showingProperty() {
-        return showing;
     }
 
     public DockTitleBar getDockTitleBar() {

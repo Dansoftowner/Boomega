@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.dock.docknode;
 
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
@@ -12,13 +11,13 @@ public class DockTitleBar extends BorderPane {
     private static final String STYLE_CLASS_NAME = "dock-title-bar";
 
     private Label titleLabel;
-    private ContextMenu menu;
     private ToolBar toolBar;
 
     private final DockNode dockNode;
 
     public DockTitleBar(DockNode dockNode) {
         this.dockNode = Objects.requireNonNull(dockNode, "The dockNode mustn't be null!");
+        this.titleLabel = new Label();
         this.titleProperty().bind(this.dockNode.titleProperty());
 
         //this.setRight(createToolbar());
@@ -28,7 +27,7 @@ public class DockTitleBar extends BorderPane {
     }
 
     private Label createLabel() {
-        Label label = new Label();
+        var label = new Label();
         label.textProperty().bind(this.titleProperty());
 
         return label;
@@ -36,14 +35,14 @@ public class DockTitleBar extends BorderPane {
 
     private Button createCloseButton() {
         Button btn = new Button();
+        btn.getStyleClass().add("close-btn");
         btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         btn.setGraphic(null);
         btn.setTooltip(
                 new Tooltip(
-
                 )
         );
-        btn.setOnAction(event -> dockNode.hide());
+        btn.setOnAction(event -> dockNode.setShowing(false));
 
         return null;
     }
@@ -53,7 +52,7 @@ public class DockTitleBar extends BorderPane {
     }
 
     public String getTitle() {
-        return titleLabel.textProperty().get();
+        return titleLabel.getText();
     }
 
     public StringProperty titleProperty() {

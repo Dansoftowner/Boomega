@@ -7,6 +7,7 @@ package com.dansoftware.libraryapp.util.function;
  * @param <T> the type of the input to the operation
  * @param <E> the type of the exception
  */
+@FunctionalInterface
 public interface UnhandledConsumer<T, E extends Exception> {
     void accept(T object) throws E;
 }

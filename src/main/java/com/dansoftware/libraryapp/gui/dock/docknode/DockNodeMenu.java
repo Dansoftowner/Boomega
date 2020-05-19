@@ -12,21 +12,11 @@ import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWords;
 
 public class DockNodeMenu extends ContextMenu {
 
-    private final DockTitleBar titleBar;
+    private final DockNode dockNode;
 
-    public DockNodeMenu(DockTitleBar dockTitleBar) {
-        this.titleBar = Objects.requireNonNull(dockTitleBar, "The dockTitleBar mustn't be null");
+    public DockNodeMenu(DockNode dockNode) {
+        this.dockNode = Objects.requireNonNull(dockNode, "The dockTitleBar mustn't be null");
         createDefaultMenuItems();
-    }
-
-    public DockNodeMenu(DockTitleBar dockTitleBar, ObservableList<MenuItem> customMenuItems) {
-        this(dockTitleBar);
-        this.addCustomMenuItems(customMenuItems);
-    }
-
-    public void addCustomMenuItems(ObservableList<MenuItem> customMenuItems) {
-        this.getItems().addAll(0, customMenuItems);
-        this.getItems().add(customMenuItems.size(), new SeparatorMenuItem());
     }
 
     private void createDefaultMenuItems() {
@@ -38,5 +28,9 @@ public class DockNodeMenu extends ContextMenu {
         );
     }
 
+    public void addCustomMenuItems(ObservableList<MenuItem> customMenuItems) {
+        this.getItems().addAll(0, customMenuItems);
+        this.getItems().add(customMenuItems.size(), new SeparatorMenuItem());
+    }
 
 }

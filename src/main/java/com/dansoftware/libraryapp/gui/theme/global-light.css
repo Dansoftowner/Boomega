@@ -79,6 +79,7 @@
 .border-edge, .border-toolbar {
     -fx-background-color: #F2F2F2;
     -fx-padding: 0;
+    -fx-min-width: 20;
 }
 
 .border-edge {

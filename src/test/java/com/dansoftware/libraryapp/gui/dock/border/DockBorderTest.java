@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class DockBorderTest extends Application {
 
     static {
-        Theme.setDefault(Theme.LIGHT);
+        Theme.setDefault(Theme.DARK);
     }
 
     @Override
@@ -32,38 +32,38 @@ public class DockBorderTest extends Application {
         BorderButton borderButton15 = new BorderButton(new Rectangle(20, 20), "BorderButton15");
         BorderButton borderButton16 = new BorderButton(new Rectangle(20, 20), "BorderButton16");
 
-        DockBorder dockBorder = new DockBorder();
-        dockBorder.allocate(DockPosition.LEFT_TOP, borderButton);
-        dockBorder.allocate(DockPosition.LEFT_TOP, borderButton2);
-        dockBorder.allocate(DockPosition.LEFT_BOTTOM, borderButton3);
-        dockBorder.allocate(DockPosition.LEFT_BOTTOM, borderButton4);
-        dockBorder.allocate(DockPosition.RIGHT_TOP, borderButton5);
-        dockBorder.allocate(DockPosition.RIGHT_TOP, borderButton6);
-        dockBorder.allocate(DockPosition.RIGHT_BOTTOM, borderButton7);
-        dockBorder.allocate(DockPosition.RIGHT_BOTTOM, borderButton8);
-        dockBorder.allocate(DockPosition.TOP_LEFT, borderButton9);
-        dockBorder.allocate(DockPosition.TOP_LEFT, borderButton10);
-        dockBorder.allocate(DockPosition.TOP_RIGHT, borderButton11);
-        dockBorder.allocate(DockPosition.TOP_RIGHT, borderButton12);
-        dockBorder.allocate(DockPosition.BOTTOM_LEFT, borderButton13);
-        dockBorder.allocate(DockPosition.BOTTOM_LEFT, borderButton14);
-        dockBorder.allocate(DockPosition.BOTTOM_RIGHT, borderButton15);
-        dockBorder.allocate(DockPosition.BOTTOM_RIGHT, borderButton16);
+        DockFrame dockFrame = new DockFrame();
+        dockFrame.allocate(DockPosition.LEFT_TOP, borderButton);
+        dockFrame.allocate(DockPosition.LEFT_TOP, borderButton2);
+        dockFrame.allocate(DockPosition.LEFT_BOTTOM, borderButton3);
+        dockFrame.allocate(DockPosition.LEFT_BOTTOM, borderButton4);
+        dockFrame.allocate(DockPosition.RIGHT_TOP, borderButton5);
+        dockFrame.allocate(DockPosition.RIGHT_TOP, borderButton6);
+        dockFrame.allocate(DockPosition.RIGHT_BOTTOM, borderButton7);
+        dockFrame.allocate(DockPosition.RIGHT_BOTTOM, borderButton8);
+        dockFrame.allocate(DockPosition.TOP_LEFT, borderButton9);
+        dockFrame.allocate(DockPosition.TOP_LEFT, borderButton10);
+        dockFrame.allocate(DockPosition.TOP_RIGHT, borderButton11);
+        dockFrame.allocate(DockPosition.TOP_RIGHT, borderButton12);
+        dockFrame.allocate(DockPosition.BOTTOM_LEFT, borderButton13);
+        dockFrame.allocate(DockPosition.BOTTOM_LEFT, borderButton14);
+        dockFrame.allocate(DockPosition.BOTTOM_RIGHT, borderButton15);
+        dockFrame.allocate(DockPosition.BOTTOM_RIGHT, borderButton16);
 
-        System.out.println(dockBorder.getLeft());
+        System.out.println(dockFrame.getLeft());
 
-        Scene scene = new Scene(dockBorder);
+        Scene scene = new Scene(dockFrame);
         Theme.applyDefault(scene);
 
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        dockBorder.deAllocate(DockPosition.LEFT_TOP, borderButton);
-        dockBorder.deAllocate(DockPosition.LEFT_TOP, borderButton2);
+        dockFrame.deAllocate(DockPosition.LEFT_TOP, borderButton);
+        dockFrame.deAllocate(DockPosition.LEFT_TOP, borderButton2);
 
-        dockBorder.deAllocate(DockPosition.TOP_LEFT, borderButton9);
-        dockBorder.deAllocate(DockPosition.TOP_LEFT, borderButton10);
-        dockBorder.deAllocate(DockPosition.TOP_LEFT, borderButton11);
-        dockBorder.deAllocate(DockPosition.TOP_LEFT, borderButton12);
+        dockFrame.deAllocate(DockPosition.TOP_LEFT, borderButton9);
+        dockFrame.deAllocate(DockPosition.TOP_LEFT, borderButton10);
+        dockFrame.deAllocate(DockPosition.TOP_LEFT, borderButton11);
+        dockFrame.deAllocate(DockPosition.TOP_LEFT, borderButton12);
     }
 }

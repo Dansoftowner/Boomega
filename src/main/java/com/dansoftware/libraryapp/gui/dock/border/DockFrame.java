@@ -5,16 +5,28 @@ import javafx.scene.layout.BorderPane;
 
 import java.util.Objects;
 
-public class DockBorder extends BorderPane {
+/**
+ * A DockFrame is a frame that surrounds a {@link com.dansoftware.libraryapp.gui.dock.docksystem.SplitPaneSystem}.
+ *
+ *
+ */
+public class DockFrame extends BorderPane {
 
     private BorderEdge top;
     private BorderEdge left;
     private BorderEdge right;
     private BorderEdge bottom;
 
-    public DockBorder() {
+    public DockFrame() {
     }
 
+    /**
+     * Adds a {@link BorderButton} to the specified position.
+     *
+     * @param pos the position of the button; mustn't be null
+     * @param borderButton the actual button to locate on the frame; mustn't be null
+     * @throws NullPointerException if the pos or the borderButton is null
+     */
     public void allocate(DockPosition pos, BorderButton borderButton) {
         Objects.requireNonNull(pos, "The pos mustn't be null");
         Objects.requireNonNull(borderButton, "The borderButton mustn't be null");
