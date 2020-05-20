@@ -8,6 +8,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 import java.util.Objects;
@@ -34,20 +36,23 @@ public class DockSystem<C extends Node> extends StackPane {
     public void hide(DockPosition pos, DockNode dockNode) {
         Objects.requireNonNull(pos, "The pos mustn't be null");
 
-        pos.getRemover().accept(this.splitPaneSystem, dockNode);
+        Pane parent = (Pane) dockNode.getParent();
+        parent.getChildren().remove(dockNode);
+        //pos.getRemover().accept(this.splitPaneSystem, dockNode);
     }
 
     public void dock(DockPosition pos, DockNode dockNode) {
         if (pos == null) pos = DockPosition.TOP_LEFT;
 
-        this.frame.allocate(pos, dockNode.getBorderButton());
+        //this.frame.allocate(pos, dockNode.getBorderButton());
 
         dockNode.setDockSystem(this);
         dockNode.setDockPosition(pos);
 
         pos.getAdder().accept(this.splitPaneSystem, dockNode);
 
-        this.dockNodes.add(dockNode);
+        if (!this.dockNodes.contains(dockNode))
+            this.dockNodes.add(dockNode);
     }
 
     public ObservableList<DockNode> getDockNodes() {
