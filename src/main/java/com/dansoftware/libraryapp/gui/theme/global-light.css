@@ -93,6 +93,91 @@
     -fx-padding: 0 20 0 20;
 }
 
+/* Dock-node*/
+.dock-node {
+    /*-fx-border-color: #D1D1D1;*/
+}
+.dock-title-bar {
+    /*-fx-background-color: #F4F4F4;*/
+    -fx-background-color: #E2E6EC;
+    -fx-pref-height: 28px;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #D1D1D1;
+    -fx-padding: 0 4px 0 4px;
+}
+
+.dock-title-bar .label {
+    -fx-font-size: 15px;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.dock-title-bar .options-btn {
+    -fx-graphic: url(/com/dansoftware/libraryapp/image/dock/options_black.png);
+    -fx-padding: 2px;
+}
+
+.dock-title-bar .close-btn {
+    -fx-graphic: url(/com/dansoftware/libraryapp/image/dock/hide_black.png);
+    -fx-padding: 2px;
+}
+
+.dock-options-menu {
+    -fx-padding: 4 0 4 0;
+}
+
+.dock-options-menu .menu-item {
+    -fx-padding: 3;
+}
+
+.dock-options-menu .menu-item .label {
+    -fx-font-size: 12px;
+}
+
+.window {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/view_mode/window_black.png);
+}
+
+.float {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/view_mode/float_black.png);
+}
+
+.pinned {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/view_mode/docked_black.png);
+}
+
+.bottom-right {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/bottom_right_black.png);
+}
+
+.bottom-left {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/bottom_left_black.png);
+}
+
+.left-top {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/top_left_black.png);
+}
+
+.left-bottom {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/bottom_left_black.png);
+}
+
+.right-top {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/top_right_black.png);
+}
+
+.right-bottom {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/bottom_right_black.png);
+}
+
+.top-right {
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/top_right_black.png);
+}
+
+.top-left{
+    -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/top_left_black.png);
+}
+
 /*Some tab pane trifles*/
 .tab .tab-close-button:hover {
     -fx-background-color: red;

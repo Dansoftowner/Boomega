@@ -12,6 +12,11 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class DockSystemTest extends Application {
+
+    static {
+        Theme.setDefault(Theme.DARK);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         DockSystem<Node> dockSystem = new DockSystem<>();

@@ -4,10 +4,8 @@ import com.dansoftware.libraryapp.gui.dock.docknode.DockNode;
 import com.dansoftware.libraryapp.gui.dock.docksystem.SplitPaneSystem;
 import com.dansoftware.libraryapp.util.function.DualConsumer;
 
-import java.util.function.Consumer;
-
 public enum DockPosition {
-    LEFT_TOP("", (splitPaneSystem, dockNode) -> {
+    LEFT_TOP("dock.options.pos.left.top", (splitPaneSystem, dockNode) -> {
         splitPaneSystem
                 .getLeftVertical()
                 .getItems()
@@ -19,7 +17,7 @@ public enum DockPosition {
                 .remove(dockNode);
     }),
 
-    LEFT_BOTTOM("", (splitPaneSystem, dockNode) -> {
+    LEFT_BOTTOM("dock.options.pos.left.bottom", (splitPaneSystem, dockNode) -> {
         splitPaneSystem
                 .getLeftVertical()
                 .getItems()
@@ -31,7 +29,7 @@ public enum DockPosition {
                 .remove(dockNode);
     }),
 
-    BOTTOM_LEFT("", (splitPaneSystem, dockNode) -> {
+    BOTTOM_LEFT("dock.options.pos.bottom.left", (splitPaneSystem, dockNode) -> {
         splitPaneSystem
                 .getBottomHorizontal()
                 .getItems()
@@ -43,7 +41,7 @@ public enum DockPosition {
                 .remove(dockNode);
     }),
 
-    BOTTOM_RIGHT("", (splitPaneSystem, dockNode) -> {
+    BOTTOM_RIGHT("dock.options.pos.bottom.right", (splitPaneSystem, dockNode) -> {
         splitPaneSystem
                 .getBottomHorizontal()
                 .getItems()
@@ -55,7 +53,7 @@ public enum DockPosition {
                 .remove(dockNode);
     }),
 
-    RIGHT_TOP("", (splitPaneSystem, dockNode) -> {
+    RIGHT_TOP("dock.options.pos.right.top", (splitPaneSystem, dockNode) -> {
         splitPaneSystem
                 .getRightVertical()
                 .getItems()
@@ -67,7 +65,7 @@ public enum DockPosition {
                 .remove(dockNode);
     }),
 
-    RIGHT_BOTTOM("",(splitPaneSystem, dockNode) -> {
+    RIGHT_BOTTOM("dock.options.pos.right.bottom",(splitPaneSystem, dockNode) -> {
         splitPaneSystem
                 .getRightVertical()
                 .getItems()
@@ -79,7 +77,7 @@ public enum DockPosition {
                 .remove(dockNode);
     }),
 
-    TOP_RIGHT("", (splitPaneSystem, dockNode) -> {
+    TOP_RIGHT("dock.options.pos.top.right", (splitPaneSystem, dockNode) -> {
         splitPaneSystem
                 .getTopHorizontal()
                 .getItems()
@@ -91,7 +89,7 @@ public enum DockPosition {
                 .remove(dockNode);
     }),
 
-    TOP_LEFT("", (splitPaneSystem, dockNode) -> {
+    TOP_LEFT("dock.options.pos.top.left", (splitPaneSystem, dockNode) -> {
         splitPaneSystem
                 .getTopHorizontal()
                 .getItems()
@@ -103,6 +101,9 @@ public enum DockPosition {
                 .remove(dockNode);
     });
 
+    public static final String NAME_LOCALE_KEY = "dock.options.pos";
+
+    private final String id;
     private final String localeKey;
     private final DualConsumer<SplitPaneSystem, DockNode> adder;
     private final DualConsumer<SplitPaneSystem, DockNode> remover;
@@ -111,6 +112,7 @@ public enum DockPosition {
         this.localeKey = localeKey;
         this.adder = adder;
         this.remover = remover;
+        this.id = this.toString().toLowerCase().replace('_', '-');
     }
 
     public String getLocaleKey() {
@@ -123,5 +125,9 @@ public enum DockPosition {
 
     public DualConsumer<SplitPaneSystem, DockNode> getRemover() {
         return remover;
+    }
+
+    public String getId() {
+        return id;
     }
 }

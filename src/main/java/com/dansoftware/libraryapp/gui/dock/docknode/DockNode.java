@@ -1,10 +1,12 @@
 package com.dansoftware.libraryapp.gui.dock.docknode;
 
 import com.dansoftware.libraryapp.gui.dock.DockPosition;
+import com.dansoftware.libraryapp.gui.dock.ViewMode;
 import com.dansoftware.libraryapp.gui.dock.border.BorderButton;
 import com.dansoftware.libraryapp.gui.dock.docksystem.DockSystem;
 import javafx.beans.property.*;
 import javafx.scene.Node;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -24,6 +26,7 @@ public class DockNode extends BorderPane {
 
     //
     private final DockNodeMenu menu;
+    private final DockNodeToolBar toolBar;
 
     //
     private ViewMode viewMode = ViewMode.PINNED;
@@ -34,9 +37,10 @@ public class DockNode extends BorderPane {
     private final BooleanProperty showing = new SimpleBooleanProperty(this, "showing");
 
     public DockNode(String title) {
-        this.dockTitleBar = new DockTitleBar(this);
         this.borderButton = new BorderButton(title);
         this.menu = new DockNodeMenu(this);
+        this.toolBar = new DockNodeToolBar(this);
+        this.dockTitleBar = new DockTitleBar(this);
 
         this.borderButton.graphicProperty().bind(this.graphic);
         this.borderButton.textProperty().bind(this.title);
@@ -50,6 +54,8 @@ public class DockNode extends BorderPane {
 
         this.setTop(this.dockTitleBar);
         this.getStyleClass().add(STYLE_CLASS_NAME);
+
+        SplitPane.setResizableWithParent(this, false);
     }
 
     public DockNode(Node graphic, String title) {
@@ -98,6 +104,14 @@ public class DockNode extends BorderPane {
         }
 
         this.showing.set(false);
+    }
+
+    public DockNodeToolBar getToolBar() {
+        return toolBar;
+    }
+
+    public DockNodeMenu getMenu() {
+        return menu;
     }
 
     public void setContent(Node value) {
@@ -156,7 +170,4 @@ public class DockNode extends BorderPane {
         return graphic;
     }
 
-    public enum ViewMode {
-        PINNED, FLOAT, WINDOW
-    }
 }
