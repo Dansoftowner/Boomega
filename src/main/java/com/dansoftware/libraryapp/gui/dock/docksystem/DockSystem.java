@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -40,8 +39,10 @@ public class DockSystem<C extends Node> extends StackPane {
 
         if (this.getDockNodes().contains(dockNode)) {
             Pane parent = (Pane) dockNode.getParent();
-            SplitPane splitPane = (SplitPane) parent.getParent();
-            splitPane.getItems().remove(dockNode);
+            if (parent != null) {
+                SplitPane splitPane = (SplitPane) parent.getParent();
+                splitPane.getItems().remove(dockNode);
+            }
         }
     }
 

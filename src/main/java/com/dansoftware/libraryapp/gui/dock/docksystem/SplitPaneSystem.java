@@ -1,10 +1,20 @@
 package com.dansoftware.libraryapp.gui.dock.docksystem;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 public class SplitPaneSystem extends SplitPane {
+
+    private final ListObserver listObserver =
+            new ListObserver();
 
     private SplitPane topHorizontal;
     private SplitPane bottomHorizontal;
@@ -19,11 +29,37 @@ public class SplitPaneSystem extends SplitPane {
     }
 
     private void buildSplitPaneSystem() {
+
+        listObserver.observeEmpty(topHorizontal.getItems(), empty -> {
+            if (empty) this.getItems().remove(topHorizontal);
+            else this.getItems().add(0, topHorizontal);
+        });
+
+        listObserver.observeEmpty(centerHorizontal.getItems(), empty -> {
+            if (empty) this.getItems().remove(centerHorizontal);
+            else this.getItems().add(centerHorizontal);
+        });
+
+        listObserver.observeEmpty(bottomHorizontal.getItems(), empty -> {
+            if (empty) this.getItems().remove(bottomHorizontal);
+            else this.getItems().add(this.getItems().size(), bottomHorizontal);
+        });
+
+        listObserver.observeEmpty(leftVertical.getItems(), empty -> {
+            if (empty) centerHorizontal.getItems().remove(leftVertical);
+            else centerHorizontal.getItems().add(0, leftVertical);
+        });
+
+        listObserver.observeEmpty(rightVertical.getItems(), empty -> {
+            if (empty) centerHorizontal.getItems().remove(rightVertical);
+            else centerHorizontal.getItems().add(centerHorizontal.getItems().size(), rightVertical);
+        });
+
         //building the whole splitpane (this)
-        this.getItems().addAll(topHorizontal, centerHorizontal, bottomHorizontal);
+        //this.getItems().addAll(topHorizontal, centerHorizontal, bottomHorizontal);
 
         //building the center-horizontal splitpane
-        this.centerHorizontal.getItems().addAll(leftVertical, rightVertical);
+        //this.centerHorizontal.getItems().addAll(leftVertical, rightVertical);
     }
 
     private void initSplitPanes() {
@@ -45,7 +81,9 @@ public class SplitPaneSystem extends SplitPane {
 
     public void setCenterNode(Node centerNode) {
         this.centerHorizontal.getItems().remove(getCenterNode());
-        this.centerHorizontal.getItems().add(1, centerNode);
+
+        int index = this.centerHorizontal.getItems().isEmpty() ? 0 : 1;
+        this.centerHorizontal.getItems().add(index, centerNode);
     }
 
     public Node getCenterNode() {
@@ -67,5 +105,17 @@ public class SplitPaneSystem extends SplitPane {
 
     public SplitPane getRightVertical() {
         return rightVertical;
+    }
+
+    private class ListObserver {
+        private List<BooleanBinding> observables =
+                new ArrayList<>(5);
+
+        public void observeEmpty(ObservableList<?> items, Consumer<Boolean> handler) {
+            var binding = Bindings.isEmpty(items);
+            binding.addListener((observable, oldValue, newValue) -> handler.accept(newValue));
+            observables.add(binding);
+        }
+
     }
 }

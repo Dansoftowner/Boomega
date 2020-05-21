@@ -62,7 +62,7 @@ public class DockNode extends BorderPane {
     /**
      * The observable-value that represents that this dockNode is visible or not (showed)
      */
-    private final BooleanProperty showing = new SimpleBooleanProperty(this, "showing");
+    private final BooleanProperty showing = new SimpleBooleanProperty(this, "showing", false);
 
 
     public DockNode(String title) {
