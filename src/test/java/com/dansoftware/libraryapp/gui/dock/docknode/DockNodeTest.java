@@ -14,6 +14,7 @@ public class DockNodeTest extends Application {
         dockNode.setCenter(new StackPane(new Button("OK")));
 
         Scene scene = new Scene(dockNode);
+        Theme.setDefault(Theme.DARK);
         Theme.applyDefault(scene);
 
         primaryStage.setScene(scene);

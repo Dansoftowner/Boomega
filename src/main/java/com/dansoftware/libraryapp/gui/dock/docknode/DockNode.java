@@ -1,12 +1,11 @@
 package com.dansoftware.libraryapp.gui.dock.docknode;
 
 import com.dansoftware.libraryapp.gui.dock.DockPosition;
-import com.dansoftware.libraryapp.gui.dock.ViewMode;
+import com.dansoftware.libraryapp.gui.dock.viewmode.ViewMode;
 import com.dansoftware.libraryapp.gui.dock.border.BorderButton;
 import com.dansoftware.libraryapp.gui.dock.docksystem.DockSystem;
+import com.dansoftware.libraryapp.gui.dock.viewmode.ViewModeStrategy;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
@@ -32,6 +31,8 @@ public class DockNode extends BorderPane {
      * the view-mode of this dock-node dynamically
      */
     private final DockNodeMenu menu;
+
+    private ViewModeStrategy viewModeStrategy;
 
     /**
      * The observable-value that represents the dockSystem that owns this dockNode
@@ -77,6 +78,12 @@ public class DockNode extends BorderPane {
 
         this.title.set(title);
 
+        this.viewModeStrategy =
+                this.viewMode
+                        .get()
+                        .getViewModeStrategySupplier()
+                        .get();
+
         this.setTop(this.dockTitleBar);
         this.getStyleClass().add(STYLE_CLASS_NAME);
 
@@ -97,34 +104,43 @@ public class DockNode extends BorderPane {
 
     private void addListeners() {
         this.showing.addListener((observable, wasShowing, isShowing) -> {
-            System.out.println("Step 1");
             if (getDockSystem() == null) return;
-            System.out.println("Step 2");
-            var viewMode = this.viewMode.get();
+
             if (isShowing) {
-                viewMode.show(this);
+                this.viewModeStrategy.show(this);
             } else {
-                viewMode.hide(this);
+                this.viewModeStrategy.hide(this);
             }
         });
 
         this.dockPosition.addListener((observable, oldValue, newValue) -> {
             if (getDockSystem() == null) return;
 
-            if (getViewMode() == ViewMode.PINNED) {
+            if (isShowing()) {
                 getDockSystem().dock(newValue, this);
             }
         });
 
         this.viewMode.addListener((observable, oldValue, newValue) -> {
-            if (getDockSystem() == null) return;
-
-            Objects.requireNonNull(newValue, "The viewMode mustn't be null");
-
-            oldValue.hide(this);
-            newValue.show(this);
-
+            ViewModeStrategy strategy = newValue.getViewModeStrategySupplier().get();
+            if (isShowing()) {
+                this.hide();
+                this.viewModeStrategy = strategy;
+                this.show();
+            } else this.viewModeStrategy = strategy;
         });
+    }
+
+    public void show() {
+        setShowing(true);
+    }
+
+    public void hide() {
+        setShowing(false);
+    }
+
+    public SimpleObjectProperty<DockPosition> dockPositionProperty() {
+        return dockPosition;
     }
 
     public ViewMode getViewMode() {
@@ -142,7 +158,6 @@ public class DockNode extends BorderPane {
     public void setShowing(boolean value) {
         this.showing.set(value);
     }
-
 
 
     public DockNodeMenu getMenu() {
@@ -204,7 +219,6 @@ public class DockNode extends BorderPane {
     public ObjectProperty<Node> graphicProperty() {
         return graphic;
     }
-
 
 
 }

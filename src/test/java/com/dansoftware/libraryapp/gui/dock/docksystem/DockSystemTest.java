@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class DockSystemTest extends Application {
@@ -27,7 +29,11 @@ public class DockSystemTest extends Application {
         browser.load("http://google.com");
 
         DockSystem<Node> dockSystem = new DockSystem<>();
-        dockSystem.dock(DockPosition.TOP_LEFT, new DockNode(null , "Panel1", new StackPane(new Label("Panel1"))));
+
+        DockNode dockNode = new DockNode(new Rectangle(20, 20, Color.BLUE), "WebBrowser", browser);
+        dockNode.setDockSystem(dockSystem);
+        dockNode.setDockPosition(DockPosition.LEFT_BOTTOM);
+        dockNode.show();
 
         //dockSystem.dock(DockPosition.RIGHT_TOP, new DockNode(null , "Panel2", new StackPane(new Button("Panel2"))));
         //dockSystem.dock(DockPosition.RIGHT_BOTTOM, new DockNode(null , "WebBrowser", browser));

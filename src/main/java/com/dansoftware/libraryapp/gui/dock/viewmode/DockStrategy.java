@@ -1,0 +1,18 @@
+package com.dansoftware.libraryapp.gui.dock.viewmode;
+
+import com.dansoftware.libraryapp.gui.dock.docknode.DockNode;
+import com.dansoftware.libraryapp.gui.dock.docksystem.DockSystem;
+
+public class DockStrategy implements ViewModeStrategy {
+    @Override
+    public void show(DockNode dockNode) {
+        DockSystem<?> dockSystem = dockNode.getDockSystem();
+        dockSystem.dock(dockNode.getDockPosition(), dockNode);
+    }
+
+    @Override
+    public void hide(DockNode dockNode) {
+        DockSystem<?> dockSystem = dockNode.getDockSystem();
+        dockSystem.hide(dockNode.getDockPosition(), dockNode);
+    }
+}

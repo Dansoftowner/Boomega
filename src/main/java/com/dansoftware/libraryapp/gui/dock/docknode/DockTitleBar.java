@@ -31,12 +31,4 @@ public class DockTitleBar extends BorderPane {
     public DockNode getDockNode() {
         return dockNode;
     }
-
-    public void applyFloating() {
-
-    }
-
-    public void disableFloating() {
-
-    }
 }

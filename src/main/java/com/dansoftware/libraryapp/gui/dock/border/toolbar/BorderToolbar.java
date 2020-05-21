@@ -65,7 +65,8 @@ public class BorderToolbar extends ToolBar {
      */
     public void addBorderButton(BorderButton borderButton) {
         Objects.requireNonNull(borderButton, "The borderButton mustn't be null!");
-        this.getItems().add(borderButton);
+        if (!this.getItems().contains(borderButton))
+           this.getItems().add(borderButton);
         borderButton.setButtonOrientation(this.toolbarOrientation.btnOrientation);
     }
 

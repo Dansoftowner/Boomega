@@ -3,12 +3,14 @@ package com.dansoftware.libraryapp.gui.dock.docksystem;
 import com.dansoftware.libraryapp.gui.dock.DockPosition;
 import com.dansoftware.libraryapp.gui.dock.border.DockFrame;
 import com.dansoftware.libraryapp.gui.dock.docknode.DockNode;
+import com.dansoftware.libraryapp.gui.dock.viewmode.ViewMode;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -36,20 +38,23 @@ public class DockSystem<C extends Node> extends StackPane {
     public void hide(DockPosition pos, DockNode dockNode) {
         Objects.requireNonNull(pos, "The pos mustn't be null");
 
-        Pane parent = (Pane) dockNode.getParent();
-        parent.getChildren().remove(dockNode);
-        //pos.getRemover().accept(this.splitPaneSystem, dockNode);
+        if (this.getDockNodes().contains(dockNode)) {
+            Pane parent = (Pane) dockNode.getParent();
+            SplitPane splitPane = (SplitPane) parent.getParent();
+            splitPane.getItems().remove(dockNode);
+        }
     }
 
     public void dock(DockPosition pos, DockNode dockNode) {
         if (pos == null) pos = DockPosition.TOP_LEFT;
 
-        //this.frame.allocate(pos, dockNode.getBorderButton());
+        this.frame.allocate(pos, dockNode.getBorderButton());
 
         dockNode.setDockSystem(this);
         dockNode.setDockPosition(pos);
 
-        pos.getAdder().accept(this.splitPaneSystem, dockNode);
+        if (dockNode.getViewMode() == ViewMode.PINNED)
+            pos.getAdder().accept(this.splitPaneSystem, dockNode);
 
         if (!this.dockNodes.contains(dockNode))
             this.dockNodes.add(dockNode);
