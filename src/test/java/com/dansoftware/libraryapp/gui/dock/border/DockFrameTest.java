@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-public class DockBorderTest extends Application {
+public class DockFrameTest extends Application {
 
     static {
         Theme.setDefault(Theme.DARK);
@@ -65,5 +65,8 @@ public class DockBorderTest extends Application {
         dockFrame.deAllocate(DockPosition.TOP_LEFT, borderButton10);
         dockFrame.deAllocate(DockPosition.TOP_LEFT, borderButton11);
         dockFrame.deAllocate(DockPosition.TOP_LEFT, borderButton12);
+
+        //dockFrame.deAllocate(DockPosition.TOP_LEFT, null);
+        //dockFrame.allocate(DockPosition.RIGHT_TOP, borderButton16);
     }
 }

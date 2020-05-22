@@ -61,19 +61,24 @@
 /* Dock-styles */
 .border-button {
     -fx-background-color: transparent;
+    -fx-min-height: 20px;
 }
 
 .border-button .label {
     -fx-font-size: 12;
 }
 
-.border-button .h-box {
+.border-button .root-btn {
     -fx-spacing: 10;
     -fx-padding: 0 5 0 0;
 }
 
-.border-button :hover {
+.border-button .root-btn:hover {
     -fx-background-color: #D9D9D9;
+}
+
+.border-button :selected {
+    -fx-background-color: #BDBDBD;
 }
 
 .border-edge, .border-toolbar {
@@ -84,6 +89,7 @@
 
 .border-edge {
     -fx-border-color: #D1D1D1;
+    -fx-min-height: 20px;
 }
 
 .border-edge :vertical {

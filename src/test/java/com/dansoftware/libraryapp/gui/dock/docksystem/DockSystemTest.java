@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.gui.dock.docknode.DockNode;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.tool.browser.Browser;
 import com.dansoftware.libraryapp.gui.tool.browser.TabWebBrowser;
-import com.dansoftware.libraryapp.gui.tool.browser.WebContentRenderer;
 import com.dansoftware.libraryapp.gui.tool.browser.WebViewWrapper;
 import com.dansoftware.libraryapp.gui.tool.documentviewer.DocumentViewer;
 import com.dansoftware.libraryapp.gui.tool.documentviewer.PDFDisplayerWrapper;
@@ -20,8 +19,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import javax.swing.text.Document;
-
 public class DockSystemTest extends Application {
 
     static {
@@ -34,7 +31,7 @@ public class DockSystemTest extends Application {
         browser.load("http://google.com");
 
         DockSystem<Node> dockSystem = new DockSystem<>();
-        dockSystem.setCenter(new StackPane(new Label("center")));
+        dockSystem.setDockedCenter(new StackPane(new Label("center")));
 
         DockNode dockNode = new DockNode(new Rectangle(20, 20, Color.BLUE), "WebBrowser, Left bottom", browser);
         dockNode.setDockSystem(dockSystem);
@@ -83,6 +80,7 @@ public class DockSystemTest extends Application {
         Theme.applyDefault(scene);
 
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
 
         System.out.println("mannniyy");

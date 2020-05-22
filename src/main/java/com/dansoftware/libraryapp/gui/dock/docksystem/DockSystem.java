@@ -46,7 +46,7 @@ public class DockSystem<C extends Node> extends StackPane {
         }
     }
 
-    public void dock(DockPosition pos, DockNode dockNode) {
+    public void dock(DockPosition pos, DockNode dockNode, boolean show) {
         if (pos == null) pos = DockPosition.TOP_LEFT;
 
         this.frame.allocate(pos, dockNode.getBorderButton());
@@ -54,26 +54,32 @@ public class DockSystem<C extends Node> extends StackPane {
         dockNode.setDockSystem(this);
         dockNode.setDockPosition(pos);
 
-        if (dockNode.getViewMode() == ViewMode.PINNED)
+        if (show) {
             pos.getAdder().accept(this.splitPaneSystem, dockNode);
 
-        if (!this.dockNodes.contains(dockNode))
-            this.dockNodes.add(dockNode);
+            if (!this.dockNodes.contains(dockNode))
+                this.dockNodes.add(dockNode);
+        }
+    }
+
+    public void dock(DockPosition from, DockPosition to, DockNode dockNode, boolean show) {
+        if (from != null) this.frame.deAllocate(from, dockNode.getBorderButton());
+        this.dock(to, dockNode, show);
     }
 
     public ObservableList<DockNode> getDockNodes() {
         return dockNodes;
     }
 
-    public Node getCenter() {
+    public Node getDockedCenter() {
         return center.get();
     }
 
-    public ObjectProperty<C> centerProperty() {
+    public ObjectProperty<C> dockedCenterProperty() {
         return center;
     }
 
-    public void setCenter(C center) {
+    public void setDockedCenter(C center) {
         this.center.set(center);
     }
 }

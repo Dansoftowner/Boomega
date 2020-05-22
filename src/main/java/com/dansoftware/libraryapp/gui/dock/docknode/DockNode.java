@@ -116,9 +116,13 @@ public class DockNode extends BorderPane {
         this.dockPosition.addListener((observable, oldValue, newValue) -> {
             if (getDockSystem() == null) return;
 
-            if (isShowing()) {
-                getDockSystem().dock(newValue, this);
-            }
+            boolean pinnedViewMode = this.getViewMode() == ViewMode.PINNED;
+            boolean isShowingAsDock = this.isShowing() && pinnedViewMode;
+
+            if (oldValue != null && pinnedViewMode)
+                getDockSystem().hide(oldValue, this);
+
+            getDockSystem().dock(oldValue, newValue, this, isShowingAsDock);
         });
 
         this.viewMode.addListener((observable, oldValue, newValue) -> {

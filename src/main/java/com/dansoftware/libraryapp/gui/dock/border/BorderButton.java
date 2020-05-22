@@ -35,7 +35,7 @@ public class BorderButton extends Group {
     /**
      * The object that represents the css-pseudo class of the button when it's selected
      */
-    private final PseudoClass selectedPseudoClass = PseudoClass.getPseudoClass("selected");
+    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
     /**
      * The current orientation of the button
@@ -64,7 +64,7 @@ public class BorderButton extends Group {
     public BorderButton() {
         this.label = new Label();
         this.hBox = new HBox(this.label);
-        this.hBox.getStyleClass().add("h-box");
+        this.hBox.getStyleClass().add("root-btn");
 
         this.getChildren().add(this.hBox);
         this.getStyleClass().add(STYLE_CLASS_NAME);
@@ -84,7 +84,7 @@ public class BorderButton extends Group {
         });
 
         this.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            this.pseudoClassStateChanged(selectedPseudoClass, newValue);
+            this.hBox.pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, newValue);
         });
     }
 
@@ -178,7 +178,7 @@ public class BorderButton extends Group {
      * @see Node#pseudoClassStateChanged(PseudoClass, boolean)
      */
     public void setSelected(boolean value) {
-
+        this.selected.set(value);
     }
 
     /**

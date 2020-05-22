@@ -7,7 +7,7 @@ public class DockStrategy implements ViewModeStrategy {
     @Override
     public void show(DockNode dockNode) {
         DockSystem<?> dockSystem = dockNode.getDockSystem();
-        dockSystem.dock(dockNode.getDockPosition(), dockNode);
+        dockSystem.dock(dockNode.getDockPosition(), dockNode, true);
     }
 
     @Override

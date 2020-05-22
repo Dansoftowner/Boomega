@@ -65,18 +65,23 @@ public class SplitPaneSystem extends SplitPane {
     private void initSplitPanes() {
         this.topHorizontal = new SplitPane();
         this.topHorizontal.setOrientation(Orientation.HORIZONTAL);
+        SplitPane.setResizableWithParent(topHorizontal, false);
 
         this.bottomHorizontal = new SplitPane();
         this.bottomHorizontal.setOrientation(Orientation.HORIZONTAL);
+        SplitPane.setResizableWithParent(bottomHorizontal, false);
 
         this.centerHorizontal = new SplitPane();
         this.centerHorizontal.setOrientation(Orientation.HORIZONTAL);
+        SplitPane.setResizableWithParent(centerHorizontal, false);
 
         this.leftVertical = new SplitPane();
         this.leftVertical.setOrientation(Orientation.VERTICAL);
+        SplitPane.setResizableWithParent(leftVertical, false);
 
         this.rightVertical = new SplitPane();
         this.rightVertical.setOrientation(Orientation.VERTICAL);
+        SplitPane.setResizableWithParent(rightVertical, false);
     }
 
     public void setCenterNode(Node centerNode) {
