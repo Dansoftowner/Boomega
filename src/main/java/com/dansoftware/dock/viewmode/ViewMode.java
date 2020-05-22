@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.dock.viewmode;
+package com.dansoftware.dock.viewmode;
 
 import java.util.function.Supplier;
 

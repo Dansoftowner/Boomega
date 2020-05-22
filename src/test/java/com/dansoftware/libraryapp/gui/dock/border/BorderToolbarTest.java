@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.dock.border;
 
-import com.dansoftware.libraryapp.gui.dock.border.toolbar.BorderToolbar;
+import com.dansoftware.dock.border.BorderButton;
+import com.dansoftware.dock.border.toolbar.BorderToolbar;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import javafx.application.Application;
 import javafx.scene.Scene;

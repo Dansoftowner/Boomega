@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.dock.docknode;
 
+import com.dansoftware.dock.docknode.DockNode;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import javafx.application.Application;
 import javafx.scene.Scene;

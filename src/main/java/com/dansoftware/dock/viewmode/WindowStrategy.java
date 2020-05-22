@@ -1,6 +1,6 @@
-package com.dansoftware.libraryapp.gui.dock.viewmode;
+package com.dansoftware.dock.viewmode;
 
-import com.dansoftware.libraryapp.gui.dock.docknode.DockNode;
+import com.dansoftware.dock.docknode.DockNode;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Globals;
 import javafx.scene.Scene;

@@ -1,7 +1,7 @@
-package com.dansoftware.libraryapp.gui.dock.viewmode;
+package com.dansoftware.dock.viewmode;
 
-import com.dansoftware.libraryapp.gui.dock.docknode.DockNode;
-import com.dansoftware.libraryapp.gui.dock.docksystem.DockSystem;
+import com.dansoftware.dock.docknode.DockNode;
+import com.dansoftware.dock.docksystem.DockSystem;
 
 public class DockStrategy implements ViewModeStrategy {
     @Override

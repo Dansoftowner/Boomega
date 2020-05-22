@@ -1,5 +1,6 @@
-package com.dansoftware.libraryapp.gui.dock.docksystem;
+package com.dansoftware.dock.docksystem;
 
+import com.dansoftware.dock.util.ListObserver;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.ObservableList;
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
 public class SplitPaneSystem extends SplitPane {
 
     private final ListObserver listObserver =
-            new ListObserver();
+            new ListObserver(5);
 
     private SplitPane topHorizontal;
     private SplitPane bottomHorizontal;
@@ -112,15 +113,5 @@ public class SplitPaneSystem extends SplitPane {
         return rightVertical;
     }
 
-    private class ListObserver {
-        private List<BooleanBinding> observables =
-                new ArrayList<>(5);
 
-        public void observeEmpty(ObservableList<?> items, Consumer<Boolean> handler) {
-            var binding = Bindings.isEmpty(items);
-            binding.addListener((observable, oldValue, newValue) -> handler.accept(newValue));
-            observables.add(binding);
-        }
-
-    }
 }

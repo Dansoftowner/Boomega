@@ -1,7 +1,8 @@
 package com.dansoftware.libraryapp.gui.dock.docksystem;
 
-import com.dansoftware.libraryapp.gui.dock.DockPosition;
-import com.dansoftware.libraryapp.gui.dock.docknode.DockNode;
+import com.dansoftware.dock.docksystem.DockSystem;
+import com.dansoftware.dock.position.DockPosition;
+import com.dansoftware.dock.docknode.DockNode;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.tool.browser.Browser;
 import com.dansoftware.libraryapp.gui.tool.browser.TabWebBrowser;
@@ -22,7 +23,7 @@ import javafx.stage.Stage;
 public class DockSystemTest extends Application {
 
     static {
-        Theme.setDefault(Theme.DARK);
+        Theme.setDefault(Theme.LIGHT);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class DockSystemTest extends Application {
         Browser browser = new TabWebBrowser(WebViewWrapper.WEBVIEW_SUPPLIER);
         browser.load("http://google.com");
 
-        DockSystem<Node> dockSystem = new DockSystem<>();
+        DockSystem<Node> dockSystem = new com.dansoftware.dock.docksystem.DockSystem<>();
         dockSystem.setDockedCenter(new StackPane(new Label("center")));
 
         DockNode dockNode = new DockNode(new Rectangle(20, 20, Color.BLUE), "WebBrowser, Left bottom", browser);

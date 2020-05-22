@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.dock.docknode;
+package com.dansoftware.dock.docknode;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;

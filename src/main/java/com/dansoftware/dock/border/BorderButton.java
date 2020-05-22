@@ -1,5 +1,6 @@
-package com.dansoftware.libraryapp.gui.dock.border;
+package com.dansoftware.dock.border;
 
+import com.dansoftware.dock.border.toolbar.BorderToolbar;
 import javafx.beans.property.*;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
@@ -20,7 +21,7 @@ import static java.util.Objects.isNull;
 
 /**
  * A BorderButton is a Control that's located on a
- * {@link com.dansoftware.libraryapp.gui.dock.border.toolbar.BorderToolbar} located
+ * {@link BorderToolbar} located
  * on a {@link BorderEdge}.
  *
  * <p>

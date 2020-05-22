@@ -1,6 +1,6 @@
-package com.dansoftware.libraryapp.gui.dock.border;
+package com.dansoftware.dock.border;
 
-import com.dansoftware.libraryapp.gui.dock.border.toolbar.BorderToolbar;
+import com.dansoftware.dock.border.toolbar.BorderToolbar;
 import javafx.beans.binding.BooleanBinding;
 import javafx.css.PseudoClass;
 import javafx.scene.layout.BorderPane;

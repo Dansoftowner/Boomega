@@ -1,7 +1,7 @@
-package com.dansoftware.libraryapp.gui.dock.docknode;
+package com.dansoftware.dock.docknode;
 
-import com.dansoftware.libraryapp.gui.dock.DockPosition;
-import com.dansoftware.libraryapp.gui.dock.viewmode.ViewMode;
+import com.dansoftware.dock.position.DockPosition;
+import com.dansoftware.dock.viewmode.ViewMode;
 import com.dansoftware.libraryapp.gui.util.menu.MenuBuilder;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;

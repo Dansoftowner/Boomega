@@ -1,16 +1,14 @@
-package com.dansoftware.libraryapp.gui.dock.docknode;
+package com.dansoftware.dock.docknode;
 
-import com.dansoftware.libraryapp.gui.dock.DockPosition;
-import com.dansoftware.libraryapp.gui.dock.viewmode.ViewMode;
-import com.dansoftware.libraryapp.gui.dock.border.BorderButton;
-import com.dansoftware.libraryapp.gui.dock.docksystem.DockSystem;
-import com.dansoftware.libraryapp.gui.dock.viewmode.ViewModeStrategy;
+import com.dansoftware.dock.position.DockPosition;
+import com.dansoftware.dock.border.BorderButton;
+import com.dansoftware.dock.viewmode.ViewModeStrategy;
+import com.dansoftware.dock.docksystem.DockSystem;
+import com.dansoftware.dock.viewmode.ViewMode;
 import javafx.beans.property.*;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
-
-import java.util.Objects;
 
 public class DockNode extends BorderPane {
 
@@ -120,7 +118,7 @@ public class DockNode extends BorderPane {
             boolean isShowingAsDock = this.isShowing() && pinnedViewMode;
 
             if (oldValue != null && pinnedViewMode)
-                getDockSystem().hide(oldValue, this);
+                this.viewModeStrategy.hide(this);
 
             getDockSystem().dock(oldValue, newValue, this, isShowingAsDock);
         });

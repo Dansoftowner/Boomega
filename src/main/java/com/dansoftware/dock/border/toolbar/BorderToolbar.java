@@ -1,6 +1,7 @@
-package com.dansoftware.libraryapp.gui.dock.border.toolbar;
+package com.dansoftware.dock.border.toolbar;
 
-import com.dansoftware.libraryapp.gui.dock.border.BorderButton;
+import com.dansoftware.dock.border.BorderButton;
+import com.dansoftware.dock.border.BorderEdge;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.NodeOrientation;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
 
 /**
  * A BorderToolbar is a {@link ToolBar} usually located on a
- * {@link com.dansoftware.libraryapp.gui.dock.border.BorderEdge}
+ * {@link BorderEdge}
  * that displays {@link BorderButton} GUI objects.
  *
  * <p>

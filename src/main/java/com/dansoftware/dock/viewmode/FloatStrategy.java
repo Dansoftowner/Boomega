@@ -1,6 +1,6 @@
-package com.dansoftware.libraryapp.gui.dock.viewmode;
+package com.dansoftware.dock.viewmode;
 
-import com.dansoftware.libraryapp.gui.dock.docknode.DockNode;
+import com.dansoftware.dock.docknode.DockNode;
 import com.goxr3plus.fxborderlessscene.borderless.BorderlessScene;
 import javafx.css.PseudoClass;
 import javafx.scene.Scene;
