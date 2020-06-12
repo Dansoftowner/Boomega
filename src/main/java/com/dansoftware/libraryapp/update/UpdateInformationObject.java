@@ -7,47 +7,40 @@ import java.util.Map;
  * the new update
  * <p>
  * To fill this type of object with real information
- * you should use the {@link UpdateInformationObjectFactory}
+ * you should use the {@link UpdateInformationLoader}
  *
- * @see UpdateInformationObjectFactory#getInformation
+ * @see UpdateInformationLoader#load
  */
 public class UpdateInformationObject {
 
     private String version;
-    private String updateReviewHtmlPath;
-    private Map<String, String> downloadableBinaries;
+    private String review;
+    private Map<String, Map<String, String>> binaries;
 
     /**
      * This constructor creates an UpdateInformationObject with the required values
      *
      * @param version              the new version of the update
-     * @param updateReviewHtmlPath the location of the review web page that describes
+     * @param review the location of the review web page that describes
      *                             the features of the new update (http://example.com/libraryappreview.html).
-     * @param downloadableBinaries the Map that contains the binary types and the location
+     * @param binaries the Map that contains the binary types and the location
      *                             of each downloadable binary on the web.
-     *                             For example (if the app runs on windows) :<br/>
-     * <pre>
-     * {
-     * "Exe installer" : "http://example.com/download/libraryapp-installer.exe", <br/>
-     * "Zip archive" :  "http://example.com/download/libraryapp.zip" <br/>
-     * }
-     * </pre>
      */
-    UpdateInformationObject(String version, String updateReviewHtmlPath, Map<String, String> downloadableBinaries) {
+    UpdateInformationObject(String version, String review, Map<String, Map<String, String>> binaries) {
         this.version = version;
-        this.downloadableBinaries = downloadableBinaries;
-        this.updateReviewHtmlPath = updateReviewHtmlPath;
+        this.review = review;
+        this.binaries = binaries;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public Map<String, String> getDownloadableBinaries() {
-        return downloadableBinaries;
+    public String getReview() {
+        return review;
     }
 
-    public String getUpdateReviewHtmlPath() {
-        return updateReviewHtmlPath;
+    public Map<String, Map<String, String>> getBinaries() {
+        return binaries;
     }
 }

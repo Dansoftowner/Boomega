@@ -40,7 +40,7 @@ public class UpdateSearcher {
      */
     public UpdateSearcher() {
         try {
-            informationObject = UpdateInformationObjectFactory.getInformation();
+            informationObject = UpdateInformationLoader.load();
         } catch (IOException e) {
             Notification.create()
                     .level(NotificationLevel.ERROR)
@@ -62,16 +62,15 @@ public class UpdateSearcher {
      * This method decides that there is new update and notifies the user about it in that case.
      */
     public void search() {
-        Optional.ofNullable(this.informationObject)
-                .ifPresent(informationObject -> {
-                    if (isCurrentVersionOld())
-                        Notification.create()
-                                .level(NotificationLevel.INFO)
-                                .title("update.searcher.title")
-                                .msg("update.searcher.available")
-                                .eventHandler(event -> new UpdateDisplayer().display(informationObject))
-                                .show();
-                });
+        if (this.informationObject != null) {
+            if (isCurrentVersionOld())
+                Notification.create()
+                        .level(NotificationLevel.INFO)
+                        .title("update.searcher.title")
+                        .msg("update.searcher.available")
+                        .eventHandler(event -> new UpdateDisplayer().display(informationObject))
+                        .show();
+        }
     }
 
     /**
