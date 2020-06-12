@@ -28,7 +28,7 @@ public final class Globals {
         WINDOW_ICON = temp;
     }
 
-    public static final BuildInfo BUILD_INFO = new BuildInfo();
+    public static final VersionInfo VERSION_INFO = new VersionInfo("0.0.0");
 
     private static ConfigurationHolder configurationHolder;
     private static DataProcessor dataProcessor;

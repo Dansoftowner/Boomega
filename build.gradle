@@ -6,12 +6,8 @@ version '0.0.0'
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://jitpack.io"
-    }
-    maven {
-        url "https://bintray.com/dukke/maven"
-    }
+    maven { url "https://jitpack.io" }
+    maven { url  "https://dl.bintray.com/dukke/maven" }
 }
 
 compileJava {

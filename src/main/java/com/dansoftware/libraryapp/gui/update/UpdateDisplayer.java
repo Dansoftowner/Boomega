@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.update;
 
-import com.dansoftware.libraryapp.update.UpdateInformationObject;
+import com.dansoftware.libraryapp.update.UpdateInformation;
 
 /**
  * This class is responsible for showing the update details for the user on the gui.
@@ -11,7 +11,7 @@ import com.dansoftware.libraryapp.update.UpdateInformationObject;
 public class UpdateDisplayer {
 
 
-    public void display(UpdateInformationObject informationObject) {
+    public void display(UpdateInformation informationObject) {
 
     }
 

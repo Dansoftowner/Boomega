@@ -7,6 +7,8 @@ import com.dansoftware.libraryapp.gui.notification.GuiNotificationStrategy;
 import com.dansoftware.libraryapp.gui.notification.Notification;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
+import com.dansoftware.libraryapp.update.loader.BaseLoader;
+import com.dansoftware.libraryapp.update.notifier.GUINotifier;
 
 import java.io.IOException;
 import java.lang.annotation.ElementType;
@@ -110,7 +112,7 @@ final class ApplicationInitializer {
     private void checkUpdates() {
         //if automatic update searching is allowed by the user
         if (getConfigurationHolder().getConfiguration(ConfigurationKey.SEARCH_FOR_UPDATES_AT_START)) {
-            UpdateSearcher updateSearcher = new UpdateSearcher();
+            UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO, new BaseLoader(), new GUINotifier());
             updateSearcher.search();
         }
     }

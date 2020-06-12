@@ -1,15 +1,13 @@
 package com.dansoftware.libraryapp.update;
 
-import com.dansoftware.libraryapp.gui.notification.Notification;
-import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
-import com.dansoftware.libraryapp.gui.update.UpdateDisplayer;
+import com.dansoftware.libraryapp.main.VersionInfo;
+import com.dansoftware.libraryapp.update.loader.Loader;
+import com.dansoftware.libraryapp.update.notifier.Notifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Optional;
-
-import static com.dansoftware.libraryapp.main.Globals.BUILD_INFO;
+import java.util.Objects;
 
 /**
  * An UpdateSearcher can search for updates.
@@ -23,70 +21,37 @@ import static com.dansoftware.libraryapp.main.Globals.BUILD_INFO;
  */
 public class UpdateSearcher {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateSearcher.class);
-
-    /**
-     * This field should contain the InformationObject that contains
-     * all necessary information about the new update
-     */
-    private UpdateInformationObject informationObject;
+    private final VersionInfo base;
+    private final Loader loader;
+    private final Notifier notifier;
 
     /**
      * Creates a basic update searcher object;
      *
-     * <p>
-     * When this constructor called the object automatically downloads
-     * the information about the new update from the internet.
+     * @param base the base version that the object should compare to; mustn't be null
+     * @param loader the object that loads the information about the update; mustn't be null
+     * @param notifier the object that is responsible for notifying the user about the
+     *                 new update/some error; mustn't be null
+     * @throws NullPointerException if one of the arguments is null.
      */
-    public UpdateSearcher() {
-        try {
-            informationObject = UpdateInformationLoader.load();
-        } catch (IOException e) {
-            Notification.create()
-                    .level(NotificationLevel.ERROR)
-                    .title("update.searcher.title")
-                    .msg("update.searcher.error")
-                    .cause(e)
-                    .show();
-
-            LOGGER.error("Couldn't download the information about the update", e);
-        }
+    public UpdateSearcher(VersionInfo base, Loader loader, Notifier notifier) {
+        this.base = Objects.requireNonNull(base, "The base mustn't be null");
+        this.loader = Objects.requireNonNull(loader, "The loader mustn't be null");
+        this.notifier = Objects.requireNonNull(notifier, "The notifier mustn't be null");
     }
 
     /**
-     * Decides that there is new update available and notifies the user about it.
-     *
-     * <p>
-     * The update-information is already downloaded
-     * when the constructor called
-     * This method decides that there is new update and notifies the user about it in that case.
+     * Decides that there is new update available and notifies {@link Notifier} object about it.
      */
     public void search() {
-        if (this.informationObject != null) {
-            if (isCurrentVersionOld())
-                Notification.create()
-                        .level(NotificationLevel.INFO)
-                        .title("update.searcher.title")
-                        .msg("update.searcher.available")
-                        .eventHandler(event -> new UpdateDisplayer().display(informationObject))
-                        .show();
+        try {
+            var information = loader.load();
+            if (information != null) {
+                boolean newUpdate = base.compareTo(new VersionInfo(information.getVersion())) < 0;
+                if (newUpdate) notifier.notifyUpdate(information);
+            }
+        } catch (Exception e) {
+            notifier.notifyException(e);
         }
     }
-
-    /**
-     * Queries the current version of the running application and compares to the new update's version.
-     *
-     * @return <code>true</code> if the current version of the application is old (so it's need to be updated)
-     * or <code>false</code> otherwise
-     */
-    private boolean isCurrentVersionOld() {
-        String currentVersion = BUILD_INFO.getVersion();
-        String nextVersion = informationObject.getVersion();
-
-        currentVersion = currentVersion.replace(".", "");
-        nextVersion = nextVersion.replace(".", "");
-
-        return Integer.parseInt(currentVersion) < Integer.parseInt(nextVersion);
-    }
-
 }

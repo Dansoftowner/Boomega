@@ -4,14 +4,9 @@ import java.util.Map;
 
 /**
  * This class responsible for storing the information about
- * the new update
- * <p>
- * To fill this type of object with real information
- * you should use the {@link UpdateInformationLoader}
- *
- * @see UpdateInformationLoader#load
+ * an update
  */
-public class UpdateInformationObject {
+public class UpdateInformation {
 
     private String version;
     private String review;
@@ -26,7 +21,7 @@ public class UpdateInformationObject {
      * @param binaries the Map that contains the binary types and the location
      *                             of each downloadable binary on the web.
      */
-    UpdateInformationObject(String version, String review, Map<String, Map<String, String>> binaries) {
+    public UpdateInformation(String version, String review, Map<String, Map<String, String>> binaries) {
         this.version = version;
         this.review = review;
         this.binaries = binaries;
