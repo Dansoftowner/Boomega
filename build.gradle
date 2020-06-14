@@ -46,30 +46,28 @@ test {
 }
 
 dependencies {
-    //Testing
-    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
 
-    //drivers for jdbc
-    implementation("org.xerial:sqlite-jdbc:3.30.1")
-
-    //
-    implementation 'com.google.code.gson:gson:2.8.6'
-
-    //Logging
+    //logging
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
 
-    //Apache libraries
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
-    //compile group: 'org.mybatis', name: 'mybatis', version: '3.4.5'
+    //JUnit 5
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
 
-    //libraries for javaFX
+    //utility libraries
+    implementation 'com.google.code.gson:gson:2.8.6'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
+    //javaFX libraries
     implementation 'com.jfoenix:jfoenix:9.0.9'
-    compile group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
-    compile 'io.github.typhon0:AnimateFX:1.2.1'
     implementation 'org.jfxtras:jmetro:11.6.13'
-    implementation 'com.github.Dansoftowner:DockSystemFX:v1.0'
+    compile group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
+    compile group: 'com.dlsc.workbenchfx', name: 'workbenchfx-core', version: '11.1.0'
+    compile 'io.github.typhon0:AnimateFX:1.2.1'
+
+    //nitrite database
+    implementation 'org.dizitart:nitrite:3.4.2'
 
     //libraries from the local file system
     compile fileTree(dir: 'external-libraries', include: '*.jar')

@@ -33,7 +33,7 @@ import static java.util.Objects.isNull;
  */
 public class Notification {
 
-    private static NotificationStrategy strategy;
+    private static NotificationStrategy strategy = new GuiNotificationStrategy();
 
     private final NotificationLevel level;
     private final String msg;

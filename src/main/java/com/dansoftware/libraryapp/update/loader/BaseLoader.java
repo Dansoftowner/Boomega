@@ -10,7 +10,7 @@ import java.net.URLConnection;
 
 public class BaseLoader implements Loader {
 
-    private static final String LOCATION = null;
+    private static final String LOCATION = "https://update-server-ed6c3.firebaseio.com/libraryapp.json";
 
     @Override
     public UpdateInformation load() throws IOException {

@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.gui.notification.MessageBuilder;
 import com.dansoftware.libraryapp.gui.notification.Notification;
 import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
+import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,7 @@ public class ApplicationArgumentHandler {
         } else {
             var cause = new FileNotFoundException(filePath);
 
+            LOGGER.error("Couldn't open file: " + file.getAbsolutePath(), cause);
             Notification.create()
                     .level(NotificationLevel.ERROR)
                     .msg(new MessageBuilder()
@@ -53,8 +55,6 @@ public class ApplicationArgumentHandler {
                             .args(new Object[]{ file.getName() }))
                     .cause(cause)
                     .show();
-
-            LOGGER.error("Couldn't open file: " + file.getAbsolutePath(), cause);
         }
     }
 
