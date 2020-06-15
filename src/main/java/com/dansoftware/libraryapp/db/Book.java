@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.db.pojo;
+package com.dansoftware.libraryapp.db;
 
 import org.dizitart.no2.NitriteId;
 import org.dizitart.no2.objects.Id;

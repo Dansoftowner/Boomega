@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.db.util;
 
 import java.util.*;
 
+@Deprecated
 public class RecordCollection<T> implements Collection<T> {
 
     private final Map<Integer, T> map;
@@ -10,10 +11,10 @@ public class RecordCollection<T> implements Collection<T> {
         this.map = new HashMap<>();
     }
 
-    public Record addGet(T record) {
+    public T addGet(T record) {
         int hashCode = record.hashCode();
 
-        Record temp;
+        T temp;
         if ((temp = map.get(hashCode)) == null) {
             map.put(hashCode, record);
             return record;

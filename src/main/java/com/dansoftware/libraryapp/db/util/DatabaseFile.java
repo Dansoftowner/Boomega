@@ -14,11 +14,11 @@ import java.util.Optional;
  *
  * @author Daniel Gyorffy
  */
-public final class DataBaseFile {
+public final class DatabaseFile {
 
     private final String path;
 
-    public DataBaseFile() {
+    public DatabaseFile() {
         ApplicationDataFolder applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
         Optional<String> launchedFile = ApplicationArgumentHandler.getLaunchedFile().map(File::toString);
 

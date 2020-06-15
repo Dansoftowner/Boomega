@@ -6,26 +6,26 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-public abstract class DataLoader<T> {
+public abstract class DataLoader<D extends Database, T> {
 
-    private Database database;
+    private final D database;
     private List<T> cache;
 
-    public DataLoader(Database database) {
+    public DataLoader(D database) {
         this.database = database;
     }
 
-    protected abstract List<T> load(boolean fromCache);
+    protected abstract List<T> load();
 
     public List<T> get(boolean fromCache) {
         if (isNull(this.cache) || !fromCache){
-            this.cache = this.load(fromCache);
+            this.cache = this.load();
         }
 
         return this.cache;
     }
 
-    protected Database getDatabase() {
+    protected D getDatabase() {
         return database;
     }
 }

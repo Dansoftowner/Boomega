@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.db.loader;
 
 import com.dansoftware.libraryapp.db.Database;
-import com.dansoftware.libraryapp.db.pojo.Book;
+import com.dansoftware.libraryapp.db.Book;
 
 import java.util.List;
 
