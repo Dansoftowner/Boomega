@@ -1,10 +1,8 @@
 package com.dansoftware.libraryapp.db.util;
 
-import com.dansoftware.libraryapp.db.pojo.Record;
-
 import java.util.*;
 
-public class RecordCollection<T extends Record> implements Collection<T> {
+public class RecordCollection<T> implements Collection<T> {
 
     private final Map<Integer, T> map;
 

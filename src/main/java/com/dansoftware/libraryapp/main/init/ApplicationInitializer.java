@@ -1,9 +1,9 @@
 package com.dansoftware.libraryapp.main.init;
 
 import com.dansoftware.libraryapp.main.Main;
-import com.dansoftware.libraryapp.main.init.step.StepLink;
-import com.dansoftware.libraryapp.main.init.step.impl.ConfigurationReader;
-import com.dansoftware.libraryapp.main.init.step.impl.UpdateCheck;
+import com.dansoftware.libraryapp.main.init.step.Step;
+import com.dansoftware.libraryapp.main.init.step.impl.ConfigurationReadingStep;
+import com.dansoftware.libraryapp.main.init.step.impl.UpdateCheckingStep;
 
 /**
  * This class is used to initialize some important thing
@@ -20,11 +20,10 @@ public final class ApplicationInitializer {
      * executed before the whole application starts.
      */
     public void initializeApplication() {
-        StepLink stepLink = StepLink.builder()
-                .step(new ConfigurationReader())
-                .step(new UpdateCheck())
-                .build();
+        Step configurationReading = new ConfigurationReadingStep();
+        configurationReading.execute();
 
-        stepLink.execute();
+        Step updateChecking = new UpdateCheckingStep();
+        updateChecking.execute();
     }
 }

@@ -4,7 +4,6 @@ import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
 import com.dansoftware.libraryapp.appdata.config.ConfigurationBase;
 import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.main.init.step.Step;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -17,12 +16,12 @@ import java.util.Locale;
 
 import static java.util.Objects.isNull;
 
-public class ConfigurationReader implements Step {
+public class ConfigurationReadingStep implements Step {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationReader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationReadingStep.class);
 
     @Override
-    public void call() {
+    public void execute() {
         ApplicationDataFolder appDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
         File configFile = appDataFolder.getConfigurationFile();
 

@@ -14,7 +14,7 @@ public class ConfigurationBase {
                     Locale.ENGLISH,
                     Theme.LIGHT,
                     Collections.emptyList(),
-                    new Account(),
+                    Account.anonymous(),
                     Boolean.TRUE
             );
 
@@ -83,6 +83,10 @@ public class ConfigurationBase {
     }
 
     public static void setGlobal(ConfigurationBase global) {
+        if (ConfigurationBase.global != null)
+            throw new UnsupportedOperationException("The global configurationBase can't " +
+                    "be instantiated more than once!");
+
         ConfigurationBase.global = global;
     }
 }

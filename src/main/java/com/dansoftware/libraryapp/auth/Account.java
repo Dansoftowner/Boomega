@@ -37,4 +37,12 @@ public class Account {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public boolean isAnonymous() {
+        return this.username == null && this.password == null;
+    }
+
+    public static Account anonymous() {
+        return new Account();
+    }
 }

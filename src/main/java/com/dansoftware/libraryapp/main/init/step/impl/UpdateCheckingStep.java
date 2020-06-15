@@ -7,9 +7,9 @@ import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.dansoftware.libraryapp.update.loader.BaseLoader;
 import com.dansoftware.libraryapp.update.notifier.GUINotifier;
 
-public class UpdateCheck implements Step {
+public class UpdateCheckingStep implements Step {
     @Override
-    public void call() {
+    public void execute() {
         if (ConfigurationBase.getGlobal().isSearchUpdatesOn()) {
             UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO, new BaseLoader(), new GUINotifier());
             updateSearcher.search();

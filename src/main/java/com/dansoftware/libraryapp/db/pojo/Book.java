@@ -1,51 +1,31 @@
 package com.dansoftware.libraryapp.db.pojo;
 
-import com.dansoftware.libraryapp.util.annotation.Optional;
-import com.dansoftware.libraryapp.util.annotation.Required;
+import org.dizitart.no2.NitriteId;
+import org.dizitart.no2.objects.Id;
 
 import java.util.List;
 import java.util.Objects;
 
-public class Book extends Record {
+public class Book {
 
-    public static final int MAX_AUTHOR_COUNT = 10;
+    @Id
+    private NitriteId id;
 
-    @Required
-    private List<Author> authors;
-
-    @Required
-    private String title;
-
-    @Optional
     private int publishedYear;
-
-    @Optional
     private int numberOfPages;
-
-    @Optional
     private int numberOfCopies;
-
-    @Optional
+    private String title;
     private String language;
-
-    @Optional
     private String notes;
-
-    @Optional
     private String isbn;
-
-    @Optional
-    private Publisher publisher;
-
-    @Optional
-    private Subject subject;
-
+    private String publisher;
+    private String subject;
+    private List<String> authors;
 
     public Book() {
     }
 
     private Book(Builder builder) {
-        super(builder.id);
         this.title = Objects.requireNonNull(builder.title);
         this.authors = Objects.requireNonNull(builder.authors);
         this.publishedYear = builder.publishedYear;
@@ -56,7 +36,6 @@ public class Book extends Record {
         this.isbn = builder.isbn;
         this.publisher = builder.publisher;
         this.subject = builder.subject;
-
     }
 
     public int getPublishedYear() {
@@ -115,32 +94,39 @@ public class Book extends Record {
         this.isbn = isbn;
     }
 
-    public Publisher getPublisher() {
+    public String getPublisher() {
         return publisher;
     }
 
-    public void setPublisher(Publisher publisher) {
+    public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
-    public Subject getSubject() {
+    public String getSubject() {
         return subject;
     }
 
-    public void setSubject(Subject subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
     }
 
-    public List<Author> getAuthors() {
+    public List<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<Author> authors) {
+    public void setAuthors(List<String> authors) {
         this.authors = authors;
     }
 
+    public NitriteId getId() {
+        return id;
+    }
+
+    public void setId(NitriteId id) {
+        this.id = id;
+    }
+
     public static class Builder {
-        private int id;
         private int publishedYear;
         private int numberOfPages;
         private int numberOfCopies;
@@ -150,15 +136,10 @@ public class Book extends Record {
         private String notes;
         private String isbn;
 
-        private Publisher publisher;
-        private Subject subject;
+        private String publisher;
+        private String subject;
 
-        private List<Author> authors;
-
-        public Builder id(int id) {
-            this.id = id;
-            return this;
-        }
+        private List<String> authors;
 
         public Builder publishedYear(int publishedYear) {
             this.publishedYear = publishedYear;
@@ -195,17 +176,17 @@ public class Book extends Record {
             return this;
         }
 
-        public Builder publisher(Publisher publisher) {
+        public Builder publisher(String publisher) {
             this.publisher = publisher;
             return this;
         }
 
-        public Builder subject(Subject subject) {
+        public Builder subject(String subject) {
             this.subject = subject;
             return this;
         }
 
-        public Builder authors(List<Author> authors) {
+        public Builder authors(List<String> authors) {
             this.authors = authors;
             return this;
         }
