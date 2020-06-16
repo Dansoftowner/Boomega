@@ -7,8 +7,6 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import org.controlsfx.control.Notifications;
 
-import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
-
 /**
  * A GuiNotificationStrategy is a NotificationStrategy that displays the
  * notifications on the GUI.
@@ -18,6 +16,7 @@ import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
  *
  * @see Notification
  */
+@Deprecated
 public class GuiNotificationStrategy implements NotificationStrategy {
     @Override
     public void handle(Notification notification) {
@@ -34,7 +33,7 @@ public class GuiNotificationStrategy implements NotificationStrategy {
                 notificationBuilder.onAction(e -> Alerts.showErrorAlertDialog(notification.getThrowable()));
 
             //
-            getPrimaryStage().ifPresent(notificationBuilder::owner);
+            //getPrimaryStage().ifPresent(notificationBuilder::owner);
 
             themeSettings(notificationBuilder);
             show(notification, notificationBuilder);
@@ -47,7 +46,6 @@ public class GuiNotificationStrategy implements NotificationStrategy {
     }
 
     private void show(Notification notification, Notifications notificationBuilder) {
-        final NotificationLevel NULL = null;
         switch (notification.getLevel()) {
             case INFO:
                 notificationBuilder.showInformation();

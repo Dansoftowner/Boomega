@@ -146,7 +146,7 @@ public class Main extends Application {
      *
      * @return the Optional of the primary stage
      */
-    public static Optional<Stage> getPrimaryStage() {
-        return Optional.ofNullable(primaryStage);
-    }
+//    public static Optional<Stage> getPrimaryStage() {
+//        return Optional.ofNullable(primaryStage);
+//    }
 }

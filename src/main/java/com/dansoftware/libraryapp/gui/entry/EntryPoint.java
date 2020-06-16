@@ -16,7 +16,7 @@ public class EntryPoint {
     private MainView mainView;
 
     public EntryPoint(boolean autoLogin) {
-        this(null, autoLogin);
+        this(new Stage(), autoLogin);
     }
 
     public EntryPoint(Stage primaryStage, boolean autoLogin) {

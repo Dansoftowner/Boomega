@@ -1,16 +1,14 @@
 package com.dansoftware.libraryapp.gui.util;
 
+import com.dansoftware.libraryapp.gui.entry.EntryPoint;
 import com.dansoftware.libraryapp.util.ThrowableToStringAdapter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 
-import java.rmi.UnexpectedException;
-
-import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
-
 /**
  * This class contains some static methods for creating alert popups for the user.
  */
+@Deprecated
 public final class Alerts {
 
     /**
@@ -25,13 +23,14 @@ public final class Alerts {
      *
      * @param cause the Throwable object.
      */
-    public static void showErrorAlertDialog(Throwable cause) {
+    public static void showErrorAlertDialog(EntryPoint entryPoint, Throwable cause) {
         Alert alert = new Alert(Alert.AlertType.ERROR, cause.getMessage());
         alert.setTitle("LibraryApp alert");
         alert.getDialogPane().setExpandableContent(
                 new UnEditableTextArea(new ThrowableToStringAdapter(cause).toString()));
 
-        getPrimaryStage().ifPresent(alert::initOwner);
+        if (entryPoint != null) alert.initOwner(entryPoint.getPrimaryStage());
+
         alert.show();
     }
 
