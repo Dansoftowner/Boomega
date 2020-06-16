@@ -8,6 +8,8 @@ import org.dizitart.no2.objects.ObjectRepository;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
+
 /**
  *
  */
@@ -51,21 +53,26 @@ public class NitriteDatabase implements Database {
 
     @Override
     public void insertBook(Book book) {
-
+        this.bookRepository.insert(book);
     }
 
     @Override
     public void updateBook(Book book) {
-
+        this.bookRepository.update(book);
     }
 
     @Override
     public void removeBook(Book book) {
-
+        this.bookRepository.remove(book);
     }
 
     @Override
     public List<Book> getBooks(boolean fromCache) {
+        if (fromCache) {
+            return this.booksCache = isNull(booksCache) ?
+                    this.booksCache = getBooks(false) : booksCache;
+        }
+
         return this.bookRepository.find().toList();
     }
 

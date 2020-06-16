@@ -11,15 +11,15 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-import static com.dansoftware.libraryapp.main.Main.getPrimaryStage;
-
 /**
  * An InfoWindow can show all the information
  * of the application in it's scene.
  */
 public class InfoWindow extends Stage {
 
-    public InfoWindow(EntryPoint entryPoint) {
+    public InfoWindow(EntryPoint entryPoint) throws IOException {
+        this();
+
         if (entryPoint != null)
             this.initOwner(entryPoint.getPrimaryStage());
     }
