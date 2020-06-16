@@ -1,8 +1,5 @@
 package com.dansoftware.libraryapp.db;
 
-import com.dansoftware.libraryapp.auth.Account;
-import com.dansoftware.libraryapp.db.loader.BookLoader;
-import com.dansoftware.libraryapp.db.loader.DataLoader;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;
 import org.dizitart.no2.exceptions.SecurityException;
@@ -52,34 +49,29 @@ public class NitriteDatabase implements Database {
         }
     }
 
-    public<T> List<T> getData(DataLoader<NitriteDatabase, T> loader, boolean fromCache) {
-        return loader.get(fromCache);
+    @Override
+    public void insertBook(Book book) {
+
+    }
+
+    @Override
+    public void updateBook(Book book) {
+
+    }
+
+    @Override
+    public void removeBook(Book book) {
+
     }
 
     @Override
     public List<Book> getBooks(boolean fromCache) {
-        return this.getData(new BookLoader(), fromCache);
+        return this.bookRepository.find().toList();
     }
 
+    @Override
     public void clearCache() {
         this.booksCache.clear();
         this.booksCache = null;
-    }
-
-    public Nitrite getDbImpl() {
-        return this.dbImpl;
-    }
-
-    private class BookLoader extends DataLoader<NitriteDatabase, Book> {
-
-        public BookLoader() {
-            super(NitriteDatabase.this);
-        }
-
-        @Override
-        protected List<Book> load() {
-            NitriteDatabase database = NitriteDatabase.this;
-            return database.bookRepository.find().toList();
-        }
     }
 }

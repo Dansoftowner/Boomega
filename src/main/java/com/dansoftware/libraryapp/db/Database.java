@@ -38,4 +38,9 @@ public interface Database {
      */
     List<Book> getBooks(boolean fromCache);
 
+    /**
+     * Removes all cache from memory.
+     */
+    void clearCache();
+
 }

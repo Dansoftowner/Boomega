@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.appdata.config;
 
-import com.dansoftware.libraryapp.auth.Account;
+import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 
 import java.util.Collections;

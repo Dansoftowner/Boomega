@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.util;
 
+@Deprecated
 public class CommonUtils {
 
     private CommonUtils() {
@@ -12,7 +13,7 @@ public class CommonUtils {
      * @return <code>true</code> - if the array is empty (or null);
      *         <code>false</code> - otherwise
      */
-    public static<T> boolean isEmpty(T[] array) {
+    /*public static<T> boolean isEmpty(T[] array) {
         return array == null || array.length == 0;
-    }
+    }*/
 }

@@ -9,8 +9,8 @@ import java.text.MessageFormat;
 import java.util.MissingResourceException;
 
 import static com.dansoftware.libraryapp.locale.Bundles.getNotificationMessages;
-import static com.dansoftware.libraryapp.util.CommonUtils.isEmpty;
 import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 /**
  * A Notification is a data-holder object that can contain all the necessary information

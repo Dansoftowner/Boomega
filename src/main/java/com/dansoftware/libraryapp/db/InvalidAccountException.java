@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.db;
 
-public class InvalidAccountException extends Exception {
+public class InvalidAccountException extends RuntimeException {
 
     public InvalidAccountException() {
     }

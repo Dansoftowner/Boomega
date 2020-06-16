@@ -1,11 +1,13 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.exception.ExceptionUtils;
+import com.dansoftware.libraryapp.gui.entry.EntryPoint;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.log.LoggerConfigurator;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -88,24 +90,22 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         Main.primaryStage = primaryStage;
 
-        URL fxmlResource = getClass().getResource("");
-        FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource, getFXMLValues());
-        Parent root = new StackPane();
-        root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        EntryPoint entryPoint = new EntryPoint(primaryStage,true);
+        boolean show = entryPoint.show();
 
-        Scene scene = new Scene(root);
+        if (!show) Platform.exit();
 
-        Theme.applyDefault(scene);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("LibraryApp");
-        primaryStage.setFullScreenExitHint(getGeneralWord("window.fullscreen.hint"));
-        primaryStage.getIcons().add(Globals.WINDOW_ICON);
-        primaryStage.initStyle(StageStyle.DECORATED);
-        primaryStage.setOnCloseRequest(null);
-        primaryStage.setResizable(true);
-        primaryStage.setMaximized(true);
-        primaryStage.show();
+//        Theme.applyDefault(scene);
+//
+//        primaryStage.setScene(scene);
+//        primaryStage.setTitle("LibraryApp");
+//        primaryStage.setFullScreenExitHint(getGeneralWord("window.fullscreen.hint"));
+//        primaryStage.getIcons().add(Globals.WINDOW_ICON);
+//        primaryStage.initStyle(StageStyle.DECORATED);
+//        primaryStage.setOnCloseRequest(null);
+//        primaryStage.setResizable(true);
+//        primaryStage.setMaximized(true);
+//        primaryStage.show();
 
         runAfterStart.forEach(Runnable::run);
         runAfterStart = null;

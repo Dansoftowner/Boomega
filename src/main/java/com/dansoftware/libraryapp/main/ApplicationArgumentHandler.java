@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Optional;
 
-import static com.dansoftware.libraryapp.util.CommonUtils.isEmpty;
+import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 /**
  * This class responsible for checking the application arguments

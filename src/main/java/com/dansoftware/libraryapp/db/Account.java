@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.auth;
+package com.dansoftware.libraryapp.db;
 
 public class Account {
     private String username;
