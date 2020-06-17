@@ -19,14 +19,13 @@ public class NitriteDatabase implements Database {
 
     private final Nitrite dbImpl;
     private final ObjectRepository<Book> bookRepository;
-
     private final Account account;
 
     public NitriteDatabase(Account account) throws InvalidAccountException {
         this.account = Objects.requireNonNull(account, "The account must not be null!");
 
         try {
-            this.dbImpl = initNitriteDb(account);
+            this.dbImpl = init(account);
         } catch (SecurityException e) {
             throw new InvalidAccountException(e);
         }
@@ -34,8 +33,7 @@ public class NitriteDatabase implements Database {
         this.bookRepository = this.dbImpl.getRepository(Book.class);
     }
 
-    private Nitrite initNitriteDb(Account account)
-            throws org.dizitart.no2.exceptions.SecurityException {
+    private Nitrite init(Account account) throws SecurityException {
 
         NitriteBuilder nitriteBuilder = Nitrite.builder()
                 .compressed()
@@ -44,8 +42,8 @@ public class NitriteDatabase implements Database {
         if (account.isAnonymous()) {
             return nitriteBuilder.openOrCreate();
         } else {
-            var username = account.getUsername();
-            var password = account.getPassword();
+            String username = account.getUsername();
+            String password = account.getPassword();
 
             return nitriteBuilder.openOrCreate(username, password);
         }
@@ -69,8 +67,8 @@ public class NitriteDatabase implements Database {
     @Override
     public List<Book> getBooks(boolean fromCache) {
         if (fromCache) {
-            return this.booksCache = isNull(booksCache) ?
-                    this.booksCache = getBooks(false) : booksCache;
+            booksCache = isNull(booksCache) ? booksCache = getBooks(false) : booksCache;
+            return booksCache;
         }
 
         return this.bookRepository.find().toList();

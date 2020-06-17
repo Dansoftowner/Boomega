@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.db.util;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
 import com.dansoftware.libraryapp.appdata.config.ConfigurationBase;
-import com.dansoftware.libraryapp.main.ApplicationArgumentHandler;
+import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
 
 import java.io.File;
 import java.util.Optional;

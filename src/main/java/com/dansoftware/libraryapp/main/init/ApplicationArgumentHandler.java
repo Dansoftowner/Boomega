@@ -1,8 +1,9 @@
-package com.dansoftware.libraryapp.main;
+package com.dansoftware.libraryapp.main.init;
 
 import com.dansoftware.libraryapp.gui.notification.MessageBuilder;
 import com.dansoftware.libraryapp.gui.notification.Notification;
 import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
+import com.dansoftware.libraryapp.main.Main;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

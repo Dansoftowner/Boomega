@@ -13,7 +13,6 @@ import org.controlsfx.control.Notifications;
  *
  * <p>
  *
- *
  * @see Notification
  */
 @Deprecated
@@ -57,7 +56,7 @@ public class GuiNotificationStrategy implements NotificationStrategy {
                 notificationBuilder.showError();
                 break;
             default:
-                    notificationBuilder.show();
+                notificationBuilder.show();
                 break;
         }
     }

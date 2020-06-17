@@ -18,7 +18,7 @@ public class ConfigurationBase {
                     Boolean.TRUE
             );
 
-    private static ConfigurationBase global;
+    private static ConfigurationBase global = EMPTY;
 
     private Locale locale;
     private Theme theme;

@@ -2,28 +2,18 @@ package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.exception.ExceptionUtils;
 import com.dansoftware.libraryapp.gui.entry.EntryPoint;
-import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.log.LoggerConfigurator;
+import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
-
-import static com.dansoftware.libraryapp.locale.Bundles.*;
 
 /**
  * The main class and javafx application starter.
