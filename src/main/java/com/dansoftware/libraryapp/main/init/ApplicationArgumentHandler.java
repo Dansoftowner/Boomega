@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.main.init;
 
+import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.gui.notification.MessageBuilder;
 import com.dansoftware.libraryapp.gui.notification.Notification;
 import com.dansoftware.libraryapp.gui.notification.NotificationLevel;
@@ -21,7 +22,7 @@ public class ApplicationArgumentHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationInitializer.class);
 
-    private static File launchedFile;
+    private static Account account;
 
     private ApplicationArgumentHandler() {
     }
@@ -31,7 +32,6 @@ public class ApplicationArgumentHandler {
      *
      * <p>
      * <b style='color:red'>Should be invoked by the main-method</b>
-     *
      *
      * @param args the application arguments to parse
      * @see Main#main(String[])
@@ -44,7 +44,7 @@ public class ApplicationArgumentHandler {
         File file = new File(filePath);
 
         if (file.exists()) {
-            launchedFile = file;
+            account = new Account(null, null, file.getAbsolutePath());
         } else {
             var cause = new FileNotFoundException(filePath);
 
@@ -53,7 +53,7 @@ public class ApplicationArgumentHandler {
                     .level(NotificationLevel.ERROR)
                     .msg(new MessageBuilder()
                             .msg("argument.handler.file.error")
-                            .args(new Object[]{ file.getName() }))
+                            .args(new Object[]{file.getName()}))
                     .cause(cause)
                     .show();
         }
@@ -64,8 +64,8 @@ public class ApplicationArgumentHandler {
      *
      * @return the launched file with Optional
      */
-    public static Optional<File> getLaunchedFile() {
-        return Optional.ofNullable(launchedFile);
+    public static Optional<Account> getLaunchedAccount() {
+        return Optional.ofNullable(account);
     }
 
 }

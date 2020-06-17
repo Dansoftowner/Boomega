@@ -29,7 +29,7 @@ public class GuiNotificationStrategy implements NotificationStrategy {
             if (notification.getEventHandler() != null)
                 notificationBuilder.onAction(notification.getEventHandler());
             else if (notification.getThrowable() != null)
-                notificationBuilder.onAction(e -> Alerts.showErrorAlertDialog(notification.getThrowable()));
+                //notificationBuilder.onAction(e -> Alerts.showErrorAlertDialog(notification.getThrowable()));
 
             //
             //getPrimaryStage().ifPresent(notificationBuilder::owner);
