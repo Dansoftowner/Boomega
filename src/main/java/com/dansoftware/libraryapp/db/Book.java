@@ -6,6 +6,12 @@ import org.dizitart.no2.objects.Id;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A Book is a Plain Java Object that represents a <i>document</i> or a <i>record</i> in the database.
+ *
+ * <p>
+ * Compatible with the <i>Nitrite</i> database api.
+ */
 public class Book {
 
     @Id
@@ -195,6 +201,4 @@ public class Book {
             return new Book(this);
         }
     }
-
-
 }

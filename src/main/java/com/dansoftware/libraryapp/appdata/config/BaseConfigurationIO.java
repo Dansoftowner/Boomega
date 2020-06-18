@@ -5,11 +5,10 @@ import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-import org.dizitart.no2.Nitrite;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import static java.util.Objects.isNull;
@@ -33,7 +32,11 @@ public class BaseConfigurationIO implements ConfigurationIO {
     }
 
     @Override
-    public void write(ConfigurationBase configurationBase) {
-
+    public void write(ConfigurationBase configurationBase) throws IOException {
+        Gson gson = new Gson();
+        try(var writer = new FileWriter(getConfigurationFile())) {
+            String json = gson.toJson(configurationBase);
+            writer.write(json);
+        }
     }
 }

@@ -11,11 +11,29 @@ import java.util.Objects;
 import static java.util.Objects.isNull;
 
 /**
+ * A NitriteDatabase is a {@link Database} that basically wraps the
+ * Nitrite NoSQL database api.
  *
+ * <p>
+ * You can use the {@link DatabaseFactory} for constructing a Nitrite-database.
+ * <br><br> <b>Example:</b>
+ * <pre>{@code
+ *    //defining the account
+ *    Account account = new Account("username", "password", "path/to/file");
+ *
+ *    //creating the database object
+ *    Database db = DatabaseFactory.getDatabase("nitrite", account);
+ *
+ *    //you can cast it to NitriteDatabase if you want
+ *    NitriteDatabase nitriteDb = (NitriteDatabase) db;
+ * }</pre>
+ *
+ * @author Daniel Gyorffy
+ * @see Nitrite
  */
 public class NitriteDatabase implements Database {
 
-    private List<Book> booksCache;
+    private List<Book> cache;
 
     private final Nitrite dbImpl;
     private final ObjectRepository<Book> bookRepository;
@@ -23,29 +41,23 @@ public class NitriteDatabase implements Database {
 
     public NitriteDatabase(Account account) throws InvalidAccountException {
         this.account = Objects.requireNonNull(account, "The account must not be null!");
-
-        try {
-            this.dbImpl = init(account);
-        } catch (SecurityException e) {
-            throw new InvalidAccountException(e);
-        }
-
-        this.bookRepository = this.dbImpl.getRepository(Book.class);
+        this.dbImpl = init(account);
+        this.bookRepository = dbImpl.getRepository(Book.class);
     }
 
-    private Nitrite init(Account account) throws SecurityException {
+    private Nitrite init(Account account) throws InvalidAccountException {
+        //account data
+        String username = account.getUsername();
+        String password = account.getPassword();
+        String filePath = account.getFilePath();
 
-        NitriteBuilder nitriteBuilder = Nitrite.builder()
-                .compressed()
-                .filePath(account.getFilePath());
+        //preparing the NitriteBuilder
+        NitriteBuilder nitriteBuilder = Nitrite.builder().compressed().filePath(filePath);
 
-        if (account.isAnonymous()) {
-            return nitriteBuilder.openOrCreate();
-        } else {
-            String username = account.getUsername();
-            String password = account.getPassword();
-
-            return nitriteBuilder.openOrCreate(username, password);
+        try {
+            return account.isAnonymous() ? nitriteBuilder.openOrCreate() : nitriteBuilder.openOrCreate(username, password);
+        } catch (SecurityException e) {
+            throw new InvalidAccountException(e);
         }
     }
 
@@ -67,8 +79,7 @@ public class NitriteDatabase implements Database {
     @Override
     public List<Book> getBooks(boolean fromCache) {
         if (fromCache) {
-            booksCache = isNull(booksCache) ? booksCache = getBooks(false) : booksCache;
-            return booksCache;
+            return cache = isNull(cache) ? getBooks(false) : cache;
         }
 
         return this.bookRepository.find().toList();
@@ -76,7 +87,7 @@ public class NitriteDatabase implements Database {
 
     @Override
     public void clearCache() {
-        this.booksCache.clear();
-        this.booksCache = null;
+        this.cache.clear();
+        this.cache = null;
     }
 }

@@ -32,27 +32,27 @@ public final class ApplicationInitializer {
      */
     private void readConfigurations() {
         ConfigurationIO configurationReader = new BaseConfigurationIO();
-        ConfigurationBase configurationBase = null;
 
         try {
-            configurationBase = configurationReader.read();
+            ConfigurationBase configurationBase = configurationReader.read();
+            ConfigurationBase.setGlobal(configurationBase);
+            LOGGER.debug("Configurations has been read");
         } catch (IOException e) {
             LOGGER.error("Couldn't read configurations", e);
         }
 
-        if (configurationBase != null)
-            ConfigurationBase.setGlobal(configurationBase);
-
 
         Locale locale = ConfigurationBase.getGlobal().getLocale();
-        if (locale != null) Locale.setDefault(locale);
-
-        LOGGER.debug("Default locale: {}", Locale.getDefault());
+        if (locale != null) {
+            Locale.setDefault(locale);
+            LOGGER.debug("Locale set to: {}", Locale.getDefault());
+        }
 
         Theme theme = ConfigurationBase.getGlobal().getTheme();
-        if (theme != null) Theme.setDefault(theme);
-
-        LOGGER.debug("Read configurations successfully");
+        if (theme != null) {
+            Theme.setDefault(theme);
+            LOGGER.debug("Theme set to: {}", theme);
+        }
     }
 
     /**
