@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.util;
 
 import com.dansoftware.libraryapp.gui.entry.EntryPoint;
-import com.dansoftware.libraryapp.util.ThrowableToStringAdapter;
+import com.dansoftware.libraryapp.util.adapter.ThrowableString;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 
@@ -27,7 +27,7 @@ public final class Alerts {
         Alert alert = new Alert(Alert.AlertType.ERROR, cause.getMessage());
         alert.setTitle("LibraryApp alert");
         alert.getDialogPane().setExpandableContent(
-                new UnEditableTextArea(new ThrowableToStringAdapter(cause).toString()));
+                new UnEditableTextArea(new ThrowableString(cause).toString()));
 
         if (entryPoint != null) alert.initOwner(entryPoint.getPrimaryStage());
 

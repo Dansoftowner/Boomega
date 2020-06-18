@@ -1,7 +1,6 @@
-package com.dansoftware.libraryapp.util;
+package com.dansoftware.libraryapp.util.adapter;
 
 import java.io.*;
-import java.util.Objects;
 
 /**
  * This class can convert the exception stack trace
@@ -9,15 +8,15 @@ import java.util.Objects;
  *
  * <p>
  * To get the string of the exception stack trace
- * you have to call the {@link ThrowableToStringAdapter#toString()} method.
+ * you have to call the {@link ThrowableString#toString()} method.
  *
  * @author Daniel Gyorffy
  */
-public class ThrowableToStringAdapter {
+public class ThrowableString {
 
     private final Throwable cause;
 
-    public ThrowableToStringAdapter(Throwable cause) {
+    public ThrowableString(Throwable cause) {
         this.cause = cause;
     }
 

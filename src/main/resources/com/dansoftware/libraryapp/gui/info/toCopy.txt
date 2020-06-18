@@ -1,0 +1,9 @@
+Version: {0}
+Build: {1}
+
+OS: {2}
+OS Version: {3}
+
+Java VM: {4} by {5}
+Java version: {6}
+JavaFX version: {7}

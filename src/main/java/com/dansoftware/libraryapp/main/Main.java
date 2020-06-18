@@ -1,8 +1,8 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.exception.ExceptionUtils;
+import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.EntryPoint;
-import com.dansoftware.libraryapp.log.LoggerConfigurator;
+import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import com.sun.javafx.application.LauncherImpl;
@@ -27,13 +27,15 @@ public class Main extends Application {
 
     static {
         //Configure the logger
-        LoggerConfigurator.configure();
+        var logFile = new LogFile();
+        System.setProperty("log.file.path", logFile.getAbsolutePath());
+        System.setProperty("log.file.path.full", logFile.getPathWithExtension());
 
         //set the initial locale
         Locale.setDefault(Locale.ENGLISH);
 
         //Set the default uncaught exception handler
-        Thread.setDefaultUncaughtExceptionHandler(ExceptionUtils.DEFAULT_EXCEPTION_HANDLER);
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     }
 
     /**

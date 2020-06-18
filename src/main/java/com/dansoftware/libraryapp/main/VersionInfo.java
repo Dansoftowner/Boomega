@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.main;
 
-import static com.dansoftware.libraryapp.main.Globals.VERSION_INFO;
+import com.dansoftware.libraryapp.util.adapter.VersionInteger;
 
 /**
  * A BuildInfo contains every information about the
@@ -11,9 +11,15 @@ import static com.dansoftware.libraryapp.main.Globals.VERSION_INFO;
 public class VersionInfo implements Comparable<VersionInfo> {
 
     private String version;
+    private String buildInfo;
 
     public VersionInfo(String version) {
         this.version = version;
+    }
+
+    public VersionInfo(String version, String buildInfo) {
+        this.version = version;
+        this.buildInfo = buildInfo;
     }
 
     public String getVersion() {
@@ -26,9 +32,18 @@ public class VersionInfo implements Comparable<VersionInfo> {
 
     @Override
     public int compareTo(VersionInfo other) {
-        String thisVersion = this.getVersion().replace(".", "");
-        String otherVersion = other.getVersion().replace(".", "");
+        String thisVersion = this.getVersion();
+        String otherVersion = other.getVersion();
 
-        return Integer.parseInt(thisVersion) - Integer.parseInt(otherVersion);
+        return new VersionInteger(thisVersion).getValue() - new VersionInteger(otherVersion).getValue();
+    }
+
+    @Override
+    public String toString() {
+        return this.version;
+    }
+
+    public String getBuildInfo() {
+        return null;
     }
 }

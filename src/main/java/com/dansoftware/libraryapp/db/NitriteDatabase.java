@@ -28,8 +28,12 @@ import static java.util.Objects.isNull;
  *    NitriteDatabase nitriteDb = (NitriteDatabase) db;
  * }</pre>
  *
- * @author Daniel Gyorffy
+ * If you create a nitrite database with an account that doesn't includes the filePath,
+ * it will create an in-memory database.
+ *
  * @see Nitrite
+ * @see Account#anonymous()
+ * @author Daniel Gyorffy
  */
 public class NitriteDatabase implements Database {
 
@@ -39,25 +43,25 @@ public class NitriteDatabase implements Database {
     private final ObjectRepository<Book> bookRepository;
     private final Account account;
 
-    public NitriteDatabase(Account account) throws InvalidAccountException {
+    public NitriteDatabase(Account account) throws LoginFailedException {
         this.account = Objects.requireNonNull(account, "The account must not be null!");
         this.dbImpl = init(account);
         this.bookRepository = dbImpl.getRepository(Book.class);
     }
 
-    private Nitrite init(Account account) throws InvalidAccountException {
+    private Nitrite init(Account account) throws LoginFailedException {
         //account data
         String username = account.getUsername();
         String password = account.getPassword();
         String filePath = account.getFilePath();
 
         //preparing the NitriteBuilder
-        NitriteBuilder nitriteBuilder = Nitrite.builder().compressed().filePath(filePath);
+        NitriteBuilder builder = Nitrite.builder().compressed().filePath(filePath);
 
         try {
-            return account.isAnonymous() ? nitriteBuilder.openOrCreate() : nitriteBuilder.openOrCreate(username, password);
+            return account.isAnonymous() ? builder.openOrCreate() : builder.openOrCreate(username, password);
         } catch (SecurityException e) {
-            throw new InvalidAccountException(e);
+            throw new LoginFailedException(e);
         }
     }
 
@@ -89,5 +93,19 @@ public class NitriteDatabase implements Database {
     public void clearCache() {
         this.cache.clear();
         this.cache = null;
+    }
+
+    @Override
+    public boolean isClosed() {
+        return this.dbImpl.isClosed();
+    }
+
+    @Override
+    public void close() {
+        this.dbImpl.close();
+    }
+
+    public Account getAccount() {
+        return account;
     }
 }

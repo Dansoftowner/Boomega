@@ -10,11 +10,11 @@
     </appender>
 
     <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${logfile.path}.log</file>
+        <file>${log.file.path}.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${logfile.path}.%d{yyyy-MM-dd-HH-mm}.log</fileNamePattern>
+            <fileNamePattern>${log.file.path}.%d{yyyy-MM-dd-HH-mm}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
 

@@ -45,4 +45,17 @@ public interface Database {
      */
     void clearCache();
 
+    /**
+     * Checks whether the db is closed.
+     * @return `true` if closed; otherwise `false`.
+     */
+    boolean isClosed();
+
+    /**
+     * Closes the database
+     */
+    void close();
+
+
+
 }

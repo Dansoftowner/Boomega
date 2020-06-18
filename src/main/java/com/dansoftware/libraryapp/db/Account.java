@@ -1,47 +1,76 @@
 package com.dansoftware.libraryapp.db;
 
-public class Account {
-    private String username;
-    private String password;
-    private String filePath;
+import org.apache.commons.lang3.StringUtils;
 
-    public Account() {
+import java.util.Objects;
+
+/**
+ * An Account is an object that can be used to authenticate a database.
+ */
+public class Account {
+
+    private final String username;
+    private final String password;
+    private final String filePath;
+
+    private Account() {
+        this.username = null;
+        this.password = null;
+        this.filePath = null;
     }
 
-    public Account(String username, String password, String filePath) {
+    /**
+     * Creates an account with the specified filePath.
+     *
+     * @param filePath mustn't be null;
+     * @throws NullPointerException if the filePath is null
+     */
+    public Account(String filePath) {
+        this(filePath, null, null);
+    }
+
+    /**
+     * Creates an account with the specified filePath.
+     *
+     * @param filePath mustn't be null;
+     * @throws NullPointerException if the filePath is null
+     */
+    public Account(String filePath, String username, String password) {
+        this.filePath = Objects.requireNonNull(filePath, "The filePath mustn't be null!");
         this.username = username;
         this.password = password;
-        this.filePath = filePath;
     }
 
     public String getFilePath() {
         return filePath;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    /**
+     * Checks the account is anonymous or not.
+     *
+     * <p>
+     * if both username an password are null or empty -> it is anonymous
+     *
+     * @return `true` if the account is anonymous; `false` otherwise.
+     */
     public boolean isAnonymous() {
-        return this.username == null && this.password == null;
+        return StringUtils.isEmpty(this.username) && StringUtils.isEmpty(this.password);
     }
 
+    /**
+     * Creates a 100% anonymous account.
+     * Neither the username, password nor the filePath is specified.
+     *
+     * @return the {@link Account} object
+     */
     public static Account anonymous() {
         return new Account();
     }

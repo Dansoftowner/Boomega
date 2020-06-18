@@ -2,6 +2,10 @@ package com.dansoftware.libraryapp.db.util;
 
 import java.util.*;
 
+/**
+ * Ugly and unused class.
+ * @param <T>
+ */
 @Deprecated
 public class RecordCollection<T> implements Collection<T> {
 

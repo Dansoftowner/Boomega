@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.gui.info;
 
-import com.dansoftware.libraryapp.log.LoggerConfigurator;
 import com.dansoftware.libraryapp.main.Globals;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,8 +9,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -39,17 +42,19 @@ public class Controller implements Initializable {
     private TextField logsLocationLabel;
 
     @FXML
-    private void onCopy(ActionEvent event) {
-        String toCopy =
-                "Version: " + versionLabel.getText() + "\n" +
-                        "Build: " + buildInfoLabel.getText() + "\n" +
-                        "\n" +
-                        "OS: " + System.getProperty("os.name") + "\n" +
-                        "OS Version: " + System.getProperty("os.version") + "\n" +
-                        "\n" +
-                        "Java VM: " + javaVMLabel.getText() + " By " + javaVendorLabel.getText() + "\n" +
-                        "Java version: " + javaVersionLabel.getText() + "\n" +
-                        "JavaFX version: " + javaFXVersionLabel.getText() + "\n";
+    private void onCopy(ActionEvent event) throws IOException {
+        String resourcePath = "/com/dansoftware/libraryapp/gui/info/toCopy.txt";
+        String resource = IOUtils.resourceToString(resourcePath, StandardCharsets.UTF_8);
+        String toCopy = MessageFormat.format(resource,
+                Globals.VERSION_INFO,
+                Globals.VERSION_INFO.getBuildInfo(),
+                System.getProperty("os.name"),
+                System.getProperty("os.version"),
+                System.getProperty("java.vm.name"),
+                System.getProperty("java.vendor"),
+                System.getProperty("java.version"),
+                com.sun.javafx.runtime.VersionInfo.getRuntimeVersion()
+        );
 
         ClipboardContent content = new ClipboardContent();
         content.putString(toCopy);
@@ -77,11 +82,11 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         versionLabel.setText(Globals.VERSION_INFO.getVersion());
-        //buildInfoLabel.setText(Globals.VERSION_INFO.getBuildDate());
+        buildInfoLabel.setText(Globals.VERSION_INFO.getBuildInfo());
         javaVMLabel.setText(System.getProperty("java.vm.name"));
         javaVendorLabel.setText(System.getProperty("java.vendor"));
         javaVersionLabel.setText(System.getProperty("java.version"));
         javaFXVersionLabel.setText(com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
-        logsLocationLabel.setText(LoggerConfigurator.getLogFilePath());
+        logsLocationLabel.setText(System.getProperty("log.file.path.full"));
     }
 }
