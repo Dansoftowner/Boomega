@@ -1,54 +1,30 @@
 package com.dansoftware.libraryapp.gui.entry;
 
+import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
-import com.dansoftware.libraryapp.gui.entry.login.Login;
+import com.dansoftware.libraryapp.gui.entry.login.LoginView;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainView;
-import javafx.stage.Stage;
 
 import java.util.Optional;
 
 public class EntryPoint {
 
-    private final Stage primaryStage;
-    private final boolean autoLogin;
+    private final LoginView loginView;
 
-    private final Login login;
-    private MainView mainView;
-
-    public EntryPoint(boolean autoLogin) {
-        this(new Stage(), autoLogin);
+    public EntryPoint() {
+        this.loginView = new LoginView();
     }
 
-    public EntryPoint(Stage primaryStage, boolean autoLogin) {
-        this.primaryStage = primaryStage;
-        this.autoLogin = autoLogin;
-        this.login = new Login(this);
+    public EntryPoint(AccountFactory accountFactory) {
+        Account account = accountFactory.getAccount();
+        this.loginView = new LoginView(account);
     }
 
     public boolean show() {
-        Optional<Database> databaseOptional = login.login();
+        Optional<Database> databaseOptional = loginView.show();
 
-        databaseOptional.ifPresent(database -> {
-            this.mainView = new MainView(database);
-            this.mainView.show();
-        });
+        databaseOptional.ifPresent(database -> new MainView(database).show());
 
         return databaseOptional.isPresent();
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-    public boolean isAutoLogin() {
-        return autoLogin;
-    }
-
-    public Login getLogin() {
-        return login;
-    }
-
-    public MainView getMainView() {
-        return mainView;
     }
 }

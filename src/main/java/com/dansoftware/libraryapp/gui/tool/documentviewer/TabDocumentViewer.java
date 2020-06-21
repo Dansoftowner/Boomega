@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.tool.documentviewer;
 
 import com.dansoftware.libraryapp.util.DocumentOpener;
-import com.dansoftware.libraryapp.util.function.UnhandledConsumer;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.ContextMenu;
@@ -68,15 +67,17 @@ public class TabDocumentViewer extends DocumentViewer {
     /**
      * Creates a tab on the tab pane
      *
-     * @param title the title of the tab; can be null
+     * @param title                    the title of the tab; can be null
      * @param titlePlaceHolderSupplier the supplier that returns a title that will be
      *                                 displayed if the title parameter is null; mustn't be null
-     * @param loader the loader that defines how to load to the {@link DocumentRenderer};
-     *               mustn't be null
-     * @param contextMenu the contextmenu for the tab; can be null
+     * @param loader                   the loader that defines how to load to the {@link DocumentRenderer};
+     *                                 mustn't be null
+     * @param contextMenu              the contextmenu for the tab; can be null
      * @throws IOException if some I/O exception occurs during the loading of the content
      */
-    private void createTab(String title, Supplier<String> titlePlaceHolderSupplier, UnhandledConsumer<DocumentRenderer, IOException> loader, ContextMenu contextMenu) throws IOException {
+    private void createTab(String title, Supplier<String> titlePlaceHolderSupplier, UndhandledConsumer<DocumentRenderer,
+            IOException> loader, ContextMenu contextMenu) throws IOException {
+
         Objects.requireNonNull(loader, "The loader mustn't be null");
         Objects.requireNonNull(titlePlaceHolderSupplier, "The titlePlaceHolderSupplier mustn't be null");
 
@@ -121,4 +122,8 @@ public class TabDocumentViewer extends DocumentViewer {
     }
 
 
+    @FunctionalInterface
+    private interface UndhandledConsumer<T, E extends Throwable> {
+        void accept(T t) throws E;
+    }
 }

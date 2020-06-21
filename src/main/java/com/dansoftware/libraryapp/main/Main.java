@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.main;
 
+import com.dansoftware.libraryapp.appdata.config.ConfigurationBase;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.EntryPoint;
 import com.dansoftware.libraryapp.log.LogFile;
@@ -14,6 +15,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.dansoftware.libraryapp.appdata.config.ConfigurationBase.getConfigurationBase;
 
 /**
  * The main class and javafx application starter.
@@ -38,6 +41,8 @@ public class Main extends Application {
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     }
 
+    private static ApplicationArgumentHandler argumentHandler;
+
     /**
      * The main-method of the application;
      *
@@ -50,18 +55,10 @@ public class Main extends Application {
      * @see LauncherImpl#launchApplication(Class, Class, String[])
      */
     public static void main(String[] args) {
-        ApplicationArgumentHandler.scan(args);
+        argumentHandler = new ApplicationArgumentHandler(args);
 
         LauncherImpl.launchApplication(Main.class, Preloader.class, null);
     }
-
-    /**
-     * Contains the primary window of the Window Hierarchy
-     * Should be initialized by the start() method
-     *
-     * @see Main#start(Stage)
-     */
-    private static Stage primaryStage;
 
     /**
      * This list contains all the tasks that are should be executed after
@@ -80,12 +77,19 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Main.primaryStage = primaryStage;
 
-        EntryPoint entryPoint = new EntryPoint(primaryStage,true);
-        boolean show = entryPoint.show();
+        EntryPoint entryPoint = new EntryPoint(() -> {
+            if (argumentHandler.getAccount().isPresent()) {
+                return argumentHandler.getAccount().get();
+            } else if (getConfigurationBase().getLoggedAccount().isPresent()) {
+                return getConfigurationBase().getLoggedAccount().get();
+            }
 
-        if (!show) Platform.exit();
+            return null;
+        });
+
+        boolean close = !entryPoint.show();
+        if (close) Platform.exit();
 
 //        Theme.applyDefault(scene);
 //
@@ -97,7 +101,6 @@ public class Main extends Application {
 //        primaryStage.setOnCloseRequest(null);
 //        primaryStage.setResizable(true);
 //        primaryStage.setMaximized(true);
-//        primaryStage.show();
 
         runAfterStart.forEach(Runnable::run);
         runAfterStart = null;
@@ -133,12 +136,4 @@ public class Main extends Application {
         return runAfterStart == null;
     }
 
-    /**
-     * Gives access to the primary stage (main window) through an Optional.
-     *
-     * @return the Optional of the primary stage
-     */
-//    public static Optional<Stage> getPrimaryStage() {
-//        return Optional.ofNullable(primaryStage);
-//    }
 }

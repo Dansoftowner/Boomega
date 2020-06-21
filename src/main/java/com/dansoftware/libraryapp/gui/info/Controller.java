@@ -19,7 +19,6 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-
     @FXML
     private Label versionLabel;
 

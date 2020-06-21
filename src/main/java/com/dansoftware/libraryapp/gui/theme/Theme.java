@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
@@ -36,7 +37,8 @@ public class Theme {
     public static final Theme DARK = new Theme(
             new ThemeIdentifier("libraryapp_dark", "theme.dark"),
             Collections.singletonList("/com/dansoftware/libraryapp/gui/theme/global-dark.css"),
-            scene -> new JMetro(Style.DARK).setScene(scene)
+            scene -> new JMetro(Style.DARK).setScene(scene),
+            parent -> new JMetro(Style.DARK).setParent(parent)
     );
 
     /**
@@ -50,12 +52,14 @@ public class Theme {
     public static final Theme LIGHT = new Theme(
             new ThemeIdentifier("libraryapp_light", "theme.light"),
             Collections.singletonList("/com/dansoftware/libraryapp/gui/theme/global-light.css"),
-            scene -> new JMetro(Style.LIGHT).setScene(scene)
+            scene -> new JMetro(Style.LIGHT).setScene(scene),
+            parent -> new JMetro(Style.LIGHT).setParent(parent)
     );
 
     private final ThemeIdentifier identifier;
     private final List<String> stylesheets;
     private final Consumer<Scene> onSceneApplier;
+    private final Consumer<Parent> onParentApplier;
 
     /**
      * Creates an applicable theme.
@@ -68,10 +72,12 @@ public class Theme {
      *                       can be null
      * @throws NullPointerException if the list of stylesheets or the identifier is null
      */
-    public Theme(ThemeIdentifier identifier, List<String> stylesheets, Consumer<Scene> onSceneApplier) {
+    public Theme(ThemeIdentifier identifier, List<String> stylesheets,
+                 Consumer<Scene> onSceneApplier, Consumer<Parent> onParentApplier) {
         this.identifier = Objects.requireNonNull(identifier, "The identifier mustn't be null");
         this.stylesheets = Objects.requireNonNull(stylesheets, "The list of stylesheets mustn't be null");
         this.onSceneApplier = onSceneApplier;
+        this.onParentApplier = onParentApplier;
 
         themesContainer.put(this.identifier.id, this);
     }
@@ -93,6 +99,15 @@ public class Theme {
         if (nonNull(this.onSceneApplier)) this.onSceneApplier.accept(scene);
 
         scene.getStylesheets().addAll(stylesheets);
+    }
+
+    public void apply(Parent parent) {
+        Objects.requireNonNull(parent, "The parent mustn't be null");
+
+        parent.getStylesheets().clear();
+        if (nonNull(this.onParentApplier)) this.onParentApplier.accept(parent);
+
+        parent.getStylesheets().addAll(stylesheets);
     }
 
     public ThemeIdentifier getIdentifier() {
@@ -119,6 +134,10 @@ public class Theme {
 
     public static void applyDefault(Scene scene) {
         Theme.getDefault().apply(scene);
+    }
+
+    public static void applyDefault(Parent parent) {
+        Theme.getDefault().apply(parent);
     }
 
     public static Theme getByID(String id) {

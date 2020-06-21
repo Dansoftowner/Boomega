@@ -1,6 +1,9 @@
 package com.dansoftware.libraryapp.locale;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
+
+import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 /**
  * This class is used for accessing the necessary
@@ -16,6 +19,14 @@ public class Bundles {
 
     public static String getGeneralWord(String key) {
         return getGeneralWords().getString(key);
+    }
+
+    public static String getNotificationMsg(String key, Object... args) {
+        if (isEmpty(args)) {
+            return getNotificationMessages().getString(key);
+        }
+
+        return MessageFormat.format(getNotificationMessages().getString(key), args);
     }
 
     public static ResourceBundle getProgressMessages() {

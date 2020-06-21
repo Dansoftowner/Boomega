@@ -2,10 +2,12 @@ package com.dansoftware.libraryapp.appdata.config;
 
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.google.gson.JsonObject;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class ConfigurationBase {
 
@@ -62,8 +64,8 @@ public class ConfigurationBase {
         this.lastFiles = lastFiles;
     }
 
-    public Account getLoggedAccount() {
-        return loggedAccount;
+    public Optional<Account> getLoggedAccount() {
+        return Optional.ofNullable(loggedAccount);
     }
 
     public void setLoggedAccount(Account loggedAccount) {
@@ -78,7 +80,7 @@ public class ConfigurationBase {
         this.searchUpdates = searchUpdates;
     }
 
-    public static ConfigurationBase getGlobal() {
+    public static ConfigurationBase getConfigurationBase() {
         return global;
     }
 

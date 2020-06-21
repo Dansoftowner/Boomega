@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
+import com.dansoftware.libraryapp.db.Database;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,17 +14,22 @@ import java.util.ResourceBundle;
 
 public class ViewController implements Initializable {
 
+    private Database selectedDatabase;
+
     @FXML
     private StackPane root;
 
     @FXML
-    private ChoiceBox sourceChooser;
+    private ChoiceBox<String> sourceChooser;
 
     @FXML
     private void addDataSource(ActionEvent event) {
 
     }
 
+    public Database getSelectedDatabase() {
+        return selectedDatabase;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

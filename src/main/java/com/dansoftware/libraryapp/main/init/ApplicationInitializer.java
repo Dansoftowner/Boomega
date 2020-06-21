@@ -42,13 +42,13 @@ public final class ApplicationInitializer {
         }
 
 
-        Locale locale = ConfigurationBase.getGlobal().getLocale();
+        Locale locale = ConfigurationBase.getConfigurationBase().getLocale();
         if (locale != null) {
             Locale.setDefault(locale);
             LOGGER.debug("Locale set to: {}", Locale.getDefault());
         }
 
-        Theme theme = ConfigurationBase.getGlobal().getTheme();
+        Theme theme = ConfigurationBase.getConfigurationBase().getTheme();
         if (theme != null) {
             Theme.setDefault(theme);
             LOGGER.debug("Theme set to: {}", theme);
@@ -59,7 +59,7 @@ public final class ApplicationInitializer {
      * Checks for updates
      */
     private void searchForUpdates() {
-        if (ConfigurationBase.getGlobal().isSearchUpdatesOn()) {
+        if (ConfigurationBase.getConfigurationBase().isSearchUpdatesOn()) {
             UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO, new BaseLoader(), new GUINotifier());
             updateSearcher.search();
         }
