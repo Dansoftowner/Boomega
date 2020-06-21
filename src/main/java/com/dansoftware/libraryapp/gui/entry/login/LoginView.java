@@ -4,10 +4,11 @@ import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.util.Optional;
+
+import static com.dansoftware.libraryapp.locale.Bundles.getFXMLValues;
 
 public class LoginView {
 
@@ -36,9 +37,10 @@ public class LoginView {
 
     private Parent initGui() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View.fxml"), getFXMLValues());
             fxmlLoader.setController(viewController);
-            return fxmlLoader.load();
+            fxmlLoader.load();
+            return viewController.getWorkbench();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

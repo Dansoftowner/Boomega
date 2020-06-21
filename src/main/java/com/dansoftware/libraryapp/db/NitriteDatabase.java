@@ -2,9 +2,11 @@ package com.dansoftware.libraryapp.db;
 
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;
+import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.dizitart.no2.objects.ObjectRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,13 +29,13 @@ import static java.util.Objects.isNull;
  *    //you can cast it to NitriteDatabase if you want
  *    NitriteDatabase nitriteDb = (NitriteDatabase) db;
  * }</pre>
- *
+ * <p>
  * If you create a nitrite database with an account that doesn't includes the filePath,
  * it will create an in-memory database.
  *
+ * @author Daniel Gyorffy
  * @see Nitrite
  * @see Account#anonymous()
- * @author Daniel Gyorffy
  */
 public class NitriteDatabase implements Database {
 
@@ -43,13 +45,13 @@ public class NitriteDatabase implements Database {
     private final ObjectRepository<Book> bookRepository;
     private final Account account;
 
-    public NitriteDatabase(Account account) throws LoginFailedException {
+    public NitriteDatabase(Account account) throws SecurityException, NitriteIOException {
         this.account = Objects.requireNonNull(account, "The account must not be null!");
         this.dbImpl = init(account);
         this.bookRepository = dbImpl.getRepository(Book.class);
     }
 
-    private Nitrite init(Account account) throws LoginFailedException {
+    private Nitrite init(Account account) throws SecurityException {
         //account data
         String username = account.getUsername();
         String password = account.getPassword();
@@ -58,11 +60,7 @@ public class NitriteDatabase implements Database {
         //preparing the NitriteBuilder
         NitriteBuilder builder = Nitrite.builder().compressed().filePath(filePath);
 
-        try {
-            return account.isAnonymous() ? builder.openOrCreate() : builder.openOrCreate(username, password);
-        } catch (SecurityException e) {
-            throw new LoginFailedException(e);
-        }
+        return account.isAnonymous() ? builder.openOrCreate() : builder.openOrCreate(username, password);
     }
 
     @Override

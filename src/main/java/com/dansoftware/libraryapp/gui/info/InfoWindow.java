@@ -20,8 +20,8 @@ public class InfoWindow extends Stage {
     public InfoWindow(EntryPoint entryPoint) throws IOException {
         this();
 
-        if (entryPoint != null)
-            this.initOwner(entryPoint.getPrimaryStage());
+        if (entryPoint != null){}
+            //this.initOwner(entryPoint.getPrimaryStage());
     }
 
     /**

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="loginForm" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="usernameInput" minWidth="274.0" promptText="%login.form.username.prompt" />
+      <PasswordField fx:id="passwordInput" promptText="%login.form.password.prompt" />
+      <Button defaultButton="true" minWidth="274.0" mnemonicParsing="false" onAction="#login" text="%login.form.login" />
+   </children>
+</VBox>

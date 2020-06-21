@@ -17,15 +17,8 @@ public class LoginViewTest extends Application {
     public void start(Stage primaryStage) throws Exception {
         Locale.setDefault(Locale.ENGLISH);
 
-        Parent root = FXMLLoader.load(getClass().getResource("View.fxml"), Bundles.getFXMLValues());
-
-        Scene scene = new Scene(root);
-
-        Theme.applyDefault(scene);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("LoginView test");
-        primaryStage.show();
+        LoginView loginView = new LoginView();
+        loginView.show();
 
     }
 }

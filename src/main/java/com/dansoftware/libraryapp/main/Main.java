@@ -6,9 +6,20 @@ import com.dansoftware.libraryapp.gui.entry.EntryPoint;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
+import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -71,13 +82,14 @@ public class Main extends Application {
     @Override
     public void init() {
         ApplicationInitializer initializer = new ApplicationInitializer();
-        initializer.initializeApplication();
+        //initializer.initializeApplication();
     }
 
 
     @Override
     public void start(Stage primaryStage) throws IOException {
 
+        /*
         EntryPoint entryPoint = new EntryPoint(() -> {
             if (argumentHandler.getAccount().isPresent()) {
                 return argumentHandler.getAccount().get();
@@ -103,7 +115,7 @@ public class Main extends Application {
 //        primaryStage.setMaximized(true);
 
         runAfterStart.forEach(Runnable::run);
-        runAfterStart = null;
+        runAfterStart = null;*/
     }
 
     @Override

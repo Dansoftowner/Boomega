@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.gui.entry;
 
-import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.login.LoginView;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainView;
@@ -16,13 +15,11 @@ public class EntryPoint {
     }
 
     public EntryPoint(AccountFactory accountFactory) {
-        Account account = accountFactory.getAccount();
-        this.loginView = new LoginView(account);
+        this.loginView = new LoginView(accountFactory.getAccount());
     }
 
     public boolean show() {
         Optional<Database> databaseOptional = loginView.show();
-
         databaseOptional.ifPresent(database -> new MainView(database).show());
 
         return databaseOptional.isPresent();
