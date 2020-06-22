@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 public class LoginWindow extends Stage {
 
-    public LoginWindow(Parent root) {
+    public LoginWindow(LoginView root) {
         this.setScene(initScene(root));
         //this.setTitle();
         this.getIcons().add(Globals.WINDOW_ICON);
