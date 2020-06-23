@@ -5,5 +5,5 @@ build
 distribution
 UML
 planning
-logFile.log
 icon-sources.txt
+*.log

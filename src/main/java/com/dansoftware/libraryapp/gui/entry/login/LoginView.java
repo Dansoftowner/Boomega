@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
+import org.dizitart.no2.exceptions.SecurityException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -73,8 +74,15 @@ public class LoginView extends Workbench implements Initializable {
      * -------------------------------------------------
      */
 
+    /**
+     * Field that holds the selected database from the user.
+     */
     private Database selectedDatabase;
 
+    /**
+     * ObservableValue that holds {@code true} if the sourceChooser choiceBox has no elements;
+     * {@code false} otherwise.
+     */
     private BooleanBinding sourceChooserEmpty;
 
     private Account initialAccount;
@@ -90,6 +98,9 @@ public class LoginView extends Workbench implements Initializable {
         this.fillLoginForm(initialAccount);
     }
 
+    /**
+     * Loads the main-login-gui.
+     */
     private void loadGui() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View.fxml"), getFXMLValues());
         fxmlLoader.setController(this);
@@ -164,13 +175,12 @@ public class LoginView extends Workbench implements Initializable {
         this.sourceChooser.getSelectionModel().select(account.getFilePath());
         this.usernameInput.textProperty().set(account.getUsername());
         this.passwordInput.textProperty().set(account.getPassword());
+        this.rememberBox.selectedProperty().set(Boolean.TRUE);
     }
 
     public Database getSelectedDatabase() {
         return selectedDatabase;
     }
-
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

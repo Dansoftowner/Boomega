@@ -16,7 +16,7 @@ public class LoginViewTest extends Application {
         Locale.setDefault(Locale.ENGLISH);
 
         LoginView loginView = new LoginView(new Account(
-                "C://sf", "Username", "MyPáswórd"
+                "C:\\Users\\judal\\Documents\\test.db", "Username", "MyPáswórd"
         ));
 
         Theme.LIGHT.apply(loginView);

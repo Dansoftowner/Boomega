@@ -2,6 +2,8 @@ package com.dansoftware.libraryapp.db;
 
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;
+import org.dizitart.no2.exceptions.ErrorCodes;
+import org.dizitart.no2.exceptions.ErrorMessage;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.dizitart.no2.objects.ObjectRepository;
@@ -42,16 +44,14 @@ public class NitriteDatabase implements Database {
     private List<Book> cache;
 
     private final Nitrite dbImpl;
-    private final ObjectRepository<Book> bookRepository;
     private final Account account;
 
     public NitriteDatabase(Account account) throws SecurityException, NitriteIOException {
         this.account = Objects.requireNonNull(account, "The account must not be null!");
         this.dbImpl = init(account);
-        this.bookRepository = dbImpl.getRepository(Book.class);
     }
 
-    private Nitrite init(Account account) throws SecurityException {
+    private Nitrite init(Account account) throws SecurityException, NitriteIOException {
         //account data
         String username = account.getUsername();
         String password = account.getPassword();
@@ -60,22 +60,26 @@ public class NitriteDatabase implements Database {
         //preparing the NitriteBuilder
         NitriteBuilder builder = Nitrite.builder().compressed().filePath(filePath);
 
-        return account.isAnonymous() ? builder.openOrCreate() : builder.openOrCreate(username, password);
+        Nitrite nitrite = account.isAnonymous() ? builder.openOrCreate() : builder.openOrCreate(username, password);
+        if (isNull(nitrite))
+            throw new NitriteIOException(ErrorMessage.IMPORT_READ_ERROR);
+
+        return nitrite;
     }
 
     @Override
     public void insertBook(Book book) {
-        this.bookRepository.insert(book);
+        this.dbImpl.getRepository(Book.class).insert(book);
     }
 
     @Override
     public void updateBook(Book book) {
-        this.bookRepository.update(book);
+        this.dbImpl.getRepository(Book.class).update(book);
     }
 
     @Override
     public void removeBook(Book book) {
-        this.bookRepository.remove(book);
+        this.dbImpl.getRepository(Book.class).remove(book);
     }
 
     @Override
@@ -84,7 +88,7 @@ public class NitriteDatabase implements Database {
             return cache = isNull(cache) ? getBooks(false) : cache;
         }
 
-        return this.bookRepository.find().toList();
+        return this.dbImpl.getRepository(Book.class).find().toList();
     }
 
     @Override

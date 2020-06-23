@@ -3,12 +3,13 @@ package com.dansoftware.libraryapp.gui.entry.login;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A LoginActivity starts a {@link LoginWindow} with a {@link LoginView}
- * and waits for the result of the authentication.
+ * A LoginActivity starts a {@link LoginWindow} with a {@link LoginView}.
+ *
+ * <p>
+ * It can be started by the {@link LoginActivity#show()}
  */
 public class LoginActivity {
 
@@ -21,6 +22,14 @@ public class LoginActivity {
         this.initialAccount = initialAccount;
     }
 
+    /**
+     * Waits until the user signs in or closes the login window, then
+     * returns the selected {@link Database} wrapped in an {@link Optional}.
+     * If the {@link Optional} is empty that means that the user closed the
+     * {@link LoginWindow}.
+     *
+     * @return the selected {@link Database} wrapped in an {@link Optional}.
+     */
     public Optional<Database> show() {
         LoginView loginView = new LoginView(initialAccount);
 
