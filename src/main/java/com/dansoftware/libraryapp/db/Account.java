@@ -65,6 +65,11 @@ public class Account {
         return StringUtils.isEmpty(this.username) && StringUtils.isEmpty(this.password);
     }
 
+    @Override
+    public String toString() {
+        return filePath;
+    }
+
     /**
      * Creates a 100% anonymous account.
      * Neither the username, password nor the filePath is specified.

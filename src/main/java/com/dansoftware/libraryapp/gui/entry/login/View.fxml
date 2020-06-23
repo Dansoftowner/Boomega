@@ -10,7 +10,7 @@
    <children>
       <Group>
          <children>
-            <VBox fx:id="rootForm" spacing="10.0" style="-fx-background-color: white;">
+            <VBox fx:id="rootForm" spacing="10.0">
                <effect>
                   <DropShadow />
                </effect>

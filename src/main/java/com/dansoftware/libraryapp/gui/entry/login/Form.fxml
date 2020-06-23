@@ -5,8 +5,11 @@
 
 <VBox fx:id="loginForm" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <Separator prefWidth="200.0" />
       <TextField fx:id="usernameInput" minWidth="274.0" promptText="%login.form.username.prompt" />
       <PasswordField fx:id="passwordInput" promptText="%login.form.password.prompt" />
+      <CheckBox fx:id="rememberBox" alignment="CENTER_RIGHT" mnemonicParsing="false" text="%login.form.remember" />
       <Button defaultButton="true" minWidth="274.0" mnemonicParsing="false" onAction="#login" text="%login.form.login" />
+      <Separator prefWidth="200.0" />
    </children>
 </VBox>

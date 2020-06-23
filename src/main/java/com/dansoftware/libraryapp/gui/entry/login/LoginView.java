@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
+import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -14,12 +15,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetroStyleClass;
+import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
 
 import java.io.IOException;
@@ -28,12 +30,35 @@ import java.util.ResourceBundle;
 
 import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
 import static com.dansoftware.libraryapp.locale.Bundles.getFXMLValues;
-import static java.util.Objects.isNull;
+import static com.dansoftware.libraryapp.locale.Bundles.getNotificationMsg;
 
+/**
+ * A LoginView is a graphical object that can handle
+ * a login request and creates the {@link Database} object.
+ */
 public class LoginView extends Workbench implements Initializable {
+
+    /* -------------------------------------------------
+     * (View.fxml)
+     * -------------------------------------------------
+     */
 
     @FXML
     private StackPane root;
+
+    @FXML
+    private ChoiceBox<String> sourceChooser;
+
+    @FXML
+    private VBox rootForm;
+
+    /* -------------------------------------------------
+     * LoginForm (Form.fxml)
+     * -------------------------------------------------
+     */
+
+    @FXML
+    private VBox loginForm;
 
     @FXML
     private TextField usernameInput;
@@ -42,30 +67,30 @@ public class LoginView extends Workbench implements Initializable {
     private TextField passwordInput;
 
     @FXML
-    private ChoiceBox<String> sourceChooser;
+    private CheckBox rememberBox;
 
-    @FXML
-    private VBox loginForm;
-
-    @FXML
-    private VBox rootForm;
+    /*
+     * -------------------------------------------------
+     */
 
     private Database selectedDatabase;
 
     private BooleanBinding sourceChooserEmpty;
 
-    private Account account;
+    private Account initialAccount;
 
     public LoginView() {
-        initGui();
+        loadGui();
+        loadLoginForm();
     }
 
-    public LoginView(Account account) {
+    public LoginView(Account initialAccount) {
         this();
-        this.account = account;
+        this.initialAccount = initialAccount;
+        this.fillLoginForm(initialAccount);
     }
 
-    private void initGui() {
+    private void loadGui() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View.fxml"), getFXMLValues());
         fxmlLoader.setController(this);
 
@@ -82,10 +107,33 @@ public class LoginView extends Workbench implements Initializable {
                 return root;
             }
         });
+
+        root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+    }
+
+    /**
+     * Loads the login-form.
+     */
+    private void loadLoginForm() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Form.fxml"), getFXMLValues());
+        fxmlLoader.setController(this);
+
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.sourceChooserEmpty = Bindings.isEmpty(sourceChooser.getItems());
+        this.sourceChooserEmpty.addListener((observable, oldValue, newValue) -> {
+            if (newValue) this.rootForm.getChildren().remove(this.loginForm);
+            else this.rootForm.getChildren().add(1, this.loginForm);
+        });
     }
 
     @FXML
     private void addDataSource(ActionEvent event) {
+
     }
 
     @FXML
@@ -93,53 +141,39 @@ public class LoginView extends Workbench implements Initializable {
         try {
             this.selectedDatabase = DatabaseFactory.getDatabase(NITRITE, new Account(
                     sourceChooser.getValue(),
-                    usernameInput.getText(),
-                    passwordInput.getText()
+                    StringUtils.trim(usernameInput.getText()),
+                    StringUtils.trim(passwordInput.getText())
             ));
+
+            StageUtils.getStageOf(this).close();
         } catch (SecurityException e) {
-
+            String title = getNotificationMsg("login.auth.failed.security.title");
+            String message = getNotificationMsg("login.auth.failed.security.msg");
+            this.showErrorDialog(title, message, e, buttonType -> {
+            });
         } catch (NitriteIOException e) {
-
+            String title = getNotificationMsg("login.auth.failed.io.title");
+            String message = getNotificationMsg("login.auth.failed.io.msg");
+            this.showErrorDialog(title, message, buttonType -> {
+            });
         }
+    }
 
-        //getStage().close();
+    private void fillLoginForm(Account account) {
+        this.sourceChooser.getItems().add(account.getFilePath());
+        this.sourceChooser.getSelectionModel().select(account.getFilePath());
+        this.usernameInput.textProperty().set(account.getUsername());
+        this.passwordInput.textProperty().set(account.getPassword());
     }
 
     public Database getSelectedDatabase() {
         return selectedDatabase;
     }
 
-    private Stage getStage() {
-        return (Stage) root.getScene().getWindow();
-    }
 
-    /**
-     * Loads the login-form.
-     * It's called by the {@link LoginView#initialize(URL, ResourceBundle)} method.
-     */
-    private void loadLoginForm() {
-        if (isNull(this.loginForm)) {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Form.fxml"), getFXMLValues());
-            fxmlLoader.setController(this);
-
-            try {
-                fxmlLoader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            this.sourceChooserEmpty = Bindings.isEmpty(sourceChooser.getItems());
-            this.sourceChooserEmpty.addListener((observable, oldValue, newValue) -> {
-                if (newValue) this.rootForm.getChildren().remove(this.loginForm);
-                else this.rootForm.getChildren().add(1, this.rootForm);
-            });
-
-            root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
-        }
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.loadLoginForm();
+        this.rootForm.getStyleClass().add(JMetroStyleClass.BACKGROUND);
     }
 }

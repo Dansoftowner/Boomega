@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
+import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -13,7 +15,11 @@ public class LoginViewTest extends Application {
     public void start(Stage primaryStage) throws Exception {
         Locale.setDefault(Locale.ENGLISH);
 
-        LoginView loginView = new LoginView();
+        LoginView loginView = new LoginView(new Account(
+                "C://sf", "Username", "MyPáswórd"
+        ));
+
+        Theme.LIGHT.apply(loginView);
 
         primaryStage.setScene(new Scene(loginView));
         primaryStage.show();

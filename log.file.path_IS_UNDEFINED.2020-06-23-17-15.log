@@ -1,0 +1,1 @@
+17:15:33.176  447  [JavaFX Application Thread] ERROR com.dlsc.workbenchfx.Workbench - setupCleanup - Scene could not be found! setOnCloseRequest was not set
