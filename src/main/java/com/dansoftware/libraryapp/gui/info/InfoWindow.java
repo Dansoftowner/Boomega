@@ -20,20 +20,25 @@ public class InfoWindow extends Stage {
     public InfoWindow(EntryPoint entryPoint) throws IOException {
         this();
 
-        if (entryPoint != null){}
-            //this.initOwner(entryPoint.getPrimaryStage());
+        if (entryPoint != null) {
+        }
+        //this.initOwner(entryPoint.getPrimaryStage());
     }
 
     /**
      * Creates the InfoWindow and loads the information-view
      * into it's scene + sets some property of the window.
-     *
-     * @throws IOException if the FXML file couldn't be read
      */
-    public InfoWindow() throws IOException {
+    public InfoWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("info-view.fxml"), Bundles.getFXMLValues());
 
-        Parent root = loader.load();
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         Scene scene = new Scene(root);
 
         this.setScene(scene);

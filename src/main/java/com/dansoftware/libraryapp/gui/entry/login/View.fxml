@@ -5,19 +5,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <StackPane fx:id="root" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Group>
          <children>
-            <VBox fx:id="rootForm" spacing="10.0">
+            <VBox fx:id="rootForm" minWidth="400.0" spacing="10.0">
                <effect>
                   <DropShadow />
                </effect>
                <children>
-                  <ChoiceBox fx:id="sourceChooser" minWidth="274.0" prefHeight="30.0">
+                  <ChoiceBox fx:id="sourceChooser" minHeight="35.0" minWidth="400.0" prefHeight="30.0">
                   </ChoiceBox>
-                  <Button minWidth="274.0" mnemonicParsing="false" onAction="#addDataSource" text="%login.add.source" />
+                  <Button minHeight="35.0" minWidth="400.0" mnemonicParsing="false" onAction="#addDataSource" text="%login.add.source">
+                     <font>
+                        <Font size="15.0" />
+                     </font></Button>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

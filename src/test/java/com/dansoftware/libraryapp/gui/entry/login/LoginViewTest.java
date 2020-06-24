@@ -19,7 +19,7 @@ public class LoginViewTest extends Application {
                 "C:\\Users\\judal\\Documents\\test.db", "Username", "MyPáswórd"
         ));
 
-        Theme.LIGHT.apply(loginView);
+        Theme.DARK.apply(loginView);
 
         primaryStage.setScene(new Scene(loginView));
         primaryStage.show();

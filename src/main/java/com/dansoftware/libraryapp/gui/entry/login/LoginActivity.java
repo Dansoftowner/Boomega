@@ -6,10 +6,10 @@ import com.dansoftware.libraryapp.db.Database;
 import java.util.Optional;
 
 /**
- * A LoginActivity starts a {@link LoginWindow} with a {@link LoginView}.
+ * A LoginActivity can be used for starting easily a {@link LoginWindow} with a {@link LoginView}.
  *
  * <p>
- * It can be started by the {@link LoginActivity#show()}
+ * It can be started by the {@link LoginActivity#show()}.
  */
 public class LoginActivity {
 

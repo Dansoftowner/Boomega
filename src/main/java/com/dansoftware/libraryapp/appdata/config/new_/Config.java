@@ -7,6 +7,10 @@ public class Config {
     private JsonObject jsonObject;
 
     public Config(String path) {
+        this.jsonObject = new JsonObject();
     }
 
+    public JsonObject getAsJsonObject() {
+        return jsonObject;
+    }
 }

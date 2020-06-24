@@ -2,14 +2,27 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="loginForm" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="loginForm" prefHeight="148.0" prefWidth="297.0" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Separator prefWidth="200.0" />
-      <TextField fx:id="usernameInput" minWidth="274.0" promptText="%login.form.username.prompt" />
-      <PasswordField fx:id="passwordInput" promptText="%login.form.password.prompt" />
-      <CheckBox fx:id="rememberBox" alignment="CENTER_RIGHT" mnemonicParsing="false" text="%login.form.remember" />
-      <Button defaultButton="true" minWidth="274.0" mnemonicParsing="false" onAction="#login" text="%login.form.login" />
+      <TextField fx:id="usernameInput" minHeight="35.0" minWidth="400.0" promptText="%login.form.username.prompt">
+         <font>
+            <Font size="15.0" />
+         </font></TextField>
+      <PasswordField fx:id="passwordInput" minHeight="35.0" minWidth="400.0" promptText="%login.form.password.prompt">
+         <font>
+            <Font size="15.0" />
+         </font></PasswordField>
+      <CheckBox fx:id="rememberBox" alignment="CENTER_RIGHT" mnemonicParsing="false" text="%login.form.remember">
+         <font>
+            <Font size="15.0" />
+         </font></CheckBox>
+      <Button defaultButton="true" minHeight="35.0" minWidth="400.0" mnemonicParsing="false" onAction="#login" text="%login.form.login">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
       <Separator prefWidth="200.0" />
    </children>
 </VBox>

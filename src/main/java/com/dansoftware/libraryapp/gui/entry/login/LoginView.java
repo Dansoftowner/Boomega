@@ -3,10 +3,15 @@ package com.dansoftware.libraryapp.gui.entry.login;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
+import com.dansoftware.libraryapp.gui.info.InfoWindow;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
+import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
@@ -27,11 +32,11 @@ import org.dizitart.no2.exceptions.SecurityException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
-import static com.dansoftware.libraryapp.locale.Bundles.getFXMLValues;
-import static com.dansoftware.libraryapp.locale.Bundles.getNotificationMsg;
+import static com.dansoftware.libraryapp.locale.Bundles.*;
 
 /**
  * A LoginView is a graphical object that can handle
@@ -88,6 +93,7 @@ public class LoginView extends Workbench implements Initializable {
     private Account initialAccount;
 
     public LoginView() {
+        initWorkbenchProperties();
         loadGui();
         loadLoginForm();
     }
@@ -96,6 +102,26 @@ public class LoginView extends Workbench implements Initializable {
         this();
         this.initialAccount = initialAccount;
         this.fillLoginForm(initialAccount);
+    }
+
+    /**
+     *
+     */
+    private void initWorkbenchProperties() {
+        //
+        InfoWindow infoWindow = new InfoWindow();
+        this.getToolbarControlsRight().add(new ToolbarItem(
+                new MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
+                event -> {
+                    if (infoWindow.isShowing()) {
+                        infoWindow.close();
+                    } else {
+                        if (Objects.isNull(infoWindow.getOwner()))
+                            infoWindow.initOwner(StageUtils.getStageOf(this));
+                        infoWindow.show();
+                    }
+                }));
+        this.getToolbarControlsLeft().add(new ToolbarItem("Libraryapp", new MaterialDesignIconView(MaterialDesignIcon.BOOK)));
     }
 
     /**
@@ -160,12 +186,12 @@ public class LoginView extends Workbench implements Initializable {
         } catch (SecurityException e) {
             String title = getNotificationMsg("login.auth.failed.security.title");
             String message = getNotificationMsg("login.auth.failed.security.msg");
-            this.showErrorDialog(title, message, e, buttonType -> {
+            this.showErrorDialog(title, message, buttonType -> {
             });
         } catch (NitriteIOException e) {
             String title = getNotificationMsg("login.auth.failed.io.title");
             String message = getNotificationMsg("login.auth.failed.io.msg");
-            this.showErrorDialog(title, message, buttonType -> {
+            this.showErrorDialog(title, message, e, buttonType -> {
             });
         }
     }

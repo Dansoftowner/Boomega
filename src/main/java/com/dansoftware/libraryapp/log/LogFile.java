@@ -11,7 +11,7 @@ public class LogFile extends File {
     }
 
     public String getPathWithExtension() {
-        return super.getAbsolutePath() + ".log";
+        return super.getAbsolutePath().concat(".log");
     }
 
     @Override
