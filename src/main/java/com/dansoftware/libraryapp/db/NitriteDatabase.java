@@ -2,13 +2,11 @@ package com.dansoftware.libraryapp.db;
 
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;
-import org.dizitart.no2.exceptions.ErrorCodes;
 import org.dizitart.no2.exceptions.ErrorMessage;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
-import org.dizitart.no2.objects.ObjectRepository;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,20 +43,26 @@ public class NitriteDatabase implements Database {
 
     private final Nitrite dbImpl;
     private final Account account;
+    private String name;
 
     public NitriteDatabase(Account account) throws SecurityException, NitriteIOException {
         this.account = Objects.requireNonNull(account, "The account must not be null!");
         this.dbImpl = init(account);
     }
 
+    public NitriteDatabase(String name, Account account) {
+        this(account);
+        this.name = name;
+    }
+
     private Nitrite init(Account account) throws SecurityException, NitriteIOException {
         //account data
         String username = account.getUsername();
         String password = account.getPassword();
-        String filePath = account.getFilePath();
+        File file = account.getFile();
 
         //preparing the NitriteBuilder
-        NitriteBuilder builder = Nitrite.builder().compressed().filePath(filePath);
+        NitriteBuilder builder = Nitrite.builder().compressed().filePath(file);
 
         Nitrite nitrite = account.isAnonymous() ? builder.openOrCreate() : builder.openOrCreate(username, password);
         if (isNull(nitrite))
@@ -105,6 +109,11 @@ public class NitriteDatabase implements Database {
     @Override
     public void close() {
         this.dbImpl.close();
+    }
+
+    @Override
+    public DatabaseMetadata getMetadata() {
+        return new DatabaseMetadata(this.name, this.account);
     }
 
     public Account getAccount() {

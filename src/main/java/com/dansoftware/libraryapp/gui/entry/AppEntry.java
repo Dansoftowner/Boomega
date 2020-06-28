@@ -6,15 +6,15 @@ import com.dansoftware.libraryapp.gui.entry.mainview.MainView;
 
 import java.util.Optional;
 
-public class EntryPoint {
+public class AppEntry {
 
     private final LoginActivity loginActivity;
 
-    public EntryPoint() {
+    public AppEntry() {
         this.loginActivity = new LoginActivity();
     }
 
-    public EntryPoint(AccountFactory accountFactory) {
+    public AppEntry(AccountFactory accountFactory) {
         this.loginActivity = new LoginActivity(accountFactory.getAccount());
     }
 

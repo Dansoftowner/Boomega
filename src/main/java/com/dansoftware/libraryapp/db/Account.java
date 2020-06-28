@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.db;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -11,38 +12,38 @@ public class Account {
 
     private final String username;
     private final String password;
-    private final String filePath;
+    private final File file;
 
     private Account() {
         this.username = null;
         this.password = null;
-        this.filePath = null;
+        this.file = null;
     }
 
     /**
      * Creates an account with the specified filePath.
      *
-     * @param filePath mustn't be null;
+     * @param file mustn't be null;
      * @throws NullPointerException if the filePath is null
      */
-    public Account(String filePath) {
-        this(filePath, null, null);
+    public Account(File file) {
+        this(file, null, null);
     }
 
     /**
      * Creates an account with the specified filePath.
      *
-     * @param filePath mustn't be null;
+     * @param file mustn't be null;
      * @throws NullPointerException if the filePath is null
      */
-    public Account(String filePath, String username, String password) {
-        this.filePath = Objects.requireNonNull(filePath, "The filePath mustn't be null!");
+    public Account(File file, String username, String password) {
+        this.file = Objects.requireNonNull(file, "The filePath mustn't be null!");
         this.username = username;
         this.password = password;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public File getFile() {
+        return file;
     }
 
     public String getUsername() {
@@ -67,7 +68,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return filePath;
+        return file.toString();
     }
 
     /**

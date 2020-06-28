@@ -22,7 +22,8 @@ public final class DatabaseFactory {
     public static Database getDatabase(String name, Object... args) {
         if (NITRITE.equals(name)) {
             Account account = isEmpty(args) ? Account.anonymous() : (Account) args[0];
-            return new NitriteDatabase(account);
+            String dbName = args.length > 1 ? args[1].toString() : null;
+            return new NitriteDatabase(dbName, account);
         }
 
         return null;

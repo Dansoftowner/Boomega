@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.info;
 
-import com.dansoftware.libraryapp.gui.entry.EntryPoint;
+import com.dansoftware.libraryapp.gui.entry.AppEntry;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.locale.Bundles;
 import javafx.fxml.FXMLLoader;
@@ -17,10 +17,10 @@ import java.io.IOException;
  */
 public class InfoWindow extends Stage {
 
-    public InfoWindow(EntryPoint entryPoint) throws IOException {
+    public InfoWindow(AppEntry appEntry) throws IOException {
         this();
 
-        if (entryPoint != null) {
+        if (appEntry != null) {
         }
         //this.initOwner(entryPoint.getPrimaryStage());
     }

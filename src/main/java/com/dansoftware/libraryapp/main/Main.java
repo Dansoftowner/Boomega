@@ -1,33 +1,17 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.appdata.config.ConfigurationBase;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
-import com.dansoftware.libraryapp.gui.entry.EntryPoint;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
-import com.jfoenix.controls.JFXAlert;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-
-import static com.dansoftware.libraryapp.appdata.config.ConfigurationBase.getConfigurationBase;
 
 /**
  * The main class and javafx application starter.

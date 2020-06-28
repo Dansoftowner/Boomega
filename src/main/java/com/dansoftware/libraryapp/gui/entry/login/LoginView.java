@@ -4,7 +4,6 @@ import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
-import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
@@ -30,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -177,7 +177,7 @@ public class LoginView extends Workbench implements Initializable {
     private void login(ActionEvent event) {
         try {
             this.selectedDatabase = DatabaseFactory.getDatabase(NITRITE, new Account(
-                    sourceChooser.getValue(),
+                    new File(sourceChooser.getValue()),
                     StringUtils.trim(usernameInput.getText()),
                     StringUtils.trim(passwordInput.getText())
             ));
@@ -197,8 +197,8 @@ public class LoginView extends Workbench implements Initializable {
     }
 
     private void fillLoginForm(Account account) {
-        this.sourceChooser.getItems().add(account.getFilePath());
-        this.sourceChooser.getSelectionModel().select(account.getFilePath());
+        this.sourceChooser.getItems().add(account.getFile().toString());
+        this.sourceChooser.getSelectionModel().select(account.getFile().toString());
         this.usernameInput.textProperty().set(account.getUsername());
         this.passwordInput.textProperty().set(account.getPassword());
         this.rememberBox.selectedProperty().set(Boolean.TRUE);
