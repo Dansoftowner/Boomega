@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
+import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
@@ -18,7 +19,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
@@ -92,7 +92,7 @@ public class LoginView extends Workbench implements Initializable {
      */
     private BooleanBinding sourceChooserEmpty;
 
-    private Account initialAccount;
+    private LoginData loginData;
 
     public LoginView() {
         initWorkbenchProperties();
@@ -100,10 +100,10 @@ public class LoginView extends Workbench implements Initializable {
         loadLoginForm();
     }
 
-    public LoginView(Account initialAccount) {
+    public LoginView(LoginData loginData) {
         this();
-        this.initialAccount = initialAccount;
-        this.fillLoginForm(initialAccount);
+        this.loginData = loginData;
+        this.fillLoginForm(loginData);
     }
 
     /**
@@ -198,12 +198,13 @@ public class LoginView extends Workbench implements Initializable {
         }
     }
 
-    private void fillLoginForm(Account account) {
+    private void fillLoginForm(LoginData loginData) {
+        /*
         this.sourceChooser.getItems().add(account.getFile().toString());
         this.sourceChooser.getSelectionModel().select(account.getFile().toString());
         this.usernameInput.textProperty().set(account.getUsername());
         this.passwordInput.textProperty().set(account.getPassword());
-        this.rememberBox.selectedProperty().set(Boolean.TRUE);
+        this.rememberBox.selectedProperty().set(Boolean.TRUE);*/
     }
 
     public Database getSelectedDatabase() {

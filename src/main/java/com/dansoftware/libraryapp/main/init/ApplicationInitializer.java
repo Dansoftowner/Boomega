@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.main.init;
 import com.dansoftware.libraryapp.appdata.config.AppConfig;
 import com.dansoftware.libraryapp.appdata.config.BaseConfigIO;
 import com.dansoftware.libraryapp.appdata.config.ConfigIO;
+import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.main.Main;
@@ -48,7 +49,9 @@ public final class ApplicationInitializer {
         }
 
         this.appArgumentHandler.getAccount().ifPresent(account -> {
-            this.appConfig.set
+            LoginData loginData = this.appConfig.get(AppConfig.Key.LOGIN_DATA);
+            loginData.setLoggedAccount(account);
+            this.appConfig.set(AppConfig.Key.LOGIN_DATA, loginData);
         });
 
         Locale.setDefault(this.appConfig.get(AppConfig.Key.LOCALE));

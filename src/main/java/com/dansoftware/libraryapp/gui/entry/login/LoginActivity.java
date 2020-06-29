@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
+import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 
@@ -13,13 +14,13 @@ import java.util.Optional;
  */
 public class LoginActivity {
 
-    private Account initialAccount;
+    private LoginData loginData;
 
     public LoginActivity() {
     }
 
-    public LoginActivity(Account initialAccount) {
-        this.initialAccount = initialAccount;
+    public LoginActivity(LoginData loginData) {
+        this.loginData = loginData;
     }
 
     /**
@@ -31,7 +32,7 @@ public class LoginActivity {
      * @return the selected {@link Database} wrapped in an {@link Optional}.
      */
     public Optional<Database> show() {
-        LoginView loginView = new LoginView(initialAccount);
+        LoginView loginView = new LoginView(loginData);
 
         LoginWindow loginWindow = new LoginWindow(loginView);
         loginWindow.showAndWait();
