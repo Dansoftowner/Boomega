@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.ArrayUtils.isNotEmpty;
@@ -19,18 +20,16 @@ public class ApplicationArgumentHandler {
 
     private Account account;
 
-    public ApplicationArgumentHandler(String[] args) {
-        if (isNotEmpty(args)) {
+    public ApplicationArgumentHandler(List<String> args) {
+        if (!args.isEmpty()) {
 
-            String filePath = args[0];
+            String filePath = args.get(0);
             File file = new File(filePath);
 
             if (file.exists()) {
-                account = new Account(file.getAbsolutePath());
+                account = new Account(file);
             } else {
-                Throwable cause = new FileNotFoundException(filePath);
-
-                LOGGER.error("Couldn't open file: " + file.getAbsolutePath(), cause);
+                LOGGER.error("Couldn't open file: " + file.getAbsolutePath(), new FileNotFoundException(filePath));
             }
         }
     }

@@ -1,8 +1,8 @@
 package com.dansoftware.libraryapp.main.init;
 
-import com.dansoftware.libraryapp.appdata.config.BaseConfigurationIO;
-import com.dansoftware.libraryapp.appdata.config.ConfigurationBase;
-import com.dansoftware.libraryapp.appdata.config.ConfigurationIO;
+import com.dansoftware.libraryapp.appdata.config.AppConfig;
+import com.dansoftware.libraryapp.appdata.config.BaseConfigIO;
+import com.dansoftware.libraryapp.appdata.config.ConfigIO;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.main.Main;
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -27,39 +28,41 @@ public final class ApplicationInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ApplicationInitializer.class);
 
+    private AppConfig appConfig;
+    private ApplicationArgumentHandler appArgumentHandler;
+
+    public ApplicationInitializer(List<String> applicationParameters) {
+        this.appArgumentHandler = new ApplicationArgumentHandler(applicationParameters);
+    }
+
     /**
      * Reads the configurations
      */
     private void readConfigurations() {
-        ConfigurationIO configurationReader = new BaseConfigurationIO();
-
+        ConfigIO configIO = new BaseConfigIO();
         try {
-            ConfigurationBase configurationBase = configurationReader.read();
-            ConfigurationBase.setGlobal(configurationBase);
+            this.appConfig = configIO.read();
             LOGGER.debug("Configurations has been read");
         } catch (IOException e) {
-            LOGGER.error("Couldn't read configurations", e);
+            LOGGER.error("Failed to load configurations ", e);
         }
 
+        this.appArgumentHandler.getAccount().ifPresent(account -> {
+            this.appConfig.set
+        });
 
-        Locale locale = ConfigurationBase.getConfigurationBase().getLocale();
-        if (locale != null) {
-            Locale.setDefault(locale);
-            LOGGER.debug("Locale set to: {}", Locale.getDefault());
-        }
+        Locale.setDefault(this.appConfig.get(AppConfig.Key.LOCALE));
+        LOGGER.debug("Locale set to: {}", Locale.getDefault());
 
-        Theme theme = ConfigurationBase.getConfigurationBase().getTheme();
-        if (theme != null) {
-            Theme.setDefault(theme);
-            LOGGER.debug("Theme set to: {}", theme);
-        }
+        Theme.setDefault(this.appConfig.get(AppConfig.Key.THEME));
+        LOGGER.debug("Theme set to: {}", Theme.getDefault());
     }
 
     /**
      * Checks for updates
      */
     private void searchForUpdates() {
-        if (ConfigurationBase.getConfigurationBase().isSearchUpdatesOn()) {
+        if (this.appConfig.get(AppConfig.Key.SEARCH_UPDATES)) {
             UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO, new BaseLoader(), new GUINotifier());
             updateSearcher.search();
         }
@@ -72,5 +75,9 @@ public final class ApplicationInitializer {
     public void initializeApplication() {
         readConfigurations();
         searchForUpdates();
+    }
+
+    public AppConfig getAppConfig() {
+        return this.appConfig;
     }
 }

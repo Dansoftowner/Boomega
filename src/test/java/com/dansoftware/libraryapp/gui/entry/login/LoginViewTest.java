@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.Locale;
 
 public class LoginViewTest extends Application {
@@ -16,7 +17,7 @@ public class LoginViewTest extends Application {
         Locale.setDefault(Locale.ENGLISH);
 
         LoginView loginView = new LoginView(new Account(
-                "C:\\Users\\judal\\Documents\\test.db", "Username", "MyPáswórd"
+                new File("C:\\Users\\judal\\Documents\\test.db"), "Username", "MyPáswórd"
         ));
 
         Theme.DARK.apply(loginView);

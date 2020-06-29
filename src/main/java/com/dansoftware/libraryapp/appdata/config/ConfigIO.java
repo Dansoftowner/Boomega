@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.appdata.config.new_;
+package com.dansoftware.libraryapp.appdata.config;
 
 import java.io.IOException;
 

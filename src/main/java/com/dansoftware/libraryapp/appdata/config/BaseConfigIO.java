@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.appdata.config.new_;
+package com.dansoftware.libraryapp.appdata.config;
 
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;

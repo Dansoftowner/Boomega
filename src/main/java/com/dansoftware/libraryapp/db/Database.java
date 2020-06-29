@@ -56,7 +56,4 @@ public interface Database {
      */
     void close();
 
-
-    DatabaseMetadata getMetadata();
-
 }

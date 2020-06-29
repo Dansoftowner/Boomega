@@ -111,11 +111,6 @@ public class NitriteDatabase implements Database {
         this.dbImpl.close();
     }
 
-    @Override
-    public DatabaseMetadata getMetadata() {
-        return new DatabaseMetadata(this.name, this.account);
-    }
-
     public Account getAccount() {
         return account;
     }

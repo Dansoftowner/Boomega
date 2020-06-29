@@ -10,6 +10,7 @@ import java.util.Objects;
  */
 public class Account {
 
+    private final String dbName;
     private final String username;
     private final String password;
     private final File file;
@@ -18,6 +19,7 @@ public class Account {
         this.username = null;
         this.password = null;
         this.file = null;
+        this.dbName = null;
     }
 
     /**
@@ -37,7 +39,13 @@ public class Account {
      * @throws NullPointerException if the filePath is null
      */
     public Account(File file, String username, String password) {
+        this(file, username, password, null);
+    }
+
+
+    public Account(File file, String username, String password, String dbName) {
         this.file = Objects.requireNonNull(file, "The filePath mustn't be null!");
+        this.dbName = Objects.isNull(dbName) ? file.getName() : dbName;
         this.username = username;
         this.password = password;
     }

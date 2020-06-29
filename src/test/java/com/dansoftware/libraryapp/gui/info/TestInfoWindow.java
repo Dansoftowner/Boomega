@@ -9,7 +9,7 @@ public class TestInfoWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        InfoWindow infoWindow = new InfoWindow();
+        InfoWindow infoWindow = new InfoWindow(new InfoView());
         infoWindow.show();
     }
 }

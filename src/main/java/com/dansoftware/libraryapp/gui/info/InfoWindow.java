@@ -17,29 +17,14 @@ import java.io.IOException;
  */
 public class InfoWindow extends Stage {
 
-    public InfoWindow(AppEntry appEntry) throws IOException {
-        this();
-
-        if (appEntry != null) {
-        }
-        //this.initOwner(entryPoint.getPrimaryStage());
-    }
-
     /**
-     * Creates the InfoWindow and loads the information-view
+     * Creates the InfoWindow and sets the information-view
      * into it's scene + sets some property of the window.
      */
-    public InfoWindow() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("info-view.fxml"), Bundles.getFXMLValues());
+    public InfoWindow(InfoView view) {
 
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(view);
 
         this.setScene(scene);
         this.sizeToScene();

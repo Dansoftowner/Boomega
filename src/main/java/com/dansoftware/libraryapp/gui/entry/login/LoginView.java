@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
+import com.dansoftware.libraryapp.gui.info.InfoView;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dlsc.workbenchfx.Workbench;
@@ -17,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
@@ -109,7 +111,7 @@ public class LoginView extends Workbench implements Initializable {
      */
     private void initWorkbenchProperties() {
         //
-        InfoWindow infoWindow = new InfoWindow();
+        InfoWindow infoWindow = new InfoWindow(new InfoView());
         this.getToolbarControlsRight().add(new ToolbarItem(
                 new MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
                 event -> {

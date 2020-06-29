@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.main;
 
+import com.dansoftware.libraryapp.appdata.config.AppConfig;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
@@ -36,7 +37,7 @@ public class Main extends Application {
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     }
 
-    private static ApplicationArgumentHandler argumentHandler;
+    private static AppConfig appConfig;
 
     /**
      * The main-method of the application;
@@ -50,9 +51,7 @@ public class Main extends Application {
      * @see LauncherImpl#launchApplication(Class, Class, String[])
      */
     public static void main(String[] args) {
-        argumentHandler = new ApplicationArgumentHandler(args);
-
-        LauncherImpl.launchApplication(Main.class, Preloader.class, null);
+        LauncherImpl.launchApplication(Main.class, Preloader.class, args);
     }
 
     /**
@@ -65,8 +64,11 @@ public class Main extends Application {
 
     @Override
     public void init() {
-        ApplicationInitializer initializer = new ApplicationInitializer();
-        //initializer.initializeApplication();
+        List<String> applicationParameters = getParameters().getRaw();
+        var initializer = new ApplicationInitializer(applicationParameters);
+        initializer.initializeApplication();
+
+        appConfig = initializer.getAppConfig();
     }
 
 
@@ -120,6 +122,10 @@ public class Main extends Application {
     public synchronized static void runAfterStart(Runnable runnable) {
         if (alreadyStarted()) runnable.run();
         else runAfterStart.add(runnable);
+    }
+
+    public synchronized static AppConfig getAppConfig() {
+        return appConfig;
     }
 
     /**
