@@ -15,21 +15,32 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Window;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +57,8 @@ import static com.dansoftware.libraryapp.locale.Bundles.*;
  */
 public class LoginView extends Workbench implements Initializable {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
+
     /* -------------------------------------------------
      * (View.fxml)
      * -------------------------------------------------
@@ -55,7 +68,7 @@ public class LoginView extends Workbench implements Initializable {
     private StackPane root;
 
     @FXML
-    private ChoiceBox<String> sourceChooser;
+    private ComboBox<Account> sourceChooser;
 
     @FXML
     private VBox rootForm;
@@ -163,7 +176,7 @@ public class LoginView extends Workbench implements Initializable {
             throw new RuntimeException(e);
         }
 
-        this.sourceChooserEmpty = Bindings.isEmpty(sourceChooser.getItems());
+        this.sourceChooserEmpty = Bindings.isNull(sourceChooser.getSelectionModel().selectedItemProperty());
         this.sourceChooserEmpty.addListener((observable, oldValue, newValue) -> {
             if (newValue) this.rootForm.getChildren().remove(this.loginForm);
             else this.rootForm.getChildren().add(1, this.loginForm);
@@ -178,33 +191,65 @@ public class LoginView extends Workbench implements Initializable {
     @FXML
     private void login(ActionEvent event) {
         try {
+            // File file
             this.selectedDatabase = DatabaseFactory.getDatabase(NITRITE, new Account(
-                    new File(sourceChooser.getValue()),
+                    sourceChooser.getValue().getFile(),
                     StringUtils.trim(usernameInput.getText()),
                     StringUtils.trim(passwordInput.getText())
             ));
-
             StageUtils.getStageOf(this).close();
         } catch (SecurityException e) {
             String title = getNotificationMsg("login.auth.failed.security.title");
             String message = getNotificationMsg("login.auth.failed.security.msg");
             this.showErrorDialog(title, message, buttonType -> {
             });
+
+            LOGGER.error("Failed to create/open database (invalid auth)", e);
         } catch (NitriteIOException e) {
             String title = getNotificationMsg("login.auth.failed.io.title");
             String message = getNotificationMsg("login.auth.failed.io.msg");
             this.showErrorDialog(title, message, e, buttonType -> {
             });
+
+            LOGGER.error("Failed to create/open database (I/O)", e);
         }
     }
 
     private void fillLoginForm(LoginData loginData) {
-        /*
-        this.sourceChooser.getItems().add(account.getFile().toString());
-        this.sourceChooser.getSelectionModel().select(account.getFile().toString());
-        this.usernameInput.textProperty().set(account.getUsername());
-        this.passwordInput.textProperty().set(account.getPassword());
-        this.rememberBox.selectedProperty().set(Boolean.TRUE);*/
+        this.sourceChooser.getItems().addAll(FXCollections.observableArrayList(loginData.getLastAccounts()));
+
+        Account loggedAccount = loginData.getLoggedAccount();
+        //loggedAccount != null means auto-login turned on
+        if (Objects.nonNull(loggedAccount)) {
+            this.sourceChooser.getSelectionModel().select(loggedAccount);
+            this.usernameInput.setText(loggedAccount.getUsername());
+            this.passwordInput.setText(loggedAccount.getPassword());
+            this.rememberBox.setSelected(Boolean.TRUE);
+            this.sceneProperty().addListener(new ChangeListener<Scene>() {
+                @Override
+                public void changed(ObservableValue<? extends Scene> sceneProperty, Scene oldScene, Scene newScene) {
+                    //create a reference of the scene-listener itself
+                    ChangeListener<Scene> sceneListener = this;
+
+                    //listening a window
+                    newScene.windowProperty().addListener(new ChangeListener<Window>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Window> windowProperty,
+                                            Window oldWindow,
+                                            Window newWindow) {
+                            //when the window is shown, we try to login automatically
+                            newWindow.setOnShown(event -> {
+                                LoginView.this.login(null);
+
+                                //remove all listeners to let JVM release memory
+                                windowProperty.removeListener(this);
+                                sceneProperty.removeListener(sceneListener);
+                            });
+                        }
+                    });
+                }
+            });
+        }
     }
 
     public Database getSelectedDatabase() {

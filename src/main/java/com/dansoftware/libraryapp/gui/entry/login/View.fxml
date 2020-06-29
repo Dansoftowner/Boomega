@@ -16,8 +16,8 @@
                   <DropShadow />
                </effect>
                <children>
-                  <ChoiceBox fx:id="sourceChooser" minHeight="35.0" minWidth="400.0" prefHeight="30.0">
-                  </ChoiceBox>
+                  <ComboBox fx:id="sourceChooser" minHeight="35.0" minWidth="400.0" prefHeight="30.0" promptText="%login.source.combo.promt">
+                  </ComboBox>
                   <Button minHeight="35.0" minWidth="400.0" mnemonicParsing="false" onAction="#addDataSource" text="%login.add.source">
                      <font>
                         <Font size="15.0" />

@@ -62,6 +62,10 @@ public class Account {
         return password;
     }
 
+    public String getDbName() {
+        return dbName;
+    }
+
     /**
      * Checks the account is anonymous or not.
      *
@@ -76,7 +80,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return file.toString();
+        return this.dbName + " (" + file.getAbsolutePath() + ")";
     }
 
     /**
