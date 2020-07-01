@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 public class PreloaderTest {
 
     public static void main(String[] args) {
-        Application.launch(Preloader.class);
+        Application.launch(Preloader.class, "manyi.db");
     }
 
 }

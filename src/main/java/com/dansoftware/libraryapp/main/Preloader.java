@@ -14,8 +14,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 
 import javax.tools.ToolProvider;
+import java.io.File;
+import java.util.List;
 
 public class Preloader extends javafx.application.Preloader {
 
@@ -25,24 +29,27 @@ public class Preloader extends javafx.application.Preloader {
     public void start(Stage primaryStage) {
         try {
             preloaderStage = primaryStage;
+            preloaderStage.initStyle(StageStyle.UTILITY);
+            preloaderStage.setOnCloseRequest(WindowEvent::consume);
+            preloaderStage.setTitle("Starting LibraryApp");
+            preloaderStage.setOpacity(0);
 
-            PreloaderGUI gui = new PreloaderGUI();
+            //Building the gui
+            PreloaderGUI gui = PreloaderGUI.builder()
+                    .parameters(getParameters().getRaw())
+                    .build();
 
             Scene scene = new Scene(gui);
             scene.setFill(Color.TRANSPARENT);
 
-            preloaderStage.setScene(scene);
-            preloaderStage.setOnCloseRequest(WindowEvent::consume);
-            preloaderStage.setTitle("Starting LibraryApp");
-            preloaderStage.getIcons().add(Globals.WINDOW_ICON);
-            preloaderStage.initStyle(StageStyle.TRANSPARENT);
-            preloaderStage.centerOnScreen();
-            preloaderStage.setOnShown(event ->
-                    new animatefx.animation
-                            .BounceIn(gui.getCenter())
-                            .play());
+            Stage contentStage = new Stage(StageStyle.UNDECORATED);
+            contentStage.initOwner(preloaderStage);
+            contentStage.setScene(scene);
+            contentStage.centerOnScreen();
+            contentStage.setOnShown(event -> gui.logoAnimation());
 
             preloaderStage.show();
+            contentStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -15,7 +15,7 @@ public class LoginViewTest extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Locale.setDefault(Locale.ENGLISH);
+        Locale.setDefault(new Locale("hu"));
 
         LoginView loginView =
                 new LoginView(
@@ -29,7 +29,7 @@ public class LoginViewTest extends Application {
                                         "null",
                                         "FBKE")));
 
-        Theme.DARK.apply(loginView);
+        Theme.LIGHT.apply(loginView);
 
         primaryStage.setScene(new Scene(loginView));
         primaryStage.show();

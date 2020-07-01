@@ -7,42 +7,37 @@ import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.info.InfoView;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
-import com.dlsc.workbenchfx.Workbench;
+import com.dansoftware.libraryapp.gui.workbench.LibraryAppWorkbench;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import javafx.stage.Window;
 import jfxtras.styles.jmetro.JMetroStyleClass;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -50,12 +45,13 @@ import java.util.ResourceBundle;
 
 import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
 import static com.dansoftware.libraryapp.locale.Bundles.*;
+import static com.dansoftware.libraryapp.main.Main.getAppConfig;
 
 /**
  * A LoginView is a graphical object that can handle
  * a login request and creates the {@link Database} object.
  */
-public class LoginView extends Workbench implements Initializable {
+public class LoginView extends LibraryAppWorkbench implements Initializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
 
@@ -100,17 +96,20 @@ public class LoginView extends Workbench implements Initializable {
     private Database selectedDatabase;
 
     /**
-     * ObservableValue that holds {@code true} if the sourceChooser choiceBox has no elements;
+     * ObservableValue that holds {@code true} if the sourceChooser choiceBox has elements;
      * {@code false} otherwise.
      */
-    private BooleanBinding sourceChooserEmpty;
+    private BooleanBinding dataSourceSelected;
 
     private LoginData loginData;
+
+    private boolean loginDataNeedsSave;
 
     public LoginView() {
         initWorkbenchProperties();
         loadGui();
         loadLoginForm();
+        addListeners();
     }
 
     public LoginView(LoginData loginData) {
@@ -146,9 +145,8 @@ public class LoginView extends Workbench implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View.fxml"), getFXMLValues());
         fxmlLoader.setController(this);
 
-        Parent root;
         try {
-            root = fxmlLoader.load();
+            fxmlLoader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -161,6 +159,24 @@ public class LoginView extends Workbench implements Initializable {
         });
 
         root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+
+        /*Platform.runLater(() -> {
+            StageUtils.getStageOf(this).setOnCloseRequest(event -> {
+                Task<?> task = new Task<Object>() {
+                    @Override
+                    protected Object call() throws Exception {
+
+                        this.login
+
+                        getAppConfig()
+
+                        return ObjectUtils.NULL;
+                    }
+                }
+
+                this.showLoadingOverlay();
+            });
+        });*/
     }
 
     /**
@@ -175,11 +191,23 @@ public class LoginView extends Workbench implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        this.sourceChooserEmpty = Bindings.isNull(sourceChooser.getSelectionModel().selectedItemProperty());
-        this.sourceChooserEmpty.addListener((observable, oldValue, newValue) -> {
-            if (newValue) this.rootForm.getChildren().remove(this.loginForm);
-            else this.rootForm.getChildren().add(1, this.loginForm);
+    private void addListeners() {
+        //creating an observable-value that represents that the sourceChooser combobox has selected element
+        this.dataSourceSelected = Bindings.isNotNull(sourceChooser.getSelectionModel().selectedItemProperty());
+        this.dataSourceSelected.addListener((observable, oldValue, newValue) -> {
+            //if there is selected element, we show the login form, otherwise we hide it
+            if (newValue) this.rootForm.getChildren().add(1, this.loginForm);
+            else this.rootForm.getChildren().remove(this.loginForm);
+        });
+
+        sourceChooser.getItems().addListener((ListChangeListener<Account>) change -> {
+            this.loginDataNeedsSave = Boolean.TRUE;
+        });
+
+        this.rememberBox.selectedProperty().addListener(observable -> {
+            this.loginDataNeedsSave = Boolean.TRUE;
         });
     }
 
@@ -225,30 +253,8 @@ public class LoginView extends Workbench implements Initializable {
             this.usernameInput.setText(loggedAccount.getUsername());
             this.passwordInput.setText(loggedAccount.getPassword());
             this.rememberBox.setSelected(Boolean.TRUE);
-            this.sceneProperty().addListener(new ChangeListener<Scene>() {
-                @Override
-                public void changed(ObservableValue<? extends Scene> sceneProperty, Scene oldScene, Scene newScene) {
-                    //create a reference of the scene-listener itself
-                    ChangeListener<Scene> sceneListener = this;
 
-                    //listening a window
-                    newScene.windowProperty().addListener(new ChangeListener<Window>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Window> windowProperty,
-                                            Window oldWindow,
-                                            Window newWindow) {
-                            //when the window is shown, we try to login automatically
-                            newWindow.setOnShown(event -> {
-                                LoginView.this.login(null);
-
-                                //remove all listeners to let JVM release memory
-                                windowProperty.removeListener(this);
-                                sceneProperty.removeListener(sceneListener);
-                            });
-                        }
-                    });
-                }
-            });
+            Platform.runLater(() -> this.login(null));
         }
     }
 

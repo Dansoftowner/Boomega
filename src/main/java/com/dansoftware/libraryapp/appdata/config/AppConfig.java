@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.appdata.config;
 
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.Locale;

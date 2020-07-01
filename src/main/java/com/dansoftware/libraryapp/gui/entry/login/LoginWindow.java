@@ -11,6 +11,7 @@ public class LoginWindow extends Stage {
         this.setScene(initScene(root));
         //this.setTitle();
         this.getIcons().add(Globals.WINDOW_ICON);
+        this.setMaximized(true);
     }
 
     private Scene initScene(Parent root) {
