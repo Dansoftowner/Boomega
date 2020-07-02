@@ -18,6 +18,7 @@ import java.io.*;
  * @see ApplicationDataFolder
  * @see ApplicationDataFolder#getConfigurationFile()
  */
+@Deprecated
 public class BaseConfigIO implements ConfigIO {
     @Override
     public AppConfig read() throws IOException {

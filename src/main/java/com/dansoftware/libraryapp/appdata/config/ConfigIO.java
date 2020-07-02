@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.appdata.config;
 
 import java.io.IOException;
 
+@Deprecated
 public interface ConfigIO {
 
     /**

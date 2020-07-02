@@ -23,11 +23,8 @@ public class LoginData {
                 Objects.requireNonNull(lastAccounts, "lastAccounts mustn't be null"),
                 PredicateUtils.notNullPredicate()
         );
-        this.loggedAccount = loggedAccount;
 
-        if (Objects.nonNull(loggedAccount) && !this.lastAccounts.contains(loggedAccount)) {
-            this.lastAccounts.add(loggedAccount);
-        }
+        this.loggedAccount = loggedAccount;
     }
 
     public void setLoggedAccount(Account loggedAccount) {

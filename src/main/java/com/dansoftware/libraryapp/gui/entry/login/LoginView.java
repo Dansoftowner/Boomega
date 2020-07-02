@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
+import com.dansoftware.libraryapp.appdata.config.AppConfig;
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
@@ -24,20 +25,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import jfxtras.styles.jmetro.JMetroStyleClass;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -101,8 +101,6 @@ public class LoginView extends LibraryAppWorkbench implements Initializable {
      */
     private BooleanBinding dataSourceSelected;
 
-    private LoginData loginData;
-
     private boolean loginDataNeedsSave;
 
     public LoginView() {
@@ -114,7 +112,6 @@ public class LoginView extends LibraryAppWorkbench implements Initializable {
 
     public LoginView(LoginData loginData) {
         this();
-        this.loginData = loginData;
         this.fillLoginForm(loginData);
     }
 
@@ -160,23 +157,24 @@ public class LoginView extends LibraryAppWorkbench implements Initializable {
 
         root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 
-        /*Platform.runLater(() -> {
+        Platform.runLater(() -> {
             StageUtils.getStageOf(this).setOnCloseRequest(event -> {
-                Task<?> task = new Task<Object>() {
+                Task<Void> task = new Task<Void>() {
                     @Override
-                    protected Object call() throws Exception {
+                    protected Void call() throws Exception {
 
-                        this.login
+                        LoginData loginData = LoginView.this.buildLoginData();
 
-                        getAppConfig()
+                        getAppConfig().set(AppConfig.Key.LOGIN_DATA, loginData);
 
-                        return ObjectUtils.NULL;
+
+                        return null;
                     }
-                }
+                };
 
                 this.showLoadingOverlay();
             });
-        });*/
+        });
     }
 
     /**
@@ -213,7 +211,6 @@ public class LoginView extends LibraryAppWorkbench implements Initializable {
 
     @FXML
     private void addDataSource(ActionEvent event) {
-
     }
 
     @FXML
@@ -241,6 +238,22 @@ public class LoginView extends LibraryAppWorkbench implements Initializable {
 
             LOGGER.error("Failed to create/open database (I/O)", e);
         }
+    }
+
+    private LoginData buildLoginData() {
+        LoginData loginData = new LoginData(this.sourceChooser.getItems(), null);
+
+        Account selectedAccount = this.sourceChooser.getSelectionModel().getSelectedItem();
+        if (Objects.nonNull(selectedAccount) && this.rememberBox.isSelected()) {
+            loginData.setLoggedAccount(new Account(
+                    selectedAccount.getFile(),
+                    usernameInput.getText(),
+                    passwordInput.getText(),
+                    selectedAccount.getDbName()
+            ));
+        }
+
+        return loginData;
     }
 
     private void fillLoginForm(LoginData loginData) {

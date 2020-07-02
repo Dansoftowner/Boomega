@@ -9,6 +9,7 @@ import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
