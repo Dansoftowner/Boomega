@@ -10,7 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import java.io.*;
 
 /**
- * Factory/utility methods for {@link AppConfigReader}.
+ * Factory/utility methods for creating {@link AppConfigReader} objects.
  *
  * @author Daniel Gyorffy
  */
@@ -25,6 +25,20 @@ public final class AppConfigReaders {
     /**
      * Creates an {@link AppConfigReader} that reads the configurations from a particular file.
      *
+     * <p><br>
+     * <pre>
+     *     File file = new File("path/to/config");
+     *
+     *     AppConfig appConfig = null;
+     *     try(var reader = AppConfigReaders.newAppConfigFileReader(file)) {
+     *         appConfig = reader.read();
+     *     } catch (IOException e) {
+     *         //handle
+     *     }
+     *
+     *     //using appConfig...
+     * </pre>
+     *
      * @param file the file that we want to read from
      * @return the reader object.
      * @throws IOException if some I/O exception occurs
@@ -38,17 +52,26 @@ public final class AppConfigReaders {
      * the <i>APPDATA</i> folder.
      *
      * @return the reader object
+     * @see ApplicationDataFolder#getConfigurationFile()
+     * @see #newAppConfigFileReader(File)
      */
-    public static AppConfigReader<IOException, IOException> newAppDataFolderReader() {
+    public static AppConfigReader<IOException, IOException> newAppDataFolderReader() throws IOException {
         ApplicationDataFolder applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
-
-        try {
-            return newAppConfigFileReader(applicationDataFolder.getConfigurationFile());
-        } catch (IOException e) {
-            return new NullAppConfigReader<>();
-        }
+        return newAppConfigFileReader(applicationDataFolder.getConfigurationFile());
     }
 
+    /**
+     * Creates an {@link AppConfigReader} that doesn't reads anything.
+     *
+     * @return the reader object
+     */
+    public static AppConfigReader<RuntimeException, RuntimeException> newNullAppConfigReader() {
+        return new NullAppConfigReader<>();
+    }
+
+    /**
+     * Implementation of {@link AppConfigReader} that can read the configurations from file.
+     */
     private static class AppConfigFileReader implements AppConfigReader<IOException, IOException> {
 
         private final Reader reader;
@@ -72,7 +95,7 @@ public final class AppConfigReaders {
         }
     }
 
-    private static class NullAppConfigReader<R extends Throwable, C extends Exception> implements AppConfigReader<R, C> {
+    private static class NullAppConfigReader<R extends Exception, C extends Exception> implements AppConfigReader<R, C> {
 
         @Override
         public AppConfig read() throws R {

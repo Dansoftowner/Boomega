@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.appdata.config;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.BufferedWriter;
@@ -10,25 +11,65 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Factory/utility methods for creating {@link AppConfigWriter} objects.
+ *
+ * @author Daniel Gyorffy
+ */
 public class AppConfigWriters {
 
     private AppConfigWriters() {
     }
 
+    /**
+     * Creates an {@link AppConfigWriter} that writes the configurations to a particular file.
+     *
+     * <p><b>
+     * <pre>
+     *         File file = new File("path/to/config");
+     *
+     *         AppConfig appConfig = ...;
+     *         try(var writer = AppConfigWriters.newAppConfigFileWriter(file)) {
+     *             writer.write(appConfig);
+     *         } catch (IOException e) {
+     *             //handle
+     *         }
+     * </pre>
+     *
+     * @param file the file that we want to write to
+     * @return the writer object.
+     * @throws IOException if some I/O exception occurs
+     */
     public static AppConfigWriter<IOException, IOException> newAppConfigFileWriter(File file) throws IOException {
         return new AppConfigFileWriter(file);
     }
 
-    public static AppConfigWriter<IOException, IOException> newAppDataFolderWriter() {
+    /**
+     * Creates an {@link AppConfigWriter} that writes to the default configuration file located in
+     * the <i>APPDATA</i> folder.
+     *
+     * @return the writer object
+     * @see ApplicationDataFolder#getConfigurationFile()
+     * @see #newAppConfigFileWriter(File)
+     */
+    public static AppConfigWriter<IOException, IOException> newAppDataFolderWriter() throws IOException {
         ApplicationDataFolder applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
-
-        try {
-            return newAppConfigFileWriter(applicationDataFolder.getConfigurationFile());
-        } catch (IOException e) {
-            return new NullAppConfigWriter<>();
-        }
+        return newAppConfigFileWriter(applicationDataFolder.getConfigurationFile());
     }
 
+    /**
+     * Creates an {@link AppConfigWriter} that doesn't writes anything.
+     *
+     * @return the writer object
+     */
+    public static AppConfigWriter<RuntimeException, RuntimeException> newNullConfigFileWriter() {
+        return new NullAppConfigWriter<>();
+    }
+
+
+    /**
+     * Implementation of {@link AppConfigWriter} that can write the configurations to a file
+     */
     private static class AppConfigFileWriter implements AppConfigWriter<IOException, IOException> {
 
         private final JsonWriter writer;
@@ -39,7 +80,11 @@ public class AppConfigWriters {
 
         @Override
         public void write(AppConfig appConfig) throws IOException {
-            new Gson().toJson(appConfig.getJsonObject(), this.writer);
+            try {
+                new Gson().toJson(appConfig.getJsonObject(), this.writer);
+            } catch (JsonIOException e) {
+                throw new IOException(e);
+            }
         }
 
         @Override
@@ -48,7 +93,7 @@ public class AppConfigWriters {
         }
     }
 
-    private static final class NullAppConfigWriter<W extends Throwable, C extends Exception>
+    private static final class NullAppConfigWriter<W extends Exception, C extends Exception>
             implements AppConfigWriter<W, C> {
 
         @Override

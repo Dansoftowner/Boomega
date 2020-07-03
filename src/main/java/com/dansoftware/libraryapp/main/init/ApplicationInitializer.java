@@ -1,9 +1,6 @@
 package com.dansoftware.libraryapp.main.init;
 
-import com.dansoftware.libraryapp.appdata.config.AppConfig;
-import com.dansoftware.libraryapp.appdata.config.BaseConfigIO;
-import com.dansoftware.libraryapp.appdata.config.ConfigIO;
-import com.dansoftware.libraryapp.appdata.config.LoginData;
+import com.dansoftware.libraryapp.appdata.config.*;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.main.Main;
@@ -40,9 +37,9 @@ public final class ApplicationInitializer {
      * Reads the configurations
      */
     private void readConfigurations() {
-        ConfigIO configIO = new BaseConfigIO();
-        try {
-            this.appConfig = configIO.read();
+
+        try(var reader = AppConfigReaders.newAppDataFolderReader()) {
+            this.appConfig = reader.read();
             LOGGER.debug("Configurations has been read");
         } catch (IOException e) {
             LOGGER.error("Failed to load configurations ", e);
