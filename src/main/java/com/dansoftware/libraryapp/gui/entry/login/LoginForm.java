@@ -2,6 +2,9 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.gui.util.StageUtils;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
@@ -9,15 +12,18 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -30,6 +36,9 @@ public class LoginForm extends StackPane implements Initializable {
 
     @FXML
     private ComboBox<Account> sourceChooser;
+
+    @FXML
+    private Button fileChooserBtn;
 
     @FXML
     private VBox rootForm;
@@ -78,6 +87,8 @@ public class LoginForm extends StackPane implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
     }
 
     private void fillForm(LoginData loginData) {
@@ -109,6 +120,24 @@ public class LoginForm extends StackPane implements Initializable {
 
         if (Objects.nonNull(this.onLoginRequest)) {
             this.onLoginRequest.accept(account);
+        }
+    }
+
+    @FXML
+    private void openFile() {
+        FileChooser.ExtensionFilter dbExtension =
+                new FileChooser.ExtensionFilter("LibraryApp database files", "*.lbadb");
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters()
+                .addAll(new FileChooser.ExtensionFilter("All files", "*"), dbExtension);
+        fileChooser.setSelectedExtensionFilter(dbExtension);
+
+        File file = fileChooser.showOpenDialog(StageUtils.getWindowOf(this));
+        if (Objects.nonNull(file)) {
+            Account account = new Account(file, null, null, file.getName());
+            this.sourceChooser.getItems().add(account);
+            this.sourceChooser.getSelectionModel().select(account);
         }
     }
 
