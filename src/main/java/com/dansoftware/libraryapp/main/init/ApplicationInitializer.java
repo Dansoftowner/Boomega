@@ -27,23 +27,24 @@ public final class ApplicationInitializer {
     private final static Logger LOGGER = LoggerFactory.getLogger(ApplicationInitializer.class);
 
     private AppConfig appConfig;
-    private ApplicationArgumentHandler appArgumentHandler;
+    private final ApplicationArgumentHandler appArgumentHandler;
 
     public ApplicationInitializer(List<String> applicationParameters) {
         this.appArgumentHandler = new ApplicationArgumentHandler(applicationParameters);
-    }
 
-    /**
-     * Reads the configurations
-     */
-    private void readConfigurations() {
-
-        try(var reader = AppConfigReaders.newAppDataFolderReader()) {
+        try (var reader = AppConfigReaders.newAppDataFolderReader()) {
             this.appConfig = reader.read();
             LOGGER.debug("Configurations has been read");
         } catch (IOException e) {
+            this.appConfig = new AppConfig();
             LOGGER.error("Failed to load configurations ", e);
         }
+    }
+
+    /**
+     *
+     */
+    private void setDefaults() {
 
         this.appArgumentHandler.getAccount().ifPresent(account -> {
             LoginData loginData = this.appConfig.get(AppConfig.Key.LOGIN_DATA);
@@ -63,7 +64,8 @@ public final class ApplicationInitializer {
      */
     private void searchForUpdates() {
         if (this.appConfig.get(AppConfig.Key.SEARCH_UPDATES)) {
-            UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO, new BaseLoader(), new GUINotifier());
+            UpdateSearcher updateSearcher =
+                    new UpdateSearcher(Globals.VERSION_INFO, new BaseLoader(), new GUINotifier());
             updateSearcher.search();
         }
     }
@@ -73,7 +75,7 @@ public final class ApplicationInitializer {
      * executed before the whole application starts.
      */
     public void initializeApplication() {
-        readConfigurations();
+        setDefaults();
         searchForUpdates();
     }
 

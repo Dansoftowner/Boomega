@@ -200,6 +200,10 @@
     -fx-background-color: red;
 }
 
+.login-box {
+    -fx-background-color: #3c3c40;
+}
+
 /*Workbech*/
 * {
     -fx-light-text-color: rgba(100%,100%,100%,0.7);

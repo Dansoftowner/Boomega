@@ -75,7 +75,7 @@ public class Account {
      * @return `true` if the account is anonymous; `false` otherwise.
      */
     public boolean isAnonymous() {
-        return StringUtils.isEmpty(this.username) && StringUtils.isEmpty(this.password);
+        return StringUtils.isBlank(this.username) && StringUtils.isBlank(this.password);
     }
 
     @Override

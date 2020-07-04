@@ -189,6 +189,10 @@
     -fx-background-color: red;
 }
 
+.login-box {
+    -fx-background-color: white;
+}
+
 /**Workbench*/
 * {
     -primary-color: #0078D7;

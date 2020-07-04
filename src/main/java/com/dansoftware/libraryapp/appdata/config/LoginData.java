@@ -10,20 +10,15 @@ import java.util.Objects;
 
 public class LoginData {
 
-    private final List<Account> lastAccounts;
+    private List<Account> lastAccounts;
     private Account loggedAccount;
 
     public LoginData() {
         this(new ArrayList<>(), null);
     }
 
-    @SuppressWarnings("unchecked")
     public LoginData(List<Account> lastAccounts, Account loggedAccount) {
-        this.lastAccounts = (List<Account>) ListUtils.predicatedList(
-                Objects.requireNonNull(lastAccounts, "lastAccounts mustn't be null"),
-                PredicateUtils.notNullPredicate()
-        );
-
+        this.setLastAccounts(lastAccounts);
         this.loggedAccount = loggedAccount;
     }
 
@@ -33,6 +28,14 @@ public class LoginData {
 
     public List<Account> getLastAccounts() {
         return lastAccounts;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setLastAccounts(List<Account> lastAccounts) {
+        this.lastAccounts = ListUtils.predicatedList(
+                Objects.requireNonNull(lastAccounts, "lastAccounts mustn't be null"),
+                PredicateUtils.notNullPredicate()
+        );
     }
 
     public Account getLoggedAccount() {
