@@ -87,8 +87,6 @@ public class LoginForm extends StackPane implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
     }
 
     private void fillForm(LoginData loginData) {
@@ -143,7 +141,8 @@ public class LoginForm extends StackPane implements Initializable {
 
     @FXML
     private void callDataSourceAdder() {
-
+        DataSourceAdder dataSourceAdder = new DataSourceAdder();
+        dataSourceAdder.show(StageUtils.getStageOf(this));
     }
 
     public void setOnLoginRequest(Consumer<Account> onLoginRequest) {
@@ -172,9 +171,15 @@ public class LoginForm extends StackPane implements Initializable {
         });
     }
 
+    private void setDefaults() {
+        this.rootForm.getChildren().remove(this.loginForm);
+        this.fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         addListeners();
+        setDefaults();
         //this.sourceChooser.setCellFactory(self -> new SourceChooserItem());
     }
 }

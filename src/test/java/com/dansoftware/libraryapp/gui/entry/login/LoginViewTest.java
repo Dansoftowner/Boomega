@@ -17,8 +17,8 @@ public class LoginViewTest extends Application {
     public void start(Stage primaryStage) throws Exception {
         Locale.setDefault(new Locale("hu"));
 
-        LoginView loginView =
-                new LoginView(
+        LoginView loginView = new LoginView();
+                /*new LoginView(
                         new LoginData(
                                 new ArrayList<>(List.of(new Account(new File("c:/dsaf/ds.db"),
                                         null,
@@ -27,7 +27,7 @@ public class LoginViewTest extends Application {
                                 new Account(new File("K:/fsdfdsf/f.dv"),
                                         "manxi",
                                         "null",
-                                        "FBKE")));
+                                        "FBKE")));*/
 
         Theme.LIGHT.apply(loginView);
 

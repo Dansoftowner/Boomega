@@ -1,7 +1,5 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
-import com.dansoftware.libraryapp.appdata.config.AppConfig;
-import com.dansoftware.libraryapp.appdata.config.AppConfigWriters;
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
@@ -15,7 +13,6 @@ import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.concurrent.Task;
 import javafx.scene.Node;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
@@ -26,8 +23,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
-import static com.dansoftware.libraryapp.locale.Bundles.*;
-import static com.dansoftware.libraryapp.main.Main.getAppConfig;
+import static com.dansoftware.libraryapp.locale.Bundles.getNotificationMsg;
 
 /**
  * A LoginView is a graphical object that can handle
@@ -68,7 +64,7 @@ public class LoginView extends LibraryAppWorkbench {
     private final LoginForm loginForm;
 
     public LoginView() {
-        this(null);
+        this(new LoginData());
     }
 
     public LoginView(LoginData loginData) {
