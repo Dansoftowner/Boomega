@@ -8,19 +8,19 @@
     <children>
         <HBox prefWidth="595.0" spacing="5.0">
             <children>
-                <TextField minHeight="30.0" HBox.hgrow="SOMETIMES" />
-                <TextField minHeight="30.0" HBox.hgrow="ALWAYS" />
-                <Button minHeight="30.0" mnemonicParsing="false" text="Button" />
+                <TextField fx:id="nameField" minHeight="30.0" HBox.hgrow="SOMETIMES" />
+                <TextField fx:id="dirField" minHeight="30.0" HBox.hgrow="ALWAYS" />
+                <Button fx:id="dirOpenerBtn" contentDisplay="GRAPHIC_ONLY" minHeight="30.0" mnemonicParsing="false" onAction="#openDirectory" text="Button" />
             </children>
         </HBox>
-        <TextField minHeight="30.0" />
+        <TextField fx:id="fullPathField" minHeight="30.0" />
         <Separator prefWidth="200.0" />
-        <CheckBox minHeight="30.0" mnemonicParsing="false" text="CheckBox" VBox.vgrow="ALWAYS" />
-        <TextField minHeight="30.0" />
-        <TextField minHeight="30.0" />
+        <CheckBox fx:id="authCheckBox" minHeight="30.0" mnemonicParsing="false" text="CheckBox" VBox.vgrow="ALWAYS" />
+        <TextField fx:id="usernameField" disable="true" minHeight="30.0" />
+        <TextField fx:id="passwordField" disable="true" minHeight="30.0" />
         <Separator prefWidth="200.0" />
 
-        <Button fx:id="saveBtn" defaultButton="true" minHeight="30.0" mnemonicParsing="false" prefWidth="${root.width}" text="Button" />
+        <Button fx:id="saveBtn" defaultButton="true" minHeight="30.0" mnemonicParsing="false" onAction="#save" prefWidth="${root.width}" text="Button" />
 
     </children>
     <padding>

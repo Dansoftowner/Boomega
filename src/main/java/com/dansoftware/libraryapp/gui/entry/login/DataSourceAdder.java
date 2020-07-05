@@ -1,11 +1,16 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.db.Account;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -23,6 +28,30 @@ public class DataSourceAdder implements Initializable {
 
     @FXML
     private VBox root;
+
+    @FXML
+    private Button dirOpenerBtn;
+
+    @FXML
+    private TextField nameField;
+
+    @FXML
+    private TextField dirField;
+
+    @FXML
+    private TextField fullPathField;
+
+    @FXML
+    private CheckBox authCheckBox;
+
+    @FXML
+    private TextField usernameField;
+
+    @FXML
+    private TextField passwordField;
+
+    @FXML
+    private Button saveBtn;
 
     private Account createdAccount;
 
@@ -60,11 +89,32 @@ public class DataSourceAdder implements Initializable {
 
         stage.showAndWait();
 
-        return Optional.empty();
+        return Optional.ofNullable(this.createdAccount);
+    }
+
+    @FXML
+    private void save() {
+
+    }
+
+    @FXML
+    private void openDirectory() {
+
+    }
+
+    private void setDefaults() {
+        this.root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        this.dirOpenerBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
+    }
+
+    private void setBehaviour() {
+        this.usernameField.disableProperty().bind(this.authCheckBox.selectedProperty());
+        this.passwordField.disableProperty().bind(this.authCheckBox.selectedProperty());
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        setDefaults();
+        setBehaviour();
     }
 }

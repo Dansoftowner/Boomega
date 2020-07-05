@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -142,7 +143,8 @@ public class LoginForm extends StackPane implements Initializable {
     @FXML
     private void callDataSourceAdder() {
         DataSourceAdder dataSourceAdder = new DataSourceAdder();
-        dataSourceAdder.show(StageUtils.getStageOf(this));
+        Optional<Account> result = dataSourceAdder.show(StageUtils.getStageOf(this));
+        result.ifPresent(this.sourceChooser.getItems()::add);
     }
 
     public void setOnLoginRequest(Consumer<Account> onLoginRequest) {
