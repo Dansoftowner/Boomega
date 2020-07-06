@@ -13,7 +13,7 @@ import static com.dansoftware.libraryapp.locale.Bundles.getFXMLValues;
 public class DatabaseCreatorWindow extends Stage {
 
     private static final double WIDTH = 741;
-    private static final double HEIGHT = 410;
+    private static final double HEIGHT = 400;
 
     public DatabaseCreatorWindow(DatabaseCreatorView view, Window owner) {
         this.setTitle(getFXMLValues().getString("data.source.adder.window.title"));

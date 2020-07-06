@@ -5,6 +5,7 @@ import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dansoftware.libraryapp.main.Globals;
+import com.dansoftware.libraryapp.util.FileUtils;
 import com.jfoenix.controls.JFXDialog;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -31,6 +32,7 @@ import org.dizitart.no2.exceptions.NitriteIOException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -108,16 +110,20 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
         //--------------------->
         // VALIDATING THE INPUTS
-
         if (StringUtils.isBlank(this.nameField.getText())) {
-            showError("You have to specify a name!");
+            //handle
+            return;
+        }
+
+        if (FileUtils.isValidPath(dbFile)) {
+            //handle
             return;
         }
 
         if (!dir.exists()) {
             boolean directoriesCreated = dir.mkdirs();
             if (!directoriesCreated) {
-                //
+                //handle
             }
         }
 
@@ -125,6 +131,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             showError("File '" + dbFile + "' already exists.");
             return;
         }
+
+
 
         String username = null;
         String password = null;

@@ -73,7 +73,7 @@
          <PasswordField fx:id="passwordField" disable="true" minHeight="35.0" promptText="%login.form.password.prompt" style="-fx-font-size: 15px" />
          <Separator prefWidth="200.0" />
 
-         <Button fx:id="createBtn" defaultButton="true" minHeight="40.0" mnemonicParsing="false" onAction="#create" prefWidth="${vBox.width}" style="-fx-font-size: 15px" text="%data.source.adder.create" />
+         <Button fx:id="createBtn" defaultButton="true" minHeight="35.0" mnemonicParsing="false" onAction="#create" prefWidth="${vBox.width}" style="-fx-font-size: 15px" text="%data.source.adder.create" />
 
      </children>
      <padding>
