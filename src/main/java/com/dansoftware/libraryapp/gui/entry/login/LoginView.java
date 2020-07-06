@@ -33,6 +33,18 @@ public class LoginView extends LibraryAppWorkbench {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
 
+    private class ModuleImpl extends WorkbenchModule {
+
+        public ModuleImpl() {
+            super("Login", FontAwesomeIcon.SIGN_IN);
+        }
+
+        @Override
+        public Node activate() {
+            return LoginView.this.loginForm;
+        }
+    }
+
     /**
      * Field that holds the selected database from the user.
      */
@@ -70,12 +82,7 @@ public class LoginView extends LibraryAppWorkbench {
     public LoginView(LoginData loginData) {
         this.init();
         this.loginForm = new LoginForm(loginData, ON_LOGIN_REQUEST);
-        this.getModules().add(new WorkbenchModule("Login", FontAwesomeIcon.SIGN_IN) {
-            @Override
-            public Node activate() {
-                return LoginView.this.loginForm;
-            }
-        });
+        this.getModules().add(new ModuleImpl());
     }
 
     /**

@@ -2,6 +2,8 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.gui.entry.login.dbcreator.DatabaseCreatorView;
+import com.dansoftware.libraryapp.gui.entry.login.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dansoftware.libraryapp.main.Globals;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -143,8 +145,12 @@ public class LoginForm extends StackPane implements Initializable {
 
     @FXML
     private void callDataSourceAdder() {
-        DataSourceAdder dataSourceAdder = new DataSourceAdder();
-        Optional<Account> result = dataSourceAdder.show(StageUtils.getStageOf(this));
+        DatabaseCreatorView view = new DatabaseCreatorView();
+
+        DatabaseCreatorWindow window = new DatabaseCreatorWindow(view, StageUtils.getStageOf(this));
+        window.showAndWait();
+
+        Optional<Account> result = view.getCreatedAccount();
         result.ifPresent(this.sourceChooser.getItems()::add);
     }
 

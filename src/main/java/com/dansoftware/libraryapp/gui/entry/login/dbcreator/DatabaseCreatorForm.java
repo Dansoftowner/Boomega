@@ -1,7 +1,6 @@
-package com.dansoftware.libraryapp.gui.entry.login;
+package com.dansoftware.libraryapp.gui.entry.login.dbcreator;
 
 import com.dansoftware.libraryapp.db.Account;
-import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
@@ -13,7 +12,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -21,10 +25,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import jfxtras.styles.jmetro.JMetroStyleClass;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
-import org.dizitart.no2.exceptions.SecurityException;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,11 +40,7 @@ import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
 import static com.dansoftware.libraryapp.locale.Bundles.getFXMLValues;
 import static com.dansoftware.libraryapp.locale.Bundles.getNotificationMsg;
 
-public class DataSourceAdder implements Initializable {
-
-
-    @FXML
-    private StackPane root;
+public class DatabaseCreatorForm extends StackPane implements Initializable {
 
     @FXML
     private VBox vBox;
@@ -73,16 +71,16 @@ public class DataSourceAdder implements Initializable {
 
     private Account createdAccount;
 
-    public DataSourceAdder() {
+    public DatabaseCreatorForm() {
         loadGui();
     }
 
     private void loadGui() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DataSourceAdder.fxml"), getFXMLValues());
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DatabaseCreatorForm.fxml"), getFXMLValues());
         fxmlLoader.setController(this);
 
         try {
-            fxmlLoader.load();
+            this.getChildren().add(fxmlLoader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -90,33 +88,15 @@ public class DataSourceAdder implements Initializable {
 
 
     /**
-     * @param ownerWindow
+     *
      * @return
      */
-    public Optional<Account> show(Window ownerWindow) {
-        Stage stage = new Stage();
-        stage.setTitle(getFXMLValues().getString("data.source.adder.window.title"));
-        stage.setScene(new Scene(this.root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        if (Objects.nonNull(ownerWindow)) {
-            stage.initOwner(ownerWindow);
-
-            //Applying stylesheets from the owner-window
-            List<String> styleSheets = ownerWindow.getScene()
-                    .getRoot()
-                    .getStylesheets();
-
-            stage.getScene().getStylesheets().addAll(styleSheets);
-        }
-
-
-        stage.showAndWait();
-
+    public Optional<Account> getCreatedAccount() {
         return Optional.ofNullable(this.createdAccount);
     }
 
     private void showError(String message) {
-        JFXDialog jfxDialog = new JFXDialog(this.root, new Label(message), JFXDialog.DialogTransition.CENTER);
+        JFXDialog jfxDialog = new JFXDialog(this, new Label(message), JFXDialog.DialogTransition.CENTER);
         jfxDialog.show();
     }
 
@@ -184,7 +164,7 @@ public class DataSourceAdder implements Initializable {
     @FXML
     private void openDirectory() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDir = directoryChooser.showDialog(StageUtils.getWindowOf(this.root));
+        File selectedDir = directoryChooser.showDialog(StageUtils.getWindowOf(this));
 
         if (Objects.nonNull(selectedDir)) {
             this.dirField.setText(selectedDir.getAbsolutePath());
@@ -196,7 +176,7 @@ public class DataSourceAdder implements Initializable {
     }
 
     private void setDefaults() {
-        this.root.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.dirOpenerBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN, "20px"));
         this.fullPathField.textProperty()
                 .bind(this.dirField
@@ -206,7 +186,22 @@ public class DataSourceAdder implements Initializable {
                         .concat("." + Globals.FILE_EXTENSION)
                 );
 
-        //We don't allow to put spaces
+        //the user can drag a directory into the field.
+        this.dirField.setOnDragOver(event -> event.acceptTransferModes(TransferMode.MOVE));
+        this.dirField.setOnDragDropped(event -> {
+            Dragboard dragboard = event.getDragboard();
+            if (dragboard.hasFiles()) {
+                List<File> files = dragboard.getFiles();
+                File draggedFile = files.get(0);
+
+                if (draggedFile.isDirectory()) {
+                    TextField field = (TextField) event.getSource();
+                    field.setText(draggedFile.getAbsolutePath());
+                }
+            }
+        });
+
+        //We don't allow to put spaces in the following inputs
         this.nameField.setTextFormatter(new SpaceValidator());
         this.usernameField.setTextFormatter(new SpaceValidator());
         this.passwordField.setTextFormatter(new SpaceValidator());

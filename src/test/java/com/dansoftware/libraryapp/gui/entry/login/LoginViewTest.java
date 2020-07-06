@@ -29,7 +29,7 @@ public class LoginViewTest extends Application {
                                         "null",
                                         "FBKE")));*/
 
-        Theme.DARK.apply(loginView);
+        Theme.LIGHT.apply(loginView);
 
 
 
