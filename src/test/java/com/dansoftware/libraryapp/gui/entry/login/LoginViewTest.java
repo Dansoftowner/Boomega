@@ -29,11 +29,11 @@ public class LoginViewTest extends Application {
                                         "null",
                                         "FBKE")));*/
 
-        Theme.LIGHT.apply(loginView);
+        Theme.DARK.apply(loginView);
 
-        new LoginWindow(loginView).show();
 
-        //primaryStage.setScene(new Scene(loginView));
-        //primaryStage.show();
+
+        primaryStage.setScene(new Scene(loginView));
+        primaryStage.show();
     }
 }

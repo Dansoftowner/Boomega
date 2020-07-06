@@ -12,6 +12,8 @@ public final class Globals {
             Globals.class.getResourceAsStream("/com/dansoftware/libraryapp/image/libraryapp-win-icon.png")
     );
 
+    public static final String FILE_EXTENSION = "lbadb";
+
     public static final VersionInfo VERSION_INFO = new VersionInfo("0.0.0");
 
 

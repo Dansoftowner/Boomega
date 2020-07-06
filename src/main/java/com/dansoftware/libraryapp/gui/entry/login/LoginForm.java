@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
+import com.dansoftware.libraryapp.main.Globals;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
@@ -125,7 +126,7 @@ public class LoginForm extends StackPane implements Initializable {
     @FXML
     private void openFile() {
         FileChooser.ExtensionFilter dbExtension =
-                new FileChooser.ExtensionFilter("LibraryApp database files", "*.lbadb");
+                new FileChooser.ExtensionFilter("LibraryApp database files", "*." + Globals.FILE_EXTENSION);
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters()

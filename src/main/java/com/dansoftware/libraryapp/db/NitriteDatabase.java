@@ -43,16 +43,10 @@ public class NitriteDatabase implements Database {
 
     private final Nitrite dbImpl;
     private final Account account;
-    private String name;
 
     public NitriteDatabase(Account account) throws SecurityException, NitriteIOException {
         this.account = Objects.requireNonNull(account, "The account must not be null!");
         this.dbImpl = init(account);
-    }
-
-    public NitriteDatabase(String name, Account account) {
-        this(account);
-        this.name = name;
     }
 
     private Nitrite init(Account account) throws SecurityException, NitriteIOException {
