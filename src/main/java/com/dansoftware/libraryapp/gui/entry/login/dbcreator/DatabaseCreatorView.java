@@ -8,6 +8,11 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
 import java.util.Optional;
 
+/**
+ * A DatabaseCreatorView is a gui object that let's the user to
+ * create new database files. It should be displayed inside
+ * a {@link DatabaseCreatorWindow}.
+ */
 public class DatabaseCreatorView extends SimpleHeaderView {
 
     private final DatabaseCreatorForm form;

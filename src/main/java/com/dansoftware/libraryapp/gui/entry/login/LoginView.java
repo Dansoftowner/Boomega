@@ -35,6 +35,9 @@ public class LoginView extends SimpleHeaderView {
      */
     private Database selectedDatabase;
 
+    /**
+     * Defines what happenes when the user wants to sign in by the login-form
+     */
     private final Consumer<Account> ON_LOGIN_REQUEST = account -> {
         try {
             // File file
@@ -70,12 +73,7 @@ public class LoginView extends SimpleHeaderView {
         this.init();
     }
 
-    /**
-     *
-     */
     private void init() {
-
-        //
         InfoWindow infoWindow = new InfoWindow(new InfoView());
         this.getToolbarControlsRight().add(new ToolbarItem(
                 new MaterialDesignIconView(MaterialDesignIcon.INFORMATION),

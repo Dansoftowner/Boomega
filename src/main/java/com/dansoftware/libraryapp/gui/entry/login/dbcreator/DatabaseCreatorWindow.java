@@ -10,6 +10,10 @@ import java.util.Objects;
 
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
+/**
+ * A DatabaseCreatorWindow is a javaFX {@link Stage} that should be
+ * used to display {@link DatabaseCreatorView} gui-objects.
+ */
 public class DatabaseCreatorWindow extends Stage {
 
     private static final double WIDTH = 741;

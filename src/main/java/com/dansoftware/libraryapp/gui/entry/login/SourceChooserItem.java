@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 
 import java.util.Objects;
 
+@Deprecated
 final class SourceChooserItem extends ListCell<Account> {
     @Override
     protected void updateItem(Account item, boolean empty) {

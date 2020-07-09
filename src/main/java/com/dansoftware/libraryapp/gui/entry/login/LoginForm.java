@@ -36,6 +36,11 @@ import java.util.function.Consumer;
 
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
+/**
+ * A LoginForm is gui-form that lets the user to sign in to
+ * a database. It's usually wrapped in a {@link LoginView}
+ * object.
+ */
 public class LoginForm extends StackPane implements Initializable {
 
     @FXML
@@ -66,6 +71,7 @@ public class LoginForm extends StackPane implements Initializable {
     private Consumer<Account> onLoginRequest;
 
     LoginForm() {
+        //calling with empty login-data
         this(new LoginData());
     }
 
@@ -151,7 +157,11 @@ public class LoginForm extends StackPane implements Initializable {
         window.showAndWait();
 
         Optional<Account> result = view.getCreatedAccount();
-        result.ifPresent(this.sourceChooser.getItems()::add);
+
+        result.ifPresent(account -> {
+            this.sourceChooser.getItems().add(account);
+            this.sourceChooser.getSelectionModel().select(account);
+        });
     }
 
     public void setOnLoginRequest(Consumer<Account> onLoginRequest) {

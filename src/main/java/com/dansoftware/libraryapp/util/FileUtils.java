@@ -45,6 +45,7 @@ public class FileUtils {
         return !hasValidPath(file);
     }
 
+
     public static String shortenedFilePath(File file, int maxBack) {
         if (Objects.isNull(file) || maxBack < 0) {
             return "";

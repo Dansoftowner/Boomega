@@ -8,12 +8,21 @@ import javafx.scene.image.Image;
  */
 public final class Globals {
 
-    public static final Image WINDOW_ICON = new Image(
+    /**
+     * The libraryapp icon
+     */
+    public static final Image ICON = new Image(
             Globals.class.getResourceAsStream("/com/dansoftware/libraryapp/image/libraryapp-win-icon.png")
     );
 
+    /**
+     * The libraryapp database file-extension
+     */
     public static final String FILE_EXTENSION = "lbadb";
 
+    /**
+     * The current version-info object
+     */
     public static final VersionInfo VERSION_INFO = new VersionInfo("0.0.0");
 
 

@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login.dbcreator;
 
 import com.dansoftware.libraryapp.db.Account;
-import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
@@ -33,6 +32,11 @@ import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 import static com.dansoftware.libraryapp.locale.I18N.getNotificationMsg;
 
+/**
+ * A {@link DatabaseCreatorForm} is gui-form that lets the user to create
+ * a new data-source file. It's usually wrapped in a {@link DatabaseCreatorView}
+ * object.
+ */
 public class DatabaseCreatorForm extends StackPane implements Initializable {
 
     @FXML
@@ -82,10 +86,6 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         }
     }
 
-
-    /**
-     * @return
-     */
     public Optional<Account> getCreatedAccount() {
         return Optional.ofNullable(this.createdAccount);
     }
