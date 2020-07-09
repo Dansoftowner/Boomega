@@ -11,6 +11,7 @@ import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.stage.Stage;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class LoginView extends SimpleHeaderView {
             // File file
             this.selectedDatabase = DatabaseFactory.getDatabase(NITRITE, account);
 
+            //starting a thread that saves the login-data
+            new Thread(new LoginDataSaver(this.getLoginData())).start();
             StageUtils.getStageOf(this).close();
         } catch (SecurityException e) {
             String title = getNotificationMsg("login.auth.failed.security.title");

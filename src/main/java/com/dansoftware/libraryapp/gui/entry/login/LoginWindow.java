@@ -30,30 +30,14 @@ public class LoginWindow extends Stage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginWindow.class);
 
-    private final LoginView root;
+    private LoginView root;
 
     /**
      * Defines what happens when the user tries to close the window
      */
     private final EventHandler<WindowEvent> ON_CLOSE_REQUEST = event -> {
-        Task<Void> saverTask = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
-                if (Objects.isNull(getAppConfig()))
-                    return null;
-
-                getAppConfig().set(AppConfig.Key.LOGIN_DATA, root.getLoginData());
-                try (var writer = AppConfigWriters.newAppDataFolderWriter()) {
-                    writer.write(getAppConfig());
-                }
-
-                return null;
-            }
-        };
+        Task<Void> saverTask = new LoginDataSaver(root.getLoginData());
         saverTask.setOnRunning(e -> root.showLoadingOverlay());
-        saverTask.setOnSucceeded(e -> LOGGER.debug("LoginData saved successfully"));
-        saverTask.setOnFailed(e ->
-                LOGGER.error("Something went wrong when trying to save loginData", e.getSource().getException()));
 
         new Thread(saverTask).start();
 

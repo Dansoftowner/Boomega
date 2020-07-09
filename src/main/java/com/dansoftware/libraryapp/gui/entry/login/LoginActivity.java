@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ public class LoginActivity {
      */
     public Optional<Database> show() {
         LoginView loginView = new LoginView(loginData);
+        Theme.applyDefault(loginView);
 
         LoginWindow loginWindow = new LoginWindow(loginView);
         loginWindow.showAndWait();

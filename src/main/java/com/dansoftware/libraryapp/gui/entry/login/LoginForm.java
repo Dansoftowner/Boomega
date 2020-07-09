@@ -25,6 +25,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +44,8 @@ import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
  * object.
  */
 public class LoginForm extends StackPane implements Initializable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginForm.class);
 
     @FXML
     private ComboBox<Account> sourceChooser;
@@ -102,6 +106,11 @@ public class LoginForm extends StackPane implements Initializable {
     private void fillForm(LoginData loginData) {
         this.sourceChooser.getItems().addAll(loginData.getLastAccounts());
 
+        Account selectedAccount = loginData.getSelectedAccount();
+        if (Objects.nonNull(selectedAccount)) {
+            this.sourceChooser.getSelectionModel().select(selectedAccount);
+        }
+
         Account loggedAccount = loginData.getLoggedAccount();
         if (Objects.nonNull(loggedAccount)) {
             this.sourceChooser.getSelectionModel().select(loggedAccount);
@@ -122,9 +131,13 @@ public class LoginForm extends StackPane implements Initializable {
                 StringUtils.trim(passwordInput.getText())
         );
 
-        this.loginData.setLoggedAccount(
-                this.rememberBox.isSelected() ? account : null
-        );
+        if (this.rememberBox.isSelected()) {
+            this.loginData.setLoggedAccount(account);
+            LOGGER.debug("LoginData loggedAccount set to: " + account);
+        } else {
+            this.loginData.setLoggedAccount(null);
+            LOGGER.debug("LoginData loggedAccount set to: null");
+        }
 
         if (Objects.nonNull(this.onLoginRequest)) {
             this.onLoginRequest.accept(account);
@@ -187,6 +200,10 @@ public class LoginForm extends StackPane implements Initializable {
                 this.rootForm.getChildren().add(1, this.loginForm);
             else
                 this.rootForm.getChildren().remove(this.loginForm);
+        });
+
+        this.sourceChooser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            loginData.setSelectedAccount(newValue);
         });
     }
 

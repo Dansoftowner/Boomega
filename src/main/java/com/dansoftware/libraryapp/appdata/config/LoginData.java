@@ -11,6 +11,7 @@ import java.util.Objects;
 public class LoginData {
 
     private List<Account> lastAccounts;
+    private Account selectedAccount;
     private Account loggedAccount;
 
     public LoginData() {
@@ -36,6 +37,14 @@ public class LoginData {
                 Objects.requireNonNull(lastAccounts, "lastAccounts mustn't be null"),
                 PredicateUtils.notNullPredicate()
         );
+    }
+
+    public Account getSelectedAccount() {
+        return selectedAccount;
+    }
+
+    public void setSelectedAccount(Account selectedAccount) {
+        this.selectedAccount = selectedAccount;
     }
 
     public Account getLoggedAccount() {

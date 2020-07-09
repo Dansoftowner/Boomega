@@ -1,13 +1,17 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.config.AppConfig;
+import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
+import com.dansoftware.libraryapp.gui.entry.AppEntry;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.BooleanUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -65,34 +69,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        LoginData loginData = appConfig.get(AppConfig.Key.LOGIN_DATA);
 
-        /*
-        EntryPoint entryPoint = new EntryPoint(() -> {
-            if (argumentHandler.getAccount().isPresent()) {
-                return argumentHandler.getAccount().get();
-            } else if (getConfigurationBase().getLoggedAccount().isPresent()) {
-                return getConfigurationBase().getLoggedAccount().get();
-            }
-
-            return null;
-        });
-
-        boolean close = !entryPoint.show();
-        if (close) Platform.exit();
-
-//        Theme.applyDefault(scene);
-//
-//        primaryStage.setScene(scene);
-//        primaryStage.setTitle("LibraryApp");
-//        primaryStage.setFullScreenExitHint(getGeneralWord("window.fullscreen.hint"));
-//        primaryStage.getIcons().add(Globals.WINDOW_ICON);
-//        primaryStage.initStyle(StageStyle.DECORATED);
-//        primaryStage.setOnCloseRequest(null);
-//        primaryStage.setResizable(true);
-//        primaryStage.setMaximized(true);
-
-        runAfterStart.forEach(Runnable::run);
-        runAfterStart = null;*/
+        AppEntry appEntry = new AppEntry(loginData);
+        if (BooleanUtils.isFalse(appEntry.show())) {
+            Platform.exit();
+        }
     }
 
     @Override

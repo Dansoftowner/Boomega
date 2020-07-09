@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.*;
+import java.util.Objects;
 
 /**
  * Factory/utility methods for creating {@link AppConfigReader} objects.
@@ -83,7 +84,8 @@ public final class AppConfigReaders {
         @Override
         public AppConfig read() throws IOException {
             try {
-                return new AppConfig(new Gson().fromJson(reader, JsonObject.class));
+                JsonObject read = new Gson().fromJson(reader, JsonObject.class);
+                return new AppConfig(Objects.isNull(read) ? new JsonObject() : read);
             } catch (JsonIOException | JsonSyntaxException e) {
                 throw new IOException(e);
             }
