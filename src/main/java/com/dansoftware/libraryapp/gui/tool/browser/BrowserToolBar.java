@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 
 import java.util.Objects;
 
-import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
 
 /**
  * A BrowserToolBar is a GUI element for operating on a particular {@link WebContentRenderer}.

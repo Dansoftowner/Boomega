@@ -1,15 +1,11 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
-import com.dansoftware.libraryapp.appdata.config.LoginData;
-import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.util.FileUtils;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.util.*;
+import java.util.Locale;
 
 public class LoginViewTest extends Application {
     @Override

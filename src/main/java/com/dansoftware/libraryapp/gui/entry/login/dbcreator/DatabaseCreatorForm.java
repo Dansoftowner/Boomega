@@ -1,30 +1,23 @@
 package com.dansoftware.libraryapp.gui.entry.login.dbcreator;
 
 import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.util.FileUtils;
-import com.jfoenix.controls.JFXDialog;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
@@ -32,15 +25,13 @@ import org.dizitart.no2.exceptions.NitriteIOException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
-import static com.dansoftware.libraryapp.locale.Bundles.getFXMLValues;
-import static com.dansoftware.libraryapp.locale.Bundles.getNotificationMsg;
+import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
+import static com.dansoftware.libraryapp.locale.I18N.getNotificationMsg;
 
 public class DatabaseCreatorForm extends StackPane implements Initializable {
 
@@ -71,10 +62,13 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     @FXML
     private Button createBtn;
 
+    private final DatabaseCreatorView parent;
+
     private Account createdAccount;
 
-    public DatabaseCreatorForm() {
-        loadGui();
+    public DatabaseCreatorForm(DatabaseCreatorView parent) {
+        this.loadGui();
+        this.parent = parent;
     }
 
     private void loadGui() {
@@ -90,16 +84,10 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
 
     /**
-     *
      * @return
      */
     public Optional<Account> getCreatedAccount() {
         return Optional.ofNullable(this.createdAccount);
-    }
-
-    private void showError(String message) {
-        JFXDialog jfxDialog = new JFXDialog(this, new Label(message), JFXDialog.DialogTransition.CENTER);
-        jfxDialog.show();
     }
 
     @FXML
@@ -108,30 +96,57 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         File dir = new File(dirField.getText());
         File dbFile = new File(fullPathField.getText());
 
-        //--------------------->
-        // VALIDATING THE INPUTS
+        // validating the inputs
+
         if (StringUtils.isBlank(this.nameField.getText())) {
-            //handle
+            this.parent.showErrorDialog(
+                    getNotificationMsg("db.creator.form.invalid.missing.name.title"),
+                    getNotificationMsg("db.creator.form.invalid.missing.name.msg"), buttonType -> {
+                        new animatefx.animation.Tada(this.nameField).play();
+                    });
             return;
         }
 
-        if (FileUtils.isValidPath(dbFile)) {
-            //handle
+        if (StringUtils.isBlank(this.dirField.getText())) {
+            this.parent.showErrorDialog(
+                    getNotificationMsg("db.creator.form.invalid.missing.dir.title"),
+                    getNotificationMsg("db.creator.form.invalid.missing.dir.msg"), buttonType -> {
+                        new animatefx.animation.Tada(this.dirField).play();
+                    }
+            );
+        }
+
+        if (FileUtils.hasNotValidPath(dir)) {
+            this.parent.showErrorDialog(
+                    getNotificationMsg("db.creator.form.invalid.dir.title"),
+                    getNotificationMsg("db.creator.form.invalid.dir.msg", dir), buttonType -> {
+                        new animatefx.animation.Tada(this.dirField).play();
+                    });
             return;
         }
 
         if (!dir.exists()) {
-            boolean directoriesCreated = dir.mkdirs();
-            if (!directoriesCreated) {
-                //handle
-            }
+            this.parent.showInformationDialog(
+                    getNotificationMsg("db.creator.form.confirm.dir.not.exist.title", dir.getName()),
+                    getNotificationMsg("db.creator.form.confirm.dir.not.exist.msg"), (buttonType) -> {
+                        try {
+                            dir.mkdirs();
+                        } catch (java.lang.SecurityException e) {
+                            //handle
+                        }
+                    }
+            );
         }
 
         if (dbFile.exists()) {
-            showError("File '" + dbFile + "' already exists.");
+            this.parent.showErrorDialog(
+                    getNotificationMsg("db.creater.form.invalid.file.already.exists.title"),
+                    getNotificationMsg("db.creater.form.invalid.file.already.exists.msg",
+                            FileUtils.shortenedFilePath(dbFile, 1)),
+                    buttonType -> {
+                    });
             return;
         }
-
 
 
         String username = null;
@@ -139,34 +154,45 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         if (authCheckBox.isSelected()) {
             username = usernameField.getText();
             password = passwordField.getText();
+
+            if (StringUtils.isBlank(username)) {
+                this.parent.showErrorDialog(
+                        getNotificationMsg("db.creator.form.invalid.empty.user.name.title"),
+                        getNotificationMsg("db.creator.form.invalid.empty.user.name.msg"),
+                        buttonType -> {
+                            new animatefx.animation.Tada(this.usernameField).play();
+                        });
+                return;
+            }
+            if (StringUtils.isBlank(password)) {
+                this.parent.showErrorDialog(
+                        getNotificationMsg("db.creator.form.invalid.empty.password.title"),
+                        getNotificationMsg("db.creator.form.invalid.empty.password.msg"),
+                        buttonType -> {
+                            new animatefx.animation.Tada(this.passwordField).play();
+                        });
+                return;
+            }
         }
 
-        if (StringUtils.isBlank(username)) {
-            //
-        }
-        if (StringUtils.isBlank(password)) {
-            //
-        }
-
-        // <---------------------
-
-        //----------------------->
-        // TRYING TO CREATE THE DATABASE
+        // trying to create the database
 
         Account account = new Account(dbFile, username, password);
 
         try {
-            // File file
-            DatabaseFactory.getDatabase(NITRITE, account);
+            // We create the database object (because we want to create the db-file)
+            // but we immediately close it
+            DatabaseFactory.getDatabase(NITRITE, account).close();
 
-            //StageUtils.getStageOf(this).close();
-        } catch (NitriteIOException e) {
+            this.createdAccount = account;
+            StageUtils.getStageOf(this).close();
+        } catch (NullPointerException | NitriteIOException e) {
             String title = getNotificationMsg("login.auth.failed.io.title");
             String message = getNotificationMsg("login.auth.failed.io.msg");
+
+            this.parent.showErrorDialog(title, message, e, buttonType -> {
+            });
         }
-
-        //<-----------------------------
-
     }
 
     @FXML
@@ -195,19 +221,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                 );
 
         //the user can drag a directory into the field.
-        this.dirField.setOnDragOver(event -> event.acceptTransferModes(TransferMode.MOVE));
-        this.dirField.setOnDragDropped(event -> {
-            Dragboard dragboard = event.getDragboard();
-            if (dragboard.hasFiles()) {
-                List<File> files = dragboard.getFiles();
-                File draggedFile = files.get(0);
 
-                if (draggedFile.isDirectory()) {
-                    TextField field = (TextField) event.getSource();
-                    field.setText(draggedFile.getAbsolutePath());
-                }
-            }
-        });
 
         //We don't allow to put spaces in the following inputs
         this.nameField.setTextFormatter(new SpaceValidator());
@@ -220,9 +234,36 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         this.passwordField.disableProperty().bind(this.authCheckBox.selectedProperty().not());
     }
 
+    private void setDragSupport() {
+        /*
+        this.setOnDragOver(event -> {
+            Dragboard dragboard = event.getDragboard();
+            if (dragboard.hasFiles() && dragboard.getFiles().get(0).isDirectory()) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                this.parent.showOverlay(new StackPane(new Rectangle(20, 20)), false);
+            }
+        });
+        this.setOnDragExited(event -> {
+            this.parent.showOverlay(null, false);
+        });
+        this.dirField.setOnDragDropped(event -> {
+            Dragboard dragboard = event.getDragboard();
+            if (dragboard.hasFiles()) {
+                List<File> files = dragboard.getFiles();
+                File draggedFile = files.get(0);
+
+                if (draggedFile.isDirectory()) {
+                    TextField field = (TextField) event.getSource();
+                    field.setText(draggedFile.getAbsolutePath());
+                }
+            }
+        });*/
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setDefaults();
         setBehaviour();
+        setDragSupport();
     }
 }

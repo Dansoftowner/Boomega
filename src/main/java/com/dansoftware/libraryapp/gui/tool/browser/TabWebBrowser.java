@@ -4,13 +4,12 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
 
 /**
  * A TabWebBrowser can load and show web pages in separate tabs

@@ -1,18 +1,15 @@
 package com.dansoftware.libraryapp.gui.info;
 
-import com.dansoftware.libraryapp.locale.Bundles;
+import com.dansoftware.libraryapp.locale.I18N;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 
 public class InfoView extends AnchorPane {
 
     public InfoView() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("info-view.fxml"), Bundles.getFXMLValues());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("info-view.fxml"), I18N.getFXMLValues());
 
         try {
             AnchorPane root = loader.load();

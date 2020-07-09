@@ -1,15 +1,9 @@
 package com.dansoftware.libraryapp.gui.info;
 
-import com.dansoftware.libraryapp.gui.entry.AppEntry;
 import com.dansoftware.libraryapp.main.Globals;
-import com.dansoftware.libraryapp.locale.Bundles;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.io.IOException;
 
 /**
  * An InfoWindow can show all the information

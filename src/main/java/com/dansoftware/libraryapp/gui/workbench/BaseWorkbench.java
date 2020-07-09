@@ -7,7 +7,7 @@ import javafx.scene.layout.Region;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class LibraryAppWorkbench extends Workbench {
+public class BaseWorkbench extends Workbench {
 
     private Supplier<Region> loadingOverlaySupplier;
 

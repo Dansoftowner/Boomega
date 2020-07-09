@@ -7,13 +7,10 @@ import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.info.InfoView;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
-import com.dansoftware.libraryapp.gui.workbench.LibraryAppWorkbench;
-import com.dlsc.workbenchfx.model.WorkbenchModule;
+import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.scene.Node;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.slf4j.Logger;
@@ -23,27 +20,15 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
-import static com.dansoftware.libraryapp.locale.Bundles.getNotificationMsg;
+import static com.dansoftware.libraryapp.locale.I18N.getNotificationMsg;
 
 /**
  * A LoginView is a graphical object that can handle
  * a login request and creates the {@link Database} object.
  */
-public class LoginView extends LibraryAppWorkbench {
+public class LoginView extends SimpleHeaderView {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
-
-    private class ModuleImpl extends WorkbenchModule {
-
-        public ModuleImpl() {
-            super("Login", FontAwesomeIcon.SIGN_IN);
-        }
-
-        @Override
-        public Node activate() {
-            return LoginView.this.loginForm;
-        }
-    }
 
     /**
      * Field that holds the selected database from the user.
@@ -80,9 +65,9 @@ public class LoginView extends LibraryAppWorkbench {
     }
 
     public LoginView(LoginData loginData) {
+        super("LibraryApp", new MaterialDesignIconView(MaterialDesignIcon.BOOK));
+        super.setContent(loginForm = new LoginForm(loginData, ON_LOGIN_REQUEST));
         this.init();
-        this.loginForm = new LoginForm(loginData, ON_LOGIN_REQUEST);
-        this.getModules().add(new ModuleImpl());
     }
 
     /**
@@ -103,7 +88,6 @@ public class LoginView extends LibraryAppWorkbench {
                         infoWindow.show();
                     }
                 }));
-        this.getToolbarControlsLeft().add(new ToolbarItem("Libraryapp", new MaterialDesignIconView(MaterialDesignIcon.BOOK)));
     }
 
     public Database getSelectedDatabase() {

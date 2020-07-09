@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.util;
 
 import java.io.*;
 import java.nio.file.InvalidPathException;
+import java.util.Objects;
 
 /**
  * This class contains some utility method
@@ -31,13 +32,41 @@ public class FileUtils {
      * @param file the file that we want to check; may be null
      * @return {@code true} if the filepath is valid; {@code false} otherwise.
      */
-    public static boolean isValidPath(File file) {
+    public static boolean hasValidPath(File file) {
         try {
             file.toPath();
             return true;
         } catch (InvalidPathException | NullPointerException e) {
             return false;
         }
+    }
+
+    public static boolean hasNotValidPath(File file) {
+        return !hasValidPath(file);
+    }
+
+    public static String shortenedFilePath(File file, int maxBack) {
+        if (Objects.isNull(file) || maxBack < 0) {
+            return "";
+        }
+
+        StringBuilder shortenedPath = new StringBuilder(file.getName());
+
+        File lastParent = file.getParentFile();
+        while(maxBack > 0) {
+            if (Objects.nonNull(lastParent)) {
+                shortenedPath.insert(0, lastParent.getName() + File.separator);
+                lastParent = lastParent.getParentFile();
+            } else break;
+
+            maxBack--;
+        }
+
+        if (Objects.nonNull(lastParent)) {
+            shortenedPath.insert(0, "..." + File.separator);
+        }
+
+        return shortenedPath.toString();
     }
 
     /**

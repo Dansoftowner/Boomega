@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
 
 /**
  * A BrowserPlaceHolderGUI is a placeholder- gui panel that should

@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-import static com.dansoftware.libraryapp.locale.Bundles.getFXMLValues;
+import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
 public class LoginForm extends StackPane implements Initializable {
 

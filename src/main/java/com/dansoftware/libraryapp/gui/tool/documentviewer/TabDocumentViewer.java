@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
 import static java.util.Objects.isNull;
 
 /**

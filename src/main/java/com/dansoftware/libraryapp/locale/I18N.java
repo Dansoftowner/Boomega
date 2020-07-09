@@ -6,15 +6,14 @@ import java.util.ResourceBundle;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 /**
- * This class is used for accessing the necessary
- * Resource Bundles.
+ * Used for accessing localized messages/values.
  */
-public class Bundles {
+public class I18N {
 
     /**
      * Don't let anyone to create an instance of this class
      */
-    private Bundles() {
+    private I18N() {
     }
 
     public static String getGeneralWord(String key) {

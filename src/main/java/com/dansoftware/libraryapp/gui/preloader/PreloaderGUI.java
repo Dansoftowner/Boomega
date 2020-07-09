@@ -17,7 +17,7 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static com.dansoftware.libraryapp.locale.Bundles.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
 
 public class PreloaderGUI extends VBox {
 

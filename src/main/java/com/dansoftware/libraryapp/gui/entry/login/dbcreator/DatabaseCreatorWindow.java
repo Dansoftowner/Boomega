@@ -8,7 +8,7 @@ import javafx.stage.Window;
 import java.util.List;
 import java.util.Objects;
 
-import static com.dansoftware.libraryapp.locale.Bundles.getFXMLValues;
+import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
 public class DatabaseCreatorWindow extends Stage {
 
