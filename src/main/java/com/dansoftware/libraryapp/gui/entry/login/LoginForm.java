@@ -2,8 +2,8 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
-import com.dansoftware.libraryapp.gui.entry.login.dbcreator.DatabaseCreatorView;
-import com.dansoftware.libraryapp.gui.entry.login.dbcreator.DatabaseCreatorWindow;
+import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
+import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dansoftware.libraryapp.main.Globals;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +80,7 @@ public class LoginForm extends StackPane implements Initializable {
         this(new LoginData());
     }
 
-    LoginForm(LoginData loginData) {
+    LoginForm(@NotNull LoginData loginData) {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.loadGui();

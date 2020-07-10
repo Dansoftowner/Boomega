@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.main.init;
 
-import com.dansoftware.libraryapp.appdata.config.*;
+import com.dansoftware.libraryapp.appdata.config.AppConfig;
+import com.dansoftware.libraryapp.appdata.config.AppConfigReaders;
+import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.main.Main;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * This class is used to initialize some important thing
@@ -36,8 +39,7 @@ public final class ApplicationInitializer {
             this.appConfig = reader.read();
             LOGGER.debug("Configurations has been read");
         } catch (IOException e) {
-            this.appConfig = new AppConfig();
-            LOGGER.error("Failed to load configurations ", e);
+            LOGGER.error("Couldn't close resource ", e);
         }
     }
 

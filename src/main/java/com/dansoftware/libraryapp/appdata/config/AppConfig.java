@@ -4,7 +4,6 @@ import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -72,7 +71,7 @@ public class AppConfig {
             this.defaultValue = defaultValue;
         }
 
-        public static final Key<Locale> LOCALE = new Key<>("locale", Locale.class, () -> Locale.ENGLISH);
+        public static final Key<Locale> LOCALE = new Key<>("locale", Locale.class, Locale::getDefault);
         public static final Key<Theme> THEME = new Key<>("theme", Theme.class, () -> Theme.LIGHT);
         public static final Key<LoginData> LOGIN_DATA = new Key<>("loginData", LoginData.class, LoginData::new);
         public static final Key<Boolean> SEARCH_UPDATES = new Key<>("searchUpdates", boolean.class, () -> Boolean.TRUE);

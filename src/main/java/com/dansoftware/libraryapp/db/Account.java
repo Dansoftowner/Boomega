@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.db;
 
+import com.dansoftware.libraryapp.util.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -80,7 +81,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return this.dbName + " (" + file.getAbsolutePath() + ")";
+        return this.dbName + " (" + FileUtils.shortenedFilePath(file, 1) + ")";
     }
 
     /**

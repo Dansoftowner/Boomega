@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry.login.dbcreator;
+package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;

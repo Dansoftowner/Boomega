@@ -35,9 +35,6 @@ public class Main extends Application {
         System.setProperty("log.file.path", logFile.getAbsolutePath());
         System.setProperty("log.file.path.full", logFile.getPathWithExtension());
 
-        //set the initial locale
-        //Locale.setDefault(Locale.ENGLISH);
-
         //Set the default uncaught exception handler
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     }

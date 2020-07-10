@@ -1,22 +1,14 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
-import com.dansoftware.libraryapp.appdata.config.AppConfig;
-import com.dansoftware.libraryapp.appdata.config.AppConfigWriters;
 import com.dansoftware.libraryapp.appdata.config.LoginData;
-import com.dansoftware.libraryapp.gui.entry.login.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.main.Globals;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
-
-import static com.dansoftware.libraryapp.main.Main.getAppConfig;
 
 /**
  * A LoginWindow is a javaFX {@link Stage} that should be

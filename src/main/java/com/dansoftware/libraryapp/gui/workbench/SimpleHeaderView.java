@@ -27,7 +27,7 @@ public class SimpleHeaderView extends BaseWorkbench {
     }
 
     public SimpleHeaderView(String title, Node graphic, Region content) {
-        this.getToolbarControlsLeft().add(new ToolbarItem("Libraryapp", graphic));
+        this.getToolbarControlsLeft().add(new ToolbarItem(title, graphic));
         this.getModules().add(new ModuleImpl());
     }
 

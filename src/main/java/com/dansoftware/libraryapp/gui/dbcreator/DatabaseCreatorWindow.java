@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry.login.dbcreator;
+package com.dansoftware.libraryapp.gui.dbcreator;
 
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -25,6 +25,7 @@ public class DatabaseCreatorWindow extends Stage {
         this.initModality(Modality.APPLICATION_MODAL);
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
+        this.centerOnScreen();
 
         if (Objects.nonNull(owner)) {
             this.initOwner(owner);

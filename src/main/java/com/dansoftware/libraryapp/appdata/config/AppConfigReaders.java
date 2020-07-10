@@ -44,7 +44,7 @@ public final class AppConfigReaders {
      * @return the reader object.
      * @throws IOException if some I/O exception occurs
      */
-    public static AppConfigReader<IOException, IOException> newAppConfigFileReader(File file) throws IOException {
+    public static AppConfigReader<IOException, IOException> newAppConfigFileReader(File file) {
         return new AppConfigFileReader(file);
     }
 
@@ -56,7 +56,7 @@ public final class AppConfigReaders {
      * @see ApplicationDataFolder#getConfigurationFile()
      * @see #newAppConfigFileReader(File)
      */
-    public static AppConfigReader<IOException, IOException> newAppDataFolderReader() throws IOException {
+    public static AppConfigReader<IOException, IOException> newAppDataFolderReader() {
         ApplicationDataFolder applicationDataFolder = ApplicationDataFolderFactory.getApplicationDataFolder();
         return newAppConfigFileReader(applicationDataFolder.getConfigurationFile());
     }
@@ -75,14 +75,17 @@ public final class AppConfigReaders {
      */
     private static class AppConfigFileReader implements AppConfigReader<IOException, IOException> {
 
-        private final Reader reader;
+        private File file;
+        private Reader reader;
 
-        private AppConfigFileReader(File file) throws IOException {
-            this.reader = new BufferedReader(new FileReader(file));
+        private AppConfigFileReader(File file) {
+            this.file = file;
         }
 
         @Override
         public AppConfig read() throws IOException {
+            this.reader = new BufferedReader(new FileReader(file));
+
             try {
                 JsonObject read = new Gson().fromJson(reader, JsonObject.class);
                 return new AppConfig(Objects.isNull(read) ? new JsonObject() : read);
@@ -93,7 +96,9 @@ public final class AppConfigReaders {
 
         @Override
         public void close() throws IOException {
-            this.reader.close();
+            if (Objects.nonNull(this.reader)) {
+                this.reader.close();
+            }
         }
     }
 
