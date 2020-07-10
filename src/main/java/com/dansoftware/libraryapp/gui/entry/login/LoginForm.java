@@ -4,10 +4,14 @@ import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
+import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerView;
+import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.util.StageUtils;
 import com.dansoftware.libraryapp.main.Globals;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
@@ -53,6 +57,9 @@ public class LoginForm extends StackPane implements Initializable {
 
     @FXML
     private Button fileChooserBtn;
+
+    @FXML
+    private Button managerBtn;
 
     @FXML
     private VBox rootForm;
@@ -178,6 +185,13 @@ public class LoginForm extends StackPane implements Initializable {
         });
     }
 
+    @FXML
+    private void openDBManager() {
+        DBManagerView view = new DBManagerView(this.sourceChooser.getItems());
+        DBManagerWindow window = new DBManagerWindow(view, StageUtils.getStageOf(this));
+        window.show();
+    }
+
     public void setOnLoginRequest(Consumer<Account> onLoginRequest) {
         this.onLoginRequest = onLoginRequest;
     }
@@ -206,6 +220,8 @@ public class LoginForm extends StackPane implements Initializable {
         this.sourceChooser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             loginData.setSelectedAccount(newValue);
         });
+
+        this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
     }
 
     private void setDefaults() {

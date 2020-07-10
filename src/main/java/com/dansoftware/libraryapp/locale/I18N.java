@@ -20,12 +20,12 @@ public class I18N {
         return getGeneralWords().getString(key);
     }
 
-    public static String getNotificationMsg(String key, Object... args) {
+    public static String getAlertMsg(String key, Object... args) {
         if (isEmpty(args)) {
-            return getNotificationMessages().getString(key);
+            return getAlertMessages().getString(key);
         }
 
-        return MessageFormat.format(getNotificationMessages().getString(key), args);
+        return MessageFormat.format(getAlertMessages().getString(key), args);
     }
 
     public static ResourceBundle getProgressMessages() {
@@ -40,8 +40,8 @@ public class I18N {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.GeneralWords");
     }
 
-    public static ResourceBundle getNotificationMessages() {
-        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.NotificationMessages");
+    public static ResourceBundle getAlertMessages() {
+        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.AlertMessages");
     }
 
 }

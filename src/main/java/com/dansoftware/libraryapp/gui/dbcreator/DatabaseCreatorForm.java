@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 
 import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
-import static com.dansoftware.libraryapp.locale.I18N.getNotificationMsg;
+import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
 
 /**
  * A {@link DatabaseCreatorForm} is gui-form that lets the user to create
@@ -100,8 +100,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
         if (StringUtils.isBlank(this.nameField.getText())) {
             this.parent.showErrorDialog(
-                    getNotificationMsg("db.creator.form.invalid.missing.name.title"),
-                    getNotificationMsg("db.creator.form.invalid.missing.name.msg"), buttonType -> {
+                    getAlertMsg("db.creator.form.invalid.missing.name.title"),
+                    getAlertMsg("db.creator.form.invalid.missing.name.msg"), buttonType -> {
                         new animatefx.animation.Tada(this.nameField).play();
                     });
             return;
@@ -109,8 +109,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
         if (StringUtils.isBlank(this.dirField.getText())) {
             this.parent.showErrorDialog(
-                    getNotificationMsg("db.creator.form.invalid.missing.dir.title"),
-                    getNotificationMsg("db.creator.form.invalid.missing.dir.msg"), buttonType -> {
+                    getAlertMsg("db.creator.form.invalid.missing.dir.title"),
+                    getAlertMsg("db.creator.form.invalid.missing.dir.msg"), buttonType -> {
                         new animatefx.animation.Tada(this.dirField).play();
                     }
             );
@@ -118,8 +118,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
         if (FileUtils.hasNotValidPath(dir)) {
             this.parent.showErrorDialog(
-                    getNotificationMsg("db.creator.form.invalid.dir.title"),
-                    getNotificationMsg("db.creator.form.invalid.dir.msg", dir), buttonType -> {
+                    getAlertMsg("db.creator.form.invalid.dir.title"),
+                    getAlertMsg("db.creator.form.invalid.dir.msg", dir), buttonType -> {
                         new animatefx.animation.Tada(this.dirField).play();
                     });
             return;
@@ -127,8 +127,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
         if (!dir.exists()) {
             this.parent.showInformationDialog(
-                    getNotificationMsg("db.creator.form.confirm.dir.not.exist.title", dir.getName()),
-                    getNotificationMsg("db.creator.form.confirm.dir.not.exist.msg"), (buttonType) -> {
+                    getAlertMsg("db.creator.form.confirm.dir.not.exist.title", dir.getName()),
+                    getAlertMsg("db.creator.form.confirm.dir.not.exist.msg"), (buttonType) -> {
                         try {
                             dir.mkdirs();
                         } catch (java.lang.SecurityException e) {
@@ -140,8 +140,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
         if (dbFile.exists()) {
             this.parent.showErrorDialog(
-                    getNotificationMsg("db.creater.form.invalid.file.already.exists.title"),
-                    getNotificationMsg("db.creater.form.invalid.file.already.exists.msg",
+                    getAlertMsg("db.creater.form.invalid.file.already.exists.title"),
+                    getAlertMsg("db.creater.form.invalid.file.already.exists.msg",
                             FileUtils.shortenedFilePath(dbFile, 1)),
                     buttonType -> {
                     });
@@ -157,8 +157,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
             if (StringUtils.isBlank(username)) {
                 this.parent.showErrorDialog(
-                        getNotificationMsg("db.creator.form.invalid.empty.user.name.title"),
-                        getNotificationMsg("db.creator.form.invalid.empty.user.name.msg"),
+                        getAlertMsg("db.creator.form.invalid.empty.user.name.title"),
+                        getAlertMsg("db.creator.form.invalid.empty.user.name.msg"),
                         buttonType -> {
                             new animatefx.animation.Tada(this.usernameField).play();
                         });
@@ -166,8 +166,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             }
             if (StringUtils.isBlank(password)) {
                 this.parent.showErrorDialog(
-                        getNotificationMsg("db.creator.form.invalid.empty.password.title"),
-                        getNotificationMsg("db.creator.form.invalid.empty.password.msg"),
+                        getAlertMsg("db.creator.form.invalid.empty.password.title"),
+                        getAlertMsg("db.creator.form.invalid.empty.password.msg"),
                         buttonType -> {
                             new animatefx.animation.Tada(this.passwordField).play();
                         });
@@ -187,8 +187,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             this.createdAccount = account;
             StageUtils.getStageOf(this).close();
         } catch (NullPointerException | NitriteIOException e) {
-            String title = getNotificationMsg("login.auth.failed.io.title");
-            String message = getNotificationMsg("login.auth.failed.io.msg");
+            String title = getAlertMsg("login.auth.failed.io.title");
+            String message = getAlertMsg("login.auth.failed.io.msg");
 
             this.parent.showErrorDialog(title, message, e, buttonType -> {
             });

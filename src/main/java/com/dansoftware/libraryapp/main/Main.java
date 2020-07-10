@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.appdata.config.AppConfig;
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;

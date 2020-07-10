@@ -11,7 +11,6 @@ import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.stage.Stage;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
-import static com.dansoftware.libraryapp.locale.I18N.getNotificationMsg;
+import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
 
 /**
  * A LoginView is a graphical object that can handle
@@ -48,15 +47,15 @@ public class LoginView extends SimpleHeaderView {
             new Thread(new LoginDataSaver(this.getLoginData())).start();
             StageUtils.getStageOf(this).close();
         } catch (SecurityException e) {
-            String title = getNotificationMsg("login.auth.failed.security.title");
-            String message = getNotificationMsg("login.auth.failed.security.msg");
+            String title = getAlertMsg("login.auth.failed.security.title");
+            String message = getAlertMsg("login.auth.failed.security.msg");
             this.showErrorDialog(title, message, buttonType -> {
             });
 
             LOGGER.error("Failed to create/open database (invalid auth)", e);
         } catch (NitriteIOException e) {
-            String title = getNotificationMsg("login.auth.failed.io.title");
-            String message = getNotificationMsg("login.auth.failed.io.msg");
+            String title = getAlertMsg("login.auth.failed.io.title");
+            String message = getAlertMsg("login.auth.failed.io.msg");
             this.showErrorDialog(title, message, e, buttonType -> {
             });
 
