@@ -27,17 +27,25 @@ public class DBManagerTable extends TableView<Account> {
         this.getColumns().addAll(createColumns());
     }
 
+    /**
+     * Creates all columns for the table
+     * @return the {@link TableColumn} objects inside an array
+     */
+    @SuppressWarnings("unchecked")
     private TableColumn<Account, String>[] createColumns() {
         TableColumn<Account, String> nameColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.name"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("dbName"));
+        nameColumn.setMinWidth(100);
 
         TableColumn<Account, String> pathColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.path"));
         pathColumn.setCellValueFactory(new PropertyValueFactory<>("file"));
+        pathColumn.setMinWidth(100);
 
         TableColumn<Account, String> openInExplorerColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.open"));
+        openInExplorerColumn.setMinWidth(100);
         openInExplorerColumn.setCellFactory(tableColumn -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -62,6 +70,7 @@ public class DBManagerTable extends TableView<Account> {
 
         TableColumn<Account, String> deleteColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.delete"));
+        deleteColumn.setMinWidth(100);
         deleteColumn.setCellFactory(tableColumn -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -87,7 +96,7 @@ public class DBManagerTable extends TableView<Account> {
                                 }
                         );
                     });
-
+                    
                     setGraphic(deleteButton);
                 }
             }

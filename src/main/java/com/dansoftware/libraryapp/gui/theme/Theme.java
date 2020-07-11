@@ -17,11 +17,6 @@ import static java.util.Objects.nonNull;
  */
 public class Theme {
 
-    /**
-     * Contains all created themes
-     */
-    private static final Map<String, Theme> themesContainer =
-            new HashMap<>();
 
     private static Theme DEFAULT;
 
@@ -78,8 +73,6 @@ public class Theme {
         this.stylesheets = Objects.requireNonNull(stylesheets, "The list of stylesheets mustn't be null");
         this.onSceneApplier = onSceneApplier;
         this.onParentApplier = onParentApplier;
-
-        themesContainer.put(this.identifier.id, this);
     }
 
     /**
@@ -138,10 +131,6 @@ public class Theme {
 
     public static void applyDefault(Parent parent) {
         Theme.getDefault().apply(parent);
-    }
-
-    public static Theme getByID(String id) {
-        return themesContainer.get(id);
     }
 
     /**

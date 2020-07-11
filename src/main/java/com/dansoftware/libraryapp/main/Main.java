@@ -4,9 +4,7 @@ import com.dansoftware.libraryapp.appdata.config.AppConfig;
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
-import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.log.LogFile;
-import com.dansoftware.libraryapp.main.init.ApplicationArgumentHandler;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
@@ -14,11 +12,8 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.BooleanUtils;
 
-import java.io.Closeable;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * The main class and javafx application starter.

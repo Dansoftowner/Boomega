@@ -13,13 +13,13 @@ import java.util.Optional;
 /**
  * This class responsible for checking the application arguments
  */
-public class ApplicationArgumentHandler {
+public class AppArgumentHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationInitializer.class);
 
     private Account account;
 
-    public ApplicationArgumentHandler(List<String> args) {
+    public AppArgumentHandler(List<String> args) {
         if (CollectionUtils.isEmpty(args))
             return;
 

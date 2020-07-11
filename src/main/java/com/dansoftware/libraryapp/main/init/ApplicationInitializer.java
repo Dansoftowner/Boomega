@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * This class is used to initialize some important thing
@@ -30,10 +29,10 @@ public final class ApplicationInitializer {
     private final static Logger LOGGER = LoggerFactory.getLogger(ApplicationInitializer.class);
 
     private AppConfig appConfig;
-    private final ApplicationArgumentHandler appArgumentHandler;
+    private final AppArgumentHandler appArgumentHandler;
 
     public ApplicationInitializer(List<String> applicationParameters) {
-        this.appArgumentHandler = new ApplicationArgumentHandler(applicationParameters);
+        this.appArgumentHandler = new AppArgumentHandler(applicationParameters);
 
         try (var reader = AppConfigReaders.newAppDataFolderReader()) {
             this.appConfig = reader.read();
