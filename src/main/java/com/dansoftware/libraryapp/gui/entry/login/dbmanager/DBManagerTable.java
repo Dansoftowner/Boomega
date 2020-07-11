@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.FileExplorer;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,16 +35,13 @@ public class DBManagerTable extends TableView<Account> {
         TableColumn<Account, String> nameColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.name"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("dbName"));
-        nameColumn.setMinWidth(100);
 
         TableColumn<Account, String> pathColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.path"));
         pathColumn.setCellValueFactory(new PropertyValueFactory<>("file"));
-        pathColumn.setMinWidth(100);
 
         TableColumn<Account, String> openInExplorerColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.open"));
-        openInExplorerColumn.setMinWidth(100);
         openInExplorerColumn.setCellFactory(tableColumn -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -70,7 +66,6 @@ public class DBManagerTable extends TableView<Account> {
 
         TableColumn<Account, String> deleteColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.delete"));
-        deleteColumn.setMinWidth(100);
         deleteColumn.setCellFactory(tableColumn -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -96,7 +91,7 @@ public class DBManagerTable extends TableView<Account> {
                                 }
                         );
                     });
-                    
+
                     setGraphic(deleteButton);
                 }
             }
@@ -104,5 +99,4 @@ public class DBManagerTable extends TableView<Account> {
 
         return new TableColumn[]{nameColumn, pathColumn, openInExplorerColumn, deleteColumn};
     }
-
 }

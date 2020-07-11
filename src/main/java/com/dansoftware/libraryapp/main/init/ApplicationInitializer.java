@@ -49,7 +49,8 @@ public final class ApplicationInitializer {
 
         this.appArgumentHandler.getAccount().ifPresent(account -> {
             LoginData loginData = this.appConfig.get(AppConfig.Key.LOGIN_DATA);
-            loginData.setLoggedAccount(account);
+            loginData.getLastAccounts().add(account);
+            //loginData.setLoggedAccount(loginData.lastIndex());
             this.appConfig.set(AppConfig.Key.LOGIN_DATA, loginData);
         });
 

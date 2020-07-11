@@ -1,53 +1,91 @@
 package com.dansoftware.libraryapp.appdata.config;
 
 import com.dansoftware.libraryapp.db.Account;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.collections.PredicateUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class LoginData {
 
     private List<Account> lastAccounts;
-    private Account selectedAccount;
-    private Account loggedAccount;
+    private Credentials loggedAccountCredentials;
+    private int selectedAccountIndex;
+    private int loggedAccountIndex;
 
     public LoginData() {
-        this(new ArrayList<>(), null);
+        this(new ArrayList<>(), -1);
     }
 
-    public LoginData(List<Account> lastAccounts, Account loggedAccount) {
+    public LoginData(List<Account> lastAccounts, int loggedAccountIndex) {
         this.setLastAccounts(lastAccounts);
-        this.loggedAccount = loggedAccount;
+        this.loggedAccountIndex = loggedAccountIndex;
     }
 
-    public void setLoggedAccount(Account loggedAccount) {
-        this.loggedAccount = loggedAccount;
+    public void setLoggedAccountIndex(int loggedAccountIndex) {
+        this.loggedAccountIndex = loggedAccountIndex;
     }
 
     public List<Account> getLastAccounts() {
         return lastAccounts;
     }
 
-    @SuppressWarnings("unchecked")
     public void setLastAccounts(List<Account> lastAccounts) {
-        this.lastAccounts = ListUtils.predicatedList(
-                Objects.requireNonNull(lastAccounts, "lastAccounts mustn't be null"),
-                PredicateUtils.notNullPredicate()
-        );
+        this.lastAccounts = Objects.requireNonNull(lastAccounts, "lastAccounts mustn't be null");
     }
 
     public Account getSelectedAccount() {
-        return selectedAccount;
-    }
-
-    public void setSelectedAccount(Account selectedAccount) {
-        this.selectedAccount = selectedAccount;
+        try {
+            return this.lastAccounts.get(this.selectedAccountIndex);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public Account getLoggedAccount() {
-        return loggedAccount;
+        try {
+            return this.lastAccounts.get(this.loggedAccountIndex);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public int getSelectedAccountIndex() {
+        return selectedAccountIndex;
+    }
+
+    public void setSelectedAccountIndex(int selectedAccount) {
+        this.selectedAccountIndex = selectedAccount;
+    }
+
+    public int getLoggedAccountIndex() {
+        return loggedAccountIndex;
+    }
+
+    public Credentials getLoggedAccountCredentials() {
+        return loggedAccountCredentials;
+    }
+
+    public void setLoggedAccountCredentials(Credentials loggedAccountCredentials) {
+        this.loggedAccountCredentials = loggedAccountCredentials;
+    }
+
+    public static class Credentials {
+        private final String username;
+        private final String password;
+
+        public Credentials(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
     }
 }

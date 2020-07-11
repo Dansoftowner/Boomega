@@ -19,10 +19,7 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -112,19 +109,25 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     private void fillForm(LoginData loginData) {
-        this.sourceChooser.getItems().addAll(loginData.getLastAccounts());
+        sourceChooser.getItems().addAll(loginData.getLastAccounts());
 
-        Account selectedAccount = loginData.getSelectedAccount();
-        if (Objects.nonNull(selectedAccount)) {
-            this.sourceChooser.getSelectionModel().select(selectedAccount);
+        int selectedAccount = loginData.getSelectedAccountIndex();
+        if (selectedAccount >= 0) {
+            sourceChooser.getSelectionModel().select(selectedAccount);
         }
 
         Account loggedAccount = loginData.getLoggedAccount();
         if (Objects.nonNull(loggedAccount)) {
-            this.sourceChooser.getSelectionModel().select(loggedAccount);
-            this.usernameInput.setText(loggedAccount.getUsername());
-            this.passwordInput.setText(loggedAccount.getPassword());
-            this.rememberBox.setSelected(Boolean.TRUE);
+            sourceChooser.getSelectionModel().select(loggedAccount);
+            rememberBox.setSelected(Boolean.TRUE);
+
+            LoginData.Credentials credentials = loginData.getLoggedAccountCredentials();
+            if (Objects.nonNull(credentials)) {
+                usernameInput.setText(credentials.getUsername());
+                passwordInput.setText(credentials.getPassword());
+            }
+
+            LOGGER.debug("LOGGED account: {username: " + loggedAccount.getUsername() + ", pass: " + loggedAccount.getPassword() + "}");
 
             Platform.runLater(this::login);
         }
@@ -132,18 +135,20 @@ public class LoginForm extends StackPane implements Initializable {
 
     @FXML
     private void login() {
+        File dbFile = sourceChooser.getValue().getFile();
+        String username = StringUtils.trim(usernameInput.getText());
+        String password = StringUtils.trim(passwordInput.getText());
 
-        Account account = new Account(
-                sourceChooser.getValue().getFile(),
-                StringUtils.trim(usernameInput.getText()),
-                StringUtils.trim(passwordInput.getText())
-        );
+        //creating an Account object that holds the credentials (username/password)
+        Account account = new Account(dbFile, username, password);
 
-        if (this.rememberBox.isSelected()) {
-            this.loginData.setLoggedAccount(account);
+        if (rememberBox.isSelected()) {
+            loginData.setLoggedAccountIndex(sourceChooser.getSelectionModel().getSelectedIndex());
+            loginData.setLoggedAccountCredentials(new LoginData.Credentials(username, password));
             LOGGER.debug("LoginData loggedAccount set to: " + account);
         } else {
-            this.loginData.setLoggedAccount(null);
+            loginData.setLoggedAccountIndex(-1);
+            loginData.setLoggedAccountCredentials(null);
             LOGGER.debug("LoginData loggedAccount set to: null");
         }
 
@@ -217,9 +222,11 @@ public class LoginForm extends StackPane implements Initializable {
                 this.rootForm.getChildren().remove(this.loginForm);
         });
 
-        this.sourceChooser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            loginData.setSelectedAccount(newValue);
-        });
+        this.sourceChooser.getSelectionModel()
+                .selectedIndexProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    loginData.setSelectedAccountIndex((Integer) newValue);
+                });
 
         this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
     }
