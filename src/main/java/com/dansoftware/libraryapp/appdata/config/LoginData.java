@@ -1,15 +1,15 @@
 package com.dansoftware.libraryapp.appdata.config;
 
 import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.db.DBMeta;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class LoginData {
 
-    private List<Account> lastAccounts;
+    private List<DBMeta> lastDatabases;
     private Credentials loggedAccountCredentials;
     private int selectedAccountIndex;
     private int loggedAccountIndex;
@@ -18,44 +18,44 @@ public class LoginData {
         this(new ArrayList<>(), -1);
     }
 
-    public LoginData(List<Account> lastAccounts, int loggedAccountIndex) {
-        this.setLastAccounts(lastAccounts);
+    public LoginData(List<DBMeta> lastDatabases, int loggedAccountIndex) {
+        this.setLastDatabases(lastDatabases);
         this.loggedAccountIndex = loggedAccountIndex;
     }
 
-    public void setLoggedAccountIndex(int loggedAccountIndex) {
+    public void setLoggedDBIndex(int loggedAccountIndex) {
         this.loggedAccountIndex = loggedAccountIndex;
     }
 
-    public List<Account> getLastAccounts() {
-        return lastAccounts;
+    public List<DBMeta> getLastDatabases() {
+        return lastDatabases;
     }
 
-    public void setLastAccounts(List<Account> lastAccounts) {
-        this.lastAccounts = Objects.requireNonNull(lastAccounts, "lastAccounts mustn't be null");
+    public void setLastDatabases(List<DBMeta> lastDatabases) {
+        this.lastDatabases = Objects.requireNonNull(lastDatabases, "lastDatabases mustn't be null");
     }
 
-    public Account getSelectedAccount() {
+    public DBMeta getSelectedDB() {
         try {
-            return this.lastAccounts.get(this.selectedAccountIndex);
+            return this.lastDatabases.get(this.selectedAccountIndex);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
     }
 
-    public Account getLoggedAccount() {
+    public DBMeta getLoggedDB() {
         try {
-            return this.lastAccounts.get(this.loggedAccountIndex);
+            return this.lastDatabases.get(this.loggedAccountIndex);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
     }
 
-    public int getSelectedAccountIndex() {
+    public int getSelectedDBIndex() {
         return selectedAccountIndex;
     }
 
-    public void setSelectedAccountIndex(int selectedAccount) {
+    public void setSelectedDbIndex(int selectedAccount) {
         this.selectedAccountIndex = selectedAccount;
     }
 
@@ -63,11 +63,11 @@ public class LoginData {
         return loggedAccountIndex;
     }
 
-    public Credentials getLoggedAccountCredentials() {
+    public Credentials getLoggedDBCredentials() {
         return loggedAccountCredentials;
     }
 
-    public void setLoggedAccountCredentials(Credentials loggedAccountCredentials) {
+    public void setLoggedDBCredentials(Credentials loggedAccountCredentials) {
         this.loggedAccountCredentials = loggedAccountCredentials;
     }
 

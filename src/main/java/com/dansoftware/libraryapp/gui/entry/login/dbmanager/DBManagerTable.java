@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login.dbmanager;
 
-import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.db.DBMeta;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.FileExplorer;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -11,17 +11,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Objects;
 
-public class DBManagerTable extends TableView<Account> {
+public class DBManagerTable extends TableView<DBMeta> {
 
     private final DBManagerView parent;
 
-    public DBManagerTable(DBManagerView parent, ObservableList<Account> accounts) {
+    public DBManagerTable(DBManagerView parent, ObservableList<DBMeta> databases) {
         this.parent = parent;
-        this.init(accounts);
+        this.init(databases);
     }
 
-    private void init(ObservableList<Account> accounts) {
-        this.setItems(accounts);
+    private void init(ObservableList<DBMeta> databases) {
+        this.setItems(databases);
         this.setPlaceholder(new Label(I18N.getGeneralWord("database.manager.table.place.holder")));
         this.getColumns().addAll(createColumns());
     }
@@ -31,17 +31,18 @@ public class DBManagerTable extends TableView<Account> {
      * @return the {@link TableColumn} objects inside an array
      */
     @SuppressWarnings("unchecked")
-    private TableColumn<Account, String>[] createColumns() {
-        TableColumn<Account, String> nameColumn =
+    private TableColumn<DBMeta, String>[] createColumns() {
+        TableColumn<DBMeta, String> nameColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.name"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("dbName"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        TableColumn<Account, String> pathColumn =
+        TableColumn<DBMeta, String> pathColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.path"));
         pathColumn.setCellValueFactory(new PropertyValueFactory<>("file"));
 
-        TableColumn<Account, String> openInExplorerColumn =
+        TableColumn<DBMeta, String> openInExplorerColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.open"));
+        openInExplorerColumn.setSortable(Boolean.FALSE);
         openInExplorerColumn.setCellFactory(tableColumn -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -55,8 +56,8 @@ public class DBManagerTable extends TableView<Account> {
                     openButton.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.FOLDER));
                     openButton.prefWidthProperty().bind(tableColumn.widthProperty());
                     openButton.setOnAction(event -> {
-                        Account account = getTableView().getItems().get(getIndex());
-                        FileExplorer.show(account.getFile());
+                        DBMeta dbMeta = getTableView().getItems().get(getIndex());
+                        FileExplorer.show(dbMeta.getFile());
                     });
 
                     setGraphic(openButton);
@@ -64,8 +65,10 @@ public class DBManagerTable extends TableView<Account> {
             }
         });
 
-        TableColumn<Account, String> deleteColumn =
+
+        TableColumn<DBMeta, String> deleteColumn =
                 new TableColumn<>(I18N.getGeneralWord("database.manager.table.column.delete"));
+        deleteColumn.setSortable(Boolean.FALSE);
         deleteColumn.setCellFactory(tableColumn -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -79,14 +82,14 @@ public class DBManagerTable extends TableView<Account> {
                     deleteButton.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DELETE));
                     deleteButton.prefWidthProperty().bind(tableColumn.widthProperty());
                     deleteButton.setOnAction(event -> {
-                        Account account = getTableView().getItems().get(getIndex());
+                        DBMeta dbMeta = getTableView().getItems().get(getIndex());
 
                         DBManagerTable.this.parent.showConfirmationDialog(
                                 I18N.getAlertMsg("db.manager.table.confirm.delete.title"),
-                                I18N.getAlertMsg("db.manager.table.confirm.delete.msg", account.getDbName()),
+                                I18N.getAlertMsg("db.manager.table.confirm.delete.msg", dbMeta.getName()),
                                 buttonType -> {
                                     if (Objects.equals(buttonType, ButtonType.YES)) {
-                                        getTableView().getItems().remove(account);
+                                        getTableView().getItems().remove(dbMeta);
                                     }
                                 }
                         );

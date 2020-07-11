@@ -17,13 +17,7 @@ final class SourceChooserItem extends ListCell<Account> {
             setText(null);
             setGraphic(null);
         } else {
-            Label nameLabel = new Label(item.getDbName());
-
-            Label pathLabel = new Label("(" + item.getFile().getAbsolutePath() + ")");
-            pathLabel.setTextFill(Color.GRAY);
-            pathLabel.setStyle("-fx-font-style: italic");
-
-            setGraphic(new HBox(10, nameLabel, pathLabel));
+            //
         }
     }
 }

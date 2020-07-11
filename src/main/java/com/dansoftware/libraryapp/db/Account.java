@@ -11,7 +11,6 @@ import java.util.Objects;
  */
 public class Account {
 
-    private final String dbName;
     private final String username;
     private final String password;
     private final File file;
@@ -20,7 +19,6 @@ public class Account {
         this.username = null;
         this.password = null;
         this.file = null;
-        this.dbName = null;
     }
 
     /**
@@ -46,7 +44,6 @@ public class Account {
 
     public Account(File file, String username, String password, String dbName) {
         this.file = Objects.requireNonNull(file, "The filePath mustn't be null!");
-        this.dbName = Objects.isNull(dbName) ? file.getName() : dbName;
         this.username = username;
         this.password = password;
     }
@@ -63,10 +60,6 @@ public class Account {
         return password;
     }
 
-    public String getDbName() {
-        return dbName;
-    }
-
     /**
      * Checks the account is anonymous or not.
      *
@@ -77,11 +70,6 @@ public class Account {
      */
     public boolean isAnonymous() {
         return StringUtils.isBlank(this.username) && StringUtils.isBlank(this.password);
-    }
-
-    @Override
-    public String toString() {
-        return this.dbName + " (" + FileUtils.shortenedFilePath(file, 1) + ")";
     }
 
     /**

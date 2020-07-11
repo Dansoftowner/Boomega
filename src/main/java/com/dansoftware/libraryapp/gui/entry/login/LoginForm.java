@@ -2,11 +2,12 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.db.DBMeta;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerWindow;
-import com.dansoftware.libraryapp.gui.util.StageUtils;
+import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -25,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import jfxtras.styles.jmetro.JMetroStyleClass;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -33,9 +35,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
@@ -50,7 +50,7 @@ public class LoginForm extends StackPane implements Initializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginForm.class);
 
     @FXML
-    private ComboBox<Account> sourceChooser;
+    private ComboBox<DBMeta> sourceChooser;
 
     @FXML
     private Button fileChooserBtn;
@@ -109,27 +109,27 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     private void fillForm(LoginData loginData) {
-        sourceChooser.getItems().addAll(loginData.getLastAccounts());
+        sourceChooser.getItems().addAll(loginData.getLastDatabases());
 
-        int selectedAccount = loginData.getSelectedAccountIndex();
-        if (selectedAccount >= 0) {
-            sourceChooser.getSelectionModel().select(selectedAccount);
+        int selectedDB = loginData.getSelectedDBIndex();
+        if (selectedDB >= 0) {
+            sourceChooser.getSelectionModel().select(selectedDB);
         }
 
-        Account loggedAccount = loginData.getLoggedAccount();
-        if (Objects.nonNull(loggedAccount)) {
-            sourceChooser.getSelectionModel().select(loggedAccount);
+        DBMeta loggedDB = loginData.getLoggedDB();
+        if (Objects.nonNull(loggedDB)) {
+            sourceChooser.getSelectionModel().select(loggedDB);
             rememberBox.setSelected(Boolean.TRUE);
 
-            LoginData.Credentials credentials = loginData.getLoggedAccountCredentials();
+            LoginData.Credentials credentials = loginData.getLoggedDBCredentials();
             if (Objects.nonNull(credentials)) {
                 usernameInput.setText(credentials.getUsername());
                 passwordInput.setText(credentials.getPassword());
             }
 
-            LOGGER.debug("LOGGED account: {username: " + loggedAccount.getUsername() + ", pass: " + loggedAccount.getPassword() + "}");
-
             Platform.runLater(this::login);
+        } else {
+            loginData.setLoggedDBCredentials(null);
         }
     }
 
@@ -143,12 +143,12 @@ public class LoginForm extends StackPane implements Initializable {
         Account account = new Account(dbFile, username, password);
 
         if (rememberBox.isSelected()) {
-            loginData.setLoggedAccountIndex(sourceChooser.getSelectionModel().getSelectedIndex());
-            loginData.setLoggedAccountCredentials(new LoginData.Credentials(username, password));
+            loginData.setLoggedDBIndex(sourceChooser.getSelectionModel().getSelectedIndex());
+            loginData.setLoggedDBCredentials(new LoginData.Credentials(username, password));
             LOGGER.debug("LoginData loggedAccount set to: " + account);
         } else {
-            loginData.setLoggedAccountIndex(-1);
-            loginData.setLoggedAccountCredentials(null);
+            loginData.setLoggedDBIndex(-1);
+            loginData.setLoggedDBCredentials(null);
             LOGGER.debug("LoginData loggedAccount set to: null");
         }
 
@@ -167,11 +167,17 @@ public class LoginForm extends StackPane implements Initializable {
                 .addAll(new FileChooser.ExtensionFilter("All files", "*"), dbExtension);
         fileChooser.setSelectedExtensionFilter(dbExtension);
 
-        File file = fileChooser.showOpenDialog(StageUtils.getWindowOf(this));
-        if (Objects.nonNull(file)) {
-            Account account = new Account(file, null, null, file.getName());
-            this.sourceChooser.getItems().add(account);
-            this.sourceChooser.getSelectionModel().select(account);
+        List<File> files = fileChooser.showOpenMultipleDialog(WindowUtils.getWindowOf(this));
+        if (CollectionUtils.isNotEmpty(files)) {
+            Iterator<File> iterator = files.iterator();
+
+            DBMeta lastElement;
+            do {
+                lastElement = new DBMeta(iterator.next());
+                sourceChooser.getItems().add(lastElement);
+            } while (iterator.hasNext());
+
+            sourceChooser.getSelectionModel().select(lastElement);
         }
     }
 
@@ -179,10 +185,10 @@ public class LoginForm extends StackPane implements Initializable {
     private void callDataSourceAdder() {
         DatabaseCreatorView view = new DatabaseCreatorView();
 
-        DatabaseCreatorWindow window = new DatabaseCreatorWindow(view, StageUtils.getStageOf(this));
+        DatabaseCreatorWindow window = new DatabaseCreatorWindow(view, WindowUtils.getStageOf(this));
         window.showAndWait();
 
-        Optional<Account> result = view.getCreatedAccount();
+        Optional<DBMeta> result = view.getCreatedAccount();
 
         result.ifPresent(account -> {
             this.sourceChooser.getItems().add(account);
@@ -193,7 +199,7 @@ public class LoginForm extends StackPane implements Initializable {
     @FXML
     private void openDBManager() {
         DBManagerView view = new DBManagerView(this.sourceChooser.getItems());
-        DBManagerWindow window = new DBManagerWindow(view, StageUtils.getStageOf(this));
+        DBManagerWindow window = new DBManagerWindow(view, WindowUtils.getStageOf(this));
         window.show();
     }
 
@@ -206,8 +212,8 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     private void addListeners() {
-        this.sourceChooser.getItems().addListener((ListChangeListener<Account>) observable -> {
-            this.loginData.setLastAccounts(this.sourceChooser.getItems());
+        this.sourceChooser.getItems().addListener((ListChangeListener<DBMeta>) observable -> {
+            this.loginData.setLastDatabases(this.sourceChooser.getItems());
         });
 
         this.getChildren().remove(this.loginForm);
@@ -225,7 +231,7 @@ public class LoginForm extends StackPane implements Initializable {
         this.sourceChooser.getSelectionModel()
                 .selectedIndexProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    loginData.setSelectedAccountIndex((Integer) newValue);
+                    loginData.setSelectedDbIndex((Integer) newValue);
                 });
 
         this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));

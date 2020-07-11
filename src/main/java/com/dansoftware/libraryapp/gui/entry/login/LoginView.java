@@ -6,7 +6,7 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.info.InfoView;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
-import com.dansoftware.libraryapp.gui.util.StageUtils;
+import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -45,7 +45,7 @@ public class LoginView extends SimpleHeaderView {
 
             //starting a thread that saves the login-data
             new Thread(new LoginDataSaver(this.getLoginData())).start();
-            StageUtils.getStageOf(this).close();
+            WindowUtils.getStageOf(this).close();
         } catch (SecurityException e) {
             String title = getAlertMsg("login.auth.failed.security.title");
             String message = getAlertMsg("login.auth.failed.security.msg");
@@ -84,7 +84,7 @@ public class LoginView extends SimpleHeaderView {
                         infoWindow.close();
                     } else {
                         if (Objects.isNull(infoWindow.getOwner()))
-                            infoWindow.initOwner(StageUtils.getStageOf(this));
+                            infoWindow.initOwner(WindowUtils.getStageOf(this));
                         infoWindow.show();
                     }
                 }));

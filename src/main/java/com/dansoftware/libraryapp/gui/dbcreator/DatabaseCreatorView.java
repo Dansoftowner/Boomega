@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
-import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.db.DBMeta;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -23,7 +23,7 @@ public class DatabaseCreatorView extends SimpleHeaderView {
         super.setContent(this.form = new DatabaseCreatorForm(this));
     }
 
-    public Optional<Account> getCreatedAccount() {
-        return this.form.getCreatedAccount();
+    public Optional<DBMeta> getCreatedAccount() {
+        return this.form.getCreatedDb();
     }
 }

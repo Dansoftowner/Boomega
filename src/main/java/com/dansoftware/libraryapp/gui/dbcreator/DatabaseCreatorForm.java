@@ -1,9 +1,10 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.db.DBMeta;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
-import com.dansoftware.libraryapp.gui.util.StageUtils;
+import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.util.FileUtils;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -68,7 +69,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
     private final DatabaseCreatorView parent;
 
-    private Account createdAccount;
+    private DBMeta createdDb;
 
     public DatabaseCreatorForm(DatabaseCreatorView parent) {
         this.loadGui();
@@ -86,19 +87,15 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         }
     }
 
-    public Optional<Account> getCreatedAccount() {
-        return Optional.ofNullable(this.createdAccount);
+    public Optional<DBMeta> getCreatedDb() {
+        return Optional.ofNullable(this.createdDb);
     }
 
     @FXML
     private void create() {
 
-        File dir = new File(dirField.getText());
-        File dbFile = new File(fullPathField.getText());
-
         // validating the inputs
-
-        if (StringUtils.isBlank(this.nameField.getText())) {
+        if (StringUtils.isBlank(nameField.getText())) {
             this.parent.showErrorDialog(
                     getAlertMsg("db.creator.form.invalid.missing.name.title"),
                     getAlertMsg("db.creator.form.invalid.missing.name.msg"), buttonType -> {
@@ -107,7 +104,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             return;
         }
 
-        if (StringUtils.isBlank(this.dirField.getText())) {
+        if (StringUtils.isBlank(dirField.getText())) {
             this.parent.showErrorDialog(
                     getAlertMsg("db.creator.form.invalid.missing.dir.title"),
                     getAlertMsg("db.creator.form.invalid.missing.dir.msg"), buttonType -> {
@@ -116,21 +113,24 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             );
         }
 
-        if (FileUtils.hasNotValidPath(dir)) {
+        File dirFile = new File(dirField.getText());
+        File dbFile = new File(fullPathField.getText());
+
+        if (FileUtils.hasNotValidPath(dirFile)) {
             this.parent.showErrorDialog(
                     getAlertMsg("db.creator.form.invalid.dir.title"),
-                    getAlertMsg("db.creator.form.invalid.dir.msg", dir), buttonType -> {
+                    getAlertMsg("db.creator.form.invalid.dir.msg", dirFile), buttonType -> {
                         new animatefx.animation.Tada(this.dirField).play();
                     });
             return;
         }
 
-        if (!dir.exists()) {
+        if (!dirFile.exists()) {
             this.parent.showInformationDialog(
-                    getAlertMsg("db.creator.form.confirm.dir.not.exist.title", dir.getName()),
+                    getAlertMsg("db.creator.form.confirm.dir.not.exist.title", dirFile.getName()),
                     getAlertMsg("db.creator.form.confirm.dir.not.exist.msg"), (buttonType) -> {
                         try {
-                            dir.mkdirs();
+                            dirFile.mkdirs();
                         } catch (java.lang.SecurityException e) {
                             //handle
                         }
@@ -176,16 +176,13 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         }
 
         // trying to create the database
-
-        Account account = new Account(dbFile, username, password);
-
         try {
             // We create the database object (because we want to create the db-file)
             // but we immediately close it
-            DatabaseFactory.getDatabase(NITRITE, account).close();
+            DatabaseFactory.getDatabase(NITRITE, new Account(dbFile, username, password)).close();
 
-            this.createdAccount = account;
-            StageUtils.getStageOf(this).close();
+            this.createdDb = new DBMeta(this.nameField.getText(), dbFile);
+            WindowUtils.getStageOf(this).close();
         } catch (NullPointerException | NitriteIOException e) {
             String title = getAlertMsg("login.auth.failed.io.title");
             String message = getAlertMsg("login.auth.failed.io.msg");
@@ -198,7 +195,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     @FXML
     private void openDirectory() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDir = directoryChooser.showDialog(StageUtils.getWindowOf(this));
+        File selectedDir = directoryChooser.showDialog(WindowUtils.getWindowOf(this));
 
         if (Objects.nonNull(selectedDir)) {
             this.dirField.setText(selectedDir.getAbsolutePath());

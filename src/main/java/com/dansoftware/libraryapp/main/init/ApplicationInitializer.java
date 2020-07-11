@@ -9,6 +9,9 @@ import com.dansoftware.libraryapp.main.Main;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.dansoftware.libraryapp.update.loader.BaseLoader;
 import com.dansoftware.libraryapp.update.notifier.GUINotifier;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,10 +50,10 @@ public final class ApplicationInitializer {
      */
     private void setDefaults() {
 
-        this.appArgumentHandler.getAccount().ifPresent(account -> {
+        this.appArgumentHandler.getDB().ifPresent(account -> {
             LoginData loginData = this.appConfig.get(AppConfig.Key.LOGIN_DATA);
-            loginData.getLastAccounts().add(account);
-            //loginData.setLoggedAccount(loginData.lastIndex());
+            loginData.getLastDatabases().add(account);
+            loginData.setSelectedDbIndex(loginData.getLastDatabases().size() - 1);
             this.appConfig.set(AppConfig.Key.LOGIN_DATA, loginData);
         });
 

@@ -6,9 +6,9 @@ import javafx.stage.Window;
 
 import java.util.Objects;
 
-public class StageUtils {
+public class WindowUtils {
 
-    private StageUtils() {
+    private WindowUtils() {
     }
 
     public static Window getWindowOf(Node node) {
