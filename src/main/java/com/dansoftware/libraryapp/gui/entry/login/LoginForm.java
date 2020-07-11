@@ -9,6 +9,7 @@ import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
+import com.dansoftware.libraryapp.util.UniqueList;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -16,7 +17,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
+import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,6 +28,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -73,9 +76,11 @@ public class LoginForm extends StackPane implements Initializable {
     @FXML
     private CheckBox rememberBox;
 
-    private ObservableValue<Boolean> dataSourceSelected;
+    private final UniqueList<DBMeta> predicatedDBList;
 
     private final LoginData loginData;
+
+    private ObservableValue<Boolean> dataSourceSelected;
 
     private Consumer<Account> onLoginRequest;
 
@@ -84,10 +89,12 @@ public class LoginForm extends StackPane implements Initializable {
         this(new LoginData());
     }
 
+    @SuppressWarnings("unchecked")
     LoginForm(@NotNull LoginData loginData) {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.loadGui();
+        this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
         this.fillForm(this.loginData);
     }
 
@@ -109,7 +116,7 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     private void fillForm(LoginData loginData) {
-        sourceChooser.getItems().addAll(loginData.getLastDatabases());
+        this.predicatedDBList.addAll(loginData.getLastDatabases());
 
         int selectedDB = loginData.getSelectedDBIndex();
         if (selectedDB >= 0) {
@@ -171,13 +178,17 @@ public class LoginForm extends StackPane implements Initializable {
         if (CollectionUtils.isNotEmpty(files)) {
             Iterator<File> iterator = files.iterator();
 
+            int lastSize = predicatedDBList.size();
+
             DBMeta lastElement;
             do {
                 lastElement = new DBMeta(iterator.next());
-                sourceChooser.getItems().add(lastElement);
+                predicatedDBList.add(lastElement);
             } while (iterator.hasNext());
 
-            sourceChooser.getSelectionModel().select(lastElement);
+            if (lastSize > predicatedDBList.size()) {
+                sourceChooser.getSelectionModel().select(lastElement);
+            }
         }
     }
 
@@ -191,7 +202,7 @@ public class LoginForm extends StackPane implements Initializable {
         Optional<DBMeta> result = view.getCreatedAccount();
 
         result.ifPresent(account -> {
-            this.sourceChooser.getItems().add(account);
+            this.predicatedDBList.add(account);
             this.sourceChooser.getSelectionModel().select(account);
         });
     }
@@ -215,8 +226,6 @@ public class LoginForm extends StackPane implements Initializable {
         this.sourceChooser.getItems().addListener((ListChangeListener<DBMeta>) observable -> {
             this.loginData.setLastDatabases(this.sourceChooser.getItems());
         });
-
-        this.getChildren().remove(this.loginForm);
 
         //creating an observable-value that represents that the sourceChooser combobox has selected element
         this.dataSourceSelected = Bindings.isNotNull(sourceChooser.getSelectionModel().selectedItemProperty());
@@ -244,8 +253,9 @@ public class LoginForm extends StackPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        addListeners();
         setDefaults();
+        addListeners();
         //this.sourceChooser.setCellFactory(self -> new SourceChooserItem());
+
     }
 }

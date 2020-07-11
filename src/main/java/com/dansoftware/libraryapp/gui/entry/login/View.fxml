@@ -37,14 +37,14 @@
                         <Font size="15.0" />
                      </font></PasswordField>
                   <CheckBox fx:id="rememberBox" alignment="CENTER_RIGHT" mnemonicParsing="false" style="-fx-font-size: 15px;" text="%login.form.remember" />
-                  <Button defaultButton="true" minHeight="35.0" minWidth="400.0" prefWidth="${loginForm.width}" mnemonicParsing="false" onAction="#login" text="%login.form.login">
+                  <Button defaultButton="true" minHeight="35.0" minWidth="400.0" mnemonicParsing="false" onAction="#login" prefWidth="445.0" text="%login.form.login">
                      <font>
                         <Font size="15.0" />
                      </font></Button>
                   <Separator prefWidth="200.0" />
                </children>
             </VBox>
-            <Button minHeight="35.0" minWidth="400.0" prefWidth="${loginForm.width}" mnemonicParsing="false" onAction="#callDataSourceAdder" text="%login.add.source">
+            <Button minHeight="35.0" minWidth="400.0" mnemonicParsing="false" onAction="#callDataSourceAdder" prefWidth="445.0" text="%login.add.source">
                <font>
                   <Font size="15.0" />
                </font>

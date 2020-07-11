@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.appdata.config;
 
-import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.DBMeta;
 
 import java.util.ArrayList;
