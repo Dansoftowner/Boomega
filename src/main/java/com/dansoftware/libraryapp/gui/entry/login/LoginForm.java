@@ -98,7 +98,6 @@ public class LoginForm extends StackPane implements Initializable {
         this(new LoginData());
     }
 
-    @SuppressWarnings("unchecked")
     LoginForm(@NotNull LoginData loginData) {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
