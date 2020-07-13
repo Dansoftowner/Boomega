@@ -5,11 +5,11 @@ import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.FileExplorer;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -18,15 +18,17 @@ import java.util.Objects;
 public class DBManagerTable extends TableView<DBMeta> {
 
     private final DBManagerView parent;
+    private final List<DBMeta> databaseList;
 
     public DBManagerTable(@NotNull DBManagerView parent,
-                          @NotNull ObservableList<DBMeta> databases) {
+                          @NotNull List<DBMeta> databaseList) {
         this.parent = parent;
-        this.init(databases);
+        this.databaseList = databaseList;
+        this.init(databaseList);
     }
 
-    private void init(ObservableList<DBMeta> databases) {
-        this.setItems(databases);
+    private void init(List<DBMeta> databases) {
+        this.getItems().addAll(databases);
         this.setPlaceholder(new Label(I18N.getGeneralWord("database.manager.table.place.holder")));
         this.getColumns().addAll(createColumns());
     }
@@ -96,6 +98,7 @@ public class DBManagerTable extends TableView<DBMeta> {
                                 buttonType -> {
                                     if (Objects.equals(buttonType, ButtonType.YES)) {
                                         getTableView().getItems().remove(dbMeta);
+                                        DBManagerTable.this.databaseList.remove(dbMeta);
                                     }
                                 }
                         );

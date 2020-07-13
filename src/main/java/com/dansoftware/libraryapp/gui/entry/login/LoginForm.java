@@ -9,6 +9,7 @@ import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
+import com.dansoftware.libraryapp.util.UniqueListWrapper;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -82,8 +83,7 @@ public class LoginForm extends StackPane implements Initializable {
      * {@link ComboBox#getItems()} observable-list that does not allow to put
      * duplicate elements.
      *
-     * @see ListUtils#predicatedList(List, Predicate)
-     * @see PredicateUtils#uniquePredicate()
+     * @see UniqueListWrapper
      */
     private final List<DBMeta> predicatedDBList;
 
@@ -103,7 +103,7 @@ public class LoginForm extends StackPane implements Initializable {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.loadGui();
-        this.predicatedDBList = ListUtils.predicatedList(sourceChooser.getItems(), PredicateUtils.uniquePredicate());
+        this.predicatedDBList = new UniqueListWrapper<>(sourceChooser.getItems());
         this.fillForm(this.loginData);
     }
 
@@ -200,7 +200,7 @@ public class LoginForm extends StackPane implements Initializable {
                 lastElement = new DBMeta(iterator.next());
                 try {
                     predicatedDBList.add(lastElement);
-                } catch (IllegalArgumentException e) {
+                } catch (UniqueListWrapper.NonUniqueElementException e) {
                     LOGGER.error("Duplicate element has been filtered", e);
                 }
             } while (iterator.hasNext());
@@ -225,7 +225,7 @@ public class LoginForm extends StackPane implements Initializable {
             try {
                 this.predicatedDBList.add(db);
                 this.sourceChooser.getSelectionModel().select(db);
-            } catch (IllegalArgumentException e) {
+            } catch (UniqueListWrapper.NonUniqueElementException e) {
                 LOGGER.error("Duplicate element has been filtered", e);
             }
         });
@@ -233,7 +233,7 @@ public class LoginForm extends StackPane implements Initializable {
 
     @FXML
     private void openDBManager() {
-        DBManagerView view = new DBManagerView(this.sourceChooser.getItems());
+        DBManagerView view = new DBManagerView(this.predicatedDBList);
         DBManagerWindow window = new DBManagerWindow(view, WindowUtils.getStageOf(this));
         window.show();
     }
@@ -266,12 +266,6 @@ public class LoginForm extends StackPane implements Initializable {
                 .addListener((observable, oldValue, newValue) -> {
                     loginData.setSelectedDbIndex((Integer) newValue);
                 });
-
-        this.sourceChooser.getItems().addListener((ListChangeListener<DBMeta>) change -> {
-            if (change.wasRemoved()) {
-                LoginForm.this.predicatedDBList.removeAll(change.getRemoved());
-            }
-        });
 
         this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
     }
