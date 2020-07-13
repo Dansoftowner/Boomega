@@ -9,7 +9,6 @@ import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
-import com.dansoftware.libraryapp.util.UniqueList;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -76,7 +75,7 @@ public class LoginForm extends StackPane implements Initializable {
     @FXML
     private CheckBox rememberBox;
 
-    private final UniqueList<DBMeta> predicatedDBList;
+    private final List<DBMeta> predicatedDBList;
 
     private final LoginData loginData;
 
@@ -94,7 +93,7 @@ public class LoginForm extends StackPane implements Initializable {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.loadGui();
-        this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
+        this.predicatedDBList = ListUtils.predicatedList(sourceChooser.getItems(), PredicateUtils.uniquePredicate());
         this.fillForm(this.loginData);
     }
 
@@ -183,7 +182,11 @@ public class LoginForm extends StackPane implements Initializable {
             DBMeta lastElement;
             do {
                 lastElement = new DBMeta(iterator.next());
-                predicatedDBList.add(lastElement);
+                try {
+                    predicatedDBList.add(lastElement);
+                } catch (IllegalArgumentException e) {
+                    LOGGER.error("Duplicate element has been filtered", e);
+                }
             } while (iterator.hasNext());
 
             if (lastSize > predicatedDBList.size()) {
@@ -201,9 +204,13 @@ public class LoginForm extends StackPane implements Initializable {
 
         Optional<DBMeta> result = view.getCreatedAccount();
 
-        result.ifPresent(account -> {
-            this.predicatedDBList.add(account);
-            this.sourceChooser.getSelectionModel().select(account);
+        result.ifPresent(db -> {
+            try {
+                this.predicatedDBList.add(db);
+                this.sourceChooser.getSelectionModel().select(db);
+            } catch (IllegalArgumentException e) {
+                LOGGER.error("Duplicate element has been filtered", e);
+            }
         });
     }
 
