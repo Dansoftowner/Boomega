@@ -28,6 +28,7 @@ import javafx.stage.FileChooser;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -76,6 +77,14 @@ public class LoginForm extends StackPane implements Initializable {
     @FXML
     private CheckBox rememberBox;
 
+    /**
+     * A 'wrapped' version of the {@link #sourceChooser} object's
+     * {@link ComboBox#getItems()} observable-list that does not allow to put
+     * duplicate elements.
+     *
+     * @see ListUtils#predicatedList(List, Predicate)
+     * @see PredicateUtils#uniquePredicate()
+     */
     private final List<DBMeta> predicatedDBList;
 
     private final LoginData loginData;
@@ -164,8 +173,12 @@ public class LoginForm extends StackPane implements Initializable {
         }
     }
 
+    /**
+     * Creates a file-chooser dialog to import existing database files.
+     */
     @FXML
     private void openFile() {
+        //file extension filter for the libraryapp-database files
         FileChooser.ExtensionFilter dbExtension =
                 new FileChooser.ExtensionFilter("LibraryApp database files", "*." + Globals.FILE_EXTENSION);
 
@@ -174,10 +187,12 @@ public class LoginForm extends StackPane implements Initializable {
                 .addAll(new FileChooser.ExtensionFilter("All files", "*"), dbExtension);
         fileChooser.setSelectedExtensionFilter(dbExtension);
 
+        //we allow to select multiple files
         List<File> files = fileChooser.showOpenMultipleDialog(WindowUtils.getWindowOf(this));
         if (CollectionUtils.isNotEmpty(files)) {
             Iterator<File> iterator = files.iterator();
 
+            //we save the size of the database-list before adding new elements
             int lastSize = predicatedDBList.size();
 
             DBMeta lastElement;
@@ -190,7 +205,8 @@ public class LoginForm extends StackPane implements Initializable {
                 }
             } while (iterator.hasNext());
 
-            if (lastSize > predicatedDBList.size()) {
+            //if we added new elements, we select the lastElement
+            if (lastSize < predicatedDBList.size()) {
                 sourceChooser.getSelectionModel().select(lastElement);
             }
         }
@@ -250,6 +266,12 @@ public class LoginForm extends StackPane implements Initializable {
                 .addListener((observable, oldValue, newValue) -> {
                     loginData.setSelectedDbIndex((Integer) newValue);
                 });
+
+        this.sourceChooser.getItems().addListener((ListChangeListener<DBMeta>) change -> {
+            if (change.wasRemoved()) {
+                LoginForm.this.predicatedDBList.removeAll(change.getRemoved());
+            }
+        });
 
         this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
     }

@@ -8,14 +8,19 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ *
+ */
 public class DBManagerTable extends TableView<DBMeta> {
 
     private final DBManagerView parent;
 
-    public DBManagerTable(DBManagerView parent, ObservableList<DBMeta> databases) {
+    public DBManagerTable(@NotNull DBManagerView parent,
+                          @NotNull ObservableList<DBMeta> databases) {
         this.parent = parent;
         this.init(databases);
     }
@@ -28,6 +33,7 @@ public class DBManagerTable extends TableView<DBMeta> {
 
     /**
      * Creates all columns for the table
+     *
      * @return the {@link TableColumn} objects inside an array
      */
     @SuppressWarnings("unchecked")
