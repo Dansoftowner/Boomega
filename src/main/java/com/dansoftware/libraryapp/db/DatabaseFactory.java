@@ -19,7 +19,6 @@ public final class DatabaseFactory {
      * @param args some additional arguments (if the particular database needs them)
      * @return the {@link Database} object
      */
-    @Deprecated
     public static Database getDatabase(String name, Object... args) {
         if (NITRITE.equals(name)) {
             Account account = isEmpty(args) ? Account.anonymous() : (Account) args[0];

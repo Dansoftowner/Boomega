@@ -31,6 +31,7 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,7 +98,7 @@ public class LoginForm extends StackPane implements Initializable {
         this.fillForm(this.loginData);
     }
 
-    LoginForm(LoginData loginData, Consumer<Account> onLoginRequest) {
+    LoginForm(@NotNull LoginData loginData, @Nullable Consumer<Account> onLoginRequest) {
         this(loginData);
         this.onLoginRequest = onLoginRequest;
     }
