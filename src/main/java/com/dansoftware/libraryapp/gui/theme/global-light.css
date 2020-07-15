@@ -208,3 +208,12 @@
     -on-surface-color: #000000;
     -on-error-color: #FFFFFF;
 }
+
+/*DBManagerTable*/
+.state-circle-error {
+    -fx-fill: #B00020;
+}
+
+.state-circle-ok {
+    -fx-fill: transparent;
+}

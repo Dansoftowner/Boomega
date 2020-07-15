@@ -64,7 +64,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         LoginData loginData = appConfig.get(AppConfig.Key.LOGIN_DATA);
-        Theme.setDefault(Theme.DARK);
+
         AppEntry appEntry = new AppEntry(loginData);
         if (BooleanUtils.isFalse(appEntry.show())) {
             Platform.exit();

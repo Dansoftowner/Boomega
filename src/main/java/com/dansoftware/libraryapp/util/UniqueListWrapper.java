@@ -67,7 +67,8 @@ public class UniqueListWrapper<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-        return decorated.remove(o) && tracker.remove(o);
+        tracker.remove(o);
+        return decorated.remove(o);
     }
 
     @Override
@@ -88,7 +89,8 @@ public class UniqueListWrapper<T> implements List<T> {
 
     @Override
     public boolean removeAll(@NotNull Collection<?> c) {
-        return this.decorated.removeAll(c) && this.tracker.removeAll(c);
+        this.tracker.removeAll(c);
+        return this.decorated.removeAll(c);
     }
 
     @Override
@@ -155,5 +157,10 @@ public class UniqueListWrapper<T> implements List<T> {
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         return this.decorated.subList(fromIndex, toIndex);
+    }
+
+    @Override
+    public String toString() {
+        return this.decorated.toString();
     }
 }

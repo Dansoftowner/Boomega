@@ -13,7 +13,7 @@ import java.util.Optional;
  * create new database files. It should be displayed inside
  * a {@link DatabaseCreatorWindow}.
  */
-public class DatabaseCreatorView extends SimpleHeaderView {
+public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> {
 
     private final DatabaseCreatorForm form;
 

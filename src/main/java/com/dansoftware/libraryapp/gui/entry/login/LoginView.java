@@ -26,7 +26,7 @@ import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
  * A LoginView is a graphical object that can handle
  * a login request and creates the {@link Database} object.
  */
-public class LoginView extends SimpleHeaderView {
+public class LoginView extends SimpleHeaderView<LoginForm> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
 

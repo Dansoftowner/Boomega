@@ -6,7 +6,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
-public class SimpleHeaderView extends BaseWorkbench {
+public class SimpleHeaderView<T extends Region> extends BaseWorkbench {
 
     private class ModuleImpl extends WorkbenchModule {
 
@@ -20,7 +20,7 @@ public class SimpleHeaderView extends BaseWorkbench {
         }
     }
 
-    private Region content;
+    private T content;
 
     public SimpleHeaderView(String title, Node graphic) {
         this(title, graphic, null);
@@ -31,11 +31,11 @@ public class SimpleHeaderView extends BaseWorkbench {
         this.getModules().add(new ModuleImpl());
     }
 
-    public Region getContent() {
+    public T getContent() {
         return content;
     }
 
-    public void setContent(Region content) {
+    public void setContent(T content) {
         this.content = content;
     }
 }
