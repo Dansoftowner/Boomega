@@ -18,7 +18,12 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * A DBManagerTable is a {@link TableView} that is used for managing (monitoring, deleting) databases.
  *
+ * <p>
+ * It should be used with a {@link DBManagerView}.
+ *
+ * @author Daniel Gyorffy
  */
 public class DBManagerTable extends TableView<DBMeta> {
 
@@ -46,23 +51,13 @@ public class DBManagerTable extends TableView<DBMeta> {
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
-    private WorkbenchDialog createDBDeleteDialog(@NotNull ObservableList<DBMeta> databasesToRemove) {
-        ListView<DBMeta> listView = new ListView<>(databasesToRemove);
 
-        return WorkbenchDialog.builder(
-                I18N.getAlertMsg("db.manager.table.confirm.delete.title", databasesToRemove.size()),
-                listView,
-                ButtonType.YES,
-                ButtonType.NO
-        ).onResult(buttonType -> {
-            if (Objects.equals(buttonType, ButtonType.YES)) {
-                this.databaseList.removeAll(databasesToRemove);
-                this.getItems().removeAll(databasesToRemove);
-            }
-        }).build();
-    }
+    /* ------------------- TABLE COLUMNS ---------------------- s*/
 
-    private class StateColumn extends TableColumn<DBMeta, String> {
+    /**
+     * The state-column shows an error-mark (red circle) if the particular database does not exist.
+     */
+    private final class StateColumn extends TableColumn<DBMeta, String> {
         StateColumn() {
             setReorderable(false);
             setSortable(false);
@@ -96,6 +91,9 @@ public class DBManagerTable extends TableView<DBMeta> {
         }
     }
 
+    /**
+     * The name-column shows the name of the database.
+     */
     private class NameColumn extends TableColumn<DBMeta, String> {
         NameColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.name"));
@@ -104,6 +102,9 @@ public class DBManagerTable extends TableView<DBMeta> {
         }
     }
 
+    /**
+     * The path-column shows the filepath of the database
+     */
     private class PathColumn extends TableColumn<DBMeta, String> {
         PathColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.path"));
@@ -112,6 +113,9 @@ public class DBManagerTable extends TableView<DBMeta> {
         }
     }
 
+    /**
+     * The size-column shows the file-size of the database
+     */
     private class SizeColumn extends TableColumn<DBMeta, String> {
         SizeColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.size"));
@@ -139,6 +143,10 @@ public class DBManagerTable extends TableView<DBMeta> {
         }
     }
 
+    /**
+     * The file-opener-column provides a {@link Button} to open the database-file in the native
+     * file-explorer.
+     */
     private class FileOpenerColumn extends TableColumn<DBMeta, String> {
         FileOpenerColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.open"));
@@ -171,6 +179,9 @@ public class DBManagerTable extends TableView<DBMeta> {
         }
     }
 
+    /**
+     * The delete-column provides a {@link Button} to delete the selected database(s).
+     */
     private class DeleteColumn extends TableColumn<DBMeta, String> {
         DeleteColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.delete"));
@@ -191,13 +202,37 @@ public class DBManagerTable extends TableView<DBMeta> {
                         deleteButton.prefWidthProperty().bind(tableColumn.widthProperty());
                         deleteButton.setOnAction(event -> {
                             ObservableList<DBMeta> selectedItems = getTableView().getSelectionModel().getSelectedItems();
-                            DBManagerTable.this.parent.showDialog(DBManagerTable.this.createDBDeleteDialog(selectedItems));
+                            DBDeleteDialog dialog = new DBDeleteDialog();
+                            dialog.show(selectedItems);
                         });
                         deleteButton.disableProperty().bind(this.getTableRow().selectedProperty().not());
                         setGraphic(deleteButton);
                     }
                 }
             });
+        }
+    }
+
+    /* -------------------- */
+
+    /**
+     * A DBDeleteDialog is used for showing database-deleting dialog.
+     * It's used by the {@link DeleteColumn}.
+     */
+    private final class DBDeleteDialog {
+
+        public void show(@NotNull ObservableList<DBMeta> itemsToRemove) {
+            DBManagerTable.this.parent.showDialog(WorkbenchDialog.builder(
+                    I18N.getAlertMsg("db.manager.table.confirm.delete.title", itemsToRemove.size()),
+                    new ListView<>(itemsToRemove),
+                    ButtonType.YES,
+                    ButtonType.NO
+            ).onResult(buttonType -> {
+                if (Objects.equals(buttonType, ButtonType.YES)) {
+                    DBManagerTable.this.databaseList.removeAll(itemsToRemove);
+                    DBManagerTable.this.getItems().removeAll(itemsToRemove);
+                }
+            }).build());
         }
     }
 }

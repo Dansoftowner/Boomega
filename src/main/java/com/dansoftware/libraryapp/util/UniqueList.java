@@ -4,13 +4,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class UniqueListWrapper<T> implements List<T> {
+/**
+ * A {@link UniqueList} is a wrapper-class for other {@link List} objects.
+ *
+ * <p>
+ * The {@link UniqueList} instance does not allow the client
+ * to add duplicate items into the wrapped-list. Throws a {@link DuplicateElementException}
+ * if a duplicate element detected.
+ *
+ * <p>
+ * The comparison is by equals().
+ * <i>It uses a {@link HashSet} for rejecting duplicate items</i>
+ *
+ * @param <T>
+ */
+public class UniqueList<T> implements List<T> {
 
-    public static final class NonUniqueElementException extends RuntimeException {
-        public NonUniqueElementException() {
+    public static final class DuplicateElementException extends RuntimeException {
+        public DuplicateElementException() {
         }
 
-        public NonUniqueElementException(Object o) {
+        public DuplicateElementException(Object o) {
             super("Cannot add object '" + o + "' - UniqueList rejected it");
         }
     }
@@ -18,9 +32,9 @@ public class UniqueListWrapper<T> implements List<T> {
     private final HashSet<T> tracker;
     private final List<T> decorated;
 
-    public UniqueListWrapper(@NotNull List<T> decorated) {
+    public UniqueList(@NotNull List<T> decorated) {
         this.decorated = Objects.requireNonNull(decorated, "The decorated-list mustn't be null");
-        this.tracker = new HashSet<>();
+        this.tracker = new HashSet<>(decorated);
     }
 
     @Override
@@ -59,7 +73,7 @@ public class UniqueListWrapper<T> implements List<T> {
     @Override
     public boolean add(T t) {
         if (!this.tracker.add(t))
-            throw new NonUniqueElementException(t);
+            throw new DuplicateElementException(t);
 
         decorated.add(t);
         return true;
@@ -121,7 +135,7 @@ public class UniqueListWrapper<T> implements List<T> {
             return;
         }
 
-        throw new NonUniqueElementException(element);
+        throw new DuplicateElementException(element);
     }
 
     @Override

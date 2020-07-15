@@ -9,7 +9,7 @@ import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
-import com.dansoftware.libraryapp.util.UniqueListWrapper;
+import com.dansoftware.libraryapp.util.UniqueList;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -28,9 +28,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.collections.Predicate;
-import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -83,7 +80,7 @@ public class LoginForm extends StackPane implements Initializable {
      * {@link ComboBox#getItems()} observable-list that does not allow to put
      * duplicate elements.
      *
-     * @see UniqueListWrapper
+     * @see UniqueList
      */
     private final List<DBMeta> predicatedDBList;
 
@@ -102,7 +99,7 @@ public class LoginForm extends StackPane implements Initializable {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.loadGui();
-        this.predicatedDBList = new UniqueListWrapper<>(sourceChooser.getItems());
+        this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
         this.fillForm(this.loginData);
     }
 
@@ -199,7 +196,7 @@ public class LoginForm extends StackPane implements Initializable {
                 lastElement = new DBMeta(iterator.next());
                 try {
                     predicatedDBList.add(lastElement);
-                } catch (UniqueListWrapper.NonUniqueElementException e) {
+                } catch (UniqueList.DuplicateElementException e) {
                     LOGGER.error("Duplicate element has been filtered", e);
                 }
             } while (iterator.hasNext());
@@ -224,7 +221,7 @@ public class LoginForm extends StackPane implements Initializable {
             try {
                 this.predicatedDBList.add(db);
                 this.sourceChooser.getSelectionModel().select(db);
-            } catch (UniqueListWrapper.NonUniqueElementException e) {
+            } catch (UniqueList.DuplicateElementException e) {
                 LOGGER.error("Duplicate element has been filtered", e);
             }
         });
