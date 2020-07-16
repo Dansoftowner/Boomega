@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
@@ -23,7 +25,7 @@ import java.util.List;
  *
  * @author Daniel Gyorffy
  */
-public class DBManagerView extends SimpleHeaderView<DBManagerTable> {
+public class DBManagerView extends SimpleHeaderView<DBManagerTable> implements Themeable {
 
     /**
      * Creates a {@link DBManagerView} with a list of database-information ({@link DatabaseMeta}) objects.
@@ -53,5 +55,11 @@ public class DBManagerView extends SimpleHeaderView<DBManagerTable> {
         this.getToolbarControlsRight().add(new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.RELOAD), event -> {
             this.getContent().refresh();
         }));
+    }
+
+    @Override
+    public void handleThemeApply(ThemeApplier globalApplier, ThemeApplier customApplier) {
+        customApplier.apply(this);
+        globalApplier.apply(this);
     }
 }

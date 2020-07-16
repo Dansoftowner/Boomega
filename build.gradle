@@ -59,6 +59,7 @@ dependencies {
     //utility libraries
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.jetbrains:annotations:19.0.0'
+    implementation 'org.reflections:reflections:0.9.12'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'

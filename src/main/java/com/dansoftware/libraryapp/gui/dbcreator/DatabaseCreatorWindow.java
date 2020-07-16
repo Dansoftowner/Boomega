@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
+import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.Themeable;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -26,16 +28,6 @@ public class DatabaseCreatorWindow extends Stage {
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
         this.centerOnScreen();
-
-        if (Objects.nonNull(owner)) {
-            this.initOwner(owner);
-
-            //Applying stylesheets from the owner-window
-            List<String> styleSheets = owner.getScene()
-                    .getRoot()
-                    .getStylesheets();
-
-            this.getScene().getStylesheets().addAll(styleSheets);
-        }
+        Theme.applyDefault((Themeable) view);
     }
 }

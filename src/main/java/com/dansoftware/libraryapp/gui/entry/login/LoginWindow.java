@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.appdata.config.LoginData;
+import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.main.Globals;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
@@ -43,6 +45,7 @@ public class LoginWindow extends Stage {
         this.getIcons().add(Globals.ICON);
         this.setMaximized(true);
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, ON_CLOSE_REQUEST);
+        Theme.applyDefault((Themeable) root);
     }
 
 }

@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -13,7 +15,7 @@ import java.util.Optional;
  * create new database files. It should be displayed inside
  * a {@link DatabaseCreatorWindow}.
  */
-public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> {
+public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements Themeable {
 
     private final DatabaseCreatorForm form;
 
@@ -25,5 +27,11 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> {
 
     public Optional<DatabaseMeta> getCreatedAccount() {
         return this.form.getCreatedDb();
+    }
+
+    @Override
+    public void handleThemeApply(ThemeApplier globalApplier, ThemeApplier customApplier) {
+        customApplier.apply(this);
+        globalApplier.apply(this);
     }
 }

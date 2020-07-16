@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.gui.dbmanager;
 
+import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.Themeable;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -30,16 +32,6 @@ public class DBManagerWindow extends Stage {
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
         this.centerOnScreen();
-
-        if (Objects.nonNull(owner)) {
-            this.initOwner(owner);
-
-            //Copying the stylesheets from the owner-window's content
-            List<String> styleSheets = owner.getScene()
-                    .getRoot()
-                    .getStylesheets();
-
-            this.getScene().getStylesheets().addAll(styleSheets);
-        }
+        Theme.applyDefault((Themeable) view);
     }
 }

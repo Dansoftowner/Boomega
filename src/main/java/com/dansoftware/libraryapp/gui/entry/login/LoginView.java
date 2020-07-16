@@ -6,6 +6,9 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.info.InfoView;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
+import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
@@ -26,7 +29,7 @@ import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
  * A LoginView is a graphical object that can handle
  * a login request and creates the {@link Database} object.
  */
-public class LoginView extends SimpleHeaderView<LoginForm> {
+public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
 
@@ -96,5 +99,11 @@ public class LoginView extends SimpleHeaderView<LoginForm> {
 
     public LoginData getLoginData() {
         return this.loginForm.getLoginData();
+    }
+
+    @Override
+    public void handleThemeApply(ThemeApplier globalApplier, ThemeApplier customApplier) {
+        customApplier.apply(this);
+        globalApplier.apply(this);
     }
 }

@@ -34,7 +34,6 @@ public class LoginActivity {
      */
     public Optional<Database> show() {
         LoginView loginView = new LoginView(loginData);
-        Theme.applyDefault(loginView);
 
         LoginWindow loginWindow = new LoginWindow(loginView);
         loginWindow.showAndWait();

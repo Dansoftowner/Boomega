@@ -34,7 +34,7 @@ public class PluginClassLoader extends URLClassLoader {
         return null;
     }
 
-    public PluginClassLoader getInstance() {
+    public static PluginClassLoader getInstance() {
         return instance;
     }
 }
