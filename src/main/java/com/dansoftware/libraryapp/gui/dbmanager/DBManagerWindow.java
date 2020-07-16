@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class DBManagerWindow extends Stage {
 
-    private static final double WIDTH = 900;
+    private static final double WIDTH = 1000;
     private static final double HEIGHT = 430;
 
     /**
