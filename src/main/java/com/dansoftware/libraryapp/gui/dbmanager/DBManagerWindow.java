@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry.login.dbmanager;
+package com.dansoftware.libraryapp.gui.dbmanager;
 
 import javafx.scene.Scene;
 import javafx.stage.Modality;

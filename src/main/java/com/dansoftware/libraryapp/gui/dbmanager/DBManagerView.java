@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry.login.dbmanager;
+package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
