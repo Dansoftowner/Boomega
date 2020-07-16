@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.main.init;
 
-import com.dansoftware.libraryapp.db.Account;
-import com.dansoftware.libraryapp.db.DBMeta;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,7 @@ public class AppArgumentHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationInitializer.class);
 
-    private DBMeta database;
+    private DatabaseMeta database;
 
     public AppArgumentHandler(List<String> args) {
         if (CollectionUtils.isEmpty(args))
@@ -32,10 +31,10 @@ public class AppArgumentHandler {
             return;
         }
 
-        this.database = new DBMeta(file);
+        this.database = new DatabaseMeta(file);
     }
 
-    public Optional<DBMeta> getDB() {
+    public Optional<DatabaseMeta> getDB() {
         return Optional.ofNullable(database);
     }
 }

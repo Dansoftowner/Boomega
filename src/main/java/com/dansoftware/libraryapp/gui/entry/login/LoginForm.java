@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.appdata.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
-import com.dansoftware.libraryapp.db.DBMeta;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.entry.login.dbmanager.DBManagerView;
@@ -52,7 +52,7 @@ public class LoginForm extends StackPane implements Initializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginForm.class);
 
     @FXML
-    private ComboBox<DBMeta> sourceChooser;
+    private ComboBox<DatabaseMeta> sourceChooser;
 
     @FXML
     private Button fileChooserBtn;
@@ -82,7 +82,7 @@ public class LoginForm extends StackPane implements Initializable {
      *
      * @see UniqueList
      */
-    private final List<DBMeta> predicatedDBList;
+    private final List<DatabaseMeta> predicatedDBList;
 
     private final LoginData loginData;
 
@@ -128,7 +128,7 @@ public class LoginForm extends StackPane implements Initializable {
             sourceChooser.getSelectionModel().select(selectedDB);
         }
 
-        DBMeta loggedDB = loginData.getLoggedDB();
+        DatabaseMeta loggedDB = loginData.getLoggedDB();
         if (Objects.nonNull(loggedDB)) {
             sourceChooser.getSelectionModel().select(loggedDB);
             rememberBox.setSelected(Boolean.TRUE);
@@ -191,9 +191,9 @@ public class LoginForm extends StackPane implements Initializable {
             //we save the size of the database-list before adding new elements
             int lastSize = predicatedDBList.size();
 
-            DBMeta lastElement;
+            DatabaseMeta lastElement;
             do {
-                lastElement = new DBMeta(iterator.next());
+                lastElement = new DatabaseMeta(iterator.next());
                 try {
                     predicatedDBList.add(lastElement);
                 } catch (UniqueList.DuplicateElementException e) {
@@ -215,7 +215,7 @@ public class LoginForm extends StackPane implements Initializable {
         DatabaseCreatorWindow window = new DatabaseCreatorWindow(view, WindowUtils.getStageOf(this));
         window.showAndWait();
 
-        Optional<DBMeta> result = view.getCreatedAccount();
+        Optional<DatabaseMeta> result = view.getCreatedAccount();
 
         result.ifPresent(db -> {
             try {
@@ -243,7 +243,7 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     private void addListeners() {
-        this.sourceChooser.getItems().addListener((ListChangeListener<DBMeta>) observable -> {
+        this.sourceChooser.getItems().addListener((ListChangeListener<DatabaseMeta>) observable -> {
             this.loginData.setLastDatabases(this.sourceChooser.getItems());
         });
 

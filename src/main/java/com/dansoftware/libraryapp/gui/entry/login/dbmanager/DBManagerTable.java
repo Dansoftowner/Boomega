@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login.dbmanager;
 
-import com.dansoftware.libraryapp.db.DBMeta;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.FileExplorer;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
@@ -21,23 +21,24 @@ import java.util.Objects;
  * A DBManagerTable is a {@link TableView} that is used for managing (monitoring, deleting) databases.
  *
  * <p>
- * It should be used with a {@link DBManagerView}.
+ * It should only be used through a {@link DBManagerView}.
  *
+ * @see DBManagerView
  * @author Daniel Gyorffy
  */
-public class DBManagerTable extends TableView<DBMeta> {
+public class DBManagerTable extends TableView<DatabaseMeta> {
 
     private final DBManagerView parent;
-    private final List<DBMeta> databaseList;
+    private final List<DatabaseMeta> databaseList;
 
     public DBManagerTable(@NotNull DBManagerView parent,
-                          @NotNull List<DBMeta> databaseList) {
+                          @NotNull List<DatabaseMeta> databaseList) {
         this.parent = parent;
         this.databaseList = databaseList;
         this.init(databaseList);
     }
 
-    private void init(List<DBMeta> databases) {
+    private void init(List<DatabaseMeta> databases) {
         this.getItems().addAll(databases);
         this.setPlaceholder(new Label(I18N.getGeneralWord("database.manager.table.place.holder")));
         this.getColumns().addAll(
@@ -57,7 +58,7 @@ public class DBManagerTable extends TableView<DBMeta> {
     /**
      * The state-column shows an error-mark (red circle) if the particular database does not exist.
      */
-    private final class StateColumn extends TableColumn<DBMeta, String> {
+    private static final class StateColumn extends TableColumn<DatabaseMeta, String> {
         StateColumn() {
             setReorderable(false);
             setSortable(false);
@@ -74,8 +75,8 @@ public class DBManagerTable extends TableView<DBMeta> {
                     } else {
                         Circle stateCircle = new Circle(5);
 
-                        DBMeta dbMeta = getTableRow().getItem();
-                        File dbFile = dbMeta.getFile();
+                        DatabaseMeta databaseMeta = getTableRow().getItem();
+                        File dbFile = databaseMeta.getFile();
                         if (!dbFile.exists() || dbFile.isDirectory()) {
                             stateCircle.getStyleClass().add("state-circle-error");
                             setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.error.not.exists")));
@@ -94,7 +95,7 @@ public class DBManagerTable extends TableView<DBMeta> {
     /**
      * The name-column shows the name of the database.
      */
-    private class NameColumn extends TableColumn<DBMeta, String> {
+    private static final class NameColumn extends TableColumn<DatabaseMeta, String> {
         NameColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.name"));
             setReorderable(false);
@@ -105,7 +106,7 @@ public class DBManagerTable extends TableView<DBMeta> {
     /**
      * The path-column shows the filepath of the database
      */
-    private class PathColumn extends TableColumn<DBMeta, String> {
+    private static final class PathColumn extends TableColumn<DatabaseMeta, String> {
         PathColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.path"));
             setReorderable(false);
@@ -116,7 +117,7 @@ public class DBManagerTable extends TableView<DBMeta> {
     /**
      * The size-column shows the file-size of the database
      */
-    private class SizeColumn extends TableColumn<DBMeta, String> {
+    private static final class SizeColumn extends TableColumn<DatabaseMeta, String> {
         SizeColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.size"));
             setReorderable(false);
@@ -128,8 +129,8 @@ public class DBManagerTable extends TableView<DBMeta> {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        DBMeta dbMeta = getTableRow().getItem();
-                        File dbFile = dbMeta.getFile();
+                        DatabaseMeta databaseMeta = getTableRow().getItem();
+                        File dbFile = databaseMeta.getFile();
                         if (dbFile.exists() && !dbFile.isDirectory()) {
                             long size = FileUtils.sizeOf(dbFile);
                             String readableSize = FileUtils.byteCountToDisplaySize(size);
@@ -147,7 +148,7 @@ public class DBManagerTable extends TableView<DBMeta> {
      * The file-opener-column provides a {@link Button} to open the database-file in the native
      * file-explorer.
      */
-    private class FileOpenerColumn extends TableColumn<DBMeta, String> {
+    private static final class FileOpenerColumn extends TableColumn<DatabaseMeta, String> {
         FileOpenerColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.open"));
             setMinWidth(90);
@@ -169,7 +170,7 @@ public class DBManagerTable extends TableView<DBMeta> {
                                 .getSelectionModel()
                                 .getSelectedItems()
                                 .stream()
-                                .map(DBMeta::getFile)
+                                .map(DatabaseMeta::getFile)
                                 .forEach(FileExplorer::show));
                         openButton.disableProperty().bind(getTableRow().selectedProperty().not());
                         setGraphic(openButton);
@@ -182,7 +183,7 @@ public class DBManagerTable extends TableView<DBMeta> {
     /**
      * The delete-column provides a {@link Button} to delete the selected database(s).
      */
-    private class DeleteColumn extends TableColumn<DBMeta, String> {
+    private final class DeleteColumn extends TableColumn<DatabaseMeta, String> {
         DeleteColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.delete"));
             setReorderable(false);
@@ -201,7 +202,7 @@ public class DBManagerTable extends TableView<DBMeta> {
                         deleteButton.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE_MINUS));
                         deleteButton.prefWidthProperty().bind(tableColumn.widthProperty());
                         deleteButton.setOnAction(event -> {
-                            ObservableList<DBMeta> selectedItems = getTableView().getSelectionModel().getSelectedItems();
+                            ObservableList<DatabaseMeta> selectedItems = getTableView().getSelectionModel().getSelectedItems();
                             DBDeleteDialog dialog = new DBDeleteDialog();
                             dialog.show(selectedItems);
                         });
@@ -221,7 +222,7 @@ public class DBManagerTable extends TableView<DBMeta> {
      */
     private final class DBDeleteDialog {
 
-        public void show(@NotNull ObservableList<DBMeta> itemsToRemove) {
+        public void show(@NotNull ObservableList<DatabaseMeta> itemsToRemove) {
             DBManagerTable.this.parent.showDialog(WorkbenchDialog.builder(
                     I18N.getAlertMsg("db.manager.table.confirm.delete.title", itemsToRemove.size()),
                     new ListView<>(itemsToRemove),

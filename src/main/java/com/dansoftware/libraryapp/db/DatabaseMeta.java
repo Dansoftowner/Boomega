@@ -1,19 +1,24 @@
 package com.dansoftware.libraryapp.db;
 
 import com.dansoftware.libraryapp.util.FileUtils;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Objects;
 
-public class DBMeta {
+/**
+ * A DatabaseMeta can hold all meta-information about a particular database.
+ */
+public class DatabaseMeta {
     private String name;
     private File file;
 
-    public DBMeta(File file) {
+    public DatabaseMeta(@NotNull File file) {
         this(null, file);
     }
 
-    public DBMeta(String name, File file) {
+    public DatabaseMeta(@Nullable String name, @NotNull File file) {
         this.file = Objects.requireNonNull(file, "file mustn't be null");
         this.name = Objects.isNull(name) ? file.getName() : name;
     }
@@ -38,8 +43,8 @@ public class DBMeta {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DBMeta dbMeta = (DBMeta) o;
-        return file.equals(dbMeta.file);
+        DatabaseMeta databaseMeta = (DatabaseMeta) o;
+        return file.equals(databaseMeta.file);
     }
 
     @Override

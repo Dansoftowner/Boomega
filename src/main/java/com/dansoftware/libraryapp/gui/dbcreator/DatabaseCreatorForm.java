@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.Account;
-import com.dansoftware.libraryapp.db.DBMeta;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
@@ -69,7 +69,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
     private final DatabaseCreatorView parent;
 
-    private DBMeta createdDb;
+    private DatabaseMeta createdDb;
 
     public DatabaseCreatorForm(DatabaseCreatorView parent) {
         this.loadGui();
@@ -87,7 +87,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         }
     }
 
-    public Optional<DBMeta> getCreatedDb() {
+    public Optional<DatabaseMeta> getCreatedDb() {
         return Optional.ofNullable(this.createdDb);
     }
 
@@ -181,7 +181,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             // but we immediately close it
             DatabaseFactory.getDatabase(NITRITE, new Account(dbFile, username, password)).close();
 
-            this.createdDb = new DBMeta(this.nameField.getText(), dbFile);
+            this.createdDb = new DatabaseMeta(this.nameField.getText(), dbFile);
             WindowUtils.getStageOf(this).close();
         } catch (NullPointerException | NitriteIOException e) {
             String title = getAlertMsg("login.auth.failed.io.title");

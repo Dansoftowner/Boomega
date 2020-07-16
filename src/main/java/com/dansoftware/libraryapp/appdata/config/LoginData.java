@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.appdata.config;
 
-import com.dansoftware.libraryapp.db.DBMeta;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class LoginData {
 
-    private List<DBMeta> lastDatabases;
+    private List<DatabaseMeta> lastDatabases;
     private Credentials loggedAccountCredentials;
     private int selectedAccountIndex;
     private int loggedAccountIndex;
@@ -17,7 +17,7 @@ public class LoginData {
         this(new ArrayList<>(), -1);
     }
 
-    public LoginData(List<DBMeta> lastDatabases, int loggedAccountIndex) {
+    public LoginData(List<DatabaseMeta> lastDatabases, int loggedAccountIndex) {
         this.setLastDatabases(lastDatabases);
         this.loggedAccountIndex = loggedAccountIndex;
     }
@@ -26,15 +26,15 @@ public class LoginData {
         this.loggedAccountIndex = loggedAccountIndex;
     }
 
-    public List<DBMeta> getLastDatabases() {
+    public List<DatabaseMeta> getLastDatabases() {
         return lastDatabases;
     }
 
-    public void setLastDatabases(List<DBMeta> lastDatabases) {
+    public void setLastDatabases(List<DatabaseMeta> lastDatabases) {
         this.lastDatabases = Objects.requireNonNull(lastDatabases, "lastDatabases mustn't be null");
     }
 
-    public DBMeta getSelectedDB() {
+    public DatabaseMeta getSelectedDB() {
         try {
             return this.lastDatabases.get(this.selectedAccountIndex);
         } catch (IndexOutOfBoundsException e) {
@@ -42,7 +42,7 @@ public class LoginData {
         }
     }
 
-    public DBMeta getLoggedDB() {
+    public DatabaseMeta getLoggedDB() {
         try {
             return this.lastDatabases.get(this.loggedAccountIndex);
         } catch (IndexOutOfBoundsException e) {
