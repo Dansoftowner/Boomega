@@ -6,7 +6,6 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
 import com.dansoftware.libraryapp.gui.info.InfoView;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
-import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
@@ -16,6 +15,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +102,7 @@ public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable 
     }
 
     @Override
-    public void handleThemeApply(ThemeApplier globalApplier, ThemeApplier customApplier) {
+    public void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
         customApplier.apply(this);
         globalApplier.apply(this);
     }

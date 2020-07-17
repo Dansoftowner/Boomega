@@ -7,6 +7,7 @@ import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
     }
 
     @Override
-    public void handleThemeApply(ThemeApplier globalApplier, ThemeApplier customApplier) {
+    public void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
         customApplier.apply(this);
         globalApplier.apply(this);
     }

@@ -43,7 +43,7 @@ import java.util.Set;
 public abstract class Theme {
 
     /**
-     * Holds the current, default theme
+     * Holds the current default theme
      */
     private static Theme DEFAULT;
 
@@ -84,11 +84,16 @@ public abstract class Theme {
         return reflections.getSubTypesOf(Theme.class);
     }
 
+    /**
+     * Gives access to the default theme object. If
+     * the default theme is null then it will set the default theme to
+     * a {@link LightTheme} instance.
+     *
+     * @return the default theme
+     */
     public static Theme getDefault() {
-        if (Objects.isNull(DEFAULT)) {
-            return DEFAULT = new LightTheme();
-        }
-
+        if (Objects.isNull(DEFAULT))
+            DEFAULT = new LightTheme();
         return DEFAULT;
     }
 

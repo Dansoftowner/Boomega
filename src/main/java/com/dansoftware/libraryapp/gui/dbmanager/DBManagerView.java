@@ -58,7 +58,7 @@ public class DBManagerView extends SimpleHeaderView<DBManagerTable> implements T
     }
 
     @Override
-    public void handleThemeApply(ThemeApplier globalApplier, ThemeApplier customApplier) {
+    public void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
         customApplier.apply(this);
         globalApplier.apply(this);
     }
