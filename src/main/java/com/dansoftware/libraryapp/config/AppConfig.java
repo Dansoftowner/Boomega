@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,11 +53,13 @@ public class AppConfig {
         return Objects.isNull(value) ? key.defaultValue.get() : value;
     }
 
-    public <T> void set(Key<T> key, T value) {
+    public <T> void set(@NotNull Key<T> key,
+                        @Nullable T value) {
         put(key, value);
     }
 
-    public <T> void put(Key<T> key, T value) {
+    public <T> void put(@NotNull Key<T> key,
+                        @Nullable T value) {
         JsonElement element = null;
         if (value != null)
             element = key.exportingProcess.export(value);
@@ -102,6 +105,7 @@ public class AppConfig {
      * @param <T> the type of the object that can be accessed by the key
      */
     public static class Key<T> {
+
         private final String jsonKey;
         private final Supplier<T> defaultValue;
         private final ValueConstructingProcess<T> constructingProcess;

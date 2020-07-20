@@ -40,6 +40,8 @@ import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
  * A {@link DatabaseCreatorForm} is gui-form that lets the user to create
  * a new data-source file. It's usually wrapped in a {@link DatabaseCreatorView}
  * object.
+ *
+ * @author Daniel Gyorffy
  */
 public class DatabaseCreatorForm extends StackPane implements Initializable {
 
@@ -217,7 +219,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                         .textProperty()
                         .concat(File.separator)
                         .concat(this.nameField.textProperty())
-                        .concat("." + Globals.FILE_EXTENSION)
+                        .concat(".")
+                        .concat(Globals.FILE_EXTENSION)
                 );
 
         //the user can drag a directory into the field.
