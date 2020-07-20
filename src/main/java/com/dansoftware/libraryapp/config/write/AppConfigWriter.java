@@ -1,4 +1,6 @@
-package com.dansoftware.libraryapp.config;
+package com.dansoftware.libraryapp.config.write;
+
+import com.dansoftware.libraryapp.config.AppConfig;
 
 /**
  * An AppConfigWriter can write configurations from an {@link AppConfig} object to a particular

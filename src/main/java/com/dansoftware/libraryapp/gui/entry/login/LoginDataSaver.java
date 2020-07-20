@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.config.AppConfig;
-import com.dansoftware.libraryapp.config.AppConfigWriters;
+import com.dansoftware.libraryapp.config.write.AppConfigWriters;
 import com.dansoftware.libraryapp.config.LoginData;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;

@@ -14,6 +14,19 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+/**
+ * An AppConfig object is a bridge between the application and the configuration-source (usually a config-file).
+ *
+ * <p>
+ * For reading the configurations into an {@link AppConfig} object, the {@link com.dansoftware.libraryapp.config.read.AppConfigReaders}
+ * class can be used.<br>
+ * For writing the configurations from an {@link AppConfig} object, the {@link com.dansoftware.libraryapp.config.write.AppConfigWriters}
+ * class can be used.
+ *
+ * @see com.dansoftware.libraryapp.config.read.AppConfigReaders
+ * @see com.dansoftware.libraryapp.config.write.AppConfigWriters
+ * @author Daniel Gyorffy
+ */
 public class AppConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfig.class);
@@ -21,10 +34,11 @@ public class AppConfig {
     private final JsonObject jsonObject;
 
     public AppConfig() {
+        //creating with an empty jsonObject
         this(new JsonObject());
     }
 
-    public AppConfig(JsonObject jsonObject) {
+    public AppConfig(@NotNull JsonObject jsonObject) {
         this.jsonObject = jsonObject;
     }
 
@@ -36,6 +50,26 @@ public class AppConfig {
 
         T value = key.constructingProcess.construct(jsonElement);
         return Objects.isNull(value) ? key.defaultValue.get() : value;
+    }
+
+    public <T> void set(Key<T> key, T value) {
+        put(key, value);
+    }
+
+    public <T> void put(Key<T> key, T value) {
+        JsonElement element = null;
+        if (value != null)
+            element = key.exportingProcess.export(value);
+
+        this.jsonObject.add(key.jsonKey, element);
+    }
+
+    public void remove(@NotNull Key<?> key) {
+        this.jsonObject.remove(key.jsonKey);
+    }
+
+    public void remove(@NotNull String key) {
+        this.jsonObject.remove(key);
     }
 
     @SuppressWarnings("unused")
@@ -58,23 +92,17 @@ public class AppConfig {
         return this.jsonObject.get(key).getAsDouble();
     }
 
-    public <T> void set(Key<T> key, T value) {
-        this.jsonObject.remove(key.jsonKey);
-
-        JsonElement element = null;
-        if (value != null)
-            element = key.exportingProcess.export(value);
-
-        this.jsonObject.add(key.jsonKey, element);
-    }
-
     public JsonObject getJsonObject() {
-        return this.jsonObject;
+        return this.jsonObject.deepCopy();
     }
 
+    /**
+     * A {@link Key} is an accessor to a particular configuration.
+     *
+     * @param <T> the type of the object that can be accessed by the key
+     */
     public static class Key<T> {
         private final String jsonKey;
-        private final Class<T> type;
         private final Supplier<T> defaultValue;
         private final ValueConstructingProcess<T> constructingProcess;
         private final ValueExportingProcess<T> exportingProcess;
@@ -82,16 +110,14 @@ public class AppConfig {
         public Key(@NotNull String jsonKey,
                    @NotNull Class<T> type,
                    @NotNull Supplier<T> defaultValue) {
-            this(jsonKey, type, defaultValue, ValueConstructingProcess.defaultProcess(type), ValueExportingProcess.defaultProcess());
+            this(jsonKey, defaultValue, ValueConstructingProcess.defaultProcess(type), ValueExportingProcess.defaultProcess());
         }
 
         public Key(@NotNull String jsonKey,
-                   @NotNull Class<T> type,
                    @NotNull Supplier<T> defaultValue,
                    @NotNull ValueConstructingProcess<T> constructingProcess,
                    @NotNull ValueExportingProcess<T> valueExportingProcess) {
             this.jsonKey = jsonKey;
-            this.type = type;
             this.defaultValue = defaultValue;
             this.constructingProcess = constructingProcess;
             this.exportingProcess = valueExportingProcess;
@@ -99,8 +125,8 @@ public class AppConfig {
 
         public static final Key<Locale> LOCALE = new Key<>("locale", Locale.class, Locale::getDefault);
         public static final Key<LoginData> LOGIN_DATA = new Key<>("loginData", LoginData.class, LoginData::new);
-        public static final Key<Boolean> SEARCH_UPDATES = new Key<>("searchUpdates", boolean.class, () -> Boolean.TRUE);
-        public static final Key<Theme> THEME = new Key<>("theme", Theme.class, Theme::getDefault, element -> {
+        public static final Key<Boolean> SEARCH_UPDATES = new Key<>("searchUpdates", Boolean.class, () -> Boolean.TRUE);
+        public static final Key<Theme> THEME = new Key<>("theme", Theme::getDefault, element -> {
             try {
                 Class<?> themeClass = PluginClassLoader.getInstance().loadClass(element.getAsString());
                 Constructor<?> constructor = themeClass.getConstructor();

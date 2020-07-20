@@ -1,7 +1,8 @@
-package com.dansoftware.libraryapp.config;
+package com.dansoftware.libraryapp.config.read;
 
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolder;
 import com.dansoftware.libraryapp.appdata.ApplicationDataFolderFactory;
+import com.dansoftware.libraryapp.config.AppConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;

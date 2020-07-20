@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.main.init;
 
 import com.dansoftware.libraryapp.config.AppConfig;
-import com.dansoftware.libraryapp.config.AppConfigReaders;
+import com.dansoftware.libraryapp.config.read.AppConfigReaders;
 import com.dansoftware.libraryapp.config.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Globals;
