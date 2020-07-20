@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
-import com.dansoftware.libraryapp.appdata.config.LoginData;
+import com.dansoftware.libraryapp.config.LoginData;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
@@ -103,6 +103,8 @@ public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable 
 
     @Override
     public void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
+        customApplier.applyBack(this);
+        globalApplier.applyBack(this);
         customApplier.apply(this);
         globalApplier.apply(this);
     }

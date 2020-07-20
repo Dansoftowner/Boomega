@@ -1,10 +1,9 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.appdata.config.AppConfig;
-import com.dansoftware.libraryapp.appdata.config.LoginData;
+import com.dansoftware.libraryapp.config.AppConfig;
+import com.dansoftware.libraryapp.config.LoginData;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
-import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import com.sun.javafx.application.LauncherImpl;

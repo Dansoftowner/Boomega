@@ -53,12 +53,16 @@ public class DBManagerView extends SimpleHeaderView<DBManagerTable> implements T
 
         //Toolbar item that can refresh the table
         this.getToolbarControlsRight().add(new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.RELOAD), event -> {
+            ToolbarItem source = (ToolbarItem) event.getSource();
             this.getContent().refresh();
+            new animatefx.animation.RotateIn(source.getGraphic()).play();
         }));
     }
 
     @Override
     public void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
+        customApplier.applyBack(this);
+        globalApplier.applyBack(this);
         customApplier.apply(this);
         globalApplier.apply(this);
     }

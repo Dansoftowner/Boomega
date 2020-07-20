@@ -1,9 +1,7 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
-import com.dansoftware.libraryapp.appdata.config.LoginData;
-import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.config.LoginData;
 import com.dansoftware.libraryapp.db.Database;
-import com.dansoftware.libraryapp.gui.theme.Theme;
 
 import java.util.Optional;
 

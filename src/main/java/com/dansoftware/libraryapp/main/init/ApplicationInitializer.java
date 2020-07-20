@@ -1,17 +1,14 @@
 package com.dansoftware.libraryapp.main.init;
 
-import com.dansoftware.libraryapp.appdata.config.AppConfig;
-import com.dansoftware.libraryapp.appdata.config.AppConfigReaders;
-import com.dansoftware.libraryapp.appdata.config.LoginData;
+import com.dansoftware.libraryapp.config.AppConfig;
+import com.dansoftware.libraryapp.config.AppConfigReaders;
+import com.dansoftware.libraryapp.config.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.main.Main;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.dansoftware.libraryapp.update.loader.BaseLoader;
 import com.dansoftware.libraryapp.update.notifier.GUINotifier;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

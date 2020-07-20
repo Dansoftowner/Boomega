@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry;
 
-import com.dansoftware.libraryapp.appdata.config.LoginData;
+import com.dansoftware.libraryapp.config.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainView;

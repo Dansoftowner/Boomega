@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.appdata.config;
+package com.dansoftware.libraryapp.config;
 
 /**
  * An AppConfigReader can read configurations into an {@link AppConfig} object from a particular
