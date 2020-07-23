@@ -13,6 +13,7 @@ import java.io.File;
  *
  * @author Daniel Gyorffy
  */
+ @Deprecated
 public abstract class ApplicationDataFolder {
 
     /**

@@ -1,8 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
-import com.dansoftware.libraryapp.config.AppConfig;
-import com.dansoftware.libraryapp.config.write.AppConfigWriters;
-import com.dansoftware.libraryapp.config.LoginData;
+import com.dansoftware.libraryapp.appdata.Preferences;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import org.slf4j.Logger;
@@ -10,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-import static com.dansoftware.libraryapp.main.Main.getAppConfig;
+import static com.dansoftware.libraryapp.appdata.Preferences.getPreferences;
 
 /**
  * A LoginDataSaver is a {@link Task} that saves the login-data
@@ -40,13 +38,12 @@ public class LoginDataSaver extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-        if (Objects.isNull(getAppConfig()))
+        if (Objects.isNull(getPreferences()))
             return null;
 
-        getAppConfig().set(AppConfig.Key.LOGIN_DATA, loginData);
-        try (var writer = AppConfigWriters.newAppDataFolderWriter()) {
-            writer.write(getAppConfig());
-        }
+        Preferences.Editor editor = getPreferences().editor();
+        editor.set(Preferences.Key.LOGIN_DATA, loginData);
+        editor.commit();
 
         LOGGER.debug("LoginData saved successfully");
         return null;

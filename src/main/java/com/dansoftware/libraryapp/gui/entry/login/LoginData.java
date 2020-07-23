@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.config;
+package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 

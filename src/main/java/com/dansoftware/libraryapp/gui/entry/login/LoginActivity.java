@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
-import com.dansoftware.libraryapp.config.LoginData;
 import com.dansoftware.libraryapp.db.Database;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ public class LoginActivity {
     public LoginActivity() {
     }
 
-    public LoginActivity(LoginData loginData) {
+    public LoginActivity(@NotNull LoginData loginData) {
         this.loginData = loginData;
     }
 

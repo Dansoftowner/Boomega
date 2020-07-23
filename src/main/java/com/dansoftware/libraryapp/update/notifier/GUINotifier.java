@@ -1,18 +1,18 @@
 package com.dansoftware.libraryapp.update.notifier;
 
+import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
+import com.dansoftware.libraryapp.gui.updateview.UpdateView;
 import com.dansoftware.libraryapp.update.UpdateInformation;
+import javafx.application.Platform;
 
 public class GUINotifier extends LoggerNotifier {
     @Override
     public void notifyUpdate(UpdateInformation updateInformation) {
         super.notifyUpdate(updateInformation);
-
-        /*Notification.create()
-                .level(NotificationLevel.INFO)
-                .title("update.searcher.title")
-                .msg("update.searcher.available")
-                .eventHandler(event -> new UpdateDisplayer().display(updateInformation))
-                .show();*/
+        Platform.runLater(() -> {
+            UpdateActivity updateActivity = new UpdateActivity(updateInformation);
+            updateActivity.show();
+        });
     }
 
     @Override

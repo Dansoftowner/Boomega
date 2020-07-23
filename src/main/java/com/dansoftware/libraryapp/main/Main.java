@@ -1,18 +1,11 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.config.AppConfig;
-import com.dansoftware.libraryapp.config.LoginData;
-import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
-import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.ApplicationInitializer;
 import com.sun.javafx.application.LauncherImpl;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.stage.Stage;
-import org.apache.commons.lang3.BooleanUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,19 +16,7 @@ import java.util.List;
  *
  * @author Daniel Gyorffy
  */
-public class Main extends Application {
-
-    static {
-        //Configure the logger
-        var logFile = new LogFile();
-        System.setProperty("log.file.path", logFile.getAbsolutePath());
-        System.setProperty("log.file.path.full", logFile.getPathWithExtension());
-
-        //Set the default uncaught exception handler
-        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
-    }
-
-    private static AppConfig appConfig;
+public class Main extends BaseApplication {
 
     /**
      * The main-method of the application;
@@ -51,31 +32,21 @@ public class Main extends Application {
     }
 
     @Override
-    public void init() {
+    protected @NotNull Preferences initialize() {
         List<String> applicationParameters = getParameters().getRaw();
         var initializer = new ApplicationInitializer(applicationParameters);
         initializer.initializeApplication();
-
-        appConfig = initializer.getAppConfig();
+        return initializer.getAppConfig();
     }
-
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        LoginData loginData = appConfig.get(AppConfig.Key.LOGIN_DATA);
+    protected void postInitialize(@NotNull AppEntry appEntry) {
 
-        AppEntry appEntry = new AppEntry(loginData);
-        if (BooleanUtils.isFalse(appEntry.show())) {
-            Platform.exit();
-        }
     }
+
 
     @Override
     public void stop() {
-    }
-
-    public static AppConfig getAppConfig() {
-        return appConfig;
     }
 
 }

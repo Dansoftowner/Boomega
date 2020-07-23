@@ -1,9 +1,10 @@
 package com.dansoftware.libraryapp.gui.entry;
 
-import com.dansoftware.libraryapp.config.LoginData;
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainView;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -15,8 +16,8 @@ public class AppEntry {
         this.loginActivity = new LoginActivity();
     }
 
-    public AppEntry(LoginData loginData) {
-        this.loginActivity = new LoginActivity(loginData);
+    public AppEntry(@NotNull Preferences config) {
+        this.loginActivity = new LoginActivity(config.get(Preferences.Key.LOGIN_DATA));
     }
 
     public boolean show() {

@@ -9,6 +9,7 @@ import java.io.File;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public final class ApplicationDataFolderFactory {
 
     private static ApplicationDataFolder instance;

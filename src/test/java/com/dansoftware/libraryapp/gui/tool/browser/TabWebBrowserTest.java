@@ -10,19 +10,20 @@ import javafx.stage.Stage;
 
 import java.util.Locale;
 
+@Deprecated
 public class TabWebBrowserTest extends Application {
     static {
-        Theme.setDefault(Theme.DARK);
+        //Theme.setDefault(Theme.DARK);
         Locale.setDefault(Locale.ENGLISH);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Button dark = new Button("Dark");
-        dark.setOnAction(e -> Theme.DARK.apply(primaryStage.getScene()));
+        //dark.setOnAction(e -> Theme.DARK.apply(primaryStage.getScene()));
 
         Button light = new Button("Light");
-        light.setOnAction(e -> Theme.LIGHT.apply(primaryStage.getScene()));
+        //light.setOnAction(e -> Theme.LIGHT.apply(primaryStage.getScene()));
 
         TabWebBrowser webBrowser = new TabWebBrowser(WebViewWrapper.WEBVIEW_SUPPLIER);
         webBrowser.load("Google pageee", "http://www.google.com");

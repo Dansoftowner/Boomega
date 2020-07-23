@@ -16,14 +16,14 @@ public class TabDocumentViewerTest extends Application {
 
         Button light = new Button("Light");
         light.setOnAction(e -> {
-            Theme.LIGHT.apply(primaryStage.getScene());
+            //Theme.LIGHT.apply(primaryStage.getScene());
             CookieManager.setDefault(null);
             System.gc();
 
         });
 
         Button dark = new Button("Dark");
-        dark.setOnAction(e -> Theme.DARK.apply(primaryStage.getScene()));
+        //dark.setOnAction(e -> Theme.DARK.apply(primaryStage.getScene()));
 
         HBox hBox = new HBox(10, light, dark);
 
