@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> defines what is the type of the value that we want to export to
  */
-interface ValueExportingProcess<T> {
+public interface ValueExportingProcess<T> {
 
     /**
      * Creates a {@link ValueExportingProcess} that can export a value into

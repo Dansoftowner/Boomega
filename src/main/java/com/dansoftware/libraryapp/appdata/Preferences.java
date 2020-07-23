@@ -15,26 +15,63 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+/**
+ * An AppConfig object is a bridge between the application and the configuration-source (config-file).
+ *
+ * <p>
+ * If we want to create a {@link Preferences} object that reads from the default config-file we can use the
+ * static {@link #getPreferences()} method, or if we want to read from a custom file we can use the {@link #getPreferences(File)}
+ * method.
+ *
+ * <p>
+ * For modifying the data we can use an {@link Editor} object that can be instantiated by the {@link #editor()} method.
+ *
+ * @see ConfigFile#getFile()
+ * @author Daniel Gyorffy
+ */
+
 public class Preferences {
 
     private static Preferences DEFAULT;
 
+    /**
+     * The backing JsonObject that actually holds the data
+     */
     private final JsonObject jsonObject;
+
+    /**
+     * The file that holds the configurations (in JSON format)
+     */
     private final File sourceFile;
 
-    private Preferences(@NotNull File file) {
+    /**
+     * Creates a normal preferences-object.
+     *
+     * <p>
+     * Reads the configurations from the file into a backing {@link JsonObject}.
+     *
+     * @param file the file that holds the configurations
+     * @throws IOException if some {@link IOException}, {@link JsonIOException} or {@link JsonSyntaxException} occurs.
+     */
+    private Preferences(@NotNull File file) throws IOException {
         this.sourceFile = file;
 
         try (var reader = new BufferedReader(new FileReader(file))) {
             JsonObject temp = new Gson().fromJson(reader, JsonObject.class);
             this.jsonObject = Objects.isNull(temp) ? new JsonObject() : temp;
         } catch (JsonIOException | JsonSyntaxException | IOException e) {
-            throw new RuntimeException(e);
+            throw new IOException(e);
         }
     }
 
     /**
-     * Class for modifying/writing the data
+     * An {@link Editor} used for modifying values in a {@link Preferences} object.
+     *
+     * <p>
+     * If you make changes (put or delete values) it will immediately change the {@link Preferences} object
+     * in the memory; but if you want to save those changes into the config-file you should use the {@link #commit()}
+     * method.
+     *
      */
     public class Editor {
 
@@ -79,6 +116,11 @@ public class Preferences {
             Preferences.this.jsonObject.remove(key);
         }
 
+        /**
+         * Writes all data into the config-file.
+         *
+         * @throws IOException if some I/o exception occurs
+         */
         public void commit() throws IOException {
             try (var writer = new JsonWriter(new BufferedWriter(new FileWriter(sourceFile)))) {
                 new Gson().toJson(Preferences.this.jsonObject, writer);
@@ -88,7 +130,12 @@ public class Preferences {
         }
     }
 
-
+    /**
+     * Creates an {@link Editor} object that can modify the data inside the {@link Preferences} object.
+     *
+     * @return the {@link Editor} object.
+     */
+    @NotNull
     public Editor editor() {
         return new Editor();
     }
@@ -148,13 +195,19 @@ public class Preferences {
     // <------
 
     public static Preferences getPreferences() {
-        if (Objects.isNull(DEFAULT))
-            DEFAULT = getPreferences(new ConfigFile());
+        if (Objects.isNull(DEFAULT)) {
+            try {
+                DEFAULT = new Preferences(FileUtils.createFile(ConfigFile.getFile(), false));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         return DEFAULT;
     }
 
-    public static Preferences getPreferences(File configFile) {
-        return new Preferences(FileUtils.createFile(configFile, false));
+    public static Preferences getPreferences(File configFile) throws IOException {
+        return new Preferences(configFile);
     }
 
     /**

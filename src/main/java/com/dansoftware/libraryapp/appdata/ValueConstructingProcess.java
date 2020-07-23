@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> defines what is the type of the value that we want to construct
  */
-interface ValueConstructingProcess<T> {
+public interface ValueConstructingProcess<T> {
 
     /**
      * Creates a {@link ValueConstructingProcess} that can construct a {@link JsonElement} into
