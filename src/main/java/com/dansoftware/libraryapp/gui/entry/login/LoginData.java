@@ -58,6 +58,10 @@ public class LoginData {
         this.selectedAccountIndex = selectedAccount;
     }
 
+    public void selectLastDatabase() {
+        this.setSelectedDbIndex(this.lastDatabases.size() - 1);
+    }
+
     public int getLoggedAccountIndex() {
         return loggedAccountIndex;
     }

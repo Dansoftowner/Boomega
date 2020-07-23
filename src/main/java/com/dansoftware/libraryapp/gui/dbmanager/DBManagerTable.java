@@ -53,7 +53,7 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
     }
 
 
-    /* ------------------- TABLE COLUMNS ---------------------- s*/
+    /* ------------------- TABLE COLUMNS ---------------------- */
 
     /**
      * The state-column shows an error-mark (red circle) if the particular database does not exist.

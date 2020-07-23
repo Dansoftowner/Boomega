@@ -78,42 +78,50 @@ public class Preferences {
         private Editor() {
         }
 
-        public <T> void set(@NotNull Key<T> key,
+        public <T> Editor set(@NotNull Key<T> key,
                             @Nullable T value) {
             put(key, value);
+            return this;
         }
 
-        public <T> void put(@NotNull Key<T> key,
+        public <T> Editor put(@NotNull Key<T> key,
                             @Nullable T value) {
             JsonElement element = null;
             if (value != null)
                 element = key.exportingProcess.export(value);
 
             Preferences.this.jsonObject.add(key.jsonKey, element);
+            return this;
         }
 
-        public void putBoolean(String key, boolean value) {
+        public Editor putBoolean(String key, boolean value) {
             Preferences.this.jsonObject.addProperty(key, value);
+            return this;
         }
 
-        public void putString(String key, String value) {
+        public Editor putString(String key, String value) {
             Preferences.this.jsonObject.addProperty(key, value);
+            return this;
         }
 
-        public void putInteger(String key, int value) {
+        public Editor putInteger(String key, int value) {
             Preferences.this.jsonObject.addProperty(key, value);
+            return this;
         }
 
-        public void putDouble(String key, double value) {
+        public Editor putDouble(String key, double value) {
             Preferences.this.jsonObject.addProperty(key, value);
+            return this;
         }
 
-        public void remove(@NotNull Key<?> key) {
+        public Editor remove(@NotNull Key<?> key) {
             Preferences.this.jsonObject.remove(key.jsonKey);
+            return this;
         }
 
-        public void remove(@NotNull String key) {
+        public Editor remove(@NotNull String key) {
             Preferences.this.jsonObject.remove(key);
+            return this;
         }
 
         /**
@@ -126,6 +134,20 @@ public class Preferences {
                 new Gson().toJson(Preferences.this.jsonObject, writer);
             } catch (JsonIOException e) {
                 throw new IOException(e);
+            }
+        }
+
+        /**
+         * Writes all data into the config-file.
+         *
+         * <p>
+         *  It is the same as {@link #commit()}, but it does not
+         *  throw any exception.
+         */
+        public void tryCommit() {
+            try {
+                this.commit();
+            } catch (IOException ignored) {
             }
         }
     }
@@ -194,6 +216,7 @@ public class Preferences {
 
     // <------
 
+    @NotNull
     public static Preferences getPreferences() {
         if (Objects.isNull(DEFAULT)) {
             try {
@@ -206,6 +229,7 @@ public class Preferences {
         return DEFAULT;
     }
 
+    @NotNull
     public static Preferences getPreferences(File configFile) throws IOException {
         return new Preferences(configFile);
     }

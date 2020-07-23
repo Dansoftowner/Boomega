@@ -20,14 +20,15 @@ public class AppArgumentHandler {
     private DatabaseMeta database;
 
     public AppArgumentHandler(List<String> args) {
-        if (CollectionUtils.isEmpty(args))
+        if (CollectionUtils.isEmpty(args)) {
             return;
+        }
 
         String filePath = args.get(0);
         File file = new File(filePath);
 
         if (!file.exists()) {
-            LOGGER.error("Couldn't open file: " + file.getAbsolutePath(), new FileNotFoundException(filePath));
+            LOGGER.error("File that passed as an argument does not exists: '" + file.getAbsolutePath() + '\'');
             return;
         }
 
