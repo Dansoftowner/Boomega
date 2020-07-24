@@ -3,14 +3,18 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
+import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.AppArgumentHandler;
+import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.sun.javafx.application.LauncherImpl;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -50,13 +54,13 @@ public class Main extends BaseApplication {
 
     @NotNull
     @Override
-    protected Preferences initialize() {
-
+    protected BaseApplication.InitializationResult initialize() throws Exception {
         Preferences preferences = Preferences.getPreferences();
         logger.info("Configurations has been read successfully!");
 
         //we check the application arguments
         AppArgumentHandler argumentHandler = new AppArgumentHandler(getParameters().getRaw());
+        //we add the launched database to the preferences
         argumentHandler.getDB().ifPresent(databaseMeta -> {
             preferences.editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
                 loginData.getLastDatabases().add(databaseMeta);
@@ -72,23 +76,26 @@ public class Main extends BaseApplication {
         Theme.setDefault(preferences.get(Preferences.Key.THEME));
         logger.debug("Theme is: {}", Theme.getDefault());
 
+        //searching for updates
+        UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO);
+        UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
-        /*List<String> applicationParameters = getParameters().getRaw();
-        var initializer = new ApplicationInitializer(applicationParameters);
-        initializer.initializeApplication();
-        return initializer.getAppConfig();*/
-
-        return preferences;
+        return new InitializationResult(preferences, searchResult);
     }
 
     @Override
-    protected void postInitialize(@NotNull AppEntry appEntry) {
-
+    protected void postInitialize(@NotNull Context starterContext,
+                                  @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
+        UpdateActivity updateActivity = new UpdateActivity(starterContext, updateSearchResult);
+        updateActivity.show(true); // FALSE
     }
 
 
     @Override
-    public void stop() {
+    public void stop() throws IOException {
+        //writing all configurations
+        Preferences preferences = Preferences.getPreferences();
+        preferences.editor().commit();
     }
 
 }

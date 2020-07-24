@@ -1,57 +1,127 @@
 package com.dansoftware.libraryapp.update;
 
 import com.dansoftware.libraryapp.main.VersionInfo;
-import com.dansoftware.libraryapp.update.loader.Loader;
-import com.dansoftware.libraryapp.update.notifier.Notifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.gson.Gson;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
- * An UpdateSearcher can search for updates.
- *
- * <p>
- * If new update is available
- * the UpdateSearcher notifies
- * to user about that.
+ * An UpdateSearcher used for searching for updates.
  *
  * @author Daniel Gyorffy
  */
 public class UpdateSearcher {
 
+    /**
+     * The server-address
+     */
+    private static final String LOCATION = "https://update-server-ed6c3.firebaseio.com/libraryapp.json";
+
+
     private final VersionInfo base;
-    private final Loader loader;
-    private final Notifier notifier;
 
     /**
      * Creates a basic update searcher object;
      *
      * @param base the base version that the object should compare to; mustn't be null
-     * @param loader the object that loads the information about the update; mustn't be null
-     * @param notifier the object that is responsible for notifying the user about the
-     *                 new update/some error; mustn't be null
-     * @throws NullPointerException if one of the arguments is null.
+     * @throws NullPointerException if base is null.
      */
-    public UpdateSearcher(VersionInfo base, Loader loader, Notifier notifier) {
+    public UpdateSearcher(@NotNull VersionInfo base) {
         this.base = Objects.requireNonNull(base, "The base mustn't be null");
-        this.loader = Objects.requireNonNull(loader, "The loader mustn't be null");
-        this.notifier = Objects.requireNonNull(notifier, "The notifier mustn't be null");
     }
 
     /**
-     * Decides that there is new update available and notifies {@link Notifier} object about it.
+     * Searches for updates; creates an {@link UpdateSearchResult} object that
+     * holds all necessary information.
+     *
+     * @return the result of the search
      */
-    public void search() {
+    @NotNull
+    public UpdateSearchResult search() {
+        UpdateSearchResult result = new UpdateSearchResult();
         try {
-            var information = loader.load();
+            var information = loadInfo();
             if (information != null) {
-                boolean newUpdate = base.compareTo(new VersionInfo(information.getVersion())) < 0;
-                if (newUpdate) notifier.notifyUpdate(information);
+                VersionInfo newVersion = new VersionInfo(information.getVersion());
+                boolean newUpdateAvailable = base.compareTo(newVersion) < 0;
+                if (newUpdateAvailable) {
+                    result.newUpdate = true;
+                    result.information = information;
+                }
             }
-        } catch (Exception e) {
-            notifier.notifyException(e);
+        } catch (IOException | RuntimeException e) {
+            result.failed = true;
+            result.failedCause = e;
+        }
+
+        return result;
+    }
+
+    /**
+     * Loads the update-information from the server into a {@link UpdateInformation} object.
+     *
+     * @return the {@link UpdateInformation} object.
+     * @throws IOException if some IO exception occurs
+     */
+    private UpdateInformation loadInfo() throws IOException {
+        URL url = new URL(LOCATION);
+        URLConnection connection = url.openConnection();
+        connection.connect();
+
+        Gson gson = new Gson();
+        try (var reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            return gson.fromJson(reader, UpdateInformation.class);
+        }
+    }
+
+    public static final class UpdateSearchResult {
+        private boolean newUpdate;
+        private boolean failed;
+        private Exception failedCause;
+        private UpdateInformation information;
+
+        public boolean newUpdateAvailable() {
+            return newUpdate;
+        }
+
+        public boolean isFailed() {
+            return failed;
+        }
+
+        @Nullable
+        public Exception getFailedCause() {
+            return failedCause;
+        }
+
+        @Nullable
+        public UpdateInformation getInformation() {
+            return information;
+        }
+
+        @NotNull
+        public UpdateSearchResult ifFailed(@Nullable Consumer<Exception> onFailed) {
+            if (failed && onFailed != null) {
+                onFailed.accept(failedCause);
+            }
+
+            return this;
+        }
+
+        @NotNull
+        public UpdateSearchResult ifNewUpdateAvailable(@Nullable Consumer<UpdateInformation> onAvailable) {
+            if (newUpdate && onAvailable != null) {
+                onAvailable.accept(information);
+            }
+
+            return this;
         }
     }
 }
