@@ -13,10 +13,11 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * An AppConfig object is a bridge between the application and the configuration-source (config-file).
+ * An Preferences object is a bridge between the application and the configuration-source (config-file).
  *
  * <p>
  * If we want to create a {@link Preferences} object that reads from the default config-file we can use the
@@ -76,6 +77,13 @@ public class Preferences {
     public class Editor {
 
         private Editor() {
+        }
+
+        public <T> Editor modify(Key<T> key, Consumer<T> modifier) {
+            T value = get(key);
+            modifier.accept(value);
+            set(key, value);
+            return this;
         }
 
         public <T> Editor set(@NotNull Key<T> key,

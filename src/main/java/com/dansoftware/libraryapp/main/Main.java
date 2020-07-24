@@ -1,9 +1,10 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
+import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
-import com.dansoftware.libraryapp.gui.entry.login.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.AppArgumentHandler;
 import com.sun.javafx.application.LauncherImpl;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,17 @@ import java.util.Locale;
  */
 public class Main extends BaseApplication {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
+    static {
+        //Configure the logger
+        var logFile = new LogFile();
+        System.setProperty("log.file.path", logFile.getAbsolutePath());
+        System.setProperty("log.file.path.full", logFile.getPathWithExtension());
+
+        //Set the default uncaught exception handler
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
+    }
 
     /**
      * The main-method of the application;
@@ -42,22 +53,24 @@ public class Main extends BaseApplication {
     protected Preferences initialize() {
 
         Preferences preferences = Preferences.getPreferences();
-        LOGGER.info("Configurations has been read successfully!");
+        logger.info("Configurations has been read successfully!");
 
+        //we check the application arguments
         AppArgumentHandler argumentHandler = new AppArgumentHandler(getParameters().getRaw());
         argumentHandler.getDB().ifPresent(databaseMeta -> {
-            LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-            loginData.getLastDatabases().add(databaseMeta);
-            loginData.selectLastDatabase();
-
-            preferences.editor().set(Preferences.Key.LOGIN_DATA, loginData).tryCommit();
+            preferences.editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
+                loginData.getLastDatabases().add(databaseMeta);
+                loginData.selectLastDatabase();
+            }).tryCommit();
         });
 
+        //setting the default locale
         Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
-        LOGGER.debug("Locale is: {}", Locale.getDefault());
+        logger.debug("Locale is: {}", Locale.getDefault());
 
+        //setting the default theme
         Theme.setDefault(preferences.get(Preferences.Key.THEME));
-        LOGGER.debug("Theme is: {}", Theme.getDefault());
+        logger.debug("Theme is: {}", Theme.getDefault());
 
 
         /*List<String> applicationParameters = getParameters().getRaw();
