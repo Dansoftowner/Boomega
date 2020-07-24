@@ -87,7 +87,7 @@ public class Main extends BaseApplication {
     protected void postInitialize(@NotNull Context starterContext,
                                   @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
         UpdateActivity updateActivity = new UpdateActivity(starterContext, updateSearchResult);
-        updateActivity.show(true); // FALSE
+        updateActivity.show(false);
     }
 
 

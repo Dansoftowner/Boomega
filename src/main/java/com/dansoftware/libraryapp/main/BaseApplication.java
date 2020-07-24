@@ -48,7 +48,7 @@ public abstract class BaseApplication extends Application {
         private final Preferences preferences;
         private final UpdateSearcher.UpdateSearchResult updateSearchResult;
 
-        public InitializationResult(Preferences preferences, UpdateSearcher.UpdateSearchResult updateSearchResult) {
+        public InitializationResult(@NotNull Preferences preferences, @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
             this.preferences = preferences;
             this.updateSearchResult = updateSearchResult;
         }
