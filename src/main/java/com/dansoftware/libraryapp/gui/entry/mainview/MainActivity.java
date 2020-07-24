@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -12,7 +13,7 @@ public class MainActivity implements Context {
 
     private Database database;
 
-    public MainActivity(Database database) {
+    public MainActivity(@NotNull Database database) {
         this.database = Objects.requireNonNull(database, "The database mustn't be null");
     }
 
