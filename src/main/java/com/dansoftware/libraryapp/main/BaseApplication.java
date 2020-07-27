@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.BooleanUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public abstract class BaseApplication extends Application {
 
     private InitializationResult initializationResult;
@@ -17,7 +19,6 @@ public abstract class BaseApplication extends Application {
     /**
      * This method can be used for initializing the application in the background
      * during the splash screen appearing. Runs on the <i>javaFX Launcher thread</i>.
-     *
      */
     @NotNull
     protected abstract InitializationResult initialize() throws Exception;
@@ -37,6 +38,13 @@ public abstract class BaseApplication extends Application {
 
     @Override
     public final void start(Stage primaryStage) throws Exception {
+        if (Objects.isNull(initializationResult)) {
+            throw new UnInitializedException(
+                    "The BaseApplication must be initialized before start!",
+                    new NullPointerException("The initializationResult mustn't be null!")
+            );
+        }
+
         AppEntry appEntry = new AppEntry(initializationResult.preferences);
         postInitialize(appEntry, initializationResult.updateSearchResult);
         if (BooleanUtils.isFalse(appEntry.show())) {
@@ -48,9 +56,22 @@ public abstract class BaseApplication extends Application {
         private final Preferences preferences;
         private final UpdateSearcher.UpdateSearchResult updateSearchResult;
 
-        public InitializationResult(@NotNull Preferences preferences, @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
+        InitializationResult(@NotNull Preferences preferences, @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
             this.preferences = preferences;
             this.updateSearchResult = updateSearchResult;
+        }
+    }
+
+    public static class UnInitializedException extends RuntimeException {
+        private UnInitializedException() {
+        }
+
+        private UnInitializedException(String message) {
+            super(message);
+        }
+
+        public UnInitializedException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }
