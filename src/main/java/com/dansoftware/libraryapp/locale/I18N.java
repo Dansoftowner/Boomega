@@ -1,6 +1,10 @@
 package com.dansoftware.libraryapp.locale;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.text.MessageFormat;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
@@ -16,11 +20,13 @@ public class I18N {
     private I18N() {
     }
 
-    public static String getGeneralWord(String key) {
+    @NotNull
+    public static String getGeneralWord(@NotNull String key) throws MissingResourceException {
         return getGeneralWords().getString(key);
     }
 
-    public static String getAlertMsg(String key, Object... args) {
+    @NotNull
+    public static String getAlertMsg(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
         if (isEmpty(args)) {
             return getAlertMessages().getString(key);
         }
@@ -28,19 +34,23 @@ public class I18N {
         return MessageFormat.format(getAlertMessages().getString(key), args);
     }
 
-    public static ResourceBundle getProgressMessages() {
+    @NotNull
+    public static ResourceBundle getProgressMessages() throws MissingResourceException {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.ProgressMessages");
     }
 
-    public static ResourceBundle getFXMLValues() {
+    @NotNull
+    public static ResourceBundle getFXMLValues() throws MissingResourceException {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.FXMLValues");
     }
 
-    public static ResourceBundle getGeneralWords() {
+    @NotNull
+    public static ResourceBundle getGeneralWords() throws MissingResourceException {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.GeneralWords");
     }
 
-    public static ResourceBundle getAlertMessages() {
+    @NotNull
+    public static ResourceBundle getAlertMessages() throws MissingResourceException {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.AlertMessages");
     }
 
