@@ -4,7 +4,6 @@ import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainActivity;
-import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;

@@ -107,8 +107,8 @@ public class UpdateSearcher {
         }
 
         @NotNull
-        public UpdateSearchResult ifFailed(@Nullable Consumer<Exception> onFailed) {
-            if (failed && onFailed != null) {
+        public UpdateSearchResult ifFailed(@NotNull Consumer<Exception> onFailed) {
+            if (failed) {
                 onFailed.accept(failedCause);
             }
 
@@ -116,8 +116,8 @@ public class UpdateSearcher {
         }
 
         @NotNull
-        public UpdateSearchResult ifNewUpdateAvailable(@Nullable Consumer<UpdateInformation> onAvailable) {
-            if (newUpdate && onAvailable != null) {
+        public UpdateSearchResult ifNewUpdateAvailable(@NotNull Consumer<UpdateInformation> onAvailable) {
+            if (newUpdate) {
                 onAvailable.accept(information);
             }
 
@@ -125,8 +125,8 @@ public class UpdateSearcher {
         }
 
         @NotNull
-        public UpdateSearchResult ifNoUpdateAvailable(@Nullable Consumer<UpdateInformation> handler) {
-            if (!failed && !newUpdate && handler != null) {
+        public UpdateSearchResult ifNoUpdateAvailable(@NotNull Consumer<UpdateInformation> handler) {
+            if (!failed && !newUpdate) {
                 handler.accept(information);
             }
 

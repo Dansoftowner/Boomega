@@ -65,22 +65,26 @@ public class UpdateActivity {
      *                  {@code false} if we only want to show if an update is available
      */
     public void show(boolean showFeedbackDialog) {
-        updateSearchResult.ifFailed(!showFeedbackDialog ? null : exception -> {
-            context.showErrorDialog(
-                    I18N.getAlertMsg("update.activity.failed.title"),
-                    I18N.getAlertMsg("update.activity.failed.msg"),
-                    exception, buttonType -> {
-                        //empty
-                    });
+        updateSearchResult.ifFailed(exception -> {
+            if (showFeedbackDialog) {
+                context.showErrorDialog(
+                        I18N.getAlertMsg("update.activity.failed.title"),
+                        I18N.getAlertMsg("update.activity.failed.msg"),
+                        exception, buttonType -> {
+                            //empty
+                        });
+            }
         }).ifNewUpdateAvailable(updateInformation -> {
             //
-        }).ifNoUpdateAvailable(!showFeedbackDialog ? null : updateInformation -> {
-            context.showInformationDialog(
-                    I18N.getAlertMsg("update.activity.up.to.date.title"),
-                    I18N.getAlertMsg("update.activity.up.to.date.msg"),
-                    buttonType -> {
-                        //empty
-                    });
+        }).ifNoUpdateAvailable(updateInformation -> {
+            if (showFeedbackDialog) {
+                context.showInformationDialog(
+                        I18N.getAlertMsg("update.activity.up.to.date.title"),
+                        I18N.getAlertMsg("update.activity.up.to.date.msg"),
+                        buttonType -> {
+                            //empty
+                        });
+            }
         });
     }
 }
