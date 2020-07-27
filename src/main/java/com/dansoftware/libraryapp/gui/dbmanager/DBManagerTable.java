@@ -6,10 +6,12 @@ import com.dansoftware.libraryapp.util.FileExplorer;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
+import javafx.util.Callback;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,8 +25,8 @@ import java.util.Objects;
  * <p>
  * It should only be used through a {@link DBManagerView}.
  *
- * @see DBManagerView
  * @author Daniel Gyorffy
+ * @see DBManagerView
  */
 public class DBManagerTable extends TableView<DatabaseMeta> {
 
@@ -58,13 +60,20 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
     /**
      * The state-column shows an error-mark (red circle) if the particular database does not exist.
      */
-    private static final class StateColumn extends TableColumn<DatabaseMeta, String> {
+    private static final class StateColumn extends TableColumn<DatabaseMeta, String>
+            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
+
         StateColumn() {
             setReorderable(false);
             setSortable(false);
             setResizable(false);
             setPrefWidth(25);
-            setCellFactory(tableColumn -> new TableCell<>() {
+            setCellFactory(this);
+        }
+
+        @Override
+        public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
+            return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -88,7 +97,7 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
                         setGraphic(stateCircle);
                     }
                 }
-            });
+            };
         }
     }
 
@@ -117,11 +126,18 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
     /**
      * The size-column shows the file-size of the database
      */
-    private static final class SizeColumn extends TableColumn<DatabaseMeta, String> {
+    private static final class SizeColumn extends TableColumn<DatabaseMeta, String>
+            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
+
         SizeColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.size"));
             setReorderable(false);
-            setCellFactory(column -> new TableCell<>() {
+            setCellFactory(this);
+        }
+
+        @Override
+        public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
+            return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -140,7 +156,7 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
                         }
                     }
                 }
-            });
+            };
         }
     }
 
@@ -148,13 +164,20 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
      * The file-opener-column provides a {@link Button} to open the database-file in the native
      * file-explorer.
      */
-    private static final class FileOpenerColumn extends TableColumn<DatabaseMeta, String> {
+    private static final class FileOpenerColumn extends TableColumn<DatabaseMeta, String>
+            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
+
         FileOpenerColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.open"));
             setMinWidth(90);
             setSortable(false);
             setReorderable(false);
-            setCellFactory(tableColumn -> new TableCell<>() {
+            setCellFactory(this);
+        }
+
+        @Override
+        public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
+            return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -176,20 +199,27 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
                         setGraphic(openButton);
                     }
                 }
-            });
+            };
         }
     }
 
     /**
      * The delete-column provides a {@link Button} to delete the selected database(s).
      */
-    private final class DeleteColumn extends TableColumn<DatabaseMeta, String> {
+    private final class DeleteColumn extends TableColumn<DatabaseMeta, String>
+            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>>{
+
         DeleteColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.delete"));
             setReorderable(false);
             setSortable(false);
             setMinWidth(90);
-            setCellFactory(tableColumn -> new TableCell<>() {
+            setCellFactory(this);
+        }
+
+        @Override
+        public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
+            return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -210,7 +240,7 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
                         setGraphic(deleteButton);
                     }
                 }
-            });
+            };
         }
     }
 

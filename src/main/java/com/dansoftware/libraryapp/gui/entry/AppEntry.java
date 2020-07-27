@@ -40,16 +40,16 @@ public class AppEntry implements Context {
 
     @Override
     public void showOverlay(Region region) {
-        Platform.runLater(() -> this.subContext.showOverlay(region));
+        this.subContext.showOverlay(region);
     }
 
     @Override
     public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-        Platform.runLater(() -> this.subContext.showErrorDialog(title, message, onResult));
+        this.subContext.showErrorDialog(title, message, onResult);
     }
 
     @Override
     public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        Platform.runLater(() -> this.subContext.showErrorDialog(title, message, exception, onResult));
+        this.subContext.showErrorDialog(title, message, exception, onResult);
     }
 }

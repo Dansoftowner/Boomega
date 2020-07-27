@@ -10,6 +10,7 @@ import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.main.init.AppArgumentHandler;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.sun.javafx.application.LauncherImpl;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,8 +87,10 @@ public class Main extends BaseApplication {
     @Override
     protected void postInitialize(@NotNull Context starterContext,
                                   @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
-        UpdateActivity updateActivity = new UpdateActivity(starterContext, updateSearchResult);
-        updateActivity.show(false);
+        Platform.runLater(() -> {
+            UpdateActivity updateActivity = new UpdateActivity(starterContext, updateSearchResult);
+            updateActivity.show(false);
+        });
     }
 
 
