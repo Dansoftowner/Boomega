@@ -87,6 +87,7 @@ public class Main extends BaseApplication {
     @Override
     protected void postInitialize(@NotNull Context starterContext,
                                   @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
+        //showing an updateActivity for the user
         Platform.runLater(() -> {
             UpdateActivity updateActivity = new UpdateActivity(starterContext, updateSearchResult);
             updateActivity.show(false);

@@ -52,4 +52,9 @@ public class AppEntry implements Context {
     public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
         this.subContext.showErrorDialog(title, message, exception, onResult);
     }
+
+    @Override
+    public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+        this.subContext.showInformationDialog(title, message, onResult);
+    }
 }

@@ -123,5 +123,14 @@ public class UpdateSearcher {
 
             return this;
         }
+
+        @NotNull
+        public UpdateSearchResult ifNoUpdateAvailable(@Nullable Consumer<UpdateInformation> handler) {
+            if (!failed && !newUpdate && handler != null) {
+                handler.accept(information);
+            }
+
+            return this;
+        }
     }
 }

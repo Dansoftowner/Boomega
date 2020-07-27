@@ -17,5 +17,8 @@ public interface Context {
                          Exception exception,
                          Consumer<ButtonType> onResult);
 
+    void showInformationDialog(String title,
+                               String message,
+                               Consumer<ButtonType> onResult);
 
 }

@@ -35,4 +35,9 @@ public class MainActivity implements Context {
     public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
 
     }
+
+    @Override
+    public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+
+    }
 }

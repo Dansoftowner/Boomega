@@ -58,4 +58,9 @@ public class LoginActivity implements Context {
     public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
         this.loginView.showErrorDialog(title, message, exception, onResult);
     }
+
+    @Override
+    public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+        this.loginView.showInformationDialog(title, message, onResult);
+    }
 }

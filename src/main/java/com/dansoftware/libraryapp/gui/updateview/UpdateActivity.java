@@ -34,7 +34,7 @@ public class UpdateActivity {
     /**
      * Creates a basic {@link UpdateActivity}.
      *
-     * @param context for displaying the dialogs.
+     * @param context            for displaying the dialogs.
      * @param updateSearchResult the actual update-search data
      */
     public UpdateActivity(@NotNull Context context,
@@ -60,18 +60,27 @@ public class UpdateActivity {
     /**
      * Shows the activity through the particular {@link Context}.
      *
-     * @param showError it should be {@code true} if we want an error message if the update-searching failed;
+     * @param showFeedbackDialog it should be {@code true} if we want an error message if the update-searching failed or
+     *                           a feedback message if there is no new update available;
      *                  {@code false} if we only want to show if an update is available
      */
-    public void show(boolean showError) {
-        updateSearchResult.ifFailed(!showError ? null : exception -> {
+    public void show(boolean showFeedbackDialog) {
+        updateSearchResult.ifFailed(!showFeedbackDialog ? null : exception -> {
             context.showErrorDialog(
                     I18N.getAlertMsg("update.activity.failed.title"),
                     I18N.getAlertMsg("update.activity.failed.msg"),
                     exception, buttonType -> {
+                        //empty
                     });
         }).ifNewUpdateAvailable(updateInformation -> {
-
+            //
+        }).ifNoUpdateAvailable(!showFeedbackDialog ? null : updateInformation -> {
+            context.showInformationDialog(
+                    I18N.getAlertMsg("update.activity.up.to.date.title"),
+                    I18N.getAlertMsg("update.activity.up.to.date.msg"),
+                    buttonType -> {
+                        //empty
+                    });
         });
     }
 }
