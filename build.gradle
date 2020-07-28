@@ -8,7 +8,12 @@ version '0.0.0'
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
+    //repository for JMetro
     maven { url  "https://dl.bintray.com/dukke/maven" }
+    //repository for markdown-javafx-renderer
+    maven {
+        url "http://sandec.bintray.com/repo"
+    }
 }
 
 compileJava {
@@ -71,6 +76,7 @@ dependencies {
     //Original: compile group: 'com.dlsc.workbenchfx', name: 'workbenchfx-core', version: '11.1.0'
     implementation 'com.github.Dansoftowner.workbench-fx-modified:workbenchfx-core:11.1.3' //Modified WorkBenchFX
     compile 'io.github.typhon0:AnimateFX:1.2.1'
+    implementation "com.sandec:mdfx:0.1.6"
 
     //nitrite database
     implementation 'org.dizitart:nitrite:3.4.2'
