@@ -38,7 +38,7 @@ public abstract class BaseApplication extends Application {
 
     @Override
     public final void start(Stage primaryStage) throws Exception {
-        if (Objects.isNull(initializationResult)) {
+        if (initializationResult == null) {
             throw new UnInitializedException(
                     "The BaseApplication must be initialized before start!",
                     new NullPointerException("The initializationResult mustn't be null!")

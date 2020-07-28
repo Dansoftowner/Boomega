@@ -79,11 +79,6 @@ public class UpdateActivity {
                         });
             }
         }).ifNewUpdateAvailable(updateInformation -> {
-            //test:
-            SimpleHeaderView<Region> myView = new SimpleHeaderView<>("MyTitle", new FontAwesomeIconView(FontAwesomeIcon.UPLOAD));
-            myView.setMaxHeight(100);
-            myView.setMaxWidth(300);
-            context.showOverlay(myView);
         }).ifNoUpdateAvailable(updateInformation -> {
             if (showFeedbackDialog) {
                 context.showInformationDialog(

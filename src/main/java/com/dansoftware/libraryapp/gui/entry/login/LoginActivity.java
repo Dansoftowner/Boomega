@@ -52,6 +52,7 @@ public class LoginActivity implements Context {
     @Override
     public void showOverlay(Region region, boolean blocking) {
         this.loginView.showOverlay(region, blocking);
+        StackPane.setAlignment(region, Pos.CENTER);
     }
 
     @Override
