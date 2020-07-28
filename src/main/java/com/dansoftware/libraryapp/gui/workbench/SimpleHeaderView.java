@@ -36,6 +36,10 @@ public class SimpleHeaderView<T extends Region> extends BaseWorkbench {
     }
 
     public void setContent(T content) {
-        this.content = content;
+        if (content != this.content) {
+            this.content = content;
+            this.getModules().clear();
+            this.getModules().add(new ModuleImpl());
+        }
     }
 }

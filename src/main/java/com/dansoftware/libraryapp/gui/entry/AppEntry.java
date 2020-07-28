@@ -48,6 +48,11 @@ public class AppEntry implements Context {
     }
 
     @Override
+    public void hideOverlay(Region region) {
+        this.subContext.hideOverlay(region);
+    }
+
+    @Override
     public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
         this.subContext.showErrorDialog(title, message, onResult);
     }

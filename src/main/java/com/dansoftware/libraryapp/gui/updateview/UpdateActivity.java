@@ -6,7 +6,9 @@ import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.scene.Group;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -79,6 +81,8 @@ public class UpdateActivity {
                         });
             }
         }).ifNewUpdateAvailable(updateInformation -> {
+            UpdateView updateView = new UpdateView(this.context, updateInformation);
+            this.context.showOverlay(new StackPane(new Group(updateView)), true);
         }).ifNoUpdateAvailable(updateInformation -> {
             if (showFeedbackDialog) {
                 context.showInformationDialog(

@@ -10,6 +10,8 @@ public interface Context {
 
     void showOverlay(Region region, boolean blocking);
 
+    void hideOverlay(Region region);
+
     void showErrorDialog(String title,
                          String message,
                          Consumer<ButtonType> onResult);
