@@ -217,3 +217,10 @@
 .state-circle-ok {
     -fx-fill: transparent;
 }
+
+/**
+UPDATE VIEW
+ */
+.update-view-available-label {
+    -fx-font-size: 32px;
+}

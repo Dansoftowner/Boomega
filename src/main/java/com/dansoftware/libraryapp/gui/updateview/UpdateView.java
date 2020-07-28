@@ -11,6 +11,8 @@ import com.dansoftware.libraryapp.update.UpdateInformation;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +25,7 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> {
     private UpdatePage updatePageDetail;
     private UpdatePage updatePageDownload;
 
-    private int currentPageNumber;
+    private SimpleIntegerProperty currentPageNumberProperty;
     private final Context context;
     private final UpdateInformation information;
 
@@ -31,38 +33,44 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> {
         super(I18N.getGeneralWord("update.view.title"), new MaterialDesignIconView(MaterialDesignIcon.UPDATE));
         this.context = context;
         this.information = information;
+        this.currentPageNumberProperty = new SimpleIntegerProperty(0);
         this.setContent(getPage(0));
         this.setPrefWidth(500);
-        this.setPrefHeight(500);
+        this.setPrefHeight(USE_COMPUTED_SIZE);
+        this.setEffect(new DropShadow());
         this.createToolbar();
     }
 
     private void createToolbar() {
-        ToolbarItem prevBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.SKIP_PREVIOUS), event -> {
-            currentPageNumber--;
-            if (currentPageNumber < PAGE_MIN) {
-                currentPageNumber = PAGE_MIN;
-            }
+        ToolbarItem prevBtn =
+                new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.SKIP_PREVIOUS), event -> goToPrevPage());
+        prevBtn.disableProperty().bind(this.currentPageNumberProperty.isEqualTo(0));
 
-            this.setContent(getPage(currentPageNumber));
-        });
+        ToolbarItem closeBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.CLOSE), event -> hide());
 
-        ToolbarItem nextBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.SKIP_NEXT), event -> {
-            currentPageNumber++;
-            if (currentPageNumber > PAGE_MAX) {
-                currentPageNumber = PAGE_MAX;
-            }
+        this.getToolbarControlsRight().addAll(prevBtn, closeBtn);
+    }
 
-            this.setContent(getPage(currentPageNumber));
-        });
+    public void goToPrevPage() {
+        currentPageNumberProperty.set(currentPageNumberProperty.get() - 1);
+        if (currentPageNumberProperty.get() < PAGE_MIN) {
+            currentPageNumberProperty.set(PAGE_MIN);
+        }
 
-        this.getToolbarControlsLeft().addAll(prevBtn, nextBtn);
+        this.setContent(getPage(currentPageNumberProperty.get()));
+    }
 
-        ToolbarItem closeBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.CLOSE), event -> {
-           this.context.hideOverlay((Region) this.getParent().getParent());
-        });
+    public void goToNextPage() {
+        currentPageNumberProperty.set(currentPageNumberProperty.get() + 1);
+        if (currentPageNumberProperty.get() > PAGE_MAX) {
+            currentPageNumberProperty.set(PAGE_MAX);
+        }
 
-        this.getToolbarControlsRight().add(closeBtn);
+        this.setContent(getPage(currentPageNumberProperty.get()));
+    }
+
+    public void hide() {
+        this.context.hideOverlay((Region) this.getParent().getParent());
     }
 
     private UpdatePage getPage(int index) {
@@ -70,13 +78,13 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> {
         switch (index) {
             case 0:
                 return updatePageStart == null ?
-                        updatePageStart = new UpdatePageStart(information) : updatePageStart;
+                        updatePageStart = new UpdatePageStart(this, information) : updatePageStart;
             case 1:
                 return updatePageDetail == null ?
-                        updatePageDetail = new UpdatePageDetail(information) : updatePageDetail;
+                        updatePageDetail = new UpdatePageDetail(this, information) : updatePageDetail;
             case 2:
                 return updatePageDownload == null ?
-                        updatePageDownload = new UpdatePageDownload(information) : updatePageDownload;
+                        updatePageDownload = new UpdatePageDownload(this, information) : updatePageDownload;
         }
 
         return null;
