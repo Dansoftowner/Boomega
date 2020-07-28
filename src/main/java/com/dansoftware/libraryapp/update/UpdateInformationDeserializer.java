@@ -24,6 +24,10 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
     private static final String WINDOWS = "Windows";
     private static final String LINUX = "Linux";
     private static final String MAC = "Mac";
+    private static final String BUNDLES = "bundles";
+    private static final String SIMPLE_NAME = "simpleName";
+    private static final String LOCALE_KEY = "localeKey";
+    private static final String DOWNLOAD_URL = "downloadUrl";
 
     private static final String DEFAULT_LANG = "defaultLang";
 
@@ -44,45 +48,62 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
         return jsonObject.get(VERSION).getAsString();
     }
 
+    /**
+     * Retrieves the available downloadable binary-types from the JsonObject
+     * into a {@link Map}
+     */
+    @NotNull
     private Map<String, String> getBinaries(@NotNull JsonObject jsonObject) {
         JsonObject binaries = jsonObject.getAsJsonObject(BINARIES);
+
+        JsonObject osSpecificBinaries;
+        //
         if (PlatformUtil.isWindows()) {
-            binaries = jsonObject.getAsJsonObject(WINDOWS);
+            osSpecificBinaries = binaries.getAsJsonObject(WINDOWS);
         } else if (PlatformUtil.isLinux()) {
-            binaries = jsonObject.getAsJsonObject(LINUX);
+            osSpecificBinaries = binaries.getAsJsonObject(LINUX);
         } else if (PlatformUtil.isMac()) {
-            binaries = jsonObject.getAsJsonObject(MAC);
+            osSpecificBinaries = binaries.getAsJsonObject(MAC);
+        } else {
+            return new HashMap<>();
         }
 
+        //
+        JsonObject bundles = osSpecificBinaries.getAsJsonObject(BUNDLES);
+
         Map<String, String> result = new HashMap<>();
-
-        Set<Map.Entry<String, JsonElement>> entries = binaries.entrySet();
+        Set<Map.Entry<String, JsonElement>> entries = bundles.entrySet();
         entries.forEach(entry -> {
-            String key = entry.getKey();
-            JsonElement value = entry.getValue();
+            JsonObject value = entry.getValue().getAsJsonObject();
 
+            String simpleName = value.get(SIMPLE_NAME).getAsString();
+            String localeKey = value.get(LOCALE_KEY).getAsString();
+            String downloadUrl = value.get(DOWNLOAD_URL).getAsString();
+
+            String localizedName;
             try {
-                key = I18N.getGeneralWord(key);
-            } catch (MissingResourceException ignored) {
-                //
+                localizedName = I18N.getGeneralWord(localeKey);
+            } catch (MissingResourceException e) {
+                localizedName = simpleName;
             }
 
-            result.put(key, value.getAsString());
+            result.put(localizedName, downloadUrl);
         });
 
         return result;
     }
 
+    @NotNull
     private String getReviewUrl(@NotNull JsonObject jsonObject) {
         JsonObject reviewBundle = jsonObject.getAsJsonObject(REVIEW);
-        JsonElement review = reviewBundle.get(Locale.getDefault().getLanguage());
+        JsonElement reviewUrl = reviewBundle.get(Locale.getDefault().getLanguage());
 
-        if (review == null) {
+        if (reviewUrl == null) {
             String defaultLang = reviewBundle.get(DEFAULT_LANG).getAsString();
-            review = reviewBundle.get(defaultLang);
+            reviewUrl = reviewBundle.get(defaultLang);
         }
 
-        return review.getAsString();
+        return reviewUrl.getAsString();
     }
 
 
