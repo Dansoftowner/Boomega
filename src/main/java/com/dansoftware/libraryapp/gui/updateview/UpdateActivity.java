@@ -1,8 +1,12 @@
 package com.dansoftware.libraryapp.gui.updateview;
 
 import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -75,7 +79,11 @@ public class UpdateActivity {
                         });
             }
         }).ifNewUpdateAvailable(updateInformation -> {
-            //
+            //test:
+            SimpleHeaderView<Region> myView = new SimpleHeaderView<>("MyTitle", new FontAwesomeIconView(FontAwesomeIcon.UPLOAD));
+            myView.setMaxHeight(100);
+            myView.setMaxWidth(300);
+            context.showOverlay(myView);
         }).ifNoUpdateAvailable(updateInformation -> {
             if (showFeedbackDialog) {
                 context.showInformationDialog(

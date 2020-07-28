@@ -27,6 +27,11 @@ public class MainActivity implements Context {
     }
 
     @Override
+    public void showOverlay(Region region, boolean blocking) {
+
+    }
+
+    @Override
     public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
 
     }

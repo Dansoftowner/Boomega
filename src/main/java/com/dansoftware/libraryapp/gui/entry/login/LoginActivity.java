@@ -50,6 +50,11 @@ public class LoginActivity implements Context {
     }
 
     @Override
+    public void showOverlay(Region region, boolean blocking) {
+        this.loginView.showOverlay(region, blocking);
+    }
+
+    @Override
     public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
         this.loginView.showErrorDialog(title, message, onResult);
     }

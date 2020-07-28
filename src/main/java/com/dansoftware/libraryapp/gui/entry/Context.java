@@ -8,6 +8,8 @@ import java.util.function.Consumer;
 public interface Context {
     void showOverlay(Region region);
 
+    void showOverlay(Region region, boolean blocking);
+
     void showErrorDialog(String title,
                          String message,
                          Consumer<ButtonType> onResult);

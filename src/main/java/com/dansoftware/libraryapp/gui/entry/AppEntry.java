@@ -43,6 +43,11 @@ public class AppEntry implements Context {
     }
 
     @Override
+    public void showOverlay(Region region, boolean blocking) {
+        this.subContext.showOverlay(region, blocking);
+    }
+
+    @Override
     public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
         this.subContext.showErrorDialog(title, message, onResult);
     }
