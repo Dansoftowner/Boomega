@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.log;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 
 /**
@@ -7,7 +9,7 @@ import java.io.File;
  */
 public class LogFile extends File {
     public LogFile() {
-        super(System.getProperty("java.io.tmpdir"), "libraryapp");
+        super(FileUtils.getTempDirectory(), "libraryapp");
     }
 
     public String getPathWithExtension() {
