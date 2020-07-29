@@ -224,3 +224,23 @@ UPDATE VIEW
 .update-view-available-label {
     -fx-font-size: 32px;
 }
+
+/** MDFXNode */
+* {
+    -mdfx-font-color: black;
+    -mdfx-border-color-1: #888;
+
+    -mdfx-bg-color-1: #ccc;
+    -mdfx-bg-color-2: #ddd;
+    -mdfx-bg-color-3: #eee;
+}
+
+.markdown-text {
+    -fx-font-family: ARIAL;
+}
+.markdown-italic {
+    -fx-font-style: italic;
+}
+.markdown-bold {
+    -fx-font-weight: bold;
+}

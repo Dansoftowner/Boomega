@@ -9,10 +9,11 @@ import javafx.scene.image.Image;
 public final class Globals {
 
     /**
-     * The libraryapp icon
+     * The libraryapp icon.
+     * The icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
      */
     public static final Image ICON = new Image(
-            Globals.class.getResourceAsStream("/com/dansoftware/libraryapp/image/libraryapp-win-icon.png")
+            Globals.class.getResourceAsStream("/com/dansoftware/libraryapp/image/win-icon.png")
     );
 
     /**

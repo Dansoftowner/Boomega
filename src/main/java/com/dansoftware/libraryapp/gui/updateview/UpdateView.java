@@ -2,8 +2,6 @@ package com.dansoftware.libraryapp.gui.updateview;
 
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.updateview.page.UpdatePage;
-import com.dansoftware.libraryapp.gui.updateview.page.UpdatePageDetail;
-import com.dansoftware.libraryapp.gui.updateview.page.UpdatePageDownload;
 import com.dansoftware.libraryapp.gui.updateview.page.UpdatePageStart;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dansoftware.libraryapp.locale.I18N;
@@ -11,82 +9,72 @@ import com.dansoftware.libraryapp.update.UpdateInformation;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
-public class UpdateView extends SimpleHeaderView<UpdatePage> {
+public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeListener<UpdatePage> {
 
-    private static final int PAGE_MIN = 0;
-    private static final int PAGE_MAX = 2;
-
-    private UpdatePage updatePageStart;
-    private UpdatePage updatePageDetail;
-    private UpdatePage updatePageDownload;
-
-    private SimpleIntegerProperty currentPageNumberProperty;
+    private final ObjectProperty<@NotNull UpdatePage> updatePageProperty;
     private final Context context;
     private final UpdateInformation information;
+
+    private final ToolbarItem prevBtn;
+    private final ToolbarItem closeBtn;
+    private final ToolbarItem reloadBtn;
 
     public UpdateView(@NotNull Context context, @NotNull UpdateInformation information) {
         super(I18N.getGeneralWord("update.view.title"), new MaterialDesignIconView(MaterialDesignIcon.UPDATE));
         this.context = context;
         this.information = information;
-        this.currentPageNumberProperty = new SimpleIntegerProperty(0);
-        this.setContent(getPage(0));
+        this.updatePageProperty = new SimpleObjectProperty<>();
+        this.updatePageProperty.addListener(this);
+        this.prevBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.SKIP_PREVIOUS), event -> {});
+        this.closeBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.CLOSE), event -> hide());
+        this.reloadBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.RELOAD), event -> getUpdatePage().reload());
+
+        this.getToolbarControlsRight().addAll(prevBtn, reloadBtn, closeBtn);
+        this.setUpdatePage(new UpdatePageStart(this, information));
         this.setPrefWidth(500);
         this.setPrefHeight(USE_COMPUTED_SIZE);
         this.setEffect(new DropShadow());
-        this.createToolbar();
-    }
-
-    private void createToolbar() {
-        ToolbarItem prevBtn =
-                new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.SKIP_PREVIOUS), event -> goToPrevPage());
-        prevBtn.disableProperty().bind(this.currentPageNumberProperty.isEqualTo(0));
-
-        ToolbarItem closeBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.CLOSE), event -> hide());
-
-        this.getToolbarControlsRight().addAll(prevBtn, closeBtn);
-    }
-
-    public void goToPrevPage() {
-        currentPageNumberProperty.set(currentPageNumberProperty.get() - 1);
-        if (currentPageNumberProperty.get() < PAGE_MIN) {
-            currentPageNumberProperty.set(PAGE_MIN);
-        }
-
-        this.setContent(getPage(currentPageNumberProperty.get()));
-    }
-
-    public void goToNextPage() {
-        currentPageNumberProperty.set(currentPageNumberProperty.get() + 1);
-        if (currentPageNumberProperty.get() > PAGE_MAX) {
-            currentPageNumberProperty.set(PAGE_MAX);
-        }
-
-        this.setContent(getPage(currentPageNumberProperty.get()));
     }
 
     public void hide() {
         this.context.hideOverlay((Region) this.getParent().getParent());
     }
 
-    private UpdatePage getPage(int index) {
+    public void setUpdatePage(@NotNull UpdatePage updatePage) {
+        this.updatePageProperty.set(updatePage);
+    }
 
-        switch (index) {
-            case 0:
-                return updatePageStart == null ?
-                        updatePageStart = new UpdatePageStart(this, information) : updatePageStart;
-            case 1:
-                return updatePageDetail == null ?
-                        updatePageDetail = new UpdatePageDetail(this, information) : updatePageDetail;
-            case 2:
-                return updatePageDownload == null ?
-                        updatePageDownload = new UpdatePageDownload(this, information) : updatePageDownload;
-        }
+    public ToolbarItem getPrevBtn() {
+        return prevBtn;
+    }
 
-        return null;
+    public ToolbarItem getCloseBtn() {
+        return closeBtn;
+    }
+
+    public ToolbarItem getReloadBtn() {
+        return reloadBtn;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public @NotNull UpdatePage getUpdatePage() {
+        return updatePageProperty.get();
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends UpdatePage> observable, UpdatePage oldPage, UpdatePage newPage) {
+        setContent(newPage);
+        newPage.onFocus(this);
     }
 }

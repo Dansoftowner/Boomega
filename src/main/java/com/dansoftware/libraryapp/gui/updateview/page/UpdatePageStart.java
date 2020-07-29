@@ -4,11 +4,11 @@ import com.dansoftware.libraryapp.gui.updateview.UpdateView;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class UpdatePageStart extends UpdatePage {
@@ -19,8 +19,10 @@ public class UpdatePageStart extends UpdatePage {
     @FXML
     private Label nextVersionLabel;
 
+    private UpdatePageDetail updatePageDetail;
+
     public UpdatePageStart(@NotNull UpdateView updateView, @NotNull UpdateInformation information) {
-        super(updateView, information, new FXMLLoader(UpdatePageStart.class.getResource("UpdatePageStart.fxml")));
+        super(updateView, information, UpdatePageStart.class.getResource("UpdatePageStart.fxml"));
     }
 
     @FXML
@@ -30,7 +32,10 @@ public class UpdatePageStart extends UpdatePage {
 
     @FXML
     private void goToNextPage() {
-        getUpdateView().goToNextPage();
+        this.updatePageDetail = Objects.isNull(updatePageDetail) ?
+                new UpdatePageDetail(getUpdateView(), this, getInformation()) : updatePageDetail;
+
+        getUpdateView().setUpdatePage(updatePageDetail);
     }
 
     @Override
@@ -38,4 +43,5 @@ public class UpdatePageStart extends UpdatePage {
         currentVersionLabel.setText(Globals.VERSION_INFO.getVersion());
         nextVersionLabel.setText(getInformation().getVersion());
     }
+
 }
