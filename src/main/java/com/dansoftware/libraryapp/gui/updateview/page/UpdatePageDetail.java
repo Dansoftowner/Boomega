@@ -5,6 +5,7 @@ import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import com.sandec.mdfx.MDFXNode;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -15,9 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -36,7 +36,7 @@ public class UpdatePageDetail extends UpdatePage {
     }
 
     private void loadPreview() {
-        new Thread(new MarkdownDownloaderTask(getInformation().getReviewUrl()) {{ //init block
+        new Thread(new RawTextDownloaderTask(getInformation().getReviewUrl()) {{ //init block
             setOnRunning(e -> {
                 ProgressBar progressBar = new ProgressBar();
                 progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
@@ -98,10 +98,27 @@ public class UpdatePageDetail extends UpdatePage {
         }
     }
 
-    private static class MarkdownDownloaderTask extends Task<String> {
+    /**
+     * A ReviewDataDownloaderTask defines a process to download raw text from
+     * the internet by the specified URL.
+     * <p>
+     * It can be easily executed on a background-thread.
+     *
+     * <pre>{@code
+     * String url = ...; // with the http(s) protocol
+     * var task = new RawTextDownloaderTask(url);
+     * new Thread(task).start();
+     * }</pre>
+     *
+     * We can handle the result by using the methods defined in {@link Task}
+     * ({@link Task#setOnSucceeded(EventHandler)}, {@link Task#setOnFailed(EventHandler)} etc...)
+     *
+     * @see Task
+     */
+    private static class RawTextDownloaderTask extends Task<String> {
         private final String url;
 
-        public MarkdownDownloaderTask(String url) {
+        public RawTextDownloaderTask(@NotNull String url) {
             this.url = url;
         }
 
@@ -109,19 +126,21 @@ public class UpdatePageDetail extends UpdatePage {
         protected String call() throws Exception {
 
             URL url = new URL(this.url);
-            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.connect();
 
-            try (var input = new BufferedInputStream(urlConnection.getInputStream());
-                 var output = new ByteArrayOutputStream()) {
+            try (var input = new BufferedInputStream(urlConnection.getInputStream())) {
+                StringBuilder stringBuilder = new StringBuilder();
 
                 byte[] buf = new byte[500];
                 int bytesRead;
                 while ((bytesRead = input.read(buf)) > 0) {
-                    output.write(buf, 0, bytesRead);
+                    stringBuilder.append(new String(buf, 0, bytesRead, StandardCharsets.UTF_8));
                 }
 
-                return new String(output.toByteArray(), StandardCharsets.UTF_8);
+                return stringBuilder.toString();
+            } finally {
+                urlConnection.disconnect();
             }
         }
     }
