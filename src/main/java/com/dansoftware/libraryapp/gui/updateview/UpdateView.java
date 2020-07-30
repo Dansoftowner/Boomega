@@ -25,8 +25,11 @@ import org.jetbrains.annotations.NotNull;
  * when the user clicks on the close-toolbar-item.
  *
  * <p>
- * It's using {@link UpdatePage} objects for displaying the actual content.
+ * It displays {@link UpdatePage} objects sequentially.
  * The first {@link UpdatePage} that is displayed is {@link UpdatePageStart}.
+ * When a new {@link UpdatePage} object set through the {@link #updatePageProperty()}
+ * it will display it and then calls the {@link UpdatePage#onFocus(UpdateView)} method
+ * on the update-page.
  *
  * <p>
  * It has three toolbar-items:
@@ -82,7 +85,7 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeLi
         this.prevBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.SKIP_PREVIOUS), event -> {});
         this.closeBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.CLOSE), event -> hide());
         this.reloadBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.RELOAD), event -> getUpdatePage().reload());
-        //adding the toolbar items
+        //adding the toolbar items to the toolbar
         this.getToolbarControlsRight().addAll(prevBtn, reloadBtn, closeBtn);
 
         //setting the first UpdatePage object
@@ -117,9 +120,12 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeLi
         return context;
     }
 
-    @NotNull
     public UpdatePage getUpdatePage() {
-        return updatePageProperty.get();
+        return updatePageProperty().get();
+    }
+
+    public ObjectProperty<UpdatePage> updatePageProperty() {
+        return this.updatePageProperty;
     }
 
     @Override
