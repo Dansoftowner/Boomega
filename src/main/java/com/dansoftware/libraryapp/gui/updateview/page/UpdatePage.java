@@ -73,6 +73,7 @@ public abstract class UpdatePage extends StackPane implements Initializable {
 
     protected void setNextPageFactory(@Nullable Supplier<@NotNull UpdatePage> nextPageFactory) {
         this.nextPageFactory = nextPageFactory;
+
     }
 
     public void reload() {

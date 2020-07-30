@@ -81,7 +81,9 @@ public class UpdateActivity {
                         });
             }
         }).ifNewUpdateAvailable(updateInformation -> {
-            UpdateView updateView = new UpdateView(this.context, updateInformation);
+            UpdateView.HideStrategy hideStrategy = (context, view) ->
+                    context.hideOverlay((Region) view.getParent().getParent());
+            UpdateView updateView = new UpdateView(this.context, hideStrategy, updateInformation);
             this.context.showOverlay(new StackPane(new Group(updateView)), true);
         }).ifNoUpdateAvailable(updateInformation -> {
             if (showFeedbackDialog) {
