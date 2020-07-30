@@ -19,53 +19,36 @@ import java.io.BufferedInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ *
+ */
 public class UpdatePageDetail extends UpdatePage {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdatePageDetail.class);
 
-    private UpdatePageDownload updatePageDownload;
-
     @FXML
     private ScrollPane previewScrollPane;
 
-    public UpdatePageDetail(@NotNull UpdateView updateView, @NotNull UpdatePage previous, @NotNull UpdateInformation information) {
+    public UpdatePageDetail(@NotNull UpdateView updateView,
+                            @NotNull UpdatePage previous,
+                            @NotNull UpdateInformation information) {
         super(updateView, previous, information, UpdatePageDetail.class.getResource("UpdatePageDetail.fxml"));
+        super.setNextPageFactory(() -> new UpdatePageDownload(getUpdateView(), this, getInformation()));
     }
 
+    /**
+     * Loads the description about the new update on a background-thread then displays it
+     * on the UI thread using a {@link PreviewTextDownloaderTask}.
+     */
     private void loadPreview() {
-        new Thread(new RawTextDownloaderTask(getInformation().getReviewUrl()) {{ //init block
-            setOnRunning(e -> {
-                ProgressBar progressBar = new ProgressBar();
-                progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
-                previewScrollPane.setContent(progressBar);
-            });
-
-            setOnFailed(e -> {
-                Throwable cause = e.getSource().getException();
-                logger.error("Couldn't load the markdown-preview", cause);
-                previewScrollPane.setContent(new PreviewErrorPlaceHolder(cause));
-            });
-
-            setOnSucceeded(e -> {
-                String markdownRaw = getValue();
-                // rendering the markdown-text into a javaFX node:
-                var markdownDisplay = new MDFXNode(markdownRaw);
-                previewScrollPane.setContent(markdownDisplay);
-                previewScrollPane.setFitToHeight(false);
-                previewScrollPane.setFitToWidth(true);
-            });
-        }}).start();
+        new Thread(new PreviewTextDownloaderTask(getInformation().getReviewUrl())).start();
     }
 
     @FXML
     private void goToNextPage() {
-        this.updatePageDownload = Objects.isNull(updatePageDownload) ?
-                new UpdatePageDownload(getUpdateView(), this, getInformation()) : updatePageDownload;
-
-        getUpdateView().setUpdatePage(updatePageDownload);
+        super.goNext();
     }
 
     @Override
@@ -79,8 +62,12 @@ public class UpdatePageDetail extends UpdatePage {
         loadPreview();
     }
 
+    /**
+     * A PreviewErrorPlaceHolder is a GUI object that is used as a placeholder for
+     * the preview-area.
+     */
     private final class PreviewErrorPlaceHolder extends StackPane {
-        PreviewErrorPlaceHolder(Throwable cause) {
+        PreviewErrorPlaceHolder(@NotNull Throwable cause) {
             var label = new Label(I18N.getGeneralWord("update.view.details.preview.failed"));
             var detailBtn = new Button(I18N.getGeneralWord("update.view.details.preview.failed.more"));
             detailBtn.setOnAction(event -> {
@@ -99,32 +86,59 @@ public class UpdatePageDetail extends UpdatePage {
     }
 
     /**
-     * A ReviewDataDownloaderTask defines a process to download raw text from
-     * the internet by the specified URL.
+     * A PreviewTextDownloaderTask defines a process to download the markdown-text that describes the
+     * new features of the update from the internet by the specified URL. While the download is in progress
+     * it will display a progressbar for the user. If the task failed then it will display an error message
+     * for the user (by the help of {@link PreviewErrorPlaceHolder}). When the download is completed successfully,
+     * it will display it in a javaFX node ({@link MDFXNode}) that renders the Markdown-text graphically.
      * <p>
-     * It can be easily executed on a background-thread.
+     * It should be executed on a background-thread to get it work properly.
      *
      * <pre>{@code
      * String url = ...; // with the http(s) protocol
      * var task = new RawTextDownloaderTask(url);
      * new Thread(task).start();
      * }</pre>
-     *
+     * <p>
      * We can handle the result by using the methods defined in {@link Task}
      * ({@link Task#setOnSucceeded(EventHandler)}, {@link Task#setOnFailed(EventHandler)} etc...)
      *
      * @see Task
      */
-    private static class RawTextDownloaderTask extends Task<String> {
+    private class PreviewTextDownloaderTask extends Task<String> {
+
         private final String url;
 
-        public RawTextDownloaderTask(@NotNull String url) {
+        public PreviewTextDownloaderTask(@NotNull String url) {
             this.url = url;
+
+            //while the task downloads the data, we show an indeterminate progress-bar
+            setOnRunning(e -> {
+                ProgressBar progressBar = new ProgressBar();
+                progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+                UpdatePageDetail.this.previewScrollPane.setContent(progressBar);
+            });
+
+            //if the task failed we log the error message and we also show a message to the user
+            setOnFailed(e -> {
+                Throwable cause = e.getSource().getException();
+                logger.error("Couldn't load the markdown-preview", cause);
+                UpdatePageDetail.this.previewScrollPane.setContent(new PreviewErrorPlaceHolder(cause));
+            });
+
+            //if the task succeeded, we render it as a markdown-text into a javaFX node
+            setOnSucceeded(e -> {
+                String markdownRaw = getValue();
+                // rendering the markdown-text into a javaFX node:
+                var markdownDisplay = new MDFXNode(markdownRaw);
+                UpdatePageDetail.this.previewScrollPane.setContent(markdownDisplay);
+                UpdatePageDetail.this.previewScrollPane.setFitToHeight(false);
+                UpdatePageDetail.this.previewScrollPane.setFitToWidth(true);
+            });
         }
 
         @Override
         protected String call() throws Exception {
-
             URL url = new URL(this.url);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.connect();

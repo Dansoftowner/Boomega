@@ -17,6 +17,11 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * An UpdateView is a GUI object that can show a user an update-dialog.
+ *
+ * @author Daniel Gyorffy
+ */
 public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeListener<UpdatePage> {
 
     private final ObjectProperty<@NotNull UpdatePage> updatePageProperty;
@@ -27,6 +32,12 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeLi
     private final ToolbarItem closeBtn;
     private final ToolbarItem reloadBtn;
 
+    /**
+     * Creates a normal UpdateView with all necessary data.
+     *
+     * @param context the context that defines that where to show this update-dialog
+     * @param information the object that holds all information about the update
+     */
     public UpdateView(@NotNull Context context, @NotNull UpdateInformation information) {
         super(I18N.getGeneralWord("update.view.title"), new MaterialDesignIconView(MaterialDesignIcon.UPDATE));
         this.context = context;
@@ -68,7 +79,8 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeLi
         return context;
     }
 
-    public @NotNull UpdatePage getUpdatePage() {
+    @NotNull
+    public UpdatePage getUpdatePage() {
         return updatePageProperty.get();
     }
 

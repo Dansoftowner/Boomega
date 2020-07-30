@@ -11,21 +11,38 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public abstract class UpdatePage extends StackPane implements Initializable {
 
     private final UpdateInformation information;
     private final UpdateView updateView;
-    private final UpdatePage previous;
+
+    private final UpdatePage previousPage;
+    private UpdatePage nextPage;
+    private Supplier<UpdatePage> nextPageFactory;
 
     public UpdatePage(@NotNull UpdateView updateView, @NotNull UpdateInformation information, URL fxmlResource) {
         this(updateView, null, information, fxmlResource);
     }
 
-    public UpdatePage(@NotNull UpdateView updateView, @Nullable UpdatePage previous, @NotNull UpdateInformation information, URL fxmlResource) {
+    public UpdatePage(@NotNull UpdateView updateView,
+                      @Nullable UpdatePage previousPage,
+                      @NotNull UpdateInformation information,
+                      @NotNull URL fxmlResource) {
+        this(updateView, previousPage, null, information, fxmlResource);
+    }
+
+    public UpdatePage(@NotNull UpdateView updateView,
+                      @Nullable UpdatePage previousPage,
+                      @Nullable Supplier<@NotNull UpdatePage> nextPageFactory,
+                      @NotNull UpdateInformation information,
+                      @NotNull URL fxmlResource) {
         this.information = information;
         this.updateView = updateView;
-        this.previous = previous;
+        this.previousPage = previousPage;
+        this.nextPageFactory = nextPageFactory;
 
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource);
         fxmlLoader.setController(this);
@@ -38,6 +55,14 @@ public abstract class UpdatePage extends StackPane implements Initializable {
         }
     }
 
+    protected void goNext() {
+        if (this.nextPageFactory != null) {
+            this.nextPage = Objects.isNull(nextPage) ? nextPageFactory.get() : nextPage;
+
+            getUpdateView().setUpdatePage(nextPage);
+        }
+    }
+
     protected UpdateView getUpdateView() {
         return updateView;
     }
@@ -46,15 +71,19 @@ public abstract class UpdatePage extends StackPane implements Initializable {
         return this.information;
     }
 
+    protected void setNextPageFactory(@Nullable Supplier<@NotNull UpdatePage> nextPageFactory) {
+        this.nextPageFactory = nextPageFactory;
+    }
+
     public void reload() {
         //empty
     }
 
     public void onFocus(@NotNull UpdateView updateView) {
-        updateView.getPrevBtn().setDisable(previous == null);
+        updateView.getPrevBtn().setDisable(previousPage == null);
         updateView.getPrevBtn().setOnClick(event -> {
-            if (previous != null)
-                updateView.setUpdatePage(previous);
+            if (previousPage != null)
+                updateView.setUpdatePage(previousPage);
         });
         updateView.setPrefWidth(USE_COMPUTED_SIZE);
         updateView.setPrefHeight(USE_COMPUTED_SIZE);

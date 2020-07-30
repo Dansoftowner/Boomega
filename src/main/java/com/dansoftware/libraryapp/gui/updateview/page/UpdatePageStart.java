@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class UpdatePageStart extends UpdatePage {
@@ -19,10 +18,9 @@ public class UpdatePageStart extends UpdatePage {
     @FXML
     private Label nextVersionLabel;
 
-    private UpdatePageDetail updatePageDetail;
-
     public UpdatePageStart(@NotNull UpdateView updateView, @NotNull UpdateInformation information) {
         super(updateView, information, UpdatePageStart.class.getResource("UpdatePageStart.fxml"));
+        super.setNextPageFactory(() -> new UpdatePageDetail(getUpdateView(), this, getInformation()));
     }
 
     @FXML
@@ -32,10 +30,7 @@ public class UpdatePageStart extends UpdatePage {
 
     @FXML
     private void goToNextPage() {
-        this.updatePageDetail = Objects.isNull(updatePageDetail) ?
-                new UpdatePageDetail(getUpdateView(), this, getInformation()) : updatePageDetail;
-
-        getUpdateView().setUpdatePage(updatePageDetail);
+        super.goNext();
     }
 
     @Override
