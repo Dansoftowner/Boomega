@@ -110,9 +110,14 @@ public abstract class UpdatePage extends StackPane implements Initializable {
      * is displayed inside it.
      *
      * <p>
-     *     ....
+     * If this {@link UpdatePage} has no previous element, it will disable
+     * the "previous" toolbar-button of {@link UpdateView}. Otherwise it will
+     * create an {@link javafx.event.EventHandler} for the "previous" button
+     * that will navigate to the previous {@link UpdatePage} when the user clicks
+     * that.
      *
      * @param updateView it should be the update-view that called this method
+     * @see UpdateView#getPrevBtn()
      */
     public void onFocus(@NotNull UpdateView updateView) {
         updateView.getPrevBtn().setDisable(previousPage == null);
@@ -142,6 +147,5 @@ public abstract class UpdatePage extends StackPane implements Initializable {
     protected void setNextPageFactory(@Nullable Supplier<@NotNull UpdatePage> nextPageFactory) {
         this.nextPageFactory = nextPageFactory;
     }
-
 
 }

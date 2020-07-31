@@ -20,9 +20,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
+import java.util.function.Supplier;
 
 /**
+ * An UpdatePageDetail is an {@link UpdatePage} that is the second page in an {@link UpdateView}
+ * after an {@link UpdatePageStart}.
  *
+ * <p>
+ * Downloads the preview markdown-text about the new update and also renders it, so the user can
+ * explore the new features and/or bug fixes.
+ *
+ * It provides a button on the bottom that will navigate to the {@link UpdatePageDownload} page.
+ *
+ * @author Daniel Gyorffy
  */
 public class UpdatePageDetail extends UpdatePage {
 
@@ -31,6 +41,12 @@ public class UpdatePageDetail extends UpdatePage {
     @FXML
     private ScrollPane previewScrollPane;
 
+    /**
+     * Creates an UpdatePageDetail that points to a {@link UpdatePageDownload} as next page.
+     * 
+     * @see UpdatePage#UpdatePage(UpdateView, UpdatePage, UpdateInformation, URL) 
+     * @see UpdatePage#setNextPageFactory(Supplier)
+     */
     public UpdatePageDetail(@NotNull UpdateView updateView,
                             @NotNull UpdatePage previous,
                             @NotNull UpdateInformation information) {
