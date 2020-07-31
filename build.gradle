@@ -54,9 +54,9 @@ test {
 dependencies {
 
     //logging
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
 
     //JUnit 5
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
@@ -65,22 +65,23 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.jetbrains:annotations:19.0.0'
     implementation 'org.reflections:reflections:0.9.12'
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
+    implementation group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
 
     //javaFX libraries
     implementation 'com.jfoenix:jfoenix:9.0.9'
     implementation 'org.jfxtras:jmetro:11.6.13'
-    compile group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
-    //Original: compile group: 'com.dlsc.workbenchfx', name: 'workbenchfx-core', version: '11.1.0'
+    implementation group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
+    //Original: implementation group: 'com.dlsc.workbenchfx', name: 'workbenchfx-core', version: '11.1.0'
     implementation 'com.github.Dansoftowner.workbench-fx-modified:workbenchfx-core:11.1.3' //Modified WorkBenchFX
-    compile 'io.github.typhon0:AnimateFX:1.2.1'
+    implementation 'io.github.typhon0:AnimateFX:1.2.1'
     implementation "com.sandec:mdfx:0.1.6"
+    implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.2.7'
 
     //nitrite database
     implementation 'org.dizitart:nitrite:3.4.2'
 
     //libraries from the local file system
-    compile fileTree(dir: 'external-libraries', include: '*.jar')
+    implementation fileTree(dir: 'external-libraries', include: '*.jar')
 }

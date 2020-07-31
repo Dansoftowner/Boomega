@@ -2,6 +2,8 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
+import com.nativejavafx.taskbar.TaskbarProgressbar;
+import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;

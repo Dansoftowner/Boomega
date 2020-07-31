@@ -6,7 +6,6 @@ import com.dansoftware.libraryapp.util.FileExplorer;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
