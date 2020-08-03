@@ -1,6 +1,8 @@
-package com.dansoftware.libraryapp.gui.updateview.page;
+package com.dansoftware.libraryapp.gui.updateview.page.start;
 
 import com.dansoftware.libraryapp.gui.updateview.UpdateView;
+import com.dansoftware.libraryapp.gui.updateview.page.UpdatePage;
+import com.dansoftware.libraryapp.gui.updateview.page.detail.UpdatePageDetail;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import javafx.fxml.FXML;

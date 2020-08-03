@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.updateview;
 
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.updateview.page.UpdatePage;
-import com.dansoftware.libraryapp.gui.updateview.page.UpdatePageStart;
+import com.dansoftware.libraryapp.gui.updateview.page.start.UpdatePageStart;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;

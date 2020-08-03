@@ -1,6 +1,9 @@
-package com.dansoftware.libraryapp.gui.updateview.page;
+package com.dansoftware.libraryapp.gui.updateview.page.detail;
 
 import com.dansoftware.libraryapp.gui.updateview.UpdateView;
+import com.dansoftware.libraryapp.gui.updateview.page.UpdatePage;
+import com.dansoftware.libraryapp.gui.updateview.page.download.UpdatePageDownload;
+import com.dansoftware.libraryapp.gui.updateview.page.start.UpdatePageStart;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import com.sandec.mdfx.MDFXNode;

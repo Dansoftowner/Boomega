@@ -14,9 +14,7 @@ public final class Globals {
      * <p>
      * <a href="https://www.flaticon.com/free-icon/bookshelf_3100669?term=library&page=1&position=12">The icon</a>
      */
-    public static final Image ICON = new Image(
-            Globals.class.getResourceAsStream("/com/dansoftware/libraryapp/image/win-icon.png")
-    );
+    public static final Image ICON = new Image("/com/dansoftware/libraryapp/image/win-icon.png");
 
     /**
      * The libraryapp database file-extension
