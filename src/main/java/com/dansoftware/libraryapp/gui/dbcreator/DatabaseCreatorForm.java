@@ -3,13 +3,10 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.DatabaseFactory;
-import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
-import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
-import com.dansoftware.libraryapp.util.FileUtils;
+import com.jfilegoodies.FileGoodies;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
@@ -121,7 +118,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         File dirFile = new File(dirField.getText());
         File dbFile = new File(fullPathField.getText());
 
-        if (FileUtils.hasNotValidPath(dirFile)) {
+        if (FileGoodies.hasNotValidPath(dirFile)) {
             this.parent.showErrorDialog(
                     getAlertMsg("db.creator.form.invalid.dir.title"),
                     getAlertMsg("db.creator.form.invalid.dir.msg", dirFile), buttonType -> {
@@ -147,7 +144,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             this.parent.showErrorDialog(
                     getAlertMsg("db.creater.form.invalid.file.already.exists.title"),
                     getAlertMsg("db.creater.form.invalid.file.already.exists.msg",
-                            FileUtils.shortenedFilePath(dbFile, 1)),
+                            FileGoodies.shortenedFilePath(dbFile, 1)),
                     buttonType -> {
                     });
             return;

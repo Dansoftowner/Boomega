@@ -5,13 +5,11 @@ import com.dansoftware.libraryapp.gui.updateview.page.UpdatePage;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;
+import com.jfilegoodies.explorer.FileExplorers;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -94,15 +92,16 @@ public class UpdatePageDownload extends UpdatePage {
         taskbarProgressbar.showIndeterminateProgress();
 
         var selectedRadio = (BinaryEntryRadioButton) this.radioGroup.getSelectedToggle();
-        this.downloadingTask = new DownloaderTask(selectedRadio.url, this.downloadDirectory);
+        this.downloadingTask = this.new DownloaderTask(selectedRadio.url, this.downloadDirectory);
 
         var thread = new Thread(downloadingTask);
         thread.setDaemon(true);
         thread.start();
+
     }
 
     @FXML
-    private void pauseDownload() throws InterruptedException {
+    private void pauseDownload() {
         if (downloadingTask == null)
             return;
 
@@ -124,6 +123,28 @@ public class UpdatePageDownload extends UpdatePage {
 
         downloadingTask.setPaused(false);
         downloadingTask.cancel();
+    }
+
+    @FXML
+    private void openDownloaded() {
+        if (downloadingTask != null && downloadingTask.isDone()) {
+            File result = downloadingTask.getValue();
+            FileExplorers.getLazy().openSelect(result);
+        }
+    }
+
+    @FXML
+    private void runDownloaded() {
+        if (downloadingTask != null && downloadingTask.isDone()) {
+            File result = downloadingTask.getValue();
+            try {
+                Runtime.getRuntime().exec(result.getAbsoluteFile().getAbsolutePath());
+            } catch (IOException e) {
+                getUpdateView().getContext()
+                        .showErrorDialog("", "", e, buttonType -> {
+                        });
+            }
+        }
     }
 
     private void createFormatChooserRadioButtons() {
@@ -183,12 +204,24 @@ public class UpdatePageDownload extends UpdatePage {
             setOnRunning(e -> {
                 UpdatePageDownload.this.progressBar.progressProperty().unbind();
                 UpdatePageDownload.this.progressBar.progressProperty().bind(this.progressProperty());
+
                 UpdatePageDownload.this.downloadPauseBtn.disableProperty().unbind();
                 UpdatePageDownload.this.downloadPauseBtn.disableProperty().bind(this.runningProperty().not());
+
                 UpdatePageDownload.this.downloadKillBtn.disableProperty().unbind();
                 UpdatePageDownload.this.downloadKillBtn.disableProperty().bind(this.runningProperty().not());
+
                 UpdatePageDownload.this.downloadBtn.disableProperty().unbind();
                 UpdatePageDownload.this.downloadBtn.disableProperty().bind(this.runningProperty());
+
+                UpdatePageDownload.this.fileOpenerBtn.disableProperty().unbind();
+                UpdatePageDownload.this.fileOpenerBtn.disableProperty().bind(this.workDoneProperty().lessThan(100));
+
+                UpdatePageDownload.this.runnerBtn.disableProperty().unbind();
+                UpdatePageDownload.this.runnerBtn.disableProperty().bind(this.workDoneProperty().lessThan(100));
+
+                getUpdateView().getCloseBtn().disableProperty().bind(this.runningProperty());
+                getUpdateView().getPrevBtn().disableProperty().bind(this.runningProperty());
             });
 
             setOnCancelled(e -> {
@@ -199,7 +232,7 @@ public class UpdatePageDownload extends UpdatePage {
 
             setOnFailed(e -> {
                 UpdatePageDownload.this.taskbarProgressbar
-                        .showCustomProgress((long)getWorkDone(), (long)getTotalWork(), TaskbarProgressbar.Type.ERROR);
+                        .showCustomProgress((long) getWorkDone(), (long) getTotalWork(), TaskbarProgressbar.Type.ERROR);
                 Throwable cause = e.getSource().getException();
                 logger.error("Something went wrong during the update-downloading ", cause);
 
@@ -210,10 +243,19 @@ public class UpdatePageDownload extends UpdatePage {
                                 I18N.getAlertMsg("update.view.download.failed.title"),
                                 I18N.getAlertMsg("update.view.download.failed.msg"),
                                 (Exception) cause, buttonType -> {
+                                    UpdatePageDownload.this.taskbarProgressbar.stopProgress();
                                 });
                 UpdatePageDownload.this.progressBar.progressProperty().unbind();
                 UpdatePageDownload.this.progressBar.setProgress(0);
             });
+
+            setOnSucceeded(e -> {
+                UpdatePageDownload.this.taskbarProgressbar.stopProgress();
+                UpdatePageDownload.this.progressBar.progressProperty().unbind();
+                UpdatePageDownload.this.progressBar.setProgress(0);
+                logger.info("Workdone is : " + getWorkDone());
+            });
+
         }
 
         public void setPaused(boolean paused) {
@@ -226,7 +268,6 @@ public class UpdatePageDownload extends UpdatePage {
 
         @Override
         protected File call() throws IOException, InterruptedException {
-
             URL url = new URL(this.url);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
@@ -250,16 +291,20 @@ public class UpdatePageDownload extends UpdatePage {
                     allReadBytesCount += bytesRead;
                     output.write(buf, 0, bytesRead);
 
-                    double percent = allReadBytesCount / (double) onePercent;
-                    updateProgress(percent, 100d);
+                    if (onePercent != 0) {
+                        double percent = allReadBytesCount / (double) onePercent;
+                        updateProgress(percent, 100d);
+                    }
 
                     if (this.isCancelled()) {
                         updateProgress(0, 0);
                         return null;
                     }
 
-                    while (this.paused);
+                    while (this.paused) ;
                 }
+
+                updateProgress(100, 100);
 
                 return outputFile;
             } finally {

@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.db;
 
-import com.dansoftware.libraryapp.util.FileUtils;
+import com.jfilegoodies.FileGoodies;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,6 +54,6 @@ public class DatabaseMeta {
 
     @Override
     public String toString() {
-        return this.name + " (" + FileUtils.shortenedFilePath(file, 1) + ")";
+        return this.name + " (" + FileGoodies.shortenedFilePath(file, 1) + ")";
     }
 }

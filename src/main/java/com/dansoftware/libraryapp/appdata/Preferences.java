@@ -3,9 +3,9 @@ package com.dansoftware.libraryapp.appdata;
 import com.dansoftware.libraryapp.gui.entry.login.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
-import com.dansoftware.libraryapp.util.FileUtils;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
+import com.jfilegoodies.FileGoodies;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -228,7 +228,10 @@ public class Preferences {
     public static Preferences getPreferences() {
         if (Objects.isNull(DEFAULT)) {
             try {
-                DEFAULT = new Preferences(FileUtils.createFile(ConfigFile.getFile(), false));
+                File configFile = ConfigFile.getFile();
+                configFile.createNewFile();
+
+                DEFAULT = new Preferences(configFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

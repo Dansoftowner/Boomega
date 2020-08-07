@@ -2,8 +2,10 @@ package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.locale.I18N;
-import com.dansoftware.libraryapp.util.FileExplorer;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
+import com.jfilegoodies.FileGoodies;
+import com.jfilegoodies.explorer.FileExplorer;
+import com.jfilegoodies.explorer.FileExplorers;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.collections.ObservableList;
@@ -166,12 +168,17 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
     private static final class FileOpenerColumn extends TableColumn<DatabaseMeta, String>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
+        private final FileExplorers.LazyExplorer fileExplorer;
+
         FileOpenerColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.open"));
             setMinWidth(90);
             setSortable(false);
             setReorderable(false);
             setCellFactory(this);
+
+            //creating the FileExplorer object
+            this.fileExplorer = FileExplorers.getLazy();
         }
 
         @Override
@@ -193,7 +200,7 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
                                 .getSelectedItems()
                                 .stream()
                                 .map(DatabaseMeta::getFile)
-                                .forEach(FileExplorer::show));
+                                .forEach(fileExplorer::openSelect));
                         openButton.disableProperty().bind(getTableRow().selectedProperty().not());
                         setGraphic(openButton);
                     }

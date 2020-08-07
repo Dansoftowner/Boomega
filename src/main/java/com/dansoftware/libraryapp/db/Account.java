@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.db;
 
-import com.dansoftware.libraryapp.util.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
