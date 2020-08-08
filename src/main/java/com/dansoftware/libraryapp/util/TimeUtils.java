@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
@@ -64,7 +66,7 @@ public final class TimeUtils {
      * @param resourceBundle the {@link ResourceBundle} to read the internationalized time-units from
      * @return the human-readable version of the milliseconds
      */
-    public static String countToDisplay(long millis, ResourceBundle resourceBundle) {
+    public static String countToDisplay(long millis, @NotNull ResourceBundle resourceBundle) {
         String unitName;
         long time;
 
