@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.locale;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,8 +22,12 @@ public class I18N {
     }
 
     @NotNull
-    public static String getGeneralWord(@NotNull String key) throws MissingResourceException {
-        return getGeneralWords().getString(key);
+    public static String getGeneralWord(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
+        if (ArrayUtils.isEmpty(args)) {
+            return getGeneralWords().getString(key);
+        }
+
+        return MessageFormat.format(getGeneralWords().getString(key), args);
     }
 
     @NotNull
