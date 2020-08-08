@@ -97,7 +97,6 @@ public class UpdatePageDownload extends UpdatePage {
         var thread = new Thread(downloadingTask);
         thread.setDaemon(true);
         thread.start();
-
     }
 
     @FXML
@@ -187,10 +186,18 @@ public class UpdatePageDownload extends UpdatePage {
 
     private final class DownloaderTask extends Task<File> {
 
+        /**
+         * The object that the DownloaderTask use for thread-locking
+         */
+        private final Object lock = new Object();
+
+        /**
+         * The boolean that indicates that the task's background thread is paused
+         */
+        private volatile boolean paused;
+
         private final String url;
         private final File dir;
-
-        private volatile boolean paused;
 
         public DownloaderTask(@NotNull String url, @NotNull File dir) {
             this.url = url;
@@ -202,25 +209,34 @@ public class UpdatePageDownload extends UpdatePage {
             });
 
             setOnRunning(e -> {
+                //we bind the progressbar's progress property to the task's progress
                 UpdatePageDownload.this.progressBar.progressProperty().unbind();
                 UpdatePageDownload.this.progressBar.progressProperty().bind(this.progressProperty());
 
+                //the pause button will only be available if the task is running
                 UpdatePageDownload.this.downloadPauseBtn.disableProperty().unbind();
                 UpdatePageDownload.this.downloadPauseBtn.disableProperty().bind(this.runningProperty().not());
 
+                //the download-stopper button will only be available if the task is running
                 UpdatePageDownload.this.downloadKillBtn.disableProperty().unbind();
                 UpdatePageDownload.this.downloadKillBtn.disableProperty().bind(this.runningProperty().not());
 
+                //the download-button will be disabled while the task is running
                 UpdatePageDownload.this.downloadBtn.disableProperty().unbind();
                 UpdatePageDownload.this.downloadBtn.disableProperty().bind(this.runningProperty());
 
+                //the downloaded-file-opener button will be disabled while the progress is less than 100
                 UpdatePageDownload.this.fileOpenerBtn.disableProperty().unbind();
                 UpdatePageDownload.this.fileOpenerBtn.disableProperty().bind(this.workDoneProperty().lessThan(100));
 
+                //the downloaded-file-runner button will be disabled while the progress is less than 100
                 UpdatePageDownload.this.runnerBtn.disableProperty().unbind();
                 UpdatePageDownload.this.runnerBtn.disableProperty().bind(this.workDoneProperty().lessThan(100));
 
+                //while the task is running the UpdateView can't be closed
                 getUpdateView().getCloseBtn().disableProperty().bind(this.runningProperty());
+
+                //while the task is running the UpdateView can't navigate to a previous update-page
                 getUpdateView().getPrevBtn().disableProperty().bind(this.runningProperty());
             });
 
@@ -259,7 +275,13 @@ public class UpdatePageDownload extends UpdatePage {
         }
 
         public void setPaused(boolean paused) {
-            this.paused = paused;
+            //if the paused's value is changed AND the paused's value is false,
+            //we notify the thread-locker object to awake the downloading thread
+            if (this.paused != paused && !(this.paused = paused)) {
+                synchronized (lock) {
+                    lock.notify();
+                }
+            }
         }
 
         public boolean isPaused() {
@@ -268,47 +290,56 @@ public class UpdatePageDownload extends UpdatePage {
 
         @Override
         protected File call() throws IOException, InterruptedException {
-            URL url = new URL(this.url);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
+            synchronized (lock) {
+                URL url = new URL(this.url);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
 
-            String fileName = FilenameUtils.getName(url.getPath());
-            File outputFile = new File(this.dir, fileName);
+                String fileName = FilenameUtils.getName(url.getPath());
+                File outputFile = new File(this.dir, fileName);
 
-            try (var input = new BufferedInputStream(connection.getInputStream());
-                 var output = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+                try (var input = new BufferedInputStream(connection.getInputStream());
+                     var output = new BufferedOutputStream(new FileOutputStream(outputFile))) {
 
-                //getting the size of the downloadable content
-                long contentSize = connection.getContentLengthLong();
-                //calculating the value of 1 %
-                long onePercent = contentSize / 100;
-                //this variable will count that how many bytes are read
-                int allReadBytesCount = 0;
+                    //getting the size of the downloadable content
+                    long contentSize = connection.getContentLengthLong();
+                    //calculating the value of 1 %
+                    long onePercent = contentSize / 100;
+                    //this variable will count that how many bytes are read
+                    int allReadBytesCount = 0;
 
-                byte[] buf = new byte[2048];
-                int bytesRead;
-                while ((bytesRead = input.read(buf)) > 0) {
-                    allReadBytesCount += bytesRead;
-                    output.write(buf, 0, bytesRead);
+                    byte[] buf = new byte[2048];
+                    int bytesRead;
+                    while ((bytesRead = input.read(buf)) > 0) {
+                        allReadBytesCount += bytesRead;
+                        output.write(buf, 0, bytesRead);
 
-                    if (onePercent != 0) {
-                        double percent = allReadBytesCount / (double) onePercent;
-                        updateProgress(percent, 100d);
+                        //we check that a one-percent value is not a false value
+                        //then we update the progress
+                        if (onePercent > 0) {
+                            double percent = allReadBytesCount / (double) onePercent;
+                            updateProgress(percent, 100d);
+                        }
+
+                        //if the user cancelled the task, we return
+                        if (this.isCancelled()) {
+                            updateProgress(0, 0);
+                            return null;
+                        }
+
+                        //if a pause request detected, we pause the thread
+                        // by the thread-locker object's wait() method
+                        if (this.paused) {
+                            lock.wait();
+                        }
                     }
 
-                    if (this.isCancelled()) {
-                        updateProgress(0, 0);
-                        return null;
-                    }
+                    updateProgress(100, 100);
 
-                    while (this.paused) ;
+                    return outputFile;
+                } finally {
+                    connection.disconnect();
                 }
-
-                updateProgress(100, 100);
-
-                return outputFile;
-            } finally {
-                connection.disconnect();
             }
         }
     }
