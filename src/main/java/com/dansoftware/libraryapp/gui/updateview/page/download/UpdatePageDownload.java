@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.gui.updateview.page.UpdatePage;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;
-import com.dansoftware.libraryapp.util.TimeUtils;
 import com.jfilegoodies.explorer.FileExplorers;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
@@ -13,14 +12,12 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +30,9 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Update
+ */
 public class UpdatePageDownload extends UpdatePage {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdatePageDownload.class);
@@ -75,10 +75,11 @@ public class UpdatePageDownload extends UpdatePage {
 
     private ToggleGroup radioGroup;
 
-    public UpdatePageDownload(@NotNull UpdateView updateView, @NotNull UpdatePage previous, @NotNull UpdateInformation information) {
+    public UpdatePageDownload(@NotNull UpdateView updateView,
+                              @NotNull UpdatePage previous,
+                              @NotNull UpdateInformation information) {
         super(updateView, previous, information, UpdatePageDownload.class.getResource("UpdatePageDownload.fxml"));
     }
-
 
     @FXML
     private void openDirChooser() {
@@ -212,8 +213,6 @@ public class UpdatePageDownload extends UpdatePage {
 
         private final File dir;
 
-        private final Label progressIndicatorLabel;
-
         /**
          * Creates a normal {@link DownloaderTask}.
          *
@@ -223,7 +222,6 @@ public class UpdatePageDownload extends UpdatePage {
         DownloaderTask(@NotNull String url, @NotNull File dir) {
             this.url = url;
             this.dir = dir;
-            this.progressIndicatorLabel = new Label();
             this.progressProperty().addListener((observable, oldValue, newValue) -> {
                 UpdatePageDownload.this.taskbarProgressbar
                         .showCustomProgress((long) getWorkDone(), (long) getTotalWork(),
@@ -261,8 +259,18 @@ public class UpdatePageDownload extends UpdatePage {
                 //while the task is running the UpdateView can't navigate to a previous update-page
                 getUpdateView().getPrevBtn().disableProperty().bind(this.runningProperty());
 
-                progressIndicatorLabel.textProperty().bind(this.titleProperty());
-                UpdatePageDownload.this.root.getChildren().add(6, progressIndicatorLabel);
+                //creating a node that has two labels: one on the left, one on the right
+                //the label on the left displays the actual message, the label on the right displays
+                //the actual progress
+                Node progressIndicatorNode = new StackPane(new Label() {{
+                    textProperty().bind(DownloaderTask.this.titleProperty());
+                    StackPane.setAlignment(this, Pos.CENTER_RIGHT);
+                }}, new Label() {{
+                    textProperty().bind(DownloaderTask.this.messageProperty());
+                    StackPane.setAlignment(this, Pos.CENTER_LEFT);
+                }});
+
+                UpdatePageDownload.this.root.getChildren().add(6, progressIndicatorNode);
             });
 
             setOnCancelled(e -> {
@@ -300,9 +308,11 @@ public class UpdatePageDownload extends UpdatePage {
         }
 
         private void clear() {
+            //clearing the progressbar
             UpdatePageDownload.this.progressBar.progressProperty().unbind();
             UpdatePageDownload.this.progressBar.setProgress(0);
-            UpdatePageDownload.this.root.getChildren().remove(progressIndicatorLabel);
+            //removing the progress indicator label
+            UpdatePageDownload.this.root.getChildren().remove(6);
         }
 
         /**
@@ -340,6 +350,7 @@ public class UpdatePageDownload extends UpdatePage {
                 //creating the input-, and output-stream
                 try (var input = new BufferedInputStream(connection.getInputStream());
                      var output = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+                    updateMessage(I18N.getProgressMessage("update.page.download.happening"));
 
                     //getting the size of the downloadable content
                     long contentSize = connection.getContentLengthLong();
@@ -371,7 +382,9 @@ public class UpdatePageDownload extends UpdatePage {
                         //if a pause request detected, we pause the thread
                         // by the thread-locker object's wait() method
                         if (this.paused) {
+                            updateMessage(I18N.getProgressMessage("update.page.download.paused"));
                             lock.wait();
+                            updateMessage(I18N.getProgressMessage("update.page.download.happening"));
                         }
                     }
 
