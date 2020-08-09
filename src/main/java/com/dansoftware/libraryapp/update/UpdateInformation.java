@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.update;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * This class responsible for storing the information about
@@ -10,7 +10,7 @@ public class UpdateInformation {
 
     private String version;
     private String reviewUrl;
-    private Map<String, String> binaries;
+    private List<DownloadableBinary> binaries;
 
     /**
      * This constructor creates an UpdateInformationObject with the required values
@@ -21,7 +21,7 @@ public class UpdateInformation {
      * @param binaries the Map that contains the binary types and the location
      *                             of each downloadable binary on the web.
      */
-    public UpdateInformation(String version, String reviewUrl, Map<String, String> binaries) {
+    public UpdateInformation(String version, String reviewUrl, List<DownloadableBinary> binaries) {
         this.version = version;
         this.reviewUrl = reviewUrl;
         this.binaries = binaries;
@@ -35,7 +35,7 @@ public class UpdateInformation {
         return reviewUrl;
     }
 
-    public Map<String, String> getBinaries() {
+    public List<DownloadableBinary> getBinaries() {
         return binaries;
     }
 }

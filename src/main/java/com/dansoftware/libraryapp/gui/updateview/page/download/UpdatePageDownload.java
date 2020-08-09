@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.gui.updateview.UpdateView;
 import com.dansoftware.libraryapp.gui.updateview.page.UpdatePage;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.update.DownloadableBinary;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import com.jfilegoodies.explorer.FileExplorers;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
@@ -31,7 +32,14 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * Update
+ * An UpdatePageDownload is an {@link UpdatePage} that is the last page in an {@link UpdateView}
+ * after an {@link com.dansoftware.libraryapp.gui.updateview.page.detail.UpdatePageDetail}.
+ *
+ * <p>
+ * Allows the user to download the new program from the internet. The user can select what type
+ * of file should be downloaded.
+ *
+ * @author Daniel Gyorffy
  */
 public class UpdatePageDownload extends UpdatePage {
 
@@ -67,14 +75,33 @@ public class UpdatePageDownload extends UpdatePage {
     @FXML
     private Button downloadKillBtn;
 
+    /**
+     * The {@link TaskbarProgressbar} object that lets us to display a progress on the
+     * taskbar (on Windows).
+     */
     private TaskbarProgressbar taskbarProgressbar;
 
+    /**
+     * The currently running {@link DownloaderTask} that downloads the update from the internet.
+     */
     private DownloaderTask downloadingTask;
 
+    /**
+     * The last selected directory where the user wants to save the update.
+     */
     private File downloadDirectory;
 
+    /**
+     * The {@link ToggleGroup} that is the group of the {@link RadioButton} objects used
+     * for selecting the downloadable binary-type.
+     */
     private ToggleGroup radioGroup;
 
+    /**
+     * Creates an UpdatePageDownload.
+     *
+     * @see UpdatePage#UpdatePage(UpdateView, UpdatePage, UpdateInformation, URL)
+     */
     public UpdatePageDownload(@NotNull UpdateView updateView,
                               @NotNull UpdatePage previous,
                               @NotNull UpdateInformation information) {
@@ -86,15 +113,18 @@ public class UpdatePageDownload extends UpdatePage {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         this.downloadDirectory = directoryChooser.showDialog(WindowUtils.getWindowOf(this));
 
-        this.downloadPathField.setText(
-                Optional.ofNullable(downloadDirectory)
-                        .map(File::getAbsolutePath)
-                        .orElse(StringUtils.EMPTY)
+        //if the file exists we set it's absolute-path into the textfield,
+        //otherwise we just set an empty string ("") into it.
+        this.downloadPathField.setText(Optional
+                .ofNullable(downloadDirectory)
+                .map(File::getAbsolutePath)
+                .orElse(StringUtils.EMPTY)
         );
     }
 
     @FXML
     private void downloadSelected() {
+        //creating a TaskbarProgressbar object if we haven't already
         if (taskbarProgressbar == null) {
             taskbarProgressbar = TaskbarProgressbarFactory.getTaskbarProgressbar(WindowUtils.getStageOf(this));
         }
@@ -102,7 +132,7 @@ public class UpdatePageDownload extends UpdatePage {
         taskbarProgressbar.showIndeterminateProgress();
 
         var selectedRadio = (BinaryEntryRadioButton) this.radioGroup.getSelectedToggle();
-        this.downloadingTask = this.new DownloaderTask(selectedRadio.url, this.downloadDirectory);
+        this.downloadingTask = this.new DownloaderTask(selectedRadio.binary, this.downloadDirectory);
 
         var thread = new Thread(downloadingTask);
         thread.setDaemon(true);
@@ -114,10 +144,14 @@ public class UpdatePageDownload extends UpdatePage {
         if (downloadingTask == null)
             return;
 
+        //we pause if it's running; or we start if it's paused
         downloadingTask.setPaused(!downloadingTask.isPaused());
 
+        //we set the right icon depending on it's paused or not
         downloadPauseBtn.setGraphic(new MaterialDesignIconView(
-                downloadingTask.isPaused() ? MaterialDesignIcon.PLAY : MaterialDesignIcon.PAUSE
+                downloadingTask.isPaused() ?
+                        MaterialDesignIcon.PLAY :
+                        MaterialDesignIcon.PAUSE
         ));
 
         /*downloadPauseBtn.setTooltip(new Tooltip(
@@ -130,6 +164,7 @@ public class UpdatePageDownload extends UpdatePage {
         if (downloadingTask == null)
             return;
 
+        //we cancel the task
         downloadingTask.setPaused(false);
         downloadingTask.cancel();
     }
@@ -160,9 +195,8 @@ public class UpdatePageDownload extends UpdatePage {
         this.radioGroup = new ToggleGroup();
         super.getInformation()
                 .getBinaries()
-                .forEach((key, value) -> {
-                    radioBtnVBox.getChildren().add(new BinaryEntryRadioButton(radioGroup, key, value));
-                });
+                .forEach(binary ->
+                        radioBtnVBox.getChildren().add(new BinaryEntryRadioButton(radioGroup, binary)));
     }
 
     @Override
@@ -179,23 +213,36 @@ public class UpdatePageDownload extends UpdatePage {
         this.downloadKillBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.STOP));
     }
 
+    /**
+     * A {@link BinaryEntryRadioButton} is a {@link RadioButton} that represents a
+     * binary-type.
+     *
+     * <p>
+     * It requires a {@link ToggleGroup} and a {@link DownloadableBinary} object that represents the
+     * downloadable update-file.
+     */
     private static class BinaryEntryRadioButton extends RadioButton {
 
-        private final String url;
+        private final DownloadableBinary binary;
 
-        public BinaryEntryRadioButton(ToggleGroup toggleGroup, String binaryName, String downloadUrl) {
-            this.setText(binaryName);
-            this.url = downloadUrl;
+        public BinaryEntryRadioButton(@NotNull ToggleGroup toggleGroup,
+                                      @NotNull DownloadableBinary binary) {
+            this.binary = binary;
+            this.setText(binary.getName());
             this.setToggleGroup(toggleGroup);
-        }
-
-        public String getUrl() {
-            return url;
         }
     }
 
     /**
+     * A DownloaderTask defines a process to download a large file (so it's used for downloading
+     * the updates). If the task failed then it will display an error-message.
      *
+     * <p>
+     * It requires a:
+     * <ul>
+     *     <li><b>binary</b> that defines what binary should we download</li>
+     *     <li><b>dir</b> that defines what directory should we save the file to</li>
+     * </ul>
      */
     private final class DownloaderTask extends Task<File> {
 
@@ -209,18 +256,18 @@ public class UpdatePageDownload extends UpdatePage {
          */
         private volatile boolean paused;
 
-        private final String url;
+        private final DownloadableBinary binary;
 
         private final File dir;
 
         /**
          * Creates a normal {@link DownloaderTask}.
          *
-         * @param url the url that we want to download from
-         * @param dir the directory where we want to save the downloaded binary
+         * @param binary the {@link DownloadableBinary} object that defines what to download
+         * @param dir    the directory where we want to save the downloaded binary
          */
-        DownloaderTask(@NotNull String url, @NotNull File dir) {
-            this.url = url;
+        DownloaderTask(@NotNull DownloadableBinary binary, @NotNull File dir) {
+            this.binary = binary;
             this.dir = dir;
             this.progressProperty().addListener((observable, oldValue, newValue) -> {
                 UpdatePageDownload.this.taskbarProgressbar
@@ -335,17 +382,34 @@ public class UpdatePageDownload extends UpdatePage {
             return this.paused;
         }
 
+        /**
+         * Helper method to define the file that we want to save the downloaded file to.
+         *
+         * @param binary the object that represents the downloadable binary
+         * @param dir    the directory where we want to save the file
+         * @return the {@link File} object that represents the file that we should save to
+         */
+        private File getOutputFile(DownloadableBinary binary, File dir) {
+            String fileName = FilenameUtils.getName(binary.getDownloadUrl());
+            if (StringUtils.isBlank(fileName)) {
+                fileName = "libraryapp-" + getInformation().getVersion() + "." + binary.getFileExtension();
+            } else if (!StringUtils.endsWithIgnoreCase(fileName, binary.getFileExtension())) {
+                fileName += (fileName.endsWith(".") ? "" : ".") + binary.getFileExtension();
+            }
+
+            return new File(dir, fileName);
+        }
+
         @Override
         protected File call() throws IOException, InterruptedException {
             synchronized (lock) {
                 //creating the URLConnection
-                URL url = new URL(this.url);
+                URL url = new URL(this.binary.getDownloadUrl());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
 
                 //defining the file that we want to write to
-                String fileName = FilenameUtils.getName(url.getPath());
-                File outputFile = new File(this.dir, fileName);
+                File outputFile = getOutputFile(this.binary, this.dir);
 
                 //creating the input-, and output-stream
                 try (var input = new BufferedInputStream(connection.getInputStream());

@@ -28,6 +28,7 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
     private static final String SIMPLE_NAME = "simpleName";
     private static final String LOCALE_KEY = "localeKey";
     private static final String DOWNLOAD_URL = "downloadUrl";
+    private static final String FILE_EXTENSION = "fileExtension";
 
     private static final String DEFAULT_LANG = "defaultLang";
 
@@ -53,7 +54,7 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
      * into a {@link Map}
      */
     @NotNull
-    private Map<String, String> getBinaries(@NotNull JsonObject jsonObject) {
+    private List<DownloadableBinary> getBinaries(@NotNull JsonObject jsonObject) {
         JsonObject binaries = jsonObject.getAsJsonObject(BINARIES);
 
         JsonObject osSpecificBinaries;
@@ -65,13 +66,13 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
         } else if (PlatformUtil.isMac()) {
             osSpecificBinaries = binaries.getAsJsonObject(MAC);
         } else {
-            return new HashMap<>();
+            return Collections.emptyList();
         }
 
         //
         JsonObject bundles = osSpecificBinaries.getAsJsonObject(BUNDLES);
 
-        Map<String, String> result = new HashMap<>();
+        List<DownloadableBinary> result = new ArrayList<>(3);
         Set<Map.Entry<String, JsonElement>> entries = bundles.entrySet();
         entries.forEach(entry -> {
             JsonObject value = entry.getValue().getAsJsonObject();
@@ -79,6 +80,7 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
             String simpleName = value.get(SIMPLE_NAME).getAsString();
             String localeKey = value.get(LOCALE_KEY).getAsString();
             String downloadUrl = value.get(DOWNLOAD_URL).getAsString();
+            String fileExtension = value.get(FILE_EXTENSION).getAsString();
 
             String localizedName;
             try {
@@ -87,7 +89,7 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
                 localizedName = simpleName;
             }
 
-            result.put(localizedName, downloadUrl);
+            result.add(new DownloadableBinary(localizedName, fileExtension, downloadUrl));
         });
 
         return result;
