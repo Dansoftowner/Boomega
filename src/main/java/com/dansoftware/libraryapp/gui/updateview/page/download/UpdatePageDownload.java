@@ -185,8 +185,9 @@ public class UpdatePageDownload extends UpdatePage {
                 Runtime.getRuntime().exec(result.getAbsoluteFile().getAbsolutePath());
             } catch (IOException e) {
                 getUpdateView().getContext()
-                        .showErrorDialog("", "", e, buttonType -> {
-                        });
+                        .showErrorDialog(
+                                I18N.getAlertMsg("update.view.downloaded.run.failed.title", result.getName()),
+                                I18N.getAlertMsg("update.view.downloaded.run.failed.msg"), e, buttonType -> {});
             }
         }
     }
@@ -394,7 +395,7 @@ public class UpdatePageDownload extends UpdatePage {
             if (StringUtils.isBlank(fileName)) {
                 fileName = "libraryapp-" + getInformation().getVersion() + "." + binary.getFileExtension();
             } else if (!StringUtils.endsWithIgnoreCase(fileName, binary.getFileExtension())) {
-                fileName += (fileName.endsWith(".") ? "" : ".") + binary.getFileExtension();
+                fileName += (fileName.endsWith(".") ? StringUtils.EMPTY : ".") + binary.getFileExtension();
             }
 
             return new File(dir, fileName);
