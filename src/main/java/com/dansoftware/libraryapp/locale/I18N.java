@@ -39,6 +39,10 @@ public class I18N {
         return MessageFormat.format(getAlertMessages().getString(key), args);
     }
 
+    public static String getProgressMessage(String key) {
+        return getProgressMessages().getString(key);
+    }
+
     @NotNull
     public static ResourceBundle getProgressMessages() throws MissingResourceException {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.ProgressMessages");
