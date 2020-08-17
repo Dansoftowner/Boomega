@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.main.init;
+package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import org.apache.commons.collections.CollectionUtils;
@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +14,7 @@ import java.util.Optional;
  */
 public class AppArgumentHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationInitializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppArgumentHandler.class);
 
     private DatabaseMeta database;
 

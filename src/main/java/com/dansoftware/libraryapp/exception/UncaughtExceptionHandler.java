@@ -9,6 +9,6 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        LOGGER.error("Something went wrong ", e);
+        LOGGER.error("Uncaught exception occurred", e);
     }
 }

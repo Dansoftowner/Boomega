@@ -11,6 +11,16 @@ import java.util.List;
 public final class Globals {
 
     /**
+     * The libraryapp database file-extension
+     */
+    public static final String FILE_EXTENSION = "lbadb";
+
+    /**
+     * The current version-info object
+     */
+    public static final VersionInfo VERSION_INFO = new VersionInfo("0.0.0");
+
+    /**
      * The 16px libraryapp icon's path.
      * The icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
      * <p>
@@ -50,23 +60,6 @@ public final class Globals {
      */
     public static final String LOGO_512 = "/com/dansoftware/libraryapp/image/logo/bookshelf_512.png";
 
-    /**
-     * The libraryapp database file-extension
-     */
-    public static final String FILE_EXTENSION = "lbadb";
-
-    /**
-     * The current version-info object
-     */
-    public static final VersionInfo VERSION_INFO = new VersionInfo("0.0.0");
-
-
-    /**
-     * Don't let anyone to create an instance of this class
-     */
-    private Globals() {
-    }
-
     public static List<Image> windowIconPack() {
         return List.of(
                 new Image(LOGO_16),
@@ -75,6 +68,12 @@ public final class Globals {
                 new Image(LOGO_256),
                 new Image(LOGO_512)
         );
+    }
+
+    /**
+     * Don't let anyone to create an instance of this class
+     */
+    private Globals() {
     }
 
 }

@@ -6,7 +6,6 @@ import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.log.LogFile;
-import com.dansoftware.libraryapp.main.init.AppArgumentHandler;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Platform;
@@ -49,6 +48,8 @@ public class Main extends BaseApplication {
      * @see LauncherImpl#launchApplication(Class, Class, String[])
      */
     public static void main(String[] args) {
+        InstanceService.open(args);
+
         LauncherImpl.launchApplication(Main.class, Preloader.class, args);
     }
 
