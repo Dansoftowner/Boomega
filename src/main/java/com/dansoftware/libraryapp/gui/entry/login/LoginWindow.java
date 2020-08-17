@@ -41,7 +41,7 @@ public class LoginWindow extends Stage {
 
         this.setScene(new Scene(root));
         //this.setTitle();
-        this.getIcons().add(Globals.ICON);
+        this.getIcons().addAll(Globals.windowIconPack());
         this.setMaximized(true);
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, ON_CLOSE_REQUEST);
         Theme.applyDefault((Themeable) root);

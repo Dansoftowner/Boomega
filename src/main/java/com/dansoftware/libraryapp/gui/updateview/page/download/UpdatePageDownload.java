@@ -154,9 +154,12 @@ public class UpdatePageDownload extends UpdatePage {
                         MaterialDesignIcon.PAUSE
         ));
 
-        /*downloadPauseBtn.setTooltip(new Tooltip(
-                downloadingTask.isPaused() ? I18N.getGeneralWord("") : I18N.getGeneralWord("")
-        ));*/
+        //changing the tooltip on the download/pause button
+        downloadPauseBtn.setTooltip(new Tooltip(
+                downloadingTask.isPaused() ?
+                        I18N.getGeneralWord("update.view.download.tooltip.resume") :
+                        I18N.getGeneralWord("update.view.download.tooltip.pause")
+        ));
     }
 
     @FXML
@@ -187,7 +190,8 @@ public class UpdatePageDownload extends UpdatePage {
                 getUpdateView().getContext()
                         .showErrorDialog(
                                 I18N.getAlertMsg("update.view.downloaded.run.failed.title", result.getName()),
-                                I18N.getAlertMsg("update.view.downloaded.run.failed.msg"), e, buttonType -> {});
+                                I18N.getAlertMsg("update.view.downloaded.run.failed.msg"), e, buttonType -> {
+                                });
             }
         }
     }

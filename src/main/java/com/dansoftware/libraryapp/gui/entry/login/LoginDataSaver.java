@@ -38,9 +38,6 @@ public class LoginDataSaver extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-        if (Objects.isNull(getPreferences()))
-            return null;
-
         Preferences.Editor editor = getPreferences().editor();
         editor.set(Preferences.Key.LOGIN_DATA, loginData);
         editor.commit();

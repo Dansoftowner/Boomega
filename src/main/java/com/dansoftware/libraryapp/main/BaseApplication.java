@@ -9,8 +9,12 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.BooleanUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseApplication extends Application {
+
+    private static final Logger logger = LoggerFactory.getLogger(BaseApplication.class);
 
     private InitializationResult initializationResult;
 
@@ -46,6 +50,7 @@ public abstract class BaseApplication extends Application {
         AppEntry appEntry = new AppEntry(initializationResult.preferences);
         postInitialize(appEntry, initializationResult.updateSearchResult);
         if (BooleanUtils.isFalse(appEntry.show())) {
+            logger.debug("the user closed the application... exiting");
             Platform.exit();
         }
     }

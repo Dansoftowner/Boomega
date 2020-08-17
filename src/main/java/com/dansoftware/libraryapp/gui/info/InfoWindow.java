@@ -24,7 +24,7 @@ public class InfoWindow extends Stage {
         this.sizeToScene();
         this.setTitle("LibraryApp Info");
         this.initStyle(StageStyle.UNDECORATED);
-        this.getIcons().add(Globals.ICON);
+        this.getIcons().addAll(Globals.windowIconPack());
     }
 
 }

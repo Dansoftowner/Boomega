@@ -34,7 +34,7 @@ public class PreloaderGUI extends VBox {
         mainPane.setPrefWidth(739.0);
 
         this.center = new ImageView(
-                new Image(getClass().getResourceAsStream("/com/dansoftware/libraryapp/image/logo512px_black.png"))
+                new Image(getClass().getResourceAsStream("/com/dansoftware/libraryapp/image/logo/bookshelf_512_black.png"))
         );
 
         center.setFitHeight(294.0);
