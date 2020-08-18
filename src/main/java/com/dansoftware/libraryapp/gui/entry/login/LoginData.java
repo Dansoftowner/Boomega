@@ -74,6 +74,10 @@ public class LoginData {
         this.loggedAccountCredentials = loggedAccountCredentials;
     }
 
+    public static LoginData empty() {
+        return new LoginData();
+    }
+
     public static class Credentials {
         private final String username;
         private final String password;

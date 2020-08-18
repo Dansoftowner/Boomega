@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
-import com.dansoftware.libraryapp.db.DatabaseFactory;
+import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
@@ -29,9 +29,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
-import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
+import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
 /**
  * A {@link DatabaseCreatorForm} is gui-form that lets the user to create
@@ -113,6 +112,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                         new animatefx.animation.Tada(this.dirField).play();
                     }
             );
+            return;
         }
 
         File dirFile = new File(dirField.getText());
@@ -179,13 +179,15 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
         // trying to create the database
         try {
+            this.createdDb = new DatabaseMeta(this.nameField.getText(), dbFile);
             // We create the database object (because we want to create the db-file)
             // but we immediately close it
-            DatabaseFactory.getDatabase(NITRITE, new Account(dbFile, username, password)).close();
+            new NitriteDatabase(new Account(dbFile, username, password), createdDb).close();
 
-            this.createdDb = new DatabaseMeta(this.nameField.getText(), dbFile);
             WindowUtils.getStageOf(this).close();
         } catch (NullPointerException | NitriteIOException e) {
+            this.createdDb = null;
+
             String title = getAlertMsg("login.auth.failed.io.title");
             String message = getAlertMsg("login.auth.failed.io.msg");
 

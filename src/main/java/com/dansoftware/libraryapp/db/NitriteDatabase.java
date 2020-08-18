@@ -5,6 +5,8 @@ import org.dizitart.no2.NitriteBuilder;
 import org.dizitart.no2.exceptions.ErrorMessage;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -41,12 +43,14 @@ public class NitriteDatabase implements Database {
 
     private List<Book> cache;
 
+    private final DatabaseMeta databaseMeta;
     private final Nitrite dbImpl;
     private final Account account;
 
-    public NitriteDatabase(Account account) throws SecurityException, NitriteIOException {
+    public NitriteDatabase(@NotNull Account account, @Nullable DatabaseMeta databaseMeta) throws SecurityException, NitriteIOException {
         this.account = Objects.requireNonNull(account, "The account must not be null!");
         this.dbImpl = init(account);
+        this.databaseMeta = databaseMeta;
     }
 
     private Nitrite init(Account account) throws SecurityException, NitriteIOException {
@@ -103,6 +107,11 @@ public class NitriteDatabase implements Database {
     @Override
     public void close() {
         this.dbImpl.close();
+    }
+
+    @Override
+    public DatabaseMeta getMeta() {
+        return this.databaseMeta;
     }
 
     public Account getAccount() {

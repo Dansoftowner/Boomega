@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
@@ -87,7 +88,7 @@ public class LoginForm extends StackPane implements Initializable {
 
     private ObservableValue<Boolean> dataSourceSelected;
 
-    private Consumer<Account> onLoginRequest;
+    private BiConsumer<Account, DatabaseMeta> onLoginRequest;
 
     LoginForm() {
         //calling with empty login-data
@@ -102,7 +103,7 @@ public class LoginForm extends StackPane implements Initializable {
         this.fillForm(this.loginData);
     }
 
-    LoginForm(@NotNull LoginData loginData, @Nullable Consumer<Account> onLoginRequest) {
+    LoginForm(@NotNull LoginData loginData, @Nullable BiConsumer<Account, DatabaseMeta> onLoginRequest) {
         this(loginData);
         this.onLoginRequest = onLoginRequest;
     }
@@ -146,7 +147,8 @@ public class LoginForm extends StackPane implements Initializable {
 
     @FXML
     private void login() {
-        File dbFile = sourceChooser.getValue().getFile();
+        DatabaseMeta dbMeta = sourceChooser.getValue();
+        File dbFile = dbMeta.getFile();
         String username = StringUtils.trim(usernameInput.getText());
         String password = StringUtils.trim(passwordInput.getText());
 
@@ -164,7 +166,7 @@ public class LoginForm extends StackPane implements Initializable {
         }
 
         if (Objects.nonNull(this.onLoginRequest)) {
-            this.onLoginRequest.accept(account);
+            this.onLoginRequest.accept(account, dbMeta);
         }
     }
 
@@ -233,7 +235,7 @@ public class LoginForm extends StackPane implements Initializable {
         window.show();
     }
 
-    public void setOnLoginRequest(Consumer<Account> onLoginRequest) {
+    public void setOnLoginRequest(BiConsumer<Account, DatabaseMeta> onLoginRequest) {
         this.onLoginRequest = onLoginRequest;
     }
 

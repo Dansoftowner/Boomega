@@ -56,4 +56,11 @@ public interface Database {
      */
     void close();
 
+    /**
+     * Returns a {@link DatabaseMeta} object that holds some meta-information
+     * of the database.
+     *
+     * @return the DatabaseMeta object
+     */
+    DatabaseMeta getMeta();
 }

@@ -1,40 +1,99 @@
 package com.dansoftware.libraryapp.gui.entry;
 
-import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.login.LoginActivity;
+import com.dansoftware.libraryapp.gui.entry.login.LoginData;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainActivity;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-public class AppEntry implements Context {
+public class AppEntry implements Context, ChangeListener<Boolean> {
 
+    private static final ObservableSet<AppEntry> showingEntries =
+            FXCollections.synchronizedObservableSet(FXCollections.observableSet());
+
+    private static final ObservableSet<AppEntry> showingEntriesUnmodifiable =
+            FXCollections.unmodifiableObservableSet(showingEntries);
+
+    private static final ObservableSet<DatabaseMeta> openedDatabases =
+            FXCollections.synchronizedObservableSet(FXCollections.observableSet());
+
+    private static final ObservableSet<DatabaseMeta> openedDatabasesUnmodifiable =
+            FXCollections.unmodifiableObservableSet(openedDatabases);
+
+    private final BooleanProperty showing;
     private final LoginActivity loginActivity;
+
     private Context subContext;
+    private DatabaseMeta openedDatabase;
+
+    private boolean mainActivityStarted;
 
     public AppEntry() {
-        this.loginActivity = new LoginActivity();
-        this.subContext = loginActivity;
+        this(LoginData.empty());
     }
 
-    public AppEntry(@NotNull Preferences preferences) {
-        this.loginActivity = new LoginActivity(preferences.get(Preferences.Key.LOGIN_DATA));
+    public AppEntry(@NotNull LoginData loginData) {
+        this.loginActivity = new LoginActivity(loginData);
         this.subContext = loginActivity;
+        this.showing = new SimpleBooleanProperty();
+        this.showing.bind(this.loginActivity.showingProperty());
+        this.showing.addListener(this);
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) {
+        if (observable == this.showing) {
+            if (showing) {
+                showingEntries.add(this);
+                if (this.openedDatabase != null)
+                    AppEntry.openedDatabases.add(this.openedDatabase);
+            } else if (mainActivityStarted) {
+                showingEntries.remove(this);
+                AppEntry.openedDatabases.remove(this.openedDatabase);
+            }
+        }
     }
 
     public boolean show() {
         Optional<Database> databaseOptional = loginActivity.show();
         databaseOptional.ifPresent(database -> {
-            var mainView = new MainActivity(database);
-            mainView.show();
-            this.subContext = mainView;
+            this.openedDatabase = database.getMeta();
+            var mainActivity = new MainActivity(database);
+            this.subContext = mainActivity;
+            this.showing.unbind();
+            this.showing.bind(mainActivity.showingProperty());
+            this.mainActivityStarted = mainActivity.show();
         });
 
         return databaseOptional.isPresent();
+    }
+
+    @Nullable
+    public DatabaseMeta getOpenedDatabase() {
+        return this.openedDatabase;
+    }
+
+    public boolean isShowing() {
+        return showing.get();
+    }
+
+    public ReadOnlyBooleanProperty showingProperty() {
+        return showing;
     }
 
     @Override
@@ -65,5 +124,26 @@ public class AppEntry implements Context {
     @Override
     public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
         this.subContext.showInformationDialog(title, message, onResult);
+    }
+
+    /**
+     * Returns a read-only set that contains all {@link AppEntry} objects that is
+     * showing.
+     *
+     * @return the set of AppEntry objects.
+     */
+    public static ObservableSet<AppEntry> getShowingEntries() {
+        return showingEntriesUnmodifiable;
+    }
+
+    /**
+     * Returns a read-only set of {@link DatabaseMeta} object.
+     * Each object represents a database that is successfully opened
+     * with an {@link AppEntry}.
+     *
+     * @return a set of DatabaseMeta objects.
+     */
+    public static ObservableSet<DatabaseMeta> getOpenedDatabases() {
+        return openedDatabasesUnmodifiable;
     }
 }

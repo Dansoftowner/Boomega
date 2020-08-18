@@ -2,7 +2,8 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.db.Account;
 import com.dansoftware.libraryapp.db.Database;
-import com.dansoftware.libraryapp.db.DatabaseFactory;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.gui.info.InfoView;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
@@ -19,9 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
-import static com.dansoftware.libraryapp.db.DatabaseFactory.NITRITE;
 import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
 
 /**
@@ -40,10 +40,10 @@ public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable 
     /**
      * Defines what happenes when the user wants to sign in by the login-form
      */
-    private final Consumer<Account> ON_LOGIN_REQUEST = account -> {
+    private final BiConsumer<Account, DatabaseMeta> ON_LOGIN_REQUEST = (account, databaseMeta) -> {
         try {
             // File file
-            this.selectedDatabase = DatabaseFactory.getDatabase(NITRITE, account);
+            this.selectedDatabase = new NitriteDatabase(account, databaseMeta);
 
             //starting a thread that saves the login-data
             new Thread(new LoginDataSaver(this.getLoginData())).start();

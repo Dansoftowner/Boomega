@@ -47,7 +47,7 @@ public abstract class BaseApplication extends Application {
             );
         }
 
-        AppEntry appEntry = new AppEntry(initializationResult.preferences);
+        AppEntry appEntry = new AppEntry(initializationResult.preferences.get(Preferences.Key.LOGIN_DATA));
         postInitialize(appEntry, initializationResult.updateSearchResult);
         if (BooleanUtils.isFalse(appEntry.show())) {
             logger.debug("the user closed the application... exiting");

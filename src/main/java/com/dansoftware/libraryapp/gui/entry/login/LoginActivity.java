@@ -4,6 +4,9 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
@@ -21,12 +24,15 @@ import java.util.function.Consumer;
  */
 public class LoginActivity implements Context {
 
+    private final BooleanProperty showing;
     private LoginView loginView;
 
-    public LoginActivity() {
+    private LoginActivity() {
+        this.showing = new SimpleBooleanProperty();
     }
 
     public LoginActivity(@NotNull LoginData loginData) {
+        this();
         this.loginView = new LoginView(loginData);
     }
 
@@ -40,9 +46,18 @@ public class LoginActivity implements Context {
      */
     public Optional<Database> show() {
         LoginWindow loginWindow = new LoginWindow(loginView);
+        this.showing.bind(loginWindow.showingProperty());
         loginWindow.showAndWait();
 
         return Optional.ofNullable(loginView.getSelectedDatabase());
+    }
+
+    public boolean isShowing() {
+        return showing.get();
+    }
+
+    public ReadOnlyBooleanProperty showingProperty() {
+        return showing;
     }
 
     @Override

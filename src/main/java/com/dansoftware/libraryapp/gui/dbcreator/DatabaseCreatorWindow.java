@@ -2,13 +2,11 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
+import com.dansoftware.libraryapp.main.Globals;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import java.util.List;
-import java.util.Objects;
 
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
@@ -28,6 +26,7 @@ public class DatabaseCreatorWindow extends Stage {
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
         this.centerOnScreen();
+        this.getIcons().addAll(Globals.windowIconPack());
         Theme.applyDefault((Themeable) view);
     }
 }
