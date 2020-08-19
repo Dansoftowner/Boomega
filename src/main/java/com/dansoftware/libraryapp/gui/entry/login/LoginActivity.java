@@ -91,4 +91,9 @@ public class LoginActivity implements Context {
     public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
         this.loginView.showInformationDialog(title, message, onResult);
     }
+
+    @Override
+    public void requestFocus() {
+        this.loginView.getScene().getWindow().requestFocus();
+    }
 }

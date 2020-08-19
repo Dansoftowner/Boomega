@@ -63,4 +63,9 @@ public class MainActivity implements Context {
     public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
 
     }
+
+    @Override
+    public void requestFocus() {
+
+    }
 }

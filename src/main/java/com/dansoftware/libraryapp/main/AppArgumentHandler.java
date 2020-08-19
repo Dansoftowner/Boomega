@@ -12,6 +12,7 @@ import java.util.Optional;
 /**
  * This class responsible for checking the application arguments
  */
+@Deprecated
 public class AppArgumentHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppArgumentHandler.class);

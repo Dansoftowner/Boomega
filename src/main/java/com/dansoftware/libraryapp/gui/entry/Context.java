@@ -25,6 +25,6 @@ public interface Context {
                                String message,
                                Consumer<ButtonType> onResult);
 
-
+    void requestFocus();
 
 }

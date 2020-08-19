@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -355,6 +356,8 @@ public class UpdatePageDownload extends UpdatePage {
 
             setOnSucceeded(e -> {
                 UpdatePageDownload.this.taskbarProgressbar.stopProgress();
+                WindowUtils.getWindowOptionalOf(UpdatePageDownload.this)
+                        .ifPresent(Window::requestFocus);
                 this.clear();
             });
         }

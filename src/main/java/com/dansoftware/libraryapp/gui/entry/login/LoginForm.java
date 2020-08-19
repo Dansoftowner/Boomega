@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
@@ -49,7 +48,7 @@ import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
  */
 public class LoginForm extends StackPane implements Initializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginForm.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginForm.class);
 
     @FXML
     private ComboBox<DatabaseMeta> sourceChooser;
@@ -121,7 +120,11 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     private void fillForm(LoginData loginData) {
-        this.predicatedDBList.addAll(loginData.getLastDatabases());
+        try {
+            this.predicatedDBList.addAll(loginData.getLastDatabases());
+        } catch (UniqueList.DuplicateElementException e) {
+            logger.error("Duplicate element ", e);
+        }
 
         int selectedDB = loginData.getSelectedDBIndex();
         if (selectedDB >= 0) {
@@ -158,11 +161,11 @@ public class LoginForm extends StackPane implements Initializable {
         if (rememberBox.isSelected()) {
             loginData.setLoggedDBIndex(sourceChooser.getSelectionModel().getSelectedIndex());
             loginData.setLoggedDBCredentials(new LoginData.Credentials(username, password));
-            LOGGER.debug("LoginData loggedAccount set to: " + account);
+            logger.debug("LoginData loggedAccount set to: " + account);
         } else {
             loginData.setLoggedDBIndex(-1);
             loginData.setLoggedDBCredentials(null);
-            LOGGER.debug("LoginData loggedAccount set to: null");
+            logger.debug("LoginData loggedAccount set to: null");
         }
 
         if (Objects.nonNull(this.onLoginRequest)) {
@@ -198,7 +201,7 @@ public class LoginForm extends StackPane implements Initializable {
                 try {
                     predicatedDBList.add(lastElement);
                 } catch (UniqueList.DuplicateElementException e) {
-                    LOGGER.error("Duplicate element has been filtered", e);
+                    logger.error("Duplicate element has been filtered", e);
                 }
             } while (iterator.hasNext());
 
@@ -223,7 +226,7 @@ public class LoginForm extends StackPane implements Initializable {
                 this.predicatedDBList.add(db);
                 this.sourceChooser.getSelectionModel().select(db);
             } catch (UniqueList.DuplicateElementException e) {
-                LOGGER.error("Duplicate element has been filtered", e);
+                logger.error("Duplicate element has been filtered", e);
             }
         });
     }

@@ -1,7 +1,13 @@
 package com.dansoftware.libraryapp.main;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.entry.AppEntry;
+import com.dansoftware.libraryapp.gui.entry.login.LoginData;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
+import it.sauronsoftware.junique.MessageHandler;
+import javafx.application.Platform;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,7 +24,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Daniel Gyorffy
  */
-public class InstanceService {
+public class InstanceService implements MessageHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(InstanceService.class);
 
@@ -28,18 +34,7 @@ public class InstanceService {
 
     private InstanceService(String[] args) {
         try {
-            JUnique.acquireLock(APPLICATION_ID, arg -> {
-                logger.debug("Message from another process: {}", arg);
-
-                if (StringUtils.isEmpty(arg)) {
-                    //focusing on some window
-                } else {
-                    //if the file that the argument represents is already opened
-                    //with the application, we focus on that window, otherwise, we just
-                    //open the AppEntry with it
-                }
-                return null;
-            });
+            JUnique.acquireLock(APPLICATION_ID, this);
         } catch (AlreadyLockedException e) {
             logger.info("An application is already running with the id: '" + APPLICATION_ID + "'");
             logger.info("Sending the arguments to the already running instance...");
@@ -55,13 +50,49 @@ public class InstanceService {
         }
     }
 
+    @Override
+    public String handle(String arg) {
+        logger.debug("Message from another process: {}", arg);
+
+        if (StringUtils.isEmpty(arg)) {
+            //focusing on some window
+            Platform.runLater(() -> {
+                AppEntry.getShowingEntries()
+                        .stream()
+                        .limit(1)
+                        .findAny()
+                        .ifPresent(AppEntry::requestFocus);
+            });
+        } else {
+            //if the file that the argument represents is already opened
+            //with the application, we focus on that window, otherwise, we just
+            //open the AppEntry with it
+
+            DatabaseMeta databaseMeta = DatabaseMeta.parseFrom(arg);
+            AppEntry.getOpenedDatabases()
+                    .stream()
+                    .filter(databaseMeta::equals)
+                    .findAny()
+                    .ifPresentOrElse(db -> {
+                        Platform.runLater(() -> AppEntry.getEntryOf(db).ifPresent(AppEntry::requestFocus));
+                    }, () -> {
+                        Preferences.getPreferences().editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
+                            loginData.getLastDatabases().add(databaseMeta);
+                            loginData.selectLastDatabase();
+                        }).tryCommit();
+
+                        LoginData loginData = Preferences.getPreferences().get(Preferences.Key.LOGIN_DATA);
+                        loginData.getLastDatabases().removeAll(AppEntry.getOpenedDatabases());
+                        Platform.runLater(() -> new AppEntry(loginData).show());
+                    });
+
+        }
+        return null;
+    }
+
     public static void open(String[] args) {
         if (instance == null) {
-            synchronized (InstanceService.class) {
-                if (instance == null) {
-                    instance = new InstanceService(args);
-                }
-            }
+            instance = new InstanceService(args);
         }
     }
 

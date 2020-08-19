@@ -17,9 +17,8 @@ import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class AppEntry implements Context, ChangeListener<Boolean> {
 
@@ -41,8 +40,6 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
     private Context subContext;
     private DatabaseMeta openedDatabase;
 
-    private boolean mainActivityStarted;
-
     public AppEntry() {
         this(LoginData.empty());
     }
@@ -55,15 +52,16 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
         this.showing.addListener(this);
     }
 
+    @Deprecated
     @Override
     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) {
         if (observable == this.showing) {
             if (showing) {
-                showingEntries.add(this);
+                AppEntry.showingEntries.add(this);
                 if (this.openedDatabase != null)
                     AppEntry.openedDatabases.add(this.openedDatabase);
-            } else if (mainActivityStarted) {
-                showingEntries.remove(this);
+            } else {
+                AppEntry.showingEntries.remove(this);
                 AppEntry.openedDatabases.remove(this.openedDatabase);
             }
         }
@@ -77,7 +75,7 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
             this.subContext = mainActivity;
             this.showing.unbind();
             this.showing.bind(mainActivity.showingProperty());
-            this.mainActivityStarted = mainActivity.show();
+            mainActivity.show();
         });
 
         return databaseOptional.isPresent();
@@ -126,6 +124,11 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
         this.subContext.showInformationDialog(title, message, onResult);
     }
 
+    @Override
+    public void requestFocus() {
+        this.subContext.requestFocus();
+    }
+
     /**
      * Returns a read-only set that contains all {@link AppEntry} objects that is
      * showing.
@@ -145,5 +148,16 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
      */
     public static ObservableSet<DatabaseMeta> getOpenedDatabases() {
         return openedDatabasesUnmodifiable;
+    }
+
+    @NotNull
+    public static Optional<AppEntry> getEntryOf(@Nullable DatabaseMeta databaseMeta) {
+        if (databaseMeta == null)
+            return Optional.empty();
+
+        return getShowingEntries()
+                .stream()
+                .filter(entry -> databaseMeta.equals(entry.getOpenedDatabase()))
+                .findAny();
     }
 }

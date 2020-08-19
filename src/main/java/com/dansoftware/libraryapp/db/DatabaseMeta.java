@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A DatabaseMeta can hold all meta-information about a particular database.
@@ -55,5 +56,17 @@ public class DatabaseMeta {
     @Override
     public String toString() {
         return this.name + " (" + FileGoodies.shortenedFilePath(file, 1) + ")";
+    }
+
+    public static DatabaseMeta parseFrom(String filePath) {
+        if (filePath == null)
+            return null;
+
+        var file = new File(filePath);
+        if (!file.exists()) {
+            return null;
+        }
+
+        return new DatabaseMeta(file);
     }
 }

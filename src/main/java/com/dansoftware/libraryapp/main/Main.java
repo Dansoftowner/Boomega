@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
+import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.theme.Theme;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * The main class and javafx application starter.
@@ -60,14 +63,18 @@ public class Main extends BaseApplication {
         logger.info("Configurations has been read successfully!");
 
         //we check the application arguments
-        AppArgumentHandler argumentHandler = new AppArgumentHandler(getParameters().getRaw());
-        //we add the launched database to the preferences
-        argumentHandler.getDB().ifPresent(databaseMeta -> {
-            preferences.editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
-                loginData.getLastDatabases().add(databaseMeta);
-                loginData.selectLastDatabase();
-            }).tryCommit();
-        });
+        getParameters().getRaw()
+                .stream()
+                .limit(1)
+                .map(DatabaseMeta::parseFrom)
+                .findAny()
+                .ifPresent(databaseMeta -> {
+                    //we add the launched database to the preferences
+                    preferences.editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
+                        loginData.getLastDatabases().add(databaseMeta);
+                        loginData.selectLastDatabase();
+                    }).tryCommit();
+                });
 
         //setting the default locale
         Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
