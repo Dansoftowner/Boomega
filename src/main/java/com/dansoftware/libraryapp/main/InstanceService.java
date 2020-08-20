@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
-import com.dansoftware.libraryapp.gui.entry.login.LoginData;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;

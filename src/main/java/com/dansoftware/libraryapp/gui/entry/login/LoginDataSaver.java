@@ -1,12 +1,11 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
 
 import static com.dansoftware.libraryapp.appdata.Preferences.getPreferences;
 

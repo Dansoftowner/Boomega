@@ -1,11 +1,10 @@
 package com.dansoftware.libraryapp.appdata;
 
-import com.dansoftware.libraryapp.gui.entry.login.LoginData;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
-import com.jfilegoodies.FileGoodies;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

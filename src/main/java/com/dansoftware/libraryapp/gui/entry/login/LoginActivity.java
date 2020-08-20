@@ -2,8 +2,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
-import com.nativejavafx.taskbar.TaskbarProgressbar;
-import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
