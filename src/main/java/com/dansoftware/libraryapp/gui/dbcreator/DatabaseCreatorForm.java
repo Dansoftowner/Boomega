@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
-import com.dansoftware.libraryapp.db.Account;
+import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.dizitart.no2.exceptions.NitriteIOException;
@@ -182,9 +183,9 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             this.createdDb = new DatabaseMeta(this.nameField.getText(), dbFile);
             // We create the database object (because we want to create the db-file)
             // but we immediately close it
-            new NitriteDatabase(new Account(dbFile, username, password), createdDb).close();
+            new NitriteDatabase(createdDb, new Credentials(username, password)).close();
 
-            WindowUtils.getStageOf(this).close();
+            WindowUtils.getStageOptionalOf(this).ifPresent(Stage::close);
         } catch (NullPointerException | NitriteIOException e) {
             this.createdDb = null;
 

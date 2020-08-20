@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
-import com.dansoftware.libraryapp.db.Account;
-import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.db.*;
+import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
@@ -25,6 +25,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -74,6 +75,8 @@ public class LoginForm extends StackPane implements Initializable {
     @FXML
     private CheckBox rememberBox;
 
+    private Database createdDatabase;
+
     /**
      * A 'wrapped' version of the {@link #sourceChooser} object's
      * {@link ComboBox#getItems()} observable-list that does not allow to put
@@ -85,26 +88,22 @@ public class LoginForm extends StackPane implements Initializable {
 
     private final LoginData loginData;
 
+    private final LoginView loginView;
+
     private ObservableValue<Boolean> dataSourceSelected;
 
-    private BiConsumer<Account, DatabaseMeta> onLoginRequest;
-
-    LoginForm() {
+    LoginForm(@NotNull LoginView loginView) {
         //calling with empty login-data
-        this(new LoginData());
+        this(loginView, new LoginData());
     }
 
-    LoginForm(@NotNull LoginData loginData) {
+    LoginForm(@NotNull LoginView loginView, @NotNull LoginData loginData) {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
+        this.loginView = Objects.requireNonNull(loginView, "The LoginView shouldn't be null");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.loadGui();
         this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
         this.fillForm(this.loginData);
-    }
-
-    LoginForm(@NotNull LoginData loginData, @Nullable BiConsumer<Account, DatabaseMeta> onLoginRequest) {
-        this(loginData);
-        this.onLoginRequest = onLoginRequest;
     }
 
 
@@ -136,7 +135,7 @@ public class LoginForm extends StackPane implements Initializable {
             sourceChooser.getSelectionModel().select(loggedDB);
             rememberBox.setSelected(Boolean.TRUE);
 
-            LoginData.Credentials credentials = loginData.getLoggedDBCredentials();
+            Credentials credentials = loginData.getLoggedDBCredentials();
             if (Objects.nonNull(credentials)) {
                 usernameInput.setText(credentials.getUsername());
                 passwordInput.setText(credentials.getPassword());
@@ -155,21 +154,33 @@ public class LoginForm extends StackPane implements Initializable {
         String username = StringUtils.trim(usernameInput.getText());
         String password = StringUtils.trim(passwordInput.getText());
 
-        //creating an Account object that holds the credentials (username/password)
-        Account account = new Account(dbFile, username, password);
+        //creating an object that holds the credentials (username/password)
+        Credentials credentials = new Credentials(username, password);
 
         if (rememberBox.isSelected()) {
             loginData.setLoggedDBIndex(sourceChooser.getSelectionModel().getSelectedIndex());
-            loginData.setLoggedDBCredentials(new LoginData.Credentials(username, password));
-            logger.debug("LoginData loggedAccount set to: " + account);
+            loginData.setLoggedDBCredentials(credentials);
+            logger.debug("LoginData loggedDB set to: " + dbMeta);
         } else {
             loginData.setLoggedDBIndex(-1);
             loginData.setLoggedDBCredentials(null);
             logger.debug("LoginData loggedAccount set to: null");
         }
 
-        if (Objects.nonNull(this.onLoginRequest)) {
-            this.onLoginRequest.accept(account, dbMeta);
+        this.createdDatabase = new LoginProcessor(NitriteDatabase.factory())
+                .onFailed((title, message, t) -> {
+                    this.loginView.showErrorDialog(title, message, ((Exception) t), buttonType -> {
+                    });
+
+                    logger.error("Failed to create/open the database", t);
+                }).process(dbMeta, credentials);
+
+        if (this.createdDatabase != null) {
+            //creating the database was successful
+
+            //starting a thread that saves the login-data
+            new Thread(new LoginDataSaver(this.getLoginData())).start();
+            WindowUtils.getStageOptionalOf(this).ifPresent(Stage::close);
         }
     }
 
@@ -238,12 +249,12 @@ public class LoginForm extends StackPane implements Initializable {
         window.show();
     }
 
-    public void setOnLoginRequest(BiConsumer<Account, DatabaseMeta> onLoginRequest) {
-        this.onLoginRequest = onLoginRequest;
-    }
-
     public LoginData getLoginData() {
         return this.loginData;
+    }
+
+    public Database getCreatedDatabase() {
+        return createdDatabase;
     }
 
     private void addListeners() {

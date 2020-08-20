@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
+import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 
 import java.util.ArrayList;
@@ -78,21 +79,4 @@ public class LoginData {
         return new LoginData();
     }
 
-    public static class Credentials {
-        private final String username;
-        private final String password;
-
-        public Credentials(String username, String password) {
-            this.username = username;
-            this.password = password;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-    }
 }
