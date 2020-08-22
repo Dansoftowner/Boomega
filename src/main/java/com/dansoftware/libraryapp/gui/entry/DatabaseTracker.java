@@ -2,17 +2,11 @@ package com.dansoftware.libraryapp.gui.entry;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.BiConsumer;
+import java.lang.ref.WeakReference;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -25,21 +19,33 @@ public class DatabaseTracker {
     private DatabaseTracker() {
     }
 
-    private static final List<Observer> observers =
+    private static final List<WeakReference<Observer>> observers =
             Collections.synchronizedList(new LinkedList<>());
 
     private static final ObservableSet<DatabaseMeta> savedDatabases =
             FXCollections.synchronizedObservableSet(FXCollections.observableSet());
 
+    private static final ObservableSet<DatabaseMeta> savedDatabasesUnmodifiable =
+            FXCollections.unmodifiableObservableSet(savedDatabases);
+
     private static final ObservableSet<DatabaseMeta> usingDatabases =
             FXCollections.synchronizedObservableSet(FXCollections.observableSet());
+
+    private static final ObservableSet<DatabaseMeta> usingDatabasesUnmodifiable =
+            FXCollections.unmodifiableObservableSet(usingDatabases);
+
+    private static void iterateObservers(Consumer<Observer> observerConsumer) {
+        observers.stream()
+                .map(WeakReference::get)
+                .filter(Objects::nonNull)
+                .forEach(observerConsumer);
+    }
 
     public static void closingDatabase(DatabaseMeta databaseMeta) {
         usingDatabases.remove(databaseMeta);
 
         if (databaseMeta != null)
-            for (Observer observer : observers)
-                observer.onClosingDatabase(databaseMeta);
+            iterateObservers(observer -> observer.onClosingDatabase(databaseMeta));
     }
 
     public static void usingDatabase(@NotNull DatabaseMeta databaseMeta) {
@@ -48,8 +54,7 @@ public class DatabaseTracker {
             return;
 
         usingDatabases.add(databaseMeta);
-        for (Observer observer : observers)
-            observer.onUsingDatabase(databaseMeta);
+        iterateObservers(observer -> observer.onUsingDatabase(databaseMeta));
     }
 
     public static void addDatabase(@NotNull DatabaseMeta databaseMeta) {
@@ -58,24 +63,37 @@ public class DatabaseTracker {
             return;
 
         savedDatabases.add(databaseMeta);
-        for (Observer observer : observers)
-            observer.onDatabaseRegistered(databaseMeta);
+        iterateObservers(observer -> observer.onDatabaseAdded(databaseMeta));
     }
 
     public static void removeDatabase(DatabaseMeta databaseMeta) {
         savedDatabases.remove(databaseMeta);
 
         if (databaseMeta != null)
-            for (Observer observer : observers)
-                observer.onDatabaseRemoved(databaseMeta);
+            iterateObservers(observer -> observer.onDatabaseRemoved(databaseMeta));
     }
 
     public static void registerObserver(Observer observer) {
-        observers.add(observer);
+        if (observer != null && findWeakReference(observer).isEmpty())
+            observers.add(new WeakReference<>(observer));
     }
 
-    public static void removeObserver(Observer observer) {
-        observers.remove(observer);
+    public static void unregisterObserver(Observer observer) {
+        if (observer != null) findWeakReference(observer).ifPresent(observers::remove);
+    }
+
+    private static Optional<WeakReference<Observer>> findWeakReference(Observer observer) {
+        return observers.stream()
+                .filter(ref -> ref.get() == observer)
+                .findAny();
+    }
+
+    public static ObservableSet<DatabaseMeta> getSavedDatabases() {
+        return savedDatabasesUnmodifiable;
+    }
+
+    public static ObservableSet<DatabaseMeta> getUsingDatabases() {
+        return usingDatabasesUnmodifiable;
     }
 
     public interface Observer {
@@ -83,7 +101,7 @@ public class DatabaseTracker {
 
         void onClosingDatabase(@NotNull DatabaseMeta databaseMeta);
 
-        void onDatabaseRegistered(@NotNull DatabaseMeta databaseMeta);
+        void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta);
 
         void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta);
     }

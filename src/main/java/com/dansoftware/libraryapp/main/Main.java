@@ -5,6 +5,8 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.log.LogFile;
@@ -62,6 +64,10 @@ public class Main extends BaseApplication {
         Preferences preferences = Preferences.getPreferences();
         logger.info("Configurations has been read successfully!");
 
+        //adding
+        LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
+        loginData.forEach(DatabaseTracker::addDatabase);
+
         //we check the application arguments
         getParameters().getRaw()
                 .stream()
@@ -95,10 +101,10 @@ public class Main extends BaseApplication {
     protected void postInitialize(@NotNull Context starterContext,
                                   @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
         //showing an updateActivity for the user
-        /*Platform.runLater(() -> {
+        Platform.runLater(() -> {
             UpdateActivity updateActivity = new UpdateActivity(starterContext, updateSearchResult);
             updateActivity.show(false);
-        });*/
+        });
     }
 
 

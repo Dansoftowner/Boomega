@@ -10,12 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class LoginData {
-
-    private static final Logger logger = LoggerFactory.getLogger(LoginData.class);
+public class LoginData implements Iterable<DatabaseMeta> {
 
     private final ObservableList<DatabaseMeta> lastDatabases;
     private DatabaseMeta selectedDatabase;
@@ -149,4 +148,9 @@ public class LoginData {
         return new LoginData();
     }
 
+    @NotNull
+    @Override
+    public Iterator<DatabaseMeta> iterator() {
+        return this.lastDatabases.iterator();
+    }
 }
