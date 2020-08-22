@@ -2,8 +2,12 @@ package com.dansoftware.libraryapp.gui.entry.login.data;
 
 import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +15,19 @@ import java.util.Objects;
 
 public class LoginData {
 
-    private List<DatabaseMeta> lastDatabases;
+    private static final Logger logger = LoggerFactory.getLogger(LoginData.class);
+
+    private final ObservableList<DatabaseMeta> lastDatabases;
     private DatabaseMeta selectedDatabase;
     private DatabaseMeta autoLoginDatabase;
     private Credentials autoLoginCredentials;
-    //private int selectedAccountIndex;
-    //private int loggedAccountIndex;
-
 
     public LoginData() {
-        this(new ArrayList<>(), null);
+        this(new ArrayList<>());
+    }
+
+    public LoginData(@NotNull List<DatabaseMeta> lastDatabases) {
+        this(lastDatabases, null);
     }
 
     public LoginData(@NotNull List<DatabaseMeta> lastDatabases,
@@ -38,9 +45,9 @@ public class LoginData {
                      @Nullable DatabaseMeta selectedDatabase,
                      @Nullable DatabaseMeta autoLoginDatabase,
                      @Nullable Credentials autoLoginCredentials) {
-        this.lastDatabases = lastDatabases;
-        this.selectedDatabase = selectedDatabase;
-        this.autoLoginDatabase = autoLoginDatabase;
+        this.lastDatabases = FXCollections.observableArrayList(lastDatabases);
+        this.setSelectedDatabase(selectedDatabase);
+        this.setAutoLoginDatabase(autoLoginDatabase);
         this.autoLoginCredentials = autoLoginCredentials;
     }
 
@@ -49,26 +56,72 @@ public class LoginData {
     }
 
     public void setLastDatabases(List<DatabaseMeta> lastDatabases) {
-        this.lastDatabases = Objects.requireNonNull(lastDatabases, "lastDatabases mustn't be null");
+        this.lastDatabases.setAll(
+                Objects.requireNonNull(lastDatabases, "lastDatabases mustn't be null")
+        );
+
+        selectedDatabase = lastDatabases.contains(selectedDatabase) ? selectedDatabase : null;
+        autoLoginDatabase = lastDatabases.contains(autoLoginDatabase) ? autoLoginDatabase : null;
     }
 
     public DatabaseMeta getSelectedDatabase() {
         return selectedDatabase;
     }
 
-    public void setSelectedDatabase(DatabaseMeta selectedDatabase) {
-        if (!this.lastDatabases.contains(selectedDatabase)) {
-            this.lastDatabases.add(selectedDatabase);
-        }
-        this.selectedDatabase = selectedDatabase;
-    }
-
     public DatabaseMeta getAutoLoginDatabase() {
         return autoLoginDatabase;
     }
 
+    /**
+     * Sets the "selected database" but it doesn't check that the 'lastDatabases' list contains
+     * it or not.
+     *
+     * @param selectedDatabase the database that should be selected in the login-form
+     */
+    void setSelectedDatabaseUnchecked(DatabaseMeta selectedDatabase) {
+        this.selectedDatabase = selectedDatabase;
+    }
+
+    /**
+     * Sets the "selected database".
+     *
+     * <p>
+     * If the 'lastDatabases' list doesn't contain the database, it will automatically add
+     * to that.
+     *
+     * @param selectedDatabase the database that should be selected in the login-form
+     */
+    public void setSelectedDatabase(DatabaseMeta selectedDatabase) {
+        //logger.debug("Setting the selectedDatabase to {} on Thread: {}", selectedDatabase, Thread.currentThread());
+        if (selectedDatabase != null && !this.lastDatabases.contains(selectedDatabase)) {
+            this.lastDatabases.add(selectedDatabase);
+        }
+
+        this.selectedDatabase = selectedDatabase;
+    }
+
+    /**
+     * Sets the "auto-login database" but it doesn't check that the 'lastDatabases' list contains it
+     * or not.
+     *
+     * @param autoLoginDatabase the database that should be automatically launched when the app starts.
+     */
+    void setAutoLoginDatabaseUnchecked(DatabaseMeta autoLoginDatabase) {
+        this.autoLoginDatabase = autoLoginDatabase;
+    }
+
+    /**
+     * Sets the "auto-login database".
+     *
+     * <p>
+     * If the 'lastDatabases' list doesn't contain the database, it will automatically add
+     * it to that.
+     *
+     * @param autoLoginDatabase the database that should be automatically launched when the app starts.
+     */
     public void setAutoLoginDatabase(DatabaseMeta autoLoginDatabase) {
-        if (this.lastDatabases.contains(autoLoginDatabase)) {
+        //logger.debug("Setting the autoLoginDatabase to {} on Thread: {}", selectedDatabase, Thread.currentThread());
+        if (autoLoginDatabase != null && !this.lastDatabases.contains(autoLoginDatabase)) {
             this.lastDatabases.add(autoLoginDatabase);
         }
         this.autoLoginDatabase = autoLoginDatabase;
@@ -81,6 +134,15 @@ public class LoginData {
 
     public void setAutoLoginCredentials(Credentials autoLoginCredentials) {
         this.autoLoginCredentials = autoLoginCredentials;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginData{" +
+                "lastDatabases=" + lastDatabases +
+                ", selectedDatabase=" + selectedDatabase +
+                ", autoLoginDatabase=" + autoLoginDatabase +
+                '}';
     }
 
     public static LoginData empty() {

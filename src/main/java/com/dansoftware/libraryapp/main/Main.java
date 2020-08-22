@@ -71,8 +71,8 @@ public class Main extends BaseApplication {
                 .ifPresent(databaseMeta -> {
                     //we add the launched database to the preferences
                     preferences.editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
-                        loginData.getLastDatabases().add(databaseMeta);
-                        loginData.selectLastDatabase();
+                        logger.debug("Parsed argument: {}; selecting it in loginData...", databaseMeta);
+                        loginData.setSelectedDatabase(databaseMeta);
                     }).tryCommit();
                 });
 
@@ -95,10 +95,10 @@ public class Main extends BaseApplication {
     protected void postInitialize(@NotNull Context starterContext,
                                   @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
         //showing an updateActivity for the user
-        Platform.runLater(() -> {
+        /*Platform.runLater(() -> {
             UpdateActivity updateActivity = new UpdateActivity(starterContext, updateSearchResult);
             updateActivity.show(false);
-        });
+        });*/
     }
 
 

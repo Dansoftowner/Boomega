@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.appdata;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginDataDeserializer;
+import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,6 +21,24 @@ public interface ValueConstructingProcess<T> {
      */
     static <T> ValueConstructingProcess<T> defaultProcess(@NotNull Class<T> type) {
         return element -> new Gson().fromJson(element.toString(), type);
+    }
+
+    /**
+     * Creates a {@link ValueConstructingProcess} that can construct a {@link JsonElement} into a
+     * particular java object using {@link Gson}.
+     *
+     * <p>
+     * This method also allows to register custom deserializers.
+     *
+     * @param type the class-reference of the object that we want to construct
+     * @param deSerializer the custom {@link JsonDeserializer}
+     * @return the {@link ValueConstructingProcess}
+     */
+    static <T> ValueConstructingProcess<T> customDeserializationProcess(@NotNull Class<T> type, JsonDeserializer<T> deSerializer) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(type, deSerializer)
+                .create();
+        return element -> gson.fromJson(element.toString(), type);
     }
 
     T construct(@NotNull JsonElement element);

@@ -1,12 +1,17 @@
 package com.dansoftware.libraryapp.appdata;
 
 import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginDataDeserializer;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginDataSerializer;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -26,11 +31,13 @@ import java.util.function.Supplier;
  * <p>
  * For modifying the data we can use an {@link Editor} object that can be instantiated by the {@link #editor()} method.
  *
- * @see ConfigFile#getFile()
  * @author Daniel Gyorffy
+ * @see ConfigFile
  */
 
 public class Preferences {
+
+    private static final Logger logger = LoggerFactory.getLogger(Preferences.class);
 
     private static Preferences DEFAULT;
 
@@ -43,6 +50,11 @@ public class Preferences {
      * The file that holds the configurations (in JSON format)
      */
     private final File sourceFile;
+
+    private Preferences() {
+        this.sourceFile = null;
+        this.jsonObject = new JsonObject();
+    }
 
     /**
      * Creates a normal preferences-object.
@@ -71,7 +83,6 @@ public class Preferences {
      * If you make changes (put or delete values) it will immediately change the {@link Preferences} object
      * in the memory; but if you want to save those changes into the config-file you should use the {@link #commit()}
      * method.
-     *
      */
     public class Editor {
 
@@ -86,13 +97,13 @@ public class Preferences {
         }
 
         public <T> Editor set(@NotNull Key<T> key,
-                            @Nullable T value) {
+                              @Nullable T value) {
             put(key, value);
             return this;
         }
 
         public <T> Editor put(@NotNull Key<T> key,
-                            @Nullable T value) {
+                              @Nullable T value) {
             JsonElement element = null;
             if (value != null)
                 element = key.exportingProcess.export(value);
@@ -137,19 +148,20 @@ public class Preferences {
          * @throws IOException if some I/o exception occurs
          */
         public void commit() throws IOException {
-            try (var writer = new JsonWriter(new BufferedWriter(new FileWriter(sourceFile)))) {
-                new Gson().toJson(Preferences.this.jsonObject, writer);
-            } catch (JsonIOException e) {
-                throw new IOException(e);
-            }
+            if (sourceFile != null)
+                try (var writer = new JsonWriter(new BufferedWriter(new FileWriter(sourceFile)))) {
+                    new Gson().toJson(Preferences.this.jsonObject, writer);
+                } catch (JsonIOException e) {
+                    throw new IOException(e);
+                }
         }
 
         /**
          * Writes all data into the config-file.
          *
          * <p>
-         *  It is the same as {@link #commit()}, but it does not
-         *  throw any exception.
+         * It is the same as {@link #commit()}, but it does not
+         * throw any exception.
          */
         public void tryCommit() {
             try {
@@ -227,10 +239,17 @@ public class Preferences {
     public static Preferences getPreferences() {
         if (Objects.isNull(DEFAULT)) {
             try {
-                File configFile = ConfigFile.getFile();
+                File configFile = new ConfigFile();
+                configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
 
-                DEFAULT = new Preferences(configFile);
+                if (configFile.exists()) {
+                    DEFAULT = new Preferences(configFile);
+                } else {
+                    logger.error("Couldn't create configuration file");
+                    //create an only in-memory preferences
+                    DEFAULT = new Preferences();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -272,9 +291,33 @@ public class Preferences {
             this.exportingProcess = valueExportingProcess;
         }
 
+        public static <T> Key<T> createKey(@NotNull Class<T> type, @NotNull Supplier<@NotNull T> defaultValue) {
+            return new Key<>(type.getName(), type, defaultValue);
+        }
+
+        /**
+         * Key for accessing the default locale.
+         */
         public static final Key<Locale> LOCALE = new Key<>("locale", Locale.class, Locale::getDefault);
-        public static final Key<LoginData> LOGIN_DATA = new Key<>("loginData", LoginData.class, LoginData::new);
+
+        /**
+         * Key for accessing the login data
+         */
+        public static final Key<LoginData> LOGIN_DATA = new Key<>(
+                "loginData",
+                LoginData::new,
+                ValueConstructingProcess.customDeserializationProcess(LoginData.class, new LoginDataDeserializer()),
+                ValueExportingProcess.customSerializationProcess(LoginData.class, new LoginDataSerializer())
+        );
+
+        /**
+         * Key for accessing that the automatic update-searching is turned on or off
+         */
         public static final Key<Boolean> SEARCH_UPDATES = new Key<>("searchUpdates", Boolean.class, () -> Boolean.TRUE);
+
+        /**
+         * Key for accessing the configured theme
+         */
         public static final Key<Theme> THEME = new Key<>("theme", Theme::getDefault, element -> {
             try {
                 Class<?> themeClass = PluginClassLoader.getInstance().loadClass(element.getAsString());
@@ -286,9 +329,5 @@ public class Preferences {
                 return null;
             }
         }, value -> new JsonPrimitive(value.getClass().getName()));
-
-        public static <T> Key<T> getKey(@NotNull Class<T> type, @NotNull Supplier<@NotNull T> defaultValue) {
-            return new Key<>(type.getName(), type, defaultValue);
-        }
     }
 }

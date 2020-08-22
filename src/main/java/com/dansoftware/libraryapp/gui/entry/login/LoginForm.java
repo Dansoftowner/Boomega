@@ -124,31 +124,34 @@ public class LoginForm extends StackPane implements Initializable {
             logger.error("Duplicate element ", e);
         }
 
-        int selectedDB = loginData.getSelectedDBIndex();
-        if (selectedDB >= 0) {
-            sourceChooser.getSelectionModel().select(selectedDB);
+        DatabaseMeta selectedDatabase = loginData.getSelectedDatabase();
+        if (selectedDatabase != null) {
+            //logger.debug("Selecting the database read from loginData...");
+            sourceChooser.getSelectionModel().select(selectedDatabase);
         }
 
-        DatabaseMeta loggedDB = loginData.getLoggedDB();
-        if (Objects.nonNull(loggedDB)) {
-            sourceChooser.getSelectionModel().select(loggedDB);
+        DatabaseMeta autoLoginDatabase = loginData.getAutoLoginDatabase();
+        if (Objects.nonNull(autoLoginDatabase)) {
+            logger.debug("Auto-login database detected");
+            sourceChooser.getSelectionModel().select(autoLoginDatabase);
             rememberBox.setSelected(Boolean.TRUE);
 
-            Credentials credentials = loginData.getLoggedDBCredentials();
+            Credentials credentials = loginData.getAutoLoginCredentials();
             if (Objects.nonNull(credentials)) {
                 usernameInput.setText(credentials.getUsername());
                 passwordInput.setText(credentials.getPassword());
             }
 
+            logger.debug("Trying signing in with auto login database...");
             Platform.runLater(this::login);
         } else {
-            loginData.setLoggedDBCredentials(null);
+            loginData.setAutoLoginCredentials(null);
         }
     }
 
     @FXML
     private void login() {
-        DatabaseMeta dbMeta = sourceChooser.getValue();
+        DatabaseMeta dbMeta = sourceChooser.getSelectionModel().getSelectedItem();
         File dbFile = dbMeta.getFile();
         String username = StringUtils.trim(usernameInput.getText());
         String password = StringUtils.trim(passwordInput.getText());
@@ -157,13 +160,11 @@ public class LoginForm extends StackPane implements Initializable {
         Credentials credentials = new Credentials(username, password);
 
         if (rememberBox.isSelected()) {
-            loginData.setLoggedDBIndex(sourceChooser.getSelectionModel().getSelectedIndex());
-            loginData.setLoggedDBCredentials(credentials);
-            logger.debug("LoginData loggedDB set to: " + dbMeta);
+            loginData.setAutoLoginDatabase(dbMeta);
+            loginData.setAutoLoginCredentials(credentials);
         } else {
-            loginData.setLoggedDBIndex(-1);
-            loginData.setLoggedDBCredentials(null);
-            logger.debug("LoginData loggedAccount set to: null");
+            loginData.setAutoLoginDatabase(null);
+            loginData.setAutoLoginCredentials(null);
         }
 
         this.createdDatabase = new LoginProcessor(NitriteDatabase.factory())
@@ -176,10 +177,13 @@ public class LoginForm extends StackPane implements Initializable {
 
         if (this.createdDatabase != null) {
             //creating the database was successful
-
+            logger.debug("Signing in was successful; closing the LoginWindow");
             //starting a thread that saves the login-data
             new Thread(new LoginDataSaver(this.getLoginData())).start();
-            WindowUtils.getStageOptionalOf(this).ifPresent(Stage::close);
+
+            logger.debug("The window is '{}'", WindowUtils.getStageOf(this) );
+
+            WindowUtils.getStageOf(this).close();
         }
     }
 
@@ -249,6 +253,9 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     public LoginData getLoginData() {
+        this.loginData.setLastDatabases(sourceChooser.getItems());
+        this.loginData.setSelectedDatabase(sourceChooser.getSelectionModel().getSelectedItem());
+
         return this.loginData;
     }
 
@@ -257,9 +264,9 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     private void addListeners() {
-        this.sourceChooser.getItems().addListener((ListChangeListener<DatabaseMeta>) observable -> {
+  /*      this.sourceChooser.getItems().addListener((ListChangeListener<DatabaseMeta>) observable -> {
             this.loginData.setLastDatabases(this.sourceChooser.getItems());
-        });
+        });*/
 
         //creating an observable-value that represents that the sourceChooser combobox has selected element
         this.dataSourceSelected = Bindings.isNotNull(sourceChooser.getSelectionModel().selectedItemProperty());
@@ -270,19 +277,19 @@ public class LoginForm extends StackPane implements Initializable {
             else
                 this.rootForm.getChildren().remove(this.loginForm);
         });
-
+/*
         this.sourceChooser.getSelectionModel()
-                .selectedIndexProperty()
+                .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    loginData.setSelectedDbIndex((Integer) newValue);
+                    loginData.setSelectedDatabase(newValue);
                 });
-
-        this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
+*/
     }
 
     private void setDefaults() {
         this.rootForm.getChildren().remove(this.loginForm);
         this.fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
+        this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.dansoftware.libraryapp.appdata;
 
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,7 +22,21 @@ public interface ValueExportingProcess<T> {
      * @return the {@link ValueExportingProcess} object
      */
     static <T> ValueExportingProcess<T> defaultProcess() {
-        return value -> new Gson().toJsonTree(value);
+        return new Gson()::toJsonTree;
+    }
+
+    /**
+     * Creates a {@link ValueExportingProcess} that can export a value into a
+     * {@link JsonElement} using {@link Gson}.
+     *
+     * @param type the type of the object that we want to export
+     * @return the {@link ValueExportingProcess} object
+     */
+    static <T> ValueExportingProcess<T> customSerializationProcess(Class<T> type, JsonSerializer<T> serializer) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(type, serializer)
+                .create();
+        return gson::toJsonTree;
     }
 
     JsonElement export(@NotNull T value);

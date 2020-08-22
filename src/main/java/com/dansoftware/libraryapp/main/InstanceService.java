@@ -77,8 +77,7 @@ public class InstanceService implements MessageHandler {
                         Platform.runLater(() -> AppEntry.getEntryOf(db).ifPresent(AppEntry::requestFocus));
                     }, () -> {
                         Preferences.getPreferences().editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
-                            loginData.getLastDatabases().add(databaseMeta);
-                            loginData.selectLastDatabase();
+                            loginData.setSelectedDatabase(databaseMeta);
                         }).tryCommit();
 
                         LoginData loginData = Preferences.getPreferences().get(Preferences.Key.LOGIN_DATA);

@@ -33,12 +33,7 @@ public class ArgumentTransformer {
     }
 
     public static Optional<DatabaseMeta> transformOptional(@NotNull String arg) {
-        var asFile = new File(arg);
-        if (!asFile.exists()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(new DatabaseMeta(asFile));
+        return Optional.of(new DatabaseMeta(new File(arg)));
     }
 
     public static Optional<DatabaseMeta> transformOptional(@Nullable List<String> args) {

@@ -24,24 +24,25 @@ import static com.dansoftware.libraryapp.appdata.Preferences.getPreferences;
  */
 public class LoginDataSaver extends Task<Void> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginDataSaver.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginDataSaver.class);
 
     private LoginData loginData;
 
     public LoginDataSaver(LoginData loginData) {
         this.loginData = loginData;
         setOnFailed((WorkerStateEvent e) -> {
-            LOGGER.error("Something went wrong when trying to save loginData", e.getSource().getException());
+            logger.error("Something went wrong when trying to save loginData", e.getSource().getException());
         });
     }
 
     @Override
     protected Void call() throws Exception {
+        logger.debug("LoginData is (before serialization): {}", loginData);
         Preferences.Editor editor = getPreferences().editor();
         editor.set(Preferences.Key.LOGIN_DATA, loginData);
         editor.commit();
 
-        LOGGER.debug("LoginData saved successfully");
+        logger.debug("LoginData saved successfully");
         return null;
     }
 }
