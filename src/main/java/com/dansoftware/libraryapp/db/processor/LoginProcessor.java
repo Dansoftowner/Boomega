@@ -57,11 +57,10 @@ public class LoginProcessor {
     /**
      * Creates/Opens the particular database that doesn't need credentials.
      *
-     * @param databaseMeta the meta-information of the database
      * @return the {@link Database} object
      */
     @Nullable
-    public Database process(@NotNull DatabaseMeta databaseMeta) {
+    public Database process() {
         return this.process(databaseMeta, Credentials.anonymous());
     }
 

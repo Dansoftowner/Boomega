@@ -64,9 +64,10 @@ public class Main extends BaseApplication {
         Preferences preferences = Preferences.getPreferences();
         logger.info("Configurations has been read successfully!");
 
-        //adding
-        LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-        loginData.forEach(DatabaseTracker::addDatabase);
+        //adding the saved databases from the login-data to DatabaseTracker
+        preferences.get(Preferences.Key.LOGIN_DATA)
+                .getLastDatabases()
+                .forEach(DatabaseTracker::addDatabase);
 
         //we check the application arguments
         getParameters().getRaw()

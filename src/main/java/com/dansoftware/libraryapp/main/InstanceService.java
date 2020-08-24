@@ -69,7 +69,7 @@ public class InstanceService implements MessageHandler {
             //open the AppEntry with it
 
             DatabaseMeta databaseMeta = DatabaseMeta.parseFrom(arg);
-            AppEntry.getOpenedDatabases()
+            /*AppEntry.getOpenedDatabases()
                     .stream()
                     .filter(databaseMeta::equals)
                     .findAny()
@@ -81,9 +81,9 @@ public class InstanceService implements MessageHandler {
                         }).tryCommit();
 
                         LoginData loginData = Preferences.getPreferences().get(Preferences.Key.LOGIN_DATA);
-                        loginData.getLastDatabases().removeAll(AppEntry.getOpenedDatabases());
+                        //loginData.getLastDatabases().removeAll(AppEntry.getOpenedDatabases());
                         Platform.runLater(() -> new AppEntry(loginData).show());
-                    });
+                    });*/
 
         }
         return null;

@@ -1,26 +1,22 @@
 package com.dansoftware.libraryapp.gui.entry;
 
 import com.dansoftware.libraryapp.db.Database;
-import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainActivity;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class AppEntry implements Context, ChangeListener<Boolean> {
+public class AppEntry implements Context {
 
     private static final ObservableSet<AppEntry> showingEntries =
             FXCollections.synchronizedObservableSet(FXCollections.observableSet());
@@ -28,17 +24,10 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
     private static final ObservableSet<AppEntry> showingEntriesUnmodifiable =
             FXCollections.unmodifiableObservableSet(showingEntries);
 
-    private static final ObservableSet<DatabaseMeta> openedDatabases =
-            FXCollections.synchronizedObservableSet(FXCollections.observableSet());
-
-    private static final ObservableSet<DatabaseMeta> openedDatabasesUnmodifiable =
-            FXCollections.unmodifiableObservableSet(openedDatabases);
-
     private final BooleanProperty showing;
     private final LoginActivity loginActivity;
 
     private Context subContext;
-    private DatabaseMeta openedDatabase;
 
     public AppEntry() {
         this(LoginData.empty());
@@ -49,28 +38,18 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
         this.subContext = loginActivity;
         this.showing = new SimpleBooleanProperty();
         this.showing.bind(this.loginActivity.showingProperty());
-        this.showing.addListener(this);
-    }
-
-    @Deprecated
-    @Override
-    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) {
-        if (observable == this.showing) {
-            if (showing) {
+        this.showing.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
                 AppEntry.showingEntries.add(this);
-                if (this.openedDatabase != null)
-                    AppEntry.openedDatabases.add(this.openedDatabase);
             } else {
                 AppEntry.showingEntries.remove(this);
-                AppEntry.openedDatabases.remove(this.openedDatabase);
             }
-        }
+        });
     }
 
     public boolean show() {
         Optional<Database> databaseOptional = loginActivity.show();
         databaseOptional.ifPresent(database -> {
-            this.openedDatabase = database.getMeta();
             var mainActivity = new MainActivity(database);
             this.subContext = mainActivity;
             this.showing.unbind();
@@ -79,11 +58,6 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
         });
 
         return databaseOptional.isPresent();
-    }
-
-    @Nullable
-    public DatabaseMeta getOpenedDatabase() {
-        return this.openedDatabase;
     }
 
     public boolean isShowing() {
@@ -137,27 +111,5 @@ public class AppEntry implements Context, ChangeListener<Boolean> {
      */
     public static ObservableSet<AppEntry> getShowingEntries() {
         return showingEntriesUnmodifiable;
-    }
-
-    /**
-     * Returns a read-only set of {@link DatabaseMeta} object.
-     * Each object represents a database that is successfully opened
-     * with an {@link AppEntry}.
-     *
-     * @return a set of DatabaseMeta objects.
-     */
-    public static ObservableSet<DatabaseMeta> getOpenedDatabases() {
-        return openedDatabasesUnmodifiable;
-    }
-
-    @NotNull
-    public static Optional<AppEntry> getEntryOf(@Nullable DatabaseMeta databaseMeta) {
-        if (databaseMeta == null)
-            return Optional.empty();
-
-        return getShowingEntries()
-                .stream()
-                .filter(entry -> databaseMeta.equals(entry.getOpenedDatabase()))
-                .findAny();
     }
 }

@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.entry.mainview;
 
 import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -10,6 +11,7 @@ import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class MainActivity implements Context {
@@ -67,5 +69,9 @@ public class MainActivity implements Context {
     @Override
     public void requestFocus() {
 
+    }
+
+    public static Optional<MainActivity> getByDatabase(DatabaseMeta databaseMeta) {
+        return Optional.empty();
     }
 }

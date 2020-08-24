@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class LoginData implements Iterable<DatabaseMeta> {
+public class LoginData {
 
     private final ObservableList<DatabaseMeta> lastDatabases;
     private DatabaseMeta selectedDatabase;
@@ -135,6 +135,10 @@ public class LoginData implements Iterable<DatabaseMeta> {
         this.autoLoginCredentials = autoLoginCredentials;
     }
 
+    public boolean autoLoginTurnedOn() {
+        return getAutoLoginDatabase() != null;
+    }
+
     @Override
     public String toString() {
         return "LoginData{" +
@@ -146,11 +150,5 @@ public class LoginData implements Iterable<DatabaseMeta> {
 
     public static LoginData empty() {
         return new LoginData();
-    }
-
-    @NotNull
-    @Override
-    public Iterator<DatabaseMeta> iterator() {
-        return this.lastDatabases.iterator();
     }
 }
