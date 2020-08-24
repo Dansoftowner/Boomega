@@ -74,8 +74,6 @@ public abstract class ActivityLauncher implements Runnable {
 
             } else {
                 //if there was application-argument
-
-                //we add the launched database to the last databases
                 argumentAvailable();
             }
 
