@@ -11,6 +11,9 @@ import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -22,14 +25,16 @@ import java.util.Objects;
 public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable {
 
     private final LoginForm loginForm;
+    private final ObjectProperty<Database> createdDatabase;
 
     public LoginView() {
-        this(new LoginData());
+        this(LoginData.empty());
     }
 
     public LoginView(@NotNull LoginData loginData) {
         super("LibraryApp", new MaterialDesignIconView(MaterialDesignIcon.BOOK));
         super.setContent(loginForm = new LoginForm(this, loginData));
+        this.createdDatabase = new SimpleObjectProperty<>();
         this.init();
     }
 
@@ -48,10 +53,6 @@ public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable 
                 }));
     }
 
-    public Database getSelectedDatabase() {
-        return this.loginForm.getCreatedDatabase();
-    }
-
     public LoginData getLoginData() {
         return this.loginForm.getLoginData();
     }
@@ -62,5 +63,9 @@ public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable 
         globalApplier.applyBack(this);
         customApplier.apply(this);
         globalApplier.apply(this);
+    }
+
+    public ReadOnlyObjectProperty<Database> createdDatabaseProperty() {
+        return createdDatabase;
     }
 }

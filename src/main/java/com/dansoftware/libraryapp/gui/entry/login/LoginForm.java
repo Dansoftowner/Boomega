@@ -16,6 +16,8 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.*;
 import javafx.fxml.FXML;
@@ -74,7 +76,7 @@ public class LoginForm extends StackPane implements Initializable {
     @FXML
     private CheckBox rememberBox;
 
-    private Database createdDatabase;
+    private ObjectProperty<Database> createdDatabase;
 
     /**
      * A 'wrapped' version of the {@link #sourceChooser} object's
@@ -99,6 +101,7 @@ public class LoginForm extends StackPane implements Initializable {
     LoginForm(@NotNull LoginView loginView, @NotNull LoginData loginData) {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.loginView = Objects.requireNonNull(loginView, "The LoginView shouldn't be null");
+        this.createdDatabase = new SimpleObjectProperty<>(this, "createdDatabase");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.loadGui();
         this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
@@ -167,15 +170,15 @@ public class LoginForm extends StackPane implements Initializable {
             loginData.setAutoLoginCredentials(null);
         }
 
-        this.createdDatabase = LoginProcessor.of(NitriteDatabase.factory())
+        this.createdDatabase.set(LoginProcessor.of(NitriteDatabase.factory())
                 .onFailed((title, message, t) -> {
                     this.loginView.showErrorDialog(title, message, ((Exception) t), buttonType -> {
                     });
 
                     logger.error("Failed to create/open the database", t);
-                }).process(dbMeta, credentials);
+                }).process(dbMeta, credentials));
 
-        if (this.createdDatabase != null) {
+        if (this.createdDatabase.get() != null) {
             //creating the database was successful
             logger.debug("Signing in was successful; closing the LoginWindow");
             //starting a thread that saves the login-data
@@ -260,7 +263,7 @@ public class LoginForm extends StackPane implements Initializable {
     }
 
     public Database getCreatedDatabase() {
-        return createdDatabase;
+        return createdDatabase.get();
     }
 
     private void addListeners() {

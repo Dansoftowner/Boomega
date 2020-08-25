@@ -7,16 +7,17 @@ import com.dansoftware.libraryapp.gui.entry.mainview.MainActivity;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
-public class AppEntry implements Context {
+public class AppEntry implements Context, ChangeListener<Database> {
 
     private static final ObservableSet<AppEntry> showingEntries =
             FXCollections.synchronizedObservableSet(FXCollections.observableSet());
@@ -47,17 +48,18 @@ public class AppEntry implements Context {
         });
     }
 
-    public boolean show() {
-        Optional<Database> databaseOptional = loginActivity.show();
-        databaseOptional.ifPresent(database -> {
-            var mainActivity = new MainActivity(database);
-            this.subContext = mainActivity;
-            this.showing.unbind();
-            this.showing.bind(mainActivity.showingProperty());
-            mainActivity.show();
-        });
+    @Override
+    public void changed(ObservableValue<? extends Database> observable, Database oldValue, Database createdDatabase) {
+        var mainActivity = new MainActivity(createdDatabase);
+        this.subContext = mainActivity;
+        this.showing.unbind();
+        this.showing.bind(mainActivity.showingProperty());
+        mainActivity.show();
+    }
 
-        return databaseOptional.isPresent();
+    public void show() {
+        loginActivity.show();
+        loginActivity.createdDatabaseProperty().addListener(this);
     }
 
     public boolean isShowing() {

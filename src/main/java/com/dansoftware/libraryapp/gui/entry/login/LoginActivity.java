@@ -3,9 +3,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
@@ -24,31 +22,31 @@ import java.util.function.Consumer;
 public class LoginActivity implements Context {
 
     private final BooleanProperty showing;
+    private final ObjectProperty<Database> createdDatabase;
     private LoginView loginView;
 
-    private LoginActivity() {
-        this.showing = new SimpleBooleanProperty();
-    }
-
     public LoginActivity(@NotNull LoginData loginData) {
-        this();
+        this.showing = new SimpleBooleanProperty();
         this.loginView = new LoginView(loginData);
+        this.createdDatabase = new SimpleObjectProperty<>();
+        this.createdDatabase.bind(loginView.createdDatabaseProperty());
     }
 
     /**
-     * Waits until the user signs in or closes the login window, then
-     * returns the selected {@link Database} wrapped in an {@link Optional}.
-     * If the {@link Optional} is empty that means that the user closed the
-     * {@link LoginWindow}.
-     *
-     * @return the selected {@link Database} wrapped in an {@link Optional}.
+     * Shows the LoginActivity
      */
-    public Optional<Database> show() {
+    public void show() {
         LoginWindow loginWindow = new LoginWindow(loginView);
         this.showing.bind(loginWindow.showingProperty());
-        loginWindow.showAndWait();
+        loginWindow.show();
+    }
 
-        return Optional.ofNullable(loginView.getSelectedDatabase());
+    public ObjectProperty<Database> createdDatabaseProperty() {
+        return createdDatabase;
+    }
+
+    public Optional<Database> getCreatedDatabase() {
+        return Optional.ofNullable(createdDatabase.get());
     }
 
     public boolean isShowing() {

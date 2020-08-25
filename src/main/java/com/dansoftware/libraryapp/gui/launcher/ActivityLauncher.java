@@ -106,9 +106,10 @@ public abstract class ActivityLauncher implements Runnable {
 
     private void handleArgument() {
         //we add the launched database to the last databases
-        if (!getLoginData().getLastDatabases().contains(argument)) {
-            getLoginData().getLastDatabases().add(argument);
-            saveLoginData();
+        LoginData loginData = getLoginData();
+        if (!loginData.getLastDatabases().contains(argument)) {
+            loginData.getLastDatabases().add(argument);
+            saveLoginData(loginData);
         }
 
         Database database = LoginProcessor.of(NitriteDatabase.factory())
@@ -152,7 +153,7 @@ public abstract class ActivityLauncher implements Runnable {
     /**
      * Defines how to save the {@link LoginData} for the base {@link ActivityLauncher} object.
      */
-    protected abstract void saveLoginData();
+    protected abstract void saveLoginData(LoginData loginData);
 
     /**
      * Called on the UI-thread, when an "Activity" is launched

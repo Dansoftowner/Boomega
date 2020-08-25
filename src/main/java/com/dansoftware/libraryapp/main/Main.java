@@ -54,8 +54,7 @@ public class Main extends BaseApplication {
      */
     public static void main(String[] args) {
         InstanceService.open(args);
-
-        LauncherImpl.launchApplication(Main.class, Preloader.class, args);
+        BaseApplication.launch(args);
     }
 
     @NotNull
@@ -68,20 +67,6 @@ public class Main extends BaseApplication {
         preferences.get(Preferences.Key.LOGIN_DATA)
                 .getLastDatabases()
                 .forEach(DatabaseTracker::addDatabase);
-
-        //we check the application arguments
-        getParameters().getRaw()
-                .stream()
-                .limit(1)
-                .map(DatabaseMeta::parseFrom)
-                .findAny()
-                .ifPresent(databaseMeta -> {
-                    //we add the launched database to the preferences
-                    preferences.editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
-                        logger.debug("Parsed argument: {}; selecting it in loginData...", databaseMeta);
-                        loginData.setSelectedDatabase(databaseMeta);
-                    }).tryCommit();
-                });
 
         //setting the default locale
         Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
@@ -96,16 +81,6 @@ public class Main extends BaseApplication {
         UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
         return new InitializationResult(preferences, searchResult);
-    }
-
-    @Override
-    protected void postInitialize(@NotNull Context starterContext,
-                                  @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
-        //showing an updateActivity for the user
-        Platform.runLater(() -> {
-            UpdateActivity updateActivity = new UpdateActivity(starterContext, updateSearchResult);
-            updateActivity.show(false);
-        });
     }
 
 

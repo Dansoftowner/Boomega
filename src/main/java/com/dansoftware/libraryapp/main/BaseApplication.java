@@ -3,7 +3,12 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
 import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
+import com.dansoftware.libraryapp.gui.launcher.ActivityLauncher;
+import com.dansoftware.libraryapp.gui.launcher.LauncherMode;
+import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
+import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -16,8 +21,6 @@ public abstract class BaseApplication extends Application {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseApplication.class);
 
-    private InitializationResult initializationResult;
-
     /**
      * This method can be used for initializing the application in the background
      * during the splash screen appearing. Runs on the <i>javaFX Launcher thread</i>.
@@ -25,34 +28,41 @@ public abstract class BaseApplication extends Application {
     @NotNull
     protected abstract InitializationResult initialize() throws Exception;
 
-    /**
-     * This method runs after the launch of the application on the main UI-thread (<i>javaFX Application Thread<i/>).
-     *
-     * @param starterContext the first application-context that created.
-     */
-    protected abstract void postInitialize(@NotNull Context starterContext,
-                                           @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) throws Exception;
-
     @Override
     public final void init() throws Exception {
-        this.initializationResult = initialize();
+        InitializationResult initRes = initialize();
+
+        Preferences preferences = initRes.preferences;
+        LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
+        UpdateSearcher.UpdateSearchResult updateSearchResult = initRes.updateSearchResult;
+
+        new ActivityLauncher(LauncherMode.INIT) {
+            @Override
+            protected LoginData getLoginData() {
+                return loginData;
+            }
+
+            @Override
+            protected void saveLoginData(LoginData loginData) {
+                preferences.editor()
+                        .set(Preferences.Key.LOGIN_DATA, loginData)
+                        .tryCommit();
+            }
+
+            @Override
+            protected void onActivityLaunched(Context context) {
+                UpdateActivity updateActivity = new UpdateActivity(context, updateSearchResult);
+                updateActivity.show(false);
+            }
+        }.launch();
     }
 
     @Override
     public final void start(Stage primaryStage) throws Exception {
-        if (initializationResult == null) {
-            throw new UnInitializedException(
-                    "The BaseApplication must be initialized before start!",
-                    new NullPointerException("The initializationResult mustn't be null!")
-            );
-        }
+    }
 
-        AppEntry appEntry = new AppEntry(initializationResult.preferences.get(Preferences.Key.LOGIN_DATA));
-        postInitialize(appEntry, initializationResult.updateSearchResult);
-        if (BooleanUtils.isFalse(appEntry.show())) {
-            logger.debug("the user closed the application... exiting");
-            Platform.exit();
-        }
+    public static void launch(String... args) {
+        LauncherImpl.launchApplication(Main.class, Preloader.class, args);
     }
 
     static class InitializationResult {
