@@ -167,7 +167,7 @@ public class LoginForm extends StackPane implements Initializable {
             loginData.setAutoLoginCredentials(null);
         }
 
-        this.createdDatabase = new LoginProcessor(NitriteDatabase.factory())
+        this.createdDatabase = LoginProcessor.of(NitriteDatabase.factory())
                 .onFailed((title, message, t) -> {
                     this.loginView.showErrorDialog(title, message, ((Exception) t), buttonType -> {
                     });

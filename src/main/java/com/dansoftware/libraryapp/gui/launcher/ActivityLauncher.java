@@ -5,6 +5,7 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
+import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainActivity;
 import com.dansoftware.libraryapp.main.ArgumentTransformer;
@@ -19,7 +20,7 @@ import java.util.Objects;
 public abstract class ActivityLauncher implements Runnable {
 
     private final LauncherMode mode;
-    private DatabaseMeta launched;
+    private final DatabaseMeta argument;
 
     public ActivityLauncher() {
         this(LauncherMode.INIT);
@@ -35,7 +36,7 @@ public abstract class ActivityLauncher implements Runnable {
 
     public ActivityLauncher(@NotNull LauncherMode mode, @Nullable DatabaseMeta databaseMeta) {
         this.mode = Objects.requireNonNull(mode, "The LauncherMode shouldn't be null");
-        this.launched = databaseMeta;
+        this.argument = databaseMeta;
     }
 
     public void launch() {
@@ -43,43 +44,48 @@ public abstract class ActivityLauncher implements Runnable {
         if (mode == LauncherMode.INIT) {
             //if we are in INIT mode
 
-            if (launched == null) {
+            if (argument == null) {
                 //if there was no application-argument
 
                 if (getLoginData().autoLoginTurnedOn()) {
                     //if auto login is turned on
 
-                    Database database = new LoginProcessor(NitriteDatabase.factory())
+                    Database database = LoginProcessor.of(NitriteDatabase.factory())
                             .onFailed((title, message, t) -> {
                                 Platform.runLater(() -> {
                                     var appEntry = new AppEntry(getLoginData());
                                     appEntry.show();
-                                    //and showing the error message!!!!
+                                    appEntry.showErrorDialog(title, message, (Exception) t);
+                                    onActivityLaunched(appEntry);
                                 });
                             }).process(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
 
                     //the login-process was successful
                     if (database != null) {
                         Platform.runLater(() -> {
-                            new MainActivity(database).show();
+                            MainActivity mainActivity = new MainActivity(database);
+                            mainActivity.show();
+                            onActivityLaunched(mainActivity);
                         });
                     }
 
                 } else {
                     //if auto login is turned off
                     Platform.runLater(() -> {
-                        new AppEntry(getLoginData()).show();
+                        AppEntry appEntry = new AppEntry(getLoginData());
+                        appEntry.show();
+                        onActivityLaunched(appEntry);
                     });
                 }
 
             } else {
                 //if there was application-argument
-                argumentAvailable();
+                handleArgument();
             }
 
         } else if (mode == LauncherMode.ALREADY_RUNNING) {
 
-            if (launched == null) {
+            if (argument == null) {
                 //no argument
                 //just focusing on a random window
                 AppEntry.getShowingEntries()
@@ -92,36 +98,39 @@ public abstract class ActivityLauncher implements Runnable {
 
                 //if there is an Activity opened with the database we focus on that,
                 // otherwise we open a new activity for it
-                MainActivity.getByDatabase(launched)
-                        .ifPresentOrElse(MainActivity::requestFocus, this::argumentAvailable);
+                MainActivity.getByDatabase(argument)
+                        .ifPresentOrElse(MainActivity::requestFocus, this::handleArgument);
             }
         }
     }
 
-    private void argumentAvailable() {
+    private void handleArgument() {
         //we add the launched database to the last databases
-        if (!getLoginData().getLastDatabases().contains(launched)) {
-            getLoginData().getLastDatabases().add(launched);
+        if (!getLoginData().getLastDatabases().contains(argument)) {
+            getLoginData().getLastDatabases().add(argument);
             saveLoginData();
         }
 
-        Database database = new LoginProcessor(NitriteDatabase.factory())
+        Database database = LoginProcessor.of(NitriteDatabase.factory())
                 .onFailed((title, message, t) -> {
                     Platform.runLater(() -> {
                         LoginData temp = getLoginData();
                         //we select it, but we don't save it to the configurations
-                        temp.setSelectedDatabase(launched);
+                        temp.setSelectedDatabase(argument);
 
                         var appEntry = new AppEntry(temp);
                         appEntry.show();
-                        //with error-messages!!!!!
+                        appEntry.showErrorDialog(title, message, (Exception) t);
+                        onActivityLaunched(appEntry);
                     });
-                }).process();
+                }).process(argument);
 
         //the login-process was successful
         if (database != null) {
             Platform.runLater(() -> {
-                new MainActivity(database).show();
+                MainActivity mainActivity = new MainActivity(database);
+                mainActivity.show();
+                onActivityLaunched(mainActivity);
             });
         }
 
@@ -133,9 +142,23 @@ public abstract class ActivityLauncher implements Runnable {
         launch();
     }
 
+    /**
+     * Defines how to get the {@link LoginData} for the base {@link ActivityLauncher} object.
+     *
+     * @return the {@link LoginData} object.
+     */
     protected abstract LoginData getLoginData();
 
+    /**
+     * Defines how to save the {@link LoginData} for the base {@link ActivityLauncher} object.
+     */
     protected abstract void saveLoginData();
 
+    /**
+     * Called on the UI-thread, when an "Activity" is launched
+     *
+     * @param context the 'activity' through the {@link Context} interface
+     */
+    protected abstract void onActivityLaunched(Context context);
 
 }

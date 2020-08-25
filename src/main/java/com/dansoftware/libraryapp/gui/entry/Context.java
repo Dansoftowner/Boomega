@@ -27,4 +27,11 @@ public interface Context {
 
     void requestFocus();
 
+    default void showErrorDialog(String title, String message) {
+        this.showErrorDialog(title, message, buttonType -> {});
+    }
+
+    default void showErrorDialog(String title, String message, Exception e) {
+        this.showErrorDialog(title, message, e, buttonType -> {});
+    }
 }

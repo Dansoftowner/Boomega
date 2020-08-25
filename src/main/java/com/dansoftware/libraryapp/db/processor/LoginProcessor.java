@@ -41,7 +41,7 @@ public class LoginProcessor {
     private FailListener onFailListener;
     private final DatabaseFactory databaseFactory;
 
-    public LoginProcessor(@NotNull DatabaseFactory databaseFactory) {
+    private LoginProcessor(@NotNull DatabaseFactory databaseFactory) {
         this.databaseFactory = Objects.requireNonNull(databaseFactory, "The DatabaseFactory shouldn't be null");
     }
 
@@ -57,10 +57,11 @@ public class LoginProcessor {
     /**
      * Creates/Opens the particular database that doesn't need credentials.
      *
+     * @param databaseMeta the meta-information of the database
      * @return the {@link Database} object
      */
     @Nullable
-    public Database process() {
+    public Database process(DatabaseMeta databaseMeta) {
         return this.process(databaseMeta, Credentials.anonymous());
     }
 
@@ -107,4 +108,7 @@ public class LoginProcessor {
         return false;
     }
 
+    public static LoginProcessor of(DatabaseFactory databaseFactory) {
+        return new LoginProcessor(databaseFactory);
+    }
 }
