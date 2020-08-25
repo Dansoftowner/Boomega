@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
 import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import com.dansoftware.libraryapp.gui.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.gui.launcher.LauncherMode;
@@ -44,6 +45,8 @@ public abstract class BaseApplication extends Application {
 
             @Override
             protected void saveLoginData(LoginData loginData) {
+                loginData.getLastDatabases().forEach(DatabaseTracker::addDatabase);
+
                 preferences.editor()
                         .set(Preferences.Key.LOGIN_DATA, loginData)
                         .tryCommit();

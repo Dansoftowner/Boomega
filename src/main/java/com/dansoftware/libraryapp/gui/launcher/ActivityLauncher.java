@@ -12,12 +12,16 @@ import com.dansoftware.libraryapp.main.ArgumentTransformer;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class ActivityLauncher implements Runnable {
+
+    private static final Logger logger = LoggerFactory.getLogger(ActivityLauncher.class);
 
     private final LauncherMode mode;
     private final DatabaseMeta argument;
@@ -43,15 +47,19 @@ public abstract class ActivityLauncher implements Runnable {
 
         if (mode == LauncherMode.INIT) {
             //if we are in INIT mode
+            logger.debug("INIT mode detected");
 
             if (argument == null) {
                 //if there was no application-argument
+                logger.debug("no argument found");
 
                 if (getLoginData().autoLoginTurnedOn()) {
                     //if auto login is turned on
+                    logger.debug("auto login is turned on, trying to sign in into the database...");
 
                     Database database = LoginProcessor.of(NitriteDatabase.factory())
                             .onFailed((title, message, t) -> {
+                                logger.debug("failed signing into the database");
                                 Platform.runLater(() -> {
                                     var appEntry = new AppEntry(getLoginData());
                                     appEntry.show();
@@ -62,6 +70,8 @@ public abstract class ActivityLauncher implements Runnable {
 
                     //the login-process was successful
                     if (database != null) {
+                        logger.debug("signed in into the auto-login database successfully, launching a MainActivity...");
+
                         Platform.runLater(() -> {
                             MainActivity mainActivity = new MainActivity(database);
                             mainActivity.show();
@@ -71,6 +81,8 @@ public abstract class ActivityLauncher implements Runnable {
 
                 } else {
                     //if auto login is turned off
+                    logger.debug("auto-login is turned off, launching a basic EntryActivity...");
+
                     Platform.runLater(() -> {
                         AppEntry appEntry = new AppEntry(getLoginData());
                         appEntry.show();

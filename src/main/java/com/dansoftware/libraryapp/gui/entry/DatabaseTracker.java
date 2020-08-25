@@ -50,20 +50,18 @@ public class DatabaseTracker {
 
     public static void usingDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
-        if (savedDatabases.contains(databaseMeta))
-            return;
 
-        usingDatabases.add(databaseMeta);
-        iterateObservers(observer -> observer.onUsingDatabase(databaseMeta));
+        if (usingDatabases.add(databaseMeta)) {
+            iterateObservers(observer -> observer.onUsingDatabase(databaseMeta));
+        }
     }
 
     public static void addDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
-        if (savedDatabases.contains(databaseMeta))
-            return;
 
-        savedDatabases.add(databaseMeta);
-        iterateObservers(observer -> observer.onDatabaseAdded(databaseMeta));
+        if (savedDatabases.add(databaseMeta)) {
+            iterateObservers(observer -> observer.onDatabaseAdded(databaseMeta));
+        }
     }
 
     public static void removeDatabase(DatabaseMeta databaseMeta) {
