@@ -17,12 +17,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class AppEntry implements Context, ChangeListener<Database> {
+public class EntryActivity implements Context, ChangeListener<Database> {
 
-    private static final ObservableSet<AppEntry> showingEntries =
+    private static final ObservableSet<EntryActivity> showingEntries =
             FXCollections.synchronizedObservableSet(FXCollections.observableSet());
 
-    private static final ObservableSet<AppEntry> showingEntriesUnmodifiable =
+    private static final ObservableSet<EntryActivity> showingEntriesUnmodifiable =
             FXCollections.unmodifiableObservableSet(showingEntries);
 
     private final BooleanProperty showing;
@@ -30,20 +30,20 @@ public class AppEntry implements Context, ChangeListener<Database> {
 
     private Context subContext;
 
-    public AppEntry() {
+    public EntryActivity() {
         this(LoginData.empty());
     }
 
-    public AppEntry(@NotNull LoginData loginData) {
+    public EntryActivity(@NotNull LoginData loginData) {
         this.loginActivity = new LoginActivity(loginData);
         this.subContext = loginActivity;
         this.showing = new SimpleBooleanProperty();
         this.showing.bind(this.loginActivity.showingProperty());
         this.showing.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                AppEntry.showingEntries.add(this);
+                EntryActivity.showingEntries.add(this);
             } else {
-                AppEntry.showingEntries.remove(this);
+                EntryActivity.showingEntries.remove(this);
             }
         });
     }
@@ -106,12 +106,12 @@ public class AppEntry implements Context, ChangeListener<Database> {
     }
 
     /**
-     * Returns a read-only set that contains all {@link AppEntry} objects that is
+     * Returns a read-only set that contains all {@link EntryActivity} objects that is
      * showing.
      *
      * @return the set of AppEntry objects.
      */
-    public static ObservableSet<AppEntry> getShowingEntries() {
+    public static ObservableSet<EntryActivity> getShowingEntries() {
         return showingEntriesUnmodifiable;
     }
 }

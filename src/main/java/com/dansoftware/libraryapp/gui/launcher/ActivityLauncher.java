@@ -4,7 +4,7 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
-import com.dansoftware.libraryapp.gui.entry.AppEntry;
+import com.dansoftware.libraryapp.gui.entry.EntryActivity;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainActivity;
@@ -61,7 +61,7 @@ public abstract class ActivityLauncher implements Runnable {
                             .onFailed((title, message, t) -> {
                                 logger.debug("failed signing into the database");
                                 Platform.runLater(() -> {
-                                    var appEntry = new AppEntry(getLoginData());
+                                    var appEntry = new EntryActivity(getLoginData());
                                     appEntry.show();
                                     appEntry.showErrorDialog(title, message, (Exception) t);
                                     onActivityLaunched(appEntry);
@@ -84,9 +84,9 @@ public abstract class ActivityLauncher implements Runnable {
                     logger.debug("auto-login is turned off, launching a basic EntryActivity...");
 
                     Platform.runLater(() -> {
-                        AppEntry appEntry = new AppEntry(getLoginData());
-                        appEntry.show();
-                        onActivityLaunched(appEntry);
+                        EntryActivity entryActivity = new EntryActivity(getLoginData());
+                        entryActivity.show();
+                        onActivityLaunched(entryActivity);
                     });
                 }
 
@@ -105,11 +105,11 @@ public abstract class ActivityLauncher implements Runnable {
                 logger.debug("no argument found, focusing on a random window...");
 
                 Platform.runLater(() -> {
-                    AppEntry.getShowingEntries()
+                    EntryActivity.getShowingEntries()
                             .stream()
                             .limit(1)
                             .findAny()
-                            .ifPresent(AppEntry::requestFocus);
+                            .ifPresent(EntryActivity::requestFocus);
                 });
             } else {
                 //there is argument
@@ -141,7 +141,7 @@ public abstract class ActivityLauncher implements Runnable {
                         //we select it, but we don't save it to the configurations
                         temp.setSelectedDatabase(argument);
 
-                        var appEntry = new AppEntry(temp);
+                        var appEntry = new EntryActivity(temp);
                         appEntry.show();
                         appEntry.showErrorDialog(title, message, (Exception) t);
                         onActivityLaunched(appEntry);
