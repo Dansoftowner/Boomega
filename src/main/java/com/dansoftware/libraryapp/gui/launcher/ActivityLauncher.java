@@ -92,21 +92,28 @@ public abstract class ActivityLauncher implements Runnable {
 
             } else {
                 //if there was application-argument
+                logger.debug("argument found");
                 handleArgument();
             }
 
         } else if (mode == LauncherMode.ALREADY_RUNNING) {
+            logger.debug("ALREADY_RUNNING mode detected");
 
             if (argument == null) {
                 //no argument
                 //just focusing on a random window
-                AppEntry.getShowingEntries()
-                        .stream()
-                        .limit(1)
-                        .findAny()
-                        .ifPresent(AppEntry::requestFocus);
+                logger.debug("no argument found, focusing on a random window...");
+
+                Platform.runLater(() -> {
+                    AppEntry.getShowingEntries()
+                            .stream()
+                            .limit(1)
+                            .findAny()
+                            .ifPresent(AppEntry::requestFocus);
+                });
             } else {
                 //there is argument
+                logger.debug("argument found, trying to focus on an already running MainActivity or creating a new one");
 
                 //if there is an Activity opened with the database we focus on that,
                 // otherwise we open a new activity for it
@@ -118,6 +125,7 @@ public abstract class ActivityLauncher implements Runnable {
 
     private void handleArgument() {
         //we add the launched database to the last databases
+        logger.debug("adding the launched database into the LoginData...");
         LoginData loginData = getLoginData();
         if (!loginData.getLastDatabases().contains(argument)) {
             loginData.getLastDatabases().add(argument);
@@ -125,6 +133,7 @@ public abstract class ActivityLauncher implements Runnable {
             saveLoginData(loginData);
         }
 
+        logger.debug("trying to sign in into the database...");
         Database database = LoginProcessor.of(NitriteDatabase.factory())
                 .onFailed((title, message, t) -> {
                     Platform.runLater(() -> {
@@ -141,6 +150,7 @@ public abstract class ActivityLauncher implements Runnable {
 
         //the login-process was successful
         if (database != null) {
+            logger.debug("signed in into the argument-database successfully, launching a MainActivity...");
             Platform.runLater(() -> {
                 MainActivity mainActivity = new MainActivity(database);
                 mainActivity.show();
@@ -149,7 +159,6 @@ public abstract class ActivityLauncher implements Runnable {
         }
 
     }
-
 
     @Override
     public void run() {

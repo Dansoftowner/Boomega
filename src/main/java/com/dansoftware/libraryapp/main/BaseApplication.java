@@ -24,28 +24,6 @@ import java.util.Objects;
 
 public abstract class BaseApplication extends Application {
 
-    /*private volatile Preferences preferences;
-    private volatile LoginData loginData;
-    private volatile UpdateSearcher.UpdateSearchResult updateSearchResult;*/
-
-   /* protected void setPreferences(@NotNull Preferences preferences) {
-        this.preferences = Objects.requireNonNull(preferences, "Preferences shouldn't be null");
-        this.loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-    }
-
-    protected void setUpdateSearchResult(@NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
-        this.updateSearchResult = updateSearchResult;
-    }*/
-
-    /*
-     * This method can be used for initializing the application in the background
-     * during the splash screen appearing. Runs on the <i>javaFX Launcher thread</i>.
-     * <p>
-     * It should set the default {@link Preferences} object with the {@link #setPreferences(Preferences)} method,
-     * and the {@link com.dansoftware.libraryapp.update.UpdateSearcher.UpdateSearchResult} with the
-     * {@link #setUpdateSearchResult(UpdateSearcher.UpdateSearchResult)} method.
-    protected abstract void initialize() throws Exception;*/
-
     @Override
     public abstract void init();
 

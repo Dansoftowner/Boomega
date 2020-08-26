@@ -1,10 +1,7 @@
 package com.dansoftware.libraryapp.gui.entry.login.data;
 
 import com.dansoftware.libraryapp.db.Credentials;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import org.jasypt.util.text.StrongTextEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +18,10 @@ public class CredentialsSerializer implements JsonSerializer<Credentials> {
 
     @Override
     public JsonElement serialize(Credentials src, Type typeOfSrc, JsonSerializationContext context) {
+        if (src.isAnonymous()) {
+            return JsonNull.INSTANCE;
+        }
+
         String encryptionPassword = Double.toString(Math.random());
         StrongTextEncryptor textEncryptor = new StrongTextEncryptor();
         textEncryptor.setPassword(encryptionPassword);

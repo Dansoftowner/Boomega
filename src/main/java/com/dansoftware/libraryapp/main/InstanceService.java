@@ -2,16 +2,22 @@ package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
-import com.dansoftware.libraryapp.gui.entry.AppEntry;
+import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
+import com.dansoftware.libraryapp.gui.launcher.ActivityLauncher;
+import com.dansoftware.libraryapp.gui.launcher.LauncherMode;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;
-import javafx.application.Platform;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * InstanceService is responsible for listening to application instances
@@ -52,46 +58,59 @@ public class InstanceService implements MessageHandler {
 
     @Override
     public String handle(String arg) {
-        logger.debug("Message from another process: {}", arg);
-
-        if (StringUtils.isEmpty(arg)) {
-            //focusing on some window
-            Platform.runLater(() -> {
-                AppEntry.getShowingEntries()
-                        .stream()
-                        .limit(1)
-                        .findAny()
-                        .ifPresent(AppEntry::requestFocus);
-            });
-        } else {
-            //if the file that the argument represents is already opened
-            //with the application, we focus on that window, otherwise, we just
-            //open the AppEntry with it
-
-            DatabaseMeta databaseMeta = DatabaseMeta.parseFrom(arg);
-            /*AppEntry.getOpenedDatabases()
-                    .stream()
-                    .filter(databaseMeta::equals)
-                    .findAny()
-                    .ifPresentOrElse(db -> {
-                        Platform.runLater(() -> AppEntry.getEntryOf(db).ifPresent(AppEntry::requestFocus));
-                    }, () -> {
-                        Preferences.getPreferences().editor().modify(Preferences.Key.LOGIN_DATA, loginData -> {
-                            loginData.setSelectedDatabase(databaseMeta);
-                        }).tryCommit();
-
-                        LoginData loginData = Preferences.getPreferences().get(Preferences.Key.LOGIN_DATA);
-                        //loginData.getLastDatabases().removeAll(AppEntry.getOpenedDatabases());
-                        Platform.runLater(() -> new AppEntry(loginData).show());
-                    });*/
-
-        }
+        logger.debug("message from another process: {}", arg);
+        logger.debug("starting an ActivityLauncher...");
+        new ActivityLauncherImpl(arg).launch();
         return null;
     }
 
     public static void open(String[] args) {
         if (instance == null) {
             instance = new InstanceService(args);
+        }
+    }
+
+    private static class ActivityLauncherImpl extends ActivityLauncher {
+
+        private final LoginData loginData;
+
+        public ActivityLauncherImpl(@Nullable String arg) {
+            super(LauncherMode.ALREADY_RUNNING, Collections.singletonList(arg));
+            this.loginData = buildLoginData();
+        }
+
+        private LoginData buildLoginData() {
+            //removing all already opened databases from the LoginData
+            Set<DatabaseMeta> databaseUsing = DatabaseTracker.getUsingDatabases();
+            LoginData loginData = Preferences.getPreferences().get(Preferences.Key.LOGIN_DATA);
+            loginData.getLastDatabases().removeAll(databaseUsing);
+            loginData.setSelectedDatabase(null);
+            loginData.setAutoLoginDatabase(null);
+
+            return loginData;
+        }
+
+        @Override
+        protected LoginData getLoginData() {
+            return loginData;
+        }
+
+        @Override
+        protected void saveLoginData(LoginData loginData) {
+            Preferences.getPreferences()
+                    .editor()
+                    .put(Preferences.Key.LOGIN_DATA, loginData)
+                    .tryCommit();
+        }
+
+        @Override
+        protected void onNewDatabaseAdded(DatabaseMeta databaseMeta) {
+            DatabaseTracker.addDatabase(databaseMeta);
+        }
+
+        @Override
+        protected void onActivityLaunched(Context context) {
+            //displaying message '$database launched'
         }
     }
 

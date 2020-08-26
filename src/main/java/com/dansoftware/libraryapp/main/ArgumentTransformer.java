@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
@@ -33,7 +34,10 @@ public class ArgumentTransformer {
     }
 
     public static Optional<DatabaseMeta> transformOptional(@NotNull String arg) {
-        return Optional.of(new DatabaseMeta(new File(arg)));
+        if (StringUtils.isBlank(arg))
+            return Optional.empty();
+
+        return Optional.of(DatabaseMeta.parseFrom(arg));
     }
 
     public static Optional<DatabaseMeta> transformOptional(@Nullable List<String> args) {
