@@ -134,7 +134,7 @@ public class LoginForm extends StackPane implements Initializable {
         }
 
         DatabaseMeta autoLoginDatabase = loginData.getAutoLoginDatabase();
-        if (Objects.nonNull(autoLoginDatabase)) {
+        if (autoLoginDatabase != null) {
             logger.debug("Auto-login database detected");
             sourceChooser.getSelectionModel().select(autoLoginDatabase);
             rememberBox.setSelected(Boolean.TRUE);
@@ -144,12 +144,9 @@ public class LoginForm extends StackPane implements Initializable {
                 usernameInput.setText(credentials.getUsername());
                 passwordInput.setText(credentials.getPassword());
             }
-
-            logger.debug("Trying signing in with auto login database...");
-            Platform.runLater(this::login);
-        } else {
+        } /*else {
             loginData.setAutoLoginCredentials(null);
-        }
+        }*/
     }
 
     @FXML
