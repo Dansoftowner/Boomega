@@ -9,15 +9,11 @@ public enum LauncherMode {
 
     /**
      * A {@link LauncherMode} that should be used with an {@link ActivityLauncher} when the application runs first.
-     *
-     * <p>
-     *
-     *
      */
     INIT,
 
     /**
-     *
+     * A {@link LauncherMode} that should be used with an {@link ActivityLauncher} when the application is already running.
      */
     ALREADY_RUNNING
 }

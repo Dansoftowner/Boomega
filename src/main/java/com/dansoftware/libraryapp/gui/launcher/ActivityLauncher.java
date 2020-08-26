@@ -103,6 +103,7 @@ public abstract class ActivityLauncher implements Runnable {
 
                 if (argument == null) {
                     //if there was no application-argument
+                    //it is basically a normal application-start.
                     logger.debug("no argument found");
 
                     if (getLoginData().autoLoginTurnedOn()) {
@@ -113,10 +114,10 @@ public abstract class ActivityLauncher implements Runnable {
                                 .onFailed((title, message, t) -> {
                                     logger.debug("failed signing into the database");
                                     Platform.runLater(() -> {
-                                        var appEntry = new EntryActivity(getLoginData());
-                                        appEntry.show();
-                                        appEntry.showErrorDialog(title, message, (Exception) t);
-                                        onActivityLaunched(appEntry);
+                                        var entryActivity = new EntryActivity(getLoginData());
+                                        entryActivity.show();
+                                        entryActivity.showErrorDialog(title, message, (Exception) t);
+                                        onActivityLaunched(entryActivity);
                                     });
                                 }).process(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
 
@@ -125,7 +126,7 @@ public abstract class ActivityLauncher implements Runnable {
                             logger.debug("signed in into the auto-login database successfully, launching a MainActivity...");
 
                             Platform.runLater(() -> {
-                                MainActivity mainActivity = new MainActivity(database);
+                                var mainActivity = new MainActivity(database);
                                 mainActivity.show();
                                 onActivityLaunched(mainActivity);
                             });
@@ -136,7 +137,7 @@ public abstract class ActivityLauncher implements Runnable {
                         logger.debug("auto-login is turned off, launching a basic EntryActivity...");
 
                         Platform.runLater(() -> {
-                            EntryActivity entryActivity = new EntryActivity(getLoginData());
+                            var entryActivity = new EntryActivity(getLoginData());
                             entryActivity.show();
                             onActivityLaunched(entryActivity);
                         });
@@ -194,10 +195,10 @@ public abstract class ActivityLauncher implements Runnable {
                         //we select it, but we don't save it to the configurations
                         temp.setSelectedDatabase(argument);
 
-                        var appEntry = new EntryActivity(temp);
-                        appEntry.show();
-                        appEntry.showErrorDialog(title, message, (Exception) t);
-                        onActivityLaunched(appEntry);
+                        var entryActivity = new EntryActivity(temp);
+                        entryActivity.show();
+                        entryActivity.showErrorDialog(title, message, (Exception) t);
+                        onActivityLaunched(entryActivity);
                     });
                 }).process(argument);
 

@@ -17,6 +17,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+/**
+ * An {@link EntryActivity} puts the {@link LoginActivity} and {@link MainActivity} activity together.
+ *
+ * <p>
+ * When an {@link EntryActivity} is started, it creates a {@link LoginActivity} and shows that and after the {@link LoginActivity} exited,
+ * it launches a {@link MainActivity}.
+ *
+ * <p>
+ * Implements the {@link Context} interface so we can send message-requests to the backing activity whether it's a {@link LoginActivity}
+ * or a {@link MainActivity}.
+ *
+ * <p>
+ * The active {@link EntryActivity} objects are tracked so they are accessible through the {@link #getShowingEntries()}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class EntryActivity implements Context, ChangeListener<Database> {
 
     private static final ObservableSet<EntryActivity> showingEntries =
@@ -30,10 +46,21 @@ public class EntryActivity implements Context, ChangeListener<Database> {
 
     private Context subContext;
 
+    /**
+     * Creates a basic {@link EntryActivity} with empty {@link LoginData}.
+     *
+     * @see LoginData#empty()
+     * @see EntryActivity#EntryActivity(LoginData)
+     */
     public EntryActivity() {
         this(LoginData.empty());
     }
 
+    /**
+     * Creates an {@link EntryActivity} with the {@link LoginData}.
+     *
+     * @param loginData the login-data object that will be passed to the {@link LoginActivity}
+     */
     public EntryActivity(@NotNull LoginData loginData) {
         this.loginActivity = new LoginActivity(loginData);
         this.subContext = loginActivity;
@@ -50,13 +77,21 @@ public class EntryActivity implements Context, ChangeListener<Database> {
 
     @Override
     public void changed(ObservableValue<? extends Database> observable, Database oldValue, Database createdDatabase) {
-        var mainActivity = new MainActivity(createdDatabase);
-        this.subContext = mainActivity;
-        this.showing.unbind();
-        this.showing.bind(mainActivity.showingProperty());
-        mainActivity.show();
+        if (createdDatabase != null) {
+            var mainActivity = new MainActivity(createdDatabase);
+            this.subContext = mainActivity;
+            this.showing.unbind();
+            this.showing.bind(mainActivity.showingProperty());
+            mainActivity.show();
+
+            //removing this object from the listeners
+            observable.removeListener(this);
+        }
     }
 
+    /**
+     * Starts the {@link EntryActivity}.
+     */
     public void show() {
         loginActivity.show();
         loginActivity.createdDatabaseProperty().addListener(this);

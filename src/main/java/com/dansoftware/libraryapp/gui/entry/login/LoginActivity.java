@@ -36,9 +36,11 @@ public class LoginActivity implements Context {
      * Shows the LoginActivity
      */
     public void show() {
-        LoginWindow loginWindow = new LoginWindow(loginView);
-        this.showing.bind(loginWindow.showingProperty());
-        loginWindow.show();
+        if (!this.isShowing()) {
+            LoginWindow loginWindow = new LoginWindow(loginView);
+            this.showing.bind(loginWindow.showingProperty());
+            loginWindow.show();
+        }
     }
 
     public ObjectProperty<Database> createdDatabaseProperty() {
