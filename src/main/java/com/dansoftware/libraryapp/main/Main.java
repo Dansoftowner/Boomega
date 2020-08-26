@@ -7,11 +7,14 @@ import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
+import com.dansoftware.libraryapp.gui.launcher.ActivityLauncher;
+import com.dansoftware.libraryapp.gui.launcher.LauncherMode;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.sun.javafx.application.LauncherImpl;
+import javafx.application.Application;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -54,19 +57,17 @@ public class Main extends BaseApplication {
      */
     public static void main(String[] args) {
         InstanceService.open(args);
-        BaseApplication.launch(args);
+        BaseApplication.launchApp(Main.class, args);
     }
 
-    @NotNull
     @Override
-    protected BaseApplication.InitializationResult initialize() throws Exception {
+    public void init() {
         Preferences preferences = Preferences.getPreferences();
         logger.info("Configurations has been read successfully!");
 
         //adding the saved databases from the login-data to DatabaseTracker
-        preferences.get(Preferences.Key.LOGIN_DATA)
-                .getLastDatabases()
-                .forEach(DatabaseTracker::addDatabase);
+        LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
+        loginData.getLastDatabases().forEach(DatabaseTracker::addDatabase);
 
         //setting the default locale
         Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
@@ -80,7 +81,31 @@ public class Main extends BaseApplication {
         UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO);
         UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
-        return new InitializationResult(preferences, searchResult);
+
+        new ActivityLauncher(LauncherMode.INIT, getParameters().getRaw()) {
+            @Override
+            protected LoginData getLoginData() {
+                return loginData;
+            }
+
+            @Override
+            protected void saveLoginData(LoginData loginData) {
+                preferences.editor()
+                        .set(Preferences.Key.LOGIN_DATA, loginData)
+                        .tryCommit();
+            }
+
+            @Override
+            protected void onNewDatabaseAdded(DatabaseMeta databaseMeta) {
+                DatabaseTracker.addDatabase(databaseMeta);
+            }
+
+            @Override
+            protected void onActivityLaunched(Context context) {
+                UpdateActivity updateActivity = new UpdateActivity(context, searchResult);
+                updateActivity.show(false);
+            }
+        }.launch();
     }
 
 
@@ -90,5 +115,4 @@ public class Main extends BaseApplication {
         Preferences preferences = Preferences.getPreferences();
         preferences.editor().commit();
     }
-
 }

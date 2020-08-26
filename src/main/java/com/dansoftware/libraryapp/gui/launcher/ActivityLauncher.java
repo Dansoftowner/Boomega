@@ -121,6 +121,7 @@ public abstract class ActivityLauncher implements Runnable {
         LoginData loginData = getLoginData();
         if (!loginData.getLastDatabases().contains(argument)) {
             loginData.getLastDatabases().add(argument);
+            onNewDatabaseAdded(argument);
             saveLoginData(loginData);
         }
 
@@ -166,6 +167,13 @@ public abstract class ActivityLauncher implements Runnable {
      * Defines how to save the {@link LoginData} for the base {@link ActivityLauncher} object.
      */
     protected abstract void saveLoginData(LoginData loginData);
+
+    /**
+     * Called, when a new database (from the arguments) is added to the login-data.
+     *
+     * @param databaseMeta the meta-information of the database
+     */
+    protected abstract void onNewDatabaseAdded(DatabaseMeta databaseMeta);
 
     /**
      * Called on the UI-thread, when an "Activity" is launched

@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
+import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.AppEntry;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
@@ -18,76 +20,46 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 public abstract class BaseApplication extends Application {
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseApplication.class);
+    /*private volatile Preferences preferences;
+    private volatile LoginData loginData;
+    private volatile UpdateSearcher.UpdateSearchResult updateSearchResult;*/
 
-    /**
+   /* protected void setPreferences(@NotNull Preferences preferences) {
+        this.preferences = Objects.requireNonNull(preferences, "Preferences shouldn't be null");
+        this.loginData = preferences.get(Preferences.Key.LOGIN_DATA);
+    }
+
+    protected void setUpdateSearchResult(@NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
+        this.updateSearchResult = updateSearchResult;
+    }*/
+
+    /*
      * This method can be used for initializing the application in the background
      * during the splash screen appearing. Runs on the <i>javaFX Launcher thread</i>.
+     * <p>
+     * It should set the default {@link Preferences} object with the {@link #setPreferences(Preferences)} method,
+     * and the {@link com.dansoftware.libraryapp.update.UpdateSearcher.UpdateSearchResult} with the
+     * {@link #setUpdateSearchResult(UpdateSearcher.UpdateSearchResult)} method.
+    protected abstract void initialize() throws Exception;*/
+
+    @Override
+    public abstract void init();
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+    }
+
+    /**
+     * Launches the base-application with a {@link Preloader}.
+     *
+     * @param appClass the class-reference to the {@link BaseApplication} implementation
+     * @param args the application-arguments
      */
-    @NotNull
-    protected abstract InitializationResult initialize() throws Exception;
-
-    @Override
-    public final void init() throws Exception {
-        InitializationResult initRes = initialize();
-
-        Preferences preferences = initRes.preferences;
-        LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-        UpdateSearcher.UpdateSearchResult updateSearchResult = initRes.updateSearchResult;
-
-        new ActivityLauncher(LauncherMode.INIT) {
-            @Override
-            protected LoginData getLoginData() {
-                return loginData;
-            }
-
-            @Override
-            protected void saveLoginData(LoginData loginData) {
-                loginData.getLastDatabases().forEach(DatabaseTracker::addDatabase);
-
-                preferences.editor()
-                        .set(Preferences.Key.LOGIN_DATA, loginData)
-                        .tryCommit();
-            }
-
-            @Override
-            protected void onActivityLaunched(Context context) {
-                UpdateActivity updateActivity = new UpdateActivity(context, updateSearchResult);
-                updateActivity.show(false);
-            }
-        }.launch();
-    }
-
-    @Override
-    public final void start(Stage primaryStage) throws Exception {
-    }
-
-    public static void launch(String... args) {
-        LauncherImpl.launchApplication(Main.class, Preloader.class, args);
-    }
-
-    static class InitializationResult {
-        private final Preferences preferences;
-        private final UpdateSearcher.UpdateSearchResult updateSearchResult;
-
-        InitializationResult(@NotNull Preferences preferences, @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
-            this.preferences = preferences;
-            this.updateSearchResult = updateSearchResult;
-        }
-    }
-
-    public static class UnInitializedException extends RuntimeException {
-        private UnInitializedException() {
-        }
-
-        private UnInitializedException(String message) {
-            super(message);
-        }
-
-        public UnInitializedException(String message, Throwable cause) {
-            super(message, cause);
-        }
+    public static void launchApp(Class<? extends BaseApplication> appClass, String... args) {
+        LauncherImpl.launchApplication(appClass, Preloader.class, args);
     }
 }
