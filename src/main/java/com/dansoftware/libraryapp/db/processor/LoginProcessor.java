@@ -6,6 +6,8 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -98,7 +100,7 @@ public class LoginProcessor {
      * @param credentials the object that holds the credentials
      * @return {@code true} if the database is created successfully; {@code false} otherwise.
      */
-    private boolean touch(@NotNull DatabaseMeta databaseMeta, @NotNull Credentials credentials) {
+    public boolean touch(@NotNull DatabaseMeta databaseMeta, @NotNull Credentials credentials) {
         Database created;
         if ((created = this.process(databaseMeta, credentials)) != null) {
             created.close();

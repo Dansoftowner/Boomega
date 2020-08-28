@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
-import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import org.slf4j.Logger;

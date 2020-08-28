@@ -6,7 +6,7 @@ import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 import com.dansoftware.libraryapp.gui.entry.EntryActivity;
 import com.dansoftware.libraryapp.gui.entry.Context;
-import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.entry.mainview.MainActivity;
 import com.dansoftware.libraryapp.main.ArgumentTransformer;
 import javafx.application.Platform;

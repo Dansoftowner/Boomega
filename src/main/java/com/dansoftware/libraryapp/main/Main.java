@@ -5,7 +5,7 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.gui.launcher.LauncherMode;
 import com.dansoftware.libraryapp.gui.theme.Theme;

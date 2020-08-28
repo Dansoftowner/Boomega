@@ -1,13 +1,12 @@
 package com.dansoftware.libraryapp.appdata;
 
-import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
-import com.dansoftware.libraryapp.gui.entry.login.data.LoginDataDeserializer;
-import com.dansoftware.libraryapp.gui.entry.login.data.LoginDataSerializer;
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
+import com.dansoftware.libraryapp.appdata.logindata.LoginDataDeserializer;
+import com.dansoftware.libraryapp.appdata.logindata.LoginDataSerializer;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

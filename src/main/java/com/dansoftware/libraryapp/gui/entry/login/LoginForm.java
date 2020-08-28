@@ -6,7 +6,8 @@ import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
-import com.dansoftware.libraryapp.gui.entry.login.data.LoginData;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.util.UniqueList;
@@ -14,12 +15,10 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,7 +27,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +46,7 @@ import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
  * a database. It's usually wrapped in a {@link LoginView}
  * object.
  */
-public class LoginForm extends StackPane implements Initializable {
+public class LoginForm extends StackPane implements Initializable, DatabaseTracker.Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginForm.class);
 
@@ -106,6 +104,8 @@ public class LoginForm extends StackPane implements Initializable {
         this.loadGui();
         this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
         this.fillForm(this.loginData);
+
+        DatabaseTracker.registerObserver(this);
     }
 
 
@@ -298,5 +298,29 @@ public class LoginForm extends StackPane implements Initializable {
         addListeners();
         //this.sourceChooser.setCellFactory(self -> new SourceChooserItem());
 
+    }
+
+    @Override
+    public void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        onDatabaseRemoved(databaseMeta);
+    }
+
+    @Override
+    public void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        onDatabaseAdded(databaseMeta);
+    }
+
+    @Override
+    public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
+        try {
+            this.predicatedDBList.add(databaseMeta);
+        } catch (Exception e) {
+            logger.error("Duplicate element added");
+        }
+    }
+
+    @Override
+    public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
+        this.predicatedDBList.remove(databaseMeta);
     }
 }

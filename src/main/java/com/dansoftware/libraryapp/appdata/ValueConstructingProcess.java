@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.appdata;
 
-import com.dansoftware.libraryapp.gui.entry.login.data.LoginDataDeserializer;
 import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 

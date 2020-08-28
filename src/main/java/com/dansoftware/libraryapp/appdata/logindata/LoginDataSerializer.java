@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry.login.data;
+package com.dansoftware.libraryapp.appdata.logindata;
 
 import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.DatabaseMeta;

@@ -1,12 +1,14 @@
 package com.dansoftware.libraryapp.db;
 
 import com.dansoftware.libraryapp.db.processor.DatabaseFactory;
+import com.dansoftware.libraryapp.db.processor.FailListener;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;
 import org.dizitart.no2.exceptions.ErrorMessage;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;

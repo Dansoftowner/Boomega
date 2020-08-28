@@ -1,16 +1,12 @@
-package com.dansoftware.libraryapp.gui.entry.login.data;
+package com.dansoftware.libraryapp.appdata.logindata;
 
 import com.dansoftware.libraryapp.db.Credentials;
 import com.google.gson.*;
 import org.jasypt.util.text.StrongTextEncryptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 
 public class CredentialsSerializer implements JsonSerializer<Credentials> {
-
-    private static final Logger logger = LoggerFactory.getLogger(CredentialsSerializer.class);
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -28,7 +24,6 @@ public class CredentialsSerializer implements JsonSerializer<Credentials> {
 
         String username = src.getUsername();
         String encryptedPassword = textEncryptor.encrypt(src.getPassword());
-        logger.debug("Enscrypted pass {}", encryptedPassword);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(USERNAME, username);
