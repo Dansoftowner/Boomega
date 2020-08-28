@@ -77,7 +77,7 @@ public class Main extends BaseApplication {
         UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO);
         UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
-        new InitActivityLauncher(getParameters().getRaw(), preferences, loginData, searchResult).launch();
+        new InitActivityLauncher(getApplicationArgs(), preferences, loginData, searchResult).launch();
     }
 
 
