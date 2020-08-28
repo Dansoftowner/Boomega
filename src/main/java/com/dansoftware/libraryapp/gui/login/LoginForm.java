@@ -53,6 +53,8 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     private static final Logger logger = LoggerFactory.getLogger(LoginForm.class);
 
+    private static final int LOGIN_FORM_INDEX = 2;
+
     @FXML
     private ComboBox<DatabaseMeta> sourceChooser;
 
@@ -274,9 +276,9 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
         this.dataSourceSelected.addListener((observable, oldValue, newValue) -> {
             //if there is selected element, we show the login form, otherwise we hide it
             if (newValue)
-                this.rootForm.getChildren().add(1, this.loginForm);
+                this.rootForm.getChildren().add(LOGIN_FORM_INDEX, this.loginForm);
             else
-                this.rootForm.getChildren().remove(this.loginForm);
+                this.rootForm.getChildren().remove(LOGIN_FORM_INDEX);
         });
 /*
         this.sourceChooser.getSelectionModel()
