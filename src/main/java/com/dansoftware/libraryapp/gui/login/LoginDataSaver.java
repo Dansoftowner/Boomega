@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry.login;
+package com.dansoftware.libraryapp.gui.login;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;

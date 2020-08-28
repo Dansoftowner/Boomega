@@ -8,7 +8,7 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.entry.EntryActivity;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
-import com.dansoftware.libraryapp.gui.entry.mainview.MainActivity;
+import com.dansoftware.libraryapp.gui.mainview.MainActivity;
 import com.dansoftware.libraryapp.main.ArgumentTransformer;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;

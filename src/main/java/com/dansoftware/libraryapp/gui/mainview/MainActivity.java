@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry.mainview;
+package com.dansoftware.libraryapp.gui.mainview;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;

@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry.login;
+package com.dansoftware.libraryapp.gui.login;
 
 import com.dansoftware.libraryapp.db.*;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
@@ -24,14 +24,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
