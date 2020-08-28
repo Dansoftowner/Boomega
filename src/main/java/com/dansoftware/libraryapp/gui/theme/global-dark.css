@@ -78,11 +78,13 @@
 .login-box {
     -fx-background-color: #3c3c40;
     -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
-    -fx-border-radius: 0, 0, 10, 10;
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
 }
 
 .login-box .source-adder {
-    -fx-border-radius: 0, 0, 10, 10;
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
 }
 
 .login-box .header .logo {
