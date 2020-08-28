@@ -47,22 +47,12 @@ public class EntryActivity implements Context, ChangeListener<Database> {
     private Context subContext;
 
     /**
-     * Creates a basic {@link EntryActivity} with empty {@link LoginData}.
-     *
-     * @see LoginData#empty()
-     * @see EntryActivity#EntryActivity(LoginData)
-     */
-    public EntryActivity() {
-        this(LoginData.empty());
-    }
-
-    /**
      * Creates an {@link EntryActivity} with the {@link LoginData}.
      *
      * @param loginData the login-data object that will be passed to the {@link LoginActivity}
      */
-    public EntryActivity(@NotNull LoginData loginData) {
-        this.loginActivity = new LoginActivity(loginData);
+    public EntryActivity(@NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
+        this.loginActivity = new LoginActivity(loginData, tracker);
         this.subContext = loginActivity;
         this.showing = new SimpleBooleanProperty();
         this.showing.bind(this.loginActivity.showingProperty());

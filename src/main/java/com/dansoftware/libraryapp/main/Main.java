@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
-import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
@@ -13,10 +12,12 @@ import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.sun.javafx.application.LauncherImpl;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -62,7 +63,7 @@ public class Main extends BaseApplication {
 
         //adding the saved databases from the login-data to DatabaseTracker
         LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-        loginData.getLastDatabases().forEach(DatabaseTracker::addDatabase);
+        loginData.getLastDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
 
         //setting the default locale
         Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
@@ -76,31 +77,7 @@ public class Main extends BaseApplication {
         UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO);
         UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
-
-        new ActivityLauncher(LauncherMode.INIT, getParameters().getRaw()) {
-            @Override
-            protected LoginData getLoginData() {
-                return loginData;
-            }
-
-            @Override
-            protected void saveLoginData(LoginData loginData) {
-                preferences.editor()
-                        .set(Preferences.Key.LOGIN_DATA, loginData)
-                        .tryCommit();
-            }
-
-            @Override
-            protected void onNewDatabaseAdded(DatabaseMeta databaseMeta) {
-                DatabaseTracker.addDatabase(databaseMeta);
-            }
-
-            @Override
-            protected void onActivityLaunched(Context context) {
-                UpdateActivity updateActivity = new UpdateActivity(context, searchResult);
-                updateActivity.show(false);
-            }
-        }.launch();
+        new InitActivityLauncher(getParameters().getRaw(), preferences, loginData, searchResult).launch();
     }
 
 
@@ -109,5 +86,43 @@ public class Main extends BaseApplication {
         //writing all configurations
         Preferences preferences = Preferences.getPreferences();
         preferences.editor().commit();
+    }
+
+    /**
+     * An {@link ActivityLauncher} implementation for starting the application.
+     */
+    private static final class InitActivityLauncher extends ActivityLauncher {
+
+        private final Preferences preferences;
+        private final LoginData loginData;
+        private final UpdateSearcher.UpdateSearchResult searchResult;
+
+        private InitActivityLauncher(@NotNull List<String> args,
+                                     @NotNull Preferences preferences,
+                                     @NotNull LoginData loginData,
+                                     @NotNull UpdateSearcher.UpdateSearchResult searchResult) {
+            super(LauncherMode.INIT, args);
+            this.preferences = preferences;
+            this.loginData = loginData;
+            this.searchResult = searchResult;
+        }
+
+        @Override
+        protected LoginData getLoginData() {
+            return loginData;
+        }
+
+        @Override
+        protected void saveLoginData(LoginData loginData) {
+            preferences.editor()
+                    .set(Preferences.Key.LOGIN_DATA, loginData)
+                    .tryCommit();
+        }
+
+        @Override
+        protected void onActivityLaunched(Context context) {
+            UpdateActivity updateActivity = new UpdateActivity(context, searchResult);
+            updateActivity.show(false);
+        }
     }
 }

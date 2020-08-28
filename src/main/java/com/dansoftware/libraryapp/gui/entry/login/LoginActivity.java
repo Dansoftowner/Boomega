@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import javafx.beans.property.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonType;
@@ -25,9 +26,9 @@ public class LoginActivity implements Context {
     private final ObjectProperty<Database> createdDatabase;
     private LoginView loginView;
 
-    public LoginActivity(@NotNull LoginData loginData) {
+    public LoginActivity(@NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
         this.showing = new SimpleBooleanProperty();
-        this.loginView = new LoginView(loginData);
+        this.loginView = new LoginView(loginData, tracker);
         this.createdDatabase = new SimpleObjectProperty<>();
         this.createdDatabase.bind(loginView.createdDatabaseProperty());
     }

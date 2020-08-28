@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.entry.EntryActivity;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
@@ -51,6 +52,7 @@ public abstract class ActivityLauncher implements Runnable {
 
     private final LauncherMode mode;
     private final DatabaseMeta argument;
+    private final DatabaseTracker databaseTracker;
 
     /**
      * Creates a basic ActivityLauncher with the {@link LauncherMode#INIT} mode.
@@ -62,7 +64,11 @@ public abstract class ActivityLauncher implements Runnable {
     /**
      * Creates an ActivityLauncher with a custom {@link LauncherMode}.
      *
+     * <p>
+     * It uses the global {@link DatabaseTracker} object for launching the activities
+     *
      * @param mode the "launcher-mode" that defines the behaviour
+     * @see DatabaseTracker#getGlobal()
      */
     public ActivityLauncher(@NotNull LauncherMode mode) {
         this(mode, Collections.emptyList());
@@ -71,9 +77,13 @@ public abstract class ActivityLauncher implements Runnable {
     /**
      * Creates an ActivityLauncher with custom {@link LauncherMode} and allows us to pass the application-arguments.
      *
+     * <p>
+     * It uses the global {@link DatabaseTracker} object for launching the activities.
+     *
      * @param mode   the "launcher-mode" that defines the behaviour
      * @param params the program-arguments
      * @see ArgumentTransformer#transform(List)
+     * @see DatabaseTracker#getGlobal()
      */
     public ActivityLauncher(@NotNull LauncherMode mode, @Nullable List<String> params) {
         this(mode, ArgumentTransformer.transform(params));
@@ -83,12 +93,29 @@ public abstract class ActivityLauncher implements Runnable {
      * Creates an ActivityLauncher with custom {@link LauncherMode} and with a {@link DatabaseMeta} object
      * that describes the database that the ActivityLauncher should launch.
      *
+     * <p>
+     * It uses the global {@link DatabaseTracker} object for launching the activities.
+     *
      * @param mode         the "launcher-mode" that defines the behaviour
      * @param databaseMeta the database-meta object
+     * @see DatabaseTracker#getGlobal()
      */
     public ActivityLauncher(@NotNull LauncherMode mode, @Nullable DatabaseMeta databaseMeta) {
+        this(mode, databaseMeta, DatabaseTracker.getGlobal());
+    }
+
+    /**
+     * Creates an ActivityLauncher with custom {@link LauncherMode}, custom {@link DatabaseTracker} and with a {@link DatabaseMeta} object
+     * that describes the database that the ActivityLauncher should launch.
+     *
+     * @param mode         the "launcher-mode" that defines the behaviour
+     * @param databaseMeta the database-meta object
+     * @param tracker      the {@link DatabaseTracker} object that will be used by the launched activity for updating it's content
+     */
+    public ActivityLauncher(@NotNull LauncherMode mode, @Nullable DatabaseMeta databaseMeta, @NotNull DatabaseTracker tracker) {
         this.mode = Objects.requireNonNull(mode, "The LauncherMode shouldn't be null");
         this.argument = databaseMeta;
+        this.databaseTracker = tracker;
     }
 
     /**
@@ -114,7 +141,7 @@ public abstract class ActivityLauncher implements Runnable {
                                 .onFailed((title, message, t) -> {
                                     logger.debug("failed signing into the database");
                                     Platform.runLater(() -> {
-                                        var entryActivity = new EntryActivity(getLoginData());
+                                        EntryActivity entryActivity = newBasicEntryActivity();
                                         entryActivity.show();
                                         entryActivity.showErrorDialog(title, message, (Exception) t);
                                         onActivityLaunched(entryActivity);
@@ -137,7 +164,7 @@ public abstract class ActivityLauncher implements Runnable {
                         logger.debug("auto-login is turned off, launching a basic EntryActivity...");
 
                         Platform.runLater(() -> {
-                            var entryActivity = new EntryActivity(getLoginData());
+                            EntryActivity entryActivity = newBasicEntryActivity();
                             entryActivity.show();
                             onActivityLaunched(entryActivity);
                         });
@@ -195,7 +222,7 @@ public abstract class ActivityLauncher implements Runnable {
                         //we select it, but we don't save it to the configurations
                         temp.setSelectedDatabase(argument);
 
-                        var entryActivity = new EntryActivity(temp);
+                        var entryActivity = new EntryActivity(temp, databaseTracker);
                         entryActivity.show();
                         entryActivity.showErrorDialog(title, message, (Exception) t);
                         onActivityLaunched(entryActivity);
@@ -212,6 +239,10 @@ public abstract class ActivityLauncher implements Runnable {
             });
         }
 
+    }
+
+    private EntryActivity newBasicEntryActivity() {
+        return new EntryActivity(getLoginData(), databaseTracker);
     }
 
     @Override
@@ -234,9 +265,15 @@ public abstract class ActivityLauncher implements Runnable {
     /**
      * Called, when a new database (from the arguments) is added to the login-data.
      *
+     * <p>
+     * The base method adds the {@link DatabaseMeta} object to the {@link DatabaseTracker}
+     * given to the {@link ActivityLauncher}.
+     *
      * @param databaseMeta the meta-information of the database
      */
-    protected abstract void onNewDatabaseAdded(DatabaseMeta databaseMeta);
+    protected void onNewDatabaseAdded(DatabaseMeta databaseMeta) {
+        databaseTracker.addDatabase(databaseMeta);
+    }
 
     /**
      * Called on the UI-thread, when an "Activity" is launched

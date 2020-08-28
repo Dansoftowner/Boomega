@@ -81,7 +81,7 @@ public class InstanceService implements MessageHandler {
 
         private LoginData buildLoginData() {
             //removing all already opened databases from the LoginData
-            Set<DatabaseMeta> databaseUsing = DatabaseTracker.getUsingDatabases();
+            Set<DatabaseMeta> databaseUsing = DatabaseTracker.getGlobal().getUsingDatabases();
             LoginData loginData = Preferences.getPreferences().get(Preferences.Key.LOGIN_DATA);
             loginData.getLastDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);
@@ -105,7 +105,7 @@ public class InstanceService implements MessageHandler {
 
         @Override
         protected void onNewDatabaseAdded(DatabaseMeta databaseMeta) {
-            DatabaseTracker.addDatabase(databaseMeta);
+            DatabaseTracker.getGlobal().addDatabase(databaseMeta);
         }
 
         @Override

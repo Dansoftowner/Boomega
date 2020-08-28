@@ -91,12 +91,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     private ObservableValue<Boolean> dataSourceSelected;
 
-    LoginForm(@NotNull LoginView loginView) {
-        //calling with empty login-data
-        this(loginView, new LoginData());
-    }
-
-    LoginForm(@NotNull LoginView loginView, @NotNull LoginData loginData) {
+    LoginForm(@NotNull LoginView loginView, @NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.loginView = Objects.requireNonNull(loginView, "The LoginView shouldn't be null");
         this.createdDatabase = new SimpleObjectProperty<>(this, "createdDatabase");
@@ -105,7 +100,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
         this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
         this.fillForm(this.loginData);
 
-        DatabaseTracker.registerObserver(this);
+        tracker.registerObserver(this);
     }
 
 

@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.entry.login;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.info.InfoView;
 import com.dansoftware.libraryapp.gui.info.InfoWindow;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
@@ -27,13 +28,9 @@ public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable 
     private final LoginForm loginForm;
     private final ObjectProperty<Database> createdDatabase;
 
-    public LoginView() {
-        this(LoginData.empty());
-    }
-
-    public LoginView(@NotNull LoginData loginData) {
+    public LoginView(@NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
         super("LibraryApp", new MaterialDesignIconView(MaterialDesignIcon.BOOK));
-        super.setContent(loginForm = new LoginForm(this, loginData));
+        super.setContent(loginForm = new LoginForm(this, loginData, tracker));
         this.createdDatabase = new SimpleObjectProperty<>();
         this.init();
     }
