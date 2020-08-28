@@ -53,7 +53,9 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     private static final Logger logger = LoggerFactory.getLogger(LoginForm.class);
 
-    private static final int LOGIN_FORM_INDEX = 2;
+    private static final String STYLE_CLASS = "login-form";
+
+    private static final int LOGIN_BOX_INDEX = 2;
 
     @FXML
     private ComboBox<DatabaseMeta> sourceChooser;
@@ -103,7 +105,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
         this.loginView = Objects.requireNonNull(loginView, "The LoginView shouldn't be null");
         this.databaseTracker = Objects.requireNonNull(tracker, "The DatabaseTracker shouldn't be null");
         this.createdDatabase = new SimpleObjectProperty<>(this, "createdDatabase");
-        this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        this.getStyleClass().add(STYLE_CLASS);
         this.loadGui();
         this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
         this.fillForm(this.loginData);
@@ -276,9 +278,9 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
         this.dataSourceSelected.addListener((observable, oldValue, newValue) -> {
             //if there is selected element, we show the login form, otherwise we hide it
             if (newValue)
-                this.rootForm.getChildren().add(LOGIN_FORM_INDEX, this.loginForm);
+                this.rootForm.getChildren().add(LOGIN_BOX_INDEX, this.loginForm);
             else
-                this.rootForm.getChildren().remove(LOGIN_FORM_INDEX);
+                this.rootForm.getChildren().remove(LOGIN_BOX_INDEX);
         });
 /*
         this.sourceChooser.getSelectionModel()

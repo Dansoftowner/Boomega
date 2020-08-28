@@ -65,6 +65,10 @@
 
 /** LOGIN VIEW **/
 
+.login-form {
+    -fx-background-image: url("/com/dansoftware/libraryapp/image/login/background-light.jpg");
+}
+
 .login-box {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);

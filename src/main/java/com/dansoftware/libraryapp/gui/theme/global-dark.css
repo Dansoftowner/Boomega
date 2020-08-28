@@ -70,6 +70,10 @@
 }
 
 /** LOGIN VIEW **/
+.login-form {
+    -fx-background-image: url("/com/dansoftware/libraryapp/image/login/background-dark.jpg");
+}
+
 
 .login-box {
     -fx-background-color: #3c3c40;

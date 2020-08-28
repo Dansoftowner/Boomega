@@ -30,8 +30,9 @@ public class LoginView extends SimpleHeaderView<LoginForm> implements Themeable 
 
     public LoginView(@NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
         super("LibraryApp", new MaterialDesignIconView(MaterialDesignIcon.BOOK));
-        super.setContent(loginForm = new LoginForm(this, loginData, tracker));
         this.createdDatabase = new SimpleObjectProperty<>();
+        this.loginForm = new LoginForm(this, loginData, tracker);
+        this.setContent(loginForm);
         this.init();
     }
 
