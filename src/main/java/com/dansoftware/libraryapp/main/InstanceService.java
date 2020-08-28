@@ -45,11 +45,7 @@ public class InstanceService implements MessageHandler {
             logger.info("An application is already running with the id: '" + e.getID() + "'");
             logger.info("Sending the arguments to the already running instance...");
 
-            if (ArrayUtils.isEmpty(args)) {
-                JUnique.sendMessage(APPLICATION_ID, StringUtils.EMPTY);
-            } else {
-                JUnique.sendMessage(APPLICATION_ID, args[0]);
-            }
+            JUnique.sendMessage(APPLICATION_ID, ArrayUtils.isEmpty(args) ? StringUtils.EMPTY : args[0]);
 
             logger.info("Exiting...");
             System.exit(0);
