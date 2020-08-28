@@ -15,18 +15,23 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -85,6 +90,8 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
      */
     private final List<DatabaseMeta> predicatedDBList;
 
+    private final DatabaseTracker databaseTracker;
+
     private final LoginData loginData;
 
     private final LoginView loginView;
@@ -94,13 +101,14 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
     LoginForm(@NotNull LoginView loginView, @NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.loginView = Objects.requireNonNull(loginView, "The LoginView shouldn't be null");
+        this.databaseTracker = Objects.requireNonNull(tracker, "The DatabaseTracker shouldn't be null");
         this.createdDatabase = new SimpleObjectProperty<>(this, "createdDatabase");
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.loadGui();
         this.predicatedDBList = new UniqueList<>(sourceChooser.getItems());
         this.fillForm(this.loginData);
 
-        tracker.registerObserver(this);
+        this.databaseTracker.registerObserver(this);
     }
 
 
@@ -242,7 +250,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     @FXML
     private void openDBManager() {
-        DBManagerView view = new DBManagerView(this.predicatedDBList);
+        DBManagerView view = new DBManagerView(this.predicatedDBList, this.databaseTracker);
         DBManagerWindow window = new DBManagerWindow(view, WindowUtils.getStageOf(this));
         window.show();
     }
@@ -285,6 +293,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
         this.rootForm.getChildren().remove(this.loginForm);
         this.fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
         this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
+        this.sourceChooser.setCellFactory(col -> new SourceChooserItem());
     }
 
     @Override
@@ -295,27 +304,67 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     }
 
+    private <T> void refreshComboBox(ComboBox<T> comboBox) {
+        ObservableList<T> items = comboBox.getItems();
+        T selected = comboBox.getSelectionModel().getSelectedItem();
+        comboBox.setItems(null);
+        comboBox.setItems(items);
+        comboBox.getSelectionModel().select(selected);
+    }
+
     @Override
     public void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        onDatabaseRemoved(databaseMeta);
+        Platform.runLater(() -> {
+            refreshComboBox(this.sourceChooser);
+            if (databaseMeta.equals(sourceChooser.getSelectionModel().getSelectedItem())) {
+                sourceChooser.getSelectionModel().select(null);
+            }
+        });
     }
 
     @Override
     public void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        onDatabaseAdded(databaseMeta);
+        Platform.runLater(() -> refreshComboBox(this.sourceChooser));
     }
 
     @Override
     public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
-        try {
-            this.predicatedDBList.add(databaseMeta);
-        } catch (Exception e) {
-            logger.error("Duplicate element added");
-        }
+        Platform.runLater(() -> {
+            try {
+                this.predicatedDBList.add(databaseMeta);
+            } catch (UniqueList.DuplicateElementException e) {
+                logger.error("Duplicate element added");
+            }
+        });
     }
 
     @Override
     public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
-        this.predicatedDBList.remove(databaseMeta);
+        Platform.runLater(() -> this.predicatedDBList.remove(databaseMeta));
+    }
+
+    private class SourceChooserItem extends ListCell<DatabaseMeta> {
+        @Override
+        protected void updateItem(DatabaseMeta item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item == null || empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                setText(item.toString());
+                if (databaseTracker.isDatabaseUsed(item)) {
+                    var mark = new Circle(3) {{
+                        getStyleClass().add("state-circle-used");
+                    }};
+
+                    setDisable(true);
+                    setGraphic(mark);
+                } else {
+                    setGraphic(null);
+                    setDisable(false);
+                    setTooltip(null);
+                }
+            }
+        }
     }
 }

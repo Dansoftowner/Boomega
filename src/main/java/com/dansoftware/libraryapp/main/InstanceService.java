@@ -42,7 +42,7 @@ public class InstanceService implements MessageHandler {
         try {
             JUnique.acquireLock(APPLICATION_ID, this);
         } catch (AlreadyLockedException e) {
-            logger.info("An application is already running with the id: '" + APPLICATION_ID + "'");
+            logger.info("An application is already running with the id: '" + e.getID() + "'");
             logger.info("Sending the arguments to the already running instance...");
 
             if (ArrayUtils.isEmpty(args)) {
@@ -101,11 +101,6 @@ public class InstanceService implements MessageHandler {
                     .editor()
                     .put(Preferences.Key.LOGIN_DATA, loginData)
                     .tryCommit();
-        }
-
-        @Override
-        protected void onNewDatabaseAdded(DatabaseMeta databaseMeta) {
-            DatabaseTracker.getGlobal().addDatabase(databaseMeta);
         }
 
         @Override

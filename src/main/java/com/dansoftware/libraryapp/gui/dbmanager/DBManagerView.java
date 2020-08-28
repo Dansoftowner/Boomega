@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
@@ -32,9 +33,9 @@ public class DBManagerView extends SimpleHeaderView<DBManagerTable> implements T
      *
      * @param items the items to be displayed.
      */
-    public DBManagerView(@NotNull List<DatabaseMeta> items) {
+    public DBManagerView(@NotNull List<DatabaseMeta> items, @NotNull DatabaseTracker databaseTracker) {
         super(I18N.getGeneralWord("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
-        super.setContent(new DBManagerTable(this, items));
+        super.setContent(new DBManagerTable(this, databaseTracker, items));
         this.createToolbarControls();
     }
 

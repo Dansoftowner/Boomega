@@ -90,9 +90,16 @@ public class UniqueList<T> implements List<T> {
         return decorated.containsAll(c);
     }
 
+    private void safeAdd(T object) {
+        try {
+            add(object);
+        } catch (DuplicateElementException e) {
+        }
+    }
+
     @Override
     public boolean addAll(@NotNull Collection<? extends T> c) {
-        c.forEach(this::add);
+        c.forEach(this::safeAdd);
         return true;
     }
 

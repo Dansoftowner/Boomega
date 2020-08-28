@@ -1,17 +1,19 @@
 package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
-import com.jfilegoodies.FileGoodies;
-import com.jfilegoodies.explorer.FileExplorer;
 import com.jfilegoodies.explorer.FileExplorers;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.SVGPath;
 import javafx.util.Callback;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * A DBManagerTable is a {@link TableView} that is used for managing (monitoring, deleting) databases.
@@ -29,30 +32,60 @@ import java.util.Objects;
  * @author Daniel Gyorffy
  * @see DBManagerView
  */
-public class DBManagerTable extends TableView<DatabaseMeta> {
+public class DBManagerTable extends TableView<DatabaseMeta>
+        implements DatabaseTracker.Observer {
 
     private final DBManagerView parent;
     private final List<DatabaseMeta> databaseList;
+    private final DatabaseTracker databaseTracker;
 
     public DBManagerTable(@NotNull DBManagerView parent,
+                          @NotNull DatabaseTracker databaseTracker,
                           @NotNull List<DatabaseMeta> databaseList) {
         this.parent = parent;
         this.databaseList = databaseList;
+        this.databaseTracker = databaseTracker;
+        this.databaseTracker.registerObserver(this);
         this.init(databaseList);
     }
 
     private void init(List<DatabaseMeta> databases) {
         this.getItems().addAll(databases);
         this.setPlaceholder(new Label(I18N.getGeneralWord("database.manager.table.place.holder")));
-        this.getColumns().addAll(
+        Stream.of(
                 new StateColumn(),
                 new NameColumn(),
                 new PathColumn(),
                 new SizeColumn(),
                 new FileOpenerColumn(),
                 new DeleteColumn()
-        );
+        ).forEach(this.getColumns()::add);
+
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+
+    @Override
+    public void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        Platform.runLater(this::refresh);
+    }
+
+    @Override
+    public void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        Platform.runLater(this::refresh);
+    }
+
+    @Override
+    public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
+        Platform.runLater(() -> {
+            this.getItems().add(databaseMeta);
+        });
+    }
+
+    @Override
+    public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
+        Platform.runLater(() -> {
+            this.getItems().remove(databaseMeta);
+        });
     }
 
 
@@ -61,7 +94,7 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
     /**
      * The state-column shows an error-mark (red circle) if the particular database does not exist.
      */
-    private static final class StateColumn extends TableColumn<DatabaseMeta, String>
+    private final class StateColumn extends TableColumn<DatabaseMeta, String>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         StateColumn() {
@@ -75,6 +108,8 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
         @Override
         public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
             return new TableCell<>() {
+                private final Node stateIndicator = new Circle(5);
+
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -83,19 +118,20 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
                         setText(null);
                         setTooltip(null);
                     } else {
-                        Circle stateCircle = new Circle(5);
-
-                        DatabaseMeta databaseMeta = getTableRow().getItem();
+                        DatabaseMeta databaseMeta = getTableView().getItems().get(getIndex());
                         File dbFile = databaseMeta.getFile();
                         if (!dbFile.exists() || dbFile.isDirectory()) {
-                            stateCircle.getStyleClass().add("state-circle-error");
+                            stateIndicator.getStyleClass().add("state-circle-error");
                             setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.error.not.exists")));
+                        } else if (DBManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
+                            stateIndicator.getStyleClass().add("state-circle-used");
+                            setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.used")));
                         } else {
-                            stateCircle.getStyleClass().add("state-circle-ok");
+                            stateIndicator.getStyleClass().add("state-circle-ok");
                             setTooltip(null);
                         }
 
-                        setGraphic(stateCircle);
+                        setGraphic(stateIndicator);
                     }
                 }
             };
@@ -146,7 +182,7 @@ public class DBManagerTable extends TableView<DatabaseMeta> {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        DatabaseMeta databaseMeta = getTableRow().getItem();
+                        DatabaseMeta databaseMeta = getTableView().getItems().get(getIndex());
                         File dbFile = databaseMeta.getFile();
                         if (dbFile.exists() && !dbFile.isDirectory()) {
                             long size = FileUtils.sizeOf(dbFile);

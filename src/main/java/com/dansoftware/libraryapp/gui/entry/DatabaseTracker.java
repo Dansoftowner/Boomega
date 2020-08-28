@@ -4,6 +4,8 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -25,6 +27,8 @@ import java.util.function.Consumer;
  */
 public class DatabaseTracker {
 
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseTracker.class);
+
     private static DatabaseTracker globalInstance;
 
     private final List<WeakReference<Observer>> observers =
@@ -43,10 +47,18 @@ public class DatabaseTracker {
             FXCollections.unmodifiableObservableSet(usingDatabases);
 
     private void iterateObservers(Consumer<Observer> observerConsumer) {
+        Consumer<Observer> safeConsumer = observer -> {
+            try {
+                observerConsumer.accept(observer);
+            } catch (Exception e) {
+                logger.error("exception caught from observer", e);
+            }
+        };
+
         observers.stream()
                 .map(WeakReference::get)
                 .filter(Objects::nonNull)
-                .forEach(observerConsumer);
+                .forEach(safeConsumer);
     }
 
     public void closingDatabase(DatabaseMeta databaseMeta) {
@@ -92,6 +104,22 @@ public class DatabaseTracker {
         return observers.stream()
                 .filter(ref -> ref.get() == observer)
                 .findAny();
+    }
+
+    public boolean isDatabaseSaved(DatabaseMeta databaseMeta) {
+        return savedDatabases.contains(databaseMeta);
+    }
+
+    public boolean isDatabaseNotSaved(DatabaseMeta databaseMeta) {
+        return !isDatabaseSaved(databaseMeta);
+    }
+
+    public boolean isDatabaseClosed(DatabaseMeta databaseMeta) {
+        return !isDatabaseUsed(databaseMeta);
+    }
+
+    public boolean isDatabaseUsed(DatabaseMeta databaseMeta) {
+        return usingDatabases.contains(databaseMeta);
     }
 
     public ObservableSet<DatabaseMeta> getSavedDatabases() {

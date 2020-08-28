@@ -58,7 +58,7 @@
     -fx-text-alignment: center;
 }
 
-/* Dock-styles */
+/*!* Dock-styles *!
 .border-button {
     -fx-background-color: transparent;
     -fx-min-height: 20px;
@@ -99,12 +99,12 @@
     -fx-padding: 0 20 0 20;
 }
 
-/* Dock-node*/
+!* Dock-node*!
 .dock-node {
-    /*-fx-border-color: #D1D1D1;*/
+    !*-fx-border-color: #D1D1D1;*!
 }
 .dock-title-bar {
-    /*-fx-background-color: #F4F4F4;*/
+    !*-fx-background-color: #F4F4F4;*!
     -fx-background-color: #E2E6EC;
     -fx-pref-height: 28px;
     -fx-border-width: 0 0 1 0;
@@ -182,7 +182,7 @@
 
 .top-left{
     -fx-image: url(/com/dansoftware/libraryapp/image/dock/pos/top_left_black.png);
-}
+}*/
 
 /*Some tab pane trifles*/
 .tab .tab-close-button:hover {
@@ -216,6 +216,10 @@
 
 .state-circle-ok {
     -fx-fill: transparent;
+}
+
+.state-circle-used {
+    -fx-fill: darkgray;
 }
 
 /**
