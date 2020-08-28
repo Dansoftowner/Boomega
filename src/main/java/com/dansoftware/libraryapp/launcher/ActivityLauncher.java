@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.launcher;
+package com.dansoftware.libraryapp.launcher;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;

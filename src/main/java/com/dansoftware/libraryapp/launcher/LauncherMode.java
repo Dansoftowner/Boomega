@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.launcher;
+package com.dansoftware.libraryapp.launcher;
 
 /**
  * Defines the "modes" of an {@link ActivityLauncher}.
