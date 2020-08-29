@@ -5,6 +5,9 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.explorer.FileExplorers;
+import com.jfilegoodies.explorer.WindowsFileExplorer;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
@@ -13,12 +16,16 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.util.Callback;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -34,6 +41,8 @@ import java.util.stream.Stream;
  */
 public class DBManagerTable extends TableView<DatabaseMeta>
         implements DatabaseTracker.Observer {
+
+    private static final Logger logger = LoggerFactory.getLogger(DBManagerTable.class);
 
     private final DBManagerView parent;
     private final List<DatabaseMeta> databaseList;
@@ -101,14 +110,16 @@ public class DBManagerTable extends TableView<DatabaseMeta>
             setReorderable(false);
             setSortable(false);
             setResizable(false);
-            setPrefWidth(25);
+            setPrefWidth(30);
             setCellFactory(this);
         }
 
         @Override
         public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
             return new TableCell<>() {
-                private final Node stateIndicator = new Circle(5);
+
+                private static final String NOT_EXISTS_CLASS = "state-indicator-file-not-exists";
+                private static final String USED_CLASS = "state-indicator-used";
 
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -118,20 +129,24 @@ public class DBManagerTable extends TableView<DatabaseMeta>
                         setText(null);
                         setTooltip(null);
                     } else {
+
                         DatabaseMeta databaseMeta = getTableView().getItems().get(getIndex());
                         File dbFile = databaseMeta.getFile();
                         if (!dbFile.exists() || dbFile.isDirectory()) {
-                            stateIndicator.getStyleClass().add("state-circle-error");
-                            setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.error.not.exists")));
+                            var indicator = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
+                            indicator.getStyleClass().add(NOT_EXISTS_CLASS);
+                            setGraphic(indicator);
+                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.error.not.exists")));
                         } else if (DBManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
-                            stateIndicator.getStyleClass().add("state-circle-used");
-                            setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.used")));
+                            var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
+                            indicator.getStyleClass().add(USED_CLASS);
+                            setGraphic(indicator);
+                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.used")));
                         } else {
-                            stateIndicator.getStyleClass().add("state-circle-ok");
-                            setTooltip(null);
+                            setGraphic(null);
+                            getTableRow().setTooltip(null);
                         }
 
-                        setGraphic(stateIndicator);
                     }
                 }
             };
@@ -204,17 +219,12 @@ public class DBManagerTable extends TableView<DatabaseMeta>
     private static final class FileOpenerColumn extends TableColumn<DatabaseMeta, String>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
-        private final FileExplorers.LazyExplorer fileExplorer;
-
         FileOpenerColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.open"));
             setMinWidth(90);
             setSortable(false);
             setReorderable(false);
             setCellFactory(this);
-
-            //creating the FileExplorer object
-            this.fileExplorer = FileExplorers.getLazy();
         }
 
         @Override
@@ -236,7 +246,7 @@ public class DBManagerTable extends TableView<DatabaseMeta>
                                 .getSelectedItems()
                                 .stream()
                                 .map(DatabaseMeta::getFile)
-                                .forEach(fileExplorer::openSelect));
+                                .forEach(FileExplorers.getLazy()::openSelect));
                         openButton.disableProperty().bind(getTableRow().selectedProperty().not());
                         setGraphic(openButton);
                     }

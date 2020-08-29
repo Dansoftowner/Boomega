@@ -102,16 +102,12 @@
 }
 
 /*DBManagerTable*/
-.state-circle-error {
+.state-indicator-file-not-exists {
     -fx-fill: #B00020;
 }
 
-.state-circle-ok {
-    -fx-fill: transparent;
-}
-
-.state-circle-used {
-    -fx-fill: darkgray;
+.state-indicator-used {
+    -fx-fill: green;
 }
 
 /**

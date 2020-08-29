@@ -73,7 +73,7 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
     implementation group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
-    implementation 'com.github.Dansoftowner:jFileGoodies:1.2'
+    implementation 'com.github.Dansoftowner:jFileGoodies:1.2.2'
 
     //javaFX libraries
     implementation 'com.jfoenix:jfoenix:9.0.9'
