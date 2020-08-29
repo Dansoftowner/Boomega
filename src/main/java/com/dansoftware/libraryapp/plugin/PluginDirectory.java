@@ -37,6 +37,9 @@ public class PluginDirectory extends File {
 
     public PluginDirectory() {
         super(PATH);
+        if (!exists()) {
+            mkdirs();
+        }
     }
 
     /**
