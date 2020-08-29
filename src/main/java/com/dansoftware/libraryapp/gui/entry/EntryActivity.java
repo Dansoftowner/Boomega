@@ -4,18 +4,19 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * An {@link EntryActivity} puts the {@link LoginActivity} and {@link MainActivity} activity together.
@@ -35,34 +36,23 @@ import java.util.function.Consumer;
  */
 public class EntryActivity implements Context, ChangeListener<Database> {
 
-    private static final ObservableSet<EntryActivity> showingEntries =
-            FXCollections.synchronizedObservableSet(FXCollections.observableSet());
-
-    private static final ObservableSet<EntryActivity> showingEntriesUnmodifiable =
-            FXCollections.unmodifiableObservableSet(showingEntries);
-
-    private final BooleanProperty showing;
-    private final LoginActivity loginActivity;
+    private static final List<WeakReference<EntryActivity>> instances =
+            Collections.synchronizedList(new LinkedList<>());
 
     private Context subContext;
+    private final LoginData loginData;
+    private final DatabaseTracker databaseTracker;
 
     /**
      * Creates an {@link EntryActivity} with the {@link LoginData}.
      *
-     * @param loginData the login-data object that will be passed to the {@link LoginActivity}
+     * @param loginData       the login-data object that will be passed to the {@link LoginActivity}
+     * @param databaseTracker the {@link DatabaseTracker} object for observing other databases
      */
-    public EntryActivity(@NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
-        this.loginActivity = new LoginActivity(loginData, tracker);
-        this.subContext = loginActivity;
-        this.showing = new SimpleBooleanProperty();
-        this.showing.bind(this.loginActivity.showingProperty());
-        this.showing.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                EntryActivity.showingEntries.add(this);
-            } else {
-                EntryActivity.showingEntries.remove(this);
-            }
-        });
+    public EntryActivity(@NotNull LoginData loginData, @NotNull DatabaseTracker databaseTracker) {
+        instances.add(new WeakReference<>(this));
+        this.loginData = loginData;
+        this.databaseTracker = databaseTracker;
     }
 
     @Override
@@ -70,8 +60,6 @@ public class EntryActivity implements Context, ChangeListener<Database> {
         if (createdDatabase != null) {
             var mainActivity = new MainActivity(createdDatabase);
             this.subContext = mainActivity;
-            this.showing.unbind();
-            this.showing.bind(mainActivity.showingProperty());
             mainActivity.show();
 
             //removing this object from the listeners
@@ -83,60 +71,68 @@ public class EntryActivity implements Context, ChangeListener<Database> {
      * Starts the {@link EntryActivity}.
      */
     public void show() {
+        var loginActivity = new LoginActivity(loginData, databaseTracker);
+        this.subContext = loginActivity;
         loginActivity.show();
         loginActivity.createdDatabaseProperty().addListener(this);
     }
 
     public boolean isShowing() {
-        return showing.get();
-    }
-
-    public ReadOnlyBooleanProperty showingProperty() {
-        return showing;
+        return subContext != null && subContext.isShowing();
     }
 
     @Override
     public void showOverlay(Region region) {
-        this.subContext.showOverlay(region);
+        if (subContext != null)
+            this.subContext.showOverlay(region);
     }
 
     @Override
     public void showOverlay(Region region, boolean blocking) {
-        this.subContext.showOverlay(region, blocking);
+        if (subContext != null)
+            this.subContext.showOverlay(region, blocking);
     }
 
     @Override
     public void hideOverlay(Region region) {
-        this.subContext.hideOverlay(region);
+        if (subContext != null)
+            this.subContext.hideOverlay(region);
     }
 
     @Override
     public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-        this.subContext.showErrorDialog(title, message, onResult);
+        if (subContext != null)
+            this.subContext.showErrorDialog(title, message, onResult);
     }
 
     @Override
     public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        this.subContext.showErrorDialog(title, message, exception, onResult);
+        if (subContext != null)
+            this.subContext.showErrorDialog(title, message, exception, onResult);
     }
 
     @Override
     public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        this.subContext.showInformationDialog(title, message, onResult);
+        if (subContext != null)
+            this.subContext.showInformationDialog(title, message, onResult);
     }
 
     @Override
     public void requestFocus() {
-        this.subContext.requestFocus();
+        if (subContext != null)
+            this.subContext.requestFocus();
     }
 
     /**
-     * Returns a read-only set that contains all {@link EntryActivity} objects that is
-     * showing.
+     * Returns a list of {@link EntryActivity} objects that are showing.
      *
-     * @return the set of AppEntry objects.
+     * @return the {@link EntryActivity} list
      */
-    public static ObservableSet<EntryActivity> getShowingEntries() {
-        return showingEntriesUnmodifiable;
+    public static List<EntryActivity> getShowingEntries() {
+        return instances.stream()
+                .map(WeakReference::get)
+                .filter(Objects::nonNull)
+                .filter(EntryActivity::isShowing)
+                .collect(Collectors.toList());
     }
 }
