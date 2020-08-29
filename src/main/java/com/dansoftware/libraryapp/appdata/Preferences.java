@@ -6,7 +6,6 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginDataSerializer;
 import com.dansoftware.libraryapp.appdata.theme.ThemeDeserializer;
 import com.dansoftware.libraryapp.appdata.theme.ThemeSerializer;
 import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Consumer;
