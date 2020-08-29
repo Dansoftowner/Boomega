@@ -3,6 +3,8 @@ package com.dansoftware.libraryapp.appdata;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.appdata.logindata.LoginDataDeserializer;
 import com.dansoftware.libraryapp.appdata.logindata.LoginDataSerializer;
+import com.dansoftware.libraryapp.appdata.theme.ThemeDeserializer;
+import com.dansoftware.libraryapp.appdata.theme.ThemeSerializer;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.google.gson.*;
@@ -39,6 +41,8 @@ public class Preferences {
     private static final Logger logger = LoggerFactory.getLogger(Preferences.class);
 
     private static Preferences DEFAULT;
+
+    private Gson gsonCache;
 
     /**
      * The backing JsonObject that actually holds the data
@@ -105,7 +109,7 @@ public class Preferences {
                               @Nullable T value) {
             JsonElement element = null;
             if (value != null)
-                element = key.exportingProcess.export(value);
+                element = getGson().toJsonTree(value);
 
             Preferences.this.jsonObject.add(key.jsonKey, element);
             return this;
@@ -180,6 +184,16 @@ public class Preferences {
         return new Editor();
     }
 
+    //
+    private Gson getGson() {
+        return gsonCache != null ? gsonCache : (gsonCache = new GsonBuilder()
+                .registerTypeAdapter(LoginData.class, new LoginDataSerializer())
+                .registerTypeAdapter(LoginData.class, new LoginDataDeserializer())
+                .registerTypeAdapter(Theme.class, new ThemeSerializer())
+                .registerTypeAdapter(Theme.class, new ThemeDeserializer())
+                .create());
+    }
+
     // ------> Methods for reading data
 
     public <T> T get(@NotNull Key<T> key) {
@@ -188,7 +202,7 @@ public class Preferences {
             return key.defaultValue.get();
         }
 
-        T value = key.constructingProcess.construct(jsonElement);
+        T value = getGson().fromJson(jsonElement, key.type);
         return Objects.isNull(value) ? key.defaultValue.get() : value;
     }
 
@@ -270,24 +284,15 @@ public class Preferences {
     public static class Key<T> {
 
         private final String jsonKey;
+        private final Class<T> type;
         private final Supplier<@NotNull T> defaultValue;
-        private final ValueConstructingProcess<T> constructingProcess;
-        private final ValueExportingProcess<T> exportingProcess;
 
         public Key(@NotNull String jsonKey,
                    @NotNull Class<T> type,
                    @NotNull Supplier<@NotNull T> defaultValue) {
-            this(jsonKey, defaultValue, ValueConstructingProcess.defaultProcess(type), ValueExportingProcess.defaultProcess());
-        }
-
-        public Key(@NotNull String jsonKey,
-                   @NotNull Supplier<T> defaultValue,
-                   @NotNull ValueConstructingProcess<T> constructingProcess,
-                   @NotNull ValueExportingProcess<T> valueExportingProcess) {
             this.jsonKey = jsonKey;
+            this.type = type;
             this.defaultValue = defaultValue;
-            this.constructingProcess = constructingProcess;
-            this.exportingProcess = valueExportingProcess;
         }
 
         public static <T> Key<T> createKey(@NotNull Class<T> type, @NotNull Supplier<@NotNull T> defaultValue) {
@@ -302,12 +307,7 @@ public class Preferences {
         /**
          * Key for accessing the login data
          */
-        public static final Key<LoginData> LOGIN_DATA = new Key<>(
-                "loginData",
-                LoginData::new,
-                ValueConstructingProcess.customDeserializationProcess(LoginData.class, new LoginDataDeserializer()),
-                ValueExportingProcess.customSerializationProcess(LoginData.class, new LoginDataSerializer())
-        );
+        public static final Key<LoginData> LOGIN_DATA = new Key<>("loginData", LoginData.class, LoginData::new);
 
         /**
          * Key for accessing that the automatic update-searching is turned on or off
@@ -317,16 +317,6 @@ public class Preferences {
         /**
          * Key for accessing the configured theme
          */
-        public static final Key<Theme> THEME = new Key<>("theme", Theme::getDefault, element -> {
-            try {
-                Class<?> themeClass = PluginClassLoader.getInstance().loadClass(element.getAsString());
-                Constructor<?> constructor = themeClass.getConstructor();
-                constructor.setAccessible(true);
-                return (Theme) constructor.newInstance();
-            } catch (ReflectiveOperationException | ClassCastException e) {
-                Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
-                return null;
-            }
-        }, value -> new JsonPrimitive(value.getClass().getName()));
+        public static final Key<Theme> THEME = new Key<>("theme", Theme.class, Theme::getDefault);
     }
 }
