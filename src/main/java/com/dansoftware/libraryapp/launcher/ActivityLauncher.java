@@ -189,7 +189,7 @@ public abstract class ActivityLauncher implements Runnable {
                                 .stream()
                                 .limit(1)
                                 .findAny()
-                                .ifPresent(EntryActivity::requestFocus);
+                                .ifPresent(EntryActivity::toFront);
                     });
                 } else {
                     //there is argument
@@ -198,7 +198,7 @@ public abstract class ActivityLauncher implements Runnable {
                     //if there is an Activity opened with the database we focus on that,
                     // otherwise we open a new activity for it
                     MainActivity.getByDatabase(argument)
-                            .ifPresentOrElse(MainActivity::requestFocus, this::handleArgument);
+                            .ifPresentOrElse(MainActivity::toFront, this::handleArgument);
                 }
                 break;
         }

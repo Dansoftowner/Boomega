@@ -71,6 +71,11 @@ public class MainActivity implements Context {
 
     }
 
+    @Override
+    public void toFront() {
+
+    }
+
     public static Optional<MainActivity> getByDatabase(DatabaseMeta databaseMeta) {
         return Optional.empty();
     }

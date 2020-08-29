@@ -4,11 +4,14 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import javafx.beans.property.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -52,12 +55,13 @@ public class LoginActivity implements Context {
         return Optional.ofNullable(createdDatabase.get());
     }
 
-    public boolean isShowing() {
-        return showing.get();
-    }
-
     public ReadOnlyBooleanProperty showingProperty() {
         return showing;
+    }
+
+    @Override
+    public boolean isShowing() {
+        return showing.get();
     }
 
     @Override
@@ -94,6 +98,11 @@ public class LoginActivity implements Context {
 
     @Override
     public void requestFocus() {
-        this.loginView.getScene().getWindow().requestFocus();
+        WindowUtils.getWindowOptionalOf(this.loginView).ifPresent(Window::requestFocus);
+    }
+
+    @Override
+    public void toFront() {
+        WindowUtils.getStageOptionalOf(this.loginView).ifPresent(Stage::toFront);
     }
 }

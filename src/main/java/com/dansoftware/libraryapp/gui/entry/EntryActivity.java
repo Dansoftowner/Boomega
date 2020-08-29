@@ -71,10 +71,12 @@ public class EntryActivity implements Context, ChangeListener<Database> {
      * Starts the {@link EntryActivity}.
      */
     public void show() {
-        var loginActivity = new LoginActivity(loginData, databaseTracker);
-        this.subContext = loginActivity;
-        loginActivity.show();
-        loginActivity.createdDatabaseProperty().addListener(this);
+        if (!this.isShowing()) {
+            var loginActivity = new LoginActivity(loginData, databaseTracker);
+            this.subContext = loginActivity;
+            loginActivity.show();
+            loginActivity.createdDatabaseProperty().addListener(this);
+        }
     }
 
     public boolean isShowing() {
@@ -121,6 +123,12 @@ public class EntryActivity implements Context, ChangeListener<Database> {
     public void requestFocus() {
         if (subContext != null)
             this.subContext.requestFocus();
+    }
+
+    @Override
+    public void toFront() {
+        if (subContext != null)
+            this.subContext.toFront();
     }
 
     /**

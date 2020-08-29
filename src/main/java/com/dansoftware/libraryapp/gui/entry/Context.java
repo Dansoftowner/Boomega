@@ -76,6 +76,11 @@ public interface Context {
      */
     void requestFocus();
 
+    /**
+     * Brings the particular GUI environment to front (usually with the {@link javafx.stage.Stage#toFront()})
+     */
+    void toFront();
+
     boolean isShowing();
 
     default void showErrorDialog(String title, String message) {
