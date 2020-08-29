@@ -76,6 +76,8 @@ public interface Context {
      */
     void requestFocus();
 
+    boolean isShowing();
+
     default void showErrorDialog(String title, String message) {
         this.showErrorDialog(title, message, buttonType -> {
         });
