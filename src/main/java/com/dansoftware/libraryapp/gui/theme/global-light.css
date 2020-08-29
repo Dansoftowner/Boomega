@@ -130,9 +130,11 @@ UPDATE VIEW
 .markdown-text {
     -fx-font-family: ARIAL;
 }
+
 .markdown-italic {
     -fx-font-style: italic;
 }
+
 .markdown-bold {
     -fx-font-weight: bold;
 }

@@ -1,8 +1,8 @@
 package com.dansoftware.libraryapp.gui.login;
 
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
-import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import javafx.beans.property.*;
 import javafx.geometry.Pos;

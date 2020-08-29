@@ -22,7 +22,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
-import org.dizitart.no2.exceptions.NitriteIOException;
 
 import java.io.File;
 import java.io.IOException;

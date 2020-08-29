@@ -65,6 +65,7 @@
 .tab .tab-close-button {
     -fx-background-color: whitesmoke;
 }
+
 .tab .tab-close-button:hover {
     -fx-background-color: red;
 }
@@ -93,7 +94,7 @@
 
 /*Workbech*/
 * {
-    -fx-light-text-color: rgba(100%,100%,100%,0.7);
+    -fx-light-text-color: rgba(100%, 100%, 100%, 0.7);
 
     -primary-color: #2c3649;
     -primary-variant-color: #293244;
@@ -136,13 +137,14 @@ UPDATE VIEW
 }
 
 
-
 .markdown-text {
     -fx-font-family: ARIAL;
 }
+
 .markdown-italic {
     -fx-font-style: italic;
 }
+
 .markdown-bold {
     -fx-font-weight: bold;
 }

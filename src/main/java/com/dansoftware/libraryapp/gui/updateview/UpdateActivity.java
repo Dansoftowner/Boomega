@@ -1,11 +1,8 @@
 package com.dansoftware.libraryapp.gui.updateview;
 
 import com.dansoftware.libraryapp.gui.entry.Context;
-import com.dansoftware.libraryapp.gui.workbench.SimpleHeaderView;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.scene.Group;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -68,7 +65,7 @@ public class UpdateActivity {
      *
      * @param showFeedbackDialog it should be {@code true} if we want an error message if the update-searching failed or
      *                           a feedback message if there is no new update available;
-     *                  {@code false} if we only want to show if an update is available
+     *                           {@code false} if we only want to show if an update is available
      */
     public void show(boolean showFeedbackDialog) {
         updateSearchResult.ifFailed(exception -> {

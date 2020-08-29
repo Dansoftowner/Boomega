@@ -9,5 +9,5 @@ import org.jetbrains.annotations.NotNull;
  * @see Theme#apply(Themeable)
  */
 public interface Themeable {
-    void handleThemeApply(@NotNull ThemeApplier globalApplier,  @NotNull ThemeApplier customApplier);
+    void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier);
 }

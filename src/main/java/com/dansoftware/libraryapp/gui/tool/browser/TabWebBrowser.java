@@ -2,8 +2,11 @@ package com.dansoftware.libraryapp.gui.tool.browser;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 
 import java.util.Objects;

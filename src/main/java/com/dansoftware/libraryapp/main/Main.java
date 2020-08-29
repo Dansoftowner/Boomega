@@ -1,14 +1,14 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.appdata.logindata.LoginData;
-import com.dansoftware.libraryapp.launcher.ActivityLauncher;
-import com.dansoftware.libraryapp.launcher.LauncherMode;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
+import com.dansoftware.libraryapp.launcher.ActivityLauncher;
+import com.dansoftware.libraryapp.launcher.LauncherMode;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.sun.javafx.application.LauncherImpl;

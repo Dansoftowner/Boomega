@@ -35,10 +35,9 @@ import java.util.Set;
  * {@link Theme#applyDefault(Themeable)} methods can be used for applying the default
  * theme on the particular component.
  *
- *
+ * @author Daniel Gyorffy
  * @see ThemeApplier
  * @see Themeable
- * @author Daniel Gyorffy
  */
 public abstract class Theme {
 
@@ -65,6 +64,7 @@ public abstract class Theme {
         customApplier.apply(scene);
         globalApplier.apply(scene);
     }
+
     public void apply(@NotNull Parent parent) {
         customApplier.applyBack(parent);
         globalApplier.applyBack(parent);
@@ -75,8 +75,8 @@ public abstract class Theme {
     /**
      * Collects all subtypes of the {@link Theme} class from the class-path.
      *
-     * @see Reflections#getSubTypesOf(Class)
      * @return the set of class-references
+     * @see Reflections#getSubTypesOf(Class)
      */
     public static Set<Class<? extends Theme>> getAllAvailableThemes() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()

@@ -6,9 +6,9 @@ import org.apache.commons.lang3.StringUtils;
  * A {@link Credentials} object holds the information (username + password) that
  * is necessary for creating a {@link Database} usually through a {@link com.dansoftware.libraryapp.db.processor.LoginProcessor}.
  *
+ * @author Daniel Gyorffy
  * @see Database
  * @see com.dansoftware.libraryapp.db.processor.LoginProcessor
- * @author Daniel Gyorffy
  */
 public class Credentials {
     private final String username;

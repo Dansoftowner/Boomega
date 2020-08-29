@@ -9,9 +9,6 @@ import javafx.stage.Window;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Objects;
-
 /**
  * A DBManagerWindow is used for displaying a {@link DBManagerView} in a window.
  */
@@ -23,7 +20,7 @@ public class DBManagerWindow extends Stage {
     /**
      * Creates the {@link DBManagerWindow}.
      *
-     * @param view the {@link DBManagerView} to display; mustn't be null
+     * @param view  the {@link DBManagerView} to display; mustn't be null
      * @param owner the owner-window; may be null
      */
     public DBManagerWindow(@NotNull DBManagerView view, @Nullable Window owner) {

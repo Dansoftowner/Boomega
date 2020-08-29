@@ -1,194 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="441.0" prefWidth="684.0" styleClass="root" stylesheets="@info-view.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dansoftware.libraryapp.gui.info.Controller">
-   <children>
-      <Rectangle fill="#383838" height="317.0" layoutX="1.0" layoutY="125.0" stroke="#383838" strokeType="INSIDE" width="685.0" />
-      <ImageView fitHeight="73.0" fitWidth="72.0" layoutX="28.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true" styleClass="company-logo">
-         <image>
-            <Image url="/com/dansoftware/libraryapp/image/dansoftware-logo.jpg" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="126.0" fitWidth="654.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="/com/dansoftware/libraryapp/image/info/libraryapp-header.png" />
-         </image>
-      </ImageView>
-      <StackPane layoutX="4.0" layoutY="136.0" prefHeight="35.0" prefWidth="679.0">
-         <children>
-            <Group>
-               <children>
-                  <HBox prefHeight="28.0" prefWidth="176.0" spacing="10.0">
-                     <children>
-                        <Label text="%info.version" textFill="#aeaeae">
-                           <font>
-                              <Font size="19.0" />
-                           </font>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="441.0" prefWidth="684.0" styleClass="root" stylesheets="@info-view.css"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.dansoftware.libraryapp.gui.info.Controller">
+    <children>
+        <Rectangle fill="#383838" height="317.0" layoutX="1.0" layoutY="125.0" stroke="#383838" strokeType="INSIDE"
+                   width="685.0"/>
+        <ImageView fitHeight="73.0" fitWidth="72.0" layoutX="28.0" layoutY="141.0" pickOnBounds="true"
+                   preserveRatio="true" styleClass="company-logo">
+            <image>
+                <Image url="/com/dansoftware/libraryapp/image/dansoftware-logo.jpg"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="126.0" fitWidth="654.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="/com/dansoftware/libraryapp/image/info/libraryapp-header.png"/>
+            </image>
+        </ImageView>
+        <StackPane layoutX="4.0" layoutY="136.0" prefHeight="35.0" prefWidth="679.0">
+            <children>
+                <Group>
+                    <children>
+                        <HBox prefHeight="28.0" prefWidth="176.0" spacing="10.0">
+                            <children>
+                                <Label text="%info.version" textFill="#aeaeae">
+                                    <font>
+                                        <Font size="19.0"/>
+                                    </font>
+                                </Label>
+                                <Label fx:id="versionLabel" text="0.0.0" textFill="#aeaeae">
+                                    <font>
+                                        <Font size="19.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </Group>
+            </children>
+        </StackPane>
+        <Label fx:id="buildInfoLabel" alignment="CENTER" layoutX="4.0" layoutY="171.0" prefHeight="35.0"
+               prefWidth="679.0" text="Build 2020.05.04" textFill="#aeaeae">
+            <font>
+                <Font size="19.0"/>
+            </font>
+        </Label>
+        <Label alignment="CENTER" layoutX="95.0" layoutY="399.0" prefHeight="28.0" prefWidth="496.0"
+               text="info.copyright" textFill="#aeaeae">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Label>
+        <Line endX="302.0" layoutX="344.0" layoutY="221.0" startX="-316.0" stroke="#868686"/>
+        <VBox layoutX="28.0" layoutY="233.0" spacing="5.0">
+            <children>
+                <HBox spacing="10.0">
+                    <children>
+                        <Label text="Java VM:" textFill="#aeaeae">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
                         </Label>
-                        <Label fx:id="versionLabel" text="0.0.0" textFill="#aeaeae">
-                           <font>
-                              <Font size="19.0" />
-                           </font>
+                        <HBox>
+                            <children>
+                                <Label fx:id="javaVMLabel" textFill="#aeaeae">
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
+                                </Label>
+                                <Label text=" By " textFill="#aeaeae">
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
+                                </Label>
+                                <Label fx:id="javaVendorLabel" textFill="#aeaeae">
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+                <HBox spacing="10.0">
+                    <children>
+                        <Label text="Java version:" textFill="#aeaeae">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
                         </Label>
-                     </children>
-                  </HBox>
-               </children>
-            </Group>
-         </children>
-      </StackPane>
-      <Label fx:id="buildInfoLabel" alignment="CENTER" layoutX="4.0" layoutY="171.0" prefHeight="35.0" prefWidth="679.0" text="Build 2020.05.04" textFill="#aeaeae">
-         <font>
-            <Font size="19.0" />
-         </font>
-      </Label>
-      <Label alignment="CENTER" layoutX="95.0" layoutY="399.0" prefHeight="28.0" prefWidth="496.0" text="info.copyright" textFill="#aeaeae">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Line endX="302.0" layoutX="344.0" layoutY="221.0" startX="-316.0" stroke="#868686" />
-      <VBox layoutX="28.0" layoutY="233.0" spacing="5.0">
-         <children>
-            <HBox spacing="10.0">
-               <children>
-                  <Label text="Java VM:" textFill="#aeaeae">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <HBox>
-                     <children>
-                        <Label fx:id="javaVMLabel" textFill="#aeaeae">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
+                        <Label fx:id="javaVersionLabel" text="0.0.0" textFill="#aeaeae">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
                         </Label>
-                        <Label text=" By " textFill="#aeaeae">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
+                    </children>
+                </HBox>
+                <HBox spacing="10.0">
+                    <children>
+                        <Label text="JavaFX version:" textFill="#aeaeae">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
                         </Label>
-                        <Label fx:id="javaVendorLabel" textFill="#aeaeae">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
+                        <Label fx:id="javaFXVersionLabel" text="0.0.0" textFill="#aeaeae">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
                         </Label>
-                     </children>
-                  </HBox>
-               </children>
-            </HBox>
-            <HBox spacing="10.0">
-               <children>
-                  <Label text="Java version:" textFill="#aeaeae">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="javaVersionLabel" text="0.0.0" textFill="#aeaeae">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox spacing="10.0">
-               <children>
-                  <Label text="JavaFX version:" textFill="#aeaeae">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="javaFXVersionLabel" text="0.0.0" textFill="#aeaeae">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-      <Line endX="302.0" layoutX="344.0" layoutY="314.0" startX="-316.0" stroke="#868686" />
-      <Button contentDisplay="GRAPHIC_ONLY" layoutX="629.0" layoutY="111.0" mnemonicParsing="false" onAction="#onCopy" prefHeight="28.0" prefWidth="27.0" styleClass="copy-btn">
-         <graphic>
-            <ImageView fitHeight="21.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="/com/dansoftware/libraryapp/image/util/copy_to_clipboard_white.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <tooltip>
-            <Tooltip text="%info.copy" />
-         </tooltip>
-      </Button>
-      <StackPane layoutX="28.0" layoutY="355.0" prefHeight="33.0" prefWidth="619.0">
-         <children>
-            <Group>
-               <children>
-                  <HBox spacing="10.0">
-                     <children>
-                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#showGithub" styleClass="copy-btn" textFill="WHITE">
-                           <graphic>
-                              <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/com/dansoftware/libraryapp/image/util/github-icon_white.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip text="%info.show.github" />
-                           </tooltip>
-                        </Button>
-                        <Button mnemonicParsing="false" onAction="#showDevelopers" styleClass="copy-btn" text="%info.show.developers" textFill="WHITE">
-                           <graphic>
-                              <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/com/dansoftware/libraryapp/image/util/code-icon_white.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button mnemonicParsing="false" onAction="#showDependencies" styleClass="copy-btn" text="%info.show.dependencies" textFill="WHITE">
-                           <graphic>
-                              <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/com/dansoftware/libraryapp/image/util/code-icon_white.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </HBox>
-               </children>
-            </Group>
-         </children>
-      </StackPane>
-      <HBox layoutX="29.0" layoutY="318.0" spacing="10.0">
-         <children>
-            <Label prefHeight="29.0" text="%info.logs.loc" textFill="#aeaeae">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Label>
-            <TextField fx:id="logsLocationLabel" editable="false" maxWidth="300.0" minWidth="430.0" prefHeight="29.0" prefWidth="300.0" style="-fx-background-color: transparent; -fx-text-fill: #aeaeae; -fx-border-width: 0.2; -fx-border-color: #777b84" text="log.log">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </TextField>
-         </children>
-      </HBox>
-   </children>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+        <Line endX="302.0" layoutX="344.0" layoutY="314.0" startX="-316.0" stroke="#868686"/>
+        <Button contentDisplay="GRAPHIC_ONLY" layoutX="629.0" layoutY="111.0" mnemonicParsing="false" onAction="#onCopy"
+                prefHeight="28.0" prefWidth="27.0" styleClass="copy-btn">
+            <graphic>
+                <ImageView fitHeight="21.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="/com/dansoftware/libraryapp/image/util/copy_to_clipboard_white.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="%info.copy"/>
+            </tooltip>
+        </Button>
+        <StackPane layoutX="28.0" layoutY="355.0" prefHeight="33.0" prefWidth="619.0">
+            <children>
+                <Group>
+                    <children>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#showGithub"
+                                        styleClass="copy-btn" textFill="WHITE">
+                                    <graphic>
+                                        <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="/com/dansoftware/libraryapp/image/util/github-icon_white.png"/>
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="%info.show.github"/>
+                                    </tooltip>
+                                </Button>
+                                <Button mnemonicParsing="false" onAction="#showDevelopers" styleClass="copy-btn"
+                                        text="%info.show.developers" textFill="WHITE">
+                                    <graphic>
+                                        <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="/com/dansoftware/libraryapp/image/util/code-icon_white.png"/>
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <Button mnemonicParsing="false" onAction="#showDependencies" styleClass="copy-btn"
+                                        text="%info.show.dependencies" textFill="WHITE">
+                                    <graphic>
+                                        <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="/com/dansoftware/libraryapp/image/util/code-icon_white.png"/>
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                </Group>
+            </children>
+        </StackPane>
+        <HBox layoutX="29.0" layoutY="318.0" spacing="10.0">
+            <children>
+                <Label prefHeight="29.0" text="%info.logs.loc" textFill="#aeaeae">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="logsLocationLabel" editable="false" maxWidth="300.0" minWidth="430.0"
+                           prefHeight="29.0" prefWidth="300.0"
+                           style="-fx-background-color: transparent; -fx-text-fill: #aeaeae; -fx-border-width: 0.2; -fx-border-color: #777b84"
+                           text="log.log">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </TextField>
+            </children>
+        </HBox>
+    </children>
 </AnchorPane>

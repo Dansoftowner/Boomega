@@ -1,8 +1,8 @@
 package com.dansoftware.libraryapp.gui.entry;
 
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.login.LoginActivity;
-import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;

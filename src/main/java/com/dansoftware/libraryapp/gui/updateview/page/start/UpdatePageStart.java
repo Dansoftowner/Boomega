@@ -25,8 +25,8 @@ import java.util.function.Supplier;
  *     <li>a button that simply lets the user to ignore this update</li>
  * </ul>
  *
- * @see UpdatePageDetail
  * @author Daniel Gyorffy
+ * @see UpdatePageDetail
  */
 public class UpdatePageStart extends UpdatePage {
 

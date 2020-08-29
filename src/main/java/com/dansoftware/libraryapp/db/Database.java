@@ -47,6 +47,7 @@ public interface Database {
 
     /**
      * Checks whether the db is closed.
+     *
      * @return `true` if closed; otherwise `false`.
      */
     boolean isClosed();

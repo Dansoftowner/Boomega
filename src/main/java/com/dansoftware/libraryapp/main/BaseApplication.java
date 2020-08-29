@@ -44,7 +44,7 @@ public abstract class BaseApplication extends Application {
      * Launches the base-application with a {@link Preloader}.
      *
      * @param appClass the class-reference to the {@link BaseApplication} implementation
-     * @param args the application-arguments
+     * @param args     the application-arguments
      */
     public static void launchApp(Class<? extends BaseApplication> appClass, String... args) {
         LauncherImpl.launchApplication(appClass, Preloader.class, args);

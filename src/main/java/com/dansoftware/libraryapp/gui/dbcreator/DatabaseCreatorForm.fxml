@@ -1,82 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
+<VBox fx:id="vBox" prefHeight="321.0" prefWidth="741.0" spacing="5.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox prefWidth="595.0" spacing="5.0">
+            <children>
+                <VBox HBox.hgrow="SOMETIMES">
+                    <children>
+                        <Label text="%data.source.adder.db.name">
+                            <padding>
+                                <Insets bottom="3.0"/>
+                            </padding>
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
+                        </Label>
+                        <TextField fx:id="nameField" minHeight="35.0" style="-fx-font-size: 15px"/>
+                    </children>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="%data.source.adder.db.dir">
+                            <padding>
+                                <Insets bottom="3.0"/>
+                            </padding>
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
+                        </Label>
+                        <TextField fx:id="dirField" minHeight="35.0" style="-fx-font-size: 15px"/>
+                    </children>
+                </VBox>
+                <StackPane>
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                    <children>
+                        <Button fx:id="dirOpenerBtn" contentDisplay="GRAPHIC_ONLY" minHeight="35.0"
+                                mnemonicParsing="false" onAction="#openDirectory" prefHeight="29.0" prefWidth="52.0"
+                                text="Button" StackPane.alignment="BOTTOM_CENTER">
+                            <tooltip>
+                                <Tooltip text="%data.source.adder.choose.dir"/>
+                            </tooltip>
+                        </Button>
+                    </children>
+                </StackPane>
+            </children>
+        </HBox>
+        <StackPane>
+            <children>
+                <Label text="%data.source.adder.db.full.path" StackPane.alignment="CENTER_LEFT">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                    <padding>
+                        <Insets top="3.0"/>
+                    </padding>
+                </Label>
+            </children>
+        </StackPane>
+        <TextField fx:id="fullPathField" editable="false" minHeight="35.0" style="-fx-font-size: 15px;"/>
+        <Separator prefWidth="200.0"/>
+        <CheckBox fx:id="authCheckBox" minHeight="40.0" mnemonicParsing="false" style="-fx-font-size: 15px"
+                  text="%data.source.adder.db.auth" VBox.vgrow="ALWAYS">
+            <font>
+                <Font size="13.0"/>
+            </font>
+        </CheckBox>
+        <TextField fx:id="usernameField" disable="true" minHeight="35.0" promptText="%login.form.username.prompt"
+                   style="-fx-font-size: 15px"/>
+        <PasswordField fx:id="passwordField" disable="true" minHeight="35.0" promptText="%login.form.password.prompt"
+                       style="-fx-font-size: 15px"/>
+        <Separator prefWidth="200.0"/>
 
+        <Button fx:id="createBtn" defaultButton="true" minHeight="35.0" mnemonicParsing="false" onAction="#create"
+                prefWidth="${vBox.width}" style="-fx-font-size: 15px" text="%data.source.adder.create"/>
 
- <VBox fx:id="vBox" prefHeight="321.0" prefWidth="741.0" spacing="5.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
-     <children>
-         <HBox prefWidth="595.0" spacing="5.0">
-             <children>
-                 <VBox HBox.hgrow="SOMETIMES">
-                     <children>
-                         <Label text="%data.source.adder.db.name">
-                             <padding>
-                                 <Insets bottom="3.0" />
-                             </padding>
-                             <font>
-                                 <Font size="13.0" />
-                             </font>
-                         </Label>
-                         <TextField fx:id="nameField" minHeight="35.0" style="-fx-font-size: 15px" />
-                     </children>
-                 </VBox>
-                 <VBox HBox.hgrow="ALWAYS">
-                     <children>
-                         <Label text="%data.source.adder.db.dir">
-                             <padding>
-                                 <Insets bottom="3.0" />
-                             </padding>
-                             <font>
-                                 <Font size="13.0" />
-                             </font>
-                         </Label>
-                         <TextField fx:id="dirField" minHeight="35.0" style="-fx-font-size: 15px" />
-                     </children>
-                 </VBox>
-                 <StackPane>
-                     <HBox.margin>
-                          <Insets />
-                     </HBox.margin>
-                     <children>
-                         <Button fx:id="dirOpenerBtn" contentDisplay="GRAPHIC_ONLY" minHeight="35.0" mnemonicParsing="false" onAction="#openDirectory" prefHeight="29.0" prefWidth="52.0" text="Button" StackPane.alignment="BOTTOM_CENTER">
-                             <tooltip>
-                                 <Tooltip text="%data.source.adder.choose.dir" />
-                             </tooltip>
-                         </Button>
-                     </children>
-                 </StackPane>
-             </children>
-         </HBox>
-         <StackPane>
-             <children>
-                 <Label text="%data.source.adder.db.full.path" StackPane.alignment="CENTER_LEFT">
-                     <font>
-                         <Font size="13.0" />
-                     </font>
-                     <padding>
-                         <Insets top="3.0" />
-                     </padding>
-                 </Label>
-             </children>
-         </StackPane>
-         <TextField fx:id="fullPathField" editable="false" minHeight="35.0" style="-fx-font-size: 15px;" />
-         <Separator prefWidth="200.0" />
-         <CheckBox fx:id="authCheckBox" minHeight="40.0" mnemonicParsing="false" style="-fx-font-size: 15px" text="%data.source.adder.db.auth" VBox.vgrow="ALWAYS">
-             <font>
-                 <Font size="13.0" />
-             </font>
-         </CheckBox>
-         <TextField fx:id="usernameField" disable="true" minHeight="35.0" promptText="%login.form.username.prompt" style="-fx-font-size: 15px" />
-         <PasswordField fx:id="passwordField" disable="true" minHeight="35.0" promptText="%login.form.password.prompt" style="-fx-font-size: 15px" />
-         <Separator prefWidth="200.0" />
-
-         <Button fx:id="createBtn" defaultButton="true" minHeight="35.0" mnemonicParsing="false" onAction="#create" prefWidth="${vBox.width}" style="-fx-font-size: 15px" text="%data.source.adder.create" />
-
-     </children>
-     <padding>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-     </padding>
- </VBox>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</VBox>

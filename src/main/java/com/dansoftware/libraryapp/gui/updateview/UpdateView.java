@@ -65,9 +65,9 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeLi
     /**
      * Creates a normal UpdateView with all necessary data.
      *
-     * @param context the context that defines that where to show this update-dialog
+     * @param context      the context that defines that where to show this update-dialog
      * @param hideStrategy the HideStrategy object that defines how to hide the
-     * @param information the object that holds all information about the update
+     * @param information  the object that holds all information about the update
      */
     public UpdateView(@NotNull Context context,
                       @NotNull HideStrategy hideStrategy,
@@ -82,7 +82,8 @@ public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeLi
         this.updatePageProperty.addListener(this);
 
         //creating the toolbar buttons
-        this.prevBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.SKIP_PREVIOUS), event -> {});
+        this.prevBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.SKIP_PREVIOUS), event -> {
+        });
         this.closeBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.CLOSE), event -> hide());
         this.reloadBtn = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.RELOAD), event -> getUpdatePage().reload());
         //adding the toolbar items to the toolbar

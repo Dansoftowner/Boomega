@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-
 <Group xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <VBox fx:id="rootForm" spacing="10.0" styleClass="login-box">
-         <children>
-            <StackPane styleClass="header">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-               <children>
-                  <ImageView pickOnBounds="true" preserveRatio="true" styleClass="logo" StackPane.alignment="CENTER" />
-               </children>
-            </StackPane>
-            <HBox spacing="5.0">
-               <children>
-                  <ComboBox fx:id="sourceChooser" minHeight="35.0" minWidth="355.0" prefHeight="30.0" promptText="%login.source.combo.promt">
-                  </ComboBox>
-                  <Button fx:id="fileChooserBtn" contentDisplay="GRAPHIC_ONLY" maxWidth="0.0" minHeight="35.0" minWidth="40.0" mnemonicParsing="false" onAction="#openFile" text="Button">
-                     <tooltip>
-                        <Tooltip text="%login.source.open" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="managerBtn" contentDisplay="GRAPHIC_ONLY" maxWidth="0.0" minHeight="35.0" minWidth="40.0" mnemonicParsing="false" onAction="#openDBManager" text="Button">
-                     <tooltip>
-                        <Tooltip text="%login.db.manager.open" />
-                     </tooltip>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets left="20.0" right="20.0" />
-               </VBox.margin>
-            </HBox>
-            <VBox fx:id="loginForm" prefHeight="148.0" prefWidth="297.0" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
-               <children>
-                  <Separator prefWidth="200.0" />
-                  <TextField fx:id="usernameInput" minHeight="35.0" prefColumnCount="10" promptText="%login.form.username.prompt">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </TextField>
-                  <PasswordField fx:id="passwordInput" minHeight="35.0" promptText="%login.form.password.prompt">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </PasswordField>
-                  <CheckBox fx:id="rememberBox" alignment="CENTER_RIGHT" mnemonicParsing="false" style="-fx-font-size: 15px;" text="%login.form.remember" />
-                  <Button defaultButton="true" minHeight="35.0" minWidth="400.0" mnemonicParsing="false" onAction="#login" prefWidth="${loginForm.width}" text="%login.form.login">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" />
-               </VBox.margin>
-            </VBox>
-            <Separator prefWidth="200.0" />
-            <Button minHeight="35.0" minWidth="485.0" mnemonicParsing="false" onAction="#callDataSourceAdder" prefWidth="${rootForm.width}" styleClass="source-adder" text="%login.add.source">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Button>
-         </children>
-      </VBox>
-   </children>
+    <children>
+        <VBox fx:id="rootForm" spacing="10.0" styleClass="login-box">
+            <children>
+                <StackPane styleClass="header">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    </padding>
+                    <children>
+                        <ImageView pickOnBounds="true" preserveRatio="true" styleClass="logo"
+                                   StackPane.alignment="CENTER"/>
+                    </children>
+                </StackPane>
+                <HBox spacing="5.0">
+                    <children>
+                        <ComboBox fx:id="sourceChooser" minHeight="35.0" minWidth="355.0" prefHeight="30.0"
+                                  promptText="%login.source.combo.promt">
+                        </ComboBox>
+                        <Button fx:id="fileChooserBtn" contentDisplay="GRAPHIC_ONLY" maxWidth="0.0" minHeight="35.0"
+                                minWidth="40.0" mnemonicParsing="false" onAction="#openFile" text="Button">
+                            <tooltip>
+                                <Tooltip text="%login.source.open"/>
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="managerBtn" contentDisplay="GRAPHIC_ONLY" maxWidth="0.0" minHeight="35.0"
+                                minWidth="40.0" mnemonicParsing="false" onAction="#openDBManager" text="Button">
+                            <tooltip>
+                                <Tooltip text="%login.db.manager.open"/>
+                            </tooltip>
+                        </Button>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="20.0" right="20.0"/>
+                    </VBox.margin>
+                </HBox>
+                <VBox fx:id="loginForm" prefHeight="148.0" prefWidth="297.0" spacing="10.0"
+                      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+                    <children>
+                        <Separator prefWidth="200.0"/>
+                        <TextField fx:id="usernameInput" minHeight="35.0" prefColumnCount="10"
+                                   promptText="%login.form.username.prompt">
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </TextField>
+                        <PasswordField fx:id="passwordInput" minHeight="35.0" promptText="%login.form.password.prompt">
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </PasswordField>
+                        <CheckBox fx:id="rememberBox" alignment="CENTER_RIGHT" mnemonicParsing="false"
+                                  style="-fx-font-size: 15px;" text="%login.form.remember"/>
+                        <Button defaultButton="true" minHeight="35.0" minWidth="400.0" mnemonicParsing="false"
+                                onAction="#login" prefWidth="${loginForm.width}" text="%login.form.login">
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </Button>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0"/>
+                    </VBox.margin>
+                </VBox>
+                <Separator prefWidth="200.0"/>
+                <Button minHeight="35.0" minWidth="485.0" mnemonicParsing="false" onAction="#callDataSourceAdder"
+                        prefWidth="${rootForm.width}" styleClass="source-adder" text="%login.add.source">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </Button>
+            </children>
+        </VBox>
+    </children>
 </Group>

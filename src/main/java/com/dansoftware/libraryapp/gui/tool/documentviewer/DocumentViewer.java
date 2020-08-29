@@ -28,8 +28,11 @@ public abstract class DocumentViewer extends StackPane {
     }
 
     public abstract void load(String title, String url) throws IOException;
+
     public abstract void load(String title, InputStream inputStream) throws IOException;
+
     public abstract void load(String title, File file) throws IOException;
+
     public abstract void load(String title, URL url) throws IOException;
 
     public void load(File file) throws IOException {

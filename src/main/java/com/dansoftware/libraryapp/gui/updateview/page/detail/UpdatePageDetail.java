@@ -32,7 +32,7 @@ import java.util.function.Supplier;
  * <p>
  * Downloads the preview markdown-text about the new update and also renders it, so the user can
  * explore the new features and/or bug fixes.
- *
+ * <p>
  * It provides a button on the bottom that will navigate to the {@link UpdatePageDownload} page.
  *
  * @author Daniel Gyorffy
@@ -46,8 +46,8 @@ public class UpdatePageDetail extends UpdatePage {
 
     /**
      * Creates an UpdatePageDetail that points to a {@link UpdatePageDownload} as next page.
-     * 
-     * @see UpdatePage#UpdatePage(UpdateView, UpdatePage, UpdateInformation, URL) 
+     *
+     * @see UpdatePage#UpdatePage(UpdateView, UpdatePage, UpdateInformation, URL)
      * @see UpdatePage#setNextPageFactory(Supplier)
      */
     public UpdatePageDetail(@NotNull UpdateView updateView,

@@ -55,7 +55,7 @@ public class WebViewWrapper implements WebContentRenderer {
 
     @Override
     public void onLocationChanged(Consumer<String> locationConsumer) {
-         webView.getEngine()
+        webView.getEngine()
                 .locationProperty()
                 .addListener((observable, oldValue, newValue) ->
                         locationConsumer.accept(newValue)
@@ -64,7 +64,7 @@ public class WebViewWrapper implements WebContentRenderer {
 
     @Override
     public void onTitleChanged(Consumer<String> titleConsumer) {
-         webView.getEngine()
+        webView.getEngine()
                 .titleProperty()
                 .addListener((observable, oldValue, newValue) ->
                         titleConsumer.accept(newValue)

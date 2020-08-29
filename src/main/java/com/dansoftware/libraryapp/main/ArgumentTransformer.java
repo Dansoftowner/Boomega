@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 

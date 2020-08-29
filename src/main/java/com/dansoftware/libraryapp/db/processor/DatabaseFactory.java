@@ -22,7 +22,7 @@ public interface DatabaseFactory {
      * Creates the particular {@link Database} implementation.
      *
      * @param databaseMeta the meta-information about the database
-     * @param credentials the database credential
+     * @param credentials  the database credential
      * @param failListener the {@link FailListener} that is used when some exception occurs.
      * @return the {@link Database} object.
      */

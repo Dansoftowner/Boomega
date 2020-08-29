@@ -3,7 +3,6 @@ package com.dansoftware.libraryapp.update;
 import com.dansoftware.libraryapp.main.VersionInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A DatabaseMeta can hold all meta-information about a particular database.

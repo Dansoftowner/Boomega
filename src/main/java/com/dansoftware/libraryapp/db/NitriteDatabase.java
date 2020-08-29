@@ -1,14 +1,12 @@
 package com.dansoftware.libraryapp.db;
 
 import com.dansoftware.libraryapp.db.processor.DatabaseFactory;
-import com.dansoftware.libraryapp.db.processor.FailListener;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;
 import org.dizitart.no2.exceptions.ErrorMessage;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -21,8 +19,8 @@ import static java.util.Objects.isNull;
  * A NitriteDatabase is a {@link Database} that basically wraps the
  * Nitrite NoSQL database api.
  *
- * @see Nitrite
  * @author Daniel Gyorffy
+ * @see Nitrite
  */
 public class NitriteDatabase implements Database {
 
@@ -104,8 +102,8 @@ public class NitriteDatabase implements Database {
      * Returns a {@link DatabaseFactory} that can be used for creating/opening a {@link NitriteDatabase} through the
      * {@link com.dansoftware.libraryapp.db.processor.LoginProcessor} API.
      *
-     * @see com.dansoftware.libraryapp.db.processor.LoginProcessor
      * @return the factory object
+     * @see com.dansoftware.libraryapp.db.processor.LoginProcessor
      */
     public static DatabaseFactory factory() {
         return (databaseMeta, credentials, failListener) -> {

@@ -13,8 +13,8 @@ import java.util.function.Supplier;
  * web pages inside the application.
  *
  * <p>
- *  A Browser provides a GUI toolset to give the ability to the user
- *  to do operations with the web page (such as reloading, url copying etc..)
+ * A Browser provides a GUI toolset to give the ability to the user
+ * to do operations with the web page (such as reloading, url copying etc..)
  *
  * @author Daniel Gyorffy
  */
@@ -41,7 +41,7 @@ public abstract class Browser extends StackPane {
      *
      * @param title a custom title which will not change;
      *              can be null
-     * @param url the url to load from; mustn't be null
+     * @param url   the url to load from; mustn't be null
      * @throws NullPointerException if the url is null
      */
     public abstract void load(String title, String url);
@@ -50,12 +50,12 @@ public abstract class Browser extends StackPane {
      * Loads the wep page with the specified URL object and sets a fixed title.
      *
      * <p>
-     *  This method actually calls the {@link Browser#load(String, String)} method
-     *  with the {@link URL#toExternalForm()} for the second parameter.
+     * This method actually calls the {@link Browser#load(String, String)} method
+     * with the {@link URL#toExternalForm()} for the second parameter.
      *
      * @param title a custom title which will not change;
      *              can be null
-     * @param url the url to load from
+     * @param url   the url to load from
      * @throws NullPointerException if the url is null
      */
     public void load(String title, URL url) {
@@ -67,8 +67,8 @@ public abstract class Browser extends StackPane {
      * Loads the web page without a predefined, fixed title.
      *
      * <p>
-     *  This method actually calls the {@link Browser#load(String, String)} method
-     *  with null value for the first parameter
+     * This method actually calls the {@link Browser#load(String, String)} method
+     * with null value for the first parameter
      *
      * @param url the url to load from; mustn't be null
      * @throws NullPointerException if the url is null

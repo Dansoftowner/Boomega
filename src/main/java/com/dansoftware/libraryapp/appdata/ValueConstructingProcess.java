@@ -1,6 +1,9 @@
 package com.dansoftware.libraryapp.appdata;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,7 +32,7 @@ public interface ValueConstructingProcess<T> {
      * <p>
      * This method also allows to register custom deserializers.
      *
-     * @param type the class-reference of the object that we want to construct
+     * @param type         the class-reference of the object that we want to construct
      * @param deSerializer the custom {@link JsonDeserializer}
      * @return the {@link ValueConstructingProcess}
      */

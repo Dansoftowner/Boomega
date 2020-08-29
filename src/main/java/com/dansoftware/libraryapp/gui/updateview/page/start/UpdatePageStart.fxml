@@ -1,56 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<VBox fx:id="root" alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <StackPane VBox.vgrow="SOMETIMES">
-         <children>
-            <Label styleClass="update-view-available-label" text="%update.view.available">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="32.0" />
-               </font>
-            </Label>
-         </children>
-      </StackPane>
-      <StackPane>
-         <children>
-            <Group>
-               <children>
-                  <HBox spacing="10.0">
-                     <children>
-                        <Text text="%update.view.current.version" HBox.hgrow="ALWAYS" />
-                        <Label fx:id="currentVersionLabel" text="Label" HBox.hgrow="SOMETIMES">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Text text="%update.view.next.version" HBox.hgrow="ALWAYS" />
-                        <Label fx:id="nextVersionLabel" text="Label" HBox.hgrow="SOMETIMES" />
-                     </children>
-                     <padding>
-                        <Insets left="10.0" right="10.0" />
-                     </padding>
-                  </HBox>
-               </children>
-            </Group>
-         </children>
-      </StackPane>
-      <VBox alignment="BOTTOM_LEFT" spacing="10.0" VBox.vgrow="ALWAYS">
-         <children>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#goToNextPage" prefWidth="${root.width}" text="%update.view.go.to.details" />
-            <Button mnemonicParsing="false" onAction="#hideUpdateView" prefWidth="${root.width}" text="%update.view.hide" />
-         </children>
-      </VBox>
-   </children>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </padding>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<VBox fx:id="root" alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <StackPane VBox.vgrow="SOMETIMES">
+            <children>
+                <Label styleClass="update-view-available-label" text="%update.view.available">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </padding>
+                    <font>
+                        <Font size="32.0"/>
+                    </font>
+                </Label>
+            </children>
+        </StackPane>
+        <StackPane>
+            <children>
+                <Group>
+                    <children>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Text text="%update.view.current.version" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="currentVersionLabel" text="Label" HBox.hgrow="SOMETIMES">
+                                    <HBox.margin>
+                                        <Insets right="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                                <Text text="%update.view.next.version" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="nextVersionLabel" text="Label" HBox.hgrow="SOMETIMES"/>
+                            </children>
+                            <padding>
+                                <Insets left="10.0" right="10.0"/>
+                            </padding>
+                        </HBox>
+                    </children>
+                </Group>
+            </children>
+        </StackPane>
+        <VBox alignment="BOTTOM_LEFT" spacing="10.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#goToNextPage" prefWidth="${root.width}"
+                        text="%update.view.go.to.details"/>
+                <Button mnemonicParsing="false" onAction="#hideUpdateView" prefWidth="${root.width}"
+                        text="%update.view.hide"/>
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
 </VBox>

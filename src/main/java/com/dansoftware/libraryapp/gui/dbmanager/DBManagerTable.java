@@ -5,19 +5,14 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.explorer.FileExplorers;
-import com.jfilegoodies.explorer.WindowsFileExplorer;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
 import javafx.util.Callback;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -259,7 +253,7 @@ public class DBManagerTable extends TableView<DatabaseMeta>
      * The delete-column provides a {@link Button} to delete the selected database(s).
      */
     private final class DeleteColumn extends TableColumn<DatabaseMeta, String>
-            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>>{
+            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         DeleteColumn() {
             super(I18N.getGeneralWord("database.manager.table.column.delete"));

@@ -6,8 +6,6 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -75,7 +73,7 @@ public class LoginProcessor {
      * Otherwise it will try to open the database with the credentials.
      *
      * @param databaseMeta the meta-information of the database
-     * @param credentials the object that holds the credentials
+     * @param credentials  the object that holds the credentials
      * @return the {@link Database} object.
      */
     @Nullable
@@ -97,7 +95,7 @@ public class LoginProcessor {
      * Creates the particular database if not exists yet with credentials.
      *
      * @param databaseMeta the meta-information of the database
-     * @param credentials the object that holds the credentials
+     * @param credentials  the object that holds the credentials
      * @return {@code true} if the database is created successfully; {@code false} otherwise.
      */
     public boolean touch(@NotNull DatabaseMeta databaseMeta, @NotNull Credentials credentials) {

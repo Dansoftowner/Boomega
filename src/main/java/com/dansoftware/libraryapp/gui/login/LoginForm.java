@@ -1,13 +1,16 @@
 package com.dansoftware.libraryapp.gui.login;
 
-import com.dansoftware.libraryapp.db.*;
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
+import com.dansoftware.libraryapp.db.Credentials;
+import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.util.UniqueList;
@@ -30,7 +33,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -186,7 +188,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
             //starting a thread that saves the login-data
             new Thread(new LoginDataSaver(this.getLoginData())).start();
 
-            logger.debug("The window is '{}'", WindowUtils.getStageOf(this) );
+            logger.debug("The window is '{}'", WindowUtils.getStageOf(this));
 
             WindowUtils.getStageOf(this).close();
         }

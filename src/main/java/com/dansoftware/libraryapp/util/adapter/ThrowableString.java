@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.util.adapter;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * This class can convert the exception stack trace

@@ -52,7 +52,7 @@ public final class TimeUtils {
      * <p>
      * It needs a {@link ResourceBundle} to get the internationalized name of the
      * timeUnit.
-     *
+     * <p>
      * The necessary resource-bundle keys:
      * <pre>{@code
      * "time.unit.days"
@@ -62,7 +62,7 @@ public final class TimeUtils {
      * "time.unit.millis"
      * }</pre>
      *
-     * @param millis the milliseconds in {@link Long}
+     * @param millis         the milliseconds in {@link Long}
      * @param resourceBundle the {@link ResourceBundle} to read the internationalized time-units from
      * @return the human-readable version of the milliseconds
      */

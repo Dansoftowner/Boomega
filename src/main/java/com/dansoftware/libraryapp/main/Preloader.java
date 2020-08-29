@@ -1,25 +1,11 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.gui.preloader.PreloaderGUI;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.ListUtils;
-
-import javax.tools.ToolProvider;
-import java.io.File;
-import java.util.List;
 
 public class Preloader extends javafx.application.Preloader {
 

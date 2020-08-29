@@ -61,14 +61,14 @@ public abstract class UpdatePage extends StackPane implements Initializable {
     /**
      * Creates an UpdatePage with <b>all</b> necessary values.
      *
-     * @param updateView the "parent" {@link UpdateView} that displays the updatePage
-     * @param previousPage the update-page that is before this
-     *                     (the "previous" toolbar-button in the {@link UpdateView}
-     *                     will navigate to the previous update-page defined here)
+     * @param updateView      the "parent" {@link UpdateView} that displays the updatePage
+     * @param previousPage    the update-page that is before this
+     *                        (the "previous" toolbar-button in the {@link UpdateView}
+     *                        will navigate to the previous update-page defined here)
      * @param nextPageFactory the {@link Supplier} that creates the update-page that should be appear after this update-page;
      *                        it can be set later by the {@link #setNextPageFactory(Supplier)} method.
-     * @param information the {@link UpdateInformation} object that holds all information about the new update
-     * @param fxmlResource the Resource-Locator that defines what fxml resource should be loaded into this update-page
+     * @param information     the {@link UpdateInformation} object that holds all information about the new update
+     * @param fxmlResource    the Resource-Locator that defines what fxml resource should be loaded into this update-page
      */
     protected UpdatePage(@NotNull UpdateView updateView,
                          @Nullable UpdatePage previousPage,
@@ -93,7 +93,7 @@ public abstract class UpdatePage extends StackPane implements Initializable {
 
     /**
      * Displays the next {@link UpdatePage} in the "parent" {@link UpdateView}.
-     *
+     * <p>
      * Uses the {@link #nextPageFactory} for creating the next update-page if it's not created yet.
      */
     protected void goNext() {
