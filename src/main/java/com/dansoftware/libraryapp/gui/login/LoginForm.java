@@ -8,11 +8,11 @@ import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
+import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
-import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.util.UniqueList;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -32,8 +32,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -199,37 +197,15 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
      */
     @FXML
     private void openFile() {
-        //file extension filter for the libraryapp-database files
-        FileChooser.ExtensionFilter dbExtension =
-                new FileChooser.ExtensionFilter("LibraryApp database files", "*." + Globals.FILE_EXTENSION);
+        DatabaseOpener opener = new DatabaseOpener();
+        List<DatabaseMeta> metas = opener.showMultipleOpenDialog(WindowUtils.getWindowOf(this));
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters()
-                .addAll(new FileChooser.ExtensionFilter("All files", "*"), dbExtension);
-        fileChooser.setSelectedExtensionFilter(dbExtension);
-
-        //we allow to select multiple files
-        List<File> files = fileChooser.showOpenMultipleDialog(WindowUtils.getWindowOf(this));
-        if (CollectionUtils.isNotEmpty(files)) {
-            Iterator<File> iterator = files.iterator();
-
-            //we save the size of the database-list before adding new elements
-            int lastSize = predicatedDBList.size();
-
-            DatabaseMeta lastElement;
-            do {
-                lastElement = new DatabaseMeta(iterator.next());
-                try {
-                    predicatedDBList.add(lastElement);
-                } catch (UniqueList.DuplicateElementException e) {
-                    logger.error("Duplicate element has been filtered", e);
-                }
-            } while (iterator.hasNext());
-
-            //if we added new elements, we select the lastElement
-            if (lastSize < predicatedDBList.size()) {
-                sourceChooser.getSelectionModel().select(lastElement);
-            }
+        int lastSize = predicatedDBList.size();
+        predicatedDBList.addAll(metas);
+        //if we added new elements, we select the lastItem
+        if (lastSize < predicatedDBList.size()) {
+            DatabaseMeta lastElement = metas.get(metas.size() - 1);
+            sourceChooser.getSelectionModel().select(lastElement);
         }
     }
 
