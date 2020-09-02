@@ -22,6 +22,7 @@ import static com.dansoftware.libraryapp.appdata.Preferences.getPreferences;
  * workerThread.start();
  * }</pre>
  */
+@Deprecated
 public class LoginDataSaver extends Task<Void> {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginDataSaver.class);

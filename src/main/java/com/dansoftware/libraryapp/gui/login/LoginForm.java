@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.login;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.Database;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import static com.dansoftware.libraryapp.appdata.Preferences.getPreferences;
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
 /**
@@ -184,8 +186,15 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
             //creating the database was successful
             logger.debug("Signing in was successful; closing the LoginWindow");
             //starting a thread that saves the login-data
-            new Thread(new LoginDataSaver(this.getLoginData())).start();
-
+            new Thread(() -> {
+                Preferences.Editor editor = getPreferences().editor();
+                editor.set(Preferences.Key.LOGIN_DATA, loginData);
+                try {
+                    editor.commit();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
             logger.debug("The window is '{}'", WindowUtils.getStageOf(this));
 
             WindowUtils.getStageOf(this).close();
