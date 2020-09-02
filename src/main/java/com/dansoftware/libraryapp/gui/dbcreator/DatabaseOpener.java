@@ -78,7 +78,7 @@ public class DatabaseOpener {
     public DatabaseMeta showOpenDialog(@Nullable Window ownerWindow) {
         File file = createFileChooser().showOpenDialog(ownerWindow);
         if (file != null) {
-            return getAsDatabaseMeta(file);
+            return new DatabaseMeta(file);
         }
 
         return null;
