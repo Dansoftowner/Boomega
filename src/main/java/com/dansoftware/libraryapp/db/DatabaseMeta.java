@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.db;
 
 import com.jfilegoodies.FileGoodies;
+import org.apache.commons.io.FilenameUtils;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,12 +16,13 @@ public class DatabaseMeta {
     private File file;
 
     public DatabaseMeta(@NotNull File file) {
-        this(null, file);
+        this.file = Objects.requireNonNull(file, "file mustn't be null");
+        this.name = FilenameUtils.getBaseName(file.getName());
     }
 
-    public DatabaseMeta(@Nullable String name, @NotNull File file) {
+    public DatabaseMeta(@NotNull String name, @NotNull File file) {
         this.file = Objects.requireNonNull(file, "file mustn't be null");
-        this.name = Objects.isNull(name) ? file.getName() : name;
+        this.name = Objects.requireNonNull(name, "name mustn't be null");
     }
 
     public String getName() {

@@ -25,19 +25,6 @@ public class DatabaseOpener {
     public DatabaseOpener() {
     }
 
-    /**
-     * Converts the {@link File} object into a {@link DatabaseMeta} object.
-     *
-     * @param file the file that we want to convert
-     * @return the {@link DatabaseMeta} object
-     */
-    @NotNull
-    public static DatabaseMeta getAsDatabaseMeta(@NotNull File file) {
-        String fullName = file.getName();
-        String simpleName = FilenameUtils.getBaseName(fullName);
-        return new DatabaseMeta(simpleName, file);
-    }
-
     @NotNull
     private List<FileChooser.ExtensionFilter> getExtensionFilters() {
         return List.of(
@@ -71,7 +58,7 @@ public class DatabaseOpener {
         List<File> files = createFileChooser().showOpenMultipleDialog(ownerWindow);
         if (CollectionUtils.isNotEmpty(files)) {
             return files.stream()
-                    .map(DatabaseOpener::getAsDatabaseMeta)
+                    .map(DatabaseMeta::new)
                     .collect(Collectors.toList());
         }
 
