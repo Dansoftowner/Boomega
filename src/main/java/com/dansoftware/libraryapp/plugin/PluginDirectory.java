@@ -2,12 +2,8 @@ package com.dansoftware.libraryapp.plugin;
 
 import com.sun.javafx.PlatformUtil;
 import org.apache.commons.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Pattern;

@@ -11,7 +11,6 @@ import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
-import com.sun.javafx.application.LauncherImpl;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,10 +45,14 @@ public class Main extends BaseApplication {
      * The main-method of the application;
      *
      * <p>
-     * Launches the application with a
+     * Starts the {@link InstanceService}.
+     * <p>
+     * If the {@link InstanceService} didn't stop the app,
+     * the main launches the application with a
      * preloader.
      *
-     * @see LauncherImpl#launchApplication(Class, Class, String[])
+     * @see BaseApplication#launchApp(Class, String...)
+     * @see InstanceService#open(String[])
      */
     public static void main(String[] args) {
         InstanceService.open(args);

@@ -23,7 +23,7 @@ public interface Context {
     /**
      * Shows a popup (on the center) with the GUI-element defined.
      *
-     * @param region the {@link Region} GUI element to be shown
+     * @param region   the {@link Region} GUI element to be shown
      * @param blocking {@code false} if clicking outside of the popup should close it.
      */
     void showOverlay(Region region, boolean blocking);
@@ -38,8 +38,8 @@ public interface Context {
     /**
      * Shows an error alert dialog.
      *
-     * @param title the title of the dialog
-     * @param message the message of the dialog
+     * @param title    the title of the dialog
+     * @param message  the message of the dialog
      * @param onResult the action when the user clicks the OK button
      */
     void showErrorDialog(String title,
@@ -50,10 +50,10 @@ public interface Context {
      * Shows an error alert dialog. Also, it can show
      * the stacktrace of an exception.
      *
-     * @param title the title of the dialog
-     * @param message the message of the dialog
+     * @param title     the title of the dialog
+     * @param message   the message of the dialog
      * @param exception the exception that caused the dialog
-     * @param onResult the action when the user clicks the OK button
+     * @param onResult  the action when the user clicks the OK button
      */
     void showErrorDialog(String title,
                          String message,
@@ -63,8 +63,8 @@ public interface Context {
     /**
      * Shows an information dialog.
      *
-     * @param title the title
-     * @param message the message
+     * @param title    the title
+     * @param message  the message
      * @param onResult the action that handles the button click-s on the dialog
      */
     void showInformationDialog(String title,
