@@ -13,6 +13,7 @@ import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.util.ControllerFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.util.UniqueList;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -55,6 +56,9 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     private static final Logger logger = LoggerFactory.getLogger(LoginForm.class);
 
+    /**
+     * Style class for styling this gui object in css
+     */
     private static final String STYLE_CLASS = "login-form";
 
     private static final int LOGIN_BOX_INDEX = 2;
@@ -102,9 +106,9 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     private ObservableValue<Boolean> dataSourceSelected;
 
-    LoginForm(@NotNull LoginView loginView, @NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
+    LoginForm(@NotNull LoginView parent, @NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
+        this.loginView = Objects.requireNonNull(parent, "The LoginView shouldn't be null");
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
-        this.loginView = Objects.requireNonNull(loginView, "The LoginView shouldn't be null");
         this.databaseTracker = Objects.requireNonNull(tracker, "The DatabaseTracker shouldn't be null");
         this.createdDatabase = new SimpleObjectProperty<>(this, "createdDatabase");
         this.getStyleClass().add(STYLE_CLASS);
@@ -115,16 +119,9 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
         this.databaseTracker.registerObserver(this);
     }
 
-
     private void loadGui() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View.fxml"), getFXMLValues());
-        fxmlLoader.setController(this);
-
-        try {
-            this.getChildren().add(fxmlLoader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ControllerFXMLLoader fxmlLoader = new ControllerFXMLLoader(this, getClass().getResource("View.fxml"), getFXMLValues());
+        this.getChildren().add(fxmlLoader.load());
     }
 
     private void fillForm(LoginData loginData) {
@@ -187,13 +184,9 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
             logger.debug("Signing in was successful; closing the LoginWindow");
             //starting a thread that saves the login-data
             new Thread(() -> {
-                Preferences.Editor editor = getPreferences().editor();
-                editor.set(Preferences.Key.LOGIN_DATA, loginData);
-                try {
-                    editor.commit();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                getPreferences().editor()
+                    .set(Preferences.Key.LOGIN_DATA, loginData)
+                    .tryCommit();
             }).start();
             logger.debug("The window is '{}'", WindowUtils.getStageOf(this));
 
