@@ -10,6 +10,8 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -42,6 +44,9 @@ public class DBManagerTable extends TableView<DatabaseMeta>
     private final List<DatabaseMeta> databaseList;
     private final DatabaseTracker databaseTracker;
 
+    private final IntegerBinding itemsCount;
+    private final IntegerBinding selectedItemsCount;
+
     public DBManagerTable(@NotNull DBManagerView parent,
                           @NotNull DatabaseTracker databaseTracker,
                           @NotNull List<DatabaseMeta> databaseList) {
@@ -49,6 +54,8 @@ public class DBManagerTable extends TableView<DatabaseMeta>
         this.databaseList = databaseList;
         this.databaseTracker = databaseTracker;
         this.databaseTracker.registerObserver(this);
+        this.itemsCount = Bindings.size(getItems());
+        this.selectedItemsCount = Bindings.size(getSelectionModel().getSelectedItems());
         this.init(databaseList);
     }
 
@@ -65,6 +72,14 @@ public class DBManagerTable extends TableView<DatabaseMeta>
         ).forEach(this.getColumns()::add);
 
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+
+    public IntegerBinding selectedItemsCount() {
+        return selectedItemsCount;
+    }
+
+    public IntegerBinding itemsCount() {
+        return itemsCount;
     }
 
     @Override

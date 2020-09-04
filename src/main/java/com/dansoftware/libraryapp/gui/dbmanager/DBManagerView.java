@@ -41,12 +41,11 @@ public class DBManagerView extends SimpleHeaderView<DBManagerTable> implements T
 
     private void createToolbarControls() {
         //Toolbar item that shows how many items are selected from the table
+        DBManagerTable table = getContent();
         var selectedItemsIndicator = new ToolbarItem();
-        IntegerBinding allItemsCount = Bindings.size(this.getContent().getItems());
-        IntegerBinding selectedItemsCount = Bindings.size(this.getContent().getSelectionModel().getSelectedItems());
-        StringExpression allItemsSlashSelected = allItemsCount.asString()
+        StringExpression allItemsSlashSelected = table.itemsCount().asString()
                 .concat("/")
-                .concat(selectedItemsCount)
+                .concat(table.selectedItemsCount())
                 .concat(StringUtils.SPACE)
                 .concat(I18N.getGeneralWord("database.manager.selected"));
         selectedItemsIndicator.textProperty().bind(allItemsSlashSelected);
