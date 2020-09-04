@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.util;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
@@ -29,5 +30,14 @@ public class ControllerFXMLLoader extends FXMLLoader {
 
             return controller;
         }, StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public <T> T load() throws RuntimeException {
+        try {
+            return super.load();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
     }
 }
