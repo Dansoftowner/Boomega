@@ -13,7 +13,7 @@ import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.gui.util.ControllerFXMLLoader;
+import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.util.UniqueList;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -27,7 +27,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
@@ -40,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -120,7 +118,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
     }
 
     private void loadGui() {
-        ControllerFXMLLoader fxmlLoader = new ControllerFXMLLoader(this, getClass().getResource("View.fxml"), getFXMLValues());
+        var fxmlLoader = new FurtherFXMLLoader(this, getClass().getResource("View.fxml"), getFXMLValues());
         this.getChildren().add(fxmlLoader.load());
     }
 
