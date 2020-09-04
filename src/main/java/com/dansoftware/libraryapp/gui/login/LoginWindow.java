@@ -26,17 +26,6 @@ public class LoginWindow extends Stage {
 
     private LoginView root;
 
-    /**
-     * Defines what happens when the user tries to close the window
-     */
-    private final EventHandler<WindowEvent> ON_CLOSE_REQUEST = event -> {
-        Task<Void> saverTask = new LoginDataSaver(root.getLoginData());
-        saverTask.setOnRunning(e -> root.showLoadingOverlay());
-
-        new Thread(saverTask).start();
-
-    };
-
     public LoginWindow(LoginView root) {
         this.root = root;
 
@@ -44,7 +33,6 @@ public class LoginWindow extends Stage {
         //this.setTitle();
         this.getIcons().addAll(Globals.windowIconPack());
         this.setMaximized(true);
-        this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, ON_CLOSE_REQUEST);
         Theme.applyDefault((Themeable) root);
     }
 
