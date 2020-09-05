@@ -1,0 +1,178 @@
+package com.dansoftware.libraryapp.gui.login.form;
+
+import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
+import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
+import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
+import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
+import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
+import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
+import com.dansoftware.libraryapp.gui.util.WindowUtils;
+import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.util.UniqueList;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
+public class FrameFormController implements Initializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(FrameFormController.class);
+
+    private static final int INTERNAL_FORM_INDEX = 2;
+
+    @FXML
+    private VBox rootForm;
+
+    @FXML
+    private ComboBox<DatabaseMeta> databaseChooser;
+
+    @FXML
+    private Button fileChooserBtn;
+
+    @FXML
+    private Button managerBtn;
+
+    private final Context context;
+
+    private final DatabaseTracker databaseTracker;
+
+    @SuppressWarnings("FieldCanBeLocal")
+    private ObservableValue<Boolean> dataSourceSelected;
+
+    /**
+     * A 'wrapped' version of the {@link #databaseChooser} object's
+     * {@link ComboBox#getItems()} observable-list that does not allow to put
+     * duplicate elements.
+     *
+     * @see UniqueList
+     */
+    private List<DatabaseMeta> predicatedDBList;
+
+    private Node internalForm;
+
+    public FrameFormController(@NotNull Context context, @NotNull DatabaseTracker databaseTracker) {
+        this.context = Objects.requireNonNull(context, "The context shouldn't be null!");
+        this.databaseTracker = Objects.requireNonNull(databaseTracker, "DatabaseTracker shouldn't be null");
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        this.predicatedDBList = new UniqueList<>(databaseChooser.getItems());
+        setInternalFormBehaviour();
+        setDefaults();
+    }
+
+    private void setDefaults() {
+        this.fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
+        this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
+        this.databaseChooser.setCellFactory(col -> new DatabaseChooserItem());
+    }
+
+    private void setInternalFormBehaviour() {
+        this.dataSourceSelected = Bindings.isNotNull(databaseChooser.getSelectionModel().selectedItemProperty());
+        this.dataSourceSelected.addListener((observable, wasSelected, selected) -> {
+            //if there is selected element, we show the login form, otherwise we hide it
+            if (selected) this.rootForm.getChildren().add(INTERNAL_FORM_INDEX, loadInternalForm());
+            else this.rootForm.getChildren().remove(INTERNAL_FORM_INDEX);
+        });
+    }
+
+    private Node loadInternalForm() {
+        if (internalForm == null) {
+            var fxmlLoader = new FurtherFXMLLoader(new InternalFormController(), getClass().getResource("InternalForm.fxml"), I18N.getFXMLValues());
+            internalForm = fxmlLoader.load();
+        }
+
+        return internalForm;
+    }
+
+    /**
+     * Creates a file-chooser dialog to import existing database files.
+     */
+    @FXML
+    private void openFile() {
+        DatabaseOpener opener = new DatabaseOpener();
+        List<DatabaseMeta> metas = opener.showMultipleOpenDialog(context.getContextWindow());
+
+        int lastSize = predicatedDBList.size();
+        predicatedDBList.addAll(metas);
+        //if we added new elements, we select the lastItem
+        if (lastSize < predicatedDBList.size()) {
+            DatabaseMeta lastElement = metas.get(metas.size() - 1);
+            databaseChooser.getSelectionModel().select(lastElement);
+        }
+    }
+
+    @FXML
+    private void callDataSourceAdder() {
+        DatabaseCreatorView view = new DatabaseCreatorView();
+
+        DatabaseCreatorWindow window = new DatabaseCreatorWindow(view, context.getContextWindow());
+        window.showAndWait();
+
+        Optional<DatabaseMeta> result = view.getCreatedAccount();
+
+        result.ifPresent(db -> {
+            try {
+                this.predicatedDBList.add(db);
+                this.databaseChooser.getSelectionModel().select(db);
+            } catch (UniqueList.DuplicateElementException e) {
+                logger.error("Duplicate element has been filtered", e);
+            }
+        });
+    }
+
+    @FXML
+    private void openDBManager() {
+        DBManagerView view = new DBManagerView(this.predicatedDBList, this.databaseTracker);
+        DBManagerWindow window = new DBManagerWindow(view, context.getContextWindow());
+        window.show();
+    }
+
+    private class DatabaseChooserItem extends ListCell<DatabaseMeta> {
+        @Override
+        protected void updateItem(DatabaseMeta item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item == null || empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                setText(item.toString());
+                if (databaseTracker.isDatabaseUsed(item)) {
+                    var mark = new Circle(3) {{
+                        getStyleClass().add("state-circle-used");
+                    }};
+
+                    setDisable(true);
+                    setGraphic(mark);
+                } else {
+                    setGraphic(null);
+                    setDisable(false);
+                    setTooltip(null);
+                }
+            }
+        }
+    }
+}

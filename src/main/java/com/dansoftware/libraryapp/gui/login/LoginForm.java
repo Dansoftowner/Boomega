@@ -35,6 +35,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +62,10 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     private static final int LOGIN_BOX_INDEX = 2;
 
+    public interface DatabaseLoginListener {
+        void onDatabaseOpened(@NotNull Database database);
+    }
+
     @FXML
     private ComboBox<DatabaseMeta> sourceChooser;
 
@@ -85,8 +90,6 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
     @FXML
     private CheckBox rememberBox;
 
-    private ObjectProperty<Database> createdDatabase;
-
     /**
      * A 'wrapped' version of the {@link #sourceChooser} object's
      * {@link ComboBox#getItems()} observable-list that does not allow to put
@@ -95,6 +98,8 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
      * @see UniqueList
      */
     private final List<DatabaseMeta> predicatedDBList;
+
+    private final DatabaseLoginListener databaseLoginListener;
 
     private final DatabaseTracker databaseTracker;
 
@@ -271,9 +276,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     private void setDefaults() {
         this.rootForm.getChildren().remove(this.loginForm);
-        this.fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
-        this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
-        this.sourceChooser.setCellFactory(col -> new SourceChooserItem());
+
     }
 
     @Override
