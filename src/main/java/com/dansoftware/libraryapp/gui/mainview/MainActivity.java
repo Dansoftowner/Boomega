@@ -8,6 +8,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
+import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -64,6 +65,11 @@ public class MainActivity implements Context {
     @Override
     public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
 
+    }
+
+    @Override
+    public Window getContextWindow() {
+        return null;
     }
 
     @Override

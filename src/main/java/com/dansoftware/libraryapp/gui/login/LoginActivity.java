@@ -97,6 +97,11 @@ public class LoginActivity implements Context {
     }
 
     @Override
+    public Window getContextWindow() {
+        return WindowUtils.getWindowOf(loginView);
+    }
+
+    @Override
     public void requestFocus() {
         WindowUtils.getWindowOptionalOf(this.loginView).ifPresent(Window::requestFocus);
     }

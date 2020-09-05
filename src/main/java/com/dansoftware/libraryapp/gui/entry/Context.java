@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.entry;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
+import javafx.stage.Window;
 
 import java.util.function.Consumer;
 
@@ -70,6 +71,8 @@ public interface Context {
     void showInformationDialog(String title,
                                String message,
                                Consumer<ButtonType> onResult);
+
+    Window getContextWindow();
 
     /**
      * Requests focus on the particular GUI environment (usually on a {@link javafx.stage.Window}).

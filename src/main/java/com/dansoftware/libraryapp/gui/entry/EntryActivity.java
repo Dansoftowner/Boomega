@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
+import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
@@ -117,6 +118,11 @@ public class EntryActivity implements Context, ChangeListener<Database> {
     public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
         if (subContext != null)
             this.subContext.showInformationDialog(title, message, onResult);
+    }
+
+    @Override
+    public Window getContextWindow() {
+        return subContext != null ? subContext.getContextWindow() : null;
     }
 
     @Override
