@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.entry;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.util.function.Consumer;
@@ -85,6 +86,14 @@ public interface Context {
     void toFront();
 
     boolean isShowing();
+
+    default void close() {
+        Window window = getContextWindow();
+        if (window instanceof Stage)
+            ((Stage) window).close();
+        else
+            window.hide();
+    }
 
     default void showErrorDialog(String title, String message) {
         this.showErrorDialog(title, message, buttonType -> {
