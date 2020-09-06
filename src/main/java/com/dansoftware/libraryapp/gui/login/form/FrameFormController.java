@@ -177,8 +177,7 @@ public class FrameFormController
         var databaseOpener = new DatabaseOpener();
         List<DatabaseMeta> openedDatabases = databaseOpener.showMultipleOpenDialog(context.getContextWindow());
         openedDatabases.stream()
-                .filter(databaseMetaSet::add) //only care about the elements that are not in the databaseMetaSet yet
-                .peek(this.databaseChooser.getItems()::add)
+                .peek(databaseTracker::addDatabase)
                 .reduce((first, second) -> second) //finding the last element
                 .ifPresent(databaseChooser.getSelectionModel()::select);
     }
