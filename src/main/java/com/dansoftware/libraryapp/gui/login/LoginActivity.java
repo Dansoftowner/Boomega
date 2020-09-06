@@ -1,11 +1,13 @@
 package com.dansoftware.libraryapp.gui.login;
 
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
-import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
@@ -14,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -26,14 +27,11 @@ import java.util.function.Consumer;
 public class LoginActivity implements Context {
 
     private final BooleanProperty showing;
-    private final ObjectProperty<Database> createdDatabase;
     private LoginView loginView;
 
-    public LoginActivity(@NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
+    public LoginActivity(@NotNull DatabaseLoginListener databaseLoginListener, @NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
         this.showing = new SimpleBooleanProperty();
-        this.loginView = new LoginView(loginData, tracker);
-        this.createdDatabase = new SimpleObjectProperty<>();
-        this.createdDatabase.bind(loginView.createdDatabaseProperty());
+        this.loginView = new LoginView(this, databaseLoginListener, loginData, tracker);
     }
 
     /**
@@ -45,14 +43,6 @@ public class LoginActivity implements Context {
             this.showing.bind(loginWindow.showingProperty());
             loginWindow.show();
         }
-    }
-
-    public ObjectProperty<Database> createdDatabaseProperty() {
-        return createdDatabase;
-    }
-
-    public Optional<Database> getCreatedDatabase() {
-        return Optional.ofNullable(createdDatabase.get());
     }
 
     public ReadOnlyBooleanProperty showingProperty() {

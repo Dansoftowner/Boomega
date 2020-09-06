@@ -1,3 +1,4 @@
+/*
 package com.dansoftware.libraryapp.gui.login;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
@@ -16,13 +17,8 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.util.UniqueList;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -35,7 +31,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,18 +41,22 @@ import java.util.*;
 import static com.dansoftware.libraryapp.appdata.Preferences.getPreferences;
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
+*/
 /**
  * A LoginForm is gui-form that lets the user to sign in to
  * a database. It's usually wrapped in a {@link LoginView}
  * object.
- */
-public class LoginForm extends StackPane implements Initializable, DatabaseTracker.Observer {
+ *//*
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginForm.class);
+public class LoginFormOLD extends StackPane implements Initializable, DatabaseTracker.Observer {
 
-    /**
+    private static final Logger logger = LoggerFactory.getLogger(LoginFormOLD.class);
+
+    */
+/**
      * Style class for styling this gui object in css
-     */
+     *//*
+
     private static final String STYLE_CLASS = "login-form";
 
     private static final int LOGIN_BOX_INDEX = 2;
@@ -90,13 +89,15 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
     @FXML
     private CheckBox rememberBox;
 
-    /**
+    */
+/**
      * A 'wrapped' version of the {@link #sourceChooser} object's
      * {@link ComboBox#getItems()} observable-list that does not allow to put
      * duplicate elements.
      *
      * @see UniqueList
-     */
+     *//*
+
     private final List<DatabaseMeta> predicatedDBList;
 
     private final DatabaseLoginListener databaseLoginListener;
@@ -109,7 +110,7 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
 
     private ObservableValue<Boolean> dataSourceSelected;
 
-    LoginForm(@NotNull LoginView parent, @NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
+    LoginFormOLD(@NotNull LoginView parent, @NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
         this.loginView = Objects.requireNonNull(parent, "The LoginView shouldn't be null");
         this.loginData = Objects.requireNonNull(loginData, "loginData mustn't be null");
         this.databaseTracker = Objects.requireNonNull(tracker, "The DatabaseTracker shouldn't be null");
@@ -151,9 +152,11 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
                 usernameInput.setText(credentials.getUsername());
                 passwordInput.setText(credentials.getPassword());
             }
-        } /*else {
+        } */
+/*else {
             loginData.setAutoLoginCredentials(null);
-        }*/
+        }*//*
+
     }
 
     @FXML
@@ -197,9 +200,11 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
         }
     }
 
-    /**
+    */
+/**
      * Creates a file-chooser dialog to import existing database files.
-     */
+     *//*
+
     @FXML
     private void openFile() {
         DatabaseOpener opener = new DatabaseOpener();
@@ -252,9 +257,11 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
     }
 
     private void addListeners() {
-  /*      this.sourceChooser.getItems().addListener((ListChangeListener<DatabaseMeta>) observable -> {
+  */
+/*      this.sourceChooser.getItems().addListener((ListChangeListener<DatabaseMeta>) observable -> {
             this.loginData.setLastDatabases(this.sourceChooser.getItems());
-        });*/
+        });*//*
+
 
         //creating an observable-value that represents that the sourceChooser combobox has selected element
         this.dataSourceSelected = Bindings.isNotNull(sourceChooser.getSelectionModel().selectedItemProperty());
@@ -265,13 +272,15 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
             else
                 this.rootForm.getChildren().remove(LOGIN_BOX_INDEX);
         });
+*/
 /*
         this.sourceChooser.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     loginData.setSelectedDatabase(newValue);
                 });
-*/
+*//*
+
     }
 
     private void setDefaults() {
@@ -351,3 +360,4 @@ public class LoginForm extends StackPane implements Initializable, DatabaseTrack
         }
     }
 }
+*/

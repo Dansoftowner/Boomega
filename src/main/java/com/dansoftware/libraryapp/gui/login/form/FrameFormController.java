@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.login.form;
 
+import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
@@ -9,7 +10,7 @@ import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
-import com.dansoftware.libraryapp.gui.util.WindowUtils;
+import com.dansoftware.libraryapp.gui.util.UIUtils;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.UniqueList;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -36,7 +37,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class FrameFormController implements Initializable {
+public class FrameFormController
+        implements Initializable, DatabaseTracker.Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(FrameFormController.class);
 
@@ -56,7 +58,11 @@ public class FrameFormController implements Initializable {
 
     private final Context context;
 
+    private final LoginData loginData;
+
     private final DatabaseTracker databaseTracker;
+
+    private final DatabaseLoginListener databaseLoginListener;
 
     @SuppressWarnings("FieldCanBeLocal")
     private ObservableValue<Boolean> dataSourceSelected;
@@ -72,9 +78,15 @@ public class FrameFormController implements Initializable {
 
     private Node internalForm;
 
-    public FrameFormController(@NotNull Context context, @NotNull DatabaseTracker databaseTracker) {
+    public FrameFormController(@NotNull Context context,
+                               @NotNull LoginData loginData,
+                               @NotNull DatabaseTracker databaseTracker,
+                               @NotNull DatabaseLoginListener databaseLoginListener) {
         this.context = Objects.requireNonNull(context, "The context shouldn't be null!");
+        this.loginData = Objects.requireNonNull(loginData, "LoginData shouldn't be null");
         this.databaseTracker = Objects.requireNonNull(databaseTracker, "DatabaseTracker shouldn't be null");
+        this.databaseLoginListener = Objects.requireNonNull(databaseLoginListener, "DatabaseLoginListener shouldn't be null");
+        this.databaseTracker.registerObserver(this);
     }
 
     @Override
@@ -82,6 +94,16 @@ public class FrameFormController implements Initializable {
         this.predicatedDBList = new UniqueList<>(databaseChooser.getItems());
         setInternalFormBehaviour();
         setDefaults();
+        fillForm(this.loginData);
+    }
+
+    private void fillForm(@NotNull LoginData loginData) {
+        this.predicatedDBList.addAll(loginData.getLastDatabases());
+        DatabaseMeta selectedDatabase = loginData.getSelectedDatabase();
+        if (selectedDatabase != null) {
+            //logger.debug("Selecting the database read from loginData...");
+            databaseChooser.getSelectionModel().select(selectedDatabase);
+        }
     }
 
     private void setDefaults() {
@@ -101,11 +123,49 @@ public class FrameFormController implements Initializable {
 
     private Node loadInternalForm() {
         if (internalForm == null) {
-            var fxmlLoader = new FurtherFXMLLoader(new InternalFormController(), getClass().getResource("InternalForm.fxml"), I18N.getFXMLValues());
+            var fxmlController = new InternalFormController(
+                    context,
+                    loginData,
+                    databaseLoginListener,
+                    () -> databaseChooser.getSelectionModel().getSelectedItem()
+            );
+
+            var fxmlLoader = new FurtherFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getFXMLValues());
             internalForm = fxmlLoader.load();
         }
 
         return internalForm;
+    }
+
+    @Override
+    public void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        UIUtils.runOnUiThread(() -> {
+            UIUtils.refreshComboBox(this.databaseChooser);
+            if (databaseMeta.equals(databaseChooser.getSelectionModel().getSelectedItem())) {
+                databaseChooser.getSelectionModel().select(null);
+            }
+        });
+    }
+
+    @Override
+    public void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        UIUtils.runOnUiThread(() -> UIUtils.refreshComboBox(this.databaseChooser));
+    }
+
+    @Override
+    public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
+        UIUtils.runOnUiThread(() -> {
+            try {
+                this.predicatedDBList.add(databaseMeta);
+            } catch (UniqueList.DuplicateElementException e) {
+                logger.error("Duplicate element added");
+            }
+        });
+    }
+
+    @Override
+    public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
+        UIUtils.runOnUiThread(() -> this.predicatedDBList.remove(databaseMeta));
     }
 
     /**
@@ -152,6 +212,11 @@ public class FrameFormController implements Initializable {
     }
 
     private class DatabaseChooserItem extends ListCell<DatabaseMeta> {
+
+        DatabaseChooserItem() {
+            setMaxWidth(650);
+        }
+
         @Override
         protected void updateItem(DatabaseMeta item, boolean empty) {
             super.updateItem(item, empty);

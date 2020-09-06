@@ -3,9 +3,8 @@ package com.dansoftware.libraryapp.gui.entry;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.login.LoginActivity;
+import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import javafx.stage.Window;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Gyorffy
  */
-public class EntryActivity implements Context, ChangeListener<Database> {
+public class EntryActivity implements Context, DatabaseLoginListener {
 
     private static final List<WeakReference<EntryActivity>> instances =
             Collections.synchronizedList(new LinkedList<>());
@@ -57,15 +56,10 @@ public class EntryActivity implements Context, ChangeListener<Database> {
     }
 
     @Override
-    public void changed(ObservableValue<? extends Database> observable, Database oldValue, Database createdDatabase) {
-        if (createdDatabase != null) {
-            var mainActivity = new MainActivity(createdDatabase);
-            this.subContext = mainActivity;
-            mainActivity.show();
-
-            //removing this object from the listeners
-            observable.removeListener(this);
-        }
+    public void onDatabaseOpened(@NotNull Database database) {
+        var mainActivity = new MainActivity(database);
+        this.subContext = mainActivity;
+        mainActivity.show();
     }
 
     /**
@@ -73,10 +67,9 @@ public class EntryActivity implements Context, ChangeListener<Database> {
      */
     public void show() {
         if (!this.isShowing()) {
-            var loginActivity = new LoginActivity(loginData, databaseTracker);
+            var loginActivity = new LoginActivity(this, loginData, databaseTracker);
             this.subContext = loginActivity;
             loginActivity.show();
-            loginActivity.createdDatabaseProperty().addListener(this);
         }
     }
 
