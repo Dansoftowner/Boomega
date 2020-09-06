@@ -32,10 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class FrameFormController
         implements Initializable, DatabaseTracker.Observer {
@@ -67,6 +64,8 @@ public class FrameFormController
     @SuppressWarnings("FieldCanBeLocal")
     private ObservableValue<Boolean> dataSourceSelected;
 
+    private final Set<DatabaseMeta> databaseMetaSet;
+
     /**
      * A 'wrapped' version of the {@link #databaseChooser} object's
      * {@link ComboBox#getItems()} observable-list that does not allow to put
@@ -74,7 +73,7 @@ public class FrameFormController
      *
      * @see UniqueList
      */
-    private List<DatabaseMeta> predicatedDBList;
+    //private List<DatabaseMeta> predicatedDBList;
 
     private Node internalForm;
 
@@ -86,22 +85,23 @@ public class FrameFormController
         this.loginData = Objects.requireNonNull(loginData, "LoginData shouldn't be null");
         this.databaseTracker = Objects.requireNonNull(databaseTracker, "DatabaseTracker shouldn't be null");
         this.databaseLoginListener = Objects.requireNonNull(databaseLoginListener, "DatabaseLoginListener shouldn't be null");
+        this.databaseMetaSet = new HashSet<>();
         this.databaseTracker.registerObserver(this);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.predicatedDBList = new UniqueList<>(databaseChooser.getItems());
         setInternalFormBehaviour();
         setDefaults();
         fillForm(this.loginData);
     }
 
     private void fillForm(@NotNull LoginData loginData) {
-        this.predicatedDBList.addAll(loginData.getLastDatabases());
+        List<DatabaseMeta> lastDatabases = loginData.getLastDatabases();
+        this.databaseMetaSet.addAll(lastDatabases);
+        this.databaseChooser.getItems().addAll(lastDatabases);
         DatabaseMeta selectedDatabase = loginData.getSelectedDatabase();
         if (selectedDatabase != null) {
-            //logger.debug("Selecting the database read from loginData...");
             databaseChooser.getSelectionModel().select(selectedDatabase);
         }
     }
@@ -155,17 +155,18 @@ public class FrameFormController
     @Override
     public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
         UIUtils.runOnUiThread(() -> {
-            try {
-                this.predicatedDBList.add(databaseMeta);
-            } catch (UniqueList.DuplicateElementException e) {
-                logger.error("Duplicate element added");
+            if (databaseMetaSet.add(databaseMeta)) {
+                this.databaseChooser.getItems().add(databaseMeta);
             }
         });
     }
 
     @Override
     public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
-        UIUtils.runOnUiThread(() -> this.predicatedDBList.remove(databaseMeta));
+        UIUtils.runOnUiThread(() -> {
+            databaseMetaSet.remove(databaseMeta);
+            this.databaseChooser.getItems().remove(databaseMeta);
+        });
     }
 
     /**
@@ -173,16 +174,13 @@ public class FrameFormController
      */
     @FXML
     private void openFile() {
-        DatabaseOpener opener = new DatabaseOpener();
-        List<DatabaseMeta> metas = opener.showMultipleOpenDialog(context.getContextWindow());
-
-        int lastSize = predicatedDBList.size();
-        predicatedDBList.addAll(metas);
-        //if we added new elements, we select the lastItem
-        if (lastSize < predicatedDBList.size()) {
-            DatabaseMeta lastElement = metas.get(metas.size() - 1);
-            databaseChooser.getSelectionModel().select(lastElement);
-        }
+        var databaseOpener = new DatabaseOpener();
+        List<DatabaseMeta> openedDatabases = databaseOpener.showMultipleOpenDialog(context.getContextWindow());
+        openedDatabases.stream()
+                .filter(databaseMetaSet::add) //only care about the elements that are not in the databaseMetaSet yet
+                .peek(this.databaseChooser.getItems()::add)
+                .reduce((first, second) -> second) //finding the last element
+                .ifPresent(databaseChooser.getSelectionModel()::select);
     }
 
     @FXML
@@ -193,20 +191,16 @@ public class FrameFormController
         window.showAndWait();
 
         Optional<DatabaseMeta> result = view.getCreatedAccount();
-
-        result.ifPresent(db -> {
-            try {
-                this.predicatedDBList.add(db);
-                this.databaseChooser.getSelectionModel().select(db);
-            } catch (UniqueList.DuplicateElementException e) {
-                logger.error("Duplicate element has been filtered", e);
-            }
-        });
+        result.stream()
+                .filter(databaseMetaSet::add)
+                .peek(this.databaseChooser.getItems()::add)
+                .findAny()
+                .ifPresent(this.databaseChooser.getSelectionModel()::select);
     }
 
     @FXML
     private void openDBManager() {
-        DBManagerView view = new DBManagerView(this.predicatedDBList, this.databaseTracker);
+        DBManagerView view = new DBManagerView(this.databaseTracker);
         DBManagerWindow window = new DBManagerWindow(view, context.getContextWindow());
         window.show();
     }

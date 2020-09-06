@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.util.UIUtils;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.explorer.FileExplorers;
@@ -22,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -41,25 +42,22 @@ public class DBManagerTable extends TableView<DatabaseMeta>
     private static final Logger logger = LoggerFactory.getLogger(DBManagerTable.class);
 
     private final DBManagerView parent;
-    private final List<DatabaseMeta> databaseList;
     private final DatabaseTracker databaseTracker;
 
     private final IntegerBinding itemsCount;
     private final IntegerBinding selectedItemsCount;
 
     public DBManagerTable(@NotNull DBManagerView parent,
-                          @NotNull DatabaseTracker databaseTracker,
-                          @NotNull List<DatabaseMeta> databaseList) {
+                          @NotNull DatabaseTracker databaseTracker) {
         this.parent = parent;
-        this.databaseList = databaseList;
         this.databaseTracker = databaseTracker;
         this.databaseTracker.registerObserver(this);
         this.itemsCount = Bindings.size(getItems());
         this.selectedItemsCount = Bindings.size(getSelectionModel().getSelectedItems());
-        this.init(databaseList);
+        this.init(databaseTracker.getSavedDatabases());
     }
 
-    private void init(List<DatabaseMeta> databases) {
+    private void init(Collection<DatabaseMeta> databases) {
         this.getItems().addAll(databases);
         this.setPlaceholder(new Label(I18N.getGeneralWord("database.manager.table.place.holder")));
         Stream.of(
@@ -84,26 +82,22 @@ public class DBManagerTable extends TableView<DatabaseMeta>
 
     @Override
     public void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        Platform.runLater(this::refresh);
+        UIUtils.runOnUiThread(this::refresh);
     }
 
     @Override
     public void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        Platform.runLater(this::refresh);
+        UIUtils.runOnUiThread(this::refresh);
     }
 
     @Override
     public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
-        Platform.runLater(() -> {
-            this.getItems().add(databaseMeta);
-        });
+        UIUtils.runOnUiThread(() -> this.getItems().add(databaseMeta));
     }
 
     @Override
     public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
-        Platform.runLater(() -> {
-            this.getItems().remove(databaseMeta);
-        });
+        UIUtils.runOnUiThread(() -> this.getItems().remove(databaseMeta));
     }
 
 
@@ -321,8 +315,7 @@ public class DBManagerTable extends TableView<DatabaseMeta>
                     ButtonType.NO
             ).onResult(buttonType -> {
                 if (Objects.equals(buttonType, ButtonType.YES)) {
-                    DBManagerTable.this.databaseList.removeAll(itemsToRemove);
-                    DBManagerTable.this.getItems().removeAll(itemsToRemove);
+                    itemsToRemove.forEach(DBManagerTable.this.databaseTracker::removeDatabase);
                 }
             }).build());
         }

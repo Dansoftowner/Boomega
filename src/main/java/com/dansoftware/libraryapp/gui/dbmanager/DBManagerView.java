@@ -31,11 +31,11 @@ public class DBManagerView extends SimpleHeaderView<DBManagerTable> implements T
     /**
      * Creates a {@link DBManagerView} with a list of database-information ({@link DatabaseMeta}) objects.
      *
-     * @param items the items to be displayed.
+     * @param databaseTracker the database-tracker
      */
-    public DBManagerView(@NotNull List<DatabaseMeta> items, @NotNull DatabaseTracker databaseTracker) {
+    public DBManagerView(@NotNull DatabaseTracker databaseTracker) {
         super(I18N.getGeneralWord("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
-        super.setContent(new DBManagerTable(this, databaseTracker, items));
+        super.setContent(new DBManagerTable(this, databaseTracker));
         this.createToolbarControls();
     }
 
