@@ -164,8 +164,8 @@ public class FrameFormController
     @Override
     public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
         UIUtils.runOnUiThread(() -> {
-            databaseMetaSet.remove(databaseMeta);
-            this.databaseChooser.getItems().remove(databaseMeta);
+            if (databaseMetaSet.remove(databaseMeta))
+                this.databaseChooser.getItems().remove(databaseMeta);
         });
     }
 
@@ -191,8 +191,7 @@ public class FrameFormController
 
         Optional<DatabaseMeta> result = view.getCreatedAccount();
         result.stream()
-                .filter(databaseMetaSet::add)
-                .peek(this.databaseChooser.getItems()::add)
+                .peek(databaseTracker::addDatabase)
                 .findAny()
                 .ifPresent(this.databaseChooser.getSelectionModel()::select);
     }
