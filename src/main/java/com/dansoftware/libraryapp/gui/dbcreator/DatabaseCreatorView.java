@@ -27,7 +27,7 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
     }
 
     public Optional<DatabaseMeta> getCreatedAccount() {
-        return this.form.getCreatedDb();
+        return this.form.getCreatedDatabase();
     }
 
     @Override

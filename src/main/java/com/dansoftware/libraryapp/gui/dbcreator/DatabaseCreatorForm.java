@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
+import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
@@ -11,9 +12,9 @@ import com.jfilegoodies.FileGoodies;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -24,11 +25,12 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
 import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
@@ -71,7 +73,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
     private final DatabaseCreatorView parent;
 
-    private DatabaseMeta createdDb;
+    private DatabaseMeta createdDatabase;
 
     public DatabaseCreatorForm(DatabaseCreatorView parent) {
         this.loadGui();
@@ -79,116 +81,64 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     }
 
     private void loadGui() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DatabaseCreatorForm.fxml"), getFXMLValues());
-        fxmlLoader.setController(this);
-
-        try {
-            this.getChildren().add(fxmlLoader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        var fxmlLoader = new FurtherFXMLLoader(this, getClass().getResource("DatabaseCreatorForm.fxml"), getFXMLValues());
+        this.getChildren().add(fxmlLoader.load());
     }
 
-    public Optional<DatabaseMeta> getCreatedDb() {
-        return Optional.ofNullable(this.createdDb);
+    public Optional<DatabaseMeta> getCreatedDatabase() {
+        return Optional.ofNullable(this.createdDatabase);
     }
 
     @FXML
     private void create() {
 
         // validating the inputs
-        if (StringUtils.isBlank(nameField.getText())) {
-            this.parent.showErrorDialog(
-                    getAlertMsg("db.creator.form.invalid.missing.name.title"),
-                    getAlertMsg("db.creator.form.invalid.missing.name.msg"), buttonType -> {
-                        new animatefx.animation.Tada(this.nameField).play();
-                    });
-            return;
-        }
-
-        if (StringUtils.isBlank(dirField.getText())) {
-            this.parent.showErrorDialog(
-                    getAlertMsg("db.creator.form.invalid.missing.dir.title"),
-                    getAlertMsg("db.creator.form.invalid.missing.dir.msg"), buttonType -> {
-                        new animatefx.animation.Tada(this.dirField).play();
+        var validator = new Validator();
+        validator.ifNameEmpty(
+                getAlertMsg("db.creator.form.invalid.missing.name.title"),
+                getAlertMsg("db.creator.form.invalid.missing.name.msg"),
+                buttonType -> new animatefx.animation.Tada(this.nameField).play()
+        ).ifDirEmpty(
+                getAlertMsg("db.creator.form.invalid.missing.dir.title"),
+                getAlertMsg("db.creator.form.invalid.missing.dir.msg"),
+                buttonType -> new animatefx.animation.Tada(this.dirField).play()
+        ).ifDirHasNotValidPath(
+                getAlertMsg("db.creator.form.invalid.dir.title"),
+                getAlertMsg("db.creator.form.invalid.dir.msg", validator.dirFile),
+                buttonType -> new animatefx.animation.Tada(this.dirField).play()
+        ).ifDirFileNotExists(
+                getAlertMsg("db.creator.form.confirm.dir.not.exist.title", validator.dirFile.getName()),
+                getAlertMsg("db.creator.form.confirm.dir.not.exist.msg"), (buttonType) -> {
+                    try {
+                        validator.dirFile.mkdirs();
+                    } catch (java.lang.SecurityException e) {
+                        //handle
                     }
-            );
-            return;
-        }
-
-        File dirFile = new File(dirField.getText());
-        File dbFile = new File(fullPathField.getText());
-
-        if (FileGoodies.hasNotValidPath(dirFile)) {
-            this.parent.showErrorDialog(
-                    getAlertMsg("db.creator.form.invalid.dir.title"),
-                    getAlertMsg("db.creator.form.invalid.dir.msg", dirFile), buttonType -> {
-                        new animatefx.animation.Tada(this.dirField).play();
-                    });
-            return;
-        }
-
-        if (!dirFile.exists()) {
-            this.parent.showInformationDialog(
-                    getAlertMsg("db.creator.form.confirm.dir.not.exist.title", dirFile.getName()),
-                    getAlertMsg("db.creator.form.confirm.dir.not.exist.msg"), (buttonType) -> {
-                        try {
-                            dirFile.mkdirs();
-                        } catch (java.lang.SecurityException e) {
-                            //handle
-                        }
-                    }
-            );
-        }
-
-        if (dbFile.exists()) {
-            this.parent.showErrorDialog(
-                    getAlertMsg("db.creater.form.invalid.file.already.exists.title"),
-                    getAlertMsg("db.creater.form.invalid.file.already.exists.msg",
-                            FileGoodies.shortenedFilePath(dbFile, 1)),
-                    buttonType -> {
-                    });
-            return;
-        }
-
-
-        String username = null;
-        String password = null;
-        if (authCheckBox.isSelected()) {
-            username = usernameField.getText();
-            password = passwordField.getText();
-
-            if (StringUtils.isBlank(username)) {
-                this.parent.showErrorDialog(
-                        getAlertMsg("db.creator.form.invalid.empty.user.name.title"),
-                        getAlertMsg("db.creator.form.invalid.empty.user.name.msg"),
-                        buttonType -> {
-                            new animatefx.animation.Tada(this.usernameField).play();
+                }
+        ).ifDbFileExists(
+                getAlertMsg("db.creater.form.invalid.file.already.exists.title"),
+                getAlertMsg("db.creater.form.invalid.file.already.exists.msg",
+                        FileGoodies.shortenedFilePath(validator.dbFile, 1)),
+                buttonType -> {
+                }
+        ).ifUsernameEmpty(
+                getAlertMsg("db.creator.form.invalid.empty.user.name.title"),
+                getAlertMsg("db.creator.form.invalid.empty.user.name.msg"),
+                buttonType -> new animatefx.animation.Tada(this.usernameField).play()
+        ).ifPasswordEmpty(
+                getAlertMsg("db.creator.form.invalid.empty.password.title"),
+                getAlertMsg("db.creator.form.invalid.empty.password.msg"),
+                buttonType -> new animatefx.animation.Tada(this.passwordField).play()
+        ).onSuccess((createdDatabase, credentials) -> {
+            this.createdDatabase = createdDatabase;
+            LoginProcessor.of(NitriteDatabase.factory())
+                    .onFailed((title, message, t) -> {
+                        this.createdDatabase = null;
+                        this.parent.showErrorDialog(title, message, (Exception) t, buttonType -> {
                         });
-                return;
-            }
-            if (StringUtils.isBlank(password)) {
-                this.parent.showErrorDialog(
-                        getAlertMsg("db.creator.form.invalid.empty.password.title"),
-                        getAlertMsg("db.creator.form.invalid.empty.password.msg"),
-                        buttonType -> {
-                            new animatefx.animation.Tada(this.passwordField).play();
-                        });
-                return;
-            }
-        }
-
-        // trying to create the database
-        this.createdDb = new DatabaseMeta(this.nameField.getText(), dbFile);
-        // We create the database on the disk
-        LoginProcessor.of(NitriteDatabase.factory())
-                .onFailed((title, message, t) -> {
-                    this.createdDb = null;
-                    this.parent.showErrorDialog(title, message, (Exception) t, buttonType -> {
-                    });
-                }).touch(createdDb, new Credentials(username, password));
-
-        WindowUtils.getStageOptionalOf(this).ifPresent(Stage::close);
+                    }).touch(createdDatabase, credentials);
+            WindowUtils.getStageOptionalOf(this).ifPresent(Stage::close);
+        });
     }
 
     @FXML
@@ -262,5 +212,98 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         setDefaults();
         setBehaviour();
         setDragSupport();
+    }
+
+    private class Validator {
+
+        private boolean chainBroke;
+
+        private final boolean dirIsEmpty;
+        private final boolean nameIsEmpty;
+        private final boolean dirIsNotValid;
+        private final boolean dirFileNotExists;
+        private final boolean dbFileExists;
+        private final boolean usernameEmpty;
+        private final boolean passwordEmpty;
+
+        private final File dirFile;
+        private final File dbFile;
+
+        Validator() {
+            dirFile = new File(dirField.getText());
+            dbFile = new File(fullPathField.getText());
+
+            dirIsEmpty = StringUtils.isBlank(dirField.getText());
+            nameIsEmpty = StringUtils.isBlank(nameField.getText());
+            dirIsNotValid = FileGoodies.hasNotValidPath(dirFile);
+            dirFileNotExists = !dirFile.exists();
+            dbFileExists = dbFile.exists();
+            usernameEmpty = authCheckBox.isSelected() && StringUtils.isBlank(usernameField.getText());
+            passwordEmpty = authCheckBox.isSelected() && StringUtils.isBlank(passwordField.getText());
+        }
+
+        Validator ifNameEmpty(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
+            if (!chainBroke && nameIsEmpty) {
+                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
+                chainBroke = true;
+            }
+            return this;
+        }
+
+        Validator ifDirEmpty(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
+            if (!chainBroke && dirIsEmpty) {
+                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
+                chainBroke = true;
+            }
+            return this;
+        }
+
+        Validator ifDirHasNotValidPath(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
+            if (!chainBroke && dirIsNotValid) {
+                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
+                chainBroke = true;
+            }
+            return this;
+        }
+
+        Validator ifDirFileNotExists(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
+            if (!chainBroke && dirFileNotExists) {
+                parent.showInformationDialog(dialogTitle, dialogMsg, onResult);
+                chainBroke = true;
+            }
+            return this;
+        }
+
+        Validator ifDbFileExists(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
+            if (!chainBroke && dbFileExists) {
+                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
+                chainBroke = true;
+            }
+            return this;
+        }
+
+        Validator ifUsernameEmpty(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
+            if (!chainBroke && usernameEmpty) {
+                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
+                chainBroke = true;
+            }
+            return this;
+        }
+
+        Validator ifPasswordEmpty(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
+            if (!chainBroke && passwordEmpty) {
+                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
+                chainBroke = true;
+            }
+            return this;
+        }
+
+        void onSuccess(BiConsumer<DatabaseMeta, Credentials> action) {
+            if (!chainBroke)
+                action.accept(
+                        new DatabaseMeta(nameField.getText(), dbFile),
+                        new Credentials(usernameField.getText(), passwordField.getText())
+                );
+        }
     }
 }
