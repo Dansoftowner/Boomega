@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.util.FXCollectionUtils;
 import com.dansoftware.libraryapp.gui.util.UIUtils;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
@@ -13,6 +14,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -287,7 +290,8 @@ public class DBManagerTable extends TableView<DatabaseMeta>
                         deleteButton.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE_MINUS));
                         deleteButton.prefWidthProperty().bind(tableColumn.widthProperty());
                         deleteButton.setOnAction(event -> {
-                            ObservableList<DatabaseMeta> selectedItems = getTableView().getSelectionModel().getSelectedItems();
+                            ObservableList<DatabaseMeta> selectedItems =
+                                    FXCollectionUtils.copyOf(getTableView().getSelectionModel().getSelectedItems());
                             DBDeleteDialog dialog = new DBDeleteDialog();
                             dialog.show(selectedItems);
                         });
