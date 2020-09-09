@@ -68,13 +68,11 @@ public class Main extends BaseApplication {
         LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
         loginData.getLastDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
 
-        //setting the default locale
         Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
-        logger.debug("Locale is: {}", Locale.getDefault());
+        logger.info("Locale is: {}", Locale.getDefault());
 
-        //setting the default theme
         Theme.setDefault(preferences.get(Preferences.Key.THEME));
-        logger.debug("Theme is: {}", Theme.getDefault());
+        logger.info("Theme is: {}", Theme.getDefault());
 
         //searching for updates
         UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO);
@@ -93,6 +91,10 @@ public class Main extends BaseApplication {
 
     /**
      * An {@link ActivityLauncher} implementation for starting the application.
+     *
+     * <p>
+     * When an activity is launched, it also shows an "notifier box" if
+     * a new update is available.
      */
     private static final class InitActivityLauncher extends ActivityLauncher {
 
