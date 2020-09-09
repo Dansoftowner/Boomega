@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * @author Daniel Gyorffy
  * @see DBManagerView
  */
-public class DBManagerTable extends TableView<DatabaseMeta>
+class DBManagerTable extends TableView<DatabaseMeta>
         implements DatabaseTracker.Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(DBManagerTable.class);
