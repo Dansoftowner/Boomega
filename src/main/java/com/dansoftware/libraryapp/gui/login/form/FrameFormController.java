@@ -61,19 +61,23 @@ public class FrameFormController
 
     private final DatabaseLoginListener databaseLoginListener;
 
+    /**
+     * A boolean observable-value that represents that an item is selected in
+     * the {@link #databaseChooser}.
+     *
+     * <p>
+     * A field is defined for it, because otherwise the garbage collector
+     * would remove it
+     *
+     * @see #setInternalFormBehaviour()
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private ObservableValue<Boolean> dataSourceSelected;
 
-    private final Set<DatabaseMeta> databaseMetaSet;
-
     /**
-     * A 'wrapped' version of the {@link #databaseChooser} object's
-     * {@link ComboBox#getItems()} observable-list that does not allow to put
-     * duplicate elements.
-     *
-     * @see UniqueList
+     * Set for filtering possible duplicate elements
      */
-    //private List<DatabaseMeta> predicatedDBList;
+    private final Set<DatabaseMeta> databaseMetaSet;
 
     private Node internalForm;
 
