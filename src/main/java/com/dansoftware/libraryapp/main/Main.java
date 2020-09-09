@@ -29,7 +29,7 @@ import java.util.Locale;
  */
 public class Main extends BaseApplication {
 
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger;
 
     static {
         //Configure the logger
@@ -37,9 +37,12 @@ public class Main extends BaseApplication {
         System.setProperty("log.file.path", logFile.getAbsolutePath());
         System.setProperty("log.file.path.full", logFile.getPathWithExtension());
 
+        logger = LoggerFactory.getLogger(Main.class);
+
         //Set the default uncaught exception handler
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     }
+
 
     /**
      * The main-method of the application;
