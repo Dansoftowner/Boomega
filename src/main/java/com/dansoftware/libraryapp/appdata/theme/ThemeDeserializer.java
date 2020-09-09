@@ -21,48 +21,62 @@ public class ThemeDeserializer implements JsonDeserializer<Theme> {
 
     private static final Logger logger = LoggerFactory.getLogger(ThemeDeserializer.class);
 
+    private static final class ThemeClassNotValidException extends Exception {
+        ThemeClassNotValidException(String msg) {
+            super(msg);
+        }
+    }
+
+    private ClassLoader getClassLoader() {
+        return PluginClassLoader.getInstance();
+    }
+
+    private String getClassName(JsonElement jsonElement) {
+        return jsonElement.getAsString();
+    }
+
+    private Class<?> getClassRef(String className) throws ClassNotFoundException {
+        return getClassLoader().loadClass(className);
+    }
+
+    private Constructor<?> getThemeConstructor(Class<?> classRef) throws NoSuchMethodException {
+        return classRef.getConstructor();
+    }
+
+    private Object getInstanceOf(Class<?> classRef) {
+        try {
+            Constructor<?> defaultConstructor = getThemeConstructor(classRef);
+            defaultConstructor.setAccessible(true);
+            return defaultConstructor.newInstance();
+        } catch (ReflectiveOperationException | ClassCastException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void checkClassValid(Class<?> classRef) throws ThemeClassNotValidException {
+        if (classRef == Theme.class) {
+            throw new ThemeClassNotValidException(String.format("The class shouldn't be the abstract '%s' class", Theme.class));
+        } else if (!Theme.class.isAssignableFrom(classRef)) {
+            throw new ThemeClassNotValidException(String.format("The class '%s' is not a subtype of '%s'", classRef, Theme.class));
+        }
+    }
+
+    private Theme getThemeInstance(JsonElement json) {
+        try {
+            Class<?> classRef = getClassRef(getClassName(json));
+            checkClassValid(classRef);
+            return (Theme) getInstanceOf(classRef);
+        } catch (ClassNotFoundException e) {
+            logger.error("The configured theme not found", e);
+        } catch (ThemeClassNotValidException e) {
+            logger.error("The configured theme is not valid", e);
+        }
+
+        return null;
+    }
+
     @Override
     public Theme deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        //the class-loader that can load classes from the class-path and from the plugin archives too
-        ClassLoader classLoader = PluginClassLoader.getInstance();
-        String className = json.getAsString(); //should be package.ClassName
-
-        Class<?> themeClass;
-        try {
-            themeClass = classLoader.loadClass(className);
-        } catch (ClassNotFoundException e) {
-            logger.error("the Theme with the path '" + className + "' not found", e);
-            return null;
-        }
-
-        if (themeClass == Theme.class) {
-            logger.error("the abstract Theme shouldn't be specified as a used theme");
-            return null;
-        } else if (!Theme.class.isAssignableFrom(themeClass)) {
-            logger.error("the specified theme '{}' is not an implementation of '{}'", themeClass, Theme.class);
-            return null;
-        }
-
-        //at this point, we know that the loaded class is a subtype of Theme
-
-        Constructor<?> defaultConstructor;
-        try {
-            defaultConstructor = themeClass.getConstructor();
-        } catch (NoSuchMethodException e) {
-            logger.error("no default constructor found for '{}'", themeClass);
-            return null;
-        }
-
-        //at this point, we found an empty constructor for the class, we can instantiate it
-        Object instance;
-        try {
-            defaultConstructor.setAccessible(true);
-            instance = defaultConstructor.newInstance();
-        } catch (ReflectiveOperationException | ClassCastException e) {
-            Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
-            return null;
-        }
-
-        return (Theme) instance;
+        return getThemeInstance(json);
     }
 }
