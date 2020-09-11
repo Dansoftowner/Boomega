@@ -94,6 +94,13 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         this.getChildren().add(fxmlLoader.load());
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setDefaults();
+        setBehaviour();
+        setDragSupport();
+    }
+
     public Optional<DatabaseMeta> getCreatedDatabase() {
         return Optional.ofNullable(this.createdDatabase);
     }
@@ -214,13 +221,6 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         });
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setDefaults();
-        setBehaviour();
-        setDragSupport();
-    }
-
     //TODO: validator problems fix (file-path not valid)
 
     /**
@@ -259,6 +259,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             dirFile = new File(dirField.getText());
             dbFile = new File(fullPathField.getText());
 
+            //calculating the criteria(s)
             dirIsEmpty = StringUtils.isBlank(dirField.getText());
             nameIsEmpty = StringUtils.isBlank(nameField.getText());
             dirIsNotValid = FileGoodies.hasNotValidPath(dirFile);
