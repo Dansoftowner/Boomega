@@ -96,7 +96,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     }
 
     private void loadGui() {
-        var fxmlLoader = new FurtherFXMLLoader(this, getClass().getResource("DatabaseCreatorForm.fxml"), getFXMLValues());
+        var fxmlLoader = new FurtherFXMLLoader(this, getClass().getResource("Form.fxml"), getFXMLValues());
         this.getChildren().add(fxmlLoader.load());
     }
 
