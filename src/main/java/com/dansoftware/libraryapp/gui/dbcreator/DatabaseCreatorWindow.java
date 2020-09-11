@@ -23,6 +23,7 @@ public class DatabaseCreatorWindow extends Stage {
         this.setTitle(getFXMLValues().getString("data.source.adder.window.title"));
         this.setScene(new Scene(view));
         this.initModality(Modality.APPLICATION_MODAL);
+        this.initOwner(owner);
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
         this.centerOnScreen();
