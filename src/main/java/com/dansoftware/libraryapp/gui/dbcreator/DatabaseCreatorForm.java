@@ -24,6 +24,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -44,6 +47,8 @@ import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
  * @author Daniel Gyorffy
  */
 public class DatabaseCreatorForm extends StackPane implements Initializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseCreatorForm.class);
 
     @FXML
     private VBox vBox;
@@ -94,7 +99,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     private void create() {
 
         // validating the inputs
-        var validator = new Validator();
+        var validator = this.new Validator();
         validator.ifNameEmpty(
                 getAlertMsg("db.creator.form.invalid.missing.name.title"),
                 getAlertMsg("db.creator.form.invalid.missing.name.msg"),
@@ -235,8 +240,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
      */
     private class Validator {
 
-        private WorkbenchDialog informationDialog;
-        private boolean chainBroke;
+        private WorkbenchDialog lastDialog;
+        private boolean dialogShowing;
 
         private final boolean dirIsEmpty;
         private final boolean nameIsEmpty;
@@ -262,73 +267,91 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             passwordEmpty = authCheckBox.isSelected() && StringUtils.isBlank(passwordField.getText());
         }
 
-        Validator ifNameEmpty(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
-            if (!chainBroke && nameIsEmpty) {
-                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
-                chainBroke = true;
+        private void showErrorDialog(@NotNull String dialogTitle,
+                                     @NotNull String dialogMsg,
+                                     @NotNull Consumer<ButtonType> onResult,
+                                     boolean criteria) {
+            if (!dialogShowing && criteria) {
+                this.lastDialog = DatabaseCreatorForm.this.parent.showErrorDialog(dialogTitle, dialogMsg, buttonType -> {
+                    onResult.accept(buttonType);
+                    Validator.this.dialogShowing = false;
+                });
+                Validator.this.dialogShowing = true;
             }
+        }
+
+        private void showInformationDialog(@NotNull String dialogTitle,
+                                           @NotNull String dialogMsg,
+                                           @NotNull Consumer<ButtonType> onResult,
+                                           boolean criteria) {
+            if (!dialogShowing && criteria) {
+                this.lastDialog = DatabaseCreatorForm.this.parent.showInformationDialog(dialogTitle, dialogMsg, buttonType -> {
+                    onResult.accept(buttonType);
+                    Validator.this.dialogShowing = false;
+                });
+                Validator.this.dialogShowing = true;
+            }
+        }
+
+        Validator ifNameEmpty(@NotNull String dialogTitle,
+                              @NotNull String dialogMsg,
+                              @NotNull Consumer<ButtonType> onResult) {
+            showErrorDialog(dialogTitle, dialogMsg, onResult, nameIsEmpty);
             return this;
         }
 
-        Validator ifDirEmpty(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
-            if (!chainBroke && dirIsEmpty) {
-                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
-                chainBroke = true;
-            }
+        Validator ifDirEmpty(@NotNull String dialogTitle,
+                             @NotNull String dialogMsg,
+                             @NotNull Consumer<ButtonType> onResult) {
+            showErrorDialog(dialogTitle, dialogMsg, onResult, dirIsEmpty);
             return this;
         }
 
-        Validator ifDirHasNotValidPath(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
-            if (!chainBroke && dirIsNotValid) {
-                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
-                chainBroke = true;
-            }
+        Validator ifDirHasNotValidPath(@NotNull String dialogTitle,
+                                       @NotNull String dialogMsg,
+                                       @NotNull Consumer<ButtonType> onResult) {
+            showErrorDialog(dialogTitle, dialogMsg, onResult, dirIsNotValid);
             return this;
         }
 
-        Validator ifDbFileExists(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
-            if (!chainBroke && dbFileExists) {
-                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
-                chainBroke = true;
-            }
+        Validator ifDbFileExists(@NotNull String dialogTitle,
+                                 @NotNull String dialogMsg,
+                                 @NotNull Consumer<ButtonType> onResult) {
+            showErrorDialog(dialogTitle, dialogMsg, onResult, dbFileExists);
             return this;
         }
 
-        Validator ifUsernameEmpty(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
-            if (!chainBroke && usernameEmpty) {
-                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
-                chainBroke = true;
-            }
+        Validator ifUsernameEmpty(@NotNull String dialogTitle,
+                                  @NotNull String dialogMsg,
+                                  @NotNull Consumer<ButtonType> onResult) {
+            showErrorDialog(dialogTitle, dialogMsg, onResult, usernameEmpty);
             return this;
         }
 
-        Validator ifPasswordEmpty(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
-            if (!chainBroke && passwordEmpty) {
-                parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
-                chainBroke = true;
-            }
+        Validator ifPasswordEmpty(@NotNull String dialogTitle,
+                                  @NotNull String dialogMsg,
+                                  @NotNull Consumer<ButtonType> onResult) {
+            showErrorDialog(dialogTitle, dialogMsg, onResult, passwordEmpty);
             return this;
         }
 
-        Validator ifDirFileNotExists(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
-            if (!chainBroke && dirFileNotExists) {
-                this.informationDialog = parent.showInformationDialog(dialogTitle, dialogMsg, onResult);
-            }
+        Validator ifDirFileNotExists(@NotNull String dialogTitle,
+                                     @NotNull String dialogMsg,
+                                     @NotNull Consumer<ButtonType> onResult) {
+            showInformationDialog(dialogTitle, dialogMsg, onResult, dirFileNotExists);
             return this;
         }
 
-        void onSuccess(BiConsumer<DatabaseMeta, Credentials> action) {
+        void onSuccess(@NotNull BiConsumer<DatabaseMeta, Credentials> action) {
             Runnable actionWrapped = () -> action.accept(
                     new DatabaseMeta(nameField.getText(), dbFile),
                     new Credentials(usernameField.getText(), passwordField.getText())
             );
 
-            if (!chainBroke)
-                if (!informationDialog.isShowing()) {
-                    actionWrapped.run();
-                } else {
-                    informationDialog.setOnHidden(event -> actionWrapped.run());
-                }
+            if (dialogShowing && lastDialog.getType() != WorkbenchDialog.Type.ERROR)
+                lastDialog.setOnHidden(event -> actionWrapped.run());
+            else if (!dialogShowing)
+                actionWrapped.run();
         }
     }
 }
