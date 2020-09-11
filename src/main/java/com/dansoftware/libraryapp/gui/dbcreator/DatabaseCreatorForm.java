@@ -8,6 +8,7 @@ import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
+import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.FileGoodies;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -106,15 +107,6 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                 getAlertMsg("db.creator.form.invalid.dir.title"),
                 getAlertMsg("db.creator.form.invalid.dir.msg", validator.dirFile),
                 buttonType -> new animatefx.animation.Tada(this.dirField).play()
-        ).ifDirFileNotExists(
-                getAlertMsg("db.creator.form.confirm.dir.not.exist.title", validator.dirFile.getName()),
-                getAlertMsg("db.creator.form.confirm.dir.not.exist.msg"), (buttonType) -> {
-                    try {
-                        validator.dirFile.mkdirs();
-                    } catch (java.lang.SecurityException e) {
-                        //handle
-                    }
-                }
         ).ifDbFileExists(
                 getAlertMsg("db.creater.form.invalid.file.already.exists.title"),
                 getAlertMsg("db.creater.form.invalid.file.already.exists.msg",
@@ -129,6 +121,15 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                 getAlertMsg("db.creator.form.invalid.empty.password.title"),
                 getAlertMsg("db.creator.form.invalid.empty.password.msg"),
                 buttonType -> new animatefx.animation.Tada(this.passwordField).play()
+        ).ifDirFileNotExists(
+                getAlertMsg("db.creator.form.confirm.dir.not.exist.title", validator.dirFile.getName()),
+                getAlertMsg("db.creator.form.confirm.dir.not.exist.msg"), (buttonType) -> {
+                    try {
+                        validator.dirFile.mkdirs();
+                    } catch (java.lang.SecurityException e) {
+                        //handle
+                    }
+                }
         ).onSuccess((createdDatabase, credentials) -> {
             this.createdDatabase = createdDatabase;
             LoginProcessor.of(NitriteDatabase.factory())
@@ -214,8 +215,27 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         setDragSupport();
     }
 
+    //TODO: validator problems fix (file-path not valid)
+
+    /**
+     * A {@link Validator} is used for validating the inputs in the form.
+     *
+     * <p>
+     * It gives a modern, functional way for handling the validation-problems and showing a dialog for the user.
+     * <br>
+     * Example:
+     * <pre>{@code
+     * new Validator()
+     *      .ifNameEmpty(
+     *          "Database name undefined",
+     *          "You should specify the database name",
+     *          buttonType -> { //action when the user clicks the "OK" button in the dialog }
+     *       ).onSuccess((databaseMeta, credentials) -> { //the database is created} );
+     * }</pre>
+     */
     private class Validator {
 
+        private WorkbenchDialog informationDialog;
         private boolean chainBroke;
 
         private final boolean dirIsEmpty;
@@ -266,14 +286,6 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             return this;
         }
 
-        Validator ifDirFileNotExists(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
-            if (!chainBroke && dirFileNotExists) {
-                parent.showInformationDialog(dialogTitle, dialogMsg, onResult);
-                chainBroke = true;
-            }
-            return this;
-        }
-
         Validator ifDbFileExists(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
             if (!chainBroke && dbFileExists) {
                 parent.showErrorDialog(dialogTitle, dialogMsg, onResult);
@@ -298,12 +310,25 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             return this;
         }
 
+        Validator ifDirFileNotExists(String dialogTitle, String dialogMsg, Consumer<ButtonType> onResult) {
+            if (!chainBroke && dirFileNotExists) {
+                this.informationDialog = parent.showInformationDialog(dialogTitle, dialogMsg, onResult);
+            }
+            return this;
+        }
+
         void onSuccess(BiConsumer<DatabaseMeta, Credentials> action) {
+            Runnable actionWrapped = () -> action.accept(
+                    new DatabaseMeta(nameField.getText(), dbFile),
+                    new Credentials(usernameField.getText(), passwordField.getText())
+            );
+
             if (!chainBroke)
-                action.accept(
-                        new DatabaseMeta(nameField.getText(), dbFile),
-                        new Credentials(usernameField.getText(), passwordField.getText())
-                );
+                if (!informationDialog.isShowing()) {
+                    actionWrapped.run();
+                } else {
+                    informationDialog.setOnHidden(event -> actionWrapped.run());
+                }
         }
     }
 }
