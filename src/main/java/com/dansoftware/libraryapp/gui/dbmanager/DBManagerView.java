@@ -9,13 +9,9 @@ import com.dlsc.workbenchfx.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.StringExpression;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * A DBManagerView is a gui element that shows a {@link DBManagerTable}

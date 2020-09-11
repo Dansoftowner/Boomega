@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.main.Globals;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

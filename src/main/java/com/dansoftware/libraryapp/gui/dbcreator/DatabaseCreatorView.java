@@ -10,8 +10,6 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
 /**
  * A DatabaseCreatorView is a gui object that let's the user to
  * create new database files. It should be displayed inside

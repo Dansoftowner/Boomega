@@ -25,7 +25,7 @@ public class DatabaseCreatorActivity {
      * It gives the created database result in an {@link Optional}.
      *
      * @param databaseTracker the {@link DatabaseTracker} that should be used for updating the saved databases
-     * @param owner the owner window for the form's window
+     * @param owner           the owner window for the form's window
      * @return the wrapped result
      */
     public Optional<DatabaseMeta> show(@NotNull DatabaseTracker databaseTracker, @Nullable Window owner) {

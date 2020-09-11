@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
-<VBox fx:id="loginForm" prefHeight="148.0" prefWidth="297.0" spacing="10.0" fx:controller="com.dansoftware.libraryapp.gui.login.form.InternalFormController"
+<VBox fx:id="loginForm" prefHeight="148.0" prefWidth="297.0" spacing="10.0"
+      fx:controller="com.dansoftware.libraryapp.gui.login.form.InternalFormController"
       xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Separator prefWidth="200.0"/>

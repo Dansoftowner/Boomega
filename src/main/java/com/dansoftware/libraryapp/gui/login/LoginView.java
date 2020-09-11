@@ -24,8 +24,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.List;
 import java.util.Objects;
 
 /**

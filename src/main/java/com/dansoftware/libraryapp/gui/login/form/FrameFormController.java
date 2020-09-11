@@ -3,8 +3,6 @@ package com.dansoftware.libraryapp.gui.login.form;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorActivity;
-import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
-import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;

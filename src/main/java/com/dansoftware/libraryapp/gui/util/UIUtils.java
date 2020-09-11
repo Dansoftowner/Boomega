@@ -10,7 +10,8 @@ public class UIUtils {
     }
 
     public static void runOnUiThread(Runnable action) {
-        if (Platform.isFxApplicationThread()) action.run(); else Platform.runLater(action);
+        if (Platform.isFxApplicationThread()) action.run();
+        else Platform.runLater(action);
     }
 
     public static <T> void refreshComboBox(ComboBox<T> comboBox) {

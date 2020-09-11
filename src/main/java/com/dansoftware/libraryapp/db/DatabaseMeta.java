@@ -2,7 +2,6 @@ package com.dansoftware.libraryapp.db;
 
 import com.jfilegoodies.FileGoodies;
 import org.apache.commons.io.FilenameUtils;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
