@@ -90,9 +90,9 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     private final SimpleObjectProperty<DatabaseMeta> createdDatabase = new SimpleObjectProperty<>();
 
     public DatabaseCreatorForm(@NotNull DatabaseCreatorView parent, @NotNull DatabaseTracker tracker) {
-        this.loadGui();
         this.databaseTracker = Objects.requireNonNull(tracker, "DatabaseTracker shouldn't be null");
         this.parent = parent;
+        this.loadGui();
     }
 
     private void loadGui() {

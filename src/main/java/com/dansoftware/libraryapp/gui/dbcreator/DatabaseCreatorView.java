@@ -16,6 +16,8 @@ import java.util.Optional;
  * A DatabaseCreatorView is a gui object that let's the user to
  * create new database files. It should be displayed inside
  * a {@link DatabaseCreatorWindow}.
+ *
+ * @author Daniel Gyorffy
  */
 public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements Themeable {
 
