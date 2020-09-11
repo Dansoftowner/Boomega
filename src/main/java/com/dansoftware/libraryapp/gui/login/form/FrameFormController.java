@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.login.form;
 
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorActivity;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorView;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorWindow;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
@@ -12,7 +13,6 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.UIUtils;
 import com.dansoftware.libraryapp.locale.I18N;
-import com.dansoftware.libraryapp.util.UniqueList;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -188,16 +188,9 @@ public class FrameFormController
 
     @FXML
     private void callDataSourceAdder() {
-        DatabaseCreatorView view = new DatabaseCreatorView();
-
-        DatabaseCreatorWindow window = new DatabaseCreatorWindow(view, context.getContextWindow());
-        window.showAndWait();
-
-        Optional<DatabaseMeta> result = view.getCreatedAccount();
-        result.stream()
-                .peek(databaseTracker::addDatabase)
-                .findAny()
-                .ifPresent(this.databaseChooser.getSelectionModel()::select);
+        DatabaseCreatorActivity creatorActivity = new DatabaseCreatorActivity();
+        Optional<DatabaseMeta> result = creatorActivity.show(this.databaseTracker, context.getContextWindow());
+        result.ifPresent(this.databaseChooser.getSelectionModel()::select);
     }
 
     @FXML
