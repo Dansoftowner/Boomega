@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.locale.I18N;
@@ -20,14 +21,14 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
 
     private final DatabaseCreatorForm form;
 
-    public DatabaseCreatorView() {
+    public DatabaseCreatorView(@NotNull DatabaseTracker databaseTracker) {
         super(I18N.getGeneralWord("database.creator.title"),
                 new MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS));
-        super.setContent(this.form = new DatabaseCreatorForm(this));
+        super.setContent(this.form = new DatabaseCreatorForm(this, databaseTracker));
     }
 
-    public Optional<DatabaseMeta> getCreatedAccount() {
-        return this.form.getCreatedDatabase();
+    public DatabaseMeta getCreatedDatabase() {
+        return this.form.createdDatabaseProperty().get();
     }
 
     @Override

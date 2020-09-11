@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
@@ -12,6 +13,8 @@ import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.FileGoodies;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -80,12 +83,15 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     @FXML
     private Button createBtn;
 
+    private final DatabaseTracker databaseTracker;
+
     private final DatabaseCreatorView parent;
 
-    private DatabaseMeta createdDatabase;
+    private final SimpleObjectProperty<DatabaseMeta> createdDatabase = new SimpleObjectProperty<>();
 
-    public DatabaseCreatorForm(DatabaseCreatorView parent) {
+    public DatabaseCreatorForm(@NotNull DatabaseCreatorView parent, @NotNull DatabaseTracker tracker) {
         this.loadGui();
+        this.databaseTracker = Objects.requireNonNull(tracker, "DatabaseTracker shouldn't be null");
         this.parent = parent;
     }
 
@@ -101,8 +107,8 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         setDragSupport();
     }
 
-    public Optional<DatabaseMeta> getCreatedDatabase() {
-        return Optional.ofNullable(this.createdDatabase);
+    public ReadOnlyObjectProperty<DatabaseMeta> createdDatabaseProperty() {
+        return createdDatabase;
     }
 
     @FXML
@@ -146,13 +152,14 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                     }
                 }
         ).onSuccess((createdDatabase, credentials) -> {
-            this.createdDatabase = createdDatabase;
+            this.createdDatabase.set(createdDatabase);
             LoginProcessor.of(NitriteDatabase.factory())
                     .onFailed((title, message, t) -> {
-                        this.createdDatabase = null;
+                        this.createdDatabase.set(null);
                         this.parent.showErrorDialog(title, message, (Exception) t, buttonType -> {
                         });
                     }).touch(createdDatabase, credentials);
+            databaseTracker.addDatabase(createdDatabase);
             WindowUtils.getStageOptionalOf(this).ifPresent(Stage::close);
         });
     }
