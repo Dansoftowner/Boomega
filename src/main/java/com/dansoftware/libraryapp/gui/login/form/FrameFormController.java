@@ -53,14 +53,6 @@ public class FrameFormController
     @FXML
     private Button managerBtn;
 
-    private final Context context;
-
-    private final LoginData loginData;
-
-    private final DatabaseTracker databaseTracker;
-
-    private final DatabaseLoginListener databaseLoginListener;
-
     /**
      * A boolean observable-value that represents that an item is selected in
      * the {@link #databaseChooser}.
@@ -78,6 +70,14 @@ public class FrameFormController
      * Set for filtering possible duplicate elements
      */
     private final Set<DatabaseMeta> databaseMetaSet;
+
+    private final Context context;
+
+    private final LoginData loginData;
+
+    private final DatabaseTracker databaseTracker;
+
+    private final DatabaseLoginListener databaseLoginListener;
 
     private Node internalForm;
 
