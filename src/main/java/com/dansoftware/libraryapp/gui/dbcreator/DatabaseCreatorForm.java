@@ -18,6 +18,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -30,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -188,29 +191,27 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     }
 
     private void setDragSupport() {
-        /*
         this.setOnDragOver(event -> {
             Dragboard dragboard = event.getDragboard();
-            if (dragboard.hasFiles() && dragboard.getFiles().get(0).isDirectory()) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                this.parent.showOverlay(new StackPane(new Rectangle(20, 20)), false);
-            }
-        });
-        this.setOnDragExited(event -> {
-            this.parent.showOverlay(null, false);
-        });
-        this.dirField.setOnDragDropped(event -> {
-            Dragboard dragboard = event.getDragboard();
-            if (dragboard.hasFiles()) {
-                List<File> files = dragboard.getFiles();
-                File draggedFile = files.get(0);
+            boolean filesDetected = dragboard.hasFiles();
+            boolean onlyOneFile = dragboard.getFiles().size() == 1;
+            boolean isDirectory = dragboard.getFiles().get(0).isDirectory();
 
-                if (draggedFile.isDirectory()) {
-                    TextField field = (TextField) event.getSource();
-                    field.setText(draggedFile.getAbsolutePath());
-                }
-            }
-        });*/
+            event.acceptTransferModes((filesDetected && onlyOneFile && isDirectory) ?
+                    TransferMode.COPY_OR_MOVE : TransferMode.NONE);
+        });
+
+        this.setOnDragDropped(event -> {
+            Dragboard dragboard = event.getDragboard();
+            List<File> files = dragboard.getFiles();
+            File draggedFile = files.get(0);
+            boolean filesDetected = dragboard.hasFiles();
+            boolean onlyOneFile = files.size() == 1;
+            boolean isDirectory = draggedFile.isDirectory();
+
+            if (filesDetected && onlyOneFile && isDirectory)
+                dirField.setText(draggedFile.getAbsolutePath());
+        });
     }
 
     @Override
@@ -271,9 +272,9 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
          * Shows an error dialog and updates the necessary fields
          *
          * @param dialogTitle the title of the dialog
-         * @param dialogMsg the message of the dialog
-         * @param onResult the event-handler that runs when the user clicks on the dialog-btn
-         * @param criteria the criteria for showing a dialog; {@code true} if it should be shown
+         * @param dialogMsg   the message of the dialog
+         * @param onResult    the event-handler that runs when the user clicks on the dialog-btn
+         * @param criteria    the criteria for showing a dialog; {@code true} if it should be shown
          */
         private void showErrorDialog(@NotNull String dialogTitle,
                                      @NotNull String dialogMsg,
@@ -292,9 +293,9 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
          * Shows an info dialog and updates the necessary fields
          *
          * @param dialogTitle the title of the dialog
-         * @param dialogMsg the message of the dialog
-         * @param onResult the event-handler that runs when the user clicks on the dialog-btn
-         * @param criteria the criteria for showing a dialog; {@code true} if it should be shown
+         * @param dialogMsg   the message of the dialog
+         * @param onResult    the event-handler that runs when the user clicks on the dialog-btn
+         * @param criteria    the criteria for showing a dialog; {@code true} if it should be shown
          */
         private void showInformationDialog(@NotNull String dialogTitle,
                                            @NotNull String dialogMsg,
