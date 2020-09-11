@@ -267,6 +267,14 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             passwordEmpty = authCheckBox.isSelected() && StringUtils.isBlank(passwordField.getText());
         }
 
+        /**
+         * Shows an error dialog and updates the necessary fields
+         *
+         * @param dialogTitle the title of the dialog
+         * @param dialogMsg the message of the dialog
+         * @param onResult the event-handler that runs when the user clicks on the dialog-btn
+         * @param criteria the criteria for showing a dialog; {@code true} if it should be shown
+         */
         private void showErrorDialog(@NotNull String dialogTitle,
                                      @NotNull String dialogMsg,
                                      @NotNull Consumer<ButtonType> onResult,
@@ -280,6 +288,14 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             }
         }
 
+        /**
+         * Shows an info dialog and updates the necessary fields
+         *
+         * @param dialogTitle the title of the dialog
+         * @param dialogMsg the message of the dialog
+         * @param onResult the event-handler that runs when the user clicks on the dialog-btn
+         * @param criteria the criteria for showing a dialog; {@code true} if it should be shown
+         */
         private void showInformationDialog(@NotNull String dialogTitle,
                                            @NotNull String dialogMsg,
                                            @NotNull Consumer<ButtonType> onResult,
