@@ -160,5 +160,5 @@ UPDATE VIEW
 custom
  */
 .button .glyph-icon {
-    -fx-fill: black;
+    /*-fx-fill: black;*/
 }
