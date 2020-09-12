@@ -15,6 +15,15 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
  */
 public class I18N {
 
+    static {
+        try {
+            //just for executing the FXI18N's static block
+            Class.forName(FXI18N.class.getName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Don't let anyone to create an instance of this class
      */

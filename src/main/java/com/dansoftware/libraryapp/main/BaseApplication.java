@@ -21,7 +21,7 @@ import java.util.List;
 public abstract class BaseApplication extends Application {
 
     @Override
-    public abstract void init();
+    public abstract void init() throws Exception;
 
     @Override
     public void start(Stage primaryStage) throws Exception {

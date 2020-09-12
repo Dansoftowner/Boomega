@@ -9,6 +9,7 @@ import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
+import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import org.jetbrains.annotations.NotNull;
@@ -63,16 +64,19 @@ public class Main extends BaseApplication {
     }
 
     @Override
-    public void init() {
+    public void init() throws Exception {
         Preferences preferences = Preferences.getPreferences();
         logger.info("Configurations has been read successfully!");
+
+        Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
+        logger.info("Locale is: {}", Locale.getDefault());
+
+        //for executing the I18N class's static block
+        Class.forName(I18N.class.getName());
 
         //adding the saved databases from the login-data to DatabaseTracker
         LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
         loginData.getSavedDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
-
-        Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
-        logger.info("Locale is: {}", Locale.getDefault());
 
         Theme.setDefault(preferences.get(Preferences.Key.THEME));
         logger.info("Theme is: {}", Theme.getDefault());
