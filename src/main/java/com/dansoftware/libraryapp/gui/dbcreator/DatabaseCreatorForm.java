@@ -49,6 +49,9 @@ import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
  * a new data-source file. It's usually wrapped in a {@link DatabaseCreatorView}
  * object.
  *
+ * <p>
+ * It also behaves as an fxml-controller that's why it implements {@link Initializable}.
+ *
  * @author Daniel Gyorffy
  */
 public class DatabaseCreatorForm extends StackPane implements Initializable {
