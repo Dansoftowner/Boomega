@@ -6,7 +6,6 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.info.InformationActivity;
-import com.dansoftware.libraryapp.gui.info.InformationView;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.login.form.LoginForm;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
@@ -18,43 +17,21 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.Pos;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
  * A LoginView is a graphical object that can handle
  * a login request and creates the {@link Database} object.
+ *
+ * @author Daniel Gyorffy
  */
-public class LoginView extends SimpleHeaderView<LoginView.FormBackground> implements Themeable {
-
-    static final class FormBackground extends StackPane {
-        private static final String STYLE_CLASS = "login-form";
-
-        private FormBackground(LoginForm loginForm, DatabaseTracker databaseTracker) {
-            super(loginForm);
-            getStyleClass().add(STYLE_CLASS);
-            setOnDragOver(event -> {
-                Dragboard dragboard = event.getDragboard();
-                if (dragboard.hasFiles()) {
-                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                }
-            });
-
-            setOnDragDropped(event -> {
-                Dragboard dragboard = event.getDragboard();
-                if (dragboard.hasFiles()) {
-                    dragboard.getFiles().stream()
-                            .map(DatabaseMeta::new)
-                            .forEach(databaseTracker::addDatabase);
-                }
-            });
-        }
-    }
+public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements Themeable {
 
     private final Context context;
     private final LoginForm loginForm;
@@ -68,11 +45,11 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBackground> implem
         this.context = Objects.requireNonNull(context, "Context shouldn't be null");
         this.createdDatabase = new SimpleObjectProperty<>();
         this.loginForm = new LoginForm(context, loginData, tracker, databaseLoginListener);
-        this.setContent(new FormBackground(loginForm, tracker));
-        this.init();
+        this.setContent(new FormBase(loginForm, tracker));
+        this.createToolbarControls();
     }
 
-    private void init() {
+    private void createToolbarControls() {
         this.getToolbarControlsRight().add(new ToolbarItem(
                 new MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
                 event -> {
@@ -91,5 +68,46 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBackground> implem
 
     public ReadOnlyObjectProperty<Database> createdDatabaseProperty() {
         return createdDatabase;
+    }
+
+    /**
+     * A {@link FormBase} is the parent of a {@link LoginForm}.
+     * It can be styled in css through the <i>login-form</i> class-name.
+     *
+     * <p>
+     * It has drag-support which means that the user can drag files into it
+     * and it's adding them into the {@link DatabaseTracker}.
+     */
+    static final class FormBase extends StackPane {
+        private static final String STYLE_CLASS = "login-form";
+
+        private final DatabaseTracker databaseTracker;
+
+        private FormBase(@NotNull LoginForm loginForm,
+                         @NotNull DatabaseTracker databaseTracker) {
+            super(loginForm);
+            this.databaseTracker = databaseTracker;
+            this.getStyleClass().add(STYLE_CLASS);
+            this.enableDragSupport();
+        }
+
+        private void enableDragSupport() {
+            setOnDragOver(event -> {
+                Dragboard dragboard = event.getDragboard();
+                if (dragboard.hasFiles()) {
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
+            });
+
+            setOnDragDropped(event -> {
+                Dragboard dragboard = event.getDragboard();
+                if (dragboard.hasFiles()) {
+                    dragboard.getFiles().stream()
+                            .filter(File::isFile)
+                            .map(DatabaseMeta::new)
+                            .forEach(databaseTracker::addDatabase);
+                }
+            });
+        }
     }
 }
