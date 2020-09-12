@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.gui.login.form;
 
-import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.Database;
@@ -21,8 +20,6 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
-
-import static com.dansoftware.libraryapp.appdata.Preferences.getPreferences;
 
 public class InternalFormController implements Initializable {
 

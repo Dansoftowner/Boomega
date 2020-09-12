@@ -1,9 +1,5 @@
 package com.dansoftware.libraryapp.main;
 
-import javafx.scene.image.Image;
-
-import java.util.List;
-
 /**
  * This class gives ability for another parts of the application to access some
  * global information/object

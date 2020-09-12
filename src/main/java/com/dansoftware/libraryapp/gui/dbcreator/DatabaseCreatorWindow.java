@@ -3,13 +3,9 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.LibraryAppStage;
-import com.dansoftware.libraryapp.main.Globals;
-import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
 
 /**
  * A DatabaseCreatorWindow is a javaFX {@link Stage} that should be
