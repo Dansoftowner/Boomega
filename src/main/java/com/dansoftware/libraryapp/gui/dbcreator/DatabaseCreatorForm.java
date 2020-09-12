@@ -90,7 +90,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
 
     public DatabaseCreatorForm(@NotNull DatabaseCreatorView parent, @NotNull DatabaseTracker tracker) {
         this.databaseTracker = Objects.requireNonNull(tracker, "DatabaseTracker shouldn't be null");
-        this.parent = parent;
+        this.parent = Objects.requireNonNull(parent, "The parent shouldn't be null");
         this.loadGui();
     }
 
@@ -188,9 +188,6 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                         .concat(".")
                         .concat(Globals.FILE_EXTENSION)
                 );
-
-        //the user can drag a directory into the field.
-
 
         //We don't allow to put spaces in the following inputs
         this.nameField.setTextFormatter(new SpaceValidator());
