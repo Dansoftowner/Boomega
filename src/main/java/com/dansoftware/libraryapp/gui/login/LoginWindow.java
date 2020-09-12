@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
+import com.dansoftware.libraryapp.gui.util.LibraryAppStage;
 import com.dansoftware.libraryapp.main.Globals;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -26,7 +27,7 @@ import static com.dansoftware.libraryapp.appdata.Preferences.getPreferences;
  * Also, when a user closes the LoginWindow, it will save the {@link LoginData} to the
  * configurations.
  */
-class LoginWindow extends Stage
+class LoginWindow extends LibraryAppStage
         implements EventHandler<WindowEvent> {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginWindow.class);
@@ -34,11 +35,9 @@ class LoginWindow extends Stage
     private final LoginView loginView;
 
     public LoginWindow(@NotNull LoginView root) {
+        super("window.login.title", root);
         this.loginView = Objects.requireNonNull(root, "LoginView shouldn't be null");
-        this.setScene(new Scene(root));
-        //this.setTitle();
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
-        this.getIcons().addAll(Globals.windowIconPack());
         this.setMaximized(true);
 
         Theme.applyDefault((Themeable) root);
