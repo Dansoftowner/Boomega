@@ -24,7 +24,7 @@ public class LoginDataSerializer implements JsonSerializer<LoginData> {
                 .registerTypeAdapter(Credentials.class, new CredentialsSerializer())
                 .create();
 
-        List<DatabaseMeta> lastDatabases = src.getLastDatabases();
+        List<DatabaseMeta> lastDatabases = src.getSavedDatabases();
 
         int autoLoginDatabaseIndex = lastDatabases.indexOf(src.getAutoLoginDatabase());
         int selectedDatabaseIndex = lastDatabases.indexOf(src.getSelectedDatabase());

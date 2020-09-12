@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class LoginData {
 
-    private final ObservableList<DatabaseMeta> lastDatabases;
+    private final ObservableList<DatabaseMeta> savedDatabases;
     private DatabaseMeta selectedDatabase;
     private DatabaseMeta autoLoginDatabase;
     private Credentials autoLoginCredentials;
@@ -22,42 +22,42 @@ public class LoginData {
         this(new ArrayList<>());
     }
 
-    public LoginData(@NotNull List<DatabaseMeta> lastDatabases) {
-        this(lastDatabases, null);
+    public LoginData(@NotNull List<DatabaseMeta> savedDatabases) {
+        this(savedDatabases, null);
     }
 
-    public LoginData(@NotNull List<DatabaseMeta> lastDatabases,
+    public LoginData(@NotNull List<DatabaseMeta> savedDatabases,
                      @Nullable DatabaseMeta selectedDatabase) {
-        this(lastDatabases, selectedDatabase, null);
+        this(savedDatabases, selectedDatabase, null);
     }
 
-    public LoginData(@NotNull List<DatabaseMeta> lastDatabases,
+    public LoginData(@NotNull List<DatabaseMeta> savedDatabases,
                      @Nullable DatabaseMeta selectedDatabase,
                      @Nullable DatabaseMeta autoLoginDatabase) {
-        this(lastDatabases, selectedDatabase, autoLoginDatabase, null);
+        this(savedDatabases, selectedDatabase, autoLoginDatabase, null);
     }
 
-    public LoginData(@NotNull List<DatabaseMeta> lastDatabases,
+    public LoginData(@NotNull List<DatabaseMeta> savedDatabases,
                      @Nullable DatabaseMeta selectedDatabase,
                      @Nullable DatabaseMeta autoLoginDatabase,
                      @Nullable Credentials autoLoginCredentials) {
-        this.lastDatabases = FXCollections.observableArrayList(lastDatabases);
+        this.savedDatabases = FXCollections.observableArrayList(savedDatabases);
         this.setSelectedDatabase(selectedDatabase);
         this.setAutoLoginDatabase(autoLoginDatabase);
         this.autoLoginCredentials = autoLoginCredentials;
     }
 
-    public List<DatabaseMeta> getLastDatabases() {
-        return lastDatabases;
+    public List<DatabaseMeta> getSavedDatabases() {
+        return savedDatabases;
     }
 
-    public void setLastDatabases(List<DatabaseMeta> lastDatabases) {
-        this.lastDatabases.setAll(
-                Objects.requireNonNull(lastDatabases, "lastDatabases mustn't be null")
+    public void setSavedDatabases(List<DatabaseMeta> savedDatabases) {
+        this.savedDatabases.setAll(
+                Objects.requireNonNull(savedDatabases, "lastDatabases mustn't be null")
         );
 
-        selectedDatabase = lastDatabases.contains(selectedDatabase) ? selectedDatabase : null;
-        autoLoginDatabase = lastDatabases.contains(autoLoginDatabase) ? autoLoginDatabase : null;
+        selectedDatabase = savedDatabases.contains(selectedDatabase) ? selectedDatabase : null;
+        autoLoginDatabase = savedDatabases.contains(autoLoginDatabase) ? autoLoginDatabase : null;
     }
 
     public DatabaseMeta getSelectedDatabase() {
@@ -89,8 +89,8 @@ public class LoginData {
      */
     public void setSelectedDatabase(DatabaseMeta selectedDatabase) {
         //logger.debug("Setting the selectedDatabase to {} on Thread: {}", selectedDatabase, Thread.currentThread());
-        if (selectedDatabase != null && !this.lastDatabases.contains(selectedDatabase)) {
-            this.lastDatabases.add(selectedDatabase);
+        if (selectedDatabase != null && !this.savedDatabases.contains(selectedDatabase)) {
+            this.savedDatabases.add(selectedDatabase);
         }
 
         this.selectedDatabase = selectedDatabase;
@@ -117,8 +117,8 @@ public class LoginData {
      */
     public void setAutoLoginDatabase(DatabaseMeta autoLoginDatabase) {
         //logger.debug("Setting the autoLoginDatabase to {} on Thread: {}", selectedDatabase, Thread.currentThread());
-        if (autoLoginDatabase != null && !this.lastDatabases.contains(autoLoginDatabase)) {
-            this.lastDatabases.add(autoLoginDatabase);
+        if (autoLoginDatabase != null && !this.savedDatabases.contains(autoLoginDatabase)) {
+            this.savedDatabases.add(autoLoginDatabase);
         }
         this.autoLoginDatabase = autoLoginDatabase;
     }
@@ -139,7 +139,7 @@ public class LoginData {
     @Override
     public String toString() {
         return "LoginData{" +
-                "lastDatabases=" + lastDatabases +
+                "lastDatabases=" + savedDatabases +
                 ", selectedDatabase=" + selectedDatabase +
                 ", autoLoginDatabase=" + autoLoginDatabase +
                 '}';

@@ -69,7 +69,7 @@ public class Main extends BaseApplication {
 
         //adding the saved databases from the login-data to DatabaseTracker
         LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-        loginData.getLastDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
+        loginData.getSavedDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
 
         Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
         logger.info("Locale is: {}", Locale.getDefault());

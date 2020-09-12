@@ -79,7 +79,7 @@ public class InstanceService implements MessageHandler {
             //removing all already opened databases from the LoginData
             Set<DatabaseMeta> databaseUsing = DatabaseTracker.getGlobal().getUsingDatabases();
             LoginData loginData = Preferences.getPreferences().get(Preferences.Key.LOGIN_DATA);
-            loginData.getLastDatabases().removeAll(databaseUsing);
+            loginData.getSavedDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);
             loginData.setAutoLoginDatabase(null);
 

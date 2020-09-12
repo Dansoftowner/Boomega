@@ -83,7 +83,7 @@ public class FrameFormController
     }
 
     private void fillForm(@NotNull LoginData loginData) {
-        List<DatabaseMeta> lastDatabases = loginData.getLastDatabases();
+        List<DatabaseMeta> lastDatabases = loginData.getSavedDatabases();
         this.databaseMetaSet.addAll(lastDatabases);
         this.databaseChooser.getItems().addAll(lastDatabases);
         DatabaseMeta selectedDatabase = loginData.getSelectedDatabase();
@@ -142,7 +142,7 @@ public class FrameFormController
         UIUtils.runOnUiThread(() -> {
             if (databaseMetaSet.add(databaseMeta)) {
                 this.databaseChooser.getItems().add(databaseMeta);
-                this.loginData.getLastDatabases().add(databaseMeta);
+                this.loginData.getSavedDatabases().add(databaseMeta);
             }
         });
     }
@@ -152,7 +152,7 @@ public class FrameFormController
         UIUtils.runOnUiThread(() -> {
             if (databaseMetaSet.remove(databaseMeta)) {
                 this.databaseChooser.getItems().remove(databaseMeta);
-                this.loginData.getLastDatabases().remove(databaseMeta);
+                this.loginData.getSavedDatabases().remove(databaseMeta);
             }
         });
     }

@@ -208,8 +208,8 @@ public abstract class ActivityLauncher implements Runnable {
         //we add the launched database to the last databases
         logger.debug("adding the launched database into the LoginData...");
         LoginData loginData = getLoginData();
-        if (!loginData.getLastDatabases().contains(argument)) {
-            loginData.getLastDatabases().add(argument);
+        if (!loginData.getSavedDatabases().contains(argument)) {
+            loginData.getSavedDatabases().add(argument);
             onNewDatabaseAdded(argument);
             saveLoginData(loginData);
         }
