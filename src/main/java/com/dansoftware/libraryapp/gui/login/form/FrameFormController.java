@@ -6,6 +6,7 @@ import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorActivity;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
+import com.dansoftware.libraryapp.gui.dbmanager.DatabaseManagerActivity;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
@@ -193,9 +194,8 @@ public class FrameFormController
 
     @FXML
     private void openDBManager() {
-        DBManagerView view = new DBManagerView(this.databaseTracker);
-        DBManagerWindow window = new DBManagerWindow(view, context.getContextWindow());
-        window.show();
+        DatabaseManagerActivity databaseManagerActivity = new DatabaseManagerActivity();
+        databaseManagerActivity.show(this.databaseTracker, context.getContextWindow());
     }
 
     private class DatabaseChooserItem extends ListCell<DatabaseMeta> {
