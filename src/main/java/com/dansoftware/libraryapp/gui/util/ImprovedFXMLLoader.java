@@ -11,12 +11,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
 
 /**
- * A {@link FurtherFXMLLoader} is an {@link FXMLLoader} implementation that has
+ * A {@link ImprovedFXMLLoader} is an {@link FXMLLoader} implementation that has
  * additional features and behaviour.
  *
  * @author Daniel Gyorffy
  */
-public class FurtherFXMLLoader extends FXMLLoader {
+public class ImprovedFXMLLoader extends FXMLLoader {
 
     private static class ControllerFactory implements Callback<Class<?>, Object> {
         private final Initializable controller;
@@ -41,7 +41,7 @@ public class FurtherFXMLLoader extends FXMLLoader {
         }
     }
 
-    public FurtherFXMLLoader(@NotNull Initializable controller, @NotNull URL location, ResourceBundle resources) {
+    public ImprovedFXMLLoader(@NotNull Initializable controller, @NotNull URL location, ResourceBundle resources) {
         super(location, resources, null, new ControllerFactory(controller), StandardCharsets.UTF_8);
     }
 

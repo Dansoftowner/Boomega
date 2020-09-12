@@ -8,7 +8,7 @@ import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
 import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
+import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.UIUtils;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -132,7 +132,7 @@ public class FrameFormController
                     () -> databaseChooser.getSelectionModel().getSelectedItem()
             );
 
-            var fxmlLoader = new FurtherFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getFXMLValues());
+            var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getFXMLValues());
             internalForm = fxmlLoader.load();
         }
 

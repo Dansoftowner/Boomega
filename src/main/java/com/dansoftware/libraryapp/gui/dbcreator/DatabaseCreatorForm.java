@@ -5,7 +5,7 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.gui.util.FurtherFXMLLoader;
+import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dansoftware.libraryapp.main.Globals;
@@ -98,7 +98,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     }
 
     private void loadGui() {
-        var fxmlLoader = new FurtherFXMLLoader(this, getClass().getResource("Form.fxml"), getFXMLValues());
+        var fxmlLoader = new ImprovedFXMLLoader(this, getClass().getResource("Form.fxml"), getFXMLValues());
         this.getChildren().add(fxmlLoader.load());
     }
 
