@@ -10,13 +10,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class LoginForm extends Group {
 
+    private final FrameFormController fxmlController;
+
     public LoginForm(@NotNull Context context,
                      @NotNull LoginData loginData,
                      @NotNull DatabaseTracker databaseTracker,
                      @NotNull DatabaseLoginListener databaseLoginListener) {
-        var fxmlController = new FrameFormController(context, loginData, databaseTracker, databaseLoginListener);
+        this.fxmlController = new FrameFormController(context, loginData, databaseTracker, databaseLoginListener);
         var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("FrameForm.fxml"), I18N.getFXMLValues());
         this.getChildren().add(fxmlLoader.load());
+    }
+
+    public LoginData getLoginData() {
+        return fxmlController.getLoginData();
     }
 
 }

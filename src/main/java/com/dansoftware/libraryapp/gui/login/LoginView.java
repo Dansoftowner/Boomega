@@ -66,6 +66,10 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
         globalApplier.apply(this);
     }
 
+    public LoginData getLoginData() {
+        return loginForm.getLoginData();
+    }
+
     public ReadOnlyObjectProperty<Database> createdDatabaseProperty() {
         return createdDatabase;
     }

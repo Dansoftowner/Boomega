@@ -27,9 +27,11 @@ import java.util.function.Consumer;
 public class LoginActivity implements Context {
 
     private final BooleanProperty showing;
-    private LoginView loginView;
+    private final LoginView loginView;
 
-    public LoginActivity(@NotNull DatabaseLoginListener databaseLoginListener, @NotNull LoginData loginData, @NotNull DatabaseTracker tracker) {
+    public LoginActivity(@NotNull DatabaseLoginListener databaseLoginListener,
+                         @NotNull LoginData loginData,
+                         @NotNull DatabaseTracker tracker) {
         this.showing = new SimpleBooleanProperty();
         this.loginView = new LoginView(this, databaseLoginListener, loginData, tracker);
     }

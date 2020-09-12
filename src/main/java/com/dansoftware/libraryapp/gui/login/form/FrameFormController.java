@@ -51,19 +51,6 @@ public class FrameFormController
     private Button managerBtn;
 
     /**
-     * A boolean observable-value that represents that an item is selected in
-     * the {@link #databaseChooser}.
-     *
-     * <p>
-     * A field is defined for it, because otherwise the garbage collector
-     * would remove it
-     *
-     * @see #setInternalFormBehaviour()
-     */
-    @SuppressWarnings("FieldCanBeLocal")
-    private ObservableValue<Boolean> dataSourceSelected;
-
-    /**
      * Set for filtering possible duplicate elements
      */
     private final Set<DatabaseMeta> databaseMetaSet;
@@ -114,11 +101,10 @@ public class FrameFormController
     }
 
     private void setInternalFormBehaviour() {
-        this.dataSourceSelected = Bindings.isNotNull(databaseChooser.getSelectionModel().selectedItemProperty());
-        this.dataSourceSelected.addListener((observable, wasSelected, selected) -> {
-            //if there is selected element, we show the login form, otherwise we hide it
-            if (selected) this.rootForm.getChildren().add(INTERNAL_FORM_INDEX, loadInternalForm());
-            else this.rootForm.getChildren().remove(INTERNAL_FORM_INDEX);
+        databaseChooser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            loginData.setSelectedDatabase(newValue);
+            if (newValue == null) this.rootForm.getChildren().remove(INTERNAL_FORM_INDEX);
+            else if (oldValue == null) this.rootForm.getChildren().add(INTERNAL_FORM_INDEX, loadInternalForm());
         });
     }
 
@@ -158,6 +144,7 @@ public class FrameFormController
         UIUtils.runOnUiThread(() -> {
             if (databaseMetaSet.add(databaseMeta)) {
                 this.databaseChooser.getItems().add(databaseMeta);
+                this.loginData.getLastDatabases().add(databaseMeta);
             }
         });
     }
@@ -165,8 +152,10 @@ public class FrameFormController
     @Override
     public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
         UIUtils.runOnUiThread(() -> {
-            if (databaseMetaSet.remove(databaseMeta))
+            if (databaseMetaSet.remove(databaseMeta)) {
                 this.databaseChooser.getItems().remove(databaseMeta);
+                this.loginData.getLastDatabases().remove(databaseMeta);
+            }
         });
     }
 
@@ -194,6 +183,10 @@ public class FrameFormController
     private void openDBManager() {
         DatabaseManagerActivity databaseManagerActivity = new DatabaseManagerActivity();
         databaseManagerActivity.show(this.databaseTracker, context.getContextWindow());
+    }
+
+    public LoginData getLoginData() {
+        return loginData;
     }
 
     private class DatabaseChooserItem extends ListCell<DatabaseMeta> {
