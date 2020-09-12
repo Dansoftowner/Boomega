@@ -13,6 +13,7 @@ import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.FileGoodies;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -85,15 +86,14 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     @FXML
     private Button createBtn;
 
-    private final DatabaseTracker databaseTracker;
-
     private final DatabaseCreatorView parent;
-
-    private final SimpleObjectProperty<DatabaseMeta> createdDatabase = new SimpleObjectProperty<>();
+    private final DatabaseTracker databaseTracker;
+    private final ObjectProperty<DatabaseMeta> createdDatabase;
 
     public DatabaseCreatorForm(@NotNull DatabaseCreatorView parent, @NotNull DatabaseTracker tracker) {
         this.databaseTracker = Objects.requireNonNull(tracker, "DatabaseTracker shouldn't be null");
         this.parent = Objects.requireNonNull(parent, "The parent shouldn't be null");
+        this.createdDatabase = new SimpleObjectProperty<>();
         this.loadGui();
     }
 
