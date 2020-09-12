@@ -149,3 +149,16 @@ UPDATE VIEW
 .markdown-bold {
     -fx-font-weight: bold;
 }
+
+
+/*InformationView*/
+.info-logo-view {
+    -fx-image: url("/com/dansoftware/libraryapp/image/logo/bookshelf_32.png");
+}
+
+/*
+custom
+ */
+.button .glyph-icon {
+    -fx-fill: black;
+}

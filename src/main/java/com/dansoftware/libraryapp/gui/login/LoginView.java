@@ -5,13 +5,12 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.gui.info.InfoView;
-import com.dansoftware.libraryapp.gui.info.InfoWindow;
+import com.dansoftware.libraryapp.gui.info.InformationActivity;
+import com.dansoftware.libraryapp.gui.info.InformationView;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.login.form.LoginForm;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
-import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -19,6 +18,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Pos;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
@@ -56,6 +56,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBackground> implem
         }
     }
 
+    private final Context context;
     private final LoginForm loginForm;
     private final ObjectProperty<Database> createdDatabase;
 
@@ -64,6 +65,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBackground> implem
                      @NotNull LoginData loginData,
                      @NotNull DatabaseTracker tracker) {
         super("LibraryApp", new MaterialDesignIconView(MaterialDesignIcon.BOOK));
+        this.context = Objects.requireNonNull(context, "Context shouldn't be null");
         this.createdDatabase = new SimpleObjectProperty<>();
         this.loginForm = new LoginForm(context, loginData, tracker, databaseLoginListener);
         this.setContent(new FormBackground(loginForm, tracker));
@@ -71,17 +73,11 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBackground> implem
     }
 
     private void init() {
-        InfoWindow infoWindow = new InfoWindow(new InfoView());
         this.getToolbarControlsRight().add(new ToolbarItem(
                 new MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
                 event -> {
-                    if (infoWindow.isShowing()) {
-                        infoWindow.close();
-                    } else {
-                        if (Objects.isNull(infoWindow.getOwner()))
-                            infoWindow.initOwner(WindowUtils.getStageOf(this));
-                        infoWindow.show();
-                    }
+                    var informationActivity = new InformationActivity(context);
+                    informationActivity.show();
                 }));
     }
 
