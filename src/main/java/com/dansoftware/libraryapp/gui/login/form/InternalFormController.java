@@ -100,6 +100,7 @@ public class InternalFormController implements Initializable {
                         .set(Preferences.Key.LOGIN_DATA, loginData)
                         .tryCommit();
             }).start();
+            databaseLoginListener.onDatabaseOpened(database);
 
             context.close();
         }
