@@ -43,6 +43,10 @@ public class I18N {
         return getProgressMessages().getString(key);
     }
 
+    public static ResourceBundle getWindowTitles() throws MissingResourceException {
+        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.WindowTitles");
+    }
+
     @NotNull
     public static ResourceBundle getProgressMessages() throws MissingResourceException {
         return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.ProgressMessages");
