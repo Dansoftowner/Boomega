@@ -4,8 +4,6 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorActivity;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
-import com.dansoftware.libraryapp.gui.dbmanager.DBManagerView;
-import com.dansoftware.libraryapp.gui.dbmanager.DBManagerWindow;
 import com.dansoftware.libraryapp.gui.dbmanager.DatabaseManagerActivity;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
