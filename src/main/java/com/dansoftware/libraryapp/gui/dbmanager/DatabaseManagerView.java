@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A DBManagerView is a gui element that shows a {@link DBManagerTable}
+ * A DBManagerView is a gui element that shows a {@link DatabaseManagerTable}
  * inside it. It's used for managing databases.
  *
  * <p>
@@ -22,22 +22,22 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DBManagerView extends SimpleHeaderView<DBManagerTable> implements Themeable {
+public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> implements Themeable {
 
     /**
-     * Creates a {@link DBManagerView} with a list of database-information ({@link DatabaseMeta}) objects.
+     * Creates a {@link DatabaseManagerView} with a list of database-information ({@link DatabaseMeta}) objects.
      *
      * @param databaseTracker the database-tracker
      */
-    public DBManagerView(@NotNull DatabaseTracker databaseTracker) {
+    public DatabaseManagerView(@NotNull DatabaseTracker databaseTracker) {
         super(I18N.getGeneralWord("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
-        super.setContent(new DBManagerTable(this, databaseTracker));
+        super.setContent(new DatabaseManagerTable(this, databaseTracker));
         this.createToolbarControls();
     }
 
     private void createToolbarControls() {
         //Toolbar item that shows how many items are selected from the table
-        DBManagerTable table = getContent();
+        DatabaseManagerTable table = getContent();
         var selectedItemsIndicator = new ToolbarItem();
         StringExpression allItemsSlashSelected = table.itemsCount().asString()
                 .concat("/")

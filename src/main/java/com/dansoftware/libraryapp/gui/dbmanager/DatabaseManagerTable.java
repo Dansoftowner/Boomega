@@ -31,24 +31,24 @@ import java.util.stream.Stream;
  * A DBManagerTable is a {@link TableView} that is used for managing (monitoring, deleting) databases.
  *
  * <p>
- * It should only be used through a {@link DBManagerView}.
+ * It should only be used through a {@link DatabaseManagerView}.
  *
  * @author Daniel Gyorffy
- * @see DBManagerView
+ * @see DatabaseManagerView
  */
-class DBManagerTable extends TableView<DatabaseMeta>
+class DatabaseManagerTable extends TableView<DatabaseMeta>
         implements DatabaseTracker.Observer {
 
-    private static final Logger logger = LoggerFactory.getLogger(DBManagerTable.class);
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseManagerTable.class);
 
-    private final DBManagerView parent;
+    private final DatabaseManagerView parent;
     private final DatabaseTracker databaseTracker;
 
     private final IntegerBinding itemsCount;
     private final IntegerBinding selectedItemsCount;
 
-    public DBManagerTable(@NotNull DBManagerView parent,
-                          @NotNull DatabaseTracker databaseTracker) {
+    public DatabaseManagerTable(@NotNull DatabaseManagerView parent,
+                                @NotNull DatabaseTracker databaseTracker) {
         this.parent = parent;
         this.databaseTracker = databaseTracker;
         this.databaseTracker.registerObserver(this);
@@ -140,7 +140,7 @@ class DBManagerTable extends TableView<DatabaseMeta>
                             indicator.getStyleClass().add(NOT_EXISTS_CLASS);
                             setGraphic(indicator);
                             getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.error.not.exists")));
-                        } else if (DBManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
+                        } else if (DatabaseManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
                             var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
                             indicator.getStyleClass().add(USED_CLASS);
                             setGraphic(indicator);
@@ -309,14 +309,14 @@ class DBManagerTable extends TableView<DatabaseMeta>
     private final class DBDeleteDialog {
 
         public void show(@NotNull ObservableList<DatabaseMeta> itemsToRemove) {
-            DBManagerTable.this.parent.showDialog(WorkbenchDialog.builder(
+            DatabaseManagerTable.this.parent.showDialog(WorkbenchDialog.builder(
                     I18N.getAlertMsg("db.manager.table.confirm.delete.title", itemsToRemove.size()),
                     new ListView<>(itemsToRemove),
                     ButtonType.YES,
                     ButtonType.NO
             ).onResult(buttonType -> {
                 if (Objects.equals(buttonType, ButtonType.YES)) {
-                    itemsToRemove.forEach(DBManagerTable.this.databaseTracker::removeDatabase);
+                    itemsToRemove.forEach(DatabaseManagerTable.this.databaseTracker::removeDatabase);
                 }
             }).build());
         }

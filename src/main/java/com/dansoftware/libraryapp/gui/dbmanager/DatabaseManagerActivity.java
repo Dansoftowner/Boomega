@@ -14,8 +14,8 @@ import org.jetbrains.annotations.Nullable;
 public class DatabaseManagerActivity {
 
     public void show(@NotNull DatabaseTracker databaseTracker, @Nullable Window owner) {
-        DBManagerView dbManagerView = new DBManagerView(databaseTracker);
-        DBManagerWindow window = new DBManagerWindow(dbManagerView, owner);
+        DatabaseManagerView dbManagerView = new DatabaseManagerView(databaseTracker);
+        DatabaseManagerWindow window = new DatabaseManagerWindow(dbManagerView, owner);
         window.show();
     }
 }
