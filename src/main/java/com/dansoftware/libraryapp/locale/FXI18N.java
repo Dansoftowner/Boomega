@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.locale;
 
+import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import javafx.scene.control.ButtonType;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
 /**
  * Used for internationalizing some embedded javaFX elements if the default {@link Locale} is not supported by
@@ -30,19 +32,7 @@ final class FXI18N {
 
     static {
         //list of supported languages in javaFX i18n
-        List<Locale> supportedLocales = List.of(
-                Locale.ENGLISH,
-                Locale.GERMAN,
-                Locale.FRENCH,
-                Locale.ITALIAN,
-                Locale.JAPANESE,
-                Locale.KOREAN,
-                Locale.CHINESE,
-                Locale.SIMPLIFIED_CHINESE,
-                new Locale("sv"),
-                new Locale("pt", "BR"),
-                new Locale("es")
-        );
+        List<Locale> supportedLocales = getSupportedLocales();
 
         Locale locale = Locale.getDefault();
         if (supportedLocales.contains(locale)) {
@@ -61,21 +51,9 @@ final class FXI18N {
     private static void internationalizeButtonTypes() {
         try {
             ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME);
-
-            ButtonType[] buttonTypes = {
-                    ButtonType.APPLY,
-                    ButtonType.OK,
-                    ButtonType.CANCEL,
-                    ButtonType.CLOSE,
-                    ButtonType.YES,
-                    ButtonType.NO,
-                    ButtonType.FINISH,
-                    ButtonType.NEXT,
-                    ButtonType.PREVIOUS
-            };
+            List<ButtonType> buttonTypes = getGlobalButtonTypes();
 
             Class<ButtonType> buttonTypeClass = ButtonType.class;
-
             Field keyField = buttonTypeClass.getDeclaredField("key");
             Field textField = buttonTypeClass.getDeclaredField("text");
 
@@ -93,7 +71,36 @@ final class FXI18N {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             logger.error("Some error occurred during internationalizing the ButtonTypes");
         }
+    }
 
+    private static List<ButtonType> getGlobalButtonTypes() {
+        return List.of(
+                ButtonType.APPLY,
+                ButtonType.OK,
+                ButtonType.CANCEL,
+                ButtonType.CLOSE,
+                ButtonType.YES,
+                ButtonType.NO,
+                ButtonType.FINISH,
+                ButtonType.NEXT,
+                ButtonType.PREVIOUS
+        );
+    }
+
+    private static List<Locale> getSupportedLocales() {
+        return List.of(
+                Locale.ENGLISH,
+                Locale.GERMAN,
+                Locale.FRENCH,
+                Locale.ITALIAN,
+                Locale.JAPANESE,
+                Locale.KOREAN,
+                Locale.CHINESE,
+                Locale.SIMPLIFIED_CHINESE,
+                new Locale("sv"),
+                new Locale("pt", "BR"),
+                new Locale("es")
+        );
     }
 
     private FXI18N() {
