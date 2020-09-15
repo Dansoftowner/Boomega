@@ -1,16 +1,16 @@
 package com.dansoftware.libraryapp.locale;
 
-import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import javafx.scene.control.ButtonType;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
 
 /**
  * Used for internationalizing some embedded javaFX elements if the default {@link Locale} is not supported by
@@ -51,19 +51,12 @@ final class FXI18N {
     private static void internationalizeButtonTypes() {
         try {
             ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME);
-            List<ButtonType> buttonTypes = getGlobalButtonTypes();
 
             Class<ButtonType> buttonTypeClass = ButtonType.class;
-            Field keyField = buttonTypeClass.getDeclaredField("key");
-            Field textField = buttonTypeClass.getDeclaredField("text");
+            Field keyField = modifiableField(buttonTypeClass.getDeclaredField("key"));
+            Field textField = modifiableField(buttonTypeClass.getDeclaredField("text"));
 
-            keyField.setAccessible(true);
-            textField.setAccessible(true);
-
-            FieldUtils.removeFinalModifier(keyField);
-            FieldUtils.removeFinalModifier(textField);
-
-            for (ButtonType buttonType : buttonTypes) {
+            for (ButtonType buttonType : getGlobalButtonTypes()) {
                 String key = (String) keyField.get(buttonType);
                 String i18nVal = bundle.getString(key);
                 textField.set(buttonType, i18nVal);
@@ -101,6 +94,19 @@ final class FXI18N {
                 new Locale("pt", "BR"),
                 new Locale("es")
         );
+    }
+
+    /**
+     * Sets the reflected field accessible and removes the 'final' modifier from it.
+     *
+     * @param field the {@link Field} to operate on
+     * @return the {@link Field} object itself
+     */
+    @NotNull
+    private static Field modifiableField(@NotNull Field field) {
+        field.setAccessible(Boolean.TRUE);
+        FieldUtils.removeFinalModifier(field);
+        return field;
     }
 
     private FXI18N() {
