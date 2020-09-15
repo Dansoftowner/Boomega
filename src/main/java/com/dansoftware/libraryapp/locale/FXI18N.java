@@ -68,8 +68,8 @@ final class FXI18N {
                 String i18nVal = bundle.getString(key);
                 textField.set(buttonType, i18nVal);
             }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            logger.error("Some error occurred during internationalizing the ButtonTypes");
+        } catch (NoSuchFieldException | IllegalAccessException | UnsupportedOperationException e) {
+            logger.error("Some error occurred during internationalizing the ButtonTypes", e);
         }
     }
 
