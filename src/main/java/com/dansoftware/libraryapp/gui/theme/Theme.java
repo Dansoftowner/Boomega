@@ -41,8 +41,7 @@ import java.util.*;
  */
 public abstract class Theme {
 
-    private static final Set<WeakReference<Themeable>> THEMEABLE_SET =
-            Collections.synchronizedSet(new HashSet<>());
+    private static final Set<WeakReference<Themeable>> THEMEABLE_SET = new HashSet<>();
 
     /**
      * Holds the current default theme
@@ -101,7 +100,7 @@ public abstract class Theme {
         return customApplier;
     }
 
-    public static void registerThemeable(@NotNull Themeable themeable) {
+    public static synchronized void registerThemeable(@NotNull Themeable themeable) {
         if (THEMEABLE_SET.add(new IdentifiableWeakReference<>(themeable))) {
             themeable.handleThemeApply(defaultTheme);
         }
@@ -116,7 +115,7 @@ public abstract class Theme {
         }
     }
 
-    public static void setDefault(@NotNull Theme theme) {
+    public static synchronized void setDefault(@NotNull Theme theme) {
         if (theme != defaultTheme) {
             Theme.defaultTheme = theme;
             notifyThemeableInstances(theme);
