@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.locale.I18N;
@@ -25,6 +26,7 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
         super(I18N.getGeneralWord("database.creator.title"),
                 new MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS));
         super.setContent(this.form = new DatabaseCreatorForm(this, databaseTracker));
+        Theme.registerThemeable(this);
     }
 
     public DatabaseMeta getCreatedDatabase() {
@@ -32,8 +34,7 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
     }
 
     @Override
-    public void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
-        customApplier.apply(this);
-        globalApplier.apply(this);
+    public void handleThemeApply(Theme newTheme) {
+        newTheme.apply(this);
     }
 }

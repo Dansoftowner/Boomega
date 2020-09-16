@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.locale.I18N;
@@ -33,6 +34,7 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
         super(I18N.getGeneralWord("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
         super.setContent(new DatabaseManagerTable(this, databaseTracker));
         this.createToolbarControls();
+        Theme.registerThemeable(this);
     }
 
     private void createToolbarControls() {
@@ -56,10 +58,7 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
     }
 
     @Override
-    public void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
-        customApplier.applyBack(this);
-        globalApplier.applyBack(this);
-        customApplier.apply(this);
-        globalApplier.apply(this);
+    public void handleThemeApply(Theme newTheme) {
+        newTheme.apply(this);
     }
 }

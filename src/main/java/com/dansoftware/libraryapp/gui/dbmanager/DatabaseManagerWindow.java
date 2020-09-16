@@ -29,6 +29,5 @@ public class DatabaseManagerWindow extends LibraryAppStage {
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
         this.centerOnScreen();
-        Theme.applyDefault((Themeable) view);
     }
 }

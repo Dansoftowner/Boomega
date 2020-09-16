@@ -1,14 +1,15 @@
 package com.dansoftware.libraryapp.gui.theme;
 
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
+import com.dansoftware.libraryapp.util.IdentifiableWeakReference;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
 
-import java.util.Objects;
-import java.util.Set;
+import java.lang.ref.WeakReference;
+import java.util.*;
 
 /**
  * A Theme can change the appearance of GUI elements.
@@ -31,8 +32,7 @@ import java.util.Set;
  * <p>
  * We can set the default theme by the static {@link #setDefault(Theme)} method.
  * <br>
- * The {@link Theme#applyDefault(Scene)}, {@link Theme#applyDefault(Parent)},
- * {@link Theme#applyDefault(Themeable)} methods can be used for applying the default
+ * The {@link Theme#applyDefault(Scene)}, {@link Theme#applyDefault(Parent)} methods can be used for applying the default
  * theme on the particular component.
  *
  * @author Daniel Gyorffy
@@ -40,6 +40,9 @@ import java.util.Set;
  * @see Themeable
  */
 public abstract class Theme {
+
+    private static final Set<WeakReference<Themeable>> THEMEABLE_SET =
+            Collections.synchronizedSet(new HashSet<>());
 
     /**
      * Holds the current default theme
@@ -50,17 +53,13 @@ public abstract class Theme {
     private final ThemeApplier customApplier;
 
     protected Theme() {
-        this.globalApplier = getGlobalApplier();
-        this.customApplier = getCustomApplier();
+        this.globalApplier = createGlobalApplier();
+        this.customApplier = createCustomApplier();
     }
 
-    protected abstract ThemeApplier getGlobalApplier();
+    protected abstract ThemeApplier createGlobalApplier();
 
-    protected abstract ThemeApplier getCustomApplier();
-
-    public void apply(@NotNull Themeable themeable) {
-        themeable.handleThemeApply(globalApplier, customApplier);
-    }
+    protected abstract ThemeApplier createCustomApplier();
 
     public void apply(@NotNull Scene scene) {
         customApplier.applyBack(scene);
@@ -74,6 +73,36 @@ public abstract class Theme {
         globalApplier.applyBack(parent);
         customApplier.apply(parent);
         globalApplier.apply(parent);
+    }
+
+    public ThemeApplier getGlobalApplier() {
+        return globalApplier;
+    }
+
+    public ThemeApplier getCustomApplier() {
+        return customApplier;
+    }
+
+    public static void registerThemeable(@NotNull Themeable themeable) {
+        if (THEMEABLE_SET.add(new IdentifiableWeakReference<>(themeable))) {
+            themeable.handleThemeApply(defaultTheme);
+        }
+    }
+
+    private static void notifyThemeableInstances(@NotNull Theme newTheme) {
+        for (Iterator<WeakReference<Themeable>> iterator = THEMEABLE_SET.iterator(); iterator.hasNext(); ) {
+            WeakReference<Themeable> themeableWeakReference = iterator.next();
+            Themeable themeableRef = themeableWeakReference.get();
+            if (themeableRef == null) iterator.remove();
+            else themeableRef.handleThemeApply(newTheme);
+        }
+    }
+
+    public static void setDefault(@NotNull Theme theme) {
+        if (theme != defaultTheme) {
+            Theme.defaultTheme = theme;
+            notifyThemeableInstances(theme);
+        }
     }
 
     /**
@@ -99,14 +128,6 @@ public abstract class Theme {
         if (Objects.isNull(defaultTheme))
             defaultTheme = new LightTheme();
         return defaultTheme;
-    }
-
-    public static void setDefault(@NotNull Theme theme) {
-        Theme.defaultTheme = theme;
-    }
-
-    public static void applyDefault(Themeable themeable) {
-        getDefault().apply(themeable);
     }
 
     public static void applyDefault(Scene scene) {

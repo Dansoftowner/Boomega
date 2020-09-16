@@ -37,8 +37,6 @@ class LoginWindow extends LibraryAppStage
         this.loginView = Objects.requireNonNull(root, "LoginView shouldn't be null");
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
         this.setMaximized(true);
-
-        Theme.applyDefault((Themeable) root);
     }
 
     @Override

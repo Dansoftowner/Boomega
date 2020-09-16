@@ -26,12 +26,12 @@ public class DarkTheme extends Theme {
     }
 
     @Override
-    protected ThemeApplier getGlobalApplier() {
+    protected ThemeApplier createGlobalApplier() {
         return new StyleSheetThemeApplier(GLOBAL_DARK_STYLE_SHEET);
     }
 
     @Override
-    protected ThemeApplier getCustomApplier() {
+    protected ThemeApplier createCustomApplier() {
         return new JMetroThemeApplier(Style.DARK);
     }
 }

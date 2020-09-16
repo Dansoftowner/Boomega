@@ -8,6 +8,7 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.info.InformationActivity;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.login.form.LoginForm;
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dlsc.workbenchfx.SimpleHeaderView;
@@ -47,6 +48,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
         this.loginForm = new LoginForm(context, loginData, tracker, databaseLoginListener);
         this.setContent(new FormBase(loginForm, tracker));
         this.createToolbarControls();
+        Theme.registerThemeable(this);
     }
 
     private void createToolbarControls() {
@@ -59,11 +61,8 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
     }
 
     @Override
-    public void handleThemeApply(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
-        customApplier.applyBack(this);
-        globalApplier.applyBack(this);
-        customApplier.apply(this);
-        globalApplier.apply(this);
+    public void handleThemeApply(Theme newTheme) {
+        newTheme.apply(this);
     }
 
     public LoginData getLoginData() {
