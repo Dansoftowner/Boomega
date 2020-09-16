@@ -36,8 +36,12 @@ public final class ReflectionUtils {
      */
     @NotNull
     public static Field modifiableField(@NotNull Field field) {
+        setFieldModifiable(field);
+        return field;
+    }
+
+    public static void setFieldModifiable(@NotNull Field field) {
         field.setAccessible(Boolean.TRUE);
         FieldUtils.removeFinalModifier(field);
-        return field;
     }
 }
