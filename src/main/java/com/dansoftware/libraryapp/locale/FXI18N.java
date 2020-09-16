@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.locale;
 
+import com.dansoftware.libraryapp.util.ReflectionUtils;
 import javafx.scene.control.ButtonType;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +54,8 @@ final class FXI18N {
             ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME);
 
             Class<ButtonType> buttonTypeClass = ButtonType.class;
-            Field keyField = modifiableField(buttonTypeClass.getDeclaredField("key"));
-            Field textField = modifiableField(buttonTypeClass.getDeclaredField("text"));
+            Field keyField = ReflectionUtils.modifiableField(buttonTypeClass.getDeclaredField("key"));
+            Field textField = ReflectionUtils.modifiableField(buttonTypeClass.getDeclaredField("text"));
 
             for (ButtonType buttonType : getGlobalButtonTypes()) {
                 String key = (String) keyField.get(buttonType);
@@ -94,19 +95,6 @@ final class FXI18N {
                 new Locale("pt", "BR"),
                 new Locale("es")
         );
-    }
-
-    /**
-     * Sets the reflected field accessible and removes the 'final' modifier from it.
-     *
-     * @param field the {@link Field} to operate on
-     * @return the {@link Field} object itself
-     */
-    @NotNull
-    private static Field modifiableField(@NotNull Field field) {
-        field.setAccessible(Boolean.TRUE);
-        FieldUtils.removeFinalModifier(field);
-        return field;
     }
 
     private FXI18N() {
