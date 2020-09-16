@@ -57,9 +57,27 @@ public abstract class Theme {
         this.customApplier = createCustomApplier();
     }
 
+    /**
+     * Every {@link Theme} implementation should create a global {@link ThemeApplier}
+     * through this method.
+     *
+     * <p>
+     * The created {@link ThemeApplier} will be cached.
+     */
+    @NotNull
     protected abstract ThemeApplier createGlobalApplier();
 
-    protected abstract ThemeApplier createCustomApplier();
+    /**
+     * Every {@link Theme} implementation can create a custom {@link ThemeApplier}
+     * through this method.
+     *
+     * <p>
+     * The created {@link ThemeApplier} will be cached.
+     */
+    @NotNull
+    protected ThemeApplier createCustomApplier() {
+        return ThemeApplier.empty();
+    }
 
     public void apply(@NotNull Scene scene) {
         customApplier.applyBack(scene);

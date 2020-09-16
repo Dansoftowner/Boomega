@@ -26,12 +26,12 @@ public class LightTheme extends Theme {
     }
 
     @Override
-    protected ThemeApplier createGlobalApplier() {
+    protected @NotNull ThemeApplier createGlobalApplier() {
         return new StyleSheetThemeApplier(GLOBAL_LIGHT_STYLE_SHEET);
     }
 
     @Override
-    protected ThemeApplier createCustomApplier() {
+    protected @NotNull ThemeApplier createCustomApplier() {
         return new JMetroThemeApplier(Style.LIGHT);
     }
 }

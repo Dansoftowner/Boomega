@@ -41,4 +41,29 @@ public interface ThemeApplier {
      * @param parent the gui-object; shouldn't be null
      */
     void applyBack(@NotNull Parent parent);
+
+    /**
+     * Creates an empty {@link ThemeApplier} that doesn't do anything.
+     *
+     * @return the {@link ThemeApplier} object.
+     */
+    static ThemeApplier empty() {
+        return new ThemeApplier() {
+            @Override
+            public void apply(@NotNull Scene scene) {
+            }
+
+            @Override
+            public void apply(@NotNull Parent parent) {
+            }
+
+            @Override
+            public void applyBack(@NotNull Scene scene) {
+            }
+
+            @Override
+            public void applyBack(@NotNull Parent parent) {
+            }
+        };
+    }
 }
