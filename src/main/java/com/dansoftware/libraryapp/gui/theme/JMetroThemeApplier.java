@@ -36,6 +36,7 @@ public class JMetroThemeApplier implements ThemeApplier {
             );
 
             return fields.stream()
+                    .peek(ReflectionUtils::modifiableField)
                     .map(ReflectionUtils::getDeclaredStaticValue)
                     .map(String::valueOf)
                     .collect(Collectors.toList());

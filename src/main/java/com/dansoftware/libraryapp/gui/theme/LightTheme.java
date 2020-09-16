@@ -32,26 +32,6 @@ public class LightTheme extends Theme {
 
     @Override
     protected ThemeApplier getCustomApplier() {
-        return new ThemeApplier() {
-            @Override
-            public void apply(@NotNull Scene scene) {
-                new JMetro(Style.LIGHT).setScene(scene);
-            }
-
-            @Override
-            public void apply(@NotNull Parent parent) {
-                new JMetro(Style.LIGHT).setParent(parent);
-            }
-
-            @Override
-            public void applyBack(@NotNull Scene scene) {
-                scene.getStylesheets().clear();
-            }
-
-            @Override
-            public void applyBack(@NotNull Parent parent) {
-                parent.getStylesheets().clear();
-            }
-        };
+        return new JMetroThemeApplier(Style.LIGHT);
     }
 }
