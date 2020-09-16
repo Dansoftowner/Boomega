@@ -113,9 +113,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
         return createdDatabase;
     }
 
-    @FXML
-    private void create() {
-
+    private void validateInputs(@NotNull BiConsumer<DatabaseMeta, Credentials> onSuccess) {
         // validating the inputs
         var validator = this.new Validator();
         validator.ifNameEmpty(
@@ -153,7 +151,12 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                         //handle
                     }
                 }
-        ).onSuccess((createdDatabase, credentials) -> {
+        ).onSuccess(onSuccess);
+    }
+
+    @FXML
+    private void create() {
+        validateInputs((createdDatabase, credentials) -> {
             this.createdDatabase.set(createdDatabase);
             LoginProcessor.of(NitriteDatabase.factory())
                     .onFailed((title, message, t) -> {
