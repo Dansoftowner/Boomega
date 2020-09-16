@@ -44,15 +44,19 @@ public abstract class Theme {
     /**
      * Holds the current default theme
      */
-    private static Theme DEFAULT;
+    private static Theme defaultTheme;
 
     private final ThemeApplier globalApplier;
     private final ThemeApplier customApplier;
 
-    protected Theme(@NotNull ThemeApplier globalApplier, @NotNull ThemeApplier customApplier) {
-        this.globalApplier = globalApplier;
-        this.customApplier = customApplier;
+    protected Theme() {
+        this.globalApplier = getGlobalApplier();
+        this.customApplier = getCustomApplier();
     }
+
+    protected abstract ThemeApplier getGlobalApplier();
+
+    protected abstract ThemeApplier getCustomApplier();
 
     public void apply(@NotNull Themeable themeable) {
         themeable.handleThemeApply(globalApplier, customApplier);
@@ -92,13 +96,13 @@ public abstract class Theme {
      * @return the default theme
      */
     public static Theme getDefault() {
-        if (Objects.isNull(DEFAULT))
-            DEFAULT = new LightTheme();
-        return DEFAULT;
+        if (Objects.isNull(defaultTheme))
+            defaultTheme = new LightTheme();
+        return defaultTheme;
     }
 
     public static void setDefault(@NotNull Theme theme) {
-        Theme.DEFAULT = theme;
+        Theme.defaultTheme = theme;
     }
 
     public static void applyDefault(Themeable themeable) {
