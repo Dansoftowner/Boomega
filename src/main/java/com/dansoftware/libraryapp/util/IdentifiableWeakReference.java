@@ -2,6 +2,12 @@ package com.dansoftware.libraryapp.util;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * An {@link IdentifiableWeakReference} is a {@link WeakReference} that provides
+ * equals() and hashCode() methods that uses the referent objects equals() and hashCode() methods.
+ *
+ * @param <T>
+ */
 public class IdentifiableWeakReference<T> extends WeakReference<T> {
     public IdentifiableWeakReference(T referent) {
         super(referent);
@@ -20,7 +26,9 @@ public class IdentifiableWeakReference<T> extends WeakReference<T> {
         else if (!(obj instanceof WeakReference))
             return false;
 
+        WeakReference<?> weakReferenceObj = (WeakReference<?>) obj;
         T referent = get();
-        return referent == null ? super.equals(obj) : referent.equals(((WeakReference<?>) obj).get());
+
+        return referent == null ? super.equals(obj) : referent.equals(weakReferenceObj.get());
     }
 }
