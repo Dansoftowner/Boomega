@@ -33,17 +33,14 @@ public class Main extends BaseApplication {
     private static final Logger logger;
 
     static {
-        //Configure the logger
-        var logFile = new LogFile();
-        System.setProperty("log.file.path", logFile.getAbsolutePath());
-        System.setProperty("log.file.path.full", logFile.getPathWithExtension());
+        PropertiesResponsible.putSystemProperties();
 
+        //we create the logger after the necessary system-properties are put
         logger = LoggerFactory.getLogger(Main.class);
 
         //Set the default uncaught exception handler
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     }
-
 
     /**
      * The main-method of the application;
