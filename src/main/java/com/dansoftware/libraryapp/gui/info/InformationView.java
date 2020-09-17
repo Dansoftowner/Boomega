@@ -97,7 +97,7 @@ public class InformationView extends SimpleHeaderView<Node>
         javaVMLabel.setText(System.getProperty("java.vm.name"));
         javaVendorLabel.setText(System.getProperty("java.vendor"));
         javaVersionLabel.setText(System.getProperty("java.version"));
-        javaFXVersionLabel.setText(com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
+        javaFXVersionLabel.setText(System.getProperty("javafx.version"));
         logsLocationField.setText(System.getProperty("log.file.path.full"));
     }
 
