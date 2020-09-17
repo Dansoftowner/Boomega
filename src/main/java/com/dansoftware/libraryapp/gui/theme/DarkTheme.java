@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-@SuppressWarnings("unused")
 public class DarkTheme extends Theme {
 
     private static final String GLOBAL_DARK_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-dark.css";

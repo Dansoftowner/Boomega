@@ -11,6 +11,13 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A {@link JMetroThemeApplier} is a {@link ThemeApplier} that can apply
+ * <i>JMetro</i> styles to GUI elements.
+ *
+ * @see JMetro
+ * @author Daniel Gyorffy
+ */
 public class JMetroThemeApplier implements ThemeApplier {
 
     private static final List<String> J_METRO_STYLE_SHEETS;
@@ -45,8 +52,15 @@ public class JMetroThemeApplier implements ThemeApplier {
         }
     }
 
+    /* * * * * * */
+
     private final Style jMetroStyle;
 
+    /**
+     * Creates a normal {@link JMetroThemeApplier}.
+     *
+     * @param jMetroStyle the JMetro style-type
+     */
     public JMetroThemeApplier(@NotNull Style jMetroStyle) {
         this.jMetroStyle = jMetroStyle;
     }
