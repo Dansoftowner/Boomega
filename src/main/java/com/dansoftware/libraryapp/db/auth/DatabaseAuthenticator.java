@@ -93,6 +93,17 @@ public abstract class DatabaseAuthenticator {
         return Optional.ofNullable(this.onFailed);
     }
 
+    /**
+     * Performs the database creating operation.
+     *
+     * <p>
+     * All {@link DatabaseAuthenticator} implementations must implement it.
+     *
+     * @param databaseMeta the meta-information about the database
+     * @param credentials the database-credentials
+     * @param failListener the FailListener that defines how to handle exceptions
+     * @return the created "database-bridge"
+     */
     protected abstract Database create(@NotNull DatabaseMeta databaseMeta,
                                        @NotNull Credentials credentials,
                                        @NotNull FailListener failListener);
