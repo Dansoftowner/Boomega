@@ -81,12 +81,12 @@ public class InternalFormController implements Initializable {
         loginData.setAutoLoginDatabase(rememberBox.isSelected() ? dbMeta : null);
         loginData.setAutoLoginCredentials(rememberBox.isSelected() ? credentials : null);
 
-        Database database = LoginProcessor.of(NitriteDatabase.factory())
+        Database database = NitriteDatabase.getAuthenticator()
                 .onFailed((title, message, t) -> {
                     this.context.showErrorDialog(title, message, ((Exception) t));
 
                     logger.error("Failed to create/open the database", t);
-                }).process(dbMeta, credentials);
+                }).auth(dbMeta, credentials);
 
         if (database != null) {
             //creating the database was successful

@@ -93,5 +93,7 @@ public abstract class DatabaseAuthenticator {
         return Optional.ofNullable(this.onFailed);
     }
 
-    protected abstract Database create(@NotNull DatabaseMeta databaseMeta, @NotNull Credentials credentials, @NotNull FailListener failListener);
+    protected abstract Database create(@NotNull DatabaseMeta databaseMeta,
+                                       @NotNull Credentials credentials,
+                                       @NotNull FailListener failListener);
 }

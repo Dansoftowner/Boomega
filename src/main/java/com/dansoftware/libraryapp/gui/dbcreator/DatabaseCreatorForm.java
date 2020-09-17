@@ -158,7 +158,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     private void create() {
         validateInputs((createdDatabase, credentials) -> {
             this.createdDatabase.set(createdDatabase);
-            LoginProcessor.of(NitriteDatabase.factory())
+            NitriteDatabase.getAuthenticator()
                     .onFailed((title, message, t) -> {
                         this.createdDatabase.set(null);
                         this.parent.showErrorDialog(title, message, (Exception) t, buttonType -> {

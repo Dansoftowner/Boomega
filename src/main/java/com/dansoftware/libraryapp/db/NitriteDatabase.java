@@ -104,21 +104,12 @@ public class NitriteDatabase implements Database {
         return new DatabaseAuthenticatorImpl();
     }
 
-    /**
-     * Returns a {@link DatabaseFactory} that can be used for creating/opening a {@link NitriteDatabase} through the
-     * {@link com.dansoftware.libraryapp.db.processor.LoginProcessor} API.
-     *
-     * @return the factory object
-     * @see com.dansoftware.libraryapp.db.processor.LoginProcessor
-     */
-    public static DatabaseFactory factory() {
-        return (databaseMeta, credentials, failListener) -> null;
-    }
-
     private static final class DatabaseAuthenticatorImpl extends DatabaseAuthenticator {
 
         @Override
-        protected Database create(@NotNull DatabaseMeta databaseMeta, @NotNull Credentials credentials, @NotNull FailListener failListener) {
+        protected Database create(@NotNull DatabaseMeta databaseMeta,
+                                  @NotNull Credentials credentials,
+                                  @NotNull FailListener failListener) {
             try {
                 return new NitriteDatabase(databaseMeta, credentials);
             } catch (SecurityException e) {

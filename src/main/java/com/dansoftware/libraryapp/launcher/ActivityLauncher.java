@@ -137,7 +137,7 @@ public abstract class ActivityLauncher implements Runnable {
                         //if auto login is turned on
                         logger.debug("auto login is turned on, trying to sign in into the database...");
 
-                        Database database = LoginProcessor.of(NitriteDatabase.factory())
+                        Database database = NitriteDatabase.getAuthenticator()
                                 .onFailed((title, message, t) -> {
                                     logger.debug("failed signing into the database");
                                     Platform.runLater(() -> {
@@ -146,7 +146,7 @@ public abstract class ActivityLauncher implements Runnable {
                                         entryActivity.showErrorDialog(title, message, (Exception) t);
                                         onActivityLaunched(entryActivity);
                                     });
-                                }).process(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
+                                }).auth(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
 
                         //the login-process was successful
                         if (database != null) {
@@ -215,7 +215,7 @@ public abstract class ActivityLauncher implements Runnable {
         }
 
         logger.debug("trying to sign in into the database...");
-        Database database = LoginProcessor.of(NitriteDatabase.factory())
+        Database database = NitriteDatabase.getAuthenticator()
                 .onFailed((title, message, t) -> {
                     Platform.runLater(() -> {
                         LoginData temp = getLoginData();
@@ -227,7 +227,7 @@ public abstract class ActivityLauncher implements Runnable {
                         entryActivity.showErrorDialog(title, message, (Exception) t);
                         onActivityLaunched(entryActivity);
                     });
-                }).process(argument);
+                }).auth(argument);
 
         //the login-process was successful
         if (database != null) {
