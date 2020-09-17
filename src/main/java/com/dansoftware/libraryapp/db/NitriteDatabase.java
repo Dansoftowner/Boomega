@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.db;
 
+import com.dansoftware.libraryapp.db.auth.DatabaseAuthenticator;
+import com.dansoftware.libraryapp.db.auth.FailListener;
 import com.dansoftware.libraryapp.db.processor.DatabaseFactory;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;
@@ -98,6 +100,10 @@ public class NitriteDatabase implements Database {
         return this.databaseMeta;
     }
 
+    public static DatabaseAuthenticator getAuthenticator() {
+        return new DatabaseAuthenticatorImpl();
+    }
+
     /**
      * Returns a {@link DatabaseFactory} that can be used for creating/opening a {@link NitriteDatabase} through the
      * {@link com.dansoftware.libraryapp.db.processor.LoginProcessor} API.
@@ -106,7 +112,13 @@ public class NitriteDatabase implements Database {
      * @see com.dansoftware.libraryapp.db.processor.LoginProcessor
      */
     public static DatabaseFactory factory() {
-        return (databaseMeta, credentials, failListener) -> {
+        return (databaseMeta, credentials, failListener) -> null;
+    }
+
+    private static final class DatabaseAuthenticatorImpl extends DatabaseAuthenticator {
+
+        @Override
+        protected Database create(@NotNull DatabaseMeta databaseMeta, @NotNull Credentials credentials, @NotNull FailListener failListener) {
             try {
                 return new NitriteDatabase(databaseMeta, credentials);
             } catch (SecurityException e) {
@@ -122,6 +134,6 @@ public class NitriteDatabase implements Database {
             }
 
             return null;
-        };
+        }
     }
 }

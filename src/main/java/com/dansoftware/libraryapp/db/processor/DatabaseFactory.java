@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public interface DatabaseFactory {
 
     /**

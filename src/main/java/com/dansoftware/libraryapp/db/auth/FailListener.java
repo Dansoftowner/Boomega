@@ -1,12 +1,14 @@
-package com.dansoftware.libraryapp.db.processor;
+package com.dansoftware.libraryapp.db.auth;
+
+import com.dansoftware.libraryapp.db.processor.DatabaseFactory;
+import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 
 /**
- * Used by {@link LoginProcessor}s, more precisely by {@link DatabaseFactory} objects
+ * Used by {@link DatabaseAuthenticator}s
  * for handling the exceptions.
  *
  * @author Daniel Gyorffy
  */
-@Deprecated
 public interface FailListener {
 
     /**

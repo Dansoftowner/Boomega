@@ -36,6 +36,7 @@ import java.util.Optional;
  * @see Database
  * @see FailListener
  */
+@Deprecated
 public class LoginProcessor {
 
     private FailListener onFailListener;
