@@ -2,13 +2,10 @@ package com.dansoftware.libraryapp.locale;
 
 import com.dansoftware.libraryapp.util.ReflectionUtils;
 import javafx.scene.control.ButtonType;
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;

@@ -20,8 +20,8 @@ import java.util.Optional;
  *
  * }</pre>
  *
- * @see FailListener
  * @author Daniel Gyorffy
+ * @see FailListener
  */
 public abstract class DatabaseAuthenticator {
 

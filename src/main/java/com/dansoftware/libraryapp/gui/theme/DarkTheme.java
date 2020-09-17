@@ -1,8 +1,5 @@
 package com.dansoftware.libraryapp.gui.theme;
 
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
 

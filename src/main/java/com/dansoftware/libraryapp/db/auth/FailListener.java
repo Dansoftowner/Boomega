@@ -1,8 +1,5 @@
 package com.dansoftware.libraryapp.db.auth;
 
-import com.dansoftware.libraryapp.db.processor.DatabaseFactory;
-import com.dansoftware.libraryapp.db.processor.LoginProcessor;
-
 /**
  * Used by {@link DatabaseAuthenticator}s
  * for handling the exceptions.

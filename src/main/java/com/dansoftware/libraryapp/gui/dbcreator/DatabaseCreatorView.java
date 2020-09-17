@@ -3,7 +3,6 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.gui.theme.ThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.SimpleHeaderView;

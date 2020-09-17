@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
  * A {@link JMetroThemeApplier} is a {@link ThemeApplier} that can apply
  * <i>JMetro</i> styles to GUI elements.
  *
- * @see JMetro
  * @author Daniel Gyorffy
+ * @see JMetro
  */
 public class JMetroThemeApplier implements ThemeApplier {
 

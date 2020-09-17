@@ -1,7 +1,5 @@
 package com.dansoftware.libraryapp.gui.theme;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * A Themeable can handle the theme apply-requests.
  *

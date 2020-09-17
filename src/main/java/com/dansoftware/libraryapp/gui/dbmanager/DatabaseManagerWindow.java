@@ -1,7 +1,5 @@
 package com.dansoftware.libraryapp.gui.dbmanager;
 
-import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.LibraryAppStage;
 import javafx.stage.Modality;
 import javafx.stage.Window;

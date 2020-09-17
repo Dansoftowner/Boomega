@@ -2,8 +2,6 @@ package com.dansoftware.libraryapp.gui.login;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
-import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.LibraryAppStage;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
