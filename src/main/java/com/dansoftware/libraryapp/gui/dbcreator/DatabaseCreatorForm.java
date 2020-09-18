@@ -3,7 +3,6 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
-import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;

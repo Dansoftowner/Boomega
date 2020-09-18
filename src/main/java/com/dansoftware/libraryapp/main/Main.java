@@ -10,7 +10,6 @@ import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
 import com.dansoftware.libraryapp.locale.I18N;
-import com.dansoftware.libraryapp.log.LogFile;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

@@ -4,7 +4,6 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
-import com.dansoftware.libraryapp.db.processor.LoginProcessor;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.entry.EntryActivity;
