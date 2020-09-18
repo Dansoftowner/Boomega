@@ -93,7 +93,7 @@ public class InformationView extends SimpleHeaderView<Node>
     }
 
     private void setData() {
-        versionLabel.setText(Globals.VERSION_INFO.getVersion());
+        versionLabel.setText(System.getProperty("libraryapp.version"));
         javaVMLabel.setText(System.getProperty("java.vm.name"));
         javaVendorLabel.setText(System.getProperty("java.vendor"));
         javaVersionLabel.setText(System.getProperty("java.version"));
