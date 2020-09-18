@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.update;
 
-import com.dansoftware.libraryapp.main.VersionInfo;
+import com.dansoftware.libraryapp.util.adapter.VersionInteger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ public class UpdateSearcher {
      */
     private static final String LOCATION = "https://update-server-ed6c3.firebaseio.com/libraryapp.json";
 
-    private final VersionInfo base;
+    private final VersionInteger base;
 
     /**
      * Creates a basic update searcher object;
@@ -34,7 +34,7 @@ public class UpdateSearcher {
      * @param base the base version that the object should compare to; mustn't be null
      * @throws NullPointerException if base is null.
      */
-    public UpdateSearcher(@NotNull VersionInfo base) {
+    public UpdateSearcher(@NotNull VersionInteger base) {
         this.base = Objects.requireNonNull(base, "The base mustn't be null");
     }
 
@@ -50,9 +50,8 @@ public class UpdateSearcher {
         try {
             var information = loadInfo();
             if (information != null) {
-                VersionInfo newVersion = new VersionInfo(information.getVersion());
-                boolean newUpdateAvailable = base.compareTo(newVersion) < 0;
-                if (newUpdateAvailable) {
+                VersionInteger newVersion = new VersionInteger(information.getVersion());
+                if (base.isOlderThan(newVersion)) {
                     result.newUpdate = true;
                     result.information = information;
                 }

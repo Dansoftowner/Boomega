@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.main;
 
-import com.dansoftware.libraryapp.log.LogFile;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Responsible for adding the necessary system properties that are needed for the application.
@@ -9,7 +10,32 @@ import com.dansoftware.libraryapp.log.LogFile;
  */
 public final class PropertiesResponsible {
 
+    /* **** VALUES **** */
+
+    private static final String LIBRARY_APP_VERSION_VALUE = "0.0.0";
+
+    private static final String LIBRARY_APP_BUILD_INFO_VALUE = "";
+
+    private static final String LIBRARY_APP_FILE_EXTENSION_VALUE = "lbadb";
+
+    /**
+     * The log-file's path without the extension
+     */
+    private static final String LOG_FILE_PATH_VALUE =
+            FileUtils.getFile(FileUtils.getTempDirectory(), "libraryapp").toString();
+
+    /**
+     * The log-file's path with the extension
+     */
+    private static final String LOG_FILE_FULL_PATH_VALUE =
+            String.join(FilenameUtils.EXTENSION_SEPARATOR_STR, LOG_FILE_PATH_VALUE, "log");
+
+
+    /* ****** Keys ****** */
+
     public static final String LIBRARY_APP_VERSION = "libraryapp.version";
+    public static final String LIBRARY_APP_BUILD_INFO = "libraryapp.build.info";
+    public static final String LIBRARY_APP_FILE_EXTENSION = "libraryapp.file.extension";
     public static final String LOG_FILE_PATH = "log.file.path";
     public static final String LOG_FILE_FULL_PATH = "log.file.path.full";
 
@@ -17,9 +43,8 @@ public final class PropertiesResponsible {
      * Puts the log file information into the system properties
      */
     private static void putLogFileProperties() {
-        var logFile = new LogFile();
-        System.setProperty(LOG_FILE_PATH, logFile.getAbsolutePath());
-        System.setProperty(LOG_FILE_FULL_PATH, logFile.getPathWithExtension());
+        System.setProperty(LOG_FILE_PATH, LOG_FILE_PATH_VALUE);
+        System.setProperty(LOG_FILE_FULL_PATH, LOG_FILE_FULL_PATH_VALUE);
     }
 
     /**
@@ -29,8 +54,10 @@ public final class PropertiesResponsible {
         com.sun.javafx.runtime.VersionInfo.setupSystemProperties();
     }
 
-    private static void appSpecificProperties() {
-        System.setProperty(LIBRARY_APP_VERSION, Globals.VERSION_INFO.getVersion());
+    private static void putAppSpecificProperties() {
+        System.setProperty(LIBRARY_APP_VERSION, LIBRARY_APP_VERSION_VALUE);
+        System.setProperty(LIBRARY_APP_BUILD_INFO, LIBRARY_APP_BUILD_INFO_VALUE);
+        System.setProperty(LIBRARY_APP_FILE_EXTENSION, LIBRARY_APP_FILE_EXTENSION_VALUE);
     }
 
     /**
@@ -39,7 +66,7 @@ public final class PropertiesResponsible {
     static void putSystemProperties() {
         putLogFileProperties();
         putJFXProperties();
-        appSpecificProperties();
+        putAppSpecificProperties();
     }
 
     private PropertiesResponsible() {

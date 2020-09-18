@@ -2,7 +2,6 @@ package com.dansoftware.libraryapp.gui.info;
 
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;
-import com.dansoftware.libraryapp.main.Globals;
 import com.dlsc.workbenchfx.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -107,14 +106,14 @@ public class InformationView extends SimpleHeaderView<Node>
             String resource = IOUtils.resourceToString(resourcePath, StandardCharsets.UTF_8);
 
             String toCopy = MessageFormat.format(resource,
-                    Globals.VERSION_INFO,
-                    Globals.VERSION_INFO.getBuildInfo(),
+                    System.getProperty("libraryapp.version"),
+                    System.getProperty("libraryapp.build.info"),
                     System.getProperty("os.name"),
                     System.getProperty("os.version"),
                     System.getProperty("java.vm.name"),
                     System.getProperty("java.vendor"),
                     System.getProperty("java.version"),
-                    com.sun.javafx.runtime.VersionInfo.getRuntimeVersion()
+                    System.getProperty("javafx.version")
             );
 
             ClipboardContent content = new ClipboardContent();

@@ -7,7 +7,6 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
-import com.dansoftware.libraryapp.main.Globals;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.FileGoodies;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -191,7 +190,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                         .concat(File.separator)
                         .concat(this.nameField.textProperty())
                         .concat(".")
-                        .concat(Globals.FILE_EXTENSION)
+                        .concat(System.getProperty("libraryapp.file.extension"))
                 );
 
         //We don't allow to put spaces in the following inputs

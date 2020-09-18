@@ -4,6 +4,7 @@ package com.dansoftware.libraryapp.main;
  * This class gives ability for another parts of the application to access some
  * global information/object
  */
+@Deprecated
 public final class Globals {
 
     /**

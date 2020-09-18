@@ -3,7 +3,6 @@ package com.dansoftware.libraryapp.gui.updateview.page.start;
 import com.dansoftware.libraryapp.gui.updateview.UpdateView;
 import com.dansoftware.libraryapp.gui.updateview.page.UpdatePage;
 import com.dansoftware.libraryapp.gui.updateview.page.detail.UpdatePageDetail;
-import com.dansoftware.libraryapp.main.Globals;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -60,7 +59,7 @@ public class UpdatePageStart extends UpdatePage {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currentVersionLabel.setText(Globals.VERSION_INFO.getVersion());
+        currentVersionLabel.setText(System.getProperty("libraryapp.version"));
         nextVersionLabel.setText(getInformation().getVersion());
     }
 }

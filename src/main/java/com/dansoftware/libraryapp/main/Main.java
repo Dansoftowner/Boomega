@@ -11,6 +11,7 @@ import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
+import com.dansoftware.libraryapp.util.adapter.VersionInteger;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +79,7 @@ public class Main extends BaseApplication {
         logger.info("Theme is: {}", Theme.getDefault());
 
         //searching for updates
-        UpdateSearcher updateSearcher = new UpdateSearcher(Globals.VERSION_INFO);
+        UpdateSearcher updateSearcher = new UpdateSearcher(new VersionInteger(System.getProperty("libraryapp.version")));
         UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
         new InitActivityLauncher(getApplicationArgs(), preferences, loginData, searchResult).launch();

@@ -26,6 +26,14 @@ public class VersionInteger {
         return Integer.parseInt(versionString.replace(DOT, StringUtils.EMPTY));
     }
 
+    public boolean isNewerThan(VersionInteger other) {
+        return this.value > other.value;
+    }
+
+    public boolean isOlderThan(VersionInteger other) {
+        return !isNewerThan(other);
+    }
+
     public int getValue() {
         return value;
     }

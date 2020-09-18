@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
-import com.dansoftware.libraryapp.main.Globals;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.apache.commons.collections.CollectionUtils;
@@ -27,7 +26,7 @@ public class DatabaseOpener {
     @NotNull
     private List<FileChooser.ExtensionFilter> getExtensionFilters() {
         return List.of(
-                new FileChooser.ExtensionFilter("LibraryApp database files", "*." + Globals.FILE_EXTENSION),
+                new FileChooser.ExtensionFilter("LibraryApp database files", "*." + System.getProperty("libraryapp.file.extension")),
                 new FileChooser.ExtensionFilter("All files", "*")
         );
     }

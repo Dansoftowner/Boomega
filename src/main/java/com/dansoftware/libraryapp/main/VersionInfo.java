@@ -5,9 +5,8 @@ import com.dansoftware.libraryapp.util.adapter.VersionInteger;
 /**
  * A BuildInfo contains every information about the
  * current build of the application.
- *
- * @see Globals#VERSION_INFO
  */
+@Deprecated
 public class VersionInfo implements Comparable<VersionInfo> {
 
     private String version;
