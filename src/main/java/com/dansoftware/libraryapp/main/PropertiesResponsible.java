@@ -12,10 +12,19 @@ public final class PropertiesResponsible {
 
     /* **** VALUES **** */
 
+    /**
+     * the app's version
+     */
     private static final String LIBRARY_APP_VERSION_VALUE = "0.0.0";
 
-    private static final String LIBRARY_APP_BUILD_INFO_VALUE = "";
+    /**
+     * some info of this build
+     */
+    private static final String LIBRARY_APP_BUILD_INFO_VALUE = "Built on 2020-09-18";
 
+    /**
+     * the libraryapp database file-extension
+     */
     private static final String LIBRARY_APP_FILE_EXTENSION_VALUE = "lbadb";
 
     /**
@@ -54,6 +63,9 @@ public final class PropertiesResponsible {
         com.sun.javafx.runtime.VersionInfo.setupSystemProperties();
     }
 
+    /**
+     * Puts the libraryapp-specific values into the system properties
+     */
     private static void putAppSpecificProperties() {
         System.setProperty(LIBRARY_APP_VERSION, LIBRARY_APP_VERSION_VALUE);
         System.setProperty(LIBRARY_APP_BUILD_INFO, LIBRARY_APP_BUILD_INFO_VALUE);
