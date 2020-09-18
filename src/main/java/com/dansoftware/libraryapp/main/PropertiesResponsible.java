@@ -39,6 +39,7 @@ public final class PropertiesResponsible {
     static void putSystemProperties() {
         putLogFileProperties();
         putJFXProperties();
+        appSpecificProperties();
     }
 
     private PropertiesResponsible() {
