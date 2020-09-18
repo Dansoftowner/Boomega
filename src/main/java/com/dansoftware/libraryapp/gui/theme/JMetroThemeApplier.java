@@ -43,7 +43,7 @@ public class JMetroThemeApplier implements ThemeApplier {
             );
 
             return fields.stream()
-                    .peek(ReflectionUtils::modifiableField)
+                    .peek(field -> field.setAccessible(true))
                     .map(ReflectionUtils::getDeclaredStaticValue)
                     .map(String::valueOf)
                     .collect(Collectors.toList());
