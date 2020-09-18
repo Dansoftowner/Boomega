@@ -9,7 +9,7 @@ import com.dansoftware.libraryapp.log.LogFile;
  */
 public final class PropertiesResponsible {
 
-    public static final String LIBRARYAPP_VERSION = "libraryapp.version";
+    public static final String LIBRARY_APP_VERSION = "libraryapp.version";
     public static final String LOG_FILE_PATH = "log.file.path";
     public static final String LOG_FILE_FULL_PATH = "log.file.path.full";
 
@@ -30,7 +30,7 @@ public final class PropertiesResponsible {
     }
 
     private static void appSpecificProperties() {
-        System.setProperty(LIBRARYAPP_VERSION, Globals.VERSION_INFO.getVersion());
+        System.setProperty(LIBRARY_APP_VERSION, Globals.VERSION_INFO.getVersion());
     }
 
     /**
