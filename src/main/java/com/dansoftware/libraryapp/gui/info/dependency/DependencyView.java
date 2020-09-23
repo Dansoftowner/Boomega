@@ -5,9 +5,6 @@ import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dlsc.workbenchfx.SimpleHeaderView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.scene.Node;
-
-import java.util.List;
 
 public class DependencyView extends SimpleHeaderView<DependencyTable>
         implements Themeable {

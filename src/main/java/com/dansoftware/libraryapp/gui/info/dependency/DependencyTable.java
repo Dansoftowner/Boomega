@@ -1,21 +1,14 @@
 package com.dansoftware.libraryapp.gui.info.dependency;
 
 import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink;
-import com.dansoftware.libraryapp.util.SystemBrowser;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
-import org.controlsfx.control.HyperlinkLabel;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 
 public class DependencyTable extends TableView<DependencyInfo> {
