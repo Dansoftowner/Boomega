@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.info;
 
+import com.dansoftware.libraryapp.gui.info.dependency.DependencyView;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.SimpleHeaderView;
@@ -11,12 +12,14 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.stage.Stage;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -132,7 +135,9 @@ public class InformationView extends SimpleHeaderView<Node>
 
     @FXML
     private void showUsedDependencies(ActionEvent event) {
-
+        new Stage() {{
+            setScene(new Scene(new DependencyView()));
+        }}.show();
     }
 
 
