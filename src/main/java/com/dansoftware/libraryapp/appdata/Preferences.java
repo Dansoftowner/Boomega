@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -69,7 +70,7 @@ public class Preferences {
     private Preferences(@NotNull File file) throws IOException {
         this.sourceFile = file;
 
-        try (var reader = new BufferedReader(new FileReader(file))) {
+        try (var reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             JsonObject temp = new Gson().fromJson(reader, JsonObject.class);
             this.jsonObject = Objects.isNull(temp) ? new JsonObject() : temp;
         } catch (JsonIOException | JsonSyntaxException | IOException e) {
