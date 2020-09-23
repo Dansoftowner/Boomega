@@ -20,6 +20,8 @@ public final class DependencyLister {
                 new DependencyInfo("Gson", "https://github.com/google/gson", apache20License()),
                 new DependencyInfo("Jetbrains annotations", "https://github.com/JetBrains/java-annotations", apache20License()),
                 new DependencyInfo("Reflections", "https://github.com/ronmamo/reflections", wtfplLicense()),
+                new DependencyInfo("Apache Commons IO", "http://commons.apache.org/proper/commons-io/", apache20License()),
+                new DependencyInfo("Apache Commons Lang", "https://commons.apache.org/proper/commons-lang/", apache20License()),
                 new DependencyInfo("FXTaskbarProgressbar",
                         "http://github.com/dansoftowner/fxtaskbarprogressbar", apache20License())
         );
