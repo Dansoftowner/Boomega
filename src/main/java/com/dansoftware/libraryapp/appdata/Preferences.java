@@ -8,6 +8,7 @@ import com.dansoftware.libraryapp.appdata.theme.ThemeSerializer;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -151,7 +152,7 @@ public class Preferences {
          */
         public void commit() throws IOException {
             if (sourceFile != null)
-                try (var writer = new JsonWriter(new BufferedWriter(new FileWriter(sourceFile)))) {
+                try (var writer = new JsonWriter(new BufferedWriter(new FileWriter(sourceFile, StandardCharsets.UTF_8)))) {
                     new Gson().toJson(Preferences.this.jsonObject, writer);
                 } catch (JsonIOException e) {
                     throw new IOException(e);
