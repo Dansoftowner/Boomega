@@ -32,8 +32,15 @@ import java.util.Set;
  * If we want to collect all the available {@link Theme} implementations we can use the
  * {@link Theme#getAllAvailableThemes()} method.
  * <br>
+ *
  * <p>
  * We can set the default theme by the static {@link #setDefault(Theme)} method.
+ *
+ * <p>
+ * We can register {@link Themeable} objects through the static {@link #registerThemeable(Themeable)} method.
+ * Every time when a new theme is set as default every registered {@link Themeable} object will be notified.
+ * <i><b>Kind of an Observable-Observer pattern</b></i>
+ *
  * <br>
  * The {@link Theme#applyDefault(Scene)}, {@link Theme#applyDefault(Parent)} methods can be used for applying the default
  * theme on the particular component.
