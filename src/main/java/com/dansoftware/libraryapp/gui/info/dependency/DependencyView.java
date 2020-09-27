@@ -10,7 +10,7 @@ public class DependencyView extends SimpleHeaderView<DependencyTable>
         implements Themeable {
     public DependencyView() {
         super("Dependency Viewer", new MaterialDesignIconView(MaterialDesignIcon.LANGUAGE_JAVASCRIPT));
-        setContent(new DependencyTable(DependencyLister.getDependencies()));
+        setContent(new DependencyTable(DependencyLister.listDependencies()));
         Theme.registerThemeable(this);
     }
 
