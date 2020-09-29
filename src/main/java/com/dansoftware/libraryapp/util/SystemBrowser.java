@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+/**
+ * SystemBrowser is a utility for communicating with the default browser of the system.
+ *
+ * @author Daniel Gyorffy
+ */
 public final class SystemBrowser {
     public SystemBrowser() {
     }
