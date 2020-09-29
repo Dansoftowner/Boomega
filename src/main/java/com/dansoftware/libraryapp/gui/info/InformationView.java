@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import org.apache.commons.io.IOUtils;
@@ -71,6 +72,7 @@ public class InformationView extends SimpleHeaderView<Node>
     public InformationView(@NotNull Context context) {
         super("LibraryApp Info", new MaterialDesignIconView(MaterialDesignIcon.INFORMATION));
         this.context = context;
+        this.setEffect(new DropShadow());
         this.setMaxWidth(MAX_WIDTH);
         this.setMaxHeight(MAX_HEIGHT);
         this.createToolbarControls();
