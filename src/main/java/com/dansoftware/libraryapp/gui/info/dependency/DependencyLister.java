@@ -2,6 +2,12 @@ package com.dansoftware.libraryapp.gui.info.dependency;
 
 import java.util.List;
 
+/**
+ * Used for creating a {@link List} of {@link DependencyInfo} objects that represents the dependencies that are
+ * used by this application.
+ *
+ * @author Daniel Gyorffy
+ */
 public final class DependencyLister {
 
     private DependencyLister() {
