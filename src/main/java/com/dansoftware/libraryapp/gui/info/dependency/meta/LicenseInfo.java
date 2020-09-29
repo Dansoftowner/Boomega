@@ -1,4 +1,6 @@
-package com.dansoftware.libraryapp.gui.info.dependency;
+package com.dansoftware.libraryapp.gui.info.dependency.meta;
+
+import java.util.Optional;
 
 /**
  * A {@link LicenseInfo} represents a software-license and holds the information of it.
@@ -19,8 +21,17 @@ public class LicenseInfo {
         return name;
     }
 
-    public String getWebsiteUrl() {
-        return websiteUrl;
+    public Optional<String> getWebsiteUrl() {
+        return Optional.ofNullable(websiteUrl);
+    }
+
+    /**
+     * Creates a {@link LicenseInfo} that represents the <b>GNU General Public License with the Classpath Exception</b>
+     *
+     * @return the LicenseInfo object
+     */
+    public static LicenseInfo gnu2ClassPath() {
+        return new LicenseInfo("GPL v2 + Classpath", "http://openjdk.java.net/legal/gplv2+ce.html");
     }
 
     /**
