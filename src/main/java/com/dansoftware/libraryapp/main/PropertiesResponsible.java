@@ -75,7 +75,7 @@ public final class PropertiesResponsible {
     /**
      * Puts all the necessary system-properties that the application needs.
      */
-    static void putSystemProperties() {
+    static void setupSystemProperties() {
         putLogFileProperties();
         putJFXProperties();
         putAppSpecificProperties();

@@ -33,7 +33,7 @@ public class Main extends BaseApplication {
     private static final Logger logger;
 
     static {
-        PropertiesResponsible.putSystemProperties();
+        PropertiesResponsible.setupSystemProperties();
 
         //we create the logger after the necessary system-properties are put
         logger = LoggerFactory.getLogger(Main.class);
