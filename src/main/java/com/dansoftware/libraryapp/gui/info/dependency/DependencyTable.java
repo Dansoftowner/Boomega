@@ -1,5 +1,9 @@
 package com.dansoftware.libraryapp.gui.info.dependency;
 
+import com.dansoftware.libraryapp.gui.info.dependency.meta.DependencyInfo;
+import com.dansoftware.libraryapp.gui.info.dependency.meta.LicenseInfo;
+import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -11,7 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class DependencyTable extends TableView<DependencyInfo> {
+public class DependencyTable extends TableView<DependencyInfo>
+        implements Themeable {
 
     private static final Logger logger = LoggerFactory.getLogger(DependencyTable.class);
 
@@ -19,14 +24,21 @@ public class DependencyTable extends TableView<DependencyInfo> {
         getColumns().add(new NameColumn());
         getColumns().add(new LicenseColumn());
         getItems().addAll(dependencies);
+        Theme.registerThemeable(this);
+    }
+
+    @Override
+    public void handleThemeApply(Theme newTheme) {
+        newTheme.apply(this);
     }
 
     private static final class NameColumn
             extends TableColumn<DependencyInfo, String>
             implements Callback<TableColumn<DependencyInfo, String>, TableCell<DependencyInfo, String>> {
         NameColumn() {
-            setText("i18n Software");
+            setText("Software");
             setCellFactory(this);
+            setMinWidth(300);
         }
 
         @Override
@@ -40,7 +52,13 @@ public class DependencyTable extends TableView<DependencyInfo> {
                         setGraphic(null);
                     } else {
                         DependencyInfo dependencyInfo = getTableView().getItems().get(getIndex());
-                        setGraphic(new WebsiteHyperLink(dependencyInfo.getName(), dependencyInfo.getWebsiteUrl()));
+                        dependencyInfo.getWebsiteUrl().ifPresentOrElse(
+                                website -> setGraphic(new WebsiteHyperLink(dependencyInfo.getName(), website)),
+                                () -> {
+                                    setGraphic(null);
+                                    setText(dependencyInfo.getName());
+                                }
+                        );
                     }
                 }
             };
@@ -54,6 +72,7 @@ public class DependencyTable extends TableView<DependencyInfo> {
         LicenseColumn() {
             setText("License");
             setCellFactory(this);
+            setMinWidth(300);
         }
 
         @Override
@@ -68,7 +87,13 @@ public class DependencyTable extends TableView<DependencyInfo> {
                     } else {
                         DependencyInfo dependencyInfo = getTableView().getItems().get(getIndex());
                         LicenseInfo licenseInfo = dependencyInfo.getLicenseInfo();
-                        setGraphic(new WebsiteHyperLink(licenseInfo.getName(), licenseInfo.getWebsiteUrl()));
+                        licenseInfo.getWebsiteUrl().ifPresentOrElse(
+                                website -> setGraphic(new WebsiteHyperLink(licenseInfo.getName(), website)),
+                                () -> {
+                                    setGraphic(null);
+                                    setText(licenseInfo.getName());
+                                }
+                        );
                     }
                 }
             };

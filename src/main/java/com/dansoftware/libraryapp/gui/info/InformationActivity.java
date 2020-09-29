@@ -14,7 +14,7 @@ public class InformationActivity {
     }
 
     public void show() {
-        var view = new InformationView();
+        var view = new InformationView(context);
         context.showOverlay(view, false);
         StackPane.setAlignment(view, Pos.CENTER);
     }
