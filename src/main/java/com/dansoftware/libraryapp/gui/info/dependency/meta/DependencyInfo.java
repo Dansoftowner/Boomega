@@ -1,4 +1,6 @@
-package com.dansoftware.libraryapp.gui.info.dependency;
+package com.dansoftware.libraryapp.gui.info.dependency.meta;
+
+import java.util.Optional;
 
 /**
  * A {@link DependencyInfo} represents a software that is used by this application.
@@ -21,8 +23,8 @@ public class DependencyInfo {
         return name;
     }
 
-    public String getWebsiteUrl() {
-        return websiteUrl;
+    public Optional<String> getWebsiteUrl() {
+        return Optional.ofNullable(websiteUrl);
     }
 
     public LicenseInfo getLicenseInfo() {
