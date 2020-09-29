@@ -29,6 +29,12 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+/**
+ * An InformationView is the actual GUI element that shows the
+ * information of the application.
+ *
+ * @author Daniel Gyorffy
+ */
 public class InformationView extends SimpleHeaderView<Node>
         implements Initializable {
 

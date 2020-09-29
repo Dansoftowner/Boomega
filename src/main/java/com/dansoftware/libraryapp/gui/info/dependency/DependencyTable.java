@@ -15,6 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * A DependencyTable is a {@link TableView} that can show the third party software
+ * used by this app.
+ *
+ * @link Daniel Gyorffy
+ */
 public class DependencyTable extends TableView<DependencyInfo>
         implements Themeable {
 
@@ -32,6 +38,9 @@ public class DependencyTable extends TableView<DependencyInfo>
         newTheme.apply(this);
     }
 
+    /**
+     * A {@link TableColumn} implementation that shows the name of the dependency.
+     */
     private static final class NameColumn
             extends TableColumn<DependencyInfo, String>
             implements Callback<TableColumn<DependencyInfo, String>, TableCell<DependencyInfo, String>> {
@@ -65,6 +74,9 @@ public class DependencyTable extends TableView<DependencyInfo>
         }
     }
 
+    /**
+     * A {@link TableColumn} implementation that shows the license of the depencency.
+     */
     private static final class LicenseColumn
             extends TableColumn<DependencyInfo, String>
             implements Callback<TableColumn<DependencyInfo, String>, TableCell<DependencyInfo, String>> {

@@ -6,6 +6,11 @@ import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A {@link Window} that is used for showing a {@link DependencyTable}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class DependenciesWindow extends LibraryAppStage {
 
     public DependenciesWindow(@NotNull DependencyTable dependencyTable, @Nullable Window owner) {

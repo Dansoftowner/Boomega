@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DependencyViewerActivity {
 
-    private Context context;
+    private final Context context;
 
     public DependencyViewerActivity(@NotNull Context context) {
         this.context = context;
