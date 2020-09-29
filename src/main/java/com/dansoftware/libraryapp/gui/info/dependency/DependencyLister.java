@@ -1,5 +1,8 @@
 package com.dansoftware.libraryapp.gui.info.dependency;
 
+import com.dansoftware.libraryapp.gui.info.dependency.meta.DependencyInfo;
+import com.dansoftware.libraryapp.gui.info.dependency.meta.LicenseInfo;
+
 import java.util.List;
 
 /**
@@ -15,6 +18,8 @@ public final class DependencyLister {
 
     public static List<DependencyInfo> listDependencies() {
         return List.of(
+                new DependencyInfo("JavaFX", "https://openjfx.io/", LicenseInfo.gnu2ClassPath()),
+                new DependencyInfo("OpenJDK", "http://openjdk.java.net/", LicenseInfo.gnu2ClassPath()),
                 new DependencyInfo("AnimateFX", "https://github.com/Typhon0/AnimateFX", LicenseInfo.apache20License()),
                 new DependencyInfo("Apache Commons IO", "http://commons.apache.org/proper/commons-io/", LicenseInfo.apache20License()),
                 new DependencyInfo("Apache Commons Lang", "https://commons.apache.org/proper/commons-lang/", LicenseInfo.apache20License()),
