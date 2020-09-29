@@ -17,5 +17,6 @@ public class DependenciesWindow extends LibraryAppStage {
         super("window.dependencies.title", dependencyTable);
         initOwner(owner);
         initModality(Modality.APPLICATION_MODAL);
+        setResizable(false);
     }
 }
