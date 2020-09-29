@@ -10,6 +10,10 @@ public class LicenseInfo {
         this.websiteUrl = websiteUrl;
     }
 
+    public static LicenseInfo mitLicense() {
+        return new LicenseInfo("MIT License", "https://opensource.org/licenses/MIT");
+    }
+
     public String getName() {
         return name;
     }
