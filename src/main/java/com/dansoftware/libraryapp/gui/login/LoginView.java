@@ -10,6 +10,7 @@ import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.login.form.LoginForm;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
+import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -41,7 +42,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
                      @NotNull DatabaseLoginListener databaseLoginListener,
                      @NotNull LoginData loginData,
                      @NotNull DatabaseTracker tracker) {
-        super("LibraryApp", new MaterialDesignIconView(MaterialDesignIcon.BOOK));
+        super(I18N.getGeneralWord("database.auth"), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
         this.context = Objects.requireNonNull(context, "Context shouldn't be null");
         this.createdDatabase = new SimpleObjectProperty<>();
         this.loginForm = new LoginForm(context, loginData, tracker, databaseLoginListener);
