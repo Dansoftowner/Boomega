@@ -3,7 +3,11 @@ package com.dansoftware.libraryapp.gui.firsttimedialog;
 import com.dansoftware.libraryapp.appdata.ConfigFile;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import javafx.application.Platform;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  * A {@link FirstTimeDialog} is used for showing a gui-dialog that should be showed only if the
@@ -43,8 +47,15 @@ public class FirstTimeDialog {
     public void show(@NotNull Preferences preferences) {
         Platform.runLater(() -> {
             synchronized (THREAD_LOCK) {
-                //showing it
-                //...
+                Optional<Stage> preloaderWindow = Window.getWindows().isEmpty() ? Optional.empty()
+                        :  Optional.of((Stage) Window.getWindows().get(0));
+                preloaderWindow.ifPresent(win -> win.setOpacity(0));
+
+                FirstTimeDialogWindow window = new FirstTimeDialogWindow();
+                window.showingProperty().addListener((observable, oldValue, newValue) -> {
+                    if (!newValue) preloaderWindow.ifPresent(win -> win.setOpacity(1));
+                });
+                window.showAndWait();
                 THREAD_LOCK.notify();
             }
         });
