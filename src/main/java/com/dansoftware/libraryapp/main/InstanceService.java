@@ -42,7 +42,7 @@ public class InstanceService implements MessageHandler {
         try {
             JUnique.acquireLock(APPLICATION_ID, this);
         } catch (AlreadyLockedException e) {
-            logger.info("An application is already running with the id: '" + e.getID() + "'");
+            logger.info("An application is already running with the id: '{}'", e.getID());
             logger.info("Sending the arguments to the already running instance...");
 
             JUnique.sendMessage(APPLICATION_ID, ArrayUtils.isEmpty(args) ? StringUtils.EMPTY : args[0]);
