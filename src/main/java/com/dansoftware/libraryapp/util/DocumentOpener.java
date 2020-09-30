@@ -9,6 +9,7 @@ import java.net.URI;
  * A DocumentOpener can open files and web pages
  * with the OperatingSystem
  */
+@Deprecated
 public class DocumentOpener {
 
     private static final DocumentOpener opener = new DocumentOpener();
