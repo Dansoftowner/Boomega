@@ -5,6 +5,7 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.firsttimedialog.FirstTimeDialog;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
@@ -62,27 +63,36 @@ public class Main extends BaseApplication {
 
     @Override
     public void init() throws Exception {
-        Preferences preferences = Preferences.getPreferences();
-        logger.info("Configurations has been read successfully!");
+        synchronized (FirstTimeDialog.class) {
+            Preferences preferences = Preferences.getPreferences();
+            logger.info("Configurations has been read successfully!");
 
-        Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
-        logger.info("Locale is: {}", Locale.getDefault());
+            //creating and showing a FirstTimeDialog
+            if (FirstTimeDialog.isNeeded()) {
+                FirstTimeDialog firstTimeDialog = new FirstTimeDialog();
+                firstTimeDialog.show(preferences);
+                FirstTimeDialog.class.wait();
+            }
 
-        //for executing the I18N class's static block
-        Class.forName(I18N.class.getName());
+            Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
+            logger.info("Locale is: {}", Locale.getDefault());
 
-        //adding the saved databases from the login-data to DatabaseTracker
-        LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-        loginData.getSavedDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
+            //for executing the I18N class's static block
+            Class.forName(I18N.class.getName());
 
-        Theme.setDefault(preferences.get(Preferences.Key.THEME));
-        logger.info("Theme is: {}", Theme.getDefault());
+            //adding the saved databases from the login-data to DatabaseTracker
+            LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
+            loginData.getSavedDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
 
-        //searching for updates
-        UpdateSearcher updateSearcher = new UpdateSearcher(new VersionInteger(System.getProperty("libraryapp.version")));
-        UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
+            Theme.setDefault(preferences.get(Preferences.Key.THEME));
+            logger.info("Theme is: {}", Theme.getDefault());
 
-        new InitActivityLauncher(getApplicationArgs(), preferences, loginData, searchResult).launch();
+            //searching for updates
+            UpdateSearcher updateSearcher = new UpdateSearcher(new VersionInteger(System.getProperty("libraryapp.version")));
+            UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
+
+            new InitActivityLauncher(getApplicationArgs(), preferences, loginData, searchResult).launch();
+        }
     }
 
 
