@@ -63,15 +63,18 @@ public class Main extends BaseApplication {
 
     @Override
     public void init() throws Exception {
-        synchronized (FirstTimeDialog.class) {
+        //we synchronize on the object that is used by FirstTimeDialogs to lock the thread
+        synchronized (FirstTimeDialog.THREAD_LOCK) {
             Preferences preferences = Preferences.getPreferences();
             logger.info("Configurations has been read successfully!");
 
             //creating and showing a FirstTimeDialog
             if (FirstTimeDialog.isNeeded()) {
-                FirstTimeDialog firstTimeDialog = new FirstTimeDialog();
+                FirstTimeDialog firstTimeDialog = FirstTimeDialog.getDialog();
                 firstTimeDialog.show(preferences);
-                FirstTimeDialog.class.wait();
+                //we wait until the FirstTimeDialog completes, and notifies the
+                //thread-lock object
+                FirstTimeDialog.THREAD_LOCK.wait();
             }
 
             Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
