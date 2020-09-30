@@ -4,12 +4,22 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 
-class ConfigFile extends File {
+public class ConfigFile extends File {
 
-    private static final String DIR_NAME = ".libraryapp2020";
-    private static final String FILE_NAME = "config.conf";
+    private static final ConfigFile instance = new ConfigFile();
 
-    ConfigFile() {
-        super(new File(FileUtils.getUserDirectoryPath(), DIR_NAME), FILE_NAME);
+    private final boolean nonExisted;
+
+    private ConfigFile() {
+        super(new File(FileUtils.getUserDirectoryPath(), ".libraryapp2020"), "config.conf");
+        nonExisted = !exists();
+    }
+
+    public boolean isNonExisted() {
+        return nonExisted;
+    }
+
+    public static ConfigFile getConfigFile() {
+        return instance;
     }
 }

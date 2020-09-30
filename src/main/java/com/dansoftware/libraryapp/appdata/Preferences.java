@@ -79,6 +79,108 @@ public class Preferences {
         }
     }
 
+    private Gson getGson() {
+        return gsonCache != null ? gsonCache : (gsonCache = new GsonBuilder()
+                .registerTypeAdapter(LoginData.class, new LoginDataSerializer())
+                .registerTypeAdapter(LoginData.class, new LoginDataDeserializer())
+                .registerTypeAdapter(Theme.class, new ThemeSerializer())
+                .registerTypeAdapter(Theme.class, new ThemeDeserializer())
+                .create());
+    }
+
+    /**
+     * Creates an {@link Editor} object that can modify the data inside the {@link Preferences} object.
+     *
+     * @return the {@link Editor} object.
+     */
+    @NotNull
+    public Editor editor() {
+        return new Editor();
+    }
+
+    //
+
+    // ------> Methods for reading data
+    public <T> T get(@NotNull Key<T> key) {
+        JsonElement jsonElement = this.jsonObject.get(key.jsonKey);
+        if (Objects.isNull(jsonElement)) {
+            return key.defaultValue.get();
+        }
+
+        T value = getGson().fromJson(jsonElement, key.type);
+        return Objects.isNull(value) ? key.defaultValue.get() : value;
+    }
+
+    @SuppressWarnings("unused")
+    public String getString(@NotNull String key, String defValue) {
+        JsonElement jsonElement = this.jsonObject.get(key);
+        if (Objects.isNull(jsonElement)) {
+            return defValue;
+        }
+
+        return jsonElement.getAsString();
+    }
+
+    @SuppressWarnings("unused")
+    public boolean getBoolean(@NotNull String key, boolean defValue) {
+        JsonElement jsonElement = this.jsonObject.get(key);
+        if (Objects.isNull(jsonElement)) {
+            return defValue;
+        }
+
+        return jsonElement.getAsBoolean();
+    }
+
+    @SuppressWarnings("unused")
+    public int getInteger(@NotNull String key, int defValue) {
+        JsonElement jsonElement = this.jsonObject.get(key);
+        if (Objects.isNull(jsonElement)) {
+            return defValue;
+        }
+
+        return jsonElement.getAsInt();
+    }
+
+    @SuppressWarnings("unused")
+    public double getDouble(@NotNull String key, double defValue) {
+        JsonElement jsonElement = this.jsonObject.get(key);
+        if (Objects.isNull(jsonElement)) {
+            return defValue;
+        }
+
+        return jsonElement.getAsDouble();
+    }
+
+
+    // <------
+    @NotNull
+    public static Preferences getPreferences() {
+        if (Objects.isNull(DEFAULT)) {
+            try {
+                File configFile = ConfigFile.getConfigFile();
+                configFile.getParentFile().mkdirs();
+                configFile.createNewFile();
+
+                if (configFile.exists()) {
+                    DEFAULT = new Preferences(configFile);
+                } else {
+                    logger.error("Couldn't create configuration file");
+                    //create an only in-memory preferences
+                    DEFAULT = new Preferences();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return DEFAULT;
+    }
+
+    @NotNull
+    public static Preferences getPreferences(File configFile) throws IOException {
+        return new Preferences(configFile);
+    }
+
     /**
      * An {@link Editor} used for modifying values in a {@link Preferences} object.
      *
@@ -175,113 +277,12 @@ public class Preferences {
     }
 
     /**
-     * Creates an {@link Editor} object that can modify the data inside the {@link Preferences} object.
-     *
-     * @return the {@link Editor} object.
-     */
-    @NotNull
-    public Editor editor() {
-        return new Editor();
-    }
-
-    //
-    private Gson getGson() {
-        return gsonCache != null ? gsonCache : (gsonCache = new GsonBuilder()
-                .registerTypeAdapter(LoginData.class, new LoginDataSerializer())
-                .registerTypeAdapter(LoginData.class, new LoginDataDeserializer())
-                .registerTypeAdapter(Theme.class, new ThemeSerializer())
-                .registerTypeAdapter(Theme.class, new ThemeDeserializer())
-                .create());
-    }
-
-    // ------> Methods for reading data
-
-    public <T> T get(@NotNull Key<T> key) {
-        JsonElement jsonElement = this.jsonObject.get(key.jsonKey);
-        if (Objects.isNull(jsonElement)) {
-            return key.defaultValue.get();
-        }
-
-        T value = getGson().fromJson(jsonElement, key.type);
-        return Objects.isNull(value) ? key.defaultValue.get() : value;
-    }
-
-    @SuppressWarnings("unused")
-    public String getString(@NotNull String key, String defValue) {
-        JsonElement jsonElement = this.jsonObject.get(key);
-        if (Objects.isNull(jsonElement)) {
-            return defValue;
-        }
-
-        return jsonElement.getAsString();
-    }
-
-    @SuppressWarnings("unused")
-    public boolean getBoolean(@NotNull String key, boolean defValue) {
-        JsonElement jsonElement = this.jsonObject.get(key);
-        if (Objects.isNull(jsonElement)) {
-            return defValue;
-        }
-
-        return jsonElement.getAsBoolean();
-    }
-
-    @SuppressWarnings("unused")
-    public int getInteger(@NotNull String key, int defValue) {
-        JsonElement jsonElement = this.jsonObject.get(key);
-        if (Objects.isNull(jsonElement)) {
-            return defValue;
-        }
-
-        return jsonElement.getAsInt();
-    }
-
-    @SuppressWarnings("unused")
-    public double getDouble(@NotNull String key, double defValue) {
-        JsonElement jsonElement = this.jsonObject.get(key);
-        if (Objects.isNull(jsonElement)) {
-            return defValue;
-        }
-
-        return jsonElement.getAsDouble();
-    }
-
-    // <------
-
-    @NotNull
-    public static Preferences getPreferences() {
-        if (Objects.isNull(DEFAULT)) {
-            try {
-                File configFile = new ConfigFile();
-                configFile.getParentFile().mkdirs();
-                configFile.createNewFile();
-
-                if (configFile.exists()) {
-                    DEFAULT = new Preferences(configFile);
-                } else {
-                    logger.error("Couldn't create configuration file");
-                    //create an only in-memory preferences
-                    DEFAULT = new Preferences();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return DEFAULT;
-    }
-
-    @NotNull
-    public static Preferences getPreferences(File configFile) throws IOException {
-        return new Preferences(configFile);
-    }
-
-    /**
      * A {@link Key} is an accessor to a particular configuration.
      *
      * @param <T> the type of the object that can be accessed by the key
      */
     public static class Key<T> {
+
 
         private final String jsonKey;
         private final Class<T> type;

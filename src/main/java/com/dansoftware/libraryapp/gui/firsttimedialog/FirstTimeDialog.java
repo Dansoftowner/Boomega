@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.firsttimedialog;
 
+import com.dansoftware.libraryapp.appdata.ConfigFile;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public class FirstTimeDialog {
     }
 
     public static boolean isNeeded() {
-        return false;
+        return ConfigFile.getConfigFile().isNonExisted();
     }
 
     public void show(@NotNull Preferences preferences) {

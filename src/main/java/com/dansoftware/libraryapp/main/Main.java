@@ -72,6 +72,7 @@ public class Main extends BaseApplication {
 
             //creating and showing a FirstTimeDialog
             if (FirstTimeDialog.isNeeded()) {
+                logger.debug("FirstTimeDialog needed");
                 FirstTimeDialog firstTimeDialog = FirstTimeDialog.createDialog();
                 firstTimeDialog.show(preferences);
                 //we wait until the FirstTimeDialog completes, and notifies the
