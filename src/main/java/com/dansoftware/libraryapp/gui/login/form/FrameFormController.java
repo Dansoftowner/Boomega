@@ -20,12 +20,14 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.net.URL;
 import java.util.*;
 
@@ -189,6 +191,9 @@ public class FrameFormController
 
     private class DatabaseChooserItem extends ListCell<DatabaseMeta> {
 
+        private static final String NOT_EXISTS_CLASS = "state-indicator-file-not-exists";
+        private static final String USED_CLASS = "state-indicator-used";
+
         DatabaseChooserItem() {
             setMaxWidth(650);
         }
@@ -201,16 +206,19 @@ public class FrameFormController
                 setGraphic(null);
             } else {
                 setText(item.toString());
-                if (databaseTracker.isDatabaseUsed(item)) {
-                    var mark = new Circle(3) {{
-                        getStyleClass().add("state-circle-used");
-                    }};
-
-                    setDisable(true);
-                    setGraphic(mark);
+                File dbFile = item.getFile();
+                if (!dbFile.exists() || dbFile.isDirectory()) {
+                    var indicator = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
+                    indicator.getStyleClass().add(NOT_EXISTS_CLASS);
+                    setGraphic(indicator);
+                    setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.error.not.exists")));
+                } else if (databaseTracker.isDatabaseUsed(item)) {
+                    var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
+                    indicator.getStyleClass().add(USED_CLASS);
+                    setGraphic(indicator);
+                    setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.used")));
                 } else {
                     setGraphic(null);
-                    setDisable(false);
                     setTooltip(null);
                 }
             }
