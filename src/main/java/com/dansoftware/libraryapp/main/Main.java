@@ -99,7 +99,12 @@ public class Main extends BaseApplication {
             UpdateSearcher updateSearcher = new UpdateSearcher(new VersionInteger(System.getProperty("libraryapp.version")));
             UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
-            new InitActivityLauncher(getApplicationArgs(), preferences, loginData, searchResult).launch();
+            new InitActivityLauncher(
+                    getApplicationArgs(),
+                    preferences,
+                    loginData,
+                    searchResult
+            ).launch();
         }
     }
 
