@@ -1,5 +1,23 @@
 package com.dansoftware.libraryapp.util;
 
+/**
+ * A {@link CaughtRunnable} is a {@link Runnable}
+ * that handles checked exceptions, and doesn't need
+ * exception-handling.
+ *
+ * Example:
+ * <pre>{@code
+ * //error, the Runnable.run() method does not allow to throw checked exceptions
+ * Runnable runnableExample = () -> { throw new Exception(); };
+ *
+ * -------
+ *
+ * CaughtRunnable caughtRunnableExample = () -> { throw new Exception(); }; //OK
+ * caughtRunnableExample.run(); // throws a RuntimeException
+ * }</pre>
+ *
+ * @author Daniel Gyorffy
+ */
 public interface CaughtRunnable extends Runnable {
 
     void exceptionRun() throws Exception;
@@ -9,7 +27,7 @@ public interface CaughtRunnable extends Runnable {
         try {
             exceptionRun();
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 }
