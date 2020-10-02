@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.tool.documentviewer;
 
-import com.dansoftware.libraryapp.util.DocumentOpener;
+import com.dansoftware.libraryapp.util.CaughtRunnable;
+import com.dansoftware.libraryapp.util.SystemBrowser;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.ContextMenu;
@@ -10,6 +11,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.input.TransferMode;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,7 +100,10 @@ public class TabDocumentViewer extends DocumentViewer {
     @Override
     public void load(String title, String url) throws IOException {
         MenuItem openInDefaultViewerItem = new MenuItem(getGeneralWord("document.viewer.tab.open.default"));
-        openInDefaultViewerItem.setOnAction(e -> DocumentOpener.getOpener().browse(url));
+        openInDefaultViewerItem.setOnAction(e -> {
+            if (SystemBrowser.isSupported())
+                new SystemBrowser().browse(url);
+        });
 
         this.createTab(title, () -> url, renderer -> renderer.load(url), new ContextMenu(openInDefaultViewerItem));
     }
@@ -111,7 +116,14 @@ public class TabDocumentViewer extends DocumentViewer {
     @Override
     public void load(String title, File file) throws IOException {
         MenuItem openInDefaultViewerItem = new MenuItem(getGeneralWord("document.viewer.tab.open.default"));
-        openInDefaultViewerItem.setOnAction(e -> DocumentOpener.getOpener().open(file));
+        openInDefaultViewerItem.setOnAction(e -> {
+            CaughtRunnable runnable = () -> {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(file);
+                }
+            };
+            runnable.run();
+        });
 
         this.createTab(title, file::getName, renderer -> renderer.load(file), new ContextMenu(openInDefaultViewerItem));
     }

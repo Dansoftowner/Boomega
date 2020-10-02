@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.tool.browser;
 
-import com.dansoftware.libraryapp.util.DocumentOpener;
+import com.dansoftware.libraryapp.util.SystemBrowser;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -112,7 +112,11 @@ public class BrowserToolBar extends BorderPane {
     private Button createDefaultBrowserOpenerButton() {
         Button opener = new Button();
         opener.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        opener.setOnAction(event -> DocumentOpener.getOpener().browse(this.webContentRenderer.getLocation()));
+        opener.setOnAction(event -> {
+            if (SystemBrowser.isSupported()) {
+                new SystemBrowser().browse(this.webContentRenderer.getLocation());
+            }
+        });
 
         Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.open.browser"));
         opener.setTooltip(tooltip);
