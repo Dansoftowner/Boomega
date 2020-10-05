@@ -3,12 +3,17 @@ package com.dansoftware.libraryapp.gui.sgmdialog;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 public abstract class SegmentSequence implements Iterable<Segment> {
+
+    private static final Logger logger = LoggerFactory.getLogger(SegmentSequence.class);
 
     private final ObjectProperty<Segment> focusedSegment;
     private final List<Segment> segments;
@@ -24,11 +29,11 @@ public abstract class SegmentSequence implements Iterable<Segment> {
     }
 
     public boolean isSegmentFirst(Segment segment) {
-        return this.segments.stream().findFirst().equals(Optional.ofNullable(segment));
+        return this.segments.get(0).equals(segment);
     }
 
-    public boolean isSegmentLast(Segment newValue) {
-        return this.segments.stream().reduce((segment, segment2) -> segment2).equals(Optional.ofNullable(newValue));
+    public boolean isSegmentLast(@Nullable Segment segment) {
+        return this.segments.get(segments.size() - 1).equals(segment);
     }
 
     public Segment getFocusedSegment() {
@@ -55,7 +60,7 @@ public abstract class SegmentSequence implements Iterable<Segment> {
         Segment last = null;
         for (Segment segment : this) {
             if (last != null && last.equals(from)) {
-                return last;
+                return segment;
             }
             last = segment;
         }
@@ -63,17 +68,19 @@ public abstract class SegmentSequence implements Iterable<Segment> {
         return null;
     }
 
-    public void navigateBackFrom(Segment from) {
-        Segment prev = getPrevFrom(from);
+    public void navigateBack() {
+        Segment prev = getPrevFrom(this.focusedSegment.get());
         if (prev != null) {
             focusedSegment.set(prev);
         }
     }
 
-    public void navigateNextFrom(Segment from) {
-        Segment next = getNextFrom(from);
+    public void navigateNext() {
+        Segment next = getNextFrom(this.focusedSegment.get());
         if (next != null) {
             focusedSegment.set(next);
+        } else {
+            onSegmentsFinished();
         }
     }
 

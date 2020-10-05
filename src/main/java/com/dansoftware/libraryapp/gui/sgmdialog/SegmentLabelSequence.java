@@ -5,6 +5,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.SVGPath;
 import org.jetbrains.annotations.NotNull;
 
