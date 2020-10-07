@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.locale;
 
+import javafx.fxml.FXML;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +15,13 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
  * Used for accessing localized messages/values.
  */
 public class I18N {
+
+    private static final String WINDOW_TITLES = "com.dansoftware.libraryapp.locale.WindowTitles";
+    private static final String FIRST_TIME_DIALOG = "com.dansoftware.libraryapp.locale.FirstTimeDialog";
+    private static final String PROGRESS_MESSAGES = "com.dansoftware.libraryapp.locale.ProgressMessages";
+    private static final String FXML_VALUES = "com.dansoftware.libraryapp.locale.FXMLValues";
+    private static final String GENERAL_WORDS = "com.dansoftware.libraryapp.locale.GeneralWords";
+    private static final String ALERT_MESSAGES = "com.dansoftware.libraryapp.locale.AlertMessages";
 
     static {
         try {
@@ -53,27 +61,32 @@ public class I18N {
     }
 
     public static ResourceBundle getWindowTitles() throws MissingResourceException {
-        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.WindowTitles");
+        return ResourceBundle.getBundle(WINDOW_TITLES);
+    }
+
+    @NotNull
+    public static ResourceBundle getFirstTimeDialogValues() {
+        return ResourceBundle.getBundle(FIRST_TIME_DIALOG);
     }
 
     @NotNull
     public static ResourceBundle getProgressMessages() throws MissingResourceException {
-        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.ProgressMessages");
+        return ResourceBundle.getBundle(PROGRESS_MESSAGES);
     }
 
     @NotNull
     public static ResourceBundle getFXMLValues() throws MissingResourceException {
-        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.FXMLValues");
+        return ResourceBundle.getBundle(FXML_VALUES);
     }
 
     @NotNull
     public static ResourceBundle getGeneralWords() throws MissingResourceException {
-        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.GeneralWords");
+        return ResourceBundle.getBundle(GENERAL_WORDS);
     }
 
     @NotNull
     public static ResourceBundle getAlertMessages() throws MissingResourceException {
-        return ResourceBundle.getBundle("com.dansoftware.libraryapp.locale.AlertMessages");
+        return ResourceBundle.getBundle(ALERT_MESSAGES);
     }
 
 }

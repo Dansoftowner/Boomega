@@ -5,7 +5,7 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.entry.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.gui.firsttimedialog.FirstTimeDialog;
+import com.dansoftware.libraryapp.gui.firsttime.FirstTimeActivity;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.updateview.UpdateActivity;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
@@ -63,21 +63,21 @@ public class Main extends BaseApplication {
 
     @Override
     public void init() throws Exception {
-        Preferences preferences = Preferences.getPreferences();
-        logger.info("Configurations has been read successfully!");
-
         //we synchronize on the object that is used by FirstTimeDialog to lock the thread
-        synchronized (FirstTimeDialog.threadLock()) {
+        synchronized (FirstTimeActivity.threadLock()) {
+            Preferences preferences = Preferences.getPreferences();
+            logger.info("Configurations has been read successfully!");
+
             logger.debug("Entering synchronized block with FirstTimeDialog.threadLock");
 
             //creating and showing a FirstTimeDialog
-            if (FirstTimeDialog.isNeeded()) {
+            if (FirstTimeActivity.isNeeded()) {
                 logger.debug("FirstTimeDialog needed");
-                FirstTimeDialog firstTimeDialog = FirstTimeDialog.createDialog();
+                FirstTimeActivity firstTimeDialog = new FirstTimeActivity();
                 firstTimeDialog.show(preferences);
                 //we wait until the FirstTimeDialog completes, and notifies the
                 //thread-lock object
-                FirstTimeDialog.threadLock().wait();
+                FirstTimeActivity.threadLock().wait();
             }
 
             //at this point, the FirstTimeDialog completed
