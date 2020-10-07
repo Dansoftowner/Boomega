@@ -151,6 +151,9 @@ public class Preferences {
         return jsonElement.getAsDouble();
     }
 
+    public InputStream openInputStream() throws FileNotFoundException {
+        return new FileInputStream(this.sourceFile);
+    }
 
     // <------
     @NotNull
@@ -244,6 +247,12 @@ public class Preferences {
 
         public Editor remove(@NotNull String key) {
             Preferences.this.jsonObject.remove(key);
+            return this;
+        }
+
+        public Editor putFromInput(@NotNull Reader reader) {
+            JsonObject readJson = new Gson().fromJson(reader, JsonObject.class);
+            readJson.keySet().forEach(key -> Preferences.this.jsonObject.add(key, readJson.get(key)));
             return this;
         }
 
