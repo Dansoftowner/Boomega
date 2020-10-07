@@ -1,9 +1,12 @@
 package com.dansoftware.libraryapp.gui.entry;
 
+import com.dansoftware.libraryapp.gui.util.WindowUtils;
+import com.dlsc.workbenchfx.Workbench;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -20,7 +23,9 @@ public interface Context {
      *
      * @param region the {@link Region} GUI element to be shown
      */
-    void showOverlay(Region region);
+    default void showOverlay(Region region) {
+        showOverlay(region, false);
+    }
 
     /**
      * Shows a popup (on the center) with the GUI-element defined.
@@ -103,5 +108,57 @@ public interface Context {
     default void showErrorDialog(String title, String message, Exception e) {
         this.showErrorDialog(title, message, e, buttonType -> {
         });
+    }
+
+    static Context from(@NotNull Workbench workbench) {
+        return new Context() {
+            @Override
+            public void showOverlay(Region region, boolean blocking) {
+                workbench.showOverlay(region, blocking);
+            }
+
+            @Override
+            public void hideOverlay(Region region) {
+                workbench.hideOverlay(region);
+            }
+
+            @Override
+            public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
+                workbench.showErrorDialog(title, message, onResult);
+            }
+
+            @Override
+            public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
+                workbench.showErrorDialog(title, message, exception, onResult);
+            }
+
+            @Override
+            public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+                workbench.showInformationDialog(title, message, onResult);
+            }
+
+            @Override
+            public Window getContextWindow() {
+                return WindowUtils.getWindowOf(workbench);
+            }
+
+            @Override
+            public void requestFocus() {
+                getContextWindow().requestFocus();
+            }
+
+            @Override
+            public void toFront() {
+                Window contextWindow = getContextWindow();
+                if (contextWindow instanceof Stage) {
+                    ((Stage) contextWindow).toFront();
+                }
+            }
+
+            @Override
+            public boolean isShowing() {
+                return getContextWindow().isShowing();
+            }
+        };
     }
 }
