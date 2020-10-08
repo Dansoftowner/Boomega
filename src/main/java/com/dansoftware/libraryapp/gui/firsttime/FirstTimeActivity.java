@@ -9,6 +9,8 @@ import com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportWindow;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * A {@link FirstTimeActivity} is used for showing a gui-dialog that should be showed only if the
  * application runs firstly on the user's computer.
@@ -30,9 +32,10 @@ public class FirstTimeActivity {
      * The object that is used by FirstTimeDialog instances to lock the
      * thread that is used for the dialog.
      */
-    private static final Object threadLock = new Object();
+    private final Object threadLock;
 
-    public FirstTimeActivity() {
+    public FirstTimeActivity(@NotNull Object threadLock) {
+        this.threadLock = Objects.requireNonNull(threadLock, "threadLock shouldn't be null");
     }
 
     public void show(@NotNull Preferences preferences) {
@@ -54,10 +57,6 @@ public class FirstTimeActivity {
     private void showFirstTimeDialog(Preferences preferences) {
         FirstTimeDialogWindow window = new FirstTimeDialogWindow(new FirstTimeDialog());
         window.showAndWait();
-    }
-
-    public static Object threadLock() {
-        return threadLock;
     }
 
     public static boolean isNeeded() {

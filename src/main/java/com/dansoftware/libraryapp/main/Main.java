@@ -33,12 +33,15 @@ public class Main extends BaseApplication {
 
     private static final Logger logger;
 
-    static {
-        PropertiesResponsible.setupSystemProperties();
+    private static final Object initThreadLock;
 
+    static {
+        //object for synchronizing the JavaFX Launcher Thread
+        initThreadLock = Main.class;
+
+        PropertiesResponsible.setupSystemProperties();
         //we create the logger after the necessary system-properties are put
         logger = LoggerFactory.getLogger(Main.class);
-
         //Set the default uncaught exception handler
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     }
@@ -64,7 +67,7 @@ public class Main extends BaseApplication {
     @Override
     public void init() throws Exception {
         //we synchronize on the object that is used by FirstTimeDialog to lock the thread
-        synchronized (FirstTimeActivity.threadLock()) {
+        synchronized (initThreadLock) {
             Preferences preferences = Preferences.getPreferences();
             logger.info("Configurations has been read successfully!");
 
@@ -73,11 +76,11 @@ public class Main extends BaseApplication {
             //creating and showing a FirstTimeDialog
             if (FirstTimeActivity.isNeeded()) {
                 logger.debug("FirstTimeDialog needed");
-                FirstTimeActivity firstTimeDialog = new FirstTimeActivity();
+                FirstTimeActivity firstTimeDialog = new FirstTimeActivity(initThreadLock);
                 firstTimeDialog.show(preferences);
                 //we wait until the FirstTimeDialog completes, and notifies the
                 //thread-lock object
-                FirstTimeActivity.threadLock().wait();
+                initThreadLock.wait();
             }
 
             //at this point, the FirstTimeDialog completed
