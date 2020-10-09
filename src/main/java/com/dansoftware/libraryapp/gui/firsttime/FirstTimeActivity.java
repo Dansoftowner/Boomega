@@ -4,8 +4,7 @@ import com.dansoftware.libraryapp.appdata.ConfigFile;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialog;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialogWindow;
-import com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportView;
-import com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportWindow;
+import com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportActivity;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,9 +20,6 @@ import java.util.Objects;
  * <p>
  * A {@link FirstTimeActivity} is not a GUI element itself, it only launches a GUI environment.
  *
- * It uses an object for locking the thread where the dialog is showed; this lock-object can be
- * accessed through the static {@link #threadLock()} method.
- *
  * @author Daniel Gyorffy
  */
 public class FirstTimeActivity {
@@ -34,11 +30,25 @@ public class FirstTimeActivity {
      */
     private final Object threadLock;
 
-    public FirstTimeActivity(@NotNull Object threadLock) {
+    private final Preferences preferences;
+
+    /**
+     * Creates a simple {@link FirstTimeActivity}.
+     *
+     * @param threadLock  the object that will the FirstTimeActivity synchronize on.
+     * @param preferences the {@link Preferences} object that the {@link FirstTimeActivity}
+     *                    should read to
+     */
+    public FirstTimeActivity(@NotNull Object threadLock,
+                             @NotNull Preferences preferences) {
         this.threadLock = Objects.requireNonNull(threadLock, "threadLock shouldn't be null");
+        this.preferences = Objects.requireNonNull(preferences, "Preferences shouldn't be null");
     }
 
-    public void show(@NotNull Preferences preferences) {
+    /**
+     * Shows the {@link ConfigurationImportActivity} and the {@link FirstTimeDialog} if needed.
+     */
+    public void show() {
         Platform.runLater(() -> {
             synchronized (threadLock) {
                 if (!showConfigurationImport(preferences))
@@ -49,9 +59,7 @@ public class FirstTimeActivity {
     }
 
     private boolean showConfigurationImport(Preferences preferences) {
-        var configurationImportWindow = new ConfigurationImportWindow(new ConfigurationImportView(preferences));
-        configurationImportWindow.showAndWait();
-        return true;
+        return new ConfigurationImportActivity().show(preferences);
     }
 
     private void showFirstTimeDialog(Preferences preferences) {

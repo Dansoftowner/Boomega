@@ -76,8 +76,8 @@ public class Main extends BaseApplication {
             //creating and showing a FirstTimeDialog
             if (FirstTimeActivity.isNeeded()) {
                 logger.debug("FirstTimeDialog needed");
-                FirstTimeActivity firstTimeDialog = new FirstTimeActivity(initThreadLock);
-                firstTimeDialog.show(preferences);
+                FirstTimeActivity firstTimeDialog = new FirstTimeActivity(initThreadLock, preferences);
+                firstTimeDialog.show();
                 //we wait until the FirstTimeDialog completes, and notifies the
                 //thread-lock object
                 initThreadLock.wait();
