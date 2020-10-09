@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.appdata;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,7 +19,11 @@ public class PreferencesImporter {
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
-    public void importFromZip(File src, Preferences to) throws IOException, InvalidZipContentException {
+    public void importFromZip(@NotNull File src, @NotNull Preferences to)
+            throws IOException, InvalidZipContentException {
+
+        Objects.requireNonNull(src, "src shouldn't be null");
+        Objects.requireNonNull(to, "Preferences shouldn't be null");
 
         try (var input = new ZipInputStream(new BufferedInputStream(new FileInputStream(src)))) {
 
