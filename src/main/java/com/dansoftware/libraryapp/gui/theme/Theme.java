@@ -112,7 +112,7 @@ public abstract class Theme {
 
     public static synchronized void registerThemeable(@NotNull Themeable themeable) {
         if (THEMEABLE_SET.add(new IdentifiableWeakReference<>(themeable))) {
-            themeable.handleThemeApply(defaultTheme);
+            themeable.handleThemeApply(getDefault());
         }
     }
 
