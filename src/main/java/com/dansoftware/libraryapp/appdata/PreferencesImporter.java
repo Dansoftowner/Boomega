@@ -18,21 +18,27 @@ public class PreferencesImporter {
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
-    public void importFromZip(File src, Preferences to) throws IOException {
+    public void importFromZip(File src, Preferences to) throws IOException, InvalidZipContentException {
 
         try (var input = new ZipInputStream(new BufferedInputStream(new FileInputStream(src)))) {
 
             ZipEntry zipEntry;
             while ((zipEntry = input.getNextEntry()) != null &&
-                    !zipEntry.getName().equalsIgnoreCase("config.conf"));
+                    !zipEntry.getName().equalsIgnoreCase("config.conf")) ;
 
-            if (zipEntry != null) {
-                //at this point, we found the 'config.conf' zipEntry
-                try(var reader = new InputStreamReader(input)) {
+            //at this point, we found the 'config.conf' zipEntry
+            if (zipEntry != null)
+                try (var reader = new InputStreamReader(input)) {
                     to.editor().putFromInput(reader).commit();
                 }
-            }
+            else
+                throw new InvalidZipContentException("The zip file does not contain a 'config.conf'");
         }
+    }
 
+    public static final class InvalidZipContentException extends Exception {
+        InvalidZipContentException(String msg) {
+            super(msg);
+        }
     }
 }
