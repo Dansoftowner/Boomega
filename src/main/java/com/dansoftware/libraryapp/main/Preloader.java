@@ -1,25 +1,22 @@
 package com.dansoftware.libraryapp.main;
 
+import com.dansoftware.libraryapp.gui.preloader.BackingStage;
 import com.dansoftware.libraryapp.gui.preloader.PreloaderGUI;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 public class Preloader extends javafx.application.Preloader {
 
-    private static Stage preloaderStage;
+    private static BackingStage backingStage;
 
     @Override
     public void start(Stage primaryStage) {
         try {
-            preloaderStage = primaryStage;
-            preloaderStage.initStyle(StageStyle.UTILITY);
-            preloaderStage.setOnCloseRequest(WindowEvent::consume);
-            preloaderStage.setTitle("Starting LibraryApp");
-            preloaderStage.setOpacity(0);
-
+            backingStage = new BackingStage();
             //Building the gui
             PreloaderGUI gui = PreloaderGUI.builder()
                     .parameters(getParameters().getRaw())
@@ -28,13 +25,12 @@ public class Preloader extends javafx.application.Preloader {
             Scene scene = new Scene(gui);
             scene.setFill(Color.TRANSPARENT);
 
-            Stage contentStage = new Stage(StageStyle.UNDECORATED);
-            contentStage.initOwner(preloaderStage);
+            Stage contentStage = backingStage.createChild(StageStyle.UNDECORATED);
             contentStage.setScene(scene);
             contentStage.centerOnScreen();
             contentStage.setOnShown(event -> gui.logoAnimation());
 
-            preloaderStage.show();
+            backingStage.show();
             contentStage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,18 +43,18 @@ public class Preloader extends javafx.application.Preloader {
 
     @Override
     public void stop() {
-        preloaderStage = null;
+        backingStage = null;
     }
 
     @Override
     public void handleStateChangeNotification(StateChangeNotification info) {
         if (info.getType() == StateChangeNotification.Type.BEFORE_START) {
-            preloaderStage.hide();
+            backingStage.close();
             stop();
         }
     }
 
-    public static Stage getPreloaderStage() {
-        return preloaderStage;
+    public static BackingStage getBackingStage() {
+        return backingStage;
     }
 }
