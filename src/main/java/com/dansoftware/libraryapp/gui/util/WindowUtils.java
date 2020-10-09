@@ -6,8 +6,11 @@ import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class WindowUtils {
 
@@ -47,5 +50,20 @@ public class WindowUtils {
     @NotNull
     public static Optional<Stage> getStageOptionalOf(@Nullable Node node) {
         return getWindowOptionalOf(node).map(window -> (Stage) window);
+    }
+
+    /**
+     * Returns all {@link Stage}s that is owned by the given {@link Stage}.
+     *
+     * @param stage the stage that we want to find the windows of
+     * @return the {@link List} of {@link Stage} objects
+     */
+    public static List<Stage> getOwnedStagesOf(@Nullable Stage stage) {
+        if (stage == null) return Collections.emptyList();
+        return Window.getWindows().stream()
+                .filter(window -> window instanceof Stage)
+                .map(window -> (Stage) window)
+                .filter(window -> window.getOwner().equals(stage))
+                .collect(Collectors.toList());
     }
 }
