@@ -79,6 +79,17 @@ public class Preferences {
         }
     }
 
+    private Preferences(@NotNull ConfigFile file) throws IOException {
+        this.sourceFile = file;
+
+        try (var reader = new InputStreamReader(file.openStream(), StandardCharsets.UTF_8)) {
+            JsonObject temp = new Gson().fromJson(reader, JsonObject.class);
+            this.jsonObject = Objects.isNull(temp) ? new JsonObject() : temp;
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
+            throw new IOException(e);
+        }
+    }
+
     private Gson getGson() {
         return gsonCache != null ? gsonCache : (gsonCache = new GsonBuilder()
                 .registerTypeAdapter(LoginData.class, new LoginDataSerializer())
@@ -160,10 +171,7 @@ public class Preferences {
     public static Preferences getPreferences() {
         if (Objects.isNull(DEFAULT)) {
             try {
-                File configFile = ConfigFile.getConfigFile();
-                configFile.getParentFile().mkdirs();
-                configFile.createNewFile();
-
+                ConfigFile configFile = ConfigFile.getConfigFile();
                 if (configFile.exists()) {
                     DEFAULT = new Preferences(configFile);
                 } else {
