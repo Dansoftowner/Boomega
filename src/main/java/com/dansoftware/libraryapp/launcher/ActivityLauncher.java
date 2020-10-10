@@ -121,89 +121,42 @@ public abstract class ActivityLauncher implements Runnable {
      * Launches the right activity.
      */
     public void launch() {
+        logger.debug("{} mode detected", mode);
+        if (argument != null) {
+            logger.debug("argument found");
+            handleArgument(mode, argument);
+        } else {
+            logger.debug("no argument found");
+            handleNoArgument(mode);
+        }
+    }
 
-        switch (mode) {
+    /**
+     * Handles the argument depending on the launcherMode.
+     *
+     * @param launcherMode the launcher-mode
+     * @param argument the argument
+     * @see #handleArgumentInit(DatabaseMeta)
+     * @see #handleArgumentAlreadyRunning(DatabaseMeta)
+     */
+    private void handleArgument(@NotNull LauncherMode launcherMode,
+                                @NotNull DatabaseMeta argument) {
+        switch (launcherMode) {
             case INIT:
-                //if we are in INIT mode
-                logger.debug("INIT mode detected");
-
-                if (argument == null) {
-                    //if there was no application-argument
-                    //it is basically a normal application-start.
-                    logger.debug("no argument found");
-
-                    if (getLoginData().autoLoginTurnedOn()) {
-                        //if auto login is turned on
-                        logger.debug("auto login is turned on, trying to sign in into the database...");
-
-                        Database database = NitriteDatabase.getAuthenticator()
-                                .onFailed((title, message, t) -> {
-                                    logger.debug("failed signing into the database");
-                                    Platform.runLater(() -> {
-                                        EntryActivity entryActivity = newBasicEntryActivity();
-                                        entryActivity.show();
-                                        entryActivity.showErrorDialog(title, message, (Exception) t);
-                                        onActivityLaunched(entryActivity);
-                                    });
-                                }).auth(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
-
-                        //the login-process was successful
-                        if (database != null) {
-                            logger.debug("signed in into the auto-login database successfully, launching a MainActivity...");
-
-                            Platform.runLater(() -> {
-                                var mainActivity = new MainActivity(database);
-                                mainActivity.show();
-                                onActivityLaunched(mainActivity);
-                            });
-                        }
-
-                    } else {
-                        //if auto login is turned off
-                        logger.debug("auto-login is turned off, launching a basic EntryActivity...");
-
-                        Platform.runLater(() -> {
-                            EntryActivity entryActivity = newBasicEntryActivity();
-                            entryActivity.show();
-                            onActivityLaunched(entryActivity);
-                        });
-                    }
-
-                } else {
-                    //if there was application-argument
-                    logger.debug("argument found");
-                    handleArgument();
-                }
+                handleArgumentInit(argument);
                 break;
             case ALREADY_RUNNING:
-                logger.debug("ALREADY_RUNNING mode detected");
-
-                if (argument == null) {
-                    //no argument
-                    //just focusing on a random window
-                    logger.debug("no argument found, focusing on a random window...");
-
-                    Platform.runLater(() -> {
-                        EntryActivity.getShowingEntries()
-                                .stream()
-                                .limit(1)
-                                .findAny()
-                                .ifPresent(EntryActivity::toFront);
-                    });
-                } else {
-                    //there is argument
-                    logger.debug("argument found, trying to focus on an already running MainActivity or creating a new one");
-
-                    //if there is an Activity opened with the database we focus on that,
-                    // otherwise we open a new activity for it
-                    MainActivity.getByDatabase(argument)
-                            .ifPresentOrElse(MainActivity::toFront, this::handleArgument);
-                }
+                handleArgumentAlreadyRunning(argument);
                 break;
         }
     }
 
-    private void handleArgument() {
+    /**
+     * Handles the argument assuming the launcherMode is {@link LauncherMode#INIT}.
+     *
+     * @param argument the application-argument
+     */
+    private void handleArgumentInit(DatabaseMeta argument) {
         //we add the launched database to the last databases
         logger.debug("adding the launched database into the LoginData...");
         LoginData loginData = getLoginData();
@@ -238,6 +191,104 @@ public abstract class ActivityLauncher implements Runnable {
             });
         }
 
+    }
+
+    /**
+     * Handles the argument assuming the launcherMode is {@link LauncherMode#ALREADY_RUNNING}.
+     *
+     * @param argument the application-argument
+     */
+    private void handleArgumentAlreadyRunning(DatabaseMeta argument) {
+        //if there is an Activity opened with the database we focus on that,
+        // otherwise we open a new activity for it
+        MainActivity.getByDatabase(argument)
+                .ifPresentOrElse(MainActivity::toFront, () -> handleArgumentInit(argument));
+    }
+
+    /**
+     * Handles the situation when the application-argument not exists
+     * depending on the launcher-mode.
+     *
+     * @param launcherMode the {@link LauncherMode}
+     */
+    private void handleNoArgument(LauncherMode launcherMode) {
+        switch (launcherMode) {
+            case INIT:
+                handleNoArgumentInit();
+                break;
+            case ALREADY_RUNNING:
+                handleNoArgumentAlreadyRunning();
+                break;
+        }
+    }
+
+    /**
+     * Handles the situation when the application-argument not exists
+     * assuming that the launcher-mode is {@link LauncherMode#INIT}
+     */
+    private void handleNoArgumentInit() {
+        //if there was no application-argument
+        //it is basically a normal application-start.
+        if (getLoginData().autoLoginTurnedOn()) {
+            //if auto login is turned on
+            logger.debug("auto login is turned on, trying to sign in into the database...");
+            autoLogin();
+        } else {
+            //if auto login is turned off
+            logger.debug("auto-login is turned off, launching a basic EntryActivity...");
+            Platform.runLater(() -> onActivityLaunched(showEntryActivity()));
+        }
+
+    }
+
+    /**
+     * Handles the situation when the application-argument not exists
+     * assuming that the launcher-mode is {@link LauncherMode#ALREADY_RUNNING}
+     */
+    private void handleNoArgumentAlreadyRunning() {
+        //no argument
+        //just focusing on a random window
+        logger.debug("no argument found, focusing on a random window...");
+
+        Platform.runLater(() -> {
+            EntryActivity.getShowingEntries()
+                    .stream()
+                    .limit(1)
+                    .findAny()
+                    .ifPresent(EntryActivity::toFront);
+        });
+    }
+
+    /**
+     * Handles the situation when auto-login is turned on
+     */
+    private void autoLogin() {
+        Database database = NitriteDatabase.getAuthenticator()
+                .onFailed((title, message, t) -> {
+                    logger.debug("failed signing into the database");
+                    Platform.runLater(() -> {
+                        EntryActivity entryActivity = showEntryActivity();
+                        entryActivity.showErrorDialog(title, message, (Exception) t);
+                        onActivityLaunched(entryActivity);
+                    });
+                }).auth(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
+
+        //the login-process was successful
+        if (database != null) {
+            logger.debug("signed in into the auto-login database successfully, launching a MainActivity...");
+
+            Platform.runLater(() -> {
+                var mainActivity = new MainActivity(database);
+                mainActivity.show();
+                onActivityLaunched(mainActivity);
+            });
+        }
+    }
+
+    private EntryActivity showEntryActivity() {
+        EntryActivity entryActivity = newBasicEntryActivity();
+        entryActivity.show();
+        return entryActivity;
     }
 
     private EntryActivity newBasicEntryActivity() {
