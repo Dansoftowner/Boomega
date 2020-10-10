@@ -23,6 +23,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the {@link ConfigurationImportView}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class ConfigurationImportController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationImportController.class);
@@ -42,7 +47,14 @@ public class ConfigurationImportController implements Initializable {
     @FXML
     private ToggleGroup radioGroup;
 
-    public ConfigurationImportController(@NotNull Context context, @NotNull Preferences preferences) {
+    /**
+     * Creates the object with the necessary values.
+     *
+     * @param context the {@link Context} for communicating with a GUI environment
+     * @param preferences the object that should read the configurations to
+     */
+    public ConfigurationImportController(@NotNull Context context,
+                                         @NotNull Preferences preferences) {
         this.context = context;
         this.preferences = preferences;
     }
@@ -87,6 +99,11 @@ public class ConfigurationImportController implements Initializable {
         ((Stage) context.getContextWindow()).close();
     }
 
+    /**
+     * Returns {@code true} if the user imported settings.
+     *
+     * @return {@code true} if external settings are imported; {@code false} otherwise.
+     */
     public boolean isImported() {
         return imported;
     }
