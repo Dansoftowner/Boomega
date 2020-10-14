@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.login;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
+import com.dansoftware.libraryapp.gui.login.form.LoginDataSaving;
 import com.dansoftware.libraryapp.gui.util.LibraryAppStage;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
@@ -40,28 +41,6 @@ class LoginWindow extends LibraryAppStage
     @Override
     public void handle(WindowEvent event) {
         logger.debug("Starting a new thread for saving loginData...");
-        new LoginDataSaving(loginView.getLoginData()).start();
-    }
-
-    private static class LoginDataSaving extends Thread {
-        private final LoginData loginData;
-
-        LoginDataSaving(LoginData loginData) {
-            this.setName(getClass().getSimpleName());
-            this.loginData = loginData;
-        }
-
-        @Override
-        public void run() {
-            try {
-                getPreferences().editor()
-                        .set(Preferences.Key.LOGIN_DATA, loginData)
-                        .commit();
-                logger.debug("Done");
-            } catch (IOException e) {
-                logger.error("Error saving LoginData", e);
-            }
-        }
-
+        new LoginDataSaving(Preferences.getPreferences(), loginView.getLoginData()).start();
     }
 }

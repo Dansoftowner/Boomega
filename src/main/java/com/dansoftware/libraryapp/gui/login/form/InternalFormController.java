@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.login.form;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.Database;
@@ -90,6 +91,7 @@ public class InternalFormController implements Initializable {
         if (database != null) {
             //creating the database was successful
             logger.debug("Signing in was successful; closing the LoginWindow");
+            new LoginDataSaving(Preferences.getPreferences(), loginData).start();
             databaseLoginListener.onDatabaseOpened(database);
             context.close();
         }
