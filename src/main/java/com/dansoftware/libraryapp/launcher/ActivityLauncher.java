@@ -174,8 +174,7 @@ public abstract class ActivityLauncher implements Runnable {
                         //we select it, but we don't save it to the configurations
                         temp.setSelectedDatabase(argument);
 
-                        var entryActivity = new EntryActivity(temp, databaseTracker);
-                        entryActivity.show();
+                        EntryActivity entryActivity = showEntryActivity();
                         entryActivity.showErrorDialog(title, message, (Exception) t);
                         onActivityLaunched(entryActivity);
                     });
@@ -185,9 +184,7 @@ public abstract class ActivityLauncher implements Runnable {
         if (database != null) {
             logger.debug("signed in into the argument-database successfully, launching a MainActivity...");
             Platform.runLater(() -> {
-                MainActivity mainActivity = new MainActivity(database);
-                mainActivity.show();
-                onActivityLaunched(mainActivity);
+                onActivityLaunched(showMainActivity(database));
             });
         }
 
@@ -278,9 +275,7 @@ public abstract class ActivityLauncher implements Runnable {
             logger.debug("signed in into the auto-login database successfully, launching a MainActivity...");
 
             Platform.runLater(() -> {
-                var mainActivity = new MainActivity(database);
-                mainActivity.show();
-                onActivityLaunched(mainActivity);
+                onActivityLaunched(showMainActivity(database));
             });
         }
     }
@@ -289,6 +284,12 @@ public abstract class ActivityLauncher implements Runnable {
         EntryActivity entryActivity = newBasicEntryActivity();
         entryActivity.show();
         return entryActivity;
+    }
+
+    private MainActivity showMainActivity(Database database) {
+        MainActivity mainActivity = new MainActivity(database);
+        mainActivity.show();
+        return mainActivity;
     }
 
     private EntryActivity newBasicEntryActivity() {
