@@ -21,9 +21,9 @@
                     <children>
                         <RadioButton fx:id="darkThemeToggle" contentDisplay="BOTTOM" mnemonicParsing="false" selected="true" text="Dark">
                             <graphic>
-                                <ImageView fitHeight="400.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="245" fitWidth="233" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@example-dark.png" />
+                                        <Image url="@/com/dansoftware/libraryapp/image/firsttime/ThemeDark.jpg" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -36,9 +36,9 @@
                         </RadioButton>
                         <RadioButton fx:id="lightThemeToggle" contentDisplay="BOTTOM" mnemonicParsing="false" selected="true" text="Light" toggleGroup="$themeGroup">
                             <graphic>
-                                <ImageView fitHeight="361.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="245.0" fitWidth="234.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@example-light.png" />
+                                        <Image url="@/com/dansoftware/libraryapp/image/firsttime/ThemeLight.jpg" />
                                     </image>
                                 </ImageView>
                             </graphic>
