@@ -78,7 +78,7 @@ public class ConfigurationImportController implements Initializable {
                 PreferencesImporter preferencesImporter = new PreferencesImporter(preferences);
                 preferencesImporter.importFromZip(chosenFile, preferences);
                 imported = true;
-                closeWindow();
+                context.close();
             } catch (IOException | PreferencesImporter.InvalidZipContentException e) {
                 logger.error("Failed to import configurations", e);
                 context.showErrorDialog(
@@ -87,7 +87,7 @@ public class ConfigurationImportController implements Initializable {
                 );
             }
         else
-            closeWindow();
+            context.close();
     }
 
     private FileChooser createFileChooser() {
@@ -97,10 +97,6 @@ public class ConfigurationImportController implements Initializable {
         fileChooser.getExtensionFilters().add(zipFiles);
         fileChooser.setSelectedExtensionFilter(zipFiles);
         return fileChooser;
-    }
-
-    private void closeWindow() {
-        ((Stage) context.getContextWindow()).close();
     }
 
     /**
