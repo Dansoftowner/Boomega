@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
@@ -46,6 +47,9 @@ public class ConfigurationImportController implements Initializable {
 
     @FXML
     private ToggleGroup radioGroup;
+
+    @FXML
+    private RadioButton importRadioButton;
 
     /**
      * Creates the object with the necessary values.
@@ -108,8 +112,14 @@ public class ConfigurationImportController implements Initializable {
         return imported;
     }
 
+    private void setDefaults() {
+        fileOpenerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.FOLDER));
+        customLocationInput.disableProperty().bind(importRadioButton.selectedProperty().not());
+        fileOpenerBtn.disableProperty().bind(importRadioButton.selectedProperty().not());
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        fileOpenerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.FOLDER));
+        setDefaults();
     }
 }
