@@ -2,16 +2,23 @@ package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.gui.preloader.BackingStage;
 import com.dansoftware.libraryapp.gui.preloader.PreloaderGUI;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class Preloader extends javafx.application.Preloader {
 
     private static BackingStage backingStage;
+
+    private final StringProperty messageProperty;
+
+    public Preloader() {
+        messageProperty = new SimpleStringProperty();
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -19,8 +26,10 @@ public class Preloader extends javafx.application.Preloader {
             backingStage = new BackingStage();
             //Building the gui
             PreloaderGUI gui = PreloaderGUI.builder()
-                    .parameters(getParameters().getRaw())
+                    .messageProperty(messageProperty)
                     .build();
+
+            //setting the param value if arguments are existing....
 
             Scene scene = new Scene(gui);
             scene.setFill(Color.TRANSPARENT);
@@ -33,7 +42,7 @@ public class Preloader extends javafx.application.Preloader {
             backingStage.show();
             contentStage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -54,7 +63,24 @@ public class Preloader extends javafx.application.Preloader {
         }
     }
 
+    @Override
+    public void handleApplicationNotification(PreloaderNotification info) {
+        if (info instanceof MessageNotification) {
+            MessageNotification messageNotification = (MessageNotification) info;
+
+        }
+    }
+
     public static BackingStage getBackingStage() {
         return backingStage;
     }
+
+    public static class MessageNotification implements PreloaderNotification {
+        private final String message;
+
+        public MessageNotification(@NotNull String message) {
+            this.message = message;
+        }
+    }
+
 }
