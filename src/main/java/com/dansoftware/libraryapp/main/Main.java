@@ -12,6 +12,7 @@ import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
+import com.dansoftware.libraryapp.util.ReflectionUtils;
 import com.dansoftware.libraryapp.util.adapter.VersionInteger;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -66,7 +67,6 @@ public class Main extends BaseApplication {
 
     @Override
     public void init() throws Exception {
-        //we synchronize on the object that is used by FirstTimeDialog to lock the thread
         synchronized (initThreadLock) {
             Preferences preferences = Preferences.getPreferences();
             logger.info("Configurations has been read successfully!");
@@ -88,8 +88,7 @@ public class Main extends BaseApplication {
             Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
             logger.info("Locale is: {}", Locale.getDefault());
 
-            //for executing the I18N class's static block
-            Class.forName(I18N.class.getName());
+            ReflectionUtils.invokeStaticBlock(I18N.class);
 
             //adding the saved databases from the login-data to DatabaseTracker
             LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
