@@ -85,4 +85,25 @@ public final class ReflectionUtils {
         Constructor<? extends O> constructor = classRef.getConstructor(constructorParamTypes);
         return constructor.newInstance(args);
     }
+
+    @SuppressWarnings({"unchecked", "UnusedReturnValue"})
+    public static <T> Class<T> forName(@NotNull Class<T> classRef)
+            throws ClassNotFoundException {
+        return (Class<T>) Class.forName(classRef.getName());
+    }
+
+    /**
+     * Invokes the static block on the given {@code class},
+     * if it's not executed yet
+     *
+     * @param classRef the class-reference
+     */
+    public static void invokeStaticBlock(@NotNull Class<?> classRef)
+            throws ClassNotFoundException {
+        try {
+            Class.forName(classRef.getName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
