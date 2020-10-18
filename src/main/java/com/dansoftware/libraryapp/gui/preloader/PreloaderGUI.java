@@ -37,12 +37,12 @@ public class PreloaderGUI extends VBox {
         this.mainPane = buildMainPane(center, buildCompanyLogo());
         this.messageProperty = builder.getStringProperty()
                 .orElseGet(SimpleStringProperty::new);
-        Label messageLabel = buildMessageLabel();
+        Label messageLabel = buildMessageLabel(messageProperty);
         this.buildUI(mainPane, messageLabel);
     }
 
-    private Label buildMessageLabel() {
-        Label label = new Label(MessageFormat.format(getGeneralWord("preloader.gui.opening"), file.getName()));
+    private Label buildMessageLabel(StringProperty textProperty) {
+        Label label = new Label();
         label.setFont(Font.font("System", FontWeight.NORMAL, 20));
         label.setTextFill(Color.BLACK);
         StackPane.setAlignment(label, Pos.BOTTOM_LEFT);

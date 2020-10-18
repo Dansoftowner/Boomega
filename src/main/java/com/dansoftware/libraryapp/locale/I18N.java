@@ -40,24 +40,20 @@ public class I18N {
 
     @NotNull
     public static String getGeneralWord(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
-        if (ArrayUtils.isEmpty(args)) {
-            return getGeneralWords().getString(key);
-        }
-
-        return MessageFormat.format(getGeneralWords().getString(key), args);
+        if (ArrayUtils.isEmpty(args)) return getGeneralWords().getString(key);
+        return getFormat(getGeneralWords(), key, args);
     }
 
     @NotNull
     public static String getAlertMsg(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
-        if (isEmpty(args)) {
-            return getAlertMessages().getString(key);
-        }
-
-        return MessageFormat.format(getAlertMessages().getString(key), args);
+        if (isEmpty(args)) return getAlertMessages().getString(key);
+        return getFormat(getAlertMessages(), key, args);
     }
 
-    public static String getProgressMessage(String key) {
-        return getProgressMessages().getString(key);
+    @NotNull
+    public static String getProgressMessage(String key, Object... args) {
+        if (ArrayUtils.isEmpty(args)) return getProgressMessages().getString(key);
+        return getFormat(getProgressMessages(), key, args);
     }
 
     public static ResourceBundle getWindowTitles() throws MissingResourceException {
@@ -87,6 +83,10 @@ public class I18N {
     @NotNull
     public static ResourceBundle getAlertMessages() throws MissingResourceException {
         return ResourceBundle.getBundle(ALERT_MESSAGES);
+    }
+
+    private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
+        return MessageFormat.format(resourceBundle.getString(key), args);
     }
 
 }

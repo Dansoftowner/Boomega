@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.gui.preloader.BackingStage;
 import com.dansoftware.libraryapp.gui.preloader.PreloaderGUI;
+import com.dansoftware.libraryapp.locale.I18N;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Scene;
@@ -10,7 +11,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
 
-public class Preloader extends javafx.application.Preloader {
+import java.io.File;
+
+public class Preloader extends BasePreloader {
 
     private static BackingStage backingStage;
 
@@ -30,6 +33,10 @@ public class Preloader extends javafx.application.Preloader {
                     .build();
 
             //setting the param value if arguments are existing....
+            ifApplicationArgumentExist(arg ->
+                    messageProperty.bind(new SimpleStringProperty(
+                            I18N.getProgressMessage("preloader.file.open", new File(arg).getName())))
+            );
 
             Scene scene = new Scene(gui);
             scene.setFill(Color.TRANSPARENT);
@@ -65,9 +72,9 @@ public class Preloader extends javafx.application.Preloader {
 
     @Override
     public void handleApplicationNotification(PreloaderNotification info) {
-        if (info instanceof MessageNotification) {
+        if (!messageProperty.isBound() && info instanceof MessageNotification) {
             MessageNotification messageNotification = (MessageNotification) info;
-
+            messageProperty.set(messageNotification.message);
         }
     }
 
