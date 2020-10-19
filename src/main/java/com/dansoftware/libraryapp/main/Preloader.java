@@ -10,10 +10,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class Preloader extends BasePreloader {
+
+    private static final Logger logger = LoggerFactory.getLogger(Preloader.class);
 
     private static BackingStage backingStage;
 

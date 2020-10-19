@@ -43,6 +43,7 @@ public class PreloaderGUI extends VBox {
 
     private Label buildMessageLabel(StringProperty textProperty) {
         Label label = new Label();
+        label.textProperty().bind(textProperty);
         label.setFont(Font.font("System", FontWeight.NORMAL, 20));
         label.setTextFill(Color.BLACK);
         StackPane.setAlignment(label, Pos.BOTTOM_LEFT);
@@ -94,10 +95,9 @@ public class PreloaderGUI extends VBox {
         this.setPrefWidth(PREF_WIDTH);
         this.getStyleClass().add(STYLE_CLASS);
 
-        mainPane.getChildren().add(messageLabel);
-
         this.getChildren().add(mainPane);
         this.getChildren().add(buildProgressBar());
+        mainPane.getChildren().add(messageLabel);
         this.getStylesheets().add("/com/dansoftware/libraryapp/gui/preloader/preloader.css");
     }
 

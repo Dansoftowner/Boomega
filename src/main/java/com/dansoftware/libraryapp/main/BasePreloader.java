@@ -6,15 +6,17 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class BasePreloader extends javafx.application.Preloader {
-    //getParameters() hasParameters()
 
     protected List<String> getApplicationArgs() {
         return getParameters().getRaw();
     }
 
+    protected boolean hasParameters() {
+        return !getApplicationArgs().isEmpty();
+    }
+
     protected void ifApplicationArgumentExist(@NotNull Consumer<String> action) {
-        if (!getApplicationArgs().isEmpty()) {
+        if (hasParameters())
             action.accept(getApplicationArgs().get(0));
-        }
     }
 }
