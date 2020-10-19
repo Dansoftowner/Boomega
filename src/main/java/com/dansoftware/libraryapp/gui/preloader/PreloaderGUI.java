@@ -30,12 +30,11 @@ public class PreloaderGUI extends VBox {
 
     private final StackPane mainPane;
     private final ImageView center;
-    private final StringProperty messageProperty;
 
     private PreloaderGUI(@NotNull Builder builder) {
         this.center = buildCenterLogo();
         this.mainPane = buildMainPane(center, buildCompanyLogo());
-        this.messageProperty = builder.getStringProperty()
+        StringProperty messageProperty = builder.getStringProperty()
                 .orElseGet(SimpleStringProperty::new);
         Label messageLabel = buildMessageLabel(messageProperty);
         this.buildUI(mainPane, messageLabel);
