@@ -3,8 +3,11 @@ package com.dansoftware.libraryapp.main;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * An abstract {@link Application} implementation.
@@ -38,6 +41,16 @@ public abstract class BaseApplication extends Application {
      */
     public List<String> getApplicationArgs() {
         return getParameters().getRaw();
+    }
+
+    protected boolean hasParameters() {
+        return !getApplicationArgs().isEmpty();
+    }
+
+    protected <T> Optional<T> getFormattedArgument(@NotNull Function<List<String>, T> argumentsConverter) {
+        if (!hasParameters())
+            return Optional.empty();
+        return Optional.ofNullable(argumentsConverter.apply(getApplicationArgs()));
     }
 
     /**
