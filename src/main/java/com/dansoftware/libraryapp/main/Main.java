@@ -68,6 +68,7 @@ public class Main extends BaseApplication {
     @Override
     public void init() throws Exception {
         synchronized (initThreadLock) {
+            notifyPreloader(new Preloader.MessageNotification("preloader.preferences.read"));
             Preferences preferences = Preferences.getPreferences();
             logger.info("Configurations has been read successfully!");
 

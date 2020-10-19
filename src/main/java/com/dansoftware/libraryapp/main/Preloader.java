@@ -38,8 +38,8 @@ public class Preloader extends BasePreloader {
 
             //setting the param value if arguments are existing....
             ifApplicationArgumentExist(arg ->
-                    messageProperty.bind(new SimpleStringProperty(
-                            I18N.getProgressMessage("preloader.file.open", new File(arg).getName())))
+                    this.handleApplicationNotification(
+                            new MessageNotification("preloader.file.open", new File(arg).getName()))
             );
 
             Scene scene = new Scene(gui);
@@ -76,9 +76,13 @@ public class Preloader extends BasePreloader {
 
     @Override
     public void handleApplicationNotification(PreloaderNotification info) {
-        if (!messageProperty.isBound() && info instanceof MessageNotification) {
+        if (info instanceof MessageNotification) {
             MessageNotification messageNotification = (MessageNotification) info;
-            messageProperty.set(messageNotification.message);
+            if (messageNotification.fix) {
+                messageProperty.bind(new SimpleStringProperty(messageNotification.message));
+            } else {
+                messageProperty.set(messageNotification.message);
+            }
         }
     }
 
@@ -87,10 +91,22 @@ public class Preloader extends BasePreloader {
     }
 
     public static class MessageNotification implements PreloaderNotification {
+
+        private boolean fix;
+
         private final String message;
 
-        public MessageNotification(@NotNull String message) {
-            this.message = message;
+        private MessageNotification(boolean fix, @NotNull String i18n, Object... args) {
+            this(i18n, args);
+            this.fix = fix;
+        }
+
+        public MessageNotification(@NotNull String i18n, Object... args) {
+            this.message = I18N.getProgressMessage(i18n, args);
+        }
+
+        public MessageNotification(@NotNull String i18n) {
+            this.message = I18N.getProgressMessage(i18n);
         }
     }
 
