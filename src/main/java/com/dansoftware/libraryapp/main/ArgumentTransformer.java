@@ -36,7 +36,7 @@ public class ArgumentTransformer {
         if (StringUtils.isBlank(arg))
             return Optional.empty();
 
-        return Optional.of(DatabaseMeta.parseFrom(arg));
+        return Optional.ofNullable(DatabaseMeta.parseFrom(arg));
     }
 
     public static Optional<DatabaseMeta> transformOptional(@Nullable List<String> args) {
