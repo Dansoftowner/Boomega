@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -68,6 +69,10 @@ public class Main extends BaseApplication {
     @Override
     public void init() throws Exception {
         synchronized (initThreadLock) {
+            //if a file is passed as a parameter, we show a message about it on the Preloader
+            getFormattedArgument(ArgumentTransformer::transform).ifPresent(file ->
+                    notifyPreloader(new Preloader.FixedMessageNotification("preloader.file.open", file.getName())));
+
             notifyPreloader(new Preloader.MessageNotification("preloader.preferences.read"));
             Preferences preferences = Preferences.getPreferences();
             logger.info("Configurations has been read successfully!");
@@ -76,12 +81,14 @@ public class Main extends BaseApplication {
 
             //creating and showing a FirstTimeDialog
             if (FirstTimeActivity.isNeeded()) {
+                notifyPreloader(new Preloader.HideNotification());
                 logger.debug("FirstTimeDialog needed");
                 FirstTimeActivity firstTimeDialog = new FirstTimeActivity(initThreadLock, preferences);
                 firstTimeDialog.show();
                 //we wait until the FirstTimeDialog completes, and notifies the
                 //thread-lock object
                 initThreadLock.wait();
+                notifyPreloader(new Preloader.ShowNotification());
             }
 
             //at this point, the FirstTimeDialog completed

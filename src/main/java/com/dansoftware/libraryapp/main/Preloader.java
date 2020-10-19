@@ -15,12 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class Preloader extends BasePreloader {
+public class Preloader extends javafx.application.Preloader {
 
     private static final Logger logger = LoggerFactory.getLogger(Preloader.class);
 
     private static BackingStage backingStage;
 
+    private Stage contentStage;
     private final StringProperty messageProperty;
 
     public Preloader() {
@@ -36,16 +37,10 @@ public class Preloader extends BasePreloader {
                     .messageProperty(messageProperty)
                     .build();
 
-            //setting the param value if arguments are existing....
-            ifApplicationArgumentExist(arg ->
-                    this.handleApplicationNotification(
-                            new MessageNotification("preloader.file.open", new File(arg).getName()))
-            );
-
             Scene scene = new Scene(gui);
             scene.setFill(Color.TRANSPARENT);
 
-            Stage contentStage = backingStage.createChild(StageStyle.UNDECORATED);
+            contentStage = backingStage.createChild(StageStyle.UNDECORATED);
             contentStage.setScene(scene);
             contentStage.centerOnScreen();
             contentStage.setOnShown(event -> gui.logoAnimation());
@@ -76,13 +71,16 @@ public class Preloader extends BasePreloader {
 
     @Override
     public void handleApplicationNotification(PreloaderNotification info) {
-        if (info instanceof MessageNotification) {
+        if (!messageProperty.isBound() && info instanceof FixedMessageNotification) {
             MessageNotification messageNotification = (MessageNotification) info;
-            if (messageNotification.fix) {
-                messageProperty.bind(new SimpleStringProperty(messageNotification.message));
-            } else {
-                messageProperty.set(messageNotification.message);
-            }
+            messageProperty.bind(new SimpleStringProperty(messageNotification.message));
+        } else if (!messageProperty.isBound() && info instanceof MessageNotification) {
+            MessageNotification messageNotification = (MessageNotification) info;
+            messageProperty.set(messageNotification.message);
+        } else if (info instanceof HideNotification) {
+            contentStage.hide();
+        } else if (info instanceof ShowNotification) {
+            contentStage.show();
         }
     }
 
@@ -90,16 +88,15 @@ public class Preloader extends BasePreloader {
         return backingStage;
     }
 
+    public static class HideNotification implements PreloaderNotification {
+    }
+
+    public static class ShowNotification implements PreloaderNotification {
+    }
+
     public static class MessageNotification implements PreloaderNotification {
 
-        private boolean fix;
-
         private final String message;
-
-        private MessageNotification(boolean fix, @NotNull String i18n, Object... args) {
-            this(i18n, args);
-            this.fix = fix;
-        }
 
         public MessageNotification(@NotNull String i18n, Object... args) {
             this.message = I18N.getProgressMessage(i18n, args);
@@ -107,6 +104,17 @@ public class Preloader extends BasePreloader {
 
         public MessageNotification(@NotNull String i18n) {
             this.message = I18N.getProgressMessage(i18n);
+        }
+    }
+
+    public static class FixedMessageNotification extends MessageNotification {
+
+        public FixedMessageNotification(@NotNull String i18n, Object... args) {
+            super(i18n, args);
+        }
+
+        public FixedMessageNotification(@NotNull String i18n) {
+            super(i18n);
         }
     }
 
