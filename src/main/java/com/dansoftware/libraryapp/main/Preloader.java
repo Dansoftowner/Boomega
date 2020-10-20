@@ -88,10 +88,10 @@ public class Preloader extends javafx.application.Preloader {
         return backingStage;
     }
 
-    public static class HideNotification implements PreloaderNotification {
+    public static final class HideNotification implements PreloaderNotification {
     }
 
-    public static class ShowNotification implements PreloaderNotification {
+    public static final class ShowNotification implements PreloaderNotification {
     }
 
     public static class MessageNotification implements PreloaderNotification {

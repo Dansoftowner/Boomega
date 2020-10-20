@@ -93,22 +93,27 @@ public class Main extends BaseApplication {
 
             //at this point, the FirstTimeDialog completed
 
+            notifyPreloader(new Preloader.MessageNotification("preloader.lang"));
             Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
             logger.info("Locale is: {}", Locale.getDefault());
 
             ReflectionUtils.invokeStaticBlock(I18N.class);
 
             //adding the saved databases from the login-data to DatabaseTracker
+            notifyPreloader(new Preloader.MessageNotification("preloader.logindata"));
             LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
             loginData.getSavedDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
 
+            notifyPreloader(new Preloader.MessageNotification("preloader.theme"));
             Theme.setDefault(preferences.get(Preferences.Key.THEME));
             logger.info("Theme is: {}", Theme.getDefault());
 
             //searching for updates
+            notifyPreloader(new Preloader.MessageNotification("preloader.update.search"));
             UpdateSearcher updateSearcher = new UpdateSearcher(new VersionInteger(System.getProperty("libraryapp.version")));
             UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
+            notifyPreloader(new Preloader.MessageNotification("preloader.gui.build"));
             new InitActivityLauncher(
                     getApplicationArgs(),
                     preferences,
