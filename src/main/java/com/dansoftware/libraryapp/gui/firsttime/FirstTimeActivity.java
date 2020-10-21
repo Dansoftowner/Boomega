@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.firsttime;
 import com.dansoftware.libraryapp.appdata.ConfigFile;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialog;
+import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialogActivity;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialogWindow;
 import com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportActivity;
 import com.dansoftware.libraryapp.main.Preloader;
@@ -64,8 +65,7 @@ public class FirstTimeActivity {
     }
 
     private void showFirstTimeDialog(@NotNull Preferences preferences) {
-        FirstTimeDialogWindow window = new FirstTimeDialogWindow(new FirstTimeDialog());
-        window.showAndWait();
+        new FirstTimeDialogActivity(preferences).show();
     }
 
     public static boolean isNeeded() {

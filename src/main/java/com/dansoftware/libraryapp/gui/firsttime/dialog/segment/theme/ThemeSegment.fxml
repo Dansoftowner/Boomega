@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<StackPane fx:id="root" fx:controller="com.dansoftware.libraryapp.gui.firsttime.dialog.segment.theme.Controller" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+<StackPane fx:id="root" fx:controller="com.dansoftware.libraryapp.gui.firsttime.dialog.segment.theme.ThemeSegmentController" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
     <children>
         <VBox>
             <children>
