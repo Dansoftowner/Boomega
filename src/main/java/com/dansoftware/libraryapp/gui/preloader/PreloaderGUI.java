@@ -15,11 +15,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.MessageFormat;
 import java.util.Optional;
 
-import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
-
+/**
+ * A {@link PreloaderGUI} is used by {@link com.dansoftware.libraryapp.main.Preloader} for creating the
+ * preloader gui easily.
+ *
+ * <p>
+ * A {@link PreloaderGUI} can be constructed through a {@link PreloaderGUI.Builder} object.
+ *
+ * @author Daniel Gyorffy
+ */
 public class PreloaderGUI extends VBox {
 
     private static final String STYLE_CLASS = "root";

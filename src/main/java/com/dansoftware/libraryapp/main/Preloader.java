@@ -15,6 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+/**
+ * The preloader class for the application.
+ * Uses a {@link PreloaderGUI} for building the UI easily.
+ *
+ * @author Daniel Gyorffy
+ */
 public class Preloader extends javafx.application.Preloader {
 
     private static final Logger logger = LoggerFactory.getLogger(Preloader.class);
@@ -53,10 +59,6 @@ public class Preloader extends javafx.application.Preloader {
     }
 
     @Override
-    public void init() throws Exception {
-    }
-
-    @Override
     public void stop() {
         backingStage = null;
     }
@@ -88,12 +90,21 @@ public class Preloader extends javafx.application.Preloader {
         return backingStage;
     }
 
+    /**
+     * Notification for hiding the preloader-window.
+     */
     public static final class HideNotification implements PreloaderNotification {
     }
 
+    /**
+     * Notification for showing the preloader-window if its hidden.
+     */
     public static final class ShowNotification implements PreloaderNotification {
     }
 
+    /**
+     * Internationalized notification for sending messages to the preloader
+     */
     public static class MessageNotification implements PreloaderNotification {
 
         private final String message;
@@ -107,6 +118,9 @@ public class Preloader extends javafx.application.Preloader {
         }
     }
 
+    /**
+     * Internationalized notification that will be not replaced by other messages
+     */
     public static class FixedMessageNotification extends MessageNotification {
 
         public FixedMessageNotification(@NotNull String i18n, Object... args) {
