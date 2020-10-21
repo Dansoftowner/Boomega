@@ -3,12 +3,10 @@ package com.dansoftware.libraryapp.appdata;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.appdata.logindata.LoginDataDeserializer;
 import com.dansoftware.libraryapp.appdata.logindata.LoginDataSerializer;
-import com.dansoftware.libraryapp.appdata.theme.ThemeDeserializer;
-import com.dansoftware.libraryapp.appdata.theme.ThemeSerializer;
+import com.dansoftware.libraryapp.appdata.theme.ThemeAdapter;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -92,10 +90,9 @@ public class Preferences {
 
     private Gson getGson() {
         return gsonCache != null ? gsonCache : (gsonCache = new GsonBuilder()
+                .registerTypeAdapter(Theme.class, new ThemeAdapter())
                 .registerTypeAdapter(LoginData.class, new LoginDataSerializer())
                 .registerTypeAdapter(LoginData.class, new LoginDataDeserializer())
-                .registerTypeAdapter(Theme.class, new ThemeSerializer())
-                .registerTypeAdapter(Theme.class, new ThemeDeserializer())
                 .create());
     }
 
@@ -222,7 +219,7 @@ public class Preferences {
                               @Nullable T value) {
             JsonElement element = null;
             if (value != null)
-                element = getGson().toJsonTree(value);
+                element = getGson().toJsonTree(value, key.type);
 
             Preferences.this.jsonObject.add(key.jsonKey, element);
             return this;
