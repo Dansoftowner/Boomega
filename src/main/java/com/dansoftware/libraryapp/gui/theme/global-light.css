@@ -187,6 +187,10 @@ UPDATE VIEW
     -fx-font-size: 20;
 }
 
+.segmentLabelSeparator .graphic {
+    -fx-image: url("/com/dansoftware/libraryapp/image/firsttime/right-arrow.png");
+}
+
 /*
 custom
  */
