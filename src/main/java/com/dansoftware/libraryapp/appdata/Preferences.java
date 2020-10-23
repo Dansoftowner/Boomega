@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.appdata;
 
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
+import com.dansoftware.libraryapp.appdata.logindata.LoginDataAdapter;
 import com.dansoftware.libraryapp.appdata.logindata.LoginDataDeserializer;
 import com.dansoftware.libraryapp.appdata.logindata.LoginDataSerializer;
 import com.dansoftware.libraryapp.appdata.theme.ThemeAdapter;
@@ -91,8 +92,7 @@ public class Preferences {
     private Gson getGson() {
         return gsonCache != null ? gsonCache : (gsonCache = new GsonBuilder()
                 .registerTypeAdapter(Theme.class, new ThemeAdapter())
-                .registerTypeAdapter(LoginData.class, new LoginDataSerializer())
-                .registerTypeAdapter(LoginData.class, new LoginDataDeserializer())
+                .registerTypeAdapter(LoginData.class, new LoginDataAdapter())
                 .create());
     }
 
