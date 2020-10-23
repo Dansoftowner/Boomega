@@ -158,11 +158,11 @@ UPDATE VIEW
 
 /** FirstTimeDialog **/
 .segmentDialog .radio-button:hover {
-    -fx-background-color: #85b9ef;
+    -fx-background-color: #536f81;
 }
 
 .segmentDialog .radio-button:selected {
-    -fx-background-color: #78abe2;
+    -fx-background-color: #505b67;
 }
 
 .nextSegmentButton {
