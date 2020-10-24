@@ -1,13 +1,19 @@
 package com.dansoftware.libraryapp.locale;
 
-import javafx.fxml.FXML;
+import com.dansoftware.libraryapp.plugin.PluginClassLoader;
+import com.dansoftware.libraryapp.util.ReflectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.spi.LocaleServiceProvider;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
@@ -15,6 +21,8 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
  * Used for accessing localized messages/values.
  */
 public class I18N {
+
+    private static final List<Locale> availableLocales;
 
     private static final String WINDOW_TITLES = "com.dansoftware.libraryapp.locale.WindowTitles";
     private static final String FIRST_TIME_DIALOG = "com.dansoftware.libraryapp.locale.FirstTimeDialog";
@@ -24,14 +32,24 @@ public class I18N {
     private static final String ALERT_MESSAGES = "com.dansoftware.libraryapp.locale.AlertMessages";
 
     static {
-        try {
-            //just for executing the FXI18N's static block
-            Class.forName(FXI18N.class.getName());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        ReflectionUtils.invokeStaticBlock(FXI18N.class);
+        availableLocales = calcAvailableLocales();
     }
 
+    private static ClassLoader getBundleLoader() {
+        return PluginClassLoader.getInstance();
+    }
+
+    private static List<Locale> calcAvailableLocales() {
+        return Arrays.stream(Locale.getAvailableLocales())
+                .filter(locale -> !locale.equals(Locale.ROOT))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Locale> getAvailableLocales() {
+        return availableLocales;
+    }
+    
     /**
      * Don't let anyone to create an instance of this class
      */
@@ -57,32 +75,32 @@ public class I18N {
     }
 
     public static ResourceBundle getWindowTitles() throws MissingResourceException {
-        return ResourceBundle.getBundle(WINDOW_TITLES);
+        return ResourceBundle.getBundle(WINDOW_TITLES, Locale.getDefault(), getBundleLoader());
     }
 
     @NotNull
     public static ResourceBundle getFirstTimeDialogValues() {
-        return ResourceBundle.getBundle(FIRST_TIME_DIALOG);
+        return ResourceBundle.getBundle(FIRST_TIME_DIALOG, Locale.getDefault(), getBundleLoader());
     }
 
     @NotNull
     public static ResourceBundle getProgressMessages() throws MissingResourceException {
-        return ResourceBundle.getBundle(PROGRESS_MESSAGES);
+        return ResourceBundle.getBundle(PROGRESS_MESSAGES, Locale.getDefault(), getBundleLoader());
     }
 
     @NotNull
     public static ResourceBundle getFXMLValues() throws MissingResourceException {
-        return ResourceBundle.getBundle(FXML_VALUES);
+        return ResourceBundle.getBundle(FXML_VALUES, Locale.getDefault(), getBundleLoader());
     }
 
     @NotNull
     public static ResourceBundle getGeneralWords() throws MissingResourceException {
-        return ResourceBundle.getBundle(GENERAL_WORDS);
+        return ResourceBundle.getBundle(GENERAL_WORDS, Locale.getDefault(), getBundleLoader());
     }
 
     @NotNull
     public static ResourceBundle getAlertMessages() throws MissingResourceException {
-        return ResourceBundle.getBundle(ALERT_MESSAGES);
+        return ResourceBundle.getBundle(ALERT_MESSAGES, Locale.getDefault(), getBundleLoader());
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
