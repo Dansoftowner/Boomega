@@ -98,8 +98,7 @@ public final class ReflectionUtils {
      *
      * @param classRef the class-reference
      */
-    public static void invokeStaticBlock(@NotNull Class<?> classRef)
-            throws ClassNotFoundException {
+    public static void invokeStaticBlock(@NotNull Class<?> classRef) {
         try {
             Class.forName(classRef.getName());
         } catch (ClassNotFoundException e) {
