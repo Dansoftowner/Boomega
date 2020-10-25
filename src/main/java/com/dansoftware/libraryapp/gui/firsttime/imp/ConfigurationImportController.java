@@ -14,7 +14,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +53,7 @@ public class ConfigurationImportController implements Initializable {
     /**
      * Creates the object with the necessary values.
      *
-     * @param context the {@link Context} for communicating with a GUI environment
+     * @param context     the {@link Context} for communicating with a GUI environment
      * @param preferences the object that should read the configurations to
      */
     public ConfigurationImportController(@NotNull Context context,

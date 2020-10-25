@@ -6,13 +6,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.spi.LocaleServiceProvider;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
@@ -49,7 +44,7 @@ public class I18N {
     public static List<Locale> getAvailableLocales() {
         return availableLocales;
     }
-    
+
     /**
      * Don't let anyone to create an instance of this class
      */

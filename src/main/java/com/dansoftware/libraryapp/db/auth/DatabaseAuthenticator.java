@@ -100,7 +100,7 @@ public abstract class DatabaseAuthenticator {
      * All {@link DatabaseAuthenticator} implementations must implement it.
      *
      * @param databaseMeta the meta-information about the database
-     * @param credentials the database-credentials
+     * @param credentials  the database-credentials
      * @param failListener the FailListener that defines how to handle exceptions
      * @return the created "database-bridge"
      */

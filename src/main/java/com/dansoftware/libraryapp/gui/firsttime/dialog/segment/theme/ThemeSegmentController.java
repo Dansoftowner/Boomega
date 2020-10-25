@@ -4,7 +4,6 @@ import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialog;
 import com.dansoftware.libraryapp.gui.theme.DarkTheme;
 import com.dansoftware.libraryapp.gui.theme.LightTheme;
-import com.dansoftware.libraryapp.gui.theme.Theme;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;

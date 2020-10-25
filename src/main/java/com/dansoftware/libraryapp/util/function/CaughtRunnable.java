@@ -4,7 +4,7 @@ package com.dansoftware.libraryapp.util.function;
  * A {@link CaughtRunnable} is a {@link Runnable}
  * that handles checked exceptions, and doesn't need
  * exception-handling.
- *
+ * <p>
  * Example:
  * <pre>{@code
  * //error, the Runnable.run() method does not allow to throw checked exceptions

@@ -35,7 +35,7 @@ public final class DependencyLister {
                 new DependencyInfo("JMetro", "https://pixelduke.com/java-javafx-theme-jmetro/", new LicenseInfo("New BSD license", "http://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_.28.22Revised_BSD_License.22.2C_.22New_BSD_License.22.2C_or_.22Modified_BSD_License.22.29")),
                 new DependencyInfo("ControlsFX", "https://github.com/controlsfx/controlsfx", new LicenseInfo("BSD 3-Clause License", "https://github.com/controlsfx/controlsfx/blob/master/license.txt")),
                 new DependencyInfo("WorkbenchFX (+ with patches)", "https://github.com/dlsc-software-consulting-gmbh/WorkbenchFX", LicenseInfo.apache20License()),
-                new DependencyInfo("MDFX","https://github.com/JPro-one/markdown-javafx-renderer", LicenseInfo.apache20License()),
+                new DependencyInfo("MDFX", "https://github.com/JPro-one/markdown-javafx-renderer", LicenseInfo.apache20License()),
                 new DependencyInfo("Nitrite Database", "https://github.com/nitrite/nitrite-java", LicenseInfo.apache20License()),
                 new DependencyInfo("JUnique", "http://www.sauronsoftware.it/projects/junique/", new LicenseInfo("LGPL", null)),
                 new DependencyInfo("PDFViewerFX", "https://github.com/Dansoftowner/PDFViewerFX", LicenseInfo.apache20License())

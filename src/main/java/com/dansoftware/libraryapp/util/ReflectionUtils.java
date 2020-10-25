@@ -56,7 +56,7 @@ public final class ReflectionUtils {
     /**
      * Creates an object through reflection: with a class-reference and the
      * constructor parameters.
-     *
+     * <p>
      * Example:
      * <pre>{@code
      * class X {
@@ -70,8 +70,8 @@ public final class ReflectionUtils {
      * }</pre>
      *
      * @param classRef the class-reference
-     * @param args the constructor arguments; empty if you want to call the default constructor
-     * @param <O> the type of the object that should constructed
+     * @param args     the constructor arguments; empty if you want to call the default constructor
+     * @param <O>      the type of the object that should constructed
      * @return the object instance
      * @throws ReflectiveOperationException if some reflection-exception occurs
      */

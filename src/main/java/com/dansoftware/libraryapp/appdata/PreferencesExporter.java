@@ -18,8 +18,8 @@ public class PreferencesExporter {
     }
 
     public void writeToZip(File outputFile) throws IOException {
-        try(var prefInput = new BufferedInputStream(src.openInputStream());
-            var prefOutput = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
+        try (var prefInput = new BufferedInputStream(src.openInputStream());
+             var prefOutput = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
 
             ZipEntry zipEntry = new ZipEntry("config.conf");
             prefOutput.putNextEntry(zipEntry);
@@ -27,7 +27,7 @@ public class PreferencesExporter {
             byte[] buf = new byte[256];
 
             int byteCount;
-            while((byteCount = prefInput.read(buf)) >= 0) {
+            while ((byteCount = prefInput.read(buf)) >= 0) {
                 prefOutput.write(buf, 0, byteCount);
             }
         }

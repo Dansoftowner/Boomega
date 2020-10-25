@@ -1,33 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<VBox spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportController">
-   <children>
-      <Label text="%configuration.import.label" />
-      <RadioButton fx:id="importRadioButton" mnemonicParsing="false" text="%configuration.import.custom.loc">
-         <toggleGroup>
-            <ToggleGroup fx:id="radioGroup" />
-         </toggleGroup></RadioButton>
-      <HBox spacing="5.0">
-         <children>
-            <TextField fx:id="customLocationInput" editable="false" HBox.hgrow="ALWAYS" />
-            <Button fx:id="fileOpenerBtn" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#importFromCustomLocation" text="Button" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="2.0" />
-         </padding>
-      </HBox>
-      <RadioButton mnemonicParsing="false" selected="true" text="%configuration.import.not" toggleGroup="$radioGroup" />
-      <StackPane>
-         <children>
-            <Button mnemonicParsing="false" onAction="#close" text="OK" />
-         </children>
-      </StackPane>
-   </children>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </padding>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportController">
+    <children>
+        <Label text="%configuration.import.label"/>
+        <RadioButton fx:id="importRadioButton" mnemonicParsing="false" text="%configuration.import.custom.loc">
+            <toggleGroup>
+                <ToggleGroup fx:id="radioGroup"/>
+            </toggleGroup>
+        </RadioButton>
+        <HBox spacing="5.0">
+            <children>
+                <TextField fx:id="customLocationInput" editable="false" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="fileOpenerBtn" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false"
+                        onAction="#importFromCustomLocation" text="Button"/>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="2.0"/>
+            </padding>
+        </HBox>
+        <RadioButton mnemonicParsing="false" selected="true" text="%configuration.import.not"
+                     toggleGroup="$radioGroup"/>
+        <StackPane>
+            <children>
+                <Button mnemonicParsing="false" onAction="#close" text="OK"/>
+            </children>
+        </StackPane>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
 </VBox>

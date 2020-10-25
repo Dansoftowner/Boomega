@@ -67,6 +67,7 @@ public class ConfigurationImportView extends Workbench implements Themeable {
         protected SingleModule() {
             super(StringUtils.EMPTY, (Image) null);
         }
+
         @Override
         public Node activate() {
             return content;

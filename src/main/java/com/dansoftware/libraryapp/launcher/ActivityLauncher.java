@@ -135,7 +135,7 @@ public abstract class ActivityLauncher implements Runnable {
      * Handles the argument depending on the launcherMode.
      *
      * @param launcherMode the launcher-mode
-     * @param argument the argument
+     * @param argument     the argument
      * @see #handleArgumentInit(DatabaseMeta)
      * @see #handleArgumentAlreadyRunning(DatabaseMeta)
      */

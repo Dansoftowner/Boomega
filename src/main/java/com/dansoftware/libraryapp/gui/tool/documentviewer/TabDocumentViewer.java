@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.tool.documentviewer;
 
-import com.dansoftware.libraryapp.util.CaughtRunnable;
 import com.dansoftware.libraryapp.util.SystemBrowser;
+import com.dansoftware.libraryapp.util.function.CaughtRunnable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.ContextMenu;

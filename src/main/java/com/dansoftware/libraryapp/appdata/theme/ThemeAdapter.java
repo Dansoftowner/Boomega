@@ -1,13 +1,10 @@
 package com.dansoftware.libraryapp.appdata.theme;
 
 import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.plugin.PluginClassLoader;
-import com.dansoftware.libraryapp.util.ReflectionUtils;
 import com.google.gson.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 
 /**

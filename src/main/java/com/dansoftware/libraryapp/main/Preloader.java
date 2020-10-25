@@ -13,8 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-
 /**
  * The preloader class for the application.
  * Uses a {@link PreloaderGUI} for building the UI easily.
