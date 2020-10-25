@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.util;
+package com.dansoftware.libraryapp.util.function;
 
 /**
  * A {@link CaughtRunnable} is a {@link Runnable}
