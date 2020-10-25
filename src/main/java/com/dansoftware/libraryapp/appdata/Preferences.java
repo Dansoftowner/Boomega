@@ -2,10 +2,9 @@ package com.dansoftware.libraryapp.appdata;
 
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.appdata.logindata.LoginDataAdapter;
-import com.dansoftware.libraryapp.appdata.logindata.LoginDataDeserializer;
-import com.dansoftware.libraryapp.appdata.logindata.LoginDataSerializer;
 import com.dansoftware.libraryapp.appdata.theme.ThemeAdapter;
 import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.util.function.UncaughtSupplier;
 import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.NotNull;
@@ -39,61 +38,43 @@ public class Preferences {
 
     private static final Logger logger = LoggerFactory.getLogger(Preferences.class);
 
-    private static Preferences DEFAULT;
-
-    private Gson gsonCache;
+    private static Preferences defaultPrefs;
 
     /**
      * The backing JsonObject that actually holds the data
      */
-    private final JsonObject jsonObject;
+    private final JsonObject jsonStorage;
 
-    /**
-     * The file that holds the configurations (in JSON format)
-     */
-    private final File sourceFile;
+    private final UncaughtSupplier<@NotNull InputStream, IOException> inputFactory;
+    private final UncaughtSupplier<@NotNull OutputStream, IOException> outputFactory;
+    private final Gson gson;
 
-    private Preferences() {
-        this.sourceFile = null;
-        this.jsonObject = new JsonObject();
+    private Preferences() throws IOException {
+        this(InputStream::nullInputStream, OutputStream::nullOutputStream);
     }
 
-    /**
-     * Creates a normal preferences-object.
-     *
-     * <p>
-     * Reads the configurations from the file into a backing {@link JsonObject}.
-     *
-     * @param file the file that holds the configurations
-     * @throws IOException if some {@link IOException}, {@link JsonIOException} or {@link JsonSyntaxException} occurs.
-     */
-    private Preferences(@NotNull File file) throws IOException {
-        this.sourceFile = file;
+    private Preferences(@NotNull UncaughtSupplier<@NotNull InputStream, IOException> inputFactory,
+                        @NotNull UncaughtSupplier<@NotNull OutputStream, IOException> outputFactory) throws IOException {
+        this.gson = createGson();
+        this.inputFactory = Objects.requireNonNull(inputFactory);
+        this.outputFactory = Objects.requireNonNull(outputFactory);
+        this.jsonStorage = readIntoJsonObject(inputFactory.get());
+    }
 
-        try (var reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
-            JsonObject temp = new Gson().fromJson(reader, JsonObject.class);
-            this.jsonObject = Objects.isNull(temp) ? new JsonObject() : temp;
-        } catch (JsonIOException | JsonSyntaxException | IOException e) {
+    private JsonObject readIntoJsonObject(@NotNull InputStream reader) throws IOException {
+        try (var bufReader = new BufferedReader(new InputStreamReader(reader, StandardCharsets.UTF_8))) {
+            JsonObject jsonObject = gson.fromJson(bufReader, JsonObject.class);
+            return jsonObject == null ? new JsonObject() : jsonObject;
+        } catch (JsonIOException | JsonSyntaxException e) {
             throw new IOException(e);
         }
     }
 
-    private Preferences(@NotNull ConfigFile file) throws IOException {
-        this.sourceFile = file;
-
-        try (var reader = new InputStreamReader(file.openStream(), StandardCharsets.UTF_8)) {
-            JsonObject temp = new Gson().fromJson(reader, JsonObject.class);
-            this.jsonObject = Objects.isNull(temp) ? new JsonObject() : temp;
-        } catch (JsonIOException | JsonSyntaxException | IOException e) {
-            throw new IOException(e);
-        }
-    }
-
-    private Gson getGson() {
-        return gsonCache != null ? gsonCache : (gsonCache = new GsonBuilder()
+    private Gson createGson() {
+        return new GsonBuilder()
                 .registerTypeAdapter(Theme.class, new ThemeAdapter())
                 .registerTypeAdapter(LoginData.class, new LoginDataAdapter())
-                .create());
+                .create();
     }
 
     /**
@@ -110,18 +91,18 @@ public class Preferences {
 
     // ------> Methods for reading data
     public <T> T get(@NotNull Key<T> key) {
-        JsonElement jsonElement = this.jsonObject.get(key.jsonKey);
+        JsonElement jsonElement = this.jsonStorage.get(key.jsonKey);
         if (Objects.isNull(jsonElement)) {
             return key.defaultValue.get();
         }
 
-        T value = getGson().fromJson(jsonElement, key.type);
+        T value = gson.fromJson(jsonElement, key.type);
         return Objects.isNull(value) ? key.defaultValue.get() : value;
     }
 
     @SuppressWarnings("unused")
     public String getString(@NotNull String key, String defValue) {
-        JsonElement jsonElement = this.jsonObject.get(key);
+        JsonElement jsonElement = this.jsonStorage.get(key);
         if (Objects.isNull(jsonElement)) {
             return defValue;
         }
@@ -131,7 +112,7 @@ public class Preferences {
 
     @SuppressWarnings("unused")
     public boolean getBoolean(@NotNull String key, boolean defValue) {
-        JsonElement jsonElement = this.jsonObject.get(key);
+        JsonElement jsonElement = this.jsonStorage.get(key);
         if (Objects.isNull(jsonElement)) {
             return defValue;
         }
@@ -141,7 +122,7 @@ public class Preferences {
 
     @SuppressWarnings("unused")
     public int getInteger(@NotNull String key, int defValue) {
-        JsonElement jsonElement = this.jsonObject.get(key);
+        JsonElement jsonElement = this.jsonStorage.get(key);
         if (Objects.isNull(jsonElement)) {
             return defValue;
         }
@@ -151,7 +132,7 @@ public class Preferences {
 
     @SuppressWarnings("unused")
     public double getDouble(@NotNull String key, double defValue) {
-        JsonElement jsonElement = this.jsonObject.get(key);
+        JsonElement jsonElement = this.jsonStorage.get(key);
         if (Objects.isNull(jsonElement)) {
             return defValue;
         }
@@ -159,34 +140,38 @@ public class Preferences {
         return jsonElement.getAsDouble();
     }
 
-    public InputStream openInputStream() throws FileNotFoundException {
-        return new FileInputStream(this.sourceFile);
+    public InputStream openInputStream() throws IOException {
+        return inputFactory.get();
     }
 
     // <------
     @NotNull
     public static Preferences getPreferences() {
-        if (Objects.isNull(DEFAULT)) {
+        if (Objects.isNull(defaultPrefs)) {
             try {
                 ConfigFile configFile = ConfigFile.getConfigFile();
                 if (configFile.exists()) {
-                    DEFAULT = new Preferences(configFile);
+                    defaultPrefs = new Preferences(() -> new FileInputStream(configFile), () -> new FileOutputStream(configFile));
                 } else {
                     logger.error("Couldn't create configuration file");
                     //create an only in-memory preferences
-                    DEFAULT = new Preferences();
+                    defaultPrefs = new Preferences();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        return DEFAULT;
+        return defaultPrefs;
     }
 
     @NotNull
     public static Preferences getPreferences(File configFile) throws IOException {
-        return new Preferences(configFile);
+        return new Preferences(() -> new FileInputStream(configFile), () -> new FileOutputStream(configFile));
+    }
+
+    public static Preferences empty() throws IOException {
+        return new Preferences();
     }
 
     /**
@@ -219,45 +204,45 @@ public class Preferences {
                               @Nullable T value) {
             JsonElement element = null;
             if (value != null)
-                element = getGson().toJsonTree(value, key.type);
+                element = gson.toJsonTree(value, key.type);
 
-            Preferences.this.jsonObject.add(key.jsonKey, element);
+            Preferences.this.jsonStorage.add(key.jsonKey, element);
             return this;
         }
 
         public Editor putBoolean(String key, boolean value) {
-            Preferences.this.jsonObject.addProperty(key, value);
+            Preferences.this.jsonStorage.addProperty(key, value);
             return this;
         }
 
         public Editor putString(String key, String value) {
-            Preferences.this.jsonObject.addProperty(key, value);
+            Preferences.this.jsonStorage.addProperty(key, value);
             return this;
         }
 
         public Editor putInteger(String key, int value) {
-            Preferences.this.jsonObject.addProperty(key, value);
+            Preferences.this.jsonStorage.addProperty(key, value);
             return this;
         }
 
         public Editor putDouble(String key, double value) {
-            Preferences.this.jsonObject.addProperty(key, value);
+            Preferences.this.jsonStorage.addProperty(key, value);
             return this;
         }
 
         public Editor remove(@NotNull Key<?> key) {
-            Preferences.this.jsonObject.remove(key.jsonKey);
+            Preferences.this.jsonStorage.remove(key.jsonKey);
             return this;
         }
 
         public Editor remove(@NotNull String key) {
-            Preferences.this.jsonObject.remove(key);
+            Preferences.this.jsonStorage.remove(key);
             return this;
         }
 
         public Editor putFromInput(@NotNull Reader reader) {
             JsonObject readJson = new Gson().fromJson(reader, JsonObject.class);
-            readJson.keySet().forEach(key -> Preferences.this.jsonObject.add(key, readJson.get(key)));
+            readJson.keySet().forEach(key -> Preferences.this.jsonStorage.add(key, readJson.get(key)));
             return this;
         }
 
@@ -267,12 +252,11 @@ public class Preferences {
          * @throws IOException if some I/o exception occurs
          */
         public void commit() throws IOException {
-            if (sourceFile != null)
-                try (var writer = new JsonWriter(new BufferedWriter(new FileWriter(sourceFile, StandardCharsets.UTF_8)))) {
-                    new Gson().toJson(Preferences.this.jsonObject, writer);
-                } catch (JsonIOException e) {
-                    throw new IOException(e);
-                }
+            try (var writer = new JsonWriter(new BufferedWriter(new OutputStreamWriter(outputFactory.get(), StandardCharsets.UTF_8)))) {
+                gson.toJson(Preferences.this.jsonStorage, writer);
+            } catch (JsonIOException e) {
+                throw new IOException(e);
+            }
         }
 
         /**
