@@ -33,7 +33,6 @@ import java.util.function.Supplier;
  * @author Daniel Gyorffy
  * @see ConfigFile
  */
-
 public class Preferences {
 
     private static final Logger logger = LoggerFactory.getLogger(Preferences.class);
