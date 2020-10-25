@@ -19,7 +19,7 @@
             <children>
                 <HBox spacing="10.0">
                     <children>
-                        <RadioButton fx:id="darkThemeToggle" contentDisplay="BOTTOM" mnemonicParsing="false" selected="true" text="Dark">
+                        <RadioButton fx:id="darkThemeToggle" contentDisplay="BOTTOM" mnemonicParsing="false" selected="true" text="%segment.theme.dark">
                             <graphic>
                                 <ImageView fitHeight="245" fitWidth="233" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -34,7 +34,7 @@
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </RadioButton>
-                        <RadioButton fx:id="lightThemeToggle" contentDisplay="BOTTOM" mnemonicParsing="false" selected="true" text="Light" toggleGroup="$themeGroup">
+                        <RadioButton fx:id="lightThemeToggle" contentDisplay="BOTTOM" mnemonicParsing="false" selected="true" text="%segment.theme.light" toggleGroup="$themeGroup">
                             <graphic>
                                 <ImageView fitHeight="245.0" fitWidth="234.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
