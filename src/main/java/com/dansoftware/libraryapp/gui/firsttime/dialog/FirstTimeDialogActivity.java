@@ -5,6 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * Used for showing {@link FirstTimeDialog} with a {@link FirstTimeDialogWindow}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class FirstTimeDialogActivity {
 
     private final Preferences preferences;

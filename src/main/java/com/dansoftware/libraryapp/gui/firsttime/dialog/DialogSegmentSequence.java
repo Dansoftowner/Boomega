@@ -11,6 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The {@link SegmentSequence} for the {@link FirstTimeDialog}.
+ *
+ * @author Daniel Gyorffy
+ */
 class DialogSegmentSequence extends SegmentSequence {
 
     private static final Logger logger = LoggerFactory.getLogger(DialogSegmentSequence.class);

@@ -21,6 +21,9 @@ import java.util.Objects;
  * <p>
  * A {@link FirstTimeActivity} is not a GUI element itself, it only launches a GUI environment.
  *
+ * <p>
+ * Basically, it shows a {@link ConfigurationImportActivity} and then a {@link FirstTimeDialogActivity}.
+ *
  * @author Daniel Gyorffy
  */
 public class FirstTimeActivity {

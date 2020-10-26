@@ -13,6 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
+/**
+ * The {@link FirstTimeDialog} is used for configuring the app at the first run.
+ *
+ * @author Daniel Gyorffy
+ */
 public class FirstTimeDialog extends SegmentDialog implements Themeable {
 
     public FirstTimeDialog(@NotNull Preferences preferences) {
