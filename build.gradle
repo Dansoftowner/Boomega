@@ -88,7 +88,7 @@ dependencies {
     implementation 'io.github.typhon0:AnimateFX:1.2.1'
     implementation "com.sandec:mdfx:0.1.6"
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.2.7'
-    implementation 'com.github.Dansoftowner:SegmentDialogFX:1.0'
+    implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
 
     //nitrite database
     implementation 'org.dizitart:nitrite:3.4.2'

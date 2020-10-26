@@ -1,9 +1,9 @@
 package com.dansoftware.libraryapp.gui.firsttime.dialog.segment.theme;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
-import com.dansoftware.libraryapp.gui.firsttime.dialog.segment.FixedSegment;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.sgmdialog.FixedContentTitledSegment;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class ThemeSegment extends FixedSegment {
+public class ThemeSegment extends FixedContentTitledSegment {
 
     private final Preferences preferences;
 
@@ -22,7 +22,7 @@ public class ThemeSegment extends FixedSegment {
     }
 
     @Override
-    protected Node loadCenterContent() {
+    protected @NotNull Node createCenterContent() {
         return new ImprovedFXMLLoader(
                 new ThemeSegmentController(preferences),
                 getClass().getResource("ThemeSegment.fxml"),

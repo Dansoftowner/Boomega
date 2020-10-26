@@ -1,9 +1,9 @@
 package com.dansoftware.libraryapp.gui.firsttime.dialog.segment.lang;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
-import com.dansoftware.libraryapp.gui.firsttime.dialog.segment.FixedSegment;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.sgmdialog.FixedContentTitledSegment;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class LanguageSegment extends FixedSegment {
+public class LanguageSegment extends FixedContentTitledSegment {
 
     private final Preferences preferences;
 
@@ -23,7 +23,7 @@ public class LanguageSegment extends FixedSegment {
     }
 
     @Override
-    protected Node loadCenterContent() {
+    protected @NotNull Node createCenterContent() {
         return new ImprovedFXMLLoader(
                 new LanguageSegmentController(this.preferences),
                 getClass().getResource("LanguageSegment.fxml"),
