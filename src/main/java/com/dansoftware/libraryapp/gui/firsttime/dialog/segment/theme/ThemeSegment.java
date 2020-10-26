@@ -7,6 +7,11 @@ import com.dansoftware.libraryapp.locale.I18N;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Responsible {@link com.dansoftware.sgmdialog.Segment} for choosing the app-theme
+ *
+ * @author Daniel Gyorffy
+ */
 public class ThemeSegment extends FixedSegment {
 
     private final Preferences preferences;

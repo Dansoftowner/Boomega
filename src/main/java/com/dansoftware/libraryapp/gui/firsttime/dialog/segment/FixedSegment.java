@@ -4,6 +4,11 @@ import com.dansoftware.sgmdialog.TitledSegment;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Utility for creating a {@link TitledSegment} with fixed content.
+ *
+ * @author Daniel Gyorffy
+ */
 public abstract class FixedSegment extends TitledSegment {
 
     private Node centerContent;

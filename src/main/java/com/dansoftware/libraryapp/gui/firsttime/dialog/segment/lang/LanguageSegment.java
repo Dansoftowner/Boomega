@@ -7,6 +7,12 @@ import com.dansoftware.libraryapp.locale.I18N;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Responsible {@link com.dansoftware.sgmdialog.Segment} for choosing
+ * languages.
+ *
+ * @author Daniel Gyorffy
+ */
 public class LanguageSegment extends FixedSegment {
 
     private final Preferences preferences;

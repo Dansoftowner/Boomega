@@ -16,6 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the theme-segment in the {@link com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialog}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class ThemeSegmentController implements Initializable, ChangeListener<Toggle> {
 
     @FXML
