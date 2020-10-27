@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextDialog;
+import com.dansoftware.libraryapp.gui.context.ContextSupplier;
 import com.dansoftware.libraryapp.gui.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Gyorffy
  */
-public class EntryActivity implements Context, DatabaseLoginListener {
+public class EntryActivity implements ContextSupplier, DatabaseLoginListener {
 
     private static final List<WeakReference<EntryActivity>> instances =
             Collections.synchronizedList(new LinkedList<>());
@@ -60,7 +61,7 @@ public class EntryActivity implements Context, DatabaseLoginListener {
     @Override
     public void onDatabaseOpened(@NotNull Database database) {
         var mainActivity = new MainActivity(database);
-        this.subContext = mainActivity;
+        this.subContext = mainActivity.getContext();
         mainActivity.show();
     }
 
@@ -70,7 +71,7 @@ public class EntryActivity implements Context, DatabaseLoginListener {
     public void show() {
         if (!this.isShowing()) {
             var loginActivity = new LoginActivity(this, loginData, databaseTracker);
-            this.subContext = loginActivity;
+            this.subContext = loginActivity.getContext();
             loginActivity.show();
         }
     }
@@ -80,53 +81,8 @@ public class EntryActivity implements Context, DatabaseLoginListener {
     }
 
     @Override
-    public void showOverlay(Region region) {
-        if (subContext != null)
-            this.subContext.showOverlay(region);
-    }
-
-    @Override
-    public void showOverlay(Region region, boolean blocking) {
-        if (subContext != null)
-            this.subContext.showOverlay(region, blocking);
-    }
-
-    @Override
-    public void hideOverlay(Region region) {
-        if (subContext != null)
-            this.subContext.hideOverlay(region);
-    }
-
-    @Override
-    public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return this.subContext.showErrorDialog(title, message, onResult);
-    }
-
-    @Override
-    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        return this.subContext.showErrorDialog(title, message, exception, onResult);
-    }
-
-    @Override
-    public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return this.subContext.showInformationDialog(title, message, onResult);
-    }
-
-    @Override
-    public Window getContextWindow() {
-        return subContext != null ? subContext.getContextWindow() : null;
-    }
-
-    @Override
-    public void requestFocus() {
-        if (subContext != null)
-            this.subContext.requestFocus();
-    }
-
-    @Override
-    public void toFront() {
-        if (subContext != null)
-            this.subContext.toFront();
+    public @NotNull Context getContext() {
+        return subContext;
     }
 
     /**

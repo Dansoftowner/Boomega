@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextSupplier;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.info.InformationActivity;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
@@ -32,20 +33,19 @@ import java.util.Objects;
  *
  * @author Daniel Gyorffy
  */
-public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements Themeable {
+public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements Themeable, ContextSupplier {
 
-    private final Context context;
+    private final Context asContext;
     private final LoginForm loginForm;
     private final ObjectProperty<Database> createdDatabase;
 
-    public LoginView(@NotNull Context context,
-                     @NotNull DatabaseLoginListener databaseLoginListener,
+    public LoginView(@NotNull DatabaseLoginListener databaseLoginListener,
                      @NotNull LoginData loginData,
                      @NotNull DatabaseTracker tracker) {
         super(I18N.getGeneralWord("database.auth"), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
-        this.context = Objects.requireNonNull(context, "Context shouldn't be null");
+        this.asContext = Context.from(this);
         this.createdDatabase = new SimpleObjectProperty<>();
-        this.loginForm = new LoginForm(context, loginData, tracker, databaseLoginListener);
+        this.loginForm = new LoginForm(asContext, loginData, tracker, databaseLoginListener);
         this.setContent(new FormBase(loginForm, tracker));
         this.createToolbarControls();
         Theme.registerThemeable(this);
@@ -55,7 +55,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
         this.getToolbarControlsRight().add(new ToolbarItem(
                 new MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
                 event -> {
-                    var informationActivity = new InformationActivity(context);
+                    var informationActivity = new InformationActivity(asContext);
                     informationActivity.show();
                 }));
     }
@@ -71,6 +71,11 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
 
     public ReadOnlyObjectProperty<Database> createdDatabaseProperty() {
         return createdDatabase;
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return asContext;
     }
 
     /**

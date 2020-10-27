@@ -175,8 +175,8 @@ public abstract class ActivityLauncher implements Runnable {
                         temp.setSelectedDatabase(argument);
 
                         EntryActivity entryActivity = showEntryActivity();
-                        entryActivity.showErrorDialog(title, message, (Exception) t);
-                        onActivityLaunched(entryActivity);
+                        entryActivity.getContext().showErrorDialog(title, message, (Exception) t);
+                        onActivityLaunched(entryActivity.getContext());
                     });
                 }).auth(argument);
 
@@ -184,7 +184,7 @@ public abstract class ActivityLauncher implements Runnable {
         if (database != null) {
             logger.debug("signed in into the argument-database successfully, launching a MainActivity...");
             Platform.runLater(() -> {
-                onActivityLaunched(showMainActivity(database));
+                onActivityLaunched(showMainActivity(database).getContext());
             });
         }
 
@@ -199,7 +199,8 @@ public abstract class ActivityLauncher implements Runnable {
         //if there is an Activity opened with the database we focus on that,
         // otherwise we open a new activity for it
         MainActivity.getByDatabase(argument)
-                .ifPresentOrElse(MainActivity::toFront, () -> handleArgumentInit(argument));
+                .map(MainActivity::getContext)
+                .ifPresentOrElse(Context::toFront, () -> handleArgumentInit(argument));
     }
 
     /**
@@ -233,7 +234,7 @@ public abstract class ActivityLauncher implements Runnable {
         } else {
             //if auto login is turned off
             logger.debug("auto-login is turned off, launching a basic EntryActivity...");
-            Platform.runLater(() -> onActivityLaunched(showEntryActivity()));
+            Platform.runLater(() -> onActivityLaunched(showEntryActivity().getContext()));
         }
 
     }
@@ -252,7 +253,8 @@ public abstract class ActivityLauncher implements Runnable {
                     .stream()
                     .limit(1)
                     .findAny()
-                    .ifPresent(EntryActivity::toFront);
+                    .map(EntryActivity::getContext)
+                    .ifPresent(Context::toFront);
         });
     }
 
@@ -265,8 +267,8 @@ public abstract class ActivityLauncher implements Runnable {
                     logger.debug("failed signing into the database");
                     Platform.runLater(() -> {
                         EntryActivity entryActivity = showEntryActivity();
-                        entryActivity.showErrorDialog(title, message, (Exception) t);
-                        onActivityLaunched(entryActivity);
+                        entryActivity.getContext().showErrorDialog(title, message, (Exception) t);
+                        onActivityLaunched(entryActivity.getContext());
                     });
                 }).auth(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
 
@@ -275,7 +277,7 @@ public abstract class ActivityLauncher implements Runnable {
             logger.debug("signed in into the auto-login database successfully, launching a MainActivity...");
 
             Platform.runLater(() -> {
-                onActivityLaunched(showMainActivity(database));
+                onActivityLaunched(showMainActivity(database).getContext());
             });
         }
     }

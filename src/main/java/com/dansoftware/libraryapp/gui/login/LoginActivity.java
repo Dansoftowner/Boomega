@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.login;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextDialog;
+import com.dansoftware.libraryapp.gui.context.ContextSupplier;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
@@ -25,7 +26,7 @@ import java.util.function.Consumer;
  * <p>
  * It can be started by the {@link LoginActivity#show()}.
  */
-public class LoginActivity implements Context {
+public class LoginActivity implements ContextSupplier {
 
     private final BooleanProperty showing;
     private final LoginView loginView;
@@ -34,7 +35,7 @@ public class LoginActivity implements Context {
                          @NotNull LoginData loginData,
                          @NotNull DatabaseTracker tracker) {
         this.showing = new SimpleBooleanProperty();
-        this.loginView = new LoginView(this, databaseLoginListener, loginData, tracker);
+        this.loginView = new LoginView(databaseLoginListener, loginData, tracker);
     }
 
     /**
@@ -52,55 +53,12 @@ public class LoginActivity implements Context {
         return showing;
     }
 
-    @Override
     public boolean isShowing() {
         return showing.get();
     }
 
     @Override
-    public void showOverlay(Region region) {
-        this.loginView.showOverlay(region, false);
-        StackPane.setAlignment(region, Pos.CENTER);
-    }
-
-    @Override
-    public void showOverlay(Region region, boolean blocking) {
-        this.loginView.showOverlay(region, blocking);
-        StackPane.setAlignment(region, Pos.CENTER);
-    }
-
-    @Override
-    public void hideOverlay(Region region) {
-        this.loginView.hideOverlay(region);
-    }
-
-    @Override
-    public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(this.loginView.showErrorDialog(title, message, onResult));
-    }
-
-    @Override
-    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(this.loginView.showErrorDialog(title, message, exception, onResult));
-    }
-
-    @Override
-    public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(this.loginView.showInformationDialog(title, message, onResult));
-    }
-
-    @Override
-    public Window getContextWindow() {
-        return WindowUtils.getWindowOf(loginView);
-    }
-
-    @Override
-    public void requestFocus() {
-        WindowUtils.getWindowOptionalOf(this.loginView).ifPresent(Window::requestFocus);
-    }
-
-    @Override
-    public void toFront() {
-        WindowUtils.getStageOptionalOf(this.loginView).ifPresent(Stage::toFront);
+    public @NotNull Context getContext() {
+        return loginView.getContext();
     }
 }
