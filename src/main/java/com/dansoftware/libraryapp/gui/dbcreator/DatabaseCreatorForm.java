@@ -3,11 +3,12 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextDialog;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
-import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.FileGoodies;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -84,13 +85,13 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     @FXML
     private Button createBtn;
 
-    private final DatabaseCreatorView parent;
+    private final Context context;
     private final DatabaseTracker databaseTracker;
     private final ObjectProperty<DatabaseMeta> createdDatabase;
 
-    public DatabaseCreatorForm(@NotNull DatabaseCreatorView parent, @NotNull DatabaseTracker tracker) {
+    public DatabaseCreatorForm(@NotNull Context context, @NotNull DatabaseTracker tracker) {
         this.databaseTracker = Objects.requireNonNull(tracker, "DatabaseTracker shouldn't be null");
-        this.parent = Objects.requireNonNull(parent, "The parent shouldn't be null");
+        this.context = Objects.requireNonNull(context, "The Context shouldn't be null");
         this.createdDatabase = new SimpleObjectProperty<>();
         this.loadGui();
     }
@@ -159,7 +160,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
             NitriteDatabase.getAuthenticator()
                     .onFailed((title, message, t) -> {
                         this.createdDatabase.set(null);
-                        this.parent.showErrorDialog(title, message, (Exception) t, buttonType -> {
+                        this.context.showErrorDialog(title, message, (Exception) t, buttonType -> {
                         });
                     }).touch(createdDatabase, credentials);
             databaseTracker.addDatabase(createdDatabase);
@@ -248,7 +249,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
      */
     private class Validator {
 
-        private WorkbenchDialog lastDialog;
+        private ContextDialog lastDialog;
         private boolean dialogShowing;
 
         private final boolean dirIsEmpty;
@@ -289,7 +290,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                                      @NotNull Consumer<ButtonType> onResult,
                                      boolean criteria) {
             if (!dialogShowing && criteria) {
-                this.lastDialog = DatabaseCreatorForm.this.parent.showErrorDialog(dialogTitle, dialogMsg, buttonType -> {
+                this.lastDialog = DatabaseCreatorForm.this.context.showErrorDialog(dialogTitle, dialogMsg, buttonType -> {
                     onResult.accept(buttonType);
                     Validator.this.dialogShowing = false;
                 });
@@ -310,7 +311,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                                            @NotNull Consumer<ButtonType> onResult,
                                            boolean criteria) {
             if (!dialogShowing && criteria) {
-                this.lastDialog = DatabaseCreatorForm.this.parent.showInformationDialog(dialogTitle, dialogMsg, buttonType -> {
+                this.lastDialog = DatabaseCreatorForm.this.context.showInformationDialog(dialogTitle, dialogMsg, buttonType -> {
                     onResult.accept(buttonType);
                     Validator.this.dialogShowing = false;
                 });
@@ -373,7 +374,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                     new Credentials(usernameField.getText(), passwordField.getText())
             );
 
-            if (dialogShowing && lastDialog.getType() != WorkbenchDialog.Type.ERROR)
+            if (dialogShowing && lastDialog.getType() != ContextDialog.Type.ERROR)
                 lastDialog.setOnHidden(event -> actionWrapped.run());
             else if (!dialogShowing)
                 actionWrapped.run();

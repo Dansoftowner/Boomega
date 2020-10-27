@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextSupplier;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
@@ -17,14 +19,16 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements Themeable {
+public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements Themeable, ContextSupplier {
 
     private final DatabaseCreatorForm form;
+    private final Context asContext;
 
     public DatabaseCreatorView(@NotNull DatabaseTracker databaseTracker) {
         super(I18N.getGeneralWord("database.creator.title"),
                 new MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS));
-        super.setContent(this.form = new DatabaseCreatorForm(this, databaseTracker));
+        this.asContext = Context.from(this);
+        super.setContent(this.form = new DatabaseCreatorForm(asContext, databaseTracker));
         Theme.registerThemeable(this);
     }
 
@@ -35,5 +39,10 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
     @Override
     public void handleThemeApply(Theme newTheme) {
         newTheme.apply(this);
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return asContext;
     }
 }
