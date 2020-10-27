@@ -1,11 +1,12 @@
 package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.FXCollectionUtils;
+import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.gui.util.UIUtils;
 import com.dansoftware.libraryapp.locale.I18N;
-import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.jfilegoodies.explorer.FileExplorers;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -41,15 +42,15 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseManagerTable.class);
 
-    private final DatabaseManagerView parent;
+    private final Context context;
     private final DatabaseTracker databaseTracker;
 
     private final IntegerBinding itemsCount;
     private final IntegerBinding selectedItemsCount;
 
-    public DatabaseManagerTable(@NotNull DatabaseManagerView parent,
+    public DatabaseManagerTable(@NotNull Context context,
                                 @NotNull DatabaseTracker databaseTracker) {
-        this.parent = parent;
+        this.context = context;
         this.databaseTracker = databaseTracker;
         this.databaseTracker.registerObserver(this);
         this.itemsCount = Bindings.size(getItems());
@@ -309,7 +310,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
     private final class DBDeleteDialog {
 
         public void show(@NotNull ObservableList<DatabaseMeta> itemsToRemove) {
-            DatabaseManagerTable.this.parent.showDialog(WorkbenchDialog.builder(
+            /*WorkbenchDialog.builder(
                     I18N.getAlertMsg("db.manager.table.confirm.delete.title", itemsToRemove.size()),
                     new ListView<>(itemsToRemove),
                     ButtonType.YES,
@@ -318,7 +319,18 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                 if (Objects.equals(buttonType, ButtonType.YES)) {
                     itemsToRemove.forEach(DatabaseManagerTable.this.databaseTracker::removeDatabase);
                 }
-            }).build());
+            }).build()*/
+
+            DatabaseManagerTable.this.context.showDialog(
+                    I18N.getAlertMsg("db.manager.table.confirm.delete.title", itemsToRemove.size()),
+                    new ListView<>(itemsToRemove),
+                    buttonType -> {
+                        if (Objects.equals(buttonType, I18NButtonTypes.YES)) {
+                            itemsToRemove.forEach(DatabaseManagerTable.this.databaseTracker::removeDatabase);
+                        }
+                    },
+                    I18NButtonTypes.YES,
+                    I18NButtonTypes.NO);
         }
     }
 }
