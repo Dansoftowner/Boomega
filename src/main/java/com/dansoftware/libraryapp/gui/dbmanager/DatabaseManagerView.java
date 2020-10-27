@@ -24,9 +24,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> implements Themeable, ContextSupplier {
-
-    private final Context asContext;
+public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> implements Themeable {
 
     /**
      * Creates a {@link DatabaseManagerView} with a list of database-information ({@link DatabaseMeta}) objects.
@@ -35,8 +33,7 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
      */
     public DatabaseManagerView(@NotNull DatabaseTracker databaseTracker) {
         super(I18N.getGeneralWord("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
-        this.asContext = Context.from(this);
-        setContent(new DatabaseManagerTable(asContext, databaseTracker));
+        setContent(new DatabaseManagerTable(Context.from(this), databaseTracker));
         createToolbarControls();
         Theme.registerThemeable(this);
     }
@@ -64,10 +61,5 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
     @Override
     public void handleThemeApply(Theme newTheme) {
         newTheme.apply(this);
-    }
-
-    @Override
-    public @NotNull Context getContext() {
-        return null;
     }
 }
