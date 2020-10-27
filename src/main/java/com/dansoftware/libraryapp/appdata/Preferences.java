@@ -6,6 +6,7 @@ import com.dansoftware.libraryapp.appdata.theme.ThemeAdapter;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.util.function.UncaughtSupplier;
 import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,8 +62,9 @@ public class Preferences {
     }
 
     private JsonObject readIntoJsonObject(@NotNull InputStream reader) throws IOException {
-        try (var bufReader = new BufferedReader(new InputStreamReader(reader, StandardCharsets.UTF_8))) {
-            JsonObject jsonObject = gson.fromJson(bufReader, JsonObject.class);
+        try (JsonReader jsonReader = new JsonReader(new BufferedReader(new InputStreamReader(reader, StandardCharsets.UTF_8)))) {
+            jsonReader.setLenient(true);
+            JsonObject jsonObject = gson.fromJson(jsonReader, JsonObject.class);
             return jsonObject == null ? new JsonObject() : jsonObject;
         } catch (JsonIOException | JsonSyntaxException e) {
             throw new IOException(e);
