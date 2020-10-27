@@ -310,17 +310,6 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
     private final class DBDeleteDialog {
 
         public void show(@NotNull ObservableList<DatabaseMeta> itemsToRemove) {
-            /*WorkbenchDialog.builder(
-                    I18N.getAlertMsg("db.manager.table.confirm.delete.title", itemsToRemove.size()),
-                    new ListView<>(itemsToRemove),
-                    ButtonType.YES,
-                    ButtonType.NO
-            ).onResult(buttonType -> {
-                if (Objects.equals(buttonType, ButtonType.YES)) {
-                    itemsToRemove.forEach(DatabaseManagerTable.this.databaseTracker::removeDatabase);
-                }
-            }).build()*/
-
             DatabaseManagerTable.this.context.showDialog(
                     I18N.getAlertMsg("db.manager.table.confirm.delete.title", itemsToRemove.size()),
                     new ListView<>(itemsToRemove),
