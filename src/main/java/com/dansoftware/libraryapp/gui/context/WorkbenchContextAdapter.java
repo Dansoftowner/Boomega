@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
+import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
@@ -51,6 +52,11 @@ final class WorkbenchContextAdapter implements Context {
     @Override
     public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
         return ContextDialog.from(workbench.showDialog(buildInformationDialog(title, message, onResult)));
+    }
+
+    @Override
+    public @NotNull ContextDialog showDialog(String title, Node content, Consumer<ButtonType> onResult, ButtonType... buttonTypes) {
+        return ContextDialog.from(workbench.showDialog(WorkbenchDialog.builder(title, content, buttonTypes).onResult(onResult).build()));
     }
 
     @Override
