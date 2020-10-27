@@ -114,54 +114,6 @@ public interface Context {
     }
 
     static Context from(@NotNull Workbench workbench) {
-        return new Context() {
-            @Override
-            public void showOverlay(Region region, boolean blocking) {
-                workbench.showOverlay(region, blocking);
-            }
-
-            @Override
-            public void hideOverlay(Region region) {
-                workbench.hideOverlay(region);
-            }
-
-            @Override
-            public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-                return ContextDialog.from(workbench.showErrorDialog(title, message, onResult));
-            }
-
-            @Override
-            public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-                return ContextDialog.from(workbench.showErrorDialog(title, message, exception, onResult));
-            }
-
-            @Override
-            public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-                return ContextDialog.from(workbench.showInformationDialog(title, message, onResult));
-            }
-
-            @Override
-            public Window getContextWindow() {
-                return WindowUtils.getWindowOf(workbench);
-            }
-
-            @Override
-            public void requestFocus() {
-                getContextWindow().requestFocus();
-            }
-
-            @Override
-            public void toFront() {
-                Window contextWindow = getContextWindow();
-                if (contextWindow instanceof Stage) {
-                    ((Stage) contextWindow).toFront();
-                }
-            }
-
-            @Override
-            public boolean isShowing() {
-                return getContextWindow().isShowing();
-            }
-        };
+        return new WorkbenchContextAdapter(workbench);
     }
 }
