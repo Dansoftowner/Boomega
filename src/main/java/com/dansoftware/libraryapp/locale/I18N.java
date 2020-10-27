@@ -28,7 +28,7 @@ public class I18N {
     private static final String BUTTON_TYPES = "com.dansoftware.libraryapp.locale.ButtonTypes";
 
     static {
-        ReflectionUtils.invokeStaticBlock(FXI18N.class);
+        //ReflectionUtils.invokeStaticBlock(FXI18N.class);
         availableLocales = calcAvailableLocales();
     }
 

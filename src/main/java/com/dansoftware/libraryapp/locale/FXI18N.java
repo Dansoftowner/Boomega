@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 final class FXI18N {
 
     private static final Logger logger = LoggerFactory.getLogger(FXI18N.class);
