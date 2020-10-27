@@ -25,6 +25,7 @@ public class I18N {
     private static final String FXML_VALUES = "com.dansoftware.libraryapp.locale.FXMLValues";
     private static final String GENERAL_WORDS = "com.dansoftware.libraryapp.locale.GeneralWords";
     private static final String ALERT_MESSAGES = "com.dansoftware.libraryapp.locale.AlertMessages";
+    private static final String BUTTON_TYPES = "com.dansoftware.libraryapp.locale.ButtonTypes";
 
     static {
         ReflectionUtils.invokeStaticBlock(FXI18N.class);
@@ -67,6 +68,11 @@ public class I18N {
     public static String getProgressMessage(String key, Object... args) {
         if (ArrayUtils.isEmpty(args)) return getProgressMessages().getString(key);
         return getFormat(getProgressMessages(), key, args);
+    }
+
+    @NotNull
+    public static ResourceBundle getButtonTypeValues() {
+        return ResourceBundle.getBundle(BUTTON_TYPES, Locale.getDefault(), getBundleLoader());
     }
 
     public static ResourceBundle getWindowTitles() throws MissingResourceException {
