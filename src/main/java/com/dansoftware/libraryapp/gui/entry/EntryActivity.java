@@ -2,6 +2,8 @@ package com.dansoftware.libraryapp.gui.entry;
 
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextDialog;
 import com.dansoftware.libraryapp.gui.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
@@ -96,21 +98,18 @@ public class EntryActivity implements Context, DatabaseLoginListener {
     }
 
     @Override
-    public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-        if (subContext != null)
-            this.subContext.showErrorDialog(title, message, onResult);
+    public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
+        return this.subContext.showErrorDialog(title, message, onResult);
     }
 
     @Override
-    public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        if (subContext != null)
-            this.subContext.showErrorDialog(title, message, exception, onResult);
+    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
+        return this.subContext.showErrorDialog(title, message, exception, onResult);
     }
 
     @Override
-    public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        if (subContext != null)
-            this.subContext.showInformationDialog(title, message, onResult);
+    public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+        return this.subContext.showInformationDialog(title, message, onResult);
     }
 
     @Override

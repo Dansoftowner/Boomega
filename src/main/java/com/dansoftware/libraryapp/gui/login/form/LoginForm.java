@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.login.form;
 
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;

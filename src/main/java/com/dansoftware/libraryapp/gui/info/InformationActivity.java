@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.info;
 
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;

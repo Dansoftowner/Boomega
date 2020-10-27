@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.info.dependency;
 
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
 import org.jetbrains.annotations.NotNull;
 
 /**

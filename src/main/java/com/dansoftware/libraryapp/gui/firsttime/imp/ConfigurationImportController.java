@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.firsttime.imp;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.PreferencesImporter;
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;

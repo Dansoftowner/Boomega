@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.gui.login;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.info.InformationActivity;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;

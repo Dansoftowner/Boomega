@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.firsttime.imp;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;

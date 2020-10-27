@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.entry;
+package com.dansoftware.libraryapp.gui.context;
 
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
@@ -49,7 +49,8 @@ public interface Context {
      * @param message  the message of the dialog
      * @param onResult the action when the user clicks the OK button
      */
-    void showErrorDialog(String title,
+    @NotNull
+    ContextDialog showErrorDialog(String title,
                          String message,
                          Consumer<ButtonType> onResult);
 
@@ -62,7 +63,8 @@ public interface Context {
      * @param exception the exception that caused the dialog
      * @param onResult  the action when the user clicks the OK button
      */
-    void showErrorDialog(String title,
+    @NotNull
+    ContextDialog showErrorDialog(String title,
                          String message,
                          Exception exception,
                          Consumer<ButtonType> onResult);
@@ -74,7 +76,8 @@ public interface Context {
      * @param message  the message
      * @param onResult the action that handles the button click-s on the dialog
      */
-    void showInformationDialog(String title,
+    @NotNull
+    ContextDialog showInformationDialog(String title,
                                String message,
                                Consumer<ButtonType> onResult);
 
@@ -123,18 +126,18 @@ public interface Context {
             }
 
             @Override
-            public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-                workbench.showErrorDialog(title, message, onResult);
+            public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
+                return ContextDialog.from(workbench.showErrorDialog(title, message, onResult));
             }
 
             @Override
-            public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-                workbench.showErrorDialog(title, message, exception, onResult);
+            public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
+                return ContextDialog.from(workbench.showErrorDialog(title, message, exception, onResult));
             }
 
             @Override
-            public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-                workbench.showInformationDialog(title, message, onResult);
+            public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+                return ContextDialog.from(workbench.showInformationDialog(title, message, onResult));
             }
 
             @Override

@@ -1,7 +1,8 @@
 package com.dansoftware.libraryapp.gui.login;
 
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextDialog;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
@@ -74,18 +75,18 @@ public class LoginActivity implements Context {
     }
 
     @Override
-    public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-        this.loginView.showErrorDialog(title, message, onResult);
+    public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
+        return ContextDialog.from(this.loginView.showErrorDialog(title, message, onResult));
     }
 
     @Override
-    public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        this.loginView.showErrorDialog(title, message, exception, onResult);
+    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
+        return ContextDialog.from(this.loginView.showErrorDialog(title, message, exception, onResult));
     }
 
     @Override
-    public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        this.loginView.showInformationDialog(title, message, onResult);
+    public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+        return ContextDialog.from(this.loginView.showInformationDialog(title, message, onResult));
     }
 
     @Override

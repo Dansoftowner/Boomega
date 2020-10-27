@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.info;
 
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.info.dependency.DependencyViewerActivity;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;

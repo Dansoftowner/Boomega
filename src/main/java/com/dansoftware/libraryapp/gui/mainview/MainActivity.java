@@ -2,7 +2,8 @@ package com.dansoftware.libraryapp.gui.mainview;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
-import com.dansoftware.libraryapp.gui.entry.Context;
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextDialog;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -53,18 +54,18 @@ public class MainActivity implements Context {
     }
 
     @Override
-    public void showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
-
+    public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
+        return null;
     }
 
     @Override
-    public void showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-
+    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
+        return null;
     }
 
     @Override
-    public void showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-
+    public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+        return null;
     }
 
     @Override
