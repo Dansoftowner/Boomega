@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.context;
 
-import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
+import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
@@ -51,8 +51,8 @@ public interface Context {
      */
     @NotNull
     ContextDialog showErrorDialog(String title,
-                         String message,
-                         Consumer<ButtonType> onResult);
+                                  String message,
+                                  Consumer<ButtonType> onResult);
 
     /**
      * Shows an error alert dialog. Also, it can show
@@ -65,9 +65,9 @@ public interface Context {
      */
     @NotNull
     ContextDialog showErrorDialog(String title,
-                         String message,
-                         Exception exception,
-                         Consumer<ButtonType> onResult);
+                                  String message,
+                                  Exception exception,
+                                  Consumer<ButtonType> onResult);
 
     /**
      * Shows an information dialog.
@@ -78,8 +78,11 @@ public interface Context {
      */
     @NotNull
     ContextDialog showInformationDialog(String title,
-                               String message,
-                               Consumer<ButtonType> onResult);
+                                        String message,
+                                        Consumer<ButtonType> onResult);
+
+    @NotNull
+    ContextDialog showDialog(String title, Node content, Consumer<ButtonType> onResult, ButtonType... buttonTypes);
 
     Window getContextWindow();
 
