@@ -20,6 +20,7 @@ public class I18N {
 
     private static final String WINDOW_TITLES = "com.dansoftware.libraryapp.locale.WindowTitles";
     private static final String FIRST_TIME_DIALOG = "com.dansoftware.libraryapp.locale.FirstTimeDialog";
+    private static final String UPDATE_DIALOG = "com.dansoftware.libraryapp.locale.UpdateDialog";
     private static final String PROGRESS_MESSAGES = "com.dansoftware.libraryapp.locale.ProgressMessages";
     private static final String FXML_VALUES = "com.dansoftware.libraryapp.locale.FXMLValues";
     private static final String GENERAL_WORDS = "com.dansoftware.libraryapp.locale.GeneralWords";
@@ -71,40 +72,48 @@ public class I18N {
 
     @NotNull
     public static ResourceBundle getButtonTypeValues() {
-        return ResourceBundle.getBundle(BUTTON_TYPES, Locale.getDefault(), getBundleLoader());
+        return getBundle(BUTTON_TYPES);
     }
 
     public static ResourceBundle getWindowTitles() throws MissingResourceException {
-        return ResourceBundle.getBundle(WINDOW_TITLES, Locale.getDefault(), getBundleLoader());
+        return getBundle(WINDOW_TITLES);
     }
 
     @NotNull
     public static ResourceBundle getFirstTimeDialogValues() {
-        return ResourceBundle.getBundle(FIRST_TIME_DIALOG, Locale.getDefault(), getBundleLoader());
+        return getBundle(FIRST_TIME_DIALOG);
     }
 
     @NotNull
     public static ResourceBundle getProgressMessages() throws MissingResourceException {
-        return ResourceBundle.getBundle(PROGRESS_MESSAGES, Locale.getDefault(), getBundleLoader());
+        return getBundle(PROGRESS_MESSAGES);
     }
 
     @NotNull
     public static ResourceBundle getFXMLValues() throws MissingResourceException {
-        return ResourceBundle.getBundle(FXML_VALUES, Locale.getDefault(), getBundleLoader());
+        return getBundle(FXML_VALUES);
     }
 
     @NotNull
     public static ResourceBundle getGeneralWords() throws MissingResourceException {
-        return ResourceBundle.getBundle(GENERAL_WORDS, Locale.getDefault(), getBundleLoader());
+        return getBundle(GENERAL_WORDS);
     }
 
     @NotNull
     public static ResourceBundle getAlertMessages() throws MissingResourceException {
-        return ResourceBundle.getBundle(ALERT_MESSAGES, Locale.getDefault(), getBundleLoader());
+        return getBundle(ALERT_MESSAGES);
+    }
+
+    @NotNull
+    public static ResourceBundle getUpdateDialogValues() {
+        return getBundle(UPDATE_DIALOG);
+    }
+
+    private static ResourceBundle getBundle(@NotNull String baseName) {
+        return ResourceBundle.getBundle(baseName, Locale.getDefault(), getBundleLoader());
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
         return MessageFormat.format(resourceBundle.getString(key), args);
     }
-
 }
