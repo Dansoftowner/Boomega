@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**

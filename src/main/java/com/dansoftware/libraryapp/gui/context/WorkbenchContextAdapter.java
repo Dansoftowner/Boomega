@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 /**
  * Encapsulates a {@link Workbench} into a {@link Context} implementation.
- *
+ * <p>
  * Used by {@link Context#from(Workbench)}.
  *
  * @author Daniel Gyorffy

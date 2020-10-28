@@ -65,8 +65,8 @@ public abstract class ActivityLauncher implements Runnable {
     /**
      * Creates an ActivityLauncher with a custom {@link LauncherMode}.
      *
-     * @param mode the "launcher-mode" that defines the behaviour
-     * @param preferences the {@link Preferences} object that stores the application configurations.
+     * @param mode            the "launcher-mode" that defines the behaviour
+     * @param preferences     the {@link Preferences} object that stores the application configurations.
      * @param databaseTracker the {@link DatabaseTracker} object that tracks the opened databases.
      * @see DatabaseTracker#getGlobal()
      */
@@ -79,11 +79,10 @@ public abstract class ActivityLauncher implements Runnable {
     /**
      * Creates an ActivityLauncher with custom {@link LauncherMode} and allows us to pass the application-arguments.
      *
-     * @param mode   the "launcher-mode" that defines the behaviour
-     * @param preferences the {@link Preferences} object that stores the application configurations.
+     * @param mode            the "launcher-mode" that defines the behaviour
+     * @param preferences     the {@link Preferences} object that stores the application configurations.
      * @param databaseTracker the {@link DatabaseTracker} object that tracks the opened databases.
-     * @param params the program-arguments
-     *
+     * @param params          the program-arguments
      * @see ArgumentTransformer#transform(List)
      * @see DatabaseTracker#getGlobal()
      */

@@ -26,7 +26,6 @@ import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Objects;
 
 /**
  * A LoginView is a graphical object that can handle

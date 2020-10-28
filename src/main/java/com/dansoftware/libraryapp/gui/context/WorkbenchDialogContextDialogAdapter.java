@@ -24,7 +24,7 @@ class WorkbenchDialogContextDialogAdapter implements ContextDialog {
 
     private final WorkbenchDialog workbenchDialog;
 
-     WorkbenchDialogContextDialogAdapter(@NotNull WorkbenchDialog workbenchDialog) {
+    WorkbenchDialogContextDialogAdapter(@NotNull WorkbenchDialog workbenchDialog) {
         this.workbenchDialog = Objects.requireNonNull(workbenchDialog);
     }
 
