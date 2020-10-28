@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.login;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
@@ -40,12 +41,13 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
     private final ObjectProperty<Database> createdDatabase;
 
     public LoginView(@NotNull DatabaseLoginListener databaseLoginListener,
+                     @NotNull Preferences preferences,
                      @NotNull LoginData loginData,
                      @NotNull DatabaseTracker tracker) {
         super(I18N.getGeneralWord("database.auth"), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
         this.asContext = Context.from(this);
         this.createdDatabase = new SimpleObjectProperty<>();
-        this.loginForm = new LoginForm(asContext, loginData, tracker, databaseLoginListener);
+        this.loginForm = new LoginForm(asContext, preferences, loginData, tracker, databaseLoginListener);
         this.setContent(new FormBase(loginForm, tracker));
         this.createToolbarControls();
         Theme.registerThemeable(this);

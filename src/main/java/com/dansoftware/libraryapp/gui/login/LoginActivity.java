@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.login;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextDialog;
@@ -18,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -28,14 +30,17 @@ import java.util.function.Consumer;
  */
 public class LoginActivity implements ContextSupplier {
 
+    private final Preferences preferences;
     private final BooleanProperty showing;
     private final LoginView loginView;
 
     public LoginActivity(@NotNull DatabaseLoginListener databaseLoginListener,
+                         @NotNull Preferences preferences,
                          @NotNull LoginData loginData,
                          @NotNull DatabaseTracker tracker) {
         this.showing = new SimpleBooleanProperty();
-        this.loginView = new LoginView(databaseLoginListener, loginData, tracker);
+        this.preferences = Objects.requireNonNull(preferences);
+        this.loginView = new LoginView(databaseLoginListener, preferences, loginData, tracker);
     }
 
     /**
@@ -43,7 +48,7 @@ public class LoginActivity implements ContextSupplier {
      */
     public void show() {
         if (!this.isShowing()) {
-            LoginWindow loginWindow = new LoginWindow(loginView);
+            LoginWindow loginWindow = new LoginWindow(loginView, preferences);
             this.showing.bind(loginWindow.showingProperty());
             loginWindow.show();
         }

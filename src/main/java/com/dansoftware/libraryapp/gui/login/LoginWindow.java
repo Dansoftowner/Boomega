@@ -26,10 +26,12 @@ class LoginWindow extends LibraryAppStage
 
     private static final Logger logger = LoggerFactory.getLogger(LoginWindow.class);
 
+    private final Preferences preferences;
     private final LoginView loginView;
 
-    public LoginWindow(@NotNull LoginView root) {
+    public LoginWindow(@NotNull LoginView root, @NotNull Preferences preferences) {
         super("window.login.title", root);
+        this.preferences = Objects.requireNonNull(preferences);
         this.loginView = Objects.requireNonNull(root, "LoginView shouldn't be null");
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
         this.setMaximized(true);
@@ -38,6 +40,6 @@ class LoginWindow extends LibraryAppStage
     @Override
     public void handle(WindowEvent event) {
         logger.debug("Starting a new thread for saving loginData...");
-        new LoginDataSaving(Preferences.getPreferences(), loginView.getLoginData()).start();
+        new LoginDataSaving(preferences, loginView.getLoginData()).start();
     }
 }

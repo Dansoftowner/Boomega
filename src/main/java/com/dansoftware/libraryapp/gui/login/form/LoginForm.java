@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.login.form;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
@@ -13,10 +14,11 @@ public class LoginForm extends Group {
     private final FrameFormController fxmlController;
 
     public LoginForm(@NotNull Context context,
+                     @NotNull Preferences preferences,
                      @NotNull LoginData loginData,
                      @NotNull DatabaseTracker databaseTracker,
                      @NotNull DatabaseLoginListener databaseLoginListener) {
-        this.fxmlController = new FrameFormController(context, loginData, databaseTracker, databaseLoginListener);
+        this.fxmlController = new FrameFormController(context, preferences, loginData, databaseTracker, databaseLoginListener);
         var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("FrameForm.fxml"), I18N.getFXMLValues());
         this.getChildren().add(fxmlLoader.load());
     }

@@ -34,7 +34,10 @@ public class InternalFormController implements Initializable {
     @FXML
     private CheckBox rememberBox;
 
+
     private final Context context;
+
+    private final Preferences preferences;
 
     private final LoginData loginData;
 
@@ -43,10 +46,12 @@ public class InternalFormController implements Initializable {
     private final DatabaseLoginListener databaseLoginListener;
 
     public InternalFormController(@NotNull Context context,
+                                  @NotNull Preferences preferences,
                                   @NotNull LoginData loginData,
                                   @NotNull DatabaseLoginListener databaseLoginListener,
                                   @NotNull Supplier<DatabaseMeta> selectedItemAccessor) {
         this.context = Objects.requireNonNull(context, "Context shouldn't be null");
+        this.preferences = Objects.requireNonNull(preferences);
         this.loginData = Objects.requireNonNull(loginData, "LoginData shouldn't be null");
         this.selectedItemAccessor = Objects.requireNonNull(selectedItemAccessor, "SelectedItemAccessor shouldn't be null");
         this.databaseLoginListener = Objects.requireNonNull(databaseLoginListener, "DatabaseLoginListener shouldn't be null");
@@ -91,7 +96,7 @@ public class InternalFormController implements Initializable {
         if (database != null) {
             //creating the database was successful
             logger.debug("Signing in was successful; closing the LoginWindow");
-            new LoginDataSaving(Preferences.getPreferences(), loginData).start();
+            new LoginDataSaving(preferences, loginData).start();
             databaseLoginListener.onDatabaseOpened(database);
             context.close();
         }

@@ -1,16 +1,13 @@
 package com.dansoftware.libraryapp.gui.entry;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.context.ContextDialog;
 import com.dansoftware.libraryapp.gui.context.ContextSupplier;
 import com.dansoftware.libraryapp.gui.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.Region;
-import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
@@ -18,7 +15,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +39,7 @@ public class EntryActivity implements ContextSupplier, DatabaseLoginListener {
             Collections.synchronizedList(new LinkedList<>());
 
     private Context subContext;
+    private final Preferences preferences;
     private final LoginData loginData;
     private final DatabaseTracker databaseTracker;
 
@@ -52,8 +49,11 @@ public class EntryActivity implements ContextSupplier, DatabaseLoginListener {
      * @param loginData       the login-data object that will be passed to the {@link LoginActivity}
      * @param databaseTracker the {@link DatabaseTracker} object for observing other databases
      */
-    public EntryActivity(@NotNull LoginData loginData, @NotNull DatabaseTracker databaseTracker) {
+    public EntryActivity(@NotNull Preferences preferences,
+                         @NotNull LoginData loginData,
+                         @NotNull DatabaseTracker databaseTracker) {
         instances.add(new WeakReference<>(this));
+        this.preferences = preferences;
         this.loginData = loginData;
         this.databaseTracker = databaseTracker;
     }
@@ -70,7 +70,7 @@ public class EntryActivity implements ContextSupplier, DatabaseLoginListener {
      */
     public void show() {
         if (!this.isShowing()) {
-            var loginActivity = new LoginActivity(this, loginData, databaseTracker);
+            var loginActivity = new LoginActivity(this, preferences, loginData, databaseTracker);
             this.subContext = loginActivity.getContext();
             loginActivity.show();
         }

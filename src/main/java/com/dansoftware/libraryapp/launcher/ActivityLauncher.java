@@ -298,7 +298,7 @@ public abstract class ActivityLauncher implements Runnable {
     }
 
     private EntryActivity newBasicEntryActivity() {
-        return new EntryActivity(getLoginData(), databaseTracker);
+        return new EntryActivity(this.preferences, getLoginData(), databaseTracker);
     }
 
     @Override

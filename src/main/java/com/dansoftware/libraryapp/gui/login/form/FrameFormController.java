@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.login.form;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorActivity;
@@ -55,20 +56,20 @@ public class FrameFormController
     private final Set<DatabaseMeta> databaseMetaSet;
 
     private final Context context;
-
+    private final Preferences preferences;
     private final LoginData loginData;
-
     private final DatabaseTracker databaseTracker;
-
     private final DatabaseLoginListener databaseLoginListener;
 
     private Node internalForm;
 
     public FrameFormController(@NotNull Context context,
+                               @NotNull Preferences preferences,
                                @NotNull LoginData loginData,
                                @NotNull DatabaseTracker databaseTracker,
                                @NotNull DatabaseLoginListener databaseLoginListener) {
         this.context = Objects.requireNonNull(context, "The context shouldn't be null!");
+        this.preferences = Objects.requireNonNull(preferences);
         this.loginData = Objects.requireNonNull(loginData, "LoginData shouldn't be null");
         this.databaseTracker = Objects.requireNonNull(databaseTracker, "DatabaseTracker shouldn't be null");
         this.databaseLoginListener = Objects.requireNonNull(databaseLoginListener, "DatabaseLoginListener shouldn't be null");
@@ -111,6 +112,7 @@ public class FrameFormController
         if (internalForm == null) {
             var fxmlController = new InternalFormController(
                     context,
+                    preferences,
                     loginData,
                     databaseLoginListener,
                     () -> databaseChooser.getSelectionModel().getSelectedItem()
