@@ -1,0 +1,34 @@
+package com.dansoftware.libraryapp.gui.updateview.segment.notification;
+
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.update.UpdateInformation;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import org.jetbrains.annotations.NotNull;
+
+import java.net.URL;
+import java.util.Objects;
+import java.util.ResourceBundle;
+
+public class NotificationSegmentController implements Initializable {
+
+    @FXML
+    private Label currentVersionLabel;
+    @FXML
+    private Label nextVersionLabel;
+
+    private final Context context;
+    private final UpdateInformation updateInformation;
+
+    NotificationSegmentController(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
+        this.context = Objects.requireNonNull(context);
+        this.updateInformation = Objects.requireNonNull(updateInformation);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        currentVersionLabel.setText(System.getProperty("libraryapp.version"));
+        nextVersionLabel.setText(updateInformation.getVersion());
+    }
+}
