@@ -12,6 +12,7 @@ import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class InstanceService implements MessageHandler {
     public String handle(String arg) {
         logger.debug("message from another process: {}", arg);
         logger.debug("starting an ActivityLauncher...");
-        new ActivityLauncherImpl(arg).launch();
+        new ActivityLauncherImpl(arg, Preferences.getPreferences(), DatabaseTracker.getGlobal()).launch();
         return null;
     }
 
@@ -70,8 +71,10 @@ public class InstanceService implements MessageHandler {
 
         private final LoginData loginData;
 
-        public ActivityLauncherImpl(@Nullable String arg) {
-            super(LauncherMode.ALREADY_RUNNING, Collections.singletonList(arg));
+        public ActivityLauncherImpl(@Nullable String arg,
+                                    @NotNull Preferences preferences,
+                                    @NotNull DatabaseTracker databaseTracker) {
+            super(LauncherMode.ALREADY_RUNNING, preferences, databaseTracker, Collections.singletonList(arg));
             this.loginData = buildLoginData();
         }
 

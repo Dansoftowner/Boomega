@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.launcher;
 
+import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
@@ -51,56 +52,46 @@ public abstract class ActivityLauncher implements Runnable {
 
     private final LauncherMode mode;
     private final DatabaseMeta argument;
+    private final Preferences preferences;
     private final DatabaseTracker databaseTracker;
 
     /**
      * Creates a basic ActivityLauncher with the {@link LauncherMode#INIT} mode.
      */
-    public ActivityLauncher() {
-        this(LauncherMode.INIT);
+    public ActivityLauncher(@NotNull Preferences preferences, @NotNull DatabaseTracker databaseTracker) {
+        this(LauncherMode.INIT, preferences, databaseTracker);
     }
 
     /**
      * Creates an ActivityLauncher with a custom {@link LauncherMode}.
      *
-     * <p>
-     * It uses the global {@link DatabaseTracker} object for launching the activities
-     *
      * @param mode the "launcher-mode" that defines the behaviour
+     * @param preferences the {@link Preferences} object that stores the application configurations.
+     * @param databaseTracker the {@link DatabaseTracker} object that tracks the opened databases.
      * @see DatabaseTracker#getGlobal()
      */
-    public ActivityLauncher(@NotNull LauncherMode mode) {
-        this(mode, Collections.emptyList());
+    public ActivityLauncher(@NotNull LauncherMode mode,
+                            @NotNull Preferences preferences,
+                            @NotNull DatabaseTracker databaseTracker) {
+        this(mode, preferences, databaseTracker, Collections.emptyList());
     }
 
     /**
      * Creates an ActivityLauncher with custom {@link LauncherMode} and allows us to pass the application-arguments.
      *
-     * <p>
-     * It uses the global {@link DatabaseTracker} object for launching the activities.
-     *
      * @param mode   the "launcher-mode" that defines the behaviour
+     * @param preferences the {@link Preferences} object that stores the application configurations.
+     * @param databaseTracker the {@link DatabaseTracker} object that tracks the opened databases.
      * @param params the program-arguments
+     *
      * @see ArgumentTransformer#transform(List)
      * @see DatabaseTracker#getGlobal()
      */
-    public ActivityLauncher(@NotNull LauncherMode mode, @Nullable List<String> params) {
-        this(mode, ArgumentTransformer.transform(params));
-    }
-
-    /**
-     * Creates an ActivityLauncher with custom {@link LauncherMode} and with a {@link DatabaseMeta} object
-     * that describes the database that the ActivityLauncher should launch.
-     *
-     * <p>
-     * It uses the global {@link DatabaseTracker} object for launching the activities.
-     *
-     * @param mode         the "launcher-mode" that defines the behaviour
-     * @param databaseMeta the database-meta object
-     * @see DatabaseTracker#getGlobal()
-     */
-    public ActivityLauncher(@NotNull LauncherMode mode, @Nullable DatabaseMeta databaseMeta) {
-        this(mode, databaseMeta, DatabaseTracker.getGlobal());
+    public ActivityLauncher(@NotNull LauncherMode mode,
+                            @NotNull Preferences preferences,
+                            @NotNull DatabaseTracker databaseTracker,
+                            @Nullable List<String> params) {
+        this(mode, ArgumentTransformer.transform(params), preferences, databaseTracker);
     }
 
     /**
@@ -111,10 +102,22 @@ public abstract class ActivityLauncher implements Runnable {
      * @param databaseMeta the database-meta object
      * @param tracker      the {@link DatabaseTracker} object that will be used by the launched activity for updating it's content
      */
-    public ActivityLauncher(@NotNull LauncherMode mode, @Nullable DatabaseMeta databaseMeta, @NotNull DatabaseTracker tracker) {
+    public ActivityLauncher(@NotNull LauncherMode mode,
+                            @Nullable DatabaseMeta databaseMeta,
+                            @NotNull Preferences preferences,
+                            @NotNull DatabaseTracker tracker) {
         this.mode = Objects.requireNonNull(mode, "The LauncherMode shouldn't be null");
         this.argument = databaseMeta;
+        this.preferences = preferences;
         this.databaseTracker = tracker;
+    }
+
+    protected Preferences getPreferences() {
+        return preferences;
+    }
+
+    protected DatabaseTracker getDatabaseTracker() {
+        return databaseTracker;
     }
 
     /**

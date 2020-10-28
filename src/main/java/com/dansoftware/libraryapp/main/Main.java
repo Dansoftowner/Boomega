@@ -100,8 +100,10 @@ public class Main extends BaseApplication {
 
             //adding the saved databases from the login-data to DatabaseTracker
             notifyPreloader(new Preloader.MessageNotification("preloader.logindata"));
+
+            DatabaseTracker databaseTracker = DatabaseTracker.getGlobal();
             LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-            loginData.getSavedDatabases().forEach(DatabaseTracker.getGlobal()::addDatabase);
+            loginData.getSavedDatabases().forEach(databaseTracker::addDatabase);
 
             notifyPreloader(new Preloader.MessageNotification("preloader.theme"));
             Theme.setDefault(preferences.get(Preferences.Key.THEME));
@@ -116,6 +118,7 @@ public class Main extends BaseApplication {
             new InitActivityLauncher(
                     getApplicationArgs(),
                     preferences,
+                    databaseTracker,
                     loginData,
                     searchResult
             ).launch();
@@ -145,9 +148,10 @@ public class Main extends BaseApplication {
 
         private InitActivityLauncher(@NotNull List<String> args,
                                      @NotNull Preferences preferences,
+                                     @NotNull DatabaseTracker databaseTracker,
                                      @NotNull LoginData loginData,
                                      @NotNull UpdateSearcher.UpdateSearchResult searchResult) {
-            super(LauncherMode.INIT, args);
+            super(LauncherMode.INIT, preferences, databaseTracker, args);
             this.preferences = preferences;
             this.loginData = loginData;
             this.searchResult = searchResult;
