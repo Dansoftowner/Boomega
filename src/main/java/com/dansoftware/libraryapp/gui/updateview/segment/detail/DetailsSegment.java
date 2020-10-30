@@ -8,6 +8,12 @@ import com.dansoftware.sgmdialog.FixedContentTitledSegment;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Downloads the preview markdown-text about the new update and also renders it, so the user can
+ * explore the new features and/or bug fixes in a {@link com.dansoftware.libraryapp.gui.updateview.UpdateDialog}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class DetailsSegment extends FixedContentTitledSegment {
 
     private final Context context;
