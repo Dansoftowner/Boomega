@@ -23,6 +23,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the {@link DetailsSegment}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class DetailsSegmentController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(DetailsSegmentController.class);
@@ -39,7 +44,8 @@ public class DetailsSegmentController implements Initializable {
     }
 
     private void loadPreview() {
-        new Thread(new PreviewTextDownloaderTask(updateInformation.getReviewUrl())).start();
+        String reviewUrl = updateInformation.getReviewUrl();
+        new PreviewDownloadThread(reviewUrl).start();
     }
 
     @Override
@@ -66,6 +72,14 @@ public class DetailsSegmentController implements Initializable {
             var vBox = new VBox(5, label, detailBtn);
             var root = new Group(vBox);
             this.getChildren().add(root);
+        }
+    }
+
+    private final class PreviewDownloadThread extends Thread {
+        PreviewDownloadThread(@NotNull String url) {
+            super(new PreviewTextDownloaderTask(url));
+            setName(getName() + " PreviewDownloadThread");
+            setDaemon(true);
         }
     }
 
@@ -132,9 +146,8 @@ public class DetailsSegmentController implements Initializable {
 
                 byte[] buf = new byte[500];
                 int bytesRead;
-                while ((bytesRead = input.read(buf)) >= 0) {
+                while ((bytesRead = input.read(buf)) >= 0)
                     stringBuilder.append(new String(buf, 0, bytesRead, StandardCharsets.UTF_8));
-                }
 
                 return stringBuilder.toString();
             } finally {
