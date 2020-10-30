@@ -1,4 +1,7 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+}
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
@@ -17,6 +20,12 @@ repositories {
     //repository for JUnique
     maven {
         url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2"
+    }
+}
+
+compileKotlin {
+    kotlinOptions  {
+        jvmTarget = "11"
     }
 }
 
@@ -61,6 +70,8 @@ test {
 }
 
 dependencies {
+    //Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
 
     //logging
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
