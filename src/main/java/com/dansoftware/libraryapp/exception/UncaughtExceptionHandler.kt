@@ -4,11 +4,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class UncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
-    override fun uncaughtException(t: Thread, e: Throwable) {
-        LOGGER.error("Uncaught exception occurred", e)
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(UncaughtExceptionHandler::class.java)
     }
 
-    companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger(UncaughtExceptionHandler::class.java)
-    }
+    override fun uncaughtException(t: Thread, e: Throwable) = logger.error("Uncaught exception occurred", e)
 }
