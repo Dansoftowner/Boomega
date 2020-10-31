@@ -146,11 +146,11 @@ UPDATE VIEW
 }
 
 /** FirstTimeDialog **/
-.segmentDialog .radio-button:hover {
+.firstTimeDialog .radio-button:hover {
     -fx-background-color: #b8d5ea;
 }
 
-.segmentDialog .radio-button:selected {
+.firstTimeDialog .radio-button:selected {
     -fx-background-color: #a5c4d9;
 }
 
@@ -189,6 +189,11 @@ UPDATE VIEW
 
 .segmentLabelSeparator .graphic {
     -fx-image: url("/com/dansoftware/libraryapp/image/firsttime/right-arrow.png");
+}
+
+/* Update dialog */
+.updateDialog {
+    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
 }
 
 /*

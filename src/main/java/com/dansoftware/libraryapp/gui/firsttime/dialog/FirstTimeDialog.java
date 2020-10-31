@@ -20,10 +20,13 @@ import java.util.Collections;
  */
 public class FirstTimeDialog extends SegmentDialog implements Themeable {
 
+    private static final String STYLE_CLASS = "firstTimeDialog";
+
     public FirstTimeDialog(@NotNull Preferences preferences) {
         super(I18N.getFirstTimeDialogValues(), new DialogSegmentSequence(preferences));
         setCustomButtons(Collections.singletonList(new SkipButton()));
         getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        getStyleClass().add(STYLE_CLASS);
         Theme.registerThemeable(this);
     }
 
