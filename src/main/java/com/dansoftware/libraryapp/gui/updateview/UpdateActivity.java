@@ -78,7 +78,8 @@ public class UpdateActivity {
                         });
             }
         }).ifNewUpdateAvailable(updateInformation -> {
-            UpdateDialog updateDialog = new UpdateDialog(context, updateInformation);
+            UpdateDialog updateDialog = new UpdateDialog(context, updateInformation,
+                    (context, updDialog) -> context.hideOverlay((Region) updDialog.getParent().getParent()));
             this.context.showOverlay(new StackPane(new Group(updateDialog)), true);
         }).ifNoUpdateAvailable(updateInformation -> {
             if (showFeedbackDialog) {

@@ -16,23 +16,37 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
+/**
+ * An {@link UpdateDialog} allows a user to review and download the new update.
+ *
+ * @author Daniel Gyorffy
+ */
 public class UpdateDialog extends SegmentDialog {
+
 
     private static final String STYLE_CLASS = "updateDialog";
 
+    public interface HidePolicy extends BiConsumer<Context, UpdateDialog> {
+    }
+
     private final Context context;
     private final UpdateInformation information;
+    private final HidePolicy hidePolicy;
 
-    public UpdateDialog(@NotNull Context context, @NotNull UpdateInformation information) {
+    public UpdateDialog(@NotNull Context context, @NotNull UpdateInformation information, @NotNull HidePolicy hidePolicy) {
         super(I18N.getUpdateDialogValues(), new SegmentSequenceImpl(context, information));
         this.context = context;
         this.information = information;
+        this.hidePolicy = hidePolicy;
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.getStyleClass().add(STYLE_CLASS);
         this.setCustomButtons(Collections.singletonList(new LaterButton()));
@@ -48,7 +62,7 @@ public class UpdateDialog extends SegmentDialog {
         }
     }
 
-    private static final class LaterButton extends Button implements EventHandler<ActionEvent> {
+    private final class LaterButton extends Button implements EventHandler<ActionEvent> {
         LaterButton() {
             super(I18N.getUpdateDialogValues().getString("segment.dialog.button.later"));
             setOnAction(this);
@@ -57,25 +71,9 @@ public class UpdateDialog extends SegmentDialog {
 
         @Override
         public void handle(ActionEvent event) {
-
+            UpdateDialog.this.hidePolicy.accept(context, UpdateDialog.this);
         }
     }
-
-    /*private final class SkipButton extends Button implements EventHandler<ActionEvent> {
-        SkipButton() {
-            super(I18N.getUpdateDialogValues().getString("segment.dialog.button.skip"));
-            this.setOnAction(this);
-        }
-
-        @Override
-        public void handle(ActionEvent event) {
-            SegmentSequence segmentSequence = getSegmentSequence();
-            Segment lastSegment = segmentSequence.getFocusedSegment();
-            while (segmentSequence.getNextFrom(lastSegment) != null)
-                lastSegment = segmentSequence.getNextFrom(lastSegment);
-            segmentSequence.focusedSegmentProperty().set(lastSegment);
-        }
-    }*/
 
     private static final class SegmentSequenceImpl extends SegmentSequence {
         SegmentSequenceImpl(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
