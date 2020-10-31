@@ -11,6 +11,11 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for {@link NotificationSegment}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class NotificationSegmentController implements Initializable {
 
     @FXML
