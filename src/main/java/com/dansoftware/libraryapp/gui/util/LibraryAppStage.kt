@@ -5,6 +5,7 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.stage.Stage
+import java.io.BufferedInputStream
 
 /**
  * A [LibraryAppStage] is a [Stage] implementation that
@@ -65,13 +66,19 @@ abstract class LibraryAppStage constructor() : Stage() {
     }
 
     init {
-        icons.addAll(
-                Image(LOGO_16),
-                Image(LOGO_32),
-                Image(LOGO_128),
-                Image(LOGO_256),
-                Image(LOGO_512)
+        this.icons.addAll(
+                loadImage(LOGO_16),
+                loadImage(LOGO_32),
+                loadImage(LOGO_128),
+                loadImage(LOGO_256),
+                loadImage(LOGO_512)
         )
+    }
+
+    private fun loadImage(url: String): Image {
+        BufferedInputStream(this.javaClass.getResourceAsStream(url)).use {
+            return Image(it)
+        }
     }
 
     protected constructor(i18n: String) : this() {
