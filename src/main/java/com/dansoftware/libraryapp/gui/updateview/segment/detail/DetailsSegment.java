@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import com.dansoftware.sgmdialog.FixedContentSegment;
-import com.dansoftware.sgmdialog.FixedContentTitledSegment;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
