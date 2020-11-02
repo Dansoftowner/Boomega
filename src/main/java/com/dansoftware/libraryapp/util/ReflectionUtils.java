@@ -83,7 +83,16 @@ public final class ReflectionUtils {
                 .toArray(Class[]::new);
 
         Constructor<? extends O> constructor = classRef.getConstructor(constructorParamTypes);
+        constructor.setAccessible(true);
         return constructor.newInstance(args);
+    }
+
+    public static <O> O constructObject(@NotNull Class<? extends O> classRef)
+            throws ReflectiveOperationException {
+        Objects.requireNonNull(classRef);
+        Constructor<? extends O> constructor = classRef.getConstructor();
+        constructor.setAccessible(true);
+        return constructor.newInstance();
     }
 
     @SuppressWarnings({"unchecked", "UnusedReturnValue"})
