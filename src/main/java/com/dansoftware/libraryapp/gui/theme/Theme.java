@@ -104,6 +104,7 @@ public abstract class Theme {
     }
 
     public void apply(@NotNull Parent parent) {
+        this.onApplyBack();
         customApplier.applyBack(parent);
         globalApplier.applyBack(parent);
         customApplier.apply(parent);
