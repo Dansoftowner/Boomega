@@ -89,6 +89,7 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
     implementation group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
     implementation 'com.github.Dansoftowner:jFileGoodies:1.2.2'
+    implementation 'com.github.Dansoftowner:jSystemThemeDetector:1.4'
 
     //javaFX libraries
     implementation 'com.jfoenix:jfoenix:9.0.9'
