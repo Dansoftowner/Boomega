@@ -95,18 +95,25 @@ public abstract class Theme {
     protected void onApplyBack() {
     }
 
-    public void apply(@NotNull Scene scene) {
-        this.onApplyBack();
+    protected void applyBack(Scene scene) {
         customApplier.applyBack(scene);
         globalApplier.applyBack(scene);
+    }
+
+    protected void applyBack(Parent parent) {
+        customApplier.applyBack(parent);
+        globalApplier.applyBack(parent);
+    }
+    public void apply(@NotNull Scene scene) {
+        this.onApplyBack();
+        applyBack(scene);
         customApplier.apply(scene);
         globalApplier.apply(scene);
     }
 
     public void apply(@NotNull Parent parent) {
         this.onApplyBack();
-        customApplier.applyBack(parent);
-        globalApplier.applyBack(parent);
+        applyBack(parent);
         customApplier.apply(parent);
         globalApplier.apply(parent);
     }
