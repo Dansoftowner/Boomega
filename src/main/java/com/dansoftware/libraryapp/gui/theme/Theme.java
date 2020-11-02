@@ -92,7 +92,11 @@ public abstract class Theme {
         notifyThemeableInstances(this);
     }
 
+    protected void onApplyBack() {
+    }
+
     public void apply(@NotNull Scene scene) {
+        this.onApplyBack();
         customApplier.applyBack(scene);
         globalApplier.applyBack(scene);
         customApplier.apply(scene);
