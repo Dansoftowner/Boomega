@@ -88,6 +88,10 @@ public abstract class Theme {
         return ThemeApplier.empty();
     }
 
+    protected void update() {
+        notifyThemeableInstances(this);
+    }
+
     public void apply(@NotNull Scene scene) {
         customApplier.applyBack(scene);
         globalApplier.applyBack(scene);
