@@ -131,6 +131,9 @@ public class Main extends BaseApplication {
         //writing all configurations
         Preferences preferences = Preferences.getPreferences();
         preferences.editor().commit();
+
+        //we make sure the app exiting, even if there are non-daemon running threads in the background
+        System.exit(0);
     }
 
     /**
