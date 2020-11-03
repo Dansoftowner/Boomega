@@ -25,6 +25,10 @@ public class LicenseInfo {
         return Optional.ofNullable(websiteUrl);
     }
 
+    public static LicenseInfo lgpLv2() {
+        return new LicenseInfo("GNU Library or Lesser General Public License version 2.0", "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html");
+    }
+
     /**
      * Creates a {@link LicenseInfo} that represents the <b>GNU General Public License with the Classpath Exception</b>
      *
