@@ -58,93 +58,107 @@ public abstract class Theme {
      */
     private static Theme defaultTheme;
 
-    private final ThemeApplier globalApplier;
-    private final ThemeApplier customApplier;
-
     protected Theme() {
-        this.globalApplier = createGlobalApplier();
-        this.customApplier = createCustomApplier();
     }
 
-    /**
-     * Every {@link Theme} implementation should create a global {@link ThemeApplier}
-     * through this method.
-     *
-     * <p>
-     * The created {@link ThemeApplier} will be cached.
-     */
-    @NotNull
-    protected abstract ThemeApplier createGlobalApplier();
+//    /**
+//     * Every {@link Theme} implementation should create a global {@link ThemeApplier}
+//     * through this method.
+//     *
+//     * <p>
+//     * The created {@link ThemeApplier} will be cached.
+//     */
+//    @NotNull
+//    protected abstract ThemeApplier createGlobalApplier();
+//
+//    /**
+//     * Every {@link Theme} implementation can create a custom {@link ThemeApplier}
+//     * through this method.
+//     *
+//     * <p>
+//     * The created {@link ThemeApplier} will be cached.
+//     */
+//    @NotNull
+//    protected ThemeApplier createCustomApplier() {
+//        return ThemeApplier.empty();
+//    }
 
-    /**
-     * Every {@link Theme} implementation can create a custom {@link ThemeApplier}
-     * through this method.
-     *
-     * <p>
-     * The created {@link ThemeApplier} will be cached.
-     */
-    @NotNull
-    protected ThemeApplier createCustomApplier() {
-        return ThemeApplier.empty();
+    protected void update(@NotNull Theme oldTheme) {
+        notifyThemeableInstances(oldTheme, this);
     }
 
     protected void update() {
-        notifyThemeableInstances(this);
+        update(this);
     }
 
-    protected void onApplyBack() {
+    /**
+     * It's executed on the particular {@link Theme} object, when a new
+     * theme is set.
+     */
+    protected void onThemeDropped() {
     }
 
-    protected void applyBack(Scene scene) {
+    public void applyBack(@NotNull Scene scene,
+                          @NotNull ThemeApplier customApplier,
+                          @NotNull ThemeApplier globalApplier) {
         customApplier.applyBack(scene);
         globalApplier.applyBack(scene);
     }
 
-    protected void applyBack(Parent parent) {
+    public void applyBack(@NotNull Parent parent,
+                          @NotNull ThemeApplier customApplier,
+                          @NotNull ThemeApplier globalApplier) {
         customApplier.applyBack(parent);
         globalApplier.applyBack(parent);
     }
+
+    protected void applyBack(@NotNull Scene scene) {
+        applyBack(scene, getCustomApplier(), getGlobalApplier());
+    }
+
+    public void applyBack(@NotNull Parent parent) {
+        applyBack(parent, getCustomApplier(), getGlobalApplier());
+    }
+
     public void apply(@NotNull Scene scene) {
-        this.onApplyBack();
-        applyBack(scene);
+        ThemeApplier customApplier = getCustomApplier();
+        ThemeApplier globalApplier = getGlobalApplier();
+        applyBack(scene, customApplier, globalApplier);
         customApplier.apply(scene);
         globalApplier.apply(scene);
     }
 
     public void apply(@NotNull Parent parent) {
-        this.onApplyBack();
-        applyBack(parent);
+        ThemeApplier customApplier = getCustomApplier();
+        ThemeApplier globalApplier = getGlobalApplier();
+        applyBack(parent, customApplier, globalApplier);
         customApplier.apply(parent);
         globalApplier.apply(parent);
     }
 
-    public ThemeApplier getGlobalApplier() {
-        return globalApplier;
-    }
+    public abstract ThemeApplier getGlobalApplier();
 
-    public ThemeApplier getCustomApplier() {
-        return customApplier;
-    }
+    public abstract ThemeApplier getCustomApplier();
 
     public static synchronized void registerThemeable(@NotNull Themeable themeable) {
         if (THEMEABLE_SET.add(new IdentifiableWeakReference<>(themeable))) {
-            themeable.handleThemeApply(getDefault());
+            themeable.handleThemeApply(new EmptyTheme(), getDefault());
         }
     }
 
-    private static void notifyThemeableInstances(@NotNull Theme newTheme) {
+    private static void notifyThemeableInstances(@NotNull Theme oldTheme, @NotNull Theme newTheme) {
         for (Iterator<WeakReference<Themeable>> iterator = THEMEABLE_SET.iterator(); iterator.hasNext(); ) {
             WeakReference<Themeable> themeableWeakReference = iterator.next();
             Themeable themeableRef = themeableWeakReference.get();
             if (themeableRef == null) iterator.remove();
-            else themeableRef.handleThemeApply(newTheme);
+            else themeableRef.handleThemeApply(oldTheme, newTheme);
         }
     }
 
     public static synchronized void setDefault(@NotNull Theme theme) {
         if (theme != defaultTheme) {
+            notifyThemeableInstances(Theme.defaultTheme, theme);
             Theme.defaultTheme = theme;
-            notifyThemeableInstances(theme);
         }
     }
 
@@ -179,5 +193,22 @@ public abstract class Theme {
 
     public static void applyDefault(Parent parent) {
         getDefault().apply(parent);
+    }
+
+    public static Theme empty() {
+        return new EmptyTheme();
+    }
+
+    private static final class EmptyTheme extends Theme {
+
+        @Override
+        public ThemeApplier getGlobalApplier() {
+            return ThemeApplier.empty();
+        }
+
+        @Override
+        public ThemeApplier getCustomApplier() {
+            return ThemeApplier.empty();
+        }
     }
 }

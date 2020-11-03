@@ -17,17 +17,22 @@ public class DarkTheme extends Theme {
 
     private static final String GLOBAL_DARK_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-dark.css";
 
+    private final ThemeApplier globalApplier;
+    private final ThemeApplier customApplier;
+
     public DarkTheme() {
         super();
+        this.globalApplier = new StyleSheetThemeApplier(GLOBAL_DARK_STYLE_SHEET);
+        this.customApplier = new JMetroThemeApplier(Style.DARK);
     }
 
     @Override
-    protected @NotNull ThemeApplier createGlobalApplier() {
-        return new StyleSheetThemeApplier(GLOBAL_DARK_STYLE_SHEET);
+    public @NotNull ThemeApplier getGlobalApplier() {
+        return this.globalApplier;
     }
 
     @Override
-    protected @NotNull ThemeApplier createCustomApplier() {
-        return new JMetroThemeApplier(Style.DARK);
+    public @NotNull ThemeApplier getCustomApplier() {
+        return this.customApplier;
     }
 }

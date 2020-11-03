@@ -18,17 +18,22 @@ public class LightTheme extends Theme {
 
     private static final String GLOBAL_LIGHT_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-light.css";
 
+    private final ThemeApplier globalApplier;
+    private final ThemeApplier customApplier;
+
     public LightTheme() {
         super();
+        this.globalApplier = new StyleSheetThemeApplier(GLOBAL_LIGHT_STYLE_SHEET);
+        this.customApplier = new JMetroThemeApplier(Style.LIGHT);
     }
 
     @Override
-    protected @NotNull ThemeApplier createGlobalApplier() {
-        return new StyleSheetThemeApplier(GLOBAL_LIGHT_STYLE_SHEET);
+    public @NotNull ThemeApplier getGlobalApplier() {
+        return this.globalApplier;
     }
 
     @Override
-    protected @NotNull ThemeApplier createCustomApplier() {
-        return new JMetroThemeApplier(Style.LIGHT);
+    public @NotNull ThemeApplier getCustomApplier() {
+        return this.customApplier;
     }
 }
