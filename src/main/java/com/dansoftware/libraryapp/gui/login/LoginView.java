@@ -62,7 +62,8 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
     }
 
     @Override
-    public void handleThemeApply(Theme newTheme) {
+    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
+        oldTheme.applyBack(this);
         newTheme.apply(this);
     }
 

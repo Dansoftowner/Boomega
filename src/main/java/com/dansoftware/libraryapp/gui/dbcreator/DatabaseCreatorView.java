@@ -37,7 +37,8 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
     }
 
     @Override
-    public void handleThemeApply(Theme newTheme) {
+    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
+        oldTheme.applyBack(this);
         newTheme.apply(this);
     }
 

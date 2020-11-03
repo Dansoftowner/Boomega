@@ -58,7 +58,8 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
     }
 
     @Override
-    public void handleThemeApply(Theme newTheme) {
+    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
+        oldTheme.applyBack(this);
         newTheme.apply(this);
     }
 }

@@ -34,7 +34,8 @@ public class DependencyTable extends TableView<DependencyInfo>
     }
 
     @Override
-    public void handleThemeApply(Theme newTheme) {
+    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
+        oldTheme.applyBack(this);
         newTheme.apply(this);
     }
 
