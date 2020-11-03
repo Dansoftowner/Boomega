@@ -1,65 +1,70 @@
 package com.dansoftware.libraryapp.gui.theme;
 
-import com.jthemedetecor.SystemUIThemeDetector;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import com.dansoftware.libraryapp.gui.theme.detect.OsThemeDetector;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.function.Consumer;
 
+/**
+ * A {@link Theme} implementation that synchronizes the App's theme
+ * with the System UI Theme.
+ *
+ * @author Daniel Gyorffy
+ */
 public class OsSynchronizedTheme extends Theme {
 
     private static final Logger logger = LoggerFactory.getLogger(OsSynchronizedTheme.class);
 
-    private final Consumer<Boolean> osThemeListener = isDark -> super.update();
+    private final Consumer<Boolean> osThemeListener;
 
+    private final OsThemeDetector osThemeDetector;
+    private final Theme darkTheme;
+
+    private final Theme lightTheme;
     public OsSynchronizedTheme() {
-        logger.debug("Constructor called!");
-        SystemUIThemeDetector.getDetector().registerListener(osThemeListener);
+        this.osThemeListener = new SyncFunction(this);
+        this.osThemeDetector = OsThemeDetector.getDetector();
+        this.osThemeDetector.registerListener(osThemeListener);
+        this.darkTheme = new DarkTheme();
+        this.lightTheme = new LightTheme();
     }
 
     private Theme getCurrentTheme() {
-        return SystemUIThemeDetector.getDetector().isDark() ?
-                new DarkTheme() : new LightTheme();
+        return this.osThemeDetector.isDark() ? darkTheme : lightTheme;
     }
 
     @Override
-    protected void onApplyBack() {
-        SystemUIThemeDetector.getDetector().removeListener(osThemeListener);
+    protected void onThemeDropped() {
+        osThemeDetector.removeListener(osThemeListener);
     }
 
     @Override
-    protected @NotNull ThemeApplier createGlobalApplier() {
+    public @NotNull ThemeApplier getGlobalApplier() {
         return getCurrentTheme().getGlobalApplier();
     }
 
     @Override
-    protected @NotNull ThemeApplier createCustomApplier() {
+    public @NotNull ThemeApplier getCustomApplier() {
         return getCurrentTheme().getCustomApplier();
     }
 
-    private class DynamicApplier implements ThemeApplier {
+    private static final class SyncFunction implements Consumer<Boolean> {
 
-        @Override
-        public void apply(@NotNull Scene scene) {
-            OsSynchronizedTheme.this.getCurrentTheme().apply(scene);
+        private final OsSynchronizedTheme synchTheme;
+
+        SyncFunction(@NotNull OsSynchronizedTheme synchTheme) {
+            this.synchTheme = synchTheme;
         }
 
         @Override
-        public void apply(@NotNull Parent parent) {
-            OsSynchronizedTheme.this.getCurrentTheme().apply(parent);
-        }
-
-        @Override
-        public void applyBack(@NotNull Scene scene) {
-            //OsSynchronizedTheme.this.getCurrentTheme()(parent);
-        }
-
-        @Override
-        public void applyBack(@NotNull Parent parent) {
-
+        public void accept(Boolean isDark) {
+            Platform.runLater(() -> {
+                if (isDark) synchTheme.update(synchTheme.lightTheme);
+                else synchTheme.update(synchTheme.darkTheme);
+            });
         }
     }
 }
