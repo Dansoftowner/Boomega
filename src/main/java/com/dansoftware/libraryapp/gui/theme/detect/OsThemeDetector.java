@@ -23,13 +23,13 @@ public abstract class OsThemeDetector {
     private OsThemeDetector() {
     }
 
-    public static OsThemeDetector getDetector() {
+    public static synchronized OsThemeDetector getDetector() {
         if (osThemeDetector != null) {
             return osThemeDetector;
         } else if (OsInfo.isWindows10()) {
-            return new WindowsThemeDetector();
+            return osThemeDetector = new WindowsThemeDetector();
         } else {
-            return new EmptyDetector();
+            return osThemeDetector = new EmptyDetector();
         }
     }
 
