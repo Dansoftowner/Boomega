@@ -56,32 +56,12 @@ public abstract class Theme {
     /**
      * Holds the current default theme
      */
-    private static Theme defaultTheme;
+    @SuppressWarnings("StaticInitializerReferencesSubClass")
+    @NotNull
+    private static Theme defaultTheme = new LightTheme();
 
     protected Theme() {
     }
-
-//    /**
-//     * Every {@link Theme} implementation should create a global {@link ThemeApplier}
-//     * through this method.
-//     *
-//     * <p>
-//     * The created {@link ThemeApplier} will be cached.
-//     */
-//    @NotNull
-//    protected abstract ThemeApplier createGlobalApplier();
-//
-//    /**
-//     * Every {@link Theme} implementation can create a custom {@link ThemeApplier}
-//     * through this method.
-//     *
-//     * <p>
-//     * The created {@link ThemeApplier} will be cached.
-//     */
-//    @NotNull
-//    protected ThemeApplier createCustomApplier() {
-//        return ThemeApplier.empty();
-//    }
 
     protected void update(@NotNull Theme oldTheme) {
         notifyThemeableInstances(oldTheme, this);
@@ -156,7 +136,9 @@ public abstract class Theme {
     }
 
     public static synchronized void setDefault(@NotNull Theme theme) {
-        if (theme != defaultTheme) {
+        Objects.requireNonNull(theme);
+        if (!defaultTheme.getClass().isInstance(theme)) {
+            defaultTheme.onThemeDropped();
             notifyThemeableInstances(Theme.defaultTheme, theme);
             Theme.defaultTheme = theme;
         }
@@ -182,8 +164,6 @@ public abstract class Theme {
      * @return the default theme
      */
     public static Theme getDefault() {
-        if (Objects.isNull(defaultTheme))
-            defaultTheme = new LightTheme();
         return defaultTheme;
     }
 
