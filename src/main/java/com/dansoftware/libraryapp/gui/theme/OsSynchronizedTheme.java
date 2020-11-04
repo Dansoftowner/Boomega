@@ -22,8 +22,8 @@ public class OsSynchronizedTheme extends Theme {
 
     private final OsThemeDetector osThemeDetector;
     private final Theme darkTheme;
-
     private final Theme lightTheme;
+
     public OsSynchronizedTheme() {
         this.osThemeListener = new SyncFunction(this);
         this.osThemeDetector = OsThemeDetector.getDetector();
