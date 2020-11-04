@@ -1,13 +1,12 @@
 package com.dansoftware.libraryapp.main;
 
 import javafx.application.Platform;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
+import oshi.SystemInfo;
+import oshi.software.os.OSProcess;
+import oshi.software.os.OperatingSystem;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.util.List;
+import java.util.Optional;
 
 /**
  * An {@link ApplicationRestart} object can restart the application.
@@ -19,43 +18,39 @@ public class ApplicationRestart {
     public ApplicationRestart() {
     }
 
-    private List<String> getJvmOptions() {
-        return ManagementFactory.getRuntimeMXBean().getInputArguments();
-    }
-
-    private String getProcessExecutable() {
-        return ProcessHandle.current().info().command()
-                .orElseGet(() -> String.join(File.separator, System.getProperty("java.home"), "bin", "java"));
-    }
-
-    private String getCodeSourceLocation() {
-        return getClass().getProtectionDomain().getCodeSource().getLocation().toExternalForm();
-    }
-
-    private String getCommandLine() {
-        var cmdBuilder = new StringBuilder();
-        String processExecutable = getProcessExecutable();
-        cmdBuilder.append(processExecutable);
-
-        if (FilenameUtils.getBaseName(processExecutable).endsWith("java")) {
-            String codeSourceLocation = getCodeSourceLocation();
-            if (!codeSourceLocation.endsWith(".jar")) {
-                return null;
+    public void restartApp() throws RestartException {
+        Optional<OSProcess> appProcess = getAppProcess();
+        if (appProcess.isPresent()) {
+            try {
+                Runtime.getRuntime().exec(appProcess.get().getCommandLine());
+            } catch (IOException e) {
+                throw new RestartException("Couldn't execute the starter command with the OS", e);
             }
+        } else throw new RestartException("Couldn't identify the process by PID");
 
-            //the app is running as a regular java app
-            cmdBuilder.append(StringUtils.SPACE);
-            getJvmOptions().stream()
-                    .map(jvmArg -> StringUtils.SPACE + jvmArg)
-                    .forEach(cmdBuilder::append);
-            cmdBuilder.append("-jar ").append(codeSourceLocation);
+        Platform.exit();
+    }
+
+    private Optional<OSProcess> getAppProcess() {
+        SystemInfo systemInfo = new SystemInfo();
+        OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
+        int currentPID = operatingSystem.getProcessId();
+        return operatingSystem.getProcesses().stream()
+                .filter(osProcess -> osProcess.getProcessID() == currentPID)
+                .findAny();
+    }
+
+    public static final class RestartException extends Exception {
+        private RestartException(String message) {
+            super(message);
         }
 
-        return cmdBuilder.toString();
-    }
+        private RestartException(String message, Throwable cause) {
+            super(message, cause);
+        }
 
-    public void restartApp() throws IOException {
-        Runtime.getRuntime().exec(getCommandLine());
-        Platform.exit();
+        private RestartException(Throwable cause) {
+            super(cause);
+        }
     }
 }
