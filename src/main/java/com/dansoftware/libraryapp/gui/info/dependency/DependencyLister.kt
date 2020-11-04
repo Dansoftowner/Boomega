@@ -15,6 +15,7 @@ object DependencyLister {
     fun listDependencies(): @NotNull List<DependencyInfo> = listOf(
             DependencyInfo("JavaFX", "https://openjfx.io/", LicenseInfo.gnu2ClassPath()),
             DependencyInfo("OpenJDK", "http://openjdk.java.net/", LicenseInfo.gnu2ClassPath()),
+            DependencyInfo("OSHI", "https://github.com/oshi/oshi", LicenseInfo.mitLicense()),
             DependencyInfo("AnimateFX", "https://github.com/Typhon0/AnimateFX", LicenseInfo.apache20License()),
             DependencyInfo("Apache Commons IO", "http://commons.apache.org/proper/commons-io/", LicenseInfo.apache20License()),
             DependencyInfo("Apache Commons Lang", "https://commons.apache.org/proper/commons-lang/", LicenseInfo.apache20License()),
