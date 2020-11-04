@@ -23,7 +23,7 @@
                             <graphic>
                                 <ImageView fitHeight="245" fitWidth="233" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@/com/dansoftware/libraryapp/image/firsttime/ThemeDark.jpg"/>
+                                        <Image url="@/com/dansoftware/libraryapp/image/firsttime/ThemeDark.png"/>
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -39,7 +39,20 @@
                             <graphic>
                                 <ImageView fitHeight="245.0" fitWidth="234.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@/com/dansoftware/libraryapp/image/firsttime/ThemeLight.jpg"/>
+                                        <Image url="@/com/dansoftware/libraryapp/image/firsttime/ThemeLight.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </padding>
+                        </RadioButton>
+                        <RadioButton fx:id="syncThemeToggle" contentDisplay="BOTTOM" mnemonicParsing="false"
+                                     selected="true" text="%segment.theme.sync" toggleGroup="$themeGroup">
+                            <graphic>
+                                <ImageView fitHeight="245.0" fitWidth="234.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@/com/dansoftware/libraryapp/image/firsttime/ThemeSynchronized.png"/>
                                     </image>
                                 </ImageView>
                             </graphic>
