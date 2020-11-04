@@ -151,14 +151,7 @@ public class Preferences {
         if (Objects.isNull(defaultPrefs)) {
             try {
                 ConfigFile configFile = ConfigFile.getConfigFile();
-                configFile.create();
-                if (configFile.exists()) {
-                    defaultPrefs = new Preferences(() -> new FileInputStream(configFile), () -> new FileOutputStream(configFile));
-                } else {
-                    logger.error("Couldn't create configuration file");
-                    //create an only in-memory preferences
-                    defaultPrefs = new Preferences();
-                }
+                defaultPrefs = new Preferences(configFile::openStream, configFile::openOutputStream);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

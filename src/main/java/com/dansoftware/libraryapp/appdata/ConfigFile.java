@@ -3,10 +3,7 @@ package com.dansoftware.libraryapp.appdata;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Objects;
 
 /**
@@ -60,7 +57,8 @@ public class ConfigFile extends File {
      * @throws IOException if some I/O exception occurs
      */
     protected void create() throws IOException {
-        getParentFile().mkdirs();
+        File parentFile = getParentFile();
+        if (parentFile != null) parentFile.mkdirs();
         createNewFile();
     }
 
@@ -73,6 +71,10 @@ public class ConfigFile extends File {
     public InputStream openStream() throws IOException {
         if (determineExists()) create();
         return new FileInputStream(this);
+    }
+
+    public OutputStream openOutputStream() throws FileNotFoundException {
+        return new FileOutputStream(this);
     }
 
     /**

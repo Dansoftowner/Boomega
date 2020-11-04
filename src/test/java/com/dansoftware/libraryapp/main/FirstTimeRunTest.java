@@ -3,7 +3,9 @@ package com.dansoftware.libraryapp.main;
 import com.dansoftware.libraryapp.appdata.ConfigFile;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class FirstTimeRunTest {
 
@@ -15,6 +17,11 @@ public class FirstTimeRunTest {
         @Override
         public InputStream openStream() {
             return InputStream.nullInputStream();
+        }
+
+        @Override
+        public OutputStream openOutputStream() {
+            return OutputStream.nullOutputStream();
         }
 
         @Override
