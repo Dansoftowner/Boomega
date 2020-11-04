@@ -151,6 +151,7 @@ public class Preferences {
         if (Objects.isNull(defaultPrefs)) {
             try {
                 ConfigFile configFile = ConfigFile.getConfigFile();
+                configFile.create();
                 if (configFile.exists()) {
                     defaultPrefs = new Preferences(() -> new FileInputStream(configFile), () -> new FileOutputStream(configFile));
                 } else {
