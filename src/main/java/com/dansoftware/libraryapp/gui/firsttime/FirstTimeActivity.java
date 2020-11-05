@@ -6,7 +6,6 @@ import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialog;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialogActivity;
 import com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportActivity;
 import com.dansoftware.libraryapp.main.Preloader;
-import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -28,24 +27,16 @@ import java.util.Objects;
  */
 public class FirstTimeActivity {
 
-    /**
-     * The object that is used by FirstTimeDialog instances to lock the
-     * thread that is used for the dialog.
-     */
-    private final Object threadLock;
-
     private final Preferences preferences;
 
     /**
      * Creates a simple {@link FirstTimeActivity}.
+     * <p>
      *
-     * @param threadLock  the object that will the FirstTimeActivity synchronize on.
      * @param preferences the {@link Preferences} object that the {@link FirstTimeActivity}
      *                    should read to
      */
-    public FirstTimeActivity(@NotNull Object threadLock,
-                             @NotNull Preferences preferences) {
-        this.threadLock = Objects.requireNonNull(threadLock, "threadLock shouldn't be null");
+    public FirstTimeActivity(@NotNull Preferences preferences) {
         this.preferences = Objects.requireNonNull(preferences, "Preferences shouldn't be null");
     }
 
@@ -53,13 +44,8 @@ public class FirstTimeActivity {
      * Shows the {@link ConfigurationImportActivity} and the {@link FirstTimeDialog} if needed.
      */
     public void show() {
-        Platform.runLater(() -> {
-            synchronized (threadLock) {
-                if (!showConfigurationImport(preferences))
-                    showFirstTimeDialog(preferences);
-                threadLock.notify();
-            }
-        });
+        if (!showConfigurationImport(preferences))
+            showFirstTimeDialog(preferences);
     }
 
     private boolean showConfigurationImport(@NotNull Preferences preferences) {

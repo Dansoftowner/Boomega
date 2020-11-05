@@ -14,6 +14,7 @@ import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import com.dansoftware.libraryapp.util.ReflectionUtils;
 import com.dansoftware.libraryapp.util.adapter.VersionInteger;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,9 +83,13 @@ public class Main extends BaseApplication {
             if (FirstTimeActivity.isNeeded()) {
                 notifyPreloader(new Preloader.HideNotification());
                 logger.debug("FirstTimeDialog needed");
-                FirstTimeActivity firstTimeDialog = new FirstTimeActivity(initThreadLock, preferences);
-                firstTimeDialog.show();
-
+                Platform.runLater(() -> {
+                    synchronized (initThreadLock) {
+                        FirstTimeActivity firstTimeDialog = new FirstTimeActivity(preferences);
+                        firstTimeDialog.show();
+                        initThreadLock.notify();
+                    }
+                });
                 //we wait until the FirstTimeDialog completes
                 initThreadLock.wait();
                 notifyPreloader(new Preloader.ShowNotification());
