@@ -51,8 +51,10 @@ public class LanguageSegmentController
 
     @Override
     public void changed(ObservableValue<? extends LanguageEntry> observable, LanguageEntry oldValue, LanguageEntry newValue) {
-        if (newValue != null) preferences.editor().put(Preferences.Key.LOCALE, newValue.locale);
-        else listView.getSelectionModel().select(oldValue); //we don't allow the user to choose no items
+        if (newValue != null) {
+            preferences.editor().put(Preferences.Key.LOCALE, newValue.locale);
+            Locale.setDefault(newValue.locale);
+        } else listView.getSelectionModel().select(oldValue); //we don't allow the user to choose no items
     }
 
     private void fillListView(ListView<LanguageEntry> listView) {

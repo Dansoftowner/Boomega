@@ -94,23 +94,18 @@ public class Main extends BaseApplication {
                 initThreadLock.wait();
                 notifyPreloader(new Preloader.ShowNotification());
             } else {
+                notifyPreloader(new Preloader.MessageNotification("preloader.lang"));
+                Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
+
                 notifyPreloader(new Preloader.MessageNotification("preloader.theme"));
                 Theme.setDefault(preferences.get(Preferences.Key.THEME));
             }
 
-            logger.info("Theme is: {}", Theme.getDefault());
-
-            //at this point, the FirstTimeDialog completed
-
-            notifyPreloader(new Preloader.MessageNotification("preloader.lang"));
-            Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
-            logger.info("Locale is: {}", Locale.getDefault());
-
-            ReflectionUtils.invokeStaticBlock(I18N.class);
+            logger.debug("Theme is: {}", Theme.getDefault());
+            logger.debug("Locale is: {}", Locale.getDefault());
 
             //adding the saved databases from the login-data to DatabaseTracker
             notifyPreloader(new Preloader.MessageNotification("preloader.logindata"));
-
             DatabaseTracker databaseTracker = DatabaseTracker.getGlobal();
             LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
             loginData.getSavedDatabases().forEach(databaseTracker::addDatabase);
