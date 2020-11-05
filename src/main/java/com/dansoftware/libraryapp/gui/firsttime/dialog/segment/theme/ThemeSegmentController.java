@@ -4,6 +4,11 @@ import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialog;
 import com.dansoftware.libraryapp.gui.theme.DarkTheme;
 import com.dansoftware.libraryapp.gui.theme.LightTheme;
+import com.dansoftware.libraryapp.gui.theme.OsSynchronizedTheme;
+import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.WindowUtils;
+import com.sun.jna.platform.unix.X11;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -30,6 +35,9 @@ public class ThemeSegmentController implements Initializable, ChangeListener<Tog
     private RadioButton darkThemeToggle;
 
     @FXML
+    private RadioButton syncThemeToggle;
+
+    @FXML
     private RadioButton lightThemeToggle;
 
     private final Preferences preferences;
@@ -40,14 +48,19 @@ public class ThemeSegmentController implements Initializable, ChangeListener<Tog
 
     @Override
     public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+        Theme.registerThemeable(getParentDialog());
         if (darkThemeToggle.equals(newValue)) {
             DarkTheme darkTheme = new DarkTheme();
             preferences.editor().put(Preferences.Key.THEME, darkTheme).tryCommit();
-            getParentDialog().handleThemeApply(darkTheme);
+            Theme.setDefault(darkTheme);
         } else if (lightThemeToggle.equals(newValue)) {
             LightTheme lightTheme = new LightTheme();
             preferences.editor().put(Preferences.Key.THEME, lightTheme).tryCommit();
-            getParentDialog().handleThemeApply(lightTheme);
+            Theme.setDefault(lightTheme);
+        } else if (syncThemeToggle.equals(newValue)) {
+            OsSynchronizedTheme osSynchronizedTheme = new OsSynchronizedTheme();
+            preferences.editor().put(Preferences.Key.THEME, osSynchronizedTheme).tryCommit();
+            Theme.setDefault(osSynchronizedTheme);
         }
     }
 
