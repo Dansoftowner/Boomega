@@ -84,11 +84,16 @@ public class Main extends BaseApplication {
                 logger.debug("FirstTimeDialog needed");
                 FirstTimeActivity firstTimeDialog = new FirstTimeActivity(initThreadLock, preferences);
                 firstTimeDialog.show();
-                //we wait until the FirstTimeDialog completes, and notifies the
-                //thread-lock object
+
+                //we wait until the FirstTimeDialog completes
                 initThreadLock.wait();
                 notifyPreloader(new Preloader.ShowNotification());
+            } else {
+                notifyPreloader(new Preloader.MessageNotification("preloader.theme"));
+                Theme.setDefault(preferences.get(Preferences.Key.THEME));
             }
+
+            logger.info("Theme is: {}", Theme.getDefault());
 
             //at this point, the FirstTimeDialog completed
 
@@ -104,10 +109,6 @@ public class Main extends BaseApplication {
             DatabaseTracker databaseTracker = DatabaseTracker.getGlobal();
             LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
             loginData.getSavedDatabases().forEach(databaseTracker::addDatabase);
-
-            notifyPreloader(new Preloader.MessageNotification("preloader.theme"));
-            Theme.setDefault(preferences.get(Preferences.Key.THEME));
-            logger.info("Theme is: {}", Theme.getDefault());
 
             //searching for updates
             notifyPreloader(new Preloader.MessageNotification("preloader.update.search"));
