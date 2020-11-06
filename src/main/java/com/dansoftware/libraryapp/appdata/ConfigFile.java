@@ -69,7 +69,7 @@ public class ConfigFile extends File {
      * @throws IOException if some I/o exception occurs
      */
     public InputStream openStream() throws IOException {
-        if (determineExists()) create();
+        if (!determineExists()) create();
         return new FileInputStream(this);
     }
 
