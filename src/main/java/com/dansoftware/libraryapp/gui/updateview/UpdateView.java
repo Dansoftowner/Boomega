@@ -44,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public class UpdateView extends SimpleHeaderView<UpdatePage> implements ChangeListener<UpdatePage> {
 
     /**
