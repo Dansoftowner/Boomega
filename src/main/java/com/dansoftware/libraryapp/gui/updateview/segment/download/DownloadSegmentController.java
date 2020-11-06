@@ -10,24 +10,19 @@ import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.net.HttpURLConnection;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
@@ -69,10 +64,9 @@ public class DownloadSegmentController implements Initializable {
      */
     private TaskbarProgressbar taskbarProgressbar;
 
-    /**
-     * The currently running {@link DownloaderTask} that downloads the update from the internet.
-     */
     private DownloaderTask downloadingTask;
+
+    private final DownloaderTaskInitializer downloaderTaskInitializer;
 
     /**
      * The last selected directory where the user wants to save the update.
@@ -91,6 +85,7 @@ public class DownloadSegmentController implements Initializable {
     DownloadSegmentController(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
         this.context = Objects.requireNonNull(context);
         this.updateInformation = Objects.requireNonNull(updateInformation);
+        this.downloaderTaskInitializer = new DownloaderTaskInitializer(context, updateInformation, this);
     }
 
     @FXML
@@ -115,7 +110,7 @@ public class DownloadSegmentController implements Initializable {
         taskbarProgressbar.showIndeterminateProgress();
 
         BinaryEntryRadioButton selectedRadio = (BinaryEntryRadioButton) this.radioGroup.getSelectedToggle();
-        this.downloadingTask = this.new DownloaderTask(selectedRadio.binary, this.downloadDirectory);
+        this.downloadingTask = downloaderTaskInitializer.construct(selectedRadio.binary, downloadDirectory);
 
         var thread = new Thread(downloadingTask);
         thread.setDaemon(true);
@@ -124,9 +119,6 @@ public class DownloadSegmentController implements Initializable {
 
     @FXML
     private void pauseDownload() {
-        if (downloadingTask == null)
-            return;
-
         //we pause if it's running; or we start if it's paused
         downloadingTask.setPaused(!downloadingTask.isPaused());
 
@@ -178,14 +170,14 @@ public class DownloadSegmentController implements Initializable {
         }
     }
 
-    private UpdateDialog getDialog() {
-        return (UpdateDialog) this.root.getScene().getRoot();
-    }
-
     private void createFormatChooserRadioButtons() {
         this.radioGroup = new ToggleGroup();
         updateInformation.getBinaries().forEach(binary ->
                 radioBtnVBox.getChildren().add(new BinaryEntryRadioButton(radioGroup, binary)));
+    }
+
+    UpdateDialog getDialog() {
+        return (UpdateDialog) this.root.getScene().getRoot();
     }
 
     @Override
@@ -219,231 +211,40 @@ public class DownloadSegmentController implements Initializable {
         }
     }
 
-    /**
-     * A DownloaderTask defines a process to download a large file (so it's used for downloading
-     * the updates). If the task failed then it will display an error-message.
-     *
-     * <p>
-     * It requires a:
-     * <ul>
-     *     <li><b>binary</b> that defines what binary should we download</li>
-     *     <li><b>dir</b> that defines what directory should we save the file to</li>
-     * </ul>
-     */
-    private final class DownloaderTask extends Task<File> {
+    ProgressBar getProgressBar() {
+        return progressBar;
+    }
 
-        /**
-         * The object that the DownloaderTask use for thread-locking
-         */
-        private final Object lock = new Object();
+    Button getDownloadPathChooserBtn() {
+        return downloadPathChooserBtn;
+    }
 
-        /**
-         * The boolean that indicates that the task's background thread is paused
-         */
-        private volatile boolean paused;
+    Button getFileOpenerBtn() {
+        return fileOpenerBtn;
+    }
 
-        private final DownloadableBinary binary;
+    Button getRunnerBtn() {
+        return runnerBtn;
+    }
 
-        private final File dir;
+    Button getDownloadBtn() {
+        return downloadBtn;
+    }
 
-        /**
-         * Creates a normal {@link DownloaderTask}.
-         *
-         * @param binary the {@link DownloadableBinary} object that defines what to download
-         * @param dir    the directory where we want to save the downloaded binary
-         */
-        DownloaderTask(@NotNull DownloadableBinary binary, @NotNull File dir) {
-            this.binary = binary;
-            this.dir = dir;
-            this.progressProperty().addListener((observable, oldValue, newValue) -> {
-                DownloadSegmentController.this.taskbarProgressbar
-                        .showCustomProgress((long) getWorkDone(), (long) getTotalWork(),
-                                isPaused() ? TaskbarProgressbar.Type.PAUSED : TaskbarProgressbar.Type.NORMAL);
-            });
+    Button getDownloadPauseBtn() {
+        return downloadPauseBtn;
+    }
 
-            setOnRunning(e -> {
-                //we bind the progressbar's progress property to the task's progress
-                DownloadSegmentController.this.progressBar.progressProperty().unbind();
-                DownloadSegmentController.this.progressBar.progressProperty().bind(this.progressProperty());
+    Button getDownloadKillBtn() {
+        return downloadKillBtn;
+    }
 
-                //the pause button will only be available if the task is running
-                DownloadSegmentController.this.downloadPauseBtn.disableProperty().unbind();
-                DownloadSegmentController.this.downloadPauseBtn.disableProperty().bind(this.runningProperty().not());
+    TaskbarProgressbar getTaskbarProgressbar() {
+        return taskbarProgressbar;
+    }
 
-                //the download-stopper button will only be available if the task is running
-                DownloadSegmentController.this.downloadKillBtn.disableProperty().unbind();
-                DownloadSegmentController.this.downloadKillBtn.disableProperty().bind(this.runningProperty().not());
-
-                //the download-button will be disabled while the task is running
-                DownloadSegmentController.this.downloadBtn.disableProperty().unbind();
-                DownloadSegmentController.this.downloadBtn.disableProperty().bind(this.runningProperty());
-
-                //the downloaded-file-opener button will be disabled while the progress is less than 100
-                DownloadSegmentController.this.fileOpenerBtn.disableProperty().unbind();
-                DownloadSegmentController.this.fileOpenerBtn.disableProperty().bind(this.workDoneProperty().lessThan(100));
-
-                //the downloaded-file-runner button will be disabled while the progress is less than 100
-                DownloadSegmentController.this.runnerBtn.disableProperty().unbind();
-                DownloadSegmentController.this.runnerBtn.disableProperty().bind(this.workDoneProperty().lessThan(100));
-
-                //while the task is running the UpdateView can't be closed
-                getDialog().nextButtonDisableProperty().bind(this.runningProperty());
-
-                //while the task is running the UpdateView can't navigate to a previous update-page
-                getDialog().prevButtonDisableProperty().bind(this.runningProperty());
-
-                //creating a node that has two labels: one on the left, one on the right
-                //the label on the left displays the actual message, the label on the right displays
-                //the actual progress
-                Node progressIndicatorNode = new StackPane(new Label() {{
-                    textProperty().bind(DownloaderTask.this.titleProperty());
-                    StackPane.setAlignment(this, Pos.CENTER_RIGHT);
-                }}, new Label() {{
-                    textProperty().bind(DownloaderTask.this.messageProperty());
-                    StackPane.setAlignment(this, Pos.CENTER_LEFT);
-                }});
-
-                DownloadSegmentController.this.root.getChildren().add(6, progressIndicatorNode);
-            });
-
-            setOnCancelled(e -> {
-                //stopping the progress on the taskbar
-                DownloadSegmentController.this.taskbarProgressbar.stopProgress();
-                this.clear();
-            });
-
-            setOnFailed(e -> {
-                //showing the progress with error-color on the taskbar
-                DownloadSegmentController.this.taskbarProgressbar
-                        .showCustomProgress((long) getWorkDone(), (long) getTotalWork(), TaskbarProgressbar.Type.ERROR);
-                //getting the Exception that caused to fail
-                Throwable cause = e.getSource().getException();
-                //logging the exception
-                logger.error("Something went wrong during the update-downloading ", cause);
-
-                //displaying the error on the gui for the user
-                DownloadSegmentController.this.context.showErrorDialog(
-                        I18N.getAlertMsg("update.view.download.failed.title"),
-                        I18N.getAlertMsg("update.view.download.failed.msg"),
-                        (Exception) cause, buttonType -> {
-                            DownloadSegmentController.this.taskbarProgressbar.stopProgress();
-                        });
-                this.clear();
-            });
-
-            setOnSucceeded(e -> {
-                DownloadSegmentController.this.taskbarProgressbar.stopProgress();
-                context.getContextWindow().requestFocus();
-                this.clear();
-            });
-        }
-
-        private void clear() {
-            //clearing the progressbar
-            DownloadSegmentController.this.progressBar.progressProperty().unbind();
-            DownloadSegmentController.this.progressBar.setProgress(0);
-            //removing the progress indicator label
-            DownloadSegmentController.this.root.getChildren().remove(6);
-        }
-
-        /**
-         * Pauses or resumes the downloader-thread depending on the boolean value
-         *
-         * @param paused {@code true} if the downloader-thread should be paused;
-         *               {@code false} if the downloader-thread should be resumed
-         */
-        void setPaused(boolean paused) {
-            //if the paused's value is changed AND the paused's value is false,
-            //we notify the thread-locker object to awake the downloading thread
-            if (this.paused != paused && !(this.paused = paused)) {
-                synchronized (lock) {
-                    lock.notify();
-                }
-            }
-        }
-
-        boolean isPaused() {
-            return this.paused;
-        }
-
-        /**
-         * Helper method to define the file that we want to save the downloaded file to.
-         *
-         * @param binary the object that represents the downloadable binary
-         * @param dir    the directory where we want to save the file
-         * @return the {@link File} object that represents the file that we should save to
-         */
-        private File getOutputFile(DownloadableBinary binary, File dir) {
-            String fileName = FilenameUtils.getName(binary.getDownloadUrl());
-            if (StringUtils.isBlank(fileName)) {
-                fileName = "libraryapp-" + updateInformation.getVersion() + "." + binary.getFileExtension();
-            } else if (!StringUtils.endsWithIgnoreCase(fileName, binary.getFileExtension())) {
-                fileName += (fileName.endsWith(".") ? StringUtils.EMPTY : ".") + binary.getFileExtension();
-            }
-
-            return new File(dir, fileName);
-        }
-
-        @Override
-        protected File call() throws IOException, InterruptedException {
-            synchronized (lock) {
-                //creating the URLConnection
-                URL url = new URL(this.binary.getDownloadUrl());
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-
-                //defining the file that we want to write to
-                File outputFile = getOutputFile(this.binary, this.dir);
-
-                //creating the input-, and output-stream
-                try (var input = new BufferedInputStream(connection.getInputStream());
-                     var output = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-                    updateMessage(I18N.getProgressMessage("update.page.download.happening"));
-
-                    //getting the size of the downloadable content
-                    long contentSize = connection.getContentLengthLong();
-                    //calculating the value of 1 %
-                    long onePercent = contentSize / 100;
-                    //this variable will count that how many bytes are read
-                    int allReadBytesCount = 0;
-
-                    byte[] buf = new byte[2048];
-                    int bytesRead;
-                    while ((bytesRead = input.read(buf)) > 0) {
-                        allReadBytesCount += bytesRead;
-                        output.write(buf, 0, bytesRead);
-
-                        //we check that a one-percent value is not a false value
-                        //then we update the progress
-                        if (onePercent > 0) {
-                            double percent = allReadBytesCount / (double) onePercent;
-                            updateProgress(percent, 100d);
-                            updateTitle(String.format("%d/%d%%", (int) percent, 100));
-                        }
-
-                        //if the user cancelled the task, we return
-                        if (this.isCancelled()) {
-                            updateProgress(0, 0);
-                            return null;
-                        }
-
-                        //if a pause request detected, we pause the thread
-                        // by the thread-locker object's wait() method
-                        if (this.paused) {
-                            updateMessage(I18N.getProgressMessage("update.page.download.paused"));
-                            lock.wait();
-                            updateMessage(I18N.getProgressMessage("update.page.download.happening"));
-                        }
-                    }
-
-                    updateProgress(100, 100);
-
-                    return outputFile;
-                } finally {
-                    connection.disconnect();
-                }
-            }
-        }
+    VBox getRoot() {
+        return root;
     }
 }
 
