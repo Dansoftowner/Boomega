@@ -21,6 +21,7 @@ public class OsSynchronizedTheme extends Theme {
     private final Consumer<Boolean> osThemeListener;
 
     private final OsThemeDetector osThemeDetector;
+    private volatile Theme currentTheme;
     private final Theme darkTheme;
     private final Theme lightTheme;
 
@@ -30,6 +31,7 @@ public class OsSynchronizedTheme extends Theme {
         this.osThemeDetector.registerListener(osThemeListener);
         this.darkTheme = new DarkTheme();
         this.lightTheme = new LightTheme();
+        this.currentTheme = getCurrentTheme();
     }
 
     private Theme getCurrentTheme() {
@@ -43,12 +45,12 @@ public class OsSynchronizedTheme extends Theme {
 
     @Override
     public @NotNull ThemeApplier getGlobalApplier() {
-        return getCurrentTheme().getGlobalApplier();
+        return currentTheme.getGlobalApplier();
     }
 
     @Override
     public @NotNull ThemeApplier getCustomApplier() {
-        return getCurrentTheme().getCustomApplier();
+        return currentTheme.getCustomApplier();
     }
 
     private static final class SyncFunction implements Consumer<Boolean> {
@@ -62,8 +64,13 @@ public class OsSynchronizedTheme extends Theme {
         @Override
         public void accept(Boolean isDark) {
             Platform.runLater(() -> {
-                if (isDark) synchTheme.update(synchTheme.lightTheme);
-                else synchTheme.update(synchTheme.darkTheme);
+                if (isDark) {
+                    synchTheme.currentTheme = synchTheme.darkTheme;
+                    synchTheme.update(synchTheme.lightTheme);
+                } else {
+                    synchTheme.currentTheme = synchTheme.lightTheme;
+                    synchTheme.update(synchTheme.darkTheme);
+                }
             });
         }
     }
