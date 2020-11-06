@@ -1,12 +1,10 @@
 package com.dansoftware.libraryapp.util
 
-import com.sun.javafx.PlatformUtil
-
 class PlatformName {
     override fun toString(): String = when {
-        PlatformUtil.isWindows() -> "Windows"
-        PlatformUtil.isLinux() -> "Linux"
-        PlatformUtil.isMac() -> "Mac"
+        OsInfo.isWindows() -> "Windows"
+        OsInfo.isLinux() -> "Linux"
+        OsInfo.isMac() -> "Mac"
         else -> System.getProperty("os.name")
     }
 }

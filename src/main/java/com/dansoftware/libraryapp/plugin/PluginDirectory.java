@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.plugin;
 
-import com.sun.javafx.PlatformUtil;
+import com.dansoftware.libraryapp.util.OsInfo;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -20,11 +20,11 @@ public class PluginDirectory extends File {
     private static final String PATH;
 
     static {
-        if (PlatformUtil.isWindows()) {
+        if (OsInfo.isWindows()) {
             PATH = String.join(File.separator, System.getenv("APPDATA"), "Dansoftware", "libraryapp2020", DIRECTORY_NAME);
-        } else if (PlatformUtil.isLinux()) {
+        } else if (OsInfo.isLinux()) {
             PATH = String.join(File.separator, System.getProperty("user.home"), ".libraryapp2020", "profiles", DIRECTORY_NAME);
-        } else if (PlatformUtil.isMac()) {
+        } else if (OsInfo.isMac()) {
             PATH = String.join(File.separator, "~", "Library", "Application", "Support", "Dansoftware", "libraryapp2020", DIRECTORY_NAME);
         } else {
             PATH = DIRECTORY_NAME;

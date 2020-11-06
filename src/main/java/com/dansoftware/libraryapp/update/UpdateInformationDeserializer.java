@@ -1,8 +1,8 @@
 package com.dansoftware.libraryapp.update;
 
 import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.util.OsInfo;
 import com.google.gson.*;
-import com.sun.javafx.PlatformUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
@@ -59,11 +59,11 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
 
         JsonObject osSpecificBinaries;
         //
-        if (PlatformUtil.isWindows()) {
+        if (OsInfo.isWindows()) {
             osSpecificBinaries = binaries.getAsJsonObject(WINDOWS);
-        } else if (PlatformUtil.isLinux()) {
+        } else if (OsInfo.isLinux()) {
             osSpecificBinaries = binaries.getAsJsonObject(LINUX);
-        } else if (PlatformUtil.isMac()) {
+        } else if (OsInfo.isMac()) {
             osSpecificBinaries = binaries.getAsJsonObject(MAC);
         } else {
             return Collections.emptyList();
