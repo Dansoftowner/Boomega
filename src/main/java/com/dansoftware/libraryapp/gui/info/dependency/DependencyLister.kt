@@ -22,6 +22,7 @@ object DependencyLister {
             DependencyInfo("Gson", "https://github.com/google/gson", LicenseInfo.apache20License()),
             DependencyInfo("Jetbrains annotations", "https://github.com/JetBrains/java-annotations", LicenseInfo.apache20License()),
             DependencyInfo("JRegistry", "https://jregistry.sourceforge.io/", LicenseInfo.lgpLv2()),
+            DependencyInfo("Jasypt", "http://www.jasypt.org/index.html", LicenseInfo.apache20License()),
             DependencyInfo("jUnit 5", "https://junit.org/junit5/", LicenseInfo("Eclipse Public License - v 2.0", "https://github.com/junit-team/junit5/blob/main/LICENSE.md")),
             DependencyInfo("jFileGoodies", "https://github.com/Dansoftowner/jFileGoodies", LicenseInfo.apache20License()),
             DependencyInfo("JFoenix", "http://www.jfoenix.com/", LicenseInfo.apache20License()),
