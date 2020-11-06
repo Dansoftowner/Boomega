@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.updateview.segment.download;
 
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.updateview.UpdateDialog;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.DownloadableBinary;
 import com.dansoftware.libraryapp.update.UpdateInformation;
@@ -177,6 +178,10 @@ public class DownloadSegmentController implements Initializable {
         }
     }
 
+    private UpdateDialog getDialog() {
+        return (UpdateDialog) this.root.getScene().getRoot();
+    }
+
     private void createFormatChooserRadioButtons() {
         this.radioGroup = new ToggleGroup();
         updateInformation.getBinaries().forEach(binary ->
@@ -282,10 +287,10 @@ public class DownloadSegmentController implements Initializable {
                 DownloadSegmentController.this.runnerBtn.disableProperty().bind(this.workDoneProperty().lessThan(100));
 
                 //while the task is running the UpdateView can't be closed
-                //getUpdateView().getCloseBtn().disableProperty().bind(this.runningProperty());
+                getDialog().nextButtonDisableProperty().bind(this.runningProperty());
 
                 //while the task is running the UpdateView can't navigate to a previous update-page
-                //getUpdateView().getPrevBtn().disableProperty().bind(this.runningProperty());
+                getDialog().prevButtonDisableProperty().bind(this.runningProperty());
 
                 //creating a node that has two labels: one on the left, one on the right
                 //the label on the left displays the actual message, the label on the right displays
