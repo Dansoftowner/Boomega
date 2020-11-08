@@ -16,9 +16,11 @@ import java.io.File
  *
  * @author Daniel Gyorffy
  */
-class DownloaderTaskInitializer(val context: Context,
-                                        val updateInformation: UpdateInformation,
-                                        val controller: DownloadSegmentController) {
+class DownloaderTaskExecutor(val context: Context,
+                             val updateInformation: UpdateInformation,
+                             val controller: DownloadSegmentController) {
+
+    private var downloaderTask: DownloaderTask? = null
 
     /**
      * Constructs the [DownloaderTask] object
@@ -26,8 +28,42 @@ class DownloaderTaskInitializer(val context: Context,
      * @param binary the object that represents the downloadable binary
      * @param downloadDirectory the directory
      */
-    fun construct(binary: DownloadableBinary, downloadDirectory: File): DownloaderTask {
-        val downloaderTask = DownloaderTask(updateInformation, binary, downloadDirectory)
+    fun start(binary: DownloadableBinary, downloadDirectory: File) {
+        when {
+            downloaderTask === null -> startNewTask(DownloaderTask(this.updateInformation, binary, downloadDirectory))
+            downloaderTask!!.isDone -> startNewTask(DownloaderTask(this.updateInformation, binary, downloadDirectory))
+        }
+    }
+
+    fun kill() {
+        if (downloaderTask !== null) {
+            downloaderTask!!.isPaused = true
+            downloaderTask!!.cancel()
+        }
+    }
+
+    fun startPause() = setPaused(!isPaused())
+
+    private fun startNewTask(task: DownloaderTask) {
+        this.downloaderTask = initialize(task)
+        DownloadingThread(downloaderTask!!).start()
+    }
+
+    fun getResult(): File? =
+            if (this.downloaderTask === null || this.downloaderTask!!.isRunning) null
+            else downloaderTask!!.value
+
+    fun isDone(): Boolean = downloaderTask?.isDone ?: false
+
+    fun isRunning(): Boolean = downloaderTask?.isRunning ?: false
+
+    fun isPaused(): Boolean = downloaderTask?.isPaused ?: false
+
+    fun setPaused(value: Boolean) {
+        downloaderTask?.isPaused = value
+    }
+
+    private fun initialize(downloaderTask: DownloaderTask): DownloaderTask {
         downloaderTask.setOnRunning {
             controller.progressBar.progressProperty().unbind()
             controller.progressBar.progressProperty().bind(downloaderTask.progressProperty())
@@ -95,6 +131,11 @@ class DownloaderTaskInitializer(val context: Context,
             clearProgress()
         }
 
+        downloaderTask.progressProperty().addListener { _, _, _ ->
+            controller.taskbarProgressbar.showCustomProgress(downloaderTask.workDone.toLong(), downloaderTask.totalWork.toLong(),
+                    if (isPaused()) TaskbarProgressbar.Type.PAUSED else TaskbarProgressbar.Type.NORMAL)
+        }
+
         return downloaderTask
     }
 
@@ -102,5 +143,11 @@ class DownloaderTaskInitializer(val context: Context,
         controller.progressBar.progressProperty().unbind()
         controller.progressBar.progress = 0.0
         controller.root.children.removeAt(6)
+    }
+
+    private class DownloadingThread(task: DownloaderTask) : Thread(task) {
+        init {
+            isDaemon = true
+        }
     }
 }
