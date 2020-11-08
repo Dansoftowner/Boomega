@@ -64,10 +64,6 @@ public class DownloadSegmentController implements Initializable {
      */
     private TaskbarProgressbar taskbarProgressbar;
 
-    private DownloaderTask downloadingTask;
-
-    private final DownloaderTaskInitializer downloaderTaskInitializer;
-
     /**
      * The last selected directory where the user wants to save the update.
      */
@@ -81,11 +77,12 @@ public class DownloadSegmentController implements Initializable {
 
     private final Context context;
     private final UpdateInformation updateInformation;
+    private final DownloaderTaskExecutor downloaderTaskExecutor;
 
     DownloadSegmentController(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
         this.context = Objects.requireNonNull(context);
         this.updateInformation = Objects.requireNonNull(updateInformation);
-        this.downloaderTaskInitializer = new DownloaderTaskInitializer(context, updateInformation, this);
+        this.downloaderTaskExecutor = new DownloaderTaskExecutor(context, updateInformation, this);
     }
 
     @FXML
@@ -105,33 +102,26 @@ public class DownloadSegmentController implements Initializable {
     @FXML
     private void downloadSelected() {
         //creating a TaskbarProgressbar object if we haven't already
-        if (taskbarProgressbar == null)
-            taskbarProgressbar = TaskbarProgressbarFactory.getTaskbarProgressbar((Stage) context.getContextWindow());
-        taskbarProgressbar.showIndeterminateProgress();
-
+        showTaskbarIndeterminateProgress();
         BinaryEntryRadioButton selectedRadio = (BinaryEntryRadioButton) this.radioGroup.getSelectedToggle();
-        this.downloadingTask = downloaderTaskInitializer.construct(selectedRadio.binary, downloadDirectory);
-
-        var thread = new Thread(downloadingTask);
-        thread.setDaemon(true);
-        thread.start();
+        downloaderTaskExecutor.start(selectedRadio.binary, downloadDirectory);
     }
 
     @FXML
     private void pauseDownload() {
         //we pause if it's running; or we start if it's paused
-        downloadingTask.setPaused(!downloadingTask.isPaused());
+        downloaderTaskExecutor.setPaused(!downloaderTaskExecutor.isPaused());
 
         //we set the right icon depending on it's paused or not
         downloadPauseBtn.setGraphic(new MaterialDesignIconView(
-                downloadingTask.isPaused() ?
+                downloaderTaskExecutor.isPaused() ?
                         MaterialDesignIcon.PLAY :
                         MaterialDesignIcon.PAUSE
         ));
 
         //changing the tooltip on the download/pause button
         downloadPauseBtn.setTooltip(new Tooltip(
-                downloadingTask.isPaused() ?
+                downloaderTaskExecutor.isPaused() ?
                         I18N.getGeneralWord("update.view.download.tooltip.resume") :
                         I18N.getGeneralWord("update.view.download.tooltip.pause")
         ));
@@ -139,26 +129,21 @@ public class DownloadSegmentController implements Initializable {
 
     @FXML
     private void killDownload() {
-        if (downloadingTask == null)
-            return;
-
         //we cancel the task
-        downloadingTask.setPaused(false);
-        downloadingTask.cancel();
+        downloaderTaskExecutor.kill();
     }
 
     @FXML
     private void openDownloaded() {
-        if (downloadingTask != null && downloadingTask.isDone()) {
-            File result = downloadingTask.getValue();
+        File result = downloaderTaskExecutor.getResult();
+        if (result != null)
             FileExplorers.getLazy().openSelect(result);
-        }
     }
 
     @FXML
     private void runDownloaded() {
-        if (downloadingTask != null && downloadingTask.isDone()) {
-            File result = downloadingTask.getValue();
+        File result = downloaderTaskExecutor.getResult();
+        if (result != null) {
             try {
                 Runtime.getRuntime().exec(result.getAbsoluteFile().getAbsolutePath());
             } catch (IOException e) {
@@ -170,6 +155,12 @@ public class DownloadSegmentController implements Initializable {
         }
     }
 
+    private void showTaskbarIndeterminateProgress() {
+        if (taskbarProgressbar == null)
+            taskbarProgressbar = TaskbarProgressbarFactory.getTaskbarProgressbar((Stage) context.getContextWindow());
+        taskbarProgressbar.showIndeterminateProgress();
+    }
+
     private void createFormatChooserRadioButtons() {
         this.radioGroup = new ToggleGroup();
         updateInformation.getBinaries().forEach(binary ->
@@ -177,7 +168,7 @@ public class DownloadSegmentController implements Initializable {
     }
 
     UpdateDialog getDialog() {
-        return (UpdateDialog) this.root.getScene().getRoot();
+        return (UpdateDialog) this.root.getParent().getParent();
     }
 
     @Override
@@ -185,7 +176,6 @@ public class DownloadSegmentController implements Initializable {
         this.createFormatChooserRadioButtons();
         this.downloadBtn.disableProperty().bind(
                 this.radioGroup.selectedToggleProperty().isNull().or(this.downloadPathField.textProperty().isEmpty()));
-
         this.downloadPathChooserBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.FOLDER));
         this.downloadPauseBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.PAUSE));
         this.downloadKillBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.STOP));
