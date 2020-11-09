@@ -109,7 +109,7 @@ public class DownloaderTask extends Task<File> {
 
                 byte[] buf = new byte[2048];
                 int bytesRead;
-                while ((bytesRead = input.read(buf)) > 0) {
+                while ((bytesRead = input.read(buf)) >= 0) {
                     allReadBytesCount += bytesRead;
                     output.write(buf, 0, bytesRead);
 
