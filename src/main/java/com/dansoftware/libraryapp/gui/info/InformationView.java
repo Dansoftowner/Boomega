@@ -102,7 +102,7 @@ public class InformationView extends SimpleHeaderView<Node>
 
     private void setDefaults() {
         gitHubBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX));
-        showDepsBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.LANGUAGE_JAVASCRIPT));
+        showDepsBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.CODE_BRACES));
     }
 
     private void setData() {
