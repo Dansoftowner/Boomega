@@ -80,6 +80,9 @@ class DownloaderTaskExecutor(val context: Context,
             controller.fileOpenerBtn.disableProperty().unbind()
             controller.fileOpenerBtn.disableProperty().bind(downloaderTask.workDoneProperty().lessThan(100))
 
+            controller.radioBtnVBox.disableProperty().unbind()
+            controller.radioBtnVBox.disableProperty().bind(downloaderTask.runningProperty())
+
             controller.runnerBtn.disableProperty().unbind()
             controller.runnerBtn.disableProperty().bind(downloaderTask.workDoneProperty().lessThan(100))
 

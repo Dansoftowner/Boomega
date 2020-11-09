@@ -233,6 +233,10 @@ public class DownloadSegmentController implements Initializable {
         return taskbarProgressbar;
     }
 
+    VBox getRadioBtnVBox() {
+        return radioBtnVBox;
+    }
+
     VBox getRoot() {
         return root;
     }
