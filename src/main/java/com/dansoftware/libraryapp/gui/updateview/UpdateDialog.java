@@ -30,7 +30,6 @@ import java.util.function.BiConsumer;
  */
 public class UpdateDialog extends SegmentDialog {
 
-
     private static final String STYLE_CLASS = "updateDialog";
 
     public interface HidePolicy extends BiConsumer<Context, UpdateDialog> {
@@ -74,17 +73,22 @@ public class UpdateDialog extends SegmentDialog {
     }
 
     private static final class SegmentSequenceImpl extends SegmentSequence {
+
+        private final Context context;
+
         SegmentSequenceImpl(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
             super(
                     new NotificationSegment(context, updateInformation),
                     new DetailsSegment(context, updateInformation),
                     new DownloadSegment(context, updateInformation)
             );
+            this.context = context;
         }
 
         @Override
         protected void onSegmentsFinished(@NotNull SegmentDialog segmentDialog) {
-//            WindowUtils.getStageOptionalOf(segmentDialog).ifPresent(Stage::close);
+            UpdateDialog updateDialog = (UpdateDialog) segmentDialog;
+            updateDialog.hidePolicy.accept(context, updateDialog);
         }
     }
 }
