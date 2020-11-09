@@ -112,19 +112,10 @@ abstract class LibraryAppStage : Stage {
      * Sets the full screen key combination.
      */
     protected fun setFullScreenKeyCombination(value: KeyCombination) {
-        val onKeyReleasedAction: EventHandler<KeyEvent> = EventHandler { event: KeyEvent ->
+        this.addEventHandler(KeyEvent.KEY_RELEASED) { event: KeyEvent ->
             if (value.match(event)) {
                 isFullScreen = isFullScreen.not()
             }
-        }
-        when {
-            scene === null -> {
-                sceneProperty().addListener { _, oldScene, newScene: Scene ->
-                    oldScene?.onKeyReleased = null
-                    newScene.onKeyReleased = onKeyReleasedAction
-                }
-            }
-            else -> scene.onKeyReleased = onKeyReleasedAction
         }
     }
 }
