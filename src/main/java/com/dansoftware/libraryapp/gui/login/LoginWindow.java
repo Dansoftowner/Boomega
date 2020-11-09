@@ -36,6 +36,8 @@ class LoginWindow extends LibraryAppStage
         super("window.login.title", root);
         this.preferences = Objects.requireNonNull(preferences);
         this.loginView = Objects.requireNonNull(root, "LoginView shouldn't be null");
+        this.setFullScreenExitHint(I18N.getGeneralWord("window.fullscreen.hint"));
+        this.setFullScreenKeyCombination(new KeyCodeCombination(KeyCode.F11));
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
         this.setMaximized(true);
     }
