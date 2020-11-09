@@ -15,20 +15,21 @@ import java.util.Optional;
  */
 public class ApplicationRestart {
 
-    public ApplicationRestart() {
-    }
-
+    /**
+     * Restarts the application.
+     *
+     * @throws RestartException if the restart process doesn't proceeds for some reason
+     */
     public void restartApp() throws RestartException {
-        Optional<OSProcess> appProcess = getAppProcess();
-        if (appProcess.isPresent()) {
-            try {
+        try {
+            Optional<OSProcess> appProcess = getAppProcess();
+            if (appProcess.isPresent()) {
                 Runtime.getRuntime().exec(appProcess.get().getCommandLine());
-            } catch (IOException e) {
-                throw new RestartException("Couldn't execute the starter command with the OS", e);
-            }
-        } else throw new RestartException("Couldn't identify the process by PID");
-
-        Platform.exit();
+            } else throw new RestartException("Couldn't identify the process by PID");
+            Platform.exit();
+        } catch (IOException e) {
+            throw new RestartException("Couldn't execute the starter command with the OS", e);
+        }
     }
 
     private Optional<OSProcess> getAppProcess() {
@@ -40,6 +41,10 @@ public class ApplicationRestart {
                 .findAny();
     }
 
+    /**
+     * Occurs when an {@link ApplicationRestart} couldn't restart the application
+     * for some reason.
+     */
     public static final class RestartException extends Exception {
         private RestartException(String message) {
             super(message);
