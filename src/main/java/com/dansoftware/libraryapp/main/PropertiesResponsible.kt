@@ -10,6 +10,14 @@ import org.apache.commons.io.FilenameUtils
  */
 object PropertiesResponsible {
 
+    /* ****** Keys ****** */
+
+    private const val LIBRARY_APP_VERSION = "libraryapp.version"
+    private const val LIBRARY_APP_BUILD_INFO = "libraryapp.build.info"
+    private const val LIBRARY_APP_FILE_EXTENSION = "libraryapp.file.extension"
+    private const val LOG_FILE_PATH = "log.file.path"
+    private const val LOG_FILE_FULL_PATH = "log.file.path.full"
+
     /* **** VALUES **** */
 
     /**
@@ -36,15 +44,6 @@ object PropertiesResponsible {
      * The log-file's path with the extension
      */
     private val LOG_FILE_FULL_PATH_VALUE: String = listOf(LOG_FILE_PATH_VALUE, "log").joinToString(FilenameUtils.EXTENSION_SEPARATOR_STR)
-
-
-    /* ****** Keys ****** */
-
-    private const val LIBRARY_APP_VERSION = "libraryapp.version"
-    private const val LIBRARY_APP_BUILD_INFO = "libraryapp.build.info"
-    private const val LIBRARY_APP_FILE_EXTENSION = "libraryapp.file.extension"
-    private const val LOG_FILE_PATH = "log.file.path"
-    private const val LOG_FILE_FULL_PATH = "log.file.path.full"
 
     /**
      * Puts all the necessary system-properties that the application needs.
