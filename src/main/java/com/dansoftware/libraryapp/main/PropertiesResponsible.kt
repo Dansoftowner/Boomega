@@ -35,7 +35,7 @@ object PropertiesResponsible {
     /**
      * The log-file's path with the extension
      */
-    private val LOG_FILE_FULL_PATH_VALUE: String = java.lang.String.join(FilenameUtils.EXTENSION_SEPARATOR_STR, LOG_FILE_PATH_VALUE, "log")
+    private val LOG_FILE_FULL_PATH_VALUE: String = listOf(LOG_FILE_PATH_VALUE, "log").joinToString(FilenameUtils.EXTENSION_SEPARATOR_STR)
 
 
     /* ****** Keys ****** */
