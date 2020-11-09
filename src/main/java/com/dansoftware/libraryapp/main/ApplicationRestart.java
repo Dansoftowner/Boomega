@@ -36,9 +36,7 @@ public class ApplicationRestart {
         SystemInfo systemInfo = new SystemInfo();
         OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
         int currentPID = operatingSystem.getProcessId();
-        return operatingSystem.getProcesses().stream()
-                .filter(osProcess -> osProcess.getProcessID() == currentPID)
-                .findAny();
+        return Optional.ofNullable(operatingSystem.getProcess(currentPID));
     }
 
     /**
