@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
-import javafx.beans.value.ChangeListener
 import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
