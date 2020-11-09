@@ -72,7 +72,7 @@
 
 /** LOGIN VIEW **/
 .login-form {
-    -fx-background-image: url("/com/dansoftware/libraryapp/image/login/background-dark.jpg");
+    -fx-background-image: url("/com/dansoftware/libraryapp/image/backgrounds/background-dark.jpg");
     -fx-background-size: stretch;
 }
 

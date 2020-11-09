@@ -30,7 +30,7 @@ public class PreloaderGUI extends VBox {
 
     private static final String STYLE_CLASS = "root";
     private static final String LOGO_RESOURCE = "/com/dansoftware/libraryapp/image/logo/bookshelf_512_black.png";
-    private static final String COMPANY_LOGO_RESOURCE = "/com/dansoftware/libraryapp/image/dansoftware-logo.jpg";
+    private static final String COMPANY_LOGO_RESOURCE = "/com/dansoftware/libraryapp/image/logo/dansoftware-logo.jpg";
     private static final double PREF_WIDTH = 739.0;
     private static final double PREF_HEIGHT = 453.0;
 
