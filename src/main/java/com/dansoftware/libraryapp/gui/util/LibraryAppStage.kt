@@ -1,9 +1,13 @@
 package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
+import javafx.beans.value.ChangeListener
+import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.image.Image
+import javafx.scene.input.KeyCombination
+import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
 import java.io.BufferedInputStream
 
@@ -13,7 +17,7 @@ import java.io.BufferedInputStream
  *
  * @author Daniel Gyorffy
  */
-abstract class LibraryAppStage constructor() : Stage() {
+abstract class LibraryAppStage : Stage {
 
     /**
      * For defining the resource-locations for window-icons
@@ -81,11 +85,47 @@ abstract class LibraryAppStage constructor() : Stage() {
         }
     }
 
+    /**
+     * Creates a normal LibraryAppStage.
+     */
+    protected constructor() : super()
+
+    /**
+     * Creates a LibraryAppStage and sets the title of it.
+     *
+     * @param i18n the resource bundle key for the title
+     */
     protected constructor(i18n: String) : this() {
         title = I18N.getWindowTitles().getString(i18n)
     }
 
+    /**
+     * Creates a LibraryAppStage and sets the title and the content of it.
+     *
+     * @param i18n the resource bundle key for the title
+     * @param content the graphic content
+     */
     protected constructor(i18n: String, content: Parent) : this(i18n) {
         scene = Scene(content)
+    }
+
+    /**
+     * Sets the full screen key combination.
+     */
+    protected fun setFullScreenKeyCombination(value: KeyCombination) {
+        val onKeyReleasedAction: EventHandler<KeyEvent> = EventHandler { event: KeyEvent ->
+            if (value.match(event)) {
+                isFullScreen = isFullScreen.not()
+            }
+        }
+        when {
+            scene === null -> {
+                sceneProperty().addListener { _, oldScene, newScene: Scene ->
+                    oldScene?.onKeyReleased = null
+                    newScene.onKeyReleased = onKeyReleasedAction
+                }
+            }
+            else -> scene.onKeyReleased = onKeyReleasedAction
+        }
     }
 }
