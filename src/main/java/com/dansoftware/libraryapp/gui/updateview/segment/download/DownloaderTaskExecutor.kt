@@ -77,6 +77,12 @@ class DownloaderTaskExecutor(val context: Context,
             controller.downloadBtn.disableProperty().unbind()
             controller.downloadBtn.disableProperty().bind(downloaderTask.runningProperty())
 
+            controller.downloadPathField.disableProperty().unbind()
+            controller.downloadPathField.disableProperty().bind(downloaderTask.runningProperty())
+
+            controller.downloadPathChooserBtn.disableProperty().unbind()
+            controller.downloadPathChooserBtn.disableProperty().bind(downloaderTask.runningProperty())
+
             controller.fileOpenerBtn.disableProperty().unbind()
             controller.fileOpenerBtn.disableProperty().bind(downloaderTask.workDoneProperty().lessThan(100))
 
@@ -135,8 +141,14 @@ class DownloaderTaskExecutor(val context: Context,
         }
 
         downloaderTask.progressProperty().addListener { _, _, _ ->
-            controller.taskbarProgressbar.showCustomProgress(downloaderTask.workDone.toLong(), downloaderTask.totalWork.toLong(),
-                    if (isPaused()) TaskbarProgressbar.Type.PAUSED else TaskbarProgressbar.Type.NORMAL)
+            controller.taskbarProgressbar.showCustomProgress(
+                    downloaderTask.workDone.toLong(),
+                    downloaderTask.totalWork.toLong(),
+                    when {
+                        isPaused() -> TaskbarProgressbar.Type.PAUSED
+                        else -> TaskbarProgressbar.Type.NORMAL
+                    }
+            )
         }
 
         return downloaderTask

@@ -205,6 +205,10 @@ public class DownloadSegmentController implements Initializable {
         return progressBar;
     }
 
+    TextField getDownloadPathField() {
+        return downloadPathField;
+    }
+
     Button getDownloadPathChooserBtn() {
         return downloadPathChooserBtn;
     }
