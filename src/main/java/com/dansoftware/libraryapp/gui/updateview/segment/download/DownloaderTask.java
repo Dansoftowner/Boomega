@@ -12,7 +12,13 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Task for downloading the particular update package from the server.
+ *
+ * @author Daniel Gyorffy
+ */
 public class DownloaderTask extends Task<File> {
+
     /**
      * The object that the DownloaderTask use for thread-locking
      */
