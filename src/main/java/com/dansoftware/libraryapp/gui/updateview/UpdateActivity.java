@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * <p>
  * It needs a {@link Context} for displaying the dialog(s) and
- * an {@link com.dansoftware.libraryapp.update.UpdateSearcher.UpdateSearchResult}
+ * an {@link UpdateSearcher.UpdateSearchResult}
  * that can be created by an {@link UpdateSearcher}.
  * <p>
  *

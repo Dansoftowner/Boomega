@@ -110,7 +110,7 @@ public class Main extends BaseApplication {
 
             //searching for updates
             notifyPreloader(new Preloader.MessageNotification("preloader.update.search"));
-            UpdateSearcher updateSearcher = new UpdateSearcher(new VersionInteger(System.getProperty("libraryapp.version")));
+            UpdateSearcher updateSearcher = UpdateSearcher.newInstance(new VersionInteger(System.getProperty("libraryapp.version")));
             UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
 
             notifyPreloader(new Preloader.MessageNotification("preloader.gui.build"));
