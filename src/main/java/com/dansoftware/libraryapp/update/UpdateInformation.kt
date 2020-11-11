@@ -6,7 +6,7 @@ package com.dansoftware.libraryapp.update
  *
  * @author Daniel Gyorffy
  */
-class UpdateInformation
+data class UpdateInformation
 /**
  * This constructor creates an UpdateInformationObject with the required values
  *
