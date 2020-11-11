@@ -9,6 +9,8 @@ import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 
 /**
@@ -19,6 +21,11 @@ import java.io.File
 class DownloaderTaskExecutor(val context: Context,
                              val updateInformation: UpdateInformation,
                              val controller: DownloadSegmentController) {
+
+    companion object {
+        @JvmStatic
+        val logger: Logger = LoggerFactory.getLogger(DownloaderTaskExecutor::class.java)
+    }
 
     private var downloaderTask: DownloaderTask? = null
 
@@ -126,6 +133,8 @@ class DownloaderTaskExecutor(val context: Context,
                     TaskbarProgressbar.Type.ERROR
             )
             val cause = event.source.exception
+
+            logger.error("DownloaderTask failed with an exception: {}", cause)
 
             context.showErrorDialog(
                     I18N.getAlertMsg("update.view.download.failed.title"),

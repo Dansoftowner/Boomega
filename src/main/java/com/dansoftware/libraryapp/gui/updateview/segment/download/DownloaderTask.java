@@ -7,10 +7,13 @@ import javafx.concurrent.Task;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Task for downloading the particular update package from the server.
@@ -18,6 +21,8 @@ import java.net.URL;
  * @author Daniel Gyorffy
  */
 public class DownloaderTask extends Task<File> {
+
+    private static final Logger logger = LoggerFactory.getLogger(DownloaderTask.class);
 
     /**
      * The object that the DownloaderTask use for thread-locking
@@ -87,9 +92,12 @@ public class DownloaderTask extends Task<File> {
     @Override
     protected File call() throws IOException, InterruptedException {
         synchronized (lock) {
-            //creating the URLConnection
-            URL url = new URL(this.binary.getDownloadUrl());
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            logger.debug("Starting downloading the update bundle...");
+            String stringUrl = this.binary.getDownloadUrl();
+            logger.debug("The download url is: {}", stringUrl);
+
+            URL url = new URL(stringUrl);
+            URLConnection connection = url.openConnection();
             connection.connect();
 
             //defining the file that we want to write to
@@ -138,9 +146,11 @@ public class DownloaderTask extends Task<File> {
 
                 updateProgress(100, 100);
 
+                logger.debug("Downloader task succeeded: {}", outputFile);
                 return outputFile;
             } finally {
-                connection.disconnect();
+                if (connection instanceof HttpURLConnection)
+                    ((HttpURLConnection) connection).disconnect();
             }
         }
     }
