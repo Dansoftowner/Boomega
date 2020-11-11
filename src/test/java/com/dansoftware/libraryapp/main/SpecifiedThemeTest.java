@@ -8,9 +8,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WithSpecifiedThemeTest {
+public class SpecifiedThemeTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(WithSpecifiedThemeTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpecifiedThemeTest.class);
 
     public static void main(String... args) throws ReflectiveOperationException {
         Preferences preferences = Preferences.getPreferences();
