@@ -20,8 +20,10 @@ public class UpdateTest {
     private static List<DownloadableBinary> mapArgumentsToDownloadable(String[] args) {
         var list = new ArrayList<DownloadableBinary>(args.length);
         try {
-            for (String arg : args)
-                list.add(new DownloadableBinary("X Installer", FilenameUtils.getExtension(arg), new File(arg).toURI().toURL().toString()));
+            for (String arg : args) {
+                String extension = FilenameUtils.getExtension(arg);
+                list.add(new DownloadableBinary(String.format("%s archieve", extension), extension, new File(arg).toURI().toURL().toString()));
+            }
             return list;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
