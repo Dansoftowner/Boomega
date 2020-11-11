@@ -10,6 +10,7 @@ import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -146,6 +147,7 @@ public class DownloadSegmentController implements Initializable {
         if (result != null) {
             try {
                 Runtime.getRuntime().exec(result.getAbsoluteFile().getAbsolutePath());
+                Platform.exit();
             } catch (IOException e) {
                 context.showErrorDialog(
                         I18N.getAlertMsg("update.view.downloaded.run.failed.title", result.getName()),
