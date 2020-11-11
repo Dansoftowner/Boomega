@@ -5,6 +5,7 @@ import com.dansoftware.libraryapp.gui.updateview.UpdateDialog;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.DownloadableBinary;
 import com.dansoftware.libraryapp.update.UpdateInformation;
+import com.jfilegoodies.FileGoodies;
 import com.jfilegoodies.explorer.FileExplorers;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
@@ -14,6 +15,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -25,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -144,16 +147,21 @@ public class DownloadSegmentController implements Initializable {
     @FXML
     private void runDownloaded() {
         File result = downloaderTaskExecutor.getResult();
-        if (result != null) {
-            try {
-                Runtime.getRuntime().exec(result.getAbsoluteFile().getAbsolutePath());
+        try {
+            if (result != null) {
+
+                if (FileGoodies.isOSExecutable(result))
+                    Runtime.getRuntime().exec(result.getAbsoluteFile().getAbsolutePath());
+                else
+                    openDownloaded();
                 Platform.exit();
-            } catch (IOException e) {
-                context.showErrorDialog(
-                        I18N.getAlertMsg("update.view.downloaded.run.failed.title", result.getName()),
-                        I18N.getAlertMsg("update.view.downloaded.run.failed.msg"), e, buttonType -> {
-                        });
+
             }
+        } catch (IOException e) {
+            context.showErrorDialog(
+                    I18N.getAlertMsg("update.view.downloaded.run.failed.title", result.getName()),
+                    I18N.getAlertMsg("update.view.downloaded.run.failed.msg"), e, buttonType -> {
+                    });
         }
     }
 
@@ -165,8 +173,13 @@ public class DownloadSegmentController implements Initializable {
 
     private void createFormatChooserRadioButtons() {
         this.radioGroup = new ToggleGroup();
-        updateInformation.getBinaries().forEach(binary ->
-                radioBtnVBox.getChildren().add(new BinaryEntryRadioButton(radioGroup, binary)));
+        List<DownloadableBinary> binaries = updateInformation.getBinaries();
+        if (!binaries.isEmpty()) {
+            binaries.forEach(binary ->
+                    radioBtnVBox.getChildren().add(new BinaryEntryRadioButton(radioGroup, binary)));
+        } else {
+            //radioBtnVBox.getChildren().add()
+        }
     }
 
     UpdateDialog getDialog() {
@@ -183,6 +196,12 @@ public class DownloadSegmentController implements Initializable {
         this.downloadKillBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.STOP));
     }
 
+    private static final class NoAvailableBinariesPlaceHolder extends StackPane {
+        NoAvailableBinariesPlaceHolder() {
+//            getChildren()
+        }
+    }
+
     /**
      * A {@link BinaryEntryRadioButton} is a {@link RadioButton} that represents a
      * binary-type.
@@ -191,7 +210,7 @@ public class DownloadSegmentController implements Initializable {
      * It requires a {@link ToggleGroup} and a {@link DownloadableBinary} object that represents the
      * downloadable update-file.
      */
-    private static class BinaryEntryRadioButton extends RadioButton {
+    private static final class BinaryEntryRadioButton extends RadioButton {
 
         private final DownloadableBinary binary;
 
