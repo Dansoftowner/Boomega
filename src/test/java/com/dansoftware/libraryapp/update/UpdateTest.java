@@ -10,7 +10,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Deprecated
 public class UpdateTest {
 
     public static void main(String[] args) {
