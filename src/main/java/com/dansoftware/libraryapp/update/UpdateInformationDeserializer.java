@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.update;
 
 import com.dansoftware.libraryapp.locale.I18N;
-import com.dansoftware.libraryapp.util.OsInfo;
+import com.dansoftware.libraryapp.util.PlatformName;
 import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,19 +11,59 @@ import java.util.*;
 /**
  * Defines an {@link UpdateInformation} json-deserialization process for {@link Gson}.
  *
+ * <p>
+ * A json sample:
+ * <pre>{@code
+ * {
+ *     "binaries" : {
+ *       "Linux" : {
+ *         "bundles" : {
+ *           "deb" : {
+ *             "downloadUrl" : "about:blank",
+ *             "localeKey" : "-",
+ *             "simpleName" : "Deb archieve"
+ *           },
+ *           "targz" : {
+ *             "downloadUrl" : "about:blank",
+ *             "localeKey" : "-",
+ *             "simpleName" : "Tar.gz archieve"
+ *           }
+ *         }
+ *       },
+ *       "Windows" : {
+ *         "bundles" : {
+ *           "exe" : {
+ *             "downloadUrl" : "about:blank",
+ *             "localeKey" : "-",
+ *             "simpleName" : "Exe installer"
+ *           },
+ *           "zip" : {
+ *             "downloadUrl" : "about:blank",
+ *             "localeKey" : "-",
+ *             "simpleName" : "Zip archieve"
+ *           }
+ *         }
+ *       }
+ *     },
+ *     "review" : {
+ *       "defaultLang" : "en",
+ *       "en" : "about:blank",
+ *       "hu" : "about:blank"
+ *     },
+ *     "version" : "0.0.0"
+ * }
+ * } </pre>
+ *
  * @author Daniel Gyorffy
  */
-public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformation> {
+class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformation> {
 
-    //defining some JSON-key constants
+    //JSon element IDENTIFIERS
 
     private static final String BINARIES = "binaries";
     private static final String VERSION = "version";
     private static final String REVIEW = "review";
 
-    private static final String WINDOWS = "Windows";
-    private static final String LINUX = "Linux";
-    private static final String MAC = "Mac";
     private static final String BUNDLES = "bundles";
     private static final String SIMPLE_NAME = "simpleName";
     private static final String LOCALE_KEY = "localeKey";
@@ -36,65 +76,27 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
     @NotNull
     @Override
     public UpdateInformation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        //handling the Json as a JsonObject
         JsonObject jsonObject = json.getAsJsonObject();
-
-        return new UpdateInformation(
-                getVersion(jsonObject),
-                getReviewUrl(jsonObject),
-                getBinaries(jsonObject)
-        );
+        return new UpdateInformation(getVersion(jsonObject), getReviewUrl(jsonObject), getBinaries(jsonObject));
     }
 
+    /**
+     * Gets the version-string of the JsonObject.
+     *
+     * @param jsonObject the json-object
+     * @return the version-string
+     */
     private String getVersion(@NotNull JsonObject jsonObject) {
         return jsonObject.get(VERSION).getAsString();
     }
 
     /**
-     * Retrieves the available downloadable binary-types from the JsonObject
-     * into a {@link Map}
+     * Gets the right url of the markdown-text review resource.
+     *
+     * @param jsonObject the jsonObject
+     * @return the url
      */
-    @NotNull
-    private List<DownloadableBinary> getBinaries(@NotNull JsonObject jsonObject) {
-        JsonObject binaries = jsonObject.getAsJsonObject(BINARIES);
-
-        JsonObject osSpecificBinaries;
-        //
-        if (OsInfo.isWindows()) {
-            osSpecificBinaries = binaries.getAsJsonObject(WINDOWS);
-        } else if (OsInfo.isLinux()) {
-            osSpecificBinaries = binaries.getAsJsonObject(LINUX);
-        } else if (OsInfo.isMac()) {
-            osSpecificBinaries = binaries.getAsJsonObject(MAC);
-        } else {
-            return Collections.emptyList();
-        }
-
-        //
-        JsonObject bundles = osSpecificBinaries.getAsJsonObject(BUNDLES);
-
-        List<DownloadableBinary> result = new ArrayList<>(3);
-        Set<Map.Entry<String, JsonElement>> entries = bundles.entrySet();
-        entries.forEach(entry -> {
-            JsonObject value = entry.getValue().getAsJsonObject();
-
-            String simpleName = value.get(SIMPLE_NAME).getAsString();
-            String localeKey = value.get(LOCALE_KEY).getAsString();
-            String downloadUrl = value.get(DOWNLOAD_URL).getAsString();
-            String fileExtension = value.get(FILE_EXTENSION).getAsString();
-
-            String localizedName;
-            try {
-                localizedName = I18N.getGeneralWord(localeKey);
-            } catch (MissingResourceException e) {
-                localizedName = simpleName;
-            }
-
-            result.add(new DownloadableBinary(localizedName, fileExtension, downloadUrl));
-        });
-
-        return result;
-    }
-
     @NotNull
     private String getReviewUrl(@NotNull JsonObject jsonObject) {
         JsonObject reviewBundle = jsonObject.getAsJsonObject(REVIEW);
@@ -108,5 +110,50 @@ public class UpdateInformationDeserializer implements JsonDeserializer<UpdateInf
         return reviewUrl.getAsString();
     }
 
+    /**
+     * Retrieves the available downloadable binary-types from the JsonObject
+     * into a {@link List}.
+     */
+    @NotNull
+    private List<DownloadableBinary> getBinaries(@NotNull JsonObject jsonObject) {
+        //the json object that contains the binaries for each platform
+        JsonObject binaries = jsonObject.getAsJsonObject(BINARIES);
 
+        //the json object that contains the binaries for the particular platform
+        JsonObject osSpecificBinaries = binaries.getAsJsonObject(new PlatformName().toString());
+
+        if (osSpecificBinaries == null)
+            return Collections.emptyList();
+
+        //the json object that contains the bundles for the particular platform
+        JsonObject bundles = osSpecificBinaries.getAsJsonObject(BUNDLES);
+
+        List<DownloadableBinary> result = new ArrayList<>(3);
+        Set<Map.Entry<String, JsonElement>> entries = bundles.entrySet();
+        entries.forEach(entry -> {
+            //the json object that contains the information of the particular bundle
+            JsonObject value = entry.getValue().getAsJsonObject();
+
+            //simple name for example: "Exe installer", "Zip Archieve"
+            String simpleName = value.get(SIMPLE_NAME).getAsString();
+            //the localeKey for internationalization
+            String localeKey = value.get(LOCALE_KEY).getAsString();
+            //the url where we can find the actual resource
+            String downloadUrl = value.get(DOWNLOAD_URL).getAsString();
+            //it's file extension
+            String fileExtension = value.get(FILE_EXTENSION).getAsString();
+
+            //trying to localize the name...
+            String localizedName;
+            try {
+                localizedName = I18N.getGeneralWord(localeKey);
+            } catch (MissingResourceException e) {
+                localizedName = simpleName;
+            }
+
+            result.add(new DownloadableBinary(localizedName, fileExtension, downloadUrl));
+        });
+
+        return result;
+    }
 }
