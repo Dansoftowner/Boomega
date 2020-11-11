@@ -46,12 +46,12 @@ final class WorkbenchContextAdapter implements Context {
 
     @Override
     public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(workbench.showDialog(buildErrorDialog(title, message, exception, onResult)));
+        return ContextDialog.from(workbench.showErrorDialog(title, message, exception, onResult));
     }
 
     @Override
     public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(workbench.showDialog(buildInformationDialog(title, message, onResult)));
+        return ContextDialog.from(workbench.showInformationDialog(title, message, onResult));
     }
 
     @Override
