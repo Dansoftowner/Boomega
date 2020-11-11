@@ -1,10 +1,12 @@
 package com.dansoftware.libraryapp.util
 
 class PlatformName {
-    override fun toString(): String = when {
+    private val platformName: String = when {
         OsInfo.isWindows() -> "Windows"
         OsInfo.isLinux() -> "Linux"
         OsInfo.isMac() -> "Mac"
         else -> System.getProperty("os.name")
     }
+
+    override fun toString(): String = platformName
 }
