@@ -1,5 +1,3 @@
-import com.dansoftware.libraryapp.update.UpdateInformation;
-import com.dansoftware.libraryapp.update.UpdateSearcher;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
