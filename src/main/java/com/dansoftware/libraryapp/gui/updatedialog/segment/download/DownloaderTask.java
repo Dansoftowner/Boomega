@@ -3,6 +3,9 @@ package com.dansoftware.libraryapp.gui.updatedialog.segment.download;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.DownloadableBinary;
 import com.dansoftware.libraryapp.update.UpdateInformation;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +32,8 @@ public class DownloaderTask extends Task<File> {
      */
     private final Object lock = new Object();
 
+
+    private final BooleanProperty pausedProperty = new SimpleBooleanProperty();
     /**
      * The boolean that indicates that the task's background thread is paused
      */
@@ -69,6 +74,10 @@ public class DownloaderTask extends Task<File> {
 
     boolean isPaused() {
         return this.paused;
+    }
+
+    BooleanProperty pausedProperty() {
+        return pausedProperty;
     }
 
     /**
@@ -138,8 +147,10 @@ public class DownloaderTask extends Task<File> {
                     //if a pause request detected, we pause the thread
                     // by the thread-locker object's wait() method
                     if (this.paused) {
+                        Platform.runLater(() -> pausedProperty.set(true));
                         updateMessage(I18N.getProgressMessage("update.page.download.paused"));
                         lock.wait();
+                        Platform.runLater(() -> pausedProperty.set(false));
                         updateMessage(I18N.getProgressMessage("update.page.download.happening"));
                     }
                 }
