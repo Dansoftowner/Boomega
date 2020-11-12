@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.updateview.segment.download;
+package com.dansoftware.libraryapp.gui.updatedialog.segment.download;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Allows the user to download the new app from the internet in a {@link com.dansoftware.libraryapp.gui.updateview.UpdateDialog}.
+ * Allows the user to download the new app from the internet in a {@link com.dansoftware.libraryapp.gui.updatedialog.UpdateDialog}.
  * The user can select what type of file should be downloaded.
  *
  * @author Daniel Gyorffy

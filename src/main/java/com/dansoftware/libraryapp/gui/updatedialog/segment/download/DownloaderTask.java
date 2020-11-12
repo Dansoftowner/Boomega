@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.updateview.segment.download;
+package com.dansoftware.libraryapp.gui.updatedialog.segment.download;
 
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.DownloadableBinary;

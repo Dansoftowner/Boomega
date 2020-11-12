@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.updateview.segment.notification;
+package com.dansoftware.libraryapp.gui.updatedialog.segment.notification;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;

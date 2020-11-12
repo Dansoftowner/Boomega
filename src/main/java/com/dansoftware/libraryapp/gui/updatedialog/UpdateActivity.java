@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.updateview;
+package com.dansoftware.libraryapp.gui.updatedialog;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;

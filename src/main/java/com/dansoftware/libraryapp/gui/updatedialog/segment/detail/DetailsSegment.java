@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.updateview.segment.detail;
+package com.dansoftware.libraryapp.gui.updatedialog.segment.detail;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Downloads the preview markdown-text about the new update and also renders it, so the user can
- * explore the new features and/or bug fixes in a {@link com.dansoftware.libraryapp.gui.updateview.UpdateDialog}.
+ * explore the new features and/or bug fixes in a {@link com.dansoftware.libraryapp.gui.updatedialog.UpdateDialog}.
  *
  * @author Daniel Gyorffy
  */

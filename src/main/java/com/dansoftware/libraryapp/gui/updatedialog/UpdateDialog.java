@@ -1,9 +1,9 @@
-package com.dansoftware.libraryapp.gui.updateview;
+package com.dansoftware.libraryapp.gui.updatedialog;
 
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.updateview.segment.detail.DetailsSegment;
-import com.dansoftware.libraryapp.gui.updateview.segment.download.DownloadSegment;
-import com.dansoftware.libraryapp.gui.updateview.segment.notification.NotificationSegment;
+import com.dansoftware.libraryapp.gui.updatedialog.segment.detail.DetailsSegment;
+import com.dansoftware.libraryapp.gui.updatedialog.segment.download.DownloadSegment;
+import com.dansoftware.libraryapp.gui.updatedialog.segment.notification.NotificationSegment;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import com.dansoftware.sgmdialog.Segment;
