@@ -118,6 +118,10 @@ UPDATE VIEW
     -fx-font-size: 32px;
 }
 
+.progress-bar.paused .bar{
+    -fx-background-color: #cbb000;
+}
+
 /** MDFXNode */
 * {
     -mdfx-font-color: black;

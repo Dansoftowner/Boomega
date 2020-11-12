@@ -72,6 +72,13 @@ class DownloaderTaskExecutor(val context: Context,
 
     private fun initialize(downloaderTask: DownloaderTask): DownloaderTask {
         downloaderTask.setOnRunning {
+            downloaderTask.pausedProperty().addListener { _, _, paused ->
+                when(paused) {
+                    true -> controller.progressBar.styleClass.add("paused")
+                    false -> controller.progressBar.styleClass.remove("paused")
+                }
+            }
+
             controller.progressBar.progressProperty().unbind()
             controller.progressBar.progressProperty().bind(downloaderTask.progressProperty())
 
