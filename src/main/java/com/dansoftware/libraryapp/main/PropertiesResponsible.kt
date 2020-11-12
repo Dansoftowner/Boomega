@@ -1,7 +1,10 @@
 package com.dansoftware.libraryapp.main
 
+import com.dansoftware.libraryapp.util.OsInfo
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.lang3.StringUtils
+import java.io.File
 
 /**
  * Responsible for adding the necessary system properties that are needed for the application.
@@ -17,6 +20,7 @@ object PropertiesResponsible {
     private const val LIBRARY_APP_FILE_EXTENSION = "libraryapp.file.extension"
     private const val LOG_FILE_PATH = "log.file.path"
     private const val LOG_FILE_FULL_PATH = "log.file.path.full"
+    private const val PLUGIN_DIRECTORY_PATH = "libraryapp.plugin.dir"
 
     /* **** VALUES **** */
 
@@ -75,5 +79,19 @@ object PropertiesResponsible {
         System.setProperty(LIBRARY_APP_VERSION, LIBRARY_APP_VERSION_VALUE)
         System.setProperty(LIBRARY_APP_BUILD_INFO, LIBRARY_APP_BUILD_INFO_VALUE)
         System.setProperty(LIBRARY_APP_FILE_EXTENSION, LIBRARY_APP_FILE_EXTENSION_VALUE)
+        System.setProperty(PLUGIN_DIRECTORY_PATH, getPluginDirPath())
+    }
+
+    private fun getPluginDirPath(): String = when {
+        OsInfo.isWindows() -> {
+            var rootDir: String = System.getenv("APPDATA")
+            if (StringUtils.isBlank(rootDir)) {
+                rootDir = System.getProperty("user.home")
+            }
+            listOf(rootDir, "Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
+        }
+        OsInfo.isLinux() -> listOf(System.getProperty("user.home"), ".libraryapp2020", "profiles", "plugin").joinToString(File.separator)
+        OsInfo.isMac() -> listOf("~", "Library", "Application", "Support", "Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
+        else -> "plugin"
     }
 }
