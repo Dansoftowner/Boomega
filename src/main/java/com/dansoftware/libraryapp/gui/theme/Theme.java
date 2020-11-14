@@ -5,8 +5,8 @@ import com.dansoftware.libraryapp.util.IdentifiableWeakReference;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
-import org.reflections.util.ConfigurationBuilder;
+import org.reflections8.Reflections;
+import org.reflections8.util.ConfigurationBuilder;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Modifier;
