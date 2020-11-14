@@ -9,10 +9,12 @@ import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A Theme can change the appearance of GUI elements.
@@ -153,7 +155,9 @@ public abstract class Theme {
     public static Set<Class<? extends Theme>> getAllAvailableThemes() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .addClassLoaders(ClassLoader.getSystemClassLoader(), PluginClassLoader.getInstance()));
-        return reflections.getSubTypesOf(Theme.class);
+        return reflections.getSubTypesOf(Theme.class).stream()
+                .filter(classRef -> !Modifier.isAbstract(classRef.getModifiers()))
+                .collect(Collectors.toSet());
     }
 
     /**
