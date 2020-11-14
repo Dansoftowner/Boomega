@@ -21,6 +21,7 @@ object PropertiesResponsible {
     private const val LOG_FILE_PATH = "log.file.path"
     private const val LOG_FILE_FULL_PATH = "log.file.path.full"
     private const val PLUGIN_DIRECTORY_PATH = "libraryapp.plugin.dir"
+    private const val CONFIG_FILE_PATH = "libraryapp.config.file.path"
 
     /* **** VALUES **** */
 
@@ -80,18 +81,30 @@ object PropertiesResponsible {
         System.setProperty(LIBRARY_APP_BUILD_INFO, LIBRARY_APP_BUILD_INFO_VALUE)
         System.setProperty(LIBRARY_APP_FILE_EXTENSION, LIBRARY_APP_FILE_EXTENSION_VALUE)
         System.setProperty(PLUGIN_DIRECTORY_PATH, getPluginDirPath())
+        System.setProperty(CONFIG_FILE_PATH, getConfigFilePath())
     }
 
+    /**
+     * Returns the config file's path
+     */
+    private fun getConfigFilePath() =
+            listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "config.conf").joinToString(File.separator)
+
+    /**
+     * Returns the plugin directory's path
+     */
     private fun getPluginDirPath(): String = when {
         OsInfo.isWindows() -> {
             var rootDir: String = System.getenv("APPDATA")
             if (StringUtils.isBlank(rootDir)) {
-                rootDir = System.getProperty("user.home")
+                rootDir = FileUtils.getUserDirectoryPath()
             }
             listOf(rootDir, "Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
         }
-        OsInfo.isLinux() -> listOf(System.getProperty("user.home"), ".libraryapp2020", "profiles", "plugin").joinToString(File.separator)
-        OsInfo.isMac() -> listOf("~", "Library", "Application", "Support", "Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
+        OsInfo.isLinux() ->
+            listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "profiles", "plugin").joinToString(File.separator)
+        OsInfo.isMac() ->
+            listOf("~", "Library", "Application", "Support", "Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
         else -> "plugin"
     }
 }
