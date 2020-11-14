@@ -9,6 +9,10 @@ import java.net.URLClassLoader
  * @author Daniel Gyorffy
  */
 object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls(), getSystemClassLoader()) {
+
+    /**
+     * For already existing code bases
+     */
     @JvmStatic
     fun getInstance(): PluginClassLoader = this
 }
