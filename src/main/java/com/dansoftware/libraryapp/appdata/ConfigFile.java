@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.appdata;
 
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -91,9 +90,9 @@ public class ConfigFile extends File {
      *
      * @return the default {@link ConfigFile}
      */
-    public static ConfigFile getConfigFile() {
+    public static synchronized ConfigFile getConfigFile() {
         if (defaultFile == null)
-            defaultFile = new ConfigFile(new File(FileUtils.getUserDirectoryPath(), ".libraryapp2020"), "config.conf");
+            defaultFile = new ConfigFile(System.getProperty("libraryapp.config.file.path"));
         return defaultFile;
     }
 }
