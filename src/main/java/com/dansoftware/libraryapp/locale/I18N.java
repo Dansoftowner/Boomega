@@ -1,10 +1,13 @@
 package com.dansoftware.libraryapp.locale;
 
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
+import com.dansoftware.libraryapp.util.ReflectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.reflections8.Reflections;
 
+import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,40 +19,47 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
  */
 public class I18N {
 
-    private static final List<Locale> availableLocales;
-
-    private static final String WINDOW_TITLES = "com.dansoftware.libraryapp.locale.WindowTitles";
-    private static final String FIRST_TIME_DIALOG = "com.dansoftware.libraryapp.locale.FirstTimeDialog";
-    private static final String UPDATE_DIALOG = "com.dansoftware.libraryapp.locale.UpdateDialog";
-    private static final String PROGRESS_MESSAGES = "com.dansoftware.libraryapp.locale.ProgressMessages";
-    private static final String FXML_VALUES = "com.dansoftware.libraryapp.locale.FXMLValues";
-    private static final String GENERAL_WORDS = "com.dansoftware.libraryapp.locale.GeneralWords";
-    private static final String ALERT_MESSAGES = "com.dansoftware.libraryapp.locale.AlertMessages";
-    private static final String BUTTON_TYPES = "com.dansoftware.libraryapp.locale.ButtonTypes";
-
-    static {
-        //ReflectionUtils.invokeStaticBlock(FXI18N.class);
-        availableLocales = calcAvailableLocales();
-    }
-
-    private static ClassLoader getBundleLoader() {
-        return PluginClassLoader.getInstance();
-    }
-
-    private static List<Locale> calcAvailableLocales() {
-        return Arrays.stream(Locale.getAvailableLocales())
-                .filter(locale -> !locale.equals(Locale.ROOT))
-                .collect(Collectors.toList());
-    }
-
-    public static List<Locale> getAvailableLocales() {
-        return availableLocales;
-    }
-
     /**
      * Don't let anyone to create an instance of this class
      */
     private I18N() {
+    }
+
+    private static LanguagePack languagePack;
+
+    public static LanguagePack getLanguagePack() {
+        return languagePack;
+    }
+
+    public static Set<Class<? extends LanguagePack>> getAvailableLanguagePacks() {
+        /*Reflections reflections = new Reflections(new ConfigurationBuilder().addScanners(new SubTypesScanner())
+                .addClassLoaders(ClassLoader.getSystemClassLoader(), PluginClassLoader.getInstance()));*/
+        Reflections reflections = new Reflections("", PluginClassLoader.getInstance());
+        return reflections.getSubTypesOf(LanguagePack.class).stream()
+                .filter(classRef -> !Modifier.isAbstract(classRef.getModifiers()))
+                .collect(Collectors.toSet());
+    }
+
+    public static List<Locale> getAvailableLocales() {
+        return getAvailableLanguagePacks().stream()
+                .map(ReflectionUtils::tryConstructObject)
+                .filter(Objects::nonNull)
+                .map(LanguagePack::getLocale)
+                .collect(Collectors.toList());
+    }
+
+    public static Optional<LanguagePack> getLanguagePackOf(@NotNull Locale locale) {
+        return getAvailableLanguagePacks().stream()
+                .map(ReflectionUtils::tryConstructObject)
+                .filter(Objects::nonNull)
+                .filter(languagePack -> languagePack.getLocale().equals(locale))
+                .map(languagePack -> (LanguagePack) languagePack)
+                .findFirst();
+    }
+
+    private static void recognizeLanguagePack() {
+        if (languagePack == null)
+            languagePack = getLanguagePackOf(Locale.getDefault()).orElseGet(EnglishLanguagePack::new);
     }
 
     @NotNull
@@ -72,45 +82,49 @@ public class I18N {
 
     @NotNull
     public static ResourceBundle getButtonTypeValues() {
-        return getBundle(BUTTON_TYPES);
+        recognizeLanguagePack();
+        return languagePack.getButtonTypeValues();
     }
 
-    public static ResourceBundle getWindowTitles() throws MissingResourceException {
-        return getBundle(WINDOW_TITLES);
+    public static ResourceBundle getWindowTitles() {
+        recognizeLanguagePack();
+        return languagePack.getWindowTitles();
     }
 
     @NotNull
     public static ResourceBundle getFirstTimeDialogValues() {
-        return getBundle(FIRST_TIME_DIALOG);
+        recognizeLanguagePack();
+        return languagePack.getFirstTimeDialogValues();
     }
 
     @NotNull
-    public static ResourceBundle getProgressMessages() throws MissingResourceException {
-        return getBundle(PROGRESS_MESSAGES);
+    public static ResourceBundle getProgressMessages() {
+        recognizeLanguagePack();
+        return languagePack.getProgressMessages();
     }
 
     @NotNull
-    public static ResourceBundle getFXMLValues() throws MissingResourceException {
-        return getBundle(FXML_VALUES);
+    public static ResourceBundle getFXMLValues() {
+        recognizeLanguagePack();
+        return languagePack.getFXMLValues();
     }
 
     @NotNull
-    public static ResourceBundle getGeneralWords() throws MissingResourceException {
-        return getBundle(GENERAL_WORDS);
+    public static ResourceBundle getGeneralWords() {
+        recognizeLanguagePack();
+        return languagePack.getGeneralWords();
     }
 
     @NotNull
-    public static ResourceBundle getAlertMessages() throws MissingResourceException {
-        return getBundle(ALERT_MESSAGES);
+    public static ResourceBundle getAlertMessages() {
+        recognizeLanguagePack();
+        return languagePack.getAlertMessages();
     }
 
     @NotNull
     public static ResourceBundle getUpdateDialogValues() {
-        return getBundle(UPDATE_DIALOG);
-    }
-
-    private static ResourceBundle getBundle(@NotNull String baseName) {
-        return ResourceBundle.getBundle(baseName, Locale.getDefault(), getBundleLoader());
+        recognizeLanguagePack();
+        return languagePack.getUpdateDialogValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
