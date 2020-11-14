@@ -95,6 +95,14 @@ public final class ReflectionUtils {
         return constructor.newInstance();
     }
 
+    public static <O> O tryConstructObject(@NotNull Class<? extends O> classRef) {
+        try {
+            return constructObject(classRef);
+        } catch (ReflectiveOperationException e) {
+            return null;
+        }
+    }
+
     @SuppressWarnings({"unchecked", "UnusedReturnValue"})
     public static <T> Class<T> forName(@NotNull Class<T> classRef)
             throws ClassNotFoundException {
