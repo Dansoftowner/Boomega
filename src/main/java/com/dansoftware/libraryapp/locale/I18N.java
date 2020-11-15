@@ -6,6 +6,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -30,7 +33,16 @@ public class I18N {
     }
 
     private static void loadPacks() {
-        Reflections reflections = new Reflections(PluginClassLoader.getInstance(), LanguagePack.class);
+        //Collecting LanguagePacks from plugins
+        Reflections pluginReflections = new Reflections(new ConfigurationBuilder()
+                .addClassLoader(PluginClassLoader.getInstance())
+                .addUrls(ClasspathHelper.forClassLoader(PluginClassLoader.getInstance()))
+                .setScanners(new SubTypesScanner()));
+        pluginReflections.getSubTypesOf(LanguagePack.class)
+                .forEach(classRef -> ReflectionUtils.invokeStaticBlock(classRef, PluginClassLoader.getInstance()));
+
+        //collecting LanguagePacks from the core project
+        Reflections reflections = new Reflections(LanguagePack.class);
         reflections.getSubTypesOf(LanguagePack.class).forEach(ReflectionUtils::invokeStaticBlock);
     }
 
