@@ -99,7 +99,7 @@ object PropertiesResponsible {
             if (StringUtils.isBlank(rootDir)) {
                 rootDir = FileUtils.getUserDirectoryPath()
             }
-            listOf(rootDir, "Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
+            File(File(rootDir), listOf("Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)).absolutePath
         }
         OsInfo.isLinux() ->
             listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "profiles", "plugin").joinToString(File.separator)
