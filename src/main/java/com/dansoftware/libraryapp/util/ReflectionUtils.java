@@ -117,7 +117,7 @@ public final class ReflectionUtils {
      */
     public static void invokeStaticBlock(@NotNull Class<?> classRef) {
         try {
-            Class.forName(classRef.getName());
+            forName(classRef);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
