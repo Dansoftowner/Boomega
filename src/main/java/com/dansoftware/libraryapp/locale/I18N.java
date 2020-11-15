@@ -5,12 +5,10 @@ import com.dansoftware.libraryapp.util.ReflectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.reflections8.Reflections;
+import org.reflections.Reflections;
 
-import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
@@ -27,38 +25,33 @@ public class I18N {
 
     private static LanguagePack languagePack;
 
+    static {
+        loadPacks();
+    }
+
+    private static void loadPacks() {
+        Reflections reflections = new Reflections(PluginClassLoader.getInstance(), LanguagePack.class);
+        reflections.getSubTypesOf(LanguagePack.class).forEach(ReflectionUtils::invokeStaticBlock);
+    }
+
     public static LanguagePack getLanguagePack() {
         return languagePack;
     }
 
-    public static Set<Class<? extends LanguagePack>> getAvailableLanguagePacks() {
-        /*Reflections reflections = new Reflections(new ConfigurationBuilder().addScanners(new SubTypesScanner())
-                .addClassLoaders(ClassLoader.getSystemClassLoader(), PluginClassLoader.getInstance()));*/
-        Reflections reflections = new Reflections("", PluginClassLoader.getInstance());
-        return reflections.getSubTypesOf(LanguagePack.class).stream()
-                .filter(classRef -> !Modifier.isAbstract(classRef.getModifiers()))
-                .collect(Collectors.toSet());
-    }
-
-    public static List<Locale> getAvailableLocales() {
-        return getAvailableLanguagePacks().stream()
-                .map(ReflectionUtils::tryConstructObject)
-                .filter(Objects::nonNull)
-                .map(LanguagePack::getLocale)
-                .collect(Collectors.toList());
+    public static Set<Locale> getAvailableLocales() {
+        return LanguagePack.getSupportedLocales();
     }
 
     public static Optional<LanguagePack> getLanguagePackOf(@NotNull Locale locale) {
-        return getAvailableLanguagePacks().stream()
+        return LanguagePack.getLanguagePacksForLocale(locale).stream()
                 .map(ReflectionUtils::tryConstructObject)
                 .filter(Objects::nonNull)
-                .filter(languagePack -> languagePack.getLocale().equals(locale))
                 .map(languagePack -> (LanguagePack) languagePack)
                 .findFirst();
     }
 
     private static void recognizeLanguagePack() {
-        if (languagePack == null)
+        if (languagePack == null || !languagePack.getLocale().equals(Locale.getDefault()))
             languagePack = getLanguagePackOf(Locale.getDefault()).orElseGet(EnglishLanguagePack::new);
     }
 
