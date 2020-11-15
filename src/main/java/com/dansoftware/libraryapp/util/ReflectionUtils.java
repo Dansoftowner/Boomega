@@ -82,7 +82,7 @@ public final class ReflectionUtils {
                 .map(Object::getClass)
                 .toArray(Class[]::new);
 
-        Constructor<? extends O> constructor = classRef.getConstructor(constructorParamTypes);
+        Constructor<? extends O> constructor = classRef.getDeclaredConstructor(constructorParamTypes);
         constructor.setAccessible(true);
         return constructor.newInstance(args);
     }
@@ -90,7 +90,7 @@ public final class ReflectionUtils {
     public static <O> O constructObject(@NotNull Class<? extends O> classRef)
             throws ReflectiveOperationException {
         Objects.requireNonNull(classRef);
-        Constructor<? extends O> constructor = classRef.getConstructor();
+        Constructor<? extends O> constructor = classRef.getDeclaredConstructor();
         constructor.setAccessible(true);
         return constructor.newInstance();
     }
@@ -118,6 +118,20 @@ public final class ReflectionUtils {
     public static void invokeStaticBlock(@NotNull Class<?> classRef) {
         try {
             forName(classRef);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Invokes the static block on the given {@code class},
+     * if it's not executed yet
+     *
+     * @param classRef the class-reference
+     */
+    public static void invokeStaticBlock(@NotNull Class<?> classRef, ClassLoader classLoader) {
+        try {
+            Class.forName(classRef.getName(), true, classLoader);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
