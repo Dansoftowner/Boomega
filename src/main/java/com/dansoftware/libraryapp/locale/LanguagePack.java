@@ -17,26 +17,47 @@ public abstract class LanguagePack {
 
     private static final Logger logger = LoggerFactory.getLogger(LanguagePack.class);
 
-    private static final Map<Locale, List<Class<? extends LanguagePack>>> languagePacksForLocales;
+    private static final Map<Locale, List<Class<? extends LanguagePack>>> languagePacksForLocales =
+            Collections.synchronizedMap(new HashMap<>());
 
-    static {
-        languagePacksForLocales = Collections.synchronizedMap(new HashMap<>());
-    }
-
-    protected static void registerLanguagePack(@NotNull Locale locale, @NotNull Class<? extends LanguagePack> languagePackClass) {
+    /**
+     * Registers a {@link LanguagePack} to {@link Locale}.
+     *
+     * @param locale the locale; shouldn't be null
+     * @param languagePackClass the language pack; shouldn't be null
+     * @throws NullPointerException if one of the arguments is null
+     */
+    protected static void registerLanguagePack(@NotNull Locale locale,
+                                               @NotNull Class<? extends LanguagePack> languagePackClass) {
+        Objects.requireNonNull(locale);
+        Objects.requireNonNull(languagePackClass);
         List<Class<? extends LanguagePack>> classes = languagePacksForLocales.get(locale);
-        if (classes != null) {
+        if (classes != null)
             classes.add(languagePackClass);
-        } else {
-            languagePacksForLocales.put(locale, new LinkedList<>(List.of(languagePackClass)));
-        }
+        else
+            languagePacksForLocales.put(locale, new LinkedList<>(Collections.singletonList(languagePackClass)));
+        logger.debug("Registered locale: {} with languagePack: {}", locale, languagePackClass);
     }
 
+    /**
+     * Lists all the registered {@link LanguagePack} types for the particular
+     * {@link Locale}.
+     *
+     * @param locale the locale
+     * @return the {@link List} of {@link Class} objects that are representing the {@link LanguagePack} types;
+     *          if the given locale isn't supported, then it will return an empty list
+     */
     @NotNull
-    protected static List<Class<? extends LanguagePack>> getLanguagePacksForLocale(@NotNull Locale locale) {
-        return Optional.ofNullable(languagePacksForLocales.get(locale)).orElseGet(Collections::emptyList);
+    protected static List<Class<? extends LanguagePack>> getLanguagePacksForLocale(@Nullable Locale locale) {
+        List<Class<? extends LanguagePack>> packs = languagePacksForLocales.get(locale);
+        return packs == null ? Collections.emptyList() : Collections.unmodifiableList(packs);
     }
 
+    /**
+     * Lists the registered {@link Locale}s that are supported.
+     *
+     * @return the {@link Set} of locales
+     */
     protected static Set<Locale> getSupportedLocales() {
         return languagePacksForLocales.keySet();
     }
