@@ -3,27 +3,12 @@ package com.dansoftware.libraryapp.locale
 import java.util.*
 
 /**
- * A [HungarianLanguagePack] is a [LanguagePack] that provides translation for the Hungarian language.
- *
- * @author Daniel Gyorffy
- */
-@Suppress("unused")
-class HungarianLanguagePack : InternalLanguagePack(Locale("hu"))
-
-/**
- * An [EnglishLanguagePack] is a [LanguagePack] that provides english translation
- *
- * @author Daniel Gyorffy
- */
-class EnglishLanguagePack : InternalLanguagePack(Locale.ENGLISH)
-
-/**
  * An [InternalLanguagePack] is an abstract [LanguagePack] implementation
  * that represents a Language pack that is nested into the application by default.
  *
  * @author Daniel Gyorffy
  */
-sealed class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
+abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
 
     companion object {
         private const val WINDOW_TITLES = "com.dansoftware.libraryapp.locale.WindowTitles"
