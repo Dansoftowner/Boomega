@@ -10,9 +10,7 @@ import javafx.scene.control.ListView;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -58,7 +56,7 @@ public class LanguageSegmentController
     }
 
     private void fillListView(ListView<LanguageEntry> listView) {
-        List<Locale> availableLocales = I18N.getAvailableLocales();
+        List<Locale> availableLocales = new ArrayList<>(I18N.getAvailableLocales());
         int defaultLocaleIndex = availableLocales.indexOf(Locale.getDefault());
 
         listView.getItems().addAll(I18N.getAvailableLocales().stream()
