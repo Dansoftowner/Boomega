@@ -34,12 +34,14 @@ public class I18N {
 
     private static void loadPacks() {
         //Collecting LanguagePacks from plugins
-        Reflections pluginReflections = new Reflections(new ConfigurationBuilder()
-                .addClassLoader(PluginClassLoader.getInstance())
-                .addUrls(ClasspathHelper.forClassLoader(PluginClassLoader.getInstance()))
-                .setScanners(new SubTypesScanner()));
-        pluginReflections.getSubTypesOf(LanguagePack.class)
-                .forEach(classRef -> ReflectionUtils.invokeStaticBlock(classRef, PluginClassLoader.getInstance()));
+        if (!PluginClassLoader.getInstance().isEmpty()) {
+            Reflections pluginReflections = new Reflections(new ConfigurationBuilder()
+                    .addClassLoader(PluginClassLoader.getInstance())
+                    .addUrls(ClasspathHelper.forClassLoader(PluginClassLoader.getInstance()))
+                    .setScanners(new SubTypesScanner()));
+            pluginReflections.getSubTypesOf(LanguagePack.class)
+                    .forEach(classRef -> ReflectionUtils.invokeStaticBlock(classRef, PluginClassLoader.getInstance()));
+        }
 
         //collecting LanguagePacks from the core project
         Reflections reflections = new Reflections(LanguagePack.class);
