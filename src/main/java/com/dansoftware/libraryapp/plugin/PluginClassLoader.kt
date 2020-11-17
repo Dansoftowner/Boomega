@@ -15,4 +15,6 @@ object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls()
      */
     @JvmStatic
     fun getInstance(): PluginClassLoader = this
+
+    fun isEmpty(): Boolean = PluginDirectory.isEmpty()
 }

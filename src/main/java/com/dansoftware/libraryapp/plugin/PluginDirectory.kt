@@ -43,4 +43,6 @@ object PluginDirectory {
             null
         }
     }
+
+    fun isEmpty(): Boolean = directory.isDirectory && directory.listFiles { file -> file.isDirectory.not() }?.isEmpty() ?: false
 }
