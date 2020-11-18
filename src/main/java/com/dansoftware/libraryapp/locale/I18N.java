@@ -40,12 +40,12 @@ public class I18N {
                     .addUrls(ClasspathHelper.forClassLoader(PluginClassLoader.getInstance()))
                     .setScanners(new SubTypesScanner()));
             pluginReflections.getSubTypesOf(LanguagePack.class)
-                    .forEach(classRef -> ReflectionUtils.invokeStaticBlock(classRef, PluginClassLoader.getInstance()));
+                    .forEach(classRef -> ReflectionUtils.initializeClass(classRef, PluginClassLoader.getInstance()));
         }
 
         //collecting LanguagePacks from the core project
         Reflections reflections = new Reflections(LanguagePack.class);
-        reflections.getSubTypesOf(LanguagePack.class).forEach(ReflectionUtils::invokeStaticBlock);
+        reflections.getSubTypesOf(LanguagePack.class).forEach(ReflectionUtils::initializeClass);
     }
 
     public static LanguagePack getLanguagePack() {
