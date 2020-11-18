@@ -105,7 +105,7 @@ public final class ReflectionUtils {
     public static <O> O tryConstructObject(@NotNull Class<? extends O> classRef) {
         try {
             return constructObject(classRef);
-        } catch (ReflectiveOperationException e) {
+        } catch (Throwable ignored) {
             return null;
         }
     }
