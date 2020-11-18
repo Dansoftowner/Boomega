@@ -22,10 +22,13 @@ import java.util.function.Consumer;
  */
 class WorkbenchDialogContextDialogAdapter implements ContextDialog {
 
+    private static final String DIALOG_STYLE_CLASS = "alertDialog";
+
     private final WorkbenchDialog workbenchDialog;
 
     WorkbenchDialogContextDialogAdapter(@NotNull WorkbenchDialog workbenchDialog) {
         this.workbenchDialog = Objects.requireNonNull(workbenchDialog);
+        this.workbenchDialog.getStyleClass().add(DIALOG_STYLE_CLASS);
     }
 
     @Override
