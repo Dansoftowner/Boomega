@@ -5,10 +5,8 @@ import com.dansoftware.libraryapp.util.ReflectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -20,32 +18,18 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
  */
 public class I18N {
 
-    /**
-     * Don't let anyone to create an instance of this class
-     */
     private I18N() {
     }
 
-    private static LanguagePack languagePack;
+    private static final Logger logger = LoggerFactory.getLogger(I18N.class);
+
+    /**
+     * The backing language-pack
+     */
+    private static volatile LanguagePack languagePack;
 
     static {
         loadPacks();
-    }
-
-    private static void loadPacks() {
-        //Collecting LanguagePacks from plugins
-        if (!PluginClassLoader.getInstance().isEmpty()) {
-            Reflections pluginReflections = new Reflections(new ConfigurationBuilder()
-                    .addClassLoader(PluginClassLoader.getInstance())
-                    .addUrls(ClasspathHelper.forClassLoader(PluginClassLoader.getInstance()))
-                    .setScanners(new SubTypesScanner()));
-            pluginReflections.getSubTypesOf(LanguagePack.class)
-                    .forEach(classRef -> ReflectionUtils.initializeClass(classRef, PluginClassLoader.getInstance()));
-        }
-
-        //collecting LanguagePacks from the core project
-        Reflections reflections = new Reflections(LanguagePack.class);
-        reflections.getSubTypesOf(LanguagePack.class).forEach(ReflectionUtils::initializeClass);
     }
 
     public static LanguagePack getLanguagePack() {
@@ -54,19 +38,6 @@ public class I18N {
 
     public static Set<Locale> getAvailableLocales() {
         return LanguagePack.getSupportedLocales();
-    }
-
-    public static Optional<LanguagePack> getLanguagePackOf(@NotNull Locale locale) {
-        return LanguagePack.getLanguagePacksForLocale(locale).stream()
-                .map(ReflectionUtils::tryConstructObject)
-                .filter(Objects::nonNull)
-                .map(languagePack -> (LanguagePack) languagePack)
-                .findFirst();
-    }
-
-    private static void recognizeLanguagePack() {
-        if (languagePack == null || !languagePack.getLocale().equals(Locale.getDefault()))
-            languagePack = getLanguagePackOf(Locale.getDefault()).orElseGet(EnglishLanguagePack::new);
     }
 
     @NotNull
@@ -136,5 +107,32 @@ public class I18N {
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
         return MessageFormat.format(resourceBundle.getString(key), args);
+    }
+
+    /**
+     * Recognizes the required {@link LanguagePack} for the default {@link LanguagePack}.
+     */
+    private static void recognizeLanguagePack() {
+        if (languagePack == null || !languagePack.getLocale().equals(Locale.getDefault()))
+            languagePack = LanguagePack.instantiateLanguagePack(Locale.getDefault()).orElseGet(EnglishLanguagePack::new);
+    }
+
+    /**
+     * Initializes the {@link LanguagePack} classes.
+     */
+    private static void loadPacks() {
+        //Collecting LanguagePacks from the core project
+        ReflectionUtils.getSubtypesOf(LanguagePack.class).forEach(ReflectionUtils::initializeClass);
+
+        //Collecting LanguagePacks from plugins
+        if (!PluginClassLoader.getInstance().isEmpty()) {
+            ReflectionUtils.getSubtypesOf(LanguagePack.class, PluginClassLoader.getInstance()).forEach(classRef -> {
+                try {
+                    ReflectionUtils.initializeClass(classRef, PluginClassLoader.getInstance());
+                } catch (ExceptionInInitializerError e) {
+                    logger.error("Failed to initialize a language pack called: " + classRef.getName(), e);
+                }
+            });
+        }
     }
 }
