@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.firsttime.imp;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
-import com.dansoftware.libraryapp.gui.preloader.BackingStage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -24,20 +23,12 @@ public class ConfigurationImportActivity {
     /**
      * Shows the activity and waits until it's closed.
      *
-     * @param backingStage the backing stage that the {@link ConfigurationImportWindow} should
-     *                     show on
      * @return {@code true} if the user imported settings; {@code false} otherwise.
      */
-    public boolean show(@NotNull BackingStage backingStage) {
-        Objects.requireNonNull(backingStage);
-        try {
-            ConfigurationImportView configurationImportView = new ConfigurationImportView(preferences);
-            ConfigurationImportWindow configurationImportWindow =
-                    backingStage.createChild(ConfigurationImportWindow.class, configurationImportView);
-            configurationImportWindow.showAndWait();
-            return configurationImportView.externalSettingsImported();
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
+    public boolean show() {
+        ConfigurationImportView configurationImportView = new ConfigurationImportView(preferences);
+        ConfigurationImportWindow configurationImportWindow = new ConfigurationImportWindow(configurationImportView);
+        configurationImportWindow.showAndWait();
+        return configurationImportView.externalSettingsImported();
     }
 }

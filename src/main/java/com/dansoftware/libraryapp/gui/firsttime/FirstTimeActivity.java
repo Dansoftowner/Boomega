@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialog;
 import com.dansoftware.libraryapp.gui.firsttime.dialog.FirstTimeDialogActivity;
 import com.dansoftware.libraryapp.gui.firsttime.imp.ConfigurationImportActivity;
-import com.dansoftware.libraryapp.main.Preloader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -49,7 +48,7 @@ public class FirstTimeActivity {
     }
 
     private boolean showConfigurationImport(@NotNull Preferences preferences) {
-        return new ConfigurationImportActivity(preferences).show(Preloader.getBackingStage());
+        return new ConfigurationImportActivity(preferences).show();
     }
 
     private void showFirstTimeDialog(@NotNull Preferences preferences) {

@@ -23,8 +23,7 @@ public class Preloader extends javafx.application.Preloader {
 
     private static final Logger logger = LoggerFactory.getLogger(Preloader.class);
 
-    private static BackingStage backingStage;
-
+    private BackingStage backingStage;
     private Stage contentStage;
     private final StringProperty messageProperty;
 
@@ -58,7 +57,6 @@ public class Preloader extends javafx.application.Preloader {
 
     @Override
     public void stop() {
-        backingStage = null;
     }
 
     @Override
@@ -84,9 +82,6 @@ public class Preloader extends javafx.application.Preloader {
         }
     }
 
-    public static BackingStage getBackingStage() {
-        return backingStage;
-    }
 
     /**
      * Notification for hiding the preloader-window.
