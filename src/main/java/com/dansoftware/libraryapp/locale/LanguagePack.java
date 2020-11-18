@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.locale;
 
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
+import com.dansoftware.libraryapp.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public abstract class LanguagePack {
     /**
      * Registers a {@link LanguagePack} to {@link Locale}.
      *
-     * @param locale the locale; shouldn't be null
+     * @param locale            the locale; shouldn't be null
      * @param languagePackClass the language pack; shouldn't be null
      * @throws NullPointerException if one of the arguments is null
      */
@@ -45,12 +46,27 @@ public abstract class LanguagePack {
      *
      * @param locale the locale
      * @return the {@link List} of {@link Class} objects that are representing the {@link LanguagePack} types;
-     *          if the given locale isn't supported, then it will return an empty list
+     * if the given locale isn't supported, then it will return an empty list
      */
     @NotNull
     protected static List<Class<? extends LanguagePack>> getLanguagePacksForLocale(@Nullable Locale locale) {
         List<Class<? extends LanguagePack>> packs = languagePacksForLocales.get(locale);
         return packs == null ? Collections.emptyList() : Collections.unmodifiableList(packs);
+    }
+
+    /**
+     * Searches for a {@link LanguagePack} implementation for the given {@link Locale}
+     * and instantiates it if possible.
+     *
+     * @param locale the locale
+     * @return the result wrapped in an {@link Optional}
+     */
+    public static Optional<LanguagePack> instantiateLanguagePack(@Nullable Locale locale) {
+        return getLanguagePacksForLocale(locale).stream()
+                .map(ReflectionUtils::tryConstructObject)
+                .filter(Objects::nonNull)
+                .map(languagePack -> (LanguagePack) languagePack)
+                .findFirst();
     }
 
     /**
