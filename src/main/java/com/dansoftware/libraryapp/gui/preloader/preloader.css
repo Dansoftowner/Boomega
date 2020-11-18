@@ -1,9 +1,28 @@
 .root {
-    -fx-background-color: #f2efe4;
-    -fx-border-color: black;
+    -fx-background-image: url("/com/dansoftware/libraryapp/image/backgrounds/preloader-background.jpg");
+    /*-fx-background-color: #f2efe4;*/
+    -fx-border-color: white;
+}
+
+.centerLogo {
+    -fx-image: url(/com/dansoftware/libraryapp/image/logo/bookshelf_512.png);
+    -fx-effect: dropshadow(three-pass-box, #000000, 20.0, 0, 1, 1);
+    -fx-pref-width: 294;
+    -fx-pref-width: 301;
+}
+
+.companyLogo {
+    -fx-alignment: top-left;
+    -fx-image: url("/com/dansoftware/libraryapp/image/logo/dansoftware-logo.jpg");
+    -fx-pref-width: 84.0;
+    -fx-pref-height: 94.0;
+}
+
+.jfx-progress-bar {
+    -fx-background-color: transparent;
 }
 
 .jfx-progress-bar .bar {
     -fx-background-radius: 0;
-    -fx-background-color: #1fa1a7;
+    -fx-background-color: #a87d24;
 }

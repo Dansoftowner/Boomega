@@ -6,7 +6,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -29,8 +28,8 @@ import java.util.Optional;
 public class PreloaderGUI extends VBox {
 
     private static final String STYLE_CLASS = "root";
-    private static final String LOGO_RESOURCE = "/com/dansoftware/libraryapp/image/logo/bookshelf_512_black.png";
-    private static final String COMPANY_LOGO_RESOURCE = "/com/dansoftware/libraryapp/image/logo/dansoftware-logo.jpg";
+    private static final String LOGO_STYLE_CLASS = "centerLogo";
+    private static final String COMPANY_LOGO_STYLE_CLASS = "companyLogo";
     private static final double PREF_WIDTH = 739.0;
     private static final double PREF_HEIGHT = 453.0;
 
@@ -49,15 +48,16 @@ public class PreloaderGUI extends VBox {
     private Label buildMessageLabel(StringProperty textProperty) {
         Label label = new Label();
         label.textProperty().bind(textProperty);
-        label.setFont(Font.font("System", FontWeight.NORMAL, 20));
-        label.setTextFill(Color.BLACK);
+//        label.setFont(Font.font("System", FontWeight.NORMAL, 20));
+//        label.setTextFill(Color.BLACK);
         StackPane.setAlignment(label, Pos.BOTTOM_LEFT);
         StackPane.setMargin(label, new Insets(0, 0, 5, 10));
         return label;
     }
 
     private ImageView buildCenterLogo() {
-        var center = new ImageView(new Image(getClass().getResourceAsStream(LOGO_RESOURCE)));
+        var center = new ImageView();
+        center.getStyleClass().add(LOGO_STYLE_CLASS);
         center.setFitHeight(294.0);
         center.setFitWidth(301.0);
         center.setPickOnBounds(true);
@@ -77,7 +77,8 @@ public class PreloaderGUI extends VBox {
     }
 
     private ImageView buildCompanyLogo() {
-        ImageView companyLogo = new ImageView(new Image(getClass().getResourceAsStream(COMPANY_LOGO_RESOURCE)));
+        ImageView companyLogo = new ImageView();
+        companyLogo.getStyleClass().add(COMPANY_LOGO_STYLE_CLASS);
         companyLogo.setFitHeight(84.0);
         companyLogo.setFitWidth(94.0);
         companyLogo.setPickOnBounds(true);
