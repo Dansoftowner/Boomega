@@ -102,6 +102,10 @@
     -on-error-color: #FFFFFF;
 }
 
+.alertDialog .button {
+    -fx-padding: 5;
+}
+
 /*DBManagerTable*/
 .state-indicator-file-not-exists {
     -fx-fill: #B00020;
