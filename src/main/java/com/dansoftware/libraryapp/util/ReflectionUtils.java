@@ -1,11 +1,18 @@
 package com.dansoftware.libraryapp.util;
 
+import com.dansoftware.libraryapp.locale.LanguagePack;
+import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -135,5 +142,34 @@ public final class ReflectionUtils {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Collects all the subtypes of a class with given class reference.
+     *
+     * @param classRef the class reference that we want to get the subtypes from
+     * @return the Set of class references
+     */
+    public static <T> Set<Class<? extends T>> getSubtypesOf(@NotNull Class<T> classRef) {
+        var reflections = new Reflections(classRef);
+        return reflections.getSubTypesOf(classRef);
+    }
+
+    /**
+     * Collects all subtypes of a class with the given class reference in
+     * a given {@link ClassLoader}.
+     *
+     * @param classRef the class reference that we want to get the subtypes from
+     * @param classLoader the class loader
+     * @return the Set of class references
+     */
+    public static <T> Set<Class<? extends T>> getSubtypesOf(@NotNull Class<T> classRef,
+                                                            @NotNull ClassLoader classLoader) {
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .addClassLoader(classLoader)
+                .addUrls(ClasspathHelper.forClassLoader(classLoader))
+                .setScanners(new SubTypesScanner()));
+        reflections.getSubTypesOf(LanguagePack.class);
+        return reflections.getSubTypesOf(classRef);
     }
 }
