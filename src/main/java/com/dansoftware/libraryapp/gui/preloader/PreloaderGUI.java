@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.preloader;
 
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
@@ -7,11 +8,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -27,18 +27,19 @@ import java.util.Optional;
  */
 public class PreloaderGUI extends VBox {
 
-    private static final String STYLE_CLASS = "root";
+    private static final String MAIN_PANE_STYLE_CLASS = "mainPane";
     private static final String LOGO_STYLE_CLASS = "centerLogo";
-    private static final String COMPANY_LOGO_STYLE_CLASS = "companyLogo";
-    private static final double PREF_WIDTH = 739.0;
-    private static final double PREF_HEIGHT = 453.0;
+    private static final String COMPANY_LABEL_STYLE_CLASS = "companyLabel";
+    private static final String LABEL_STYLE_CLASS = "messageLabel";
+    /*private static final double PREF_WIDTH = 739.0;
+    private static final double PREF_HEIGHT = 453.0;*/
 
     private final StackPane mainPane;
     private final ImageView center;
 
     private PreloaderGUI(@NotNull Builder builder) {
         this.center = buildCenterLogo();
-        this.mainPane = buildMainPane(center, buildCompanyLogo());
+        this.mainPane = buildMainPane(center, buildCompanyLabel());
         StringProperty messageProperty = builder.getStringProperty()
                 .orElseGet(SimpleStringProperty::new);
         Label messageLabel = buildMessageLabel(messageProperty);
@@ -47,64 +48,55 @@ public class PreloaderGUI extends VBox {
 
     private Label buildMessageLabel(StringProperty textProperty) {
         Label label = new Label();
+        label.getStyleClass().add(LABEL_STYLE_CLASS);
         label.textProperty().bind(textProperty);
-//        label.setFont(Font.font("System", FontWeight.NORMAL, 20));
-//        label.setTextFill(Color.BLACK);
+        label.prefWidthProperty().bind(mainPane.widthProperty());
+        label.visibleProperty().bind(textProperty.isNotEmpty());
         StackPane.setAlignment(label, Pos.BOTTOM_LEFT);
-        StackPane.setMargin(label, new Insets(0, 0, 5, 10));
+        StackPane.setMargin(label, new Insets(0, 0, 15, 10));
         return label;
     }
 
     private ImageView buildCenterLogo() {
         var center = new ImageView();
         center.getStyleClass().add(LOGO_STYLE_CLASS);
-        center.setFitHeight(294.0);
-        center.setFitWidth(301.0);
+        center.setFitWidth(714);
+        center.setFitHeight(232);
         center.setPickOnBounds(true);
         center.setPreserveRatio(true);
         return center;
     }
 
     private StackPane buildMainPane(@NotNull ImageView center,
-                                    @NotNull ImageView companyLogo) {
+                                    @NotNull Label companyLabel) {
         var mainPane = new StackPane();
-        mainPane.setPrefHeight(448.0);
-        mainPane.setPrefWidth(739.0);
+        mainPane.getStyleClass().add(MAIN_PANE_STYLE_CLASS);
         mainPane.getChildren().add(center);
-        StackPane.setMargin(mainPane, new Insets(0, 0, 10.0, 0));
-        mainPane.getChildren().add(companyLogo);
+        mainPane.getChildren().add(companyLabel);
         return mainPane;
     }
 
-    private ImageView buildCompanyLogo() {
-        ImageView companyLogo = new ImageView();
-        companyLogo.getStyleClass().add(COMPANY_LOGO_STYLE_CLASS);
-        companyLogo.setFitHeight(84.0);
-        companyLogo.setFitWidth(94.0);
-        companyLogo.setPickOnBounds(true);
-        companyLogo.setPreserveRatio(true);
-        StackPane.setAlignment(companyLogo, Pos.TOP_LEFT);
-        StackPane.setMargin(companyLogo, new Insets(5.0));
-        return companyLogo;
+    private Label buildCompanyLabel() {
+        Label label = new Label("Dansoftware");
+        label.getStyleClass().add(COMPANY_LABEL_STYLE_CLASS);
+        StackPane.setAlignment(label, Pos.TOP_RIGHT);
+        return label;
     }
 
     private ProgressBar buildProgressBar() {
         ProgressBar progressBar = new com.jfoenix.controls.JFXProgressBar();
-        progressBar.setPrefHeight(8.0);
-        progressBar.setPrefWidth(747.0);
+        progressBar.setProgress(Timeline.INDEFINITE);
+        progressBar.prefWidthProperty().bind(mainPane.widthProperty());
+        StackPane.setAlignment(progressBar, Pos.BOTTOM_CENTER);
+        HBox.setHgrow(progressBar, Priority.ALWAYS);
         return progressBar;
     }
 
     private void buildUI(@NotNull StackPane mainPane,
                          @NotNull Label messageLabel) {
-        this.setPrefHeight(PREF_HEIGHT);
-        this.setPrefWidth(PREF_WIDTH);
-        this.getStyleClass().add(STYLE_CLASS);
-
         this.getChildren().add(mainPane);
-        this.getChildren().add(buildProgressBar());
+        mainPane.getChildren().add(buildProgressBar());
         mainPane.getChildren().add(messageLabel);
-        this.getStylesheets().add("/com/dansoftware/libraryapp/gui/preloader/preloader.css");
     }
 
     public void logoAnimation() {
