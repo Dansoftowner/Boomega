@@ -145,9 +145,10 @@ public class FrameFormController
     public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
         UIUtils.runOnUiThread(() -> {
             if (databaseMetaSet.add(databaseMeta)) {
+                logger.debug("Adding database {}", databaseMeta);
                 this.databaseChooser.getItems().add(databaseMeta);
                 this.loginData.getSavedDatabases().add(databaseMeta);
-            }
+            } else logger.debug("Database already added {}", databaseMeta);
         });
     }
 

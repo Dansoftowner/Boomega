@@ -160,12 +160,15 @@ public abstract class ActivityLauncher implements Runnable {
      */
     private void handleArgumentInit(DatabaseMeta argument) {
         //we add the launched database to the last databases
-        logger.debug("adding the launched database into the LoginData...");
+
         LoginData loginData = getLoginData();
         if (!loginData.getSavedDatabases().contains(argument)) {
+            logger.debug("adding the launched database into the LoginData...");
             loginData.getSavedDatabases().add(argument);
             onNewDatabaseAdded(argument);
             saveLoginData(loginData);
+        } else {
+            logger.debug("The launched database is already in the login data");
         }
 
         logger.debug("trying to sign in into the database...");
@@ -202,7 +205,10 @@ public abstract class ActivityLauncher implements Runnable {
         // otherwise we open a new activity for it
         MainActivity.getByDatabase(argument)
                 .map(MainActivity::getContext)
-                .ifPresentOrElse(Context::toFront, () -> handleArgumentInit(argument));
+                .ifPresentOrElse(Context::toFront, () -> {
+                    onNewDatabaseAdded(argument);
+                    handleArgumentInit(argument);
+                });
     }
 
     /**

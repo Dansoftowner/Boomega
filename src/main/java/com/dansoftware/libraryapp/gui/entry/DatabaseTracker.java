@@ -85,7 +85,10 @@ public class DatabaseTracker {
     }
 
     public void removeDatabase(DatabaseMeta databaseMeta) {
-        savedDatabases.remove(databaseMeta);
+        if (savedDatabases.remove(databaseMeta))
+            logger.debug("Removed from DatabaseTracker '{}'", databaseMeta);
+        else
+            logger.debug("DatabaseMeta '{}' not found in savedDatabases", databaseMeta);
 
         if (databaseMeta != null)
             iterateObservers(observer -> observer.onDatabaseRemoved(databaseMeta));
