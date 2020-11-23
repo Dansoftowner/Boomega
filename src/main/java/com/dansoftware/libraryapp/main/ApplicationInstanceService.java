@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * InstanceService is responsible for listening to application instances
+ * Responsible for listening to application instances
  * and avoiding them if there is an already running instance of the application.
  * It also forwards the application arguments to the already running instance.
  *
@@ -31,15 +31,14 @@ import java.util.Set;
  *
  * @author Daniel Gyorffy
  */
-public class InstanceService implements MessageHandler {
+public class ApplicationInstanceService implements MessageHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(InstanceService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationInstanceService.class);
 
     private static final String APPLICATION_ID = "com.dansoftware.libraryapp";
+    private static ApplicationInstanceService instance;
 
-    private static InstanceService instance;
-
-    private InstanceService(String[] args) {
+    private ApplicationInstanceService(String[] args) {
         try {
             JUnique.acquireLock(APPLICATION_ID, this);
         } catch (AlreadyLockedException e) {
@@ -61,9 +60,9 @@ public class InstanceService implements MessageHandler {
         return null;
     }
 
-    public static void open(String[] args) {
+    public static synchronized void open(String[] args) {
         if (instance == null) {
-            instance = new InstanceService(args);
+            instance = new ApplicationInstanceService(args);
         }
     }
 

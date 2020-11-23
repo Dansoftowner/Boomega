@@ -50,17 +50,17 @@ public class Main extends BaseApplication {
      * The main-method of the application;
      *
      * <p>
-     * Starts the {@link InstanceService}.
+     * Starts the {@link ApplicationInstanceService}.
      * <p>
-     * If the {@link InstanceService} didn't stop the app,
+     * If the {@link ApplicationInstanceService} didn't stop the app,
      * the main launches the application with a
      * preloader.
      *
      * @see BaseApplication#launchApp(Class, String...)
-     * @see InstanceService#open(String[])
+     * @see ApplicationInstanceService#open(String[])
      */
     public static void main(String[] args) {
-        InstanceService.open(args);
+        ApplicationInstanceService.open(args);
         BaseApplication.launchApp(Main.class, args);
     }
 
