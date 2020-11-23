@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.info.dependency.DependencyViewerActivity;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.locale.LanguageTranslator;
 import com.dlsc.workbenchfx.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -58,6 +60,12 @@ public class InformationView extends SimpleHeaderView<Node>
 
     @FXML
     private Label javaFXVersionLabel;
+
+    @FXML
+    private Label langLabel;
+
+    @FXML
+    private Label langTranslatorLabel;
 
     @FXML
     private Button gitHubBtn;
@@ -112,6 +120,10 @@ public class InformationView extends SimpleHeaderView<Node>
         javaVersionLabel.setText(System.getProperty("java.version"));
         javaFXVersionLabel.setText(System.getProperty("javafx.version"));
         logsLocationField.setText(System.getProperty("log.file.path.full"));
+        langLabel.setText(Locale.getDefault().getDisplayLanguage());
+        LanguageTranslator translator = I18N.getLanguagePack().getTranslator();
+        if (translator != null) langTranslatorLabel.setText(translator.getDisplayName(Locale.getDefault()));
+        else langTranslatorLabel.setText("?");
     }
 
     private void onCopy(Event event) {
