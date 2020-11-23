@@ -98,6 +98,7 @@ public class FrameFormController
         this.fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
         this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
         this.databaseChooser.setCellFactory(col -> new DatabaseChooserItem());
+        this.databaseChooser.setButtonCell(new DatabaseChooserItem());
     }
 
     private void setInternalFormBehaviour() {
