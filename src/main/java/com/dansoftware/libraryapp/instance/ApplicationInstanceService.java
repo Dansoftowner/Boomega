@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.instance;
 
+import ch.qos.logback.classic.sift.JNDIBasedContextDiscriminator;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
@@ -10,6 +11,7 @@ import com.dansoftware.libraryapp.launcher.LauncherMode;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -37,8 +39,9 @@ public class ApplicationInstanceService implements MessageHandler {
     private static final String APPLICATION_ID = "com.dansoftware.libraryapp";
     private static ApplicationInstanceService instance;
 
-    private static final String SUCCESS_MESSAGE = "OK";
-    private static final String ERROR_MESSAGE = "FAILED";
+    private static final int ERROR_MESSAGE = -1;
+    private static final int EMPTY_ARGS_MESSAGE = 0;
+    private static final int SUCCESS_MESSAGE = 1;
 
     private ApplicationInstanceService(String[] args) {
         try {
@@ -52,11 +55,15 @@ public class ApplicationInstanceService implements MessageHandler {
                 }
             });
 
-            try {
-                writeArgumentsToFile(RuntimeArgumentsHolderFile.INSTANCE, args);
-                JUnique.sendMessage(APPLICATION_ID, SUCCESS_MESSAGE);
-            } catch (IOException ioException) {
-                JUnique.sendMessage(APPLICATION_ID, ERROR_MESSAGE);
+            if (ArrayUtils.isEmpty(args)) {
+                JUnique.sendMessage(APPLICATION_ID, Integer.toString(EMPTY_ARGS_MESSAGE));
+            } else {
+                try {
+                    writeArgumentsToFile(RuntimeArgumentsHolderFile.INSTANCE, args);
+                    JUnique.sendMessage(APPLICATION_ID, Integer.toString(SUCCESS_MESSAGE));
+                } catch (IOException ioException) {
+                    JUnique.sendMessage(APPLICATION_ID, Integer.toString(ERROR_MESSAGE));
+                }
             }
 
             logger.info("Exiting...");
@@ -82,16 +89,30 @@ public class ApplicationInstanceService implements MessageHandler {
     @Override
     public String handle(String arg) {
         logger.debug("message from another process: {}", arg);
-        logger.debug("Reading arguments from file...");
-        try {
-            List<String> args = readArgumentsFromFile(RuntimeArgumentsHolderFile.INSTANCE);
-            logger.debug("starting an ActivityLauncher...");
-            new ActivityLauncherImpl(args, Preferences.getPreferences(), DatabaseTracker.getGlobal()).launch();
-            logger.debug("Clearing argument-holder file...");
-            RuntimeArgumentsHolderFile.INSTANCE.clear();
-        } catch (IOException e) {
-            logger.error("Failed to read the arguments from file!", e);
+
+        List<String> args = Collections.emptyList();
+        switch (Integer.parseInt(arg)) {
+            case EMPTY_ARGS_MESSAGE:
+                logger.debug("No need to read arguments from file");
+                break;
+            case ERROR_MESSAGE:
+                logger.debug("Something went wrong in the other process");
+                logger.debug("Aren't reading the arguments");
+                break;
+            case SUCCESS_MESSAGE:
+                logger.debug("Reading arguments from file...");
+                try {
+                    args = readArgumentsFromFile(RuntimeArgumentsHolderFile.INSTANCE);
+                    logger.debug("Clearing argument-holder file...");
+                    RuntimeArgumentsHolderFile.INSTANCE.clear();
+                } catch (IOException e) {
+                    logger.error("Failed to read the arguments from file!", e);
+                }
+                break;
         }
+
+        logger.debug("starting an ActivityLauncher...");
+        new ActivityLauncherImpl(args, Preferences.getPreferences(), DatabaseTracker.getGlobal()).launch();
         return null;
     }
 
