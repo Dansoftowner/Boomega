@@ -84,7 +84,7 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <Label text=", " />
+                              <Label text="," />
                               <Label text="%info.lang.translator">
                                  <font>
                                     <Font size="14.0" />
