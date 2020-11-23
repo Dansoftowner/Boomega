@@ -73,7 +73,9 @@ final class WorkbenchContextAdapter implements Context {
     public void toFront() {
         Window contextWindow = getContextWindow();
         if (contextWindow instanceof Stage) {
-            ((Stage) contextWindow).toFront();
+            Stage stage = (Stage) contextWindow;
+            stage.setIconified(false);
+            stage.toFront();
         }
     }
 
