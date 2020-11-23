@@ -112,14 +112,26 @@ public class NitriteDatabase implements Database {
             try {
                 return new NitriteDatabase(databaseMeta, credentials);
             } catch (SecurityException e) {
-                String title = getAlertMsg("login.auth.failed.security.title");
-                String message = getAlertMsg("login.auth.failed.security.msg");
-
+                String title;
+                String message;
+                if (credentials.isAnonymous()) {
+                    title = getAlertMsg("login.auth.failed.emptycredentials.title");
+                    message = getAlertMsg("login.auth.failed.emptycredentials.msg");
+                } else {
+                    title = getAlertMsg("login.auth.failed.security.title");
+                    message = getAlertMsg("login.auth.failed.security.msg");
+                }
                 failListener.onFail(title, message);
             } catch (NitriteIOException e) {
-                String title = getAlertMsg("login.auth.failed.io.title");
-                String message = getAlertMsg("login.auth.failed.io.msg");
-
+                String title;
+                String message;
+                if (e.getErrorMessage().getErrorCode().equals("NO2.2012")) {
+                    title = getAlertMsg("login.auth.failed.io.exists.title");
+                    message = getAlertMsg("login.auth.failed.io.exists.msg", databaseMeta.getFile());
+                } else {
+                    title = getAlertMsg("login.auth.failed.io.title");
+                    message = getAlertMsg("login.auth.failed.io.msg");
+                }
                 failListener.onFail(title, message, e);
             }
 
