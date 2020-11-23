@@ -9,6 +9,12 @@ import com.dansoftware.libraryapp.locale.I18N;
 import javafx.scene.Group;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A {@link LoginForm} is the most important component of a {@link com.dansoftware.libraryapp.gui.login.LoginView}
+ * it is the actual "login box".
+ *
+ * @author Daniel Gyorffy
+ */
 public class LoginForm extends Group {
 
     private final FrameFormController fxmlController;
