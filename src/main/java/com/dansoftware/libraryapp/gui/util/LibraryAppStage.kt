@@ -1,6 +1,11 @@
 package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableStringValue
+import javafx.beans.value.ObservableValue
 import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
@@ -8,6 +13,7 @@ import javafx.scene.image.Image
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
+import org.apache.commons.lang3.StringUtils
 import java.io.BufferedInputStream
 
 /**
@@ -106,6 +112,39 @@ abstract class LibraryAppStage : Stage {
      */
     protected constructor(i18n: String, content: Parent) : this(i18n) {
         scene = Scene(content)
+    }
+
+    protected constructor(i18n: String, separator: String, changingString: ObservableStringValue, content: Parent) {
+        scene = Scene(content)
+        titleProperty().bind(buildTitleProperty(i18n, separator, changingString))
+    }
+
+    private fun buildTitleProperty(i18n: String, separator: String, changingString: ObservableStringValue): ObservableValue<String> {
+
+        class ChangingProperty : SimpleStringProperty(), ChangeListener<String> {
+            private val separatorAndValueProperty = SimpleStringProperty(separator).concat(changingString)
+
+            init {
+                setValue()
+                changingString.addListener(this)
+            }
+
+            private fun setValue() {
+                when {
+                    changingString.get() == "null" -> {
+                        this.unbind()
+                        this.set(StringUtils.EMPTY)
+                    }
+                    else -> {
+                        this.bind(separatorAndValueProperty)
+                    }
+                }
+            }
+
+            override fun changed(observable: ObservableValue<out String>?, oldValue: String?, newValue: String?) = setValue()
+        }
+
+        return SimpleStringProperty(I18N.getWindowTitles().getString(i18n)).concat(ChangingProperty())
     }
 
     /**
