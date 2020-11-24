@@ -20,6 +20,8 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableStringValue;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
@@ -78,6 +80,10 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
     @Override
     public @NotNull Context getContext() {
         return asContext;
+    }
+
+    protected ObservableStringValue titleProperty() {
+        return this.loginForm.titleProperty();
     }
 
     /**

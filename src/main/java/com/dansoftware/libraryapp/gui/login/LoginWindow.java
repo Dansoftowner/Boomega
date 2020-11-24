@@ -33,7 +33,7 @@ class LoginWindow extends LibraryAppStage
     private final LoginView loginView;
 
     public LoginWindow(@NotNull LoginView root, @NotNull Preferences preferences) {
-        super("window.login.title", root);
+        super("window.login.title", " - ", root.titleProperty(), root);
         this.preferences = Objects.requireNonNull(preferences);
         this.loginView = Objects.requireNonNull(root, "LoginView shouldn't be null");
         this.setFullScreenExitHint(I18N.getGeneralWord("window.fullscreen.hint"));

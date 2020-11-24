@@ -6,6 +6,8 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableStringValue;
 import javafx.scene.Group;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,4 +35,7 @@ public class LoginForm extends Group {
         return fxmlController.getLoginData();
     }
 
+    public ObservableStringValue titleProperty() {
+        return fxmlController.titleProperty();
+    }
 }
