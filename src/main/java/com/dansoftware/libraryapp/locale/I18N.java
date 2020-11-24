@@ -130,7 +130,7 @@ public class I18N {
                 try {
                     ReflectionUtils.initializeClass(classRef, PluginClassLoader.getInstance());
                 } catch (ExceptionInInitializerError e) {
-                    logger.error("Failed to initialize a language pack called: " + classRef.getName(), e);
+                    logger.error("Failed to initialize a language pack called: {}", classRef.getName(), e);
                 }
             });
         }
