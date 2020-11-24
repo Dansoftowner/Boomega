@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import com.dansoftware.libraryapp.locale.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,13 @@ import org.jetbrains.annotations.NotNull;
 public class LightTheme extends Theme {
 
     private static final String GLOBAL_LIGHT_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-light.css";
+
+    private static final ThemeMeta<LightTheme> THEME_META =
+            new ThemeMeta<>(LightTheme.class, () -> I18N.getGeneralWord("theme.light"), InternalThemeDesigner.INSTANCE);
+
+    static {
+        registerTheme(THEME_META);
+    }
 
     private final ThemeApplier globalApplier;
     private final ThemeApplier customApplier;

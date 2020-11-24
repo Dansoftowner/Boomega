@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import com.dansoftware.libraryapp.locale.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,13 @@ import org.jetbrains.annotations.NotNull;
 public class DarkTheme extends Theme {
 
     private static final String GLOBAL_DARK_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-dark.css";
+
+    private static final ThemeMeta<DarkTheme> THEME_META =
+            new ThemeMeta<>(DarkTheme.class, () -> I18N.getGeneralWord("theme.dark"), InternalThemeDesigner.INSTANCE);
+
+    static {
+        registerTheme(THEME_META);
+    }
 
     private final ThemeApplier globalApplier;
     private final ThemeApplier customApplier;

@@ -2,18 +2,19 @@ package com.dansoftware.libraryapp.gui.theme;
 
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.dansoftware.libraryapp.util.IdentifiableWeakReference;
+import com.dansoftware.libraryapp.util.ReflectionUtils;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Modifier;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
  * but other {@link Theme} implementations can be loaded from plugins, through the
  * {@link PluginClassLoader}.<br>
  * If we want to collect all the available {@link Theme} implementations we can use the
- * {@link Theme#getAllAvailableThemes()} method.
+ * {@link Theme#getAvailableThemes()} method.
  * <br>
  *
  * <p>
@@ -53,7 +54,10 @@ import java.util.stream.Collectors;
  */
 public abstract class Theme {
 
+    private static final Logger logger = LoggerFactory.getLogger(Theme.class);
+
     private static final Set<WeakReference<Themeable>> THEMEABLE_SET = new HashSet<>();
+    private static final Map<Class<? extends Theme>, ThemeMeta<? extends Theme>> registeredThemes = new HashMap<>();
 
     /**
      * Holds the current default theme
@@ -61,6 +65,35 @@ public abstract class Theme {
     @SuppressWarnings("StaticInitializerReferencesSubClass")
     @NotNull
     private static Theme defaultTheme = new LightTheme();
+
+    static {
+        loadThemes();
+    }
+
+    private static void loadThemes() {
+        //collecting Themes from the core project
+        ReflectionUtils.getSubtypesOf(Theme.class).forEach(ReflectionUtils::initializeClass);
+
+        //collecting Themes from plugins
+        if (!PluginClassLoader.getInstance().isEmpty()) {
+            ReflectionUtils.getSubtypesOf(Theme.class, PluginClassLoader.getInstance()).forEach(classRef ->{
+                try {
+                    ReflectionUtils.initializeClass(classRef, PluginClassLoader.getInstance());
+                } catch (ExceptionInInitializerError e) {
+                    logger.error("Failed to initialize a theme called '{}'", classRef.getName(), e);
+                }
+            });
+        }
+    }
+
+    protected static void registerTheme(@NotNull ThemeMeta<? extends Theme> themeMeta) {
+        Objects.requireNonNull(themeMeta);
+        registeredThemes.put(themeMeta.getThemeClass(), themeMeta);
+    }
+
+    public static Set<Class<? extends Theme>> getAvailableThemes() {
+        return registeredThemes.keySet();
+    }
 
     protected Theme() {
     }
@@ -144,20 +177,6 @@ public abstract class Theme {
             notifyThemeableInstances(Theme.defaultTheme, theme);
             Theme.defaultTheme = theme;
         }
-    }
-
-    /**
-     * Collects all subtypes of the {@link Theme} class from the class-path.
-     *
-     * @return the set of class-references
-     * @see Reflections#getSubTypesOf(Class)
-     */
-    public static Set<Class<? extends Theme>> getAllAvailableThemes() {
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .addClassLoaders(ClassLoader.getSystemClassLoader(), PluginClassLoader.getInstance()));
-        return reflections.getSubTypesOf(Theme.class).stream()
-                .filter(classRef -> !Modifier.isAbstract(classRef.getModifiers()))
-                .collect(Collectors.toSet());
     }
 
     /**

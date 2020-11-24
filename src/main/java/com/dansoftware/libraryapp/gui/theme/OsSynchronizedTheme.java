@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.theme;
 
 import com.dansoftware.libraryapp.gui.theme.detect.OsThemeDetector;
+import com.dansoftware.libraryapp.locale.I18N;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -17,6 +18,13 @@ import java.util.function.Consumer;
 public class OsSynchronizedTheme extends Theme {
 
     private static final Logger logger = LoggerFactory.getLogger(OsSynchronizedTheme.class);
+
+    private static final ThemeMeta<OsSynchronizedTheme> THEME_META =
+            new ThemeMeta<>(OsSynchronizedTheme.class, () -> I18N.getGeneralWord("theme.sync"), InternalThemeDesigner.INSTANCE);
+
+    static {
+        registerTheme(THEME_META);
+    }
 
     private final Consumer<Boolean> osThemeListener;
 
