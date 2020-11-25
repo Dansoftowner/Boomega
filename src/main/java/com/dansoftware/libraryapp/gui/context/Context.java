@@ -98,6 +98,10 @@ public interface Context {
 
     boolean isShowing();
 
+    void showIndeterminateProgress();
+
+    void stopIndeterminateProgress();
+
     default void close() {
         Window window = getContextWindow();
         if (window instanceof Stage)

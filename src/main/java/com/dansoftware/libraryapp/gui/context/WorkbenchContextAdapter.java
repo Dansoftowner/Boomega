@@ -4,6 +4,9 @@ import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
+import com.nativejavafx.taskbar.TaskbarProgressbar;
+import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
@@ -24,6 +27,8 @@ import java.util.function.Consumer;
 final class WorkbenchContextAdapter implements Context {
 
     private final Workbench workbench;
+
+    private TaskbarProgressbar taskbarProgressbarCache;
 
     WorkbenchContextAdapter(@NotNull Workbench workbench) {
         this.workbench = workbench;
@@ -82,6 +87,25 @@ final class WorkbenchContextAdapter implements Context {
     @Override
     public boolean isShowing() {
         return getContextWindow().isShowing();
+    }
+
+    @Override
+    public void showIndeterminateProgress() {
+        workbench.setCursor(Cursor.WAIT);
+        getTaskbarProgressbar().showIndeterminateProgress();
+    }
+
+    @Override
+    public void stopIndeterminateProgress() {
+        workbench.setCursor(Cursor.DEFAULT);
+        getTaskbarProgressbar().stopProgress();
+    }
+
+    private TaskbarProgressbar getTaskbarProgressbar() {
+        if (taskbarProgressbarCache == null) {
+            taskbarProgressbarCache = TaskbarProgressbarFactory.getTaskbarProgressbar((Stage) getContextWindow());
+        }
+        return taskbarProgressbarCache;
     }
 
     private static WorkbenchDialog buildErrorDialog(@NotNull String title,
