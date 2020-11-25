@@ -31,7 +31,7 @@ private class ToolbarItemsBuilder(val context: Context) {
         InformationActivity(context).show()
     }
 
-    private fun menuToolbarItem(): ToolbarItem = ToolbarItem(StringUtils.EMPTY,
+    private fun menuToolbarItem(): ToolbarItem = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.SETTINGS),
             MenuItem(I18N.getGeneralWord("update.search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)) {
                 val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
                     override fun call() = UpdateSearcher.defaultInstance().search()
