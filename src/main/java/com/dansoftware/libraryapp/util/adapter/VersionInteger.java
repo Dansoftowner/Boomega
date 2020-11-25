@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.util.adapter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A {@link VersionInteger} can convert a version-string (x.x.x) to
@@ -12,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
  *     new VersionInteger("4.5.0").getValue()  =  450
  * </pre>
  */
-public class VersionInteger {
+public class VersionInteger implements Comparable<VersionInteger> {
 
     private final static String DOT = ".";
 
@@ -27,14 +28,19 @@ public class VersionInteger {
     }
 
     public boolean isNewerThan(VersionInteger other) {
-        return this.value > other.value;
+        return this.compareTo(other) > 0;
     }
 
     public boolean isOlderThan(VersionInteger other) {
-        return !isNewerThan(other);
+        return this.compareTo(other) < 0;
     }
 
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public int compareTo(@NotNull VersionInteger o) {
+        return this.value - o.value;
     }
 }
