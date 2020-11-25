@@ -63,12 +63,6 @@ public class DownloadSegmentController implements Initializable {
     private Button downloadKillBtn;
 
     /**
-     * The {@link TaskbarProgressbar} object that lets us to display a progress on the
-     * taskbar (on Windows).
-     */
-    private TaskbarProgressbar taskbarProgressbar;
-
-    /**
      * The last selected directory where the user wants to save the update.
      */
     private File downloadDirectory;
@@ -106,7 +100,7 @@ public class DownloadSegmentController implements Initializable {
     @FXML
     private void downloadSelected() {
         //creating a TaskbarProgressbar object if we haven't already
-        showTaskbarIndeterminateProgress();
+        context.showIndeterminateProgress();
         BinaryEntryRadioButton selectedRadio = (BinaryEntryRadioButton) this.radioGroup.getSelectedToggle();
         downloaderTaskExecutor.start(selectedRadio.binary, downloadDirectory);
     }
@@ -126,8 +120,8 @@ public class DownloadSegmentController implements Initializable {
         //changing the tooltip on the download/pause button
         downloadPauseBtn.setTooltip(new Tooltip(
                 downloaderTaskExecutor.isPaused() ?
-                        I18N.getGeneralWord("update.view.download.tooltip.resume") :
-                        I18N.getGeneralWord("update.view.download.tooltip.pause")
+                        I18N.getUpdateDialogValues().getString("update.view.download.resume") :
+                        I18N.getUpdateDialogValues().getString("update.view.download.pause")
         ));
     }
 
@@ -163,12 +157,6 @@ public class DownloadSegmentController implements Initializable {
                     I18N.getAlertMsg("update.view.downloaded.run.failed.msg"), e, buttonType -> {
                     });
         }
-    }
-
-    private void showTaskbarIndeterminateProgress() {
-        if (taskbarProgressbar == null)
-            taskbarProgressbar = TaskbarProgressbarFactory.getTaskbarProgressbar((Stage) context.getContextWindow());
-        taskbarProgressbar.showIndeterminateProgress();
     }
 
     private void createFormatChooserRadioButtons() {
@@ -252,10 +240,6 @@ public class DownloadSegmentController implements Initializable {
 
     Button getDownloadKillBtn() {
         return downloadKillBtn;
-    }
-
-    TaskbarProgressbar getTaskbarProgressbar() {
-        return taskbarProgressbar;
     }
 
     VBox getRadioBtnVBox() {

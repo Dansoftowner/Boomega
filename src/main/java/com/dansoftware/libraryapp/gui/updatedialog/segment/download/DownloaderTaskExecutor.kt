@@ -129,15 +129,15 @@ class DownloaderTaskExecutor(val context: Context,
         }
 
         downloaderTask.setOnCancelled {
-            controller.taskbarProgressbar.stopProgress()
+            context.stopProgress()
             clearProgress()
         }
 
         downloaderTask.setOnFailed { event ->
-            controller.taskbarProgressbar.showCustomProgress(
+            context.showProgress(
                     downloaderTask.workDone.toLong(),
                     downloaderTask.totalWork.toLong(),
-                    TaskbarProgressbar.Type.ERROR
+                    Context.ProgressType.ERROR
             )
             val cause = event.source.exception
 
@@ -146,23 +146,23 @@ class DownloaderTaskExecutor(val context: Context,
             context.showErrorDialog(
                     I18N.getAlertMsg("update.view.download.failed.title"),
                     I18N.getAlertMsg("update.view.download.failed.msg"),
-                    cause as Exception) { controller.taskbarProgressbar.stopProgress() }
+                    cause as Exception) { context.stopProgress() }
             clearProgress()
         }
 
         downloaderTask.setOnSucceeded {
-            controller.taskbarProgressbar.stopProgress()
+            context.stopProgress()
             context.contextWindow.requestFocus()
             clearProgress()
         }
 
         downloaderTask.progressProperty().addListener { _, _, _ ->
-            controller.taskbarProgressbar.showCustomProgress(
+            context.showProgress(
                     downloaderTask.workDone.toLong(),
                     downloaderTask.totalWork.toLong(),
                     when {
-                        isPaused() -> TaskbarProgressbar.Type.PAUSED
-                        else -> TaskbarProgressbar.Type.NORMAL
+                        isPaused() -> Context.ProgressType.PAUSED
+                        else -> Context.ProgressType.NORMAL
                     }
             )
         }
