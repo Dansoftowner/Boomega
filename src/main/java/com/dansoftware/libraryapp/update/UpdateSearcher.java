@@ -64,6 +64,10 @@ public abstract class UpdateSearcher {
         return instanceFactory.apply(base);
     }
 
+    public static UpdateSearcher defaultInstance() {
+        return instanceFactory.apply(new VersionInteger(System.getProperty("libraryapp.version")));
+    }
+
     static void setInstanceFactory(@NotNull Function<@NotNull VersionInteger, @NotNull UpdateSearcher> instanceFactory) {
         Objects.requireNonNull(instanceFactory);
         UpdateSearcher.instanceFactory = instanceFactory;
