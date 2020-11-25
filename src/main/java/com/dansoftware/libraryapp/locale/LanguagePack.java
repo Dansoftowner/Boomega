@@ -124,9 +124,6 @@ public abstract class LanguagePack {
     protected abstract ResourceBundle getProgressMessages();
 
     @NotNull
-    protected abstract ResourceBundle getFXMLValues();
-
-    @NotNull
     protected abstract ResourceBundle getGeneralWords();
 
     @NotNull
@@ -140,4 +137,7 @@ public abstract class LanguagePack {
 
     @NotNull
     protected abstract ResourceBundle getInfoViewValues();
+
+    @NotNull
+    protected abstract ResourceBundle getDatabaseCreatorViewValues();
 }

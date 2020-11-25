@@ -41,8 +41,7 @@ import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
-import static com.dansoftware.libraryapp.locale.I18N.getFXMLValues;
+import static com.dansoftware.libraryapp.locale.I18N.*;
 
 /**
  * A {@link DatabaseCreatorForm} is gui-form that lets the user to create
@@ -97,7 +96,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     }
 
     private void loadGui() {
-        var fxmlLoader = new ImprovedFXMLLoader(this, getClass().getResource("Form.fxml"), getFXMLValues());
+        var fxmlLoader = new ImprovedFXMLLoader(this, getClass().getResource("Form.fxml"), getDatabaseCreatorViewValues());
         this.getChildren().add(fxmlLoader.load());
     }
 

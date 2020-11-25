@@ -21,6 +21,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val BUTTON_TYPES = "com.dansoftware.libraryapp.locale.ButtonTypes"
         private const val LOGIN_VIEW = "com.dansoftware.libraryapp.locale.LoginView"
         private const val INFO_VIEW = "com.dansoftware.libraryapp.locale.InfoView"
+        private const val DATABASE_CREATOR_VIEW = "com.dansoftware.libraryapp.locale.DatabaseCreatorView"
     }
 
     override fun getTranslator(): LanguageTranslator? {
@@ -43,10 +44,6 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         return getBundle(PROGRESS_MESSAGES)
     }
 
-    public override fun getFXMLValues(): ResourceBundle {
-        return getBundle(FXML_VALUES)
-    }
-
     public override fun getGeneralWords(): ResourceBundle {
         return getBundle(GENERAL_WORDS)
     }
@@ -65,5 +62,9 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
 
     override fun getInfoViewValues(): ResourceBundle {
         return getBundle(INFO_VIEW)
+    }
+
+    override fun getDatabaseCreatorViewValues(): ResourceBundle {
+        return getBundle(DATABASE_CREATOR_VIEW)
     }
 }

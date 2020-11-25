@@ -82,12 +82,6 @@ public class I18N {
     }
 
     @NotNull
-    public static ResourceBundle getFXMLValues() {
-        recognizeLanguagePack();
-        return languagePack.getFXMLValues();
-    }
-
-    @NotNull
     public static ResourceBundle getGeneralWords() {
         recognizeLanguagePack();
         return languagePack.getGeneralWords();
@@ -115,6 +109,12 @@ public class I18N {
     public static ResourceBundle getInfoViewValues() {
         recognizeLanguagePack();
         return languagePack.getInfoViewValues();
+    }
+
+    @NotNull
+    public static ResourceBundle getDatabaseCreatorViewValues() {
+        recognizeLanguagePack();
+        return languagePack.getDatabaseCreatorViewValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
