@@ -97,7 +97,7 @@ final class WorkbenchContextAdapter implements Context {
 
     @Override
     public void showProgress(long done, long max, @NotNull ProgressType type) {
-        workbench.setCursor(Cursor.WAIT);
+        workbench.setCursor(Cursor.DEFAULT);
         getTaskbarProgressbar().showCustomProgress(done, max, TaskbarProgressbar.Type.valueOf(type.name()));
     }
 
