@@ -22,6 +22,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
@@ -55,12 +56,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
     }
 
     private void createToolbarControls() {
-        this.getToolbarControlsRight().add(new ToolbarItem(
-                new MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
-                event -> {
-                    var informationActivity = new InformationActivity(asContext);
-                    informationActivity.show();
-                }));
+        this.getToolbarControlsRight().addAll(new ToolbarItemsBuilder(asContext).build());
     }
 
     @Override
