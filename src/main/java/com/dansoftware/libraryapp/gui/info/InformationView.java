@@ -93,12 +93,12 @@ public class InformationView extends SimpleHeaderView<Node>
                 new MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY),
                 this::onCopy
         );
-        copyItem.setTooltip(new Tooltip(I18N.getFXMLValues().getString("info.copy")));
+        copyItem.setTooltip(new Tooltip(I18N.getInfoViewValues().getString("info.copy")));
         this.getToolbarControlsRight().add(copyItem);
     }
 
     private void loadContent() {
-        var fxmlLoader = new ImprovedFXMLLoader(this, getClass().getResource("View.fxml"), I18N.getFXMLValues());
+        var fxmlLoader = new ImprovedFXMLLoader(this, getClass().getResource("View.fxml"), I18N.getInfoViewValues());
         this.setContent(fxmlLoader.load());
     }
 

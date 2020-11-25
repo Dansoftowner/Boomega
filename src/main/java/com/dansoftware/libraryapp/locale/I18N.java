@@ -111,6 +111,12 @@ public class I18N {
         return languagePack.getLoginViewValues();
     }
 
+    @NotNull
+    public static ResourceBundle getInfoViewValues() {
+        recognizeLanguagePack();
+        return languagePack.getInfoViewValues();
+    }
+
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
         return MessageFormat.format(resourceBundle.getString(key), args);
     }

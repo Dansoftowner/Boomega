@@ -20,6 +20,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val ALERT_MESSAGES = "com.dansoftware.libraryapp.locale.AlertMessages"
         private const val BUTTON_TYPES = "com.dansoftware.libraryapp.locale.ButtonTypes"
         private const val LOGIN_VIEW = "com.dansoftware.libraryapp.locale.LoginView"
+        private const val INFO_VIEW = "com.dansoftware.libraryapp.locale.InfoView"
     }
 
     override fun getTranslator(): LanguageTranslator? {
@@ -60,5 +61,9 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
 
     override fun getLoginViewValues(): ResourceBundle {
         return getBundle(LOGIN_VIEW)
+    }
+
+    override fun getInfoViewValues(): ResourceBundle {
+        return getBundle(INFO_VIEW)
     }
 }

@@ -137,4 +137,7 @@ public abstract class LanguagePack {
 
     @NotNull
     protected abstract ResourceBundle getLoginViewValues();
+
+    @NotNull
+    protected abstract ResourceBundle getInfoViewValues();
 }
