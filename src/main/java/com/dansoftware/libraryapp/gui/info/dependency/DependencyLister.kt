@@ -17,6 +17,7 @@ object DependencyLister {
             DependencyInfo("OpenJDK", "http://openjdk.java.net/", LicenseInfo.gnu2ClassPath()),
             DependencyInfo("OSHI", "https://github.com/oshi/oshi", LicenseInfo.mitLicense()),
             DependencyInfo("AnimateFX", "https://github.com/Typhon0/AnimateFX", LicenseInfo.apache20License()),
+            DependencyInfo("FontAwesomeFX", "https://bitbucket.org/Jerady/fontawesomefx/src/master/", LicenseInfo.apache20License()),
             DependencyInfo("Apache Commons IO", "http://commons.apache.org/proper/commons-io/", LicenseInfo.apache20License()),
             DependencyInfo("Apache Commons Lang", "https://commons.apache.org/proper/commons-lang/", LicenseInfo.apache20License()),
             DependencyInfo("Gson", "https://github.com/google/gson", LicenseInfo.apache20License()),
