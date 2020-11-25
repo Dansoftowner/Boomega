@@ -19,6 +19,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val GENERAL_WORDS = "com.dansoftware.libraryapp.locale.GeneralWords"
         private const val ALERT_MESSAGES = "com.dansoftware.libraryapp.locale.AlertMessages"
         private const val BUTTON_TYPES = "com.dansoftware.libraryapp.locale.ButtonTypes"
+        private const val LOGIN_VIEW = "com.dansoftware.libraryapp.locale.LoginView"
     }
 
     override fun getTranslator(): LanguageTranslator? {
@@ -55,5 +56,9 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
 
     public override fun getUpdateDialogValues(): ResourceBundle {
         return getBundle(UPDATE_DIALOG)
+    }
+
+    override fun getLoginViewValues(): ResourceBundle {
+        return getBundle(LOGIN_VIEW)
     }
 }

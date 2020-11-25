@@ -122,7 +122,7 @@ public class FrameFormController
                     () -> databaseChooser.getSelectionModel().getSelectedItem()
             );
 
-            var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getFXMLValues());
+            var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getLoginViewValues());
             internalForm = fxmlLoader.load();
         }
 

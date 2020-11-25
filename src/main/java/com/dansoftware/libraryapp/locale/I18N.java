@@ -105,6 +105,12 @@ public class I18N {
         return languagePack.getUpdateDialogValues();
     }
 
+    @NotNull
+    public static ResourceBundle getLoginViewValues() {
+        recognizeLanguagePack();
+        return languagePack.getLoginViewValues();
+    }
+
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
         return MessageFormat.format(resourceBundle.getString(key), args);
     }
