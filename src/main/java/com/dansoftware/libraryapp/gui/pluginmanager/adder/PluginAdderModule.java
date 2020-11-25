@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.pluginmanager;
+package com.dansoftware.libraryapp.gui.pluginmanager.adder;
 
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import javafx.scene.Node;
