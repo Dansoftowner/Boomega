@@ -8,14 +8,13 @@ import java.util.*
  *
  * @author Daniel Gyorffy
  */
-class FirstTimeDialogActivity(preferences: Preferences) {
-    private val preferences: Preferences
+class FirstTimeDialogActivity(private val preferences: Preferences) {
+    init {
+        Objects.requireNonNull(preferences, "Preferences shouldn't be null")
+    }
+
     fun show() {
         val window = FirstTimeDialogWindow(FirstTimeDialog(preferences))
         window.showAndWait()
-    }
-
-    init {
-        this.preferences = Objects.requireNonNull(preferences, "Preferences shouldn't be null")
     }
 }
