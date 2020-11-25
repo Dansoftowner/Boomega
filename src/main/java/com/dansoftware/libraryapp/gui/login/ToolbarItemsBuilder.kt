@@ -14,7 +14,6 @@ import javafx.concurrent.Task
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Node
-import org.apache.commons.lang3.StringUtils
 
 /**
  * Utility class for building the drop-down menu for the [LoginView].
@@ -37,7 +36,7 @@ private class ToolbarItemsBuilder(val context: Context) {
                     override fun call() = UpdateSearcher.defaultInstance().search()
                 }
                 task.setOnSucceeded {
-                    context.stopIndeterminateProgress()
+                    context.stopProgress()
                     UpdateActivity(context, it.source.value as UpdateSearcher.UpdateSearchResult).show()
                 }
                 task.setOnRunning { context.showIndeterminateProgress() }

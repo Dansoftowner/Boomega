@@ -100,7 +100,9 @@ public interface Context {
 
     void showIndeterminateProgress();
 
-    void stopIndeterminateProgress();
+    void stopProgress();
+
+    void showProgress(long done, long max, @NotNull ProgressType type);
 
     default void close() {
         Window window = getContextWindow();
@@ -122,5 +124,11 @@ public interface Context {
 
     static Context from(@NotNull Workbench workbench) {
         return new WorkbenchContextAdapter(workbench);
+    }
+
+    enum ProgressType {
+        ERROR,
+        NORMAL,
+        PAUSED
     }
 }
