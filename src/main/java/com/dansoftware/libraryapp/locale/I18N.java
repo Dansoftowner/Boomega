@@ -59,6 +59,12 @@ public class I18N {
     }
 
     @NotNull
+    public static String getPluginManagerValue(String key, Object... args) {
+        if (ArrayUtils.isEmpty(args)) return getPluginManagerValues().getString(key);
+        else return getFormat(getPluginManagerValues(), key, args);
+    }
+
+    @NotNull
     public static ResourceBundle getButtonTypeValues() {
         recognizeLanguagePack();
         return languagePack.getButtonTypeValues();
@@ -115,6 +121,12 @@ public class I18N {
     public static ResourceBundle getDatabaseCreatorViewValues() {
         recognizeLanguagePack();
         return languagePack.getDatabaseCreatorViewValues();
+    }
+
+    @NotNull
+    public static ResourceBundle getPluginManagerValues() {
+        recognizeLanguagePack();
+        return languagePack.getPluginManagerValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
