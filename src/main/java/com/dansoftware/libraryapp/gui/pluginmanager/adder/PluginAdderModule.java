@@ -5,7 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 
 public class PluginAdderModule extends WorkbenchModule {
-    protected PluginAdderModule() {
+    public PluginAdderModule() {
         super("null", (Image) null);
     }
 
