@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.gui.util;
 
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.WinDef;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -15,6 +17,16 @@ import java.util.stream.Collectors;
 public class WindowUtils {
 
     private WindowUtils() {
+    }
+
+    @Nullable
+    public static WinDef.HWND getHwnd(@NotNull Stage window) {
+        if (window.isMaximized()) {
+            int windowIndex = javafx.stage.Window.getWindows().indexOf(window);
+            long hwndVal = com.sun.glass.ui.Window.getWindows().get(windowIndex).getNativeWindow();
+            return new WinDef.HWND(Pointer.createConstant(hwndVal));
+        }
+        return null;
     }
 
     /**
