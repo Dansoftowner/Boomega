@@ -122,7 +122,7 @@ UPDATE VIEW
     -fx-font-size: 32px;
 }
 
-.progress-bar.paused .bar{
+.progress-bar.paused .bar {
     -fx-background-color: #cbb000;
 }
 
@@ -209,4 +209,85 @@ custom
  */
 .button .glyph-icon {
     -fx-fill: black;
+}
+
+/*
+ Custom Decorated Window
+*/
+
+.internalTitledPane {
+    -fx-border-color: #b0b0b0;
+}
+
+.windowTitleBar .button {
+    -fx-background-insets: 0,0,0,0,0;
+}
+
+.windowTitleLabel {
+    -fx-text-fill: white;
+}
+
+.windowTitleBar {
+    -fx-background-color: #003d71;
+    -fx-pref-height: 5;
+}
+
+.windowControlBox {
+    -fx-spacing: 5;
+}
+
+.windowTitleBar .closeButton {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-content-display: graphic-only;
+    -fx-max-height: 5;
+}
+
+.windowTitleBar .closeButton .glyph-icon {
+    -fx-fill: white;
+}
+
+.windowTitleBar .closeButton:hover {
+    -fx-background-color: red;
+}
+
+.windowTitleBar .restoreButton {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-content-display: graphic-only;
+    -fx-max-height: 5;
+}
+
+.windowTitleBar .restoreButton:hover {
+    -fx-background-color: #035ca9;
+}
+
+.windowTitleBar .restoreButton .glyph-icon {
+    -fx-fill: white;
+}
+
+.windowTitleBar .minimizeButton {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-content-display: graphic-only;
+    -fx-max-height: 5;
+}
+
+.windowTitleBar .minimizeButton:hover {
+    -fx-background-color: #035ca9;
+}
+
+.windowTitleBar .minimizeButton .glyph-icon {
+    -fx-fill: white;
+}
+
+.windowIconArea {
+
+}
+
+.windowIconArea .graphic {
+
 }
