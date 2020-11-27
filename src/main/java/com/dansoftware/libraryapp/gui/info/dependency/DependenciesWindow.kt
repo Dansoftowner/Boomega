@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.info.dependency
 
-import com.dansoftware.libraryapp.gui.util.LibraryAppStage
+import com.dansoftware.libraryapp.gui.window.LibraryAppStage
 import javafx.stage.Modality
 import javafx.stage.Window
 

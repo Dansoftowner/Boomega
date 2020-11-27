@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.gui.login;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.login.form.LoginDataSaving;
-import com.dansoftware.libraryapp.gui.util.LibraryAppStage;
+import com.dansoftware.libraryapp.gui.window.LibraryAppStage;
 import com.dansoftware.libraryapp.locale.I18N;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;

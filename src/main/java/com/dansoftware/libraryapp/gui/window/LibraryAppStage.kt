@@ -1,12 +1,10 @@
-package com.dansoftware.libraryapp.gui.util
+package com.dansoftware.libraryapp.gui.window
 
 import com.dansoftware.libraryapp.locale.I18N
 import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableStringValue
 import javafx.beans.value.ObservableValue
-import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.image.Image
