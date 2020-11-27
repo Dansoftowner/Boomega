@@ -7,15 +7,16 @@ import javafx.scene.Node;
 
 public class PluginListModule extends WorkbenchModule {
 
-    private final PluginTable pluginTable;
+//    private final PluginTable pluginTable;
 
     public PluginListModule() {
         super(I18N.getPluginManagerValues().getString("plugin.module.list"), MaterialDesignIcon.VIEW_LIST);
-        this.pluginTable = new PluginTable();
+//        this.pluginTable = new PluginTable();
     }
 
     @Override
     public Node activate() {
-        return pluginTable;
+//        return pluginTable;
+        return null;
     }
 }
