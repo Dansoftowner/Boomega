@@ -133,8 +133,12 @@ public class Main extends BaseApplication {
     @Override
     public void stop() throws IOException {
         //writing all configurations
+        logger.info("Saving configurations");
         Preferences preferences = Preferences.getPreferences();
         preferences.editor().commit();
+
+        logger.info("Closing down PluginClassLoader");
+        PluginClassLoader.getInstance().close();
 
         //we make sure the app exiting, even if there are non-daemon running threads in the background
         System.exit(0);
