@@ -28,7 +28,7 @@ public class PluginTable extends TableView<File> {
     PluginTable(@NotNull Context context, @NotNull List<File> pluginFiles) {
         this.context = context;
         getItems().addAll(pluginFiles);
-        getColumns().addAll(new NameColumn(), new PathColumn(), new DeleteColumn());
+        getColumns().addAll(List.of(new NameColumn(), new PathColumn(), new DeleteColumn()));
     }
 
     private static final class NameColumn extends TableColumn<File, String>
