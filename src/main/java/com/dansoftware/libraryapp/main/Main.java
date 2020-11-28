@@ -11,6 +11,7 @@ import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity;
 import com.dansoftware.libraryapp.instance.ApplicationInstanceService;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
+import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
@@ -70,6 +71,10 @@ public class Main extends BaseApplication {
             //if a file is passed as a parameter, we show a message about it on the Preloader
             getFormattedArgument(ArgumentTransformer::transform).ifPresent(file ->
                     notifyPreloader(new Preloader.FixedMessageNotification("preloader.file.open", file.getName())));
+
+            notifyPreloader(new Preloader.MessageNotification("preloader.plugins.load"));
+            PluginClassLoader.getInstance();
+            logger.info("Plugins loaded successfully!");
 
             notifyPreloader(new Preloader.MessageNotification("preloader.preferences.read"));
             Preferences preferences = Preferences.getPreferences();
