@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.plugin
 
 import org.apache.commons.io.FileUtils
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
 import java.net.URL
@@ -14,26 +15,18 @@ import java.util.regex.Pattern
  */
 object PluginDirectory {
 
+    private val logger = LoggerFactory.getLogger(javaClass)
+    private val JAR_EXTENSION_PATTERN = Pattern.compile(".*\\.jar", Pattern.CASE_INSENSITIVE)
+
     private val directory = File(System.getProperty("libraryapp.plugin.dir"))
-    private val registrationFile = File(directory, "registered.conf")
-    private val registeredFiles: MutableList<String> = ArrayList(registrationFile.readLines())
+    private val registrationFile: File
+    private val registeredFiles: MutableList<String>
 
     init {
-        createDirectory()
-        createRegFile()
-    }
-
-    /**
-     * Creates the plugin directory if not exists
-     */
-    private fun createDirectory(): Boolean = when {
-        directory.exists().not() -> directory.mkdirs()
-        else -> true
-    }
-
-    private fun createRegFile(): Boolean = when {
-        registrationFile.exists().not() -> registrationFile.createNewFile()
-        else -> true
+        directory.mkdirs()
+        registrationFile = File(directory.parent, "registeredplugins.conf")
+        registrationFile.createNewFile()
+        registeredFiles = ArrayList(registrationFile.readLines())
     }
 
     private fun registerPlugin(file: File) {
@@ -45,8 +38,7 @@ object PluginDirectory {
      * Lists the plugin archives as [File] objects
      */
     fun getPluginFiles(): Array<File>? {
-        val extensionPattern = Pattern.compile(".*\\.jar", Pattern.CASE_INSENSITIVE)
-        return directory.listFiles { _, name -> extensionPattern.matcher(name).matches() && registeredFiles.contains(name) }
+        return directory.listFiles { _, name -> JAR_EXTENSION_PATTERN.matcher(name).matches() && registeredFiles.contains(name) }
     }
 
     /**
@@ -73,20 +65,21 @@ object PluginDirectory {
 
     fun clear() {
         val newRegistrationFileContent = ArrayList<String>()
-        registrationFile.reader().forEachLine {
+        registeredFiles.forEach {
             if (File(directory, it).exists()) {
                 newRegistrationFileContent.add(it)
             }
         }
-        getPluginFiles()?.forEach {
+        directory.listFiles { _, name -> JAR_EXTENSION_PATTERN.matcher(name).matches() }?.forEach {
             if (newRegistrationFileContent.contains(it.name).not()) {
                 try {
                     Files.deleteIfExists(it.toPath())
                 } catch (e: IOException) {
+                    logger.error("Couldn't delete plugin file ", e)
                 }
             }
         }
     }
 
-    fun isEmpty(): Boolean = directory.isDirectory && directory.listFiles { file -> file.isDirectory.not() }?.isEmpty() ?: false
+    fun isEmpty(): Boolean = registeredFiles.isEmpty()
 }
