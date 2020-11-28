@@ -17,4 +17,9 @@ object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls()
     fun getInstance(): PluginClassLoader = this
 
     fun isEmpty(): Boolean = PluginDirectory.isEmpty()
+
+    override fun close() {
+        super.close()
+        PluginDirectory.clear()
+    }
 }
