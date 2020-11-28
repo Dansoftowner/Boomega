@@ -168,7 +168,7 @@ public final class ReflectionUtils {
                 .addClassLoader(classLoader)
                 .addUrls(ClasspathHelper.forClassLoader(classLoader))
                 .setScanners(new SubTypesScanner()));
-        reflections.getSubTypesOf(LanguagePack.class);
+        reflections.getSubTypesOf(classRef);
         return reflections.getSubTypesOf(classRef);
     }
 }
