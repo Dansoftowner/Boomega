@@ -6,16 +6,11 @@ import com.dansoftware.libraryapp.util.ReflectionUtils;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
-import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * A Theme can change the appearance of GUI elements.
@@ -76,7 +71,7 @@ public abstract class Theme {
 
         //collecting Themes from plugins
         if (!PluginClassLoader.getInstance().isEmpty()) {
-            ReflectionUtils.getSubtypesOf(Theme.class, PluginClassLoader.getInstance()).forEach(classRef ->{
+            ReflectionUtils.getSubtypesOf(Theme.class, PluginClassLoader.getInstance()).forEach(classRef -> {
                 try {
                     ReflectionUtils.initializeClass(classRef, PluginClassLoader.getInstance());
                 } catch (ExceptionInInitializerError e) {

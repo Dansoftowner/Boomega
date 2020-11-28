@@ -12,6 +12,6 @@ class SpaceValidator : TextFormatter<TextFormatter.Change?>({ change: Change ->
     when {
         StringUtils.isEmpty(text) -> change.text = text.replace("\\s+".toRegex(), StringUtils.EMPTY)
     }
-    
+
     change
 })

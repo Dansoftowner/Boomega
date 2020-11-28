@@ -16,7 +16,7 @@ import java.util.function.Function;
  * Also, this class should be used when we want to create an {@link UpdateSearcher} object.
  * We use the static {@link #newInstance(VersionInteger)} method for creating the particular instance,
  * because it provides testability.
- *
+ * <p>
  * Example:
  * <pre>{@code
  * UpdateSearcher updateSearcher = UpdateSearcher.newInstance(...);

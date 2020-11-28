@@ -2,23 +2,10 @@ package com.dansoftware.libraryapp.gui.window.undecorate.control;
 
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
-import com.google.common.io.ByteStreams;
-import com.registry.RegistryValue;
-import com.registry.ValueType;
-import com.registry.event.RegistryEvent;
-import com.registry.event.RegistryListener;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.apache.commons.codec.binary.Hex;
 import org.jetbrains.annotations.NotNull;
-import com.registry.RegistryKey;
-import com.registry.RegistryWatcher;
-
-import java.util.Arrays;
-import java.util.stream.IntStream;
-
-// Számítógép\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM
 
 public class TitledPane extends BorderPane implements Themeable {
 

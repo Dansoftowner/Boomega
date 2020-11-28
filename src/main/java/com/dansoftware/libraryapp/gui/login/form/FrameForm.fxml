@@ -7,40 +7,45 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox fx:id="rootForm" maxWidth="650.0" spacing="10.0" styleClass="login-box" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dansoftware.libraryapp.gui.login.form.FrameFormController">
+<VBox fx:id="rootForm" maxWidth="650.0" spacing="10.0" styleClass="login-box" xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dansoftware.libraryapp.gui.login.form.FrameFormController">
     <children>
         <StackPane styleClass="header">
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
             <children>
-                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="logo" />
+                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="logo"/>
             </children>
         </StackPane>
         <HBox spacing="5.0">
             <children>
-                <ComboBox fx:id="databaseChooser" minHeight="35.0" minWidth="355.0" prefHeight="30.0" promptText="%login.source.combo.promt">
+                <ComboBox fx:id="databaseChooser" minHeight="35.0" minWidth="355.0" prefHeight="30.0"
+                          promptText="%login.source.combo.promt">
                 </ComboBox>
-                <Button fx:id="fileChooserBtn" contentDisplay="GRAPHIC_ONLY" maxWidth="0.0" minHeight="35.0" minWidth="40.0" mnemonicParsing="false" onAction="#openFile" text="Button">
+                <Button fx:id="fileChooserBtn" contentDisplay="GRAPHIC_ONLY" maxWidth="0.0" minHeight="35.0"
+                        minWidth="40.0" mnemonicParsing="false" onAction="#openFile" text="Button">
                     <tooltip>
-                        <Tooltip text="%login.source.open" />
+                        <Tooltip text="%login.source.open"/>
                     </tooltip>
                 </Button>
-                <Button fx:id="managerBtn" contentDisplay="GRAPHIC_ONLY" maxWidth="0.0" minHeight="35.0" minWidth="40.0" mnemonicParsing="false" onAction="#openDBManager" text="Button">
+                <Button fx:id="managerBtn" contentDisplay="GRAPHIC_ONLY" maxWidth="0.0" minHeight="35.0" minWidth="40.0"
+                        mnemonicParsing="false" onAction="#openDBManager" text="Button">
                     <tooltip>
-                        <Tooltip text="%login.db.manager.open" />
+                        <Tooltip text="%login.db.manager.open"/>
                     </tooltip>
                 </Button>
             </children>
             <VBox.margin>
-                <Insets left="20.0" right="20.0" />
+                <Insets left="20.0" right="20.0"/>
             </VBox.margin>
         </HBox>
 
-        <Separator prefWidth="200.0" />
-        <Button minHeight="35.0" minWidth="485.0" mnemonicParsing="false" onAction="#callDataSourceAdder" prefWidth="${rootForm.width}" styleClass="source-adder" text="%login.add.source">
+        <Separator prefWidth="200.0"/>
+        <Button minHeight="35.0" minWidth="485.0" mnemonicParsing="false" onAction="#callDataSourceAdder"
+                prefWidth="${rootForm.width}" styleClass="source-adder" text="%login.add.source">
             <font>
-                <Font size="15.0" />
+                <Font size="15.0"/>
             </font>
         </Button>
     </children>

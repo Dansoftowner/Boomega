@@ -12,7 +12,6 @@ import com.dansoftware.libraryapp.instance.ApplicationInstanceService;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
-import com.dansoftware.libraryapp.util.adapter.VersionInteger;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

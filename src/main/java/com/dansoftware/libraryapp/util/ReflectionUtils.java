@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.util;
 
 import com.dansoftware.libraryapp.locale.LanguagePack;
-import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
@@ -159,7 +158,7 @@ public final class ReflectionUtils {
      * Collects all subtypes of a class with the given class reference in
      * a given {@link ClassLoader}.
      *
-     * @param classRef the class reference that we want to get the subtypes from
+     * @param classRef    the class reference that we want to get the subtypes from
      * @param classLoader the class loader
      * @return the Set of class references
      */

@@ -8,5 +8,5 @@ import java.util.*
  * @author Daniel Gyorffy
  */
 data class DependencyInfo(val name: String, private val websiteUrl: String, val licenseInfo: LicenseInfo) {
-    fun getWebsiteUrl() : Optional<String> = Optional.ofNullable(websiteUrl)
+    fun getWebsiteUrl(): Optional<String> = Optional.ofNullable(websiteUrl)
 }

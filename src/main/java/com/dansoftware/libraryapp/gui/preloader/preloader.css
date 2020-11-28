@@ -15,7 +15,7 @@
 
 .centerLogo {
     -fx-image: url("/com/dansoftware/libraryapp/image/logo/bookshelf_title_shadow.png");
-    -fx-padding: 0 10 0 0 ;
+    -fx-padding: 0 10 0 0;
     -fx-pref-width: 714;
     -fx-pref-height: 232;
     /*-fx-image: url(/com/dansoftware/libraryapp/image/logo/bookshelf_256.png);*/

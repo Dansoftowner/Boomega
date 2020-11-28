@@ -4,7 +4,6 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 

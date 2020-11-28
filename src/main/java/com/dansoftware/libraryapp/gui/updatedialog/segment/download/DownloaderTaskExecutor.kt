@@ -4,7 +4,6 @@ import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.update.DownloadableBinary
 import com.dansoftware.libraryapp.update.UpdateInformation
-import com.nativejavafx.taskbar.TaskbarProgressbar
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Label
@@ -73,7 +72,7 @@ class DownloaderTaskExecutor(val context: Context,
     private fun initialize(downloaderTask: DownloaderTask): DownloaderTask {
         downloaderTask.setOnRunning {
             downloaderTask.pausedProperty().addListener { _, _, paused ->
-                when(paused) {
+                when (paused) {
                     true -> controller.progressBar.styleClass.add("paused")
                     false -> controller.progressBar.styleClass.remove("paused")
                 }

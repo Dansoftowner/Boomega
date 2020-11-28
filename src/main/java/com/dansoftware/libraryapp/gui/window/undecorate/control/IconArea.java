@@ -15,6 +15,8 @@ public class IconArea extends StackPane {
     }
 
     private static final class IconAreaImageView extends ImageView {
-        IconAreaImageView() { getStyleClass().add("graphic"); }
+        IconAreaImageView() {
+            getStyleClass().add("graphic");
+        }
     }
 }

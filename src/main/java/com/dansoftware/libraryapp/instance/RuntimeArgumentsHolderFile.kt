@@ -20,6 +20,7 @@ object RuntimeArgumentsHolderFile : File(FileUtils.getTempDirectory(), "librarya
     fun clear() {
         try {
             BufferedWriter(FileWriter(this)).use { it.write(StringUtils.EMPTY) }
-        } catch (ignored: IOException) { }
+        } catch (ignored: IOException) {
+        }
     }
 }

@@ -220,7 +220,7 @@ custom
 }
 
 .windowTitleBar .button {
-    -fx-background-insets: 0,0,0,0,0;
+    -fx-background-insets: 0, 0, 0, 0, 0;
 }
 
 .windowTitleLabel {

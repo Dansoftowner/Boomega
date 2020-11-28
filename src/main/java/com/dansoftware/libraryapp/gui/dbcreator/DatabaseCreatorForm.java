@@ -41,7 +41,8 @@ import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static com.dansoftware.libraryapp.locale.I18N.*;
+import static com.dansoftware.libraryapp.locale.I18N.getAlertMsg;
+import static com.dansoftware.libraryapp.locale.I18N.getDatabaseCreatorViewValues;
 
 /**
  * A {@link DatabaseCreatorForm} is gui-form that lets the user to create
