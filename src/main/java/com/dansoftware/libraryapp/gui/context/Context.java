@@ -81,6 +81,10 @@ public interface Context {
                                         String message,
                                         Consumer<ButtonType> onResult);
 
+    ContextDialog showConfirmationDialog(String title,
+                                         String message,
+                                         Consumer<ButtonType> onResult);
+
     @NotNull
     ContextDialog showDialog(String title, Node content, Consumer<ButtonType> onResult, ButtonType... buttonTypes);
 

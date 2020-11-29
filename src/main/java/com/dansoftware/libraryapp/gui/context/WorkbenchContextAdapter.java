@@ -60,6 +60,11 @@ final class WorkbenchContextAdapter implements Context {
     }
 
     @Override
+    public ContextDialog showConfirmationDialog(String title, String message, Consumer<ButtonType> onResult) {
+        return ContextDialog.from(workbench.showConfirmationDialog(title, message, onResult));
+    }
+
+    @Override
     public @NotNull ContextDialog showDialog(String title, Node content, Consumer<ButtonType> onResult, ButtonType... buttonTypes) {
         return ContextDialog.from(workbench.showDialog(WorkbenchDialog.builder(title, content, buttonTypes).onResult(onResult).build()));
     }
