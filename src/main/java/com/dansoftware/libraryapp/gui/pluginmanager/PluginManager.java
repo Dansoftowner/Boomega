@@ -6,6 +6,8 @@ import com.dansoftware.libraryapp.gui.pluginmanager.list.PluginListModule;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dlsc.workbenchfx.Workbench;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -17,7 +19,8 @@ public class PluginManager extends Workbench implements Themeable {
 
     PluginManager(@NotNull List<File> pluginFiles) {
         asContext = Context.from(this);
-        getModules().addAll(new PluginListModule(asContext, pluginFiles), new PluginAdderModule());
+        ObservableList<File> observablePluginList = FXCollections.observableArrayList(pluginFiles);
+        getModules().addAll(new PluginListModule(asContext, observablePluginList), new PluginAdderModule(asContext, observablePluginList));
         Theme.registerThemeable(this);
     }
 

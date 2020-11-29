@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ public class PluginListModule extends WorkbenchModule {
 
     private final PluginTable pluginTable;
 
-    public PluginListModule(@NotNull Context context, @NotNull List<File> pluginFiles) {
+    public PluginListModule(@NotNull Context context, @NotNull ObservableList<File> pluginFiles) {
         super(I18N.getPluginManagerValues().getString("plugin.module.list"), MaterialDesignIcon.VIEW_LIST);
         this.pluginTable = new PluginTable(context, pluginFiles);
     }

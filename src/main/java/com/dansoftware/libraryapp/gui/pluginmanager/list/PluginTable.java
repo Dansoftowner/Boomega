@@ -23,8 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -36,10 +34,11 @@ public class PluginTable extends TableView<File> implements Themeable {
 
     private final Context context;
 
-    PluginTable(@NotNull Context context, @NotNull List<File> pluginFiles) {
+    PluginTable(@NotNull Context context, @NotNull ObservableList<File> pluginFiles) {
         this.context = context;
-        getItems().addAll(pluginFiles);
+        setItems(pluginFiles);
         getColumns().addAll(List.of(new NameColumn(), new SizeColumn(), new DeleteColumn()));
+        getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         Theme.registerThemeable(this);
     }
 
@@ -125,6 +124,7 @@ public class PluginTable extends TableView<File> implements Themeable {
                             var dialog = new PluginDeleteDialog();
                             dialog.show(FXCollectionUtils.copyOf(getTableView().getSelectionModel().getSelectedItems()));
                         });
+                        deleteButton.disableProperty().bind(getTableRow().selectedProperty().not());
                         setGraphic(deleteButton);
                     }
                 }
