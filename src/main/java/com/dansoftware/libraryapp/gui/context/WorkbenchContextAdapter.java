@@ -51,17 +51,17 @@ final class WorkbenchContextAdapter implements Context {
 
     @Override
     public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(workbench.showErrorDialog(title, message, exception, onResult));
+        return ContextDialog.from(workbench.showDialog(buildErrorDialog(title, message, exception, onResult)));
     }
 
     @Override
     public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(workbench.showInformationDialog(title, message, onResult));
+        return ContextDialog.from(workbench.showDialog(buildInformationDialog(title, message, onResult)));
     }
 
     @Override
     public ContextDialog showConfirmationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(workbench.showConfirmationDialog(title, message, onResult));
+        return ContextDialog.from(workbench.showDialog(buildConfirmationDialog(title, message, onResult)));
     }
 
     @Override
@@ -123,7 +123,7 @@ final class WorkbenchContextAdapter implements Context {
                                                     @NotNull String message,
                                                     @Nullable Exception exception,
                                                     @NotNull Consumer<ButtonType> onResult) {
-        return WorkbenchDialog.builder(title, message, I18NButtonTypes.CLOSE)
+        return WorkbenchDialog.builder(title, message, I18NButtonTypes.OK)
                 .exception(exception)
                 .onResult(onResult)
                 .build();
@@ -133,6 +133,13 @@ final class WorkbenchContextAdapter implements Context {
                                                           @NotNull String message,
                                                           @NotNull Consumer<ButtonType> onResult) {
         return WorkbenchDialog.builder(title, message, I18NButtonTypes.OK)
+                .onResult(onResult)
                 .build();
+    }
+
+    private static WorkbenchDialog buildConfirmationDialog(@NotNull String title,
+                                                           @NotNull String message,
+                                                           @NotNull Consumer<ButtonType> onResult) {
+        return WorkbenchDialog.builder(title, message, I18NButtonTypes.NO, I18NButtonTypes.YES).build();
     }
 }
