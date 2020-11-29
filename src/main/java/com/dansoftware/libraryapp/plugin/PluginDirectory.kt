@@ -59,8 +59,12 @@ object PluginDirectory {
 
     @Throws(IOException::class)
     fun addPlugin(src: File) {
-        Files.copy(src.toPath(), File(directory, src.name).toPath())
-        registerPlugin(src)
+        try {
+            Files.copy(src.toPath(), File(directory, src.name).toPath())
+            registerPlugin(src)
+        } catch (e: java.nio.file.FileAlreadyExistsException) {
+            registerPlugin(src)
+        }
     }
 
     fun clear() {
