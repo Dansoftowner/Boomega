@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.gui.pluginmanager.adder;
 
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -10,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public class PluginAdderModule extends WorkbenchModule {
+public class PluginAdderModule extends WorkbenchModule implements Themeable {
 
     private final PluginAdderPane pluginAdderPane;
 
@@ -22,5 +24,10 @@ public class PluginAdderModule extends WorkbenchModule {
     @Override
     public Node activate() {
         return pluginAdderPane;
+    }
+
+    @Override
+    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
+
     }
 }

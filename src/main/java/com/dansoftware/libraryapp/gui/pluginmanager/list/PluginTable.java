@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.pluginmanager.list;
 
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.theme.LightTheme;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.FXCollectionUtils;
@@ -16,6 +17,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
@@ -23,12 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class PluginTable extends TableView<File> implements Themeable {
+public class PluginTable extends TableView<File>  {
 
     private static final Logger logger = LoggerFactory.getLogger(PluginTable.class);
 
@@ -39,13 +43,6 @@ public class PluginTable extends TableView<File> implements Themeable {
         setItems(pluginFiles);
         getColumns().addAll(List.of(new NameColumn(), new SizeColumn(), new DeleteColumn()));
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        Theme.registerThemeable(this);
-    }
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.getCustomApplier().applyBack(this);
-        newTheme.getCustomApplier().apply(this);
     }
 
     private static final class NameColumn extends TableColumn<File, String>
@@ -124,7 +121,7 @@ public class PluginTable extends TableView<File> implements Themeable {
                             var dialog = new PluginDeleteDialog();
                             dialog.show(FXCollectionUtils.copyOf(getTableView().getSelectionModel().getSelectedItems()));
                         });
-                        deleteButton.disableProperty().bind(getTableRow().selectedProperty().not());
+                        try { deleteButton.disableProperty().bind(getTableRow().selectedProperty().not()); } catch( NullPointerException ignored) { }
                         setGraphic(deleteButton);
                     }
                 }
