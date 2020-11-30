@@ -52,17 +52,23 @@ public class I18N {
     }
 
     @NotNull
-    public static String getProgressMessage(String key, Object... args) {
+    public static String getProgressMessage(@NotNull String key, @Nullable Object... args) {
         return getValue(getProgressMessages(), key, args);
     }
 
     @NotNull
-    public static String getPluginManagerValue(String key, Object... args) {
+    public static String getPluginManagerValue(@NotNull String key, @Nullable Object... args) {
         return getValue(getPluginManagerValues(), key, args);
     }
 
-    public static String getLoginViewValue(String key, Object... args) {
+    @NotNull
+    public static String getLoginViewValue(@NotNull String key, @Nullable Object... args) {
         return getValue(getLoginViewValues(), key, args);
+    }
+
+    @NotNull
+    public static String getDatabaseCreatorValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getDatabaseCreatorViewValues(), key, args);
     }
 
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
