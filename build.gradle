@@ -93,7 +93,7 @@ dependencies {
 
     //javaFX libraries
     implementation 'com.jfoenix:jfoenix:9.0.9'
-    implementation 'org.jfxtras:jmetro:11.6.13'
+    implementation 'org.jfxtras:jmetro:11.6.14'
     implementation group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
     //Original: implementation group: 'com.dlsc.workbenchfx', name: 'workbenchfx-core', version: '11.1.0'
     implementation 'com.github.Dansoftowner:workbenchfx-fork:11.1.7' //Modified WorkBenchFX
