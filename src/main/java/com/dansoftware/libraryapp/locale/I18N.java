@@ -14,8 +14,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import static org.apache.commons.lang3.ArrayUtils.isEmpty;
-
 /**
  * Used for accessing localized messages/values.
  */
@@ -45,26 +43,31 @@ public class I18N {
 
     @NotNull
     public static String getGeneralWord(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
-        if (ArrayUtils.isEmpty(args)) return getGeneralWords().getString(key);
-        return getFormat(getGeneralWords(), key, args);
+        return getValue(getGeneralWords(), key, args);
     }
 
     @NotNull
     public static String getAlertMsg(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
-        if (isEmpty(args)) return getAlertMessages().getString(key);
-        return getFormat(getAlertMessages(), key, args);
+        return getValue(getAlertMessages(), key, args);
     }
 
     @NotNull
     public static String getProgressMessage(String key, Object... args) {
-        if (ArrayUtils.isEmpty(args)) return getProgressMessages().getString(key);
-        return getFormat(getProgressMessages(), key, args);
+        return getValue(getProgressMessages(), key, args);
     }
 
     @NotNull
     public static String getPluginManagerValue(String key, Object... args) {
-        if (ArrayUtils.isEmpty(args)) return getPluginManagerValues().getString(key);
-        else return getFormat(getPluginManagerValues(), key, args);
+        return getValue(getPluginManagerValues(), key, args);
+    }
+
+    public static String getLoginViewValue(String key, Object... args) {
+        return getValue(getLoginViewValues(), key, args);
+    }
+
+    private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
+        if (ArrayUtils.isEmpty(args)) return resourceBundle.getString(key);
+        return getFormat(resourceBundle, key, args);
     }
 
     @NotNull
