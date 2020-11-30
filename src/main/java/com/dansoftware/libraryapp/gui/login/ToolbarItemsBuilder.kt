@@ -43,7 +43,7 @@ private class ToolbarItemsBuilder(val context: Context) {
                 task.setOnRunning { context.showIndeterminateProgress() }
                 Thread(task).start()
             },
-            MenuItem(I18N.getGeneralWord("plugin.add"), FontAwesomeIconView(FontAwesomeIcon.PLUG)) {
+            MenuItem(I18N.getGeneralWord("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)) {
                 PluginManagerActivity().show(context)
             },
             MenuItem(I18N.getGeneralWord("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)) {
