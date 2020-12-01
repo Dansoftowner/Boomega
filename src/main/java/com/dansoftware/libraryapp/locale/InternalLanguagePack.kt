@@ -28,47 +28,25 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         return LanguageTranslator("Dániel", "Györffy", "dansoftwareowner@gmail.com")
     }
 
-    override fun getButtonTypeValues(): ResourceBundle {
-        return getBundle(BUTTON_TYPES)
-    }
+    override fun getButtonTypeValues(): ResourceBundle = getBundle(BUTTON_TYPES)
 
-    public override fun getWindowTitles(): ResourceBundle {
-        return getBundle(WINDOW_TITLES)
-    }
+    override fun getWindowTitles(): ResourceBundle = getBundle(WINDOW_TITLES)
 
-    public override fun getFirstTimeDialogValues(): ResourceBundle {
-        return getBundle(FIRST_TIME_DIALOG)
-    }
+    override fun getFirstTimeDialogValues(): ResourceBundle = getBundle(FIRST_TIME_DIALOG)
 
-    public override fun getProgressMessages(): ResourceBundle {
-        return getBundle(PROGRESS_MESSAGES)
-    }
+    override fun getProgressMessages(): ResourceBundle = getBundle(PROGRESS_MESSAGES)
 
-    public override fun getGeneralWords(): ResourceBundle {
-        return getBundle(GENERAL_WORDS)
-    }
+    override fun getGeneralWords(): ResourceBundle = getBundle(GENERAL_WORDS)
 
-    public override fun getAlertMessages(): ResourceBundle {
-        return getBundle(ALERT_MESSAGES)
-    }
+    override fun getAlertMessages(): ResourceBundle = getBundle(ALERT_MESSAGES)
 
-    public override fun getUpdateDialogValues(): ResourceBundle {
-        return getBundle(UPDATE_DIALOG)
-    }
+    override fun getUpdateDialogValues(): ResourceBundle = getBundle(UPDATE_DIALOG)
 
-    override fun getLoginViewValues(): ResourceBundle {
-        return getBundle(LOGIN_VIEW)
-    }
+    override fun getLoginViewValues(): ResourceBundle = getBundle(LOGIN_VIEW)
 
-    override fun getInfoViewValues(): ResourceBundle {
-        return getBundle(INFO_VIEW)
-    }
+    override fun getInfoViewValues(): ResourceBundle = getBundle(INFO_VIEW)
 
-    override fun getDatabaseCreatorValues(): ResourceBundle {
-        return getBundle(DATABASE_CREATOR)
-    }
+    override fun getDatabaseCreatorValues(): ResourceBundle = getBundle(DATABASE_CREATOR)
 
-    override fun getPluginManagerValues(): ResourceBundle {
-        return getBundle(PLUGIN_MANAGER)
-    }
+    override fun getPluginManagerValues(): ResourceBundle = getBundle(PLUGIN_MANAGER)
 }
