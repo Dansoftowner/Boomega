@@ -76,6 +76,11 @@ public class I18N {
         return getValue(getDatabaseManagerValues(), key, args);
     }
 
+    @NotNull
+    public static String getUpdateDialogValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getUpdateDialogValues(), key, args);
+    }
+
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
         if (ArrayUtils.isEmpty(args)) return resourceBundle.getString(key);
         return getFormat(resourceBundle, key, args);
