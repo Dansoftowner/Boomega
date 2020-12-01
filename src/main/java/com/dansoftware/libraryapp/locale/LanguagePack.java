@@ -139,7 +139,7 @@ public abstract class LanguagePack {
     protected abstract ResourceBundle getInfoViewValues();
 
     @NotNull
-    protected abstract ResourceBundle getDatabaseCreatorViewValues();
+    protected abstract ResourceBundle getDatabaseCreatorValues();
 
     @NotNull
     public abstract ResourceBundle getPluginManagerValues();

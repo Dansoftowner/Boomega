@@ -132,7 +132,7 @@ public class I18N {
     @NotNull
     public static ResourceBundle getDatabaseCreatorViewValues() {
         recognizeLanguagePack();
-        return languagePack.getDatabaseCreatorViewValues();
+        return languagePack.getDatabaseCreatorValues();
     }
 
     @NotNull

@@ -15,13 +15,12 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val FIRST_TIME_DIALOG = "com.dansoftware.libraryapp.locale.FirstTimeDialog"
         private const val UPDATE_DIALOG = "com.dansoftware.libraryapp.locale.UpdateDialog"
         private const val PROGRESS_MESSAGES = "com.dansoftware.libraryapp.locale.ProgressMessages"
-        private const val FXML_VALUES = "com.dansoftware.libraryapp.locale.FXMLValues"
         private const val GENERAL_WORDS = "com.dansoftware.libraryapp.locale.GeneralWords"
         private const val ALERT_MESSAGES = "com.dansoftware.libraryapp.locale.AlertMessages"
         private const val BUTTON_TYPES = "com.dansoftware.libraryapp.locale.ButtonTypes"
         private const val LOGIN_VIEW = "com.dansoftware.libraryapp.locale.LoginView"
         private const val INFO_VIEW = "com.dansoftware.libraryapp.locale.InfoView"
-        private const val DATABASE_CREATOR_VIEW = "com.dansoftware.libraryapp.locale.DatabaseCreatorView"
+        private const val DATABASE_CREATOR = "com.dansoftware.libraryapp.locale.DatabaseCreator"
         private const val PLUGIN_MANAGER = "com.dansoftware.libraryapp.locale.PluginManager"
     }
 
@@ -65,8 +64,8 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         return getBundle(INFO_VIEW)
     }
 
-    override fun getDatabaseCreatorViewValues(): ResourceBundle {
-        return getBundle(DATABASE_CREATOR_VIEW)
+    override fun getDatabaseCreatorValues(): ResourceBundle {
+        return getBundle(DATABASE_CREATOR)
     }
 
     override fun getPluginManagerValues(): ResourceBundle {
