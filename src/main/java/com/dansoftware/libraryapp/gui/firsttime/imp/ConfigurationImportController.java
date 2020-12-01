@@ -81,8 +81,8 @@ public class ConfigurationImportController implements Initializable {
             } catch (IOException | PreferencesImporter.InvalidZipContentException e) {
                 logger.error("Failed to import configurations", e);
                 context.showErrorDialog(
-                        I18N.getAlertMsg("configuration.import.failed.title"),
-                        I18N.getAlertMsg("configuration.import.failed.msg"), e
+                        I18N.getUpdateDialogValue("configuration.import.failed.title"),
+                        I18N.getUpdateDialogValue("configuration.import.failed.msg"), e
                 );
             }
         else
