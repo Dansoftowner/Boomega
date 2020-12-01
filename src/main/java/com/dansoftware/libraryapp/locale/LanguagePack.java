@@ -127,9 +127,6 @@ public abstract class LanguagePack {
     protected abstract ResourceBundle getGenerals();
 
     @NotNull
-    protected abstract ResourceBundle getAlertMessages();
-
-    @NotNull
     protected abstract ResourceBundle getUpdateDialogValues();
 
     @NotNull

@@ -47,11 +47,6 @@ public class I18N {
     }
 
     @NotNull
-    public static String getAlertMsg(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
-        return getValue(getAlertMessages(), key, args);
-    }
-
-    @NotNull
     public static String getProgressMessage(@NotNull String key, @Nullable Object... args) {
         return getValue(getProgressMessages(), key, args);
     }
@@ -113,12 +108,6 @@ public class I18N {
     public static ResourceBundle getGenerals() {
         recognizeLanguagePack();
         return languagePack.getGenerals();
-    }
-
-    @NotNull
-    public static ResourceBundle getAlertMessages() {
-        recognizeLanguagePack();
-        return languagePack.getAlertMessages();
     }
 
     @NotNull
