@@ -7,24 +7,10 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
 version '0.0.0'
-
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" }
-    //repository for JMetro
-    maven { url  "https://dl.bintray.com/dukke/maven" }
-    //repository for markdown-javafx-renderer
-    maven {
-        url "http://sandec.bintray.com/repo"
-    }
-    //repository for JUnique
-    maven {
-        url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2"
-    }
-}
+def mainClass = 'com.dansoftware.libraryapp.main.Main'
 
 compileKotlin {
-    kotlinOptions  {
+    kotlinOptions {
         jvmTarget = "11"
     }
 }
@@ -46,23 +32,44 @@ compileTestJava {
     options.compilerArgs += ["--add-exports", "javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED"]
 }
 
+repositories {
+    mavenCentral()
+
+    //JitPack repository
+    maven { url "https://jitpack.io" }
+
+    //repository for JMetro
+    maven { url "https://dl.bintray.com/dukke/maven" }
+
+    //repository for FontawesomeFX
+    maven { url "https://dl.bintray.com/jerady/maven" }
+
+    //repository for markdown-javafx-renderer
+    maven {
+        url "http://sandec.bintray.com/repo"
+    }
+
+    //repository for JUnique
+    maven {
+        url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2"
+    }
+}
+
 processResources {
-    from ('src/main/java') {
+
+    //we accept the .fxml and .css resources from the java source set
+    from('src/main/java') {
         include '**/*.fxml'
         include '**/*.css'
     }
 }
 
-def mainClass = 'com.dansoftware.libraryapp.main.Main'
+configurations {
+    //for holding the dependencies
+    libraries
 
-jar {
-    manifest {
-       attributes 'Main-Class': mainClass
-    }
-
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+    //we exclude the javafx group
+    libraries.exclude group: 'org.openjfx'
 }
 
 test {
@@ -71,43 +78,71 @@ test {
 
 dependencies {
     //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    libraries "org.jetbrains.kotlin:kotlin-stdlib"
 
     //logging
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    libraries group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    libraries group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    libraries group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
 
     //JUnit 5
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
 
-    //utility libraries
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.jetbrains:annotations:19.0.0'
-    implementation 'org.reflections:reflections:0.9.12'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
-    implementation group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
-    implementation 'com.github.Dansoftowner:jFileGoodies:1.2.2'
-    implementation 'com.github.oshi:oshi-core:5.3.4'
+    /*** UTILITY LIBRARIES ***/
+    libraries 'com.google.code.gson:gson:2.8.6'
+    libraries 'org.jetbrains:annotations:19.0.0'
+    libraries 'org.reflections:reflections:0.9.12'
+    libraries 'commons-io:commons-io:2.6'
+    libraries 'org.apache.commons:commons-lang3:3.10'
+    libraries 'commons-collections:commons-collections:3.2.2'
+    libraries 'com.github.Dansoftowner:jFileGoodies:1.2.2'
+    libraries 'com.github.oshi:oshi-core:5.3.4'
 
-    //javaFX libraries
-    implementation 'com.jfoenix:jfoenix:9.0.9'
-    implementation 'org.jfxtras:jmetro:11.6.14'
-    implementation group: 'org.controlsfx', name:'controlsfx', version: '11.0.1'
-    //Original: implementation group: 'com.dlsc.workbenchfx', name: 'workbenchfx-core', version: '11.1.0'
-    implementation 'com.github.Dansoftowner:workbenchfx-fork:11.1.7' //Modified WorkBenchFX
-    implementation 'io.github.typhon0:AnimateFX:1.2.1'
-    implementation "com.sandec:mdfx:0.1.6"
-    implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.2.7'
-    implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
+    /*** JAVA FX LIBRARIES ***/
+
+    libraries 'com.jfoenix:jfoenix:9.0.9'
+    libraries 'org.jfxtras:jmetro:11.6.14'
+    libraries 'org.controlsfx:controlsfx:11.0.1'
+
+    //Modified WorkBenchFX
+    //Original: 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
+    libraries 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
+
+    libraries 'de.jensd:fontawesomefx-commons:11.0'
+    libraries 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
+    libraries 'io.github.typhon0:AnimateFX:1.2.1'
+    libraries "com.sandec:mdfx:0.1.6"
+    libraries 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.2.7'
+    libraries 'com.github.Dansoftowner:SegmentDialogFX:2.0'
 
     //nitrite database
-    implementation 'org.dizitart:nitrite:3.4.2'
+    libraries 'org.dizitart:nitrite:3.4.2'
 
     //junique
-    implementation 'it.sauronsoftware:junique:1.0.4'
+    libraries 'it.sauronsoftware:junique:1.0.4'
 
     //libraries from the local file system
-    implementation fileTree(dir: 'external-libraries', include: '*.jar')
+    libraries fileTree(dir: 'external-libraries', include: '*.jar')
+
+    // libraries = implementation
+    configurations.implementation.extendsFrom(configurations.libraries)
 }
+
+jar {
+    //we exclude the javafx package from the jar
+    exclude('javafx/**')
+    //we exclude junit from the jar
+    exclude('junit/**')
+    //we exclude unnecessary javafx-swt.jar resource
+    exclude('javafx-swt.jar')
+
+    manifest {
+        attributes 'Main-Class': mainClass
+    }
+
+    from {
+        // we include all libraries in a single jar
+        configurations.libraries.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
