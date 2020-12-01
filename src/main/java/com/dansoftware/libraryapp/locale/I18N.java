@@ -43,7 +43,7 @@ public class I18N {
 
     @NotNull
     public static String getGeneralWord(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
-        return getValue(getGeneralWords(), key, args);
+        return getValue(getGenerals(), key, args);
     }
 
     @NotNull
@@ -105,9 +105,9 @@ public class I18N {
     }
 
     @NotNull
-    public static ResourceBundle getGeneralWords() {
+    public static ResourceBundle getGenerals() {
         recognizeLanguagePack();
-        return languagePack.getGeneralWords();
+        return languagePack.getGenerals();
     }
 
     @NotNull

@@ -124,7 +124,7 @@ public abstract class LanguagePack {
     protected abstract ResourceBundle getProgressMessages();
 
     @NotNull
-    protected abstract ResourceBundle getGeneralWords();
+    protected abstract ResourceBundle getGenerals();
 
     @NotNull
     protected abstract ResourceBundle getAlertMessages();

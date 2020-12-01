@@ -15,7 +15,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val FIRST_TIME_DIALOG = "com.dansoftware.libraryapp.locale.FirstTimeDialog"
         private const val UPDATE_DIALOG = "com.dansoftware.libraryapp.locale.UpdateDialog"
         private const val PROGRESS_MESSAGES = "com.dansoftware.libraryapp.locale.ProgressMessages"
-        private const val GENERAL_WORDS = "com.dansoftware.libraryapp.locale.GeneralWords"
+        private const val GENERALS = "com.dansoftware.libraryapp.locale.Generals"
         private const val ALERT_MESSAGES = "com.dansoftware.libraryapp.locale.AlertMessages"
         private const val BUTTON_TYPES = "com.dansoftware.libraryapp.locale.ButtonTypes"
         private const val LOGIN_VIEW = "com.dansoftware.libraryapp.locale.LoginView"
@@ -37,7 +37,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
 
     override fun getProgressMessages(): ResourceBundle = getBundle(PROGRESS_MESSAGES)
 
-    override fun getGeneralWords(): ResourceBundle = getBundle(GENERAL_WORDS)
+    override fun getGenerals(): ResourceBundle = getBundle(GENERALS)
 
     override fun getAlertMessages(): ResourceBundle = getBundle(ALERT_MESSAGES)
 
