@@ -1,15 +1,8 @@
 package com.dansoftware.libraryapp.gui.theme.detect;
 
 import com.dansoftware.libraryapp.util.OsInfo;
-import com.registry.RegistryKey;
-import com.registry.RegistryValue;
-import com.registry.RegistryWatcher;
-import com.registry.event.RegistryListener;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 /**

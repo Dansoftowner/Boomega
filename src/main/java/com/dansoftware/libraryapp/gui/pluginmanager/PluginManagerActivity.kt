@@ -9,7 +9,7 @@ class PluginManagerActivity {
         show(context, PluginDirectory.getPluginFiles()?.asList())
     }
 
-    fun show(context: Context?, pluginFiles: List<File>?)  {
+    fun show(context: Context?, pluginFiles: List<File>?) {
         PluginManagerWindow(context, PluginManager(pluginFiles ?: emptyList())).show()
     }
 }

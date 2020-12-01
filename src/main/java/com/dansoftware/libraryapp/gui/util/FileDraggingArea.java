@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.util;
 
 import javafx.css.PseudoClass;
-import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
