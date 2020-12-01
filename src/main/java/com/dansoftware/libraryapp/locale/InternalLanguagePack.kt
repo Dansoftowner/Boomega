@@ -22,6 +22,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val INFO_VIEW = "com.dansoftware.libraryapp.locale.InfoView"
         private const val DATABASE_CREATOR = "com.dansoftware.libraryapp.locale.DatabaseCreator"
         private const val PLUGIN_MANAGER = "com.dansoftware.libraryapp.locale.PluginManager"
+        private const val DATABASE_MANAGER = "com.dansoftware.libraryapp.locale.DatabaseManager"
     }
 
     override fun getTranslator(): LanguageTranslator? {
@@ -49,4 +50,6 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
     override fun getDatabaseCreatorValues(): ResourceBundle = getBundle(DATABASE_CREATOR)
 
     override fun getPluginManagerValues(): ResourceBundle = getBundle(PLUGIN_MANAGER)
+
+    override fun getDatabaseManagerValues(): ResourceBundle = getBundle(DATABASE_MANAGER)
 }

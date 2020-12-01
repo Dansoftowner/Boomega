@@ -60,7 +60,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
     private void init(Collection<DatabaseMeta> databases) {
         this.getItems().addAll(databases);
-        this.setPlaceholder(new Label(I18N.getGeneralWord("database.manager.table.place.holder")));
+        this.setPlaceholder(new Label(I18N.getDatabaseManagerValue("database.manager.table.place.holder")));
         Stream.of(
                 new StateColumn(),
                 new NameColumn(),
@@ -140,12 +140,12 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                             var indicator = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
                             indicator.getStyleClass().add(NOT_EXISTS_CLASS);
                             setGraphic(indicator);
-                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.error.not.exists")));
+                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("file.not.exists")));
                         } else if (DatabaseManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
                             var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
                             indicator.getStyleClass().add(USED_CLASS);
                             setGraphic(indicator);
-                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("database.manager.table.column.state.used")));
+                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("database.currently.used")));
                         } else {
                             setGraphic(null);
                             getTableRow().setTooltip(null);
@@ -162,7 +162,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
      */
     private static final class NameColumn extends TableColumn<DatabaseMeta, String> {
         NameColumn() {
-            super(I18N.getGeneralWord("database.manager.table.column.name"));
+            super(I18N.getDatabaseManagerValue("database.manager.table.column.name"));
             setReorderable(false);
             setCellValueFactory(new PropertyValueFactory<>("name"));
         }
@@ -173,7 +173,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
      */
     private static final class PathColumn extends TableColumn<DatabaseMeta, String> {
         PathColumn() {
-            super(I18N.getGeneralWord("database.manager.table.column.path"));
+            super(I18N.getDatabaseManagerValue("database.manager.table.column.path"));
             setReorderable(false);
             setCellValueFactory(new PropertyValueFactory<>("file"));
         }
@@ -186,7 +186,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         SizeColumn() {
-            super(I18N.getGeneralWord("database.manager.table.column.size"));
+            super(I18N.getDatabaseManagerValue("database.manager.table.column.size"));
             setReorderable(false);
             setCellFactory(this);
         }
@@ -224,7 +224,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         FileOpenerColumn() {
-            super(I18N.getGeneralWord("database.manager.table.column.open"));
+            super(I18N.getDatabaseManagerValue("database.manager.table.column.open"));
             setMinWidth(90);
             setSortable(false);
             setReorderable(false);
@@ -266,7 +266,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         DeleteColumn() {
-            super(I18N.getGeneralWord("database.manager.table.column.delete"));
+            super(I18N.getDatabaseManagerValue("database.manager.table.column.delete"));
             setReorderable(false);
             setSortable(false);
             setMinWidth(90);
@@ -311,7 +311,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
         public void show(@NotNull ObservableList<DatabaseMeta> itemsToRemove) {
             DatabaseManagerTable.this.context.showDialog(
-                    I18N.getAlertMsg("db.manager.table.confirm.delete.title", itemsToRemove.size()),
+                    I18N.getDatabaseManagerValue("db.manager.table.confirm.delete.title", itemsToRemove.size()),
                     new ListView<>(itemsToRemove),
                     buttonType -> {
                         if (Objects.equals(buttonType, I18NButtonTypes.YES)) {

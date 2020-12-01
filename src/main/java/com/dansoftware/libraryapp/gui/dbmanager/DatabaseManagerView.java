@@ -31,7 +31,7 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
      * @param databaseTracker the database-tracker
      */
     public DatabaseManagerView(@NotNull DatabaseTracker databaseTracker) {
-        super(I18N.getGeneralWord("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
+        super(I18N.getDatabaseManagerValue("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
         setContent(new DatabaseManagerTable(Context.from(this), databaseTracker));
         createToolbarControls();
         Theme.registerThemeable(this);
@@ -45,7 +45,7 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
                 .concat("/")
                 .concat(table.selectedItemsCount())
                 .concat(StringUtils.SPACE)
-                .concat(I18N.getGeneralWord("database.manager.selected"));
+                .concat(I18N.getDatabaseManagerValue("database.manager.selected"));
         selectedItemsIndicator.textProperty().bind(allItemsSlashSelected);
         this.getToolbarControlsRight().add(selectedItemsIndicator);
 

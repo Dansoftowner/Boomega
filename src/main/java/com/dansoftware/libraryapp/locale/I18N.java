@@ -71,6 +71,11 @@ public class I18N {
         return getValue(getDatabaseCreatorViewValues(), key, args);
     }
 
+    @NotNull
+    public static String getDatabaseManagerValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getDatabaseManagerValues(), key, args);
+    }
+
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
         if (ArrayUtils.isEmpty(args)) return resourceBundle.getString(key);
         return getFormat(resourceBundle, key, args);
@@ -139,6 +144,12 @@ public class I18N {
     public static ResourceBundle getPluginManagerValues() {
         recognizeLanguagePack();
         return languagePack.getPluginManagerValues();
+    }
+
+    @NotNull
+    public static ResourceBundle getDatabaseManagerValues() {
+        recognizeLanguagePack();
+        return languagePack.getDatabaseManagerValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
