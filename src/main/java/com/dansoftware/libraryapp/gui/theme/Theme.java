@@ -133,7 +133,7 @@ public abstract class Theme {
     public void apply(@NotNull Scene scene) {
         ThemeApplier customApplier = getCustomApplier();
         ThemeApplier globalApplier = getGlobalApplier();
-//        applyBack(scene, customApplier, globalApplier);
+        applyBack(scene, customApplier, globalApplier);
         customApplier.apply(scene);
         globalApplier.apply(scene);
     }
@@ -141,7 +141,7 @@ public abstract class Theme {
     public void apply(@NotNull Parent parent) {
         ThemeApplier customApplier = getCustomApplier();
         ThemeApplier globalApplier = getGlobalApplier();
-//        applyBack(parent, customApplier, globalApplier);
+        applyBack(parent, customApplier, globalApplier);
         customApplier.apply(parent);
         globalApplier.apply(parent);
     }
