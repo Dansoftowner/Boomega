@@ -24,7 +24,7 @@ object OsInfo {
             hasType(platformType) && this.version.startsWith(versionStarts)
 
     @JvmStatic
-    fun hasType(platformType: PlatformEnum): Boolean = platformType == platformType
+    fun hasType(platformType: PlatformEnum): Boolean = this.platformType == platformType
 
     @JvmStatic
     fun isWindows(): Boolean = hasType(PlatformEnum.WINDOWS)
