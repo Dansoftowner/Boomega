@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.theme.detect;
 
 import com.dansoftware.libraryapp.util.OsInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -23,6 +24,8 @@ public abstract class OsThemeDetector {
             return osThemeDetector;
         } else if (OsInfo.isWindows10()) {
             return osThemeDetector = new WindowsThemeDetector();
+        } else if (OsInfo.isLinux()) {
+            return osThemeDetector = new LinuxThemeDetector();
         } else {
             return osThemeDetector = new EmptyDetector();
         }
@@ -41,12 +44,12 @@ public abstract class OsThemeDetector {
      * @param darkThemeListener the {@link Consumer} that accepts a {@link Boolean} that represents
      *                          that the os using a dark theme or not
      */
-    public abstract void registerListener(Consumer<Boolean> darkThemeListener);
+    public abstract void registerListener(@NotNull Consumer<Boolean> darkThemeListener);
 
     /**
      * Removes the listener.
      */
-    public abstract void removeListener(Consumer<Boolean> darkThemeListener);
+    public abstract void removeListener(@Nullable Consumer<Boolean> darkThemeListener);
 
 
     private static final class EmptyDetector extends OsThemeDetector {
@@ -56,11 +59,11 @@ public abstract class OsThemeDetector {
         }
 
         @Override
-        public void registerListener(Consumer<Boolean> darkThemeListener) {
+        public void registerListener(@NotNull Consumer<Boolean> darkThemeListener) {
         }
 
         @Override
-        public void removeListener(Consumer<Boolean> darkThemeListener) {
+        public void removeListener(@Nullable Consumer<Boolean> darkThemeListener) {
         }
     }
 }

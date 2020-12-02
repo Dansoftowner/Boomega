@@ -1,5 +1,8 @@
 package com.dansoftware.libraryapp.gui.theme.detect;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Consumer;
 
 /**
@@ -16,10 +19,10 @@ public class MacOSThemeDetector extends OsThemeDetector {
     }
 
     @Override
-    public void registerListener(Consumer<Boolean> darkThemeListener) {
+    public void registerListener(@NotNull Consumer<Boolean> darkThemeListener) {
     }
 
     @Override
-    public void removeListener(Consumer<Boolean> darkThemeListener) {
+    public void removeListener(@Nullable Consumer<Boolean> darkThemeListener) {
     }
 }

@@ -4,6 +4,8 @@ import com.registry.RegistryKey;
 import com.registry.RegistryValue;
 import com.registry.RegistryWatcher;
 import com.registry.event.RegistryListener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ class WindowsThemeDetector extends OsThemeDetector {
     }
 
     @Override
-    public void registerListener(Consumer<Boolean> darkThemeListener) {
+    public void registerListener(@NotNull Consumer<Boolean> darkThemeListener) {
         RegistryListener registryListener = registryEvent -> {
             RegistryKey key = registryEvent.getKey();
             if (key.equals(registryPath)) {
@@ -54,7 +56,7 @@ class WindowsThemeDetector extends OsThemeDetector {
     }
 
     @Override
-    public void removeListener(Consumer<Boolean> darkThemeListener) {
+    public void removeListener(@Nullable Consumer<Boolean> darkThemeListener) {
         RegistryListener removed = listeners.remove(darkThemeListener);
         RegistryWatcher.removeRegistryListener(removed);
         if (listeners.isEmpty()) RegistryWatcher.removeKey(registryPath);
