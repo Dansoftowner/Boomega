@@ -29,6 +29,7 @@ private class LoginWindow(private val root: LoginView, private val preferences: 
         Objects.requireNonNull(root, "LoginView shouldn't be null")
         this.setFullScreenKeyCombination(KeyCodeCombination(KeyCode.F11))
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this)
+        this.setExitDialog(true)
         this.fullScreenExitHint = I18N.getGeneralWord("window.fullscreen.hint")
         this.isMaximized = true
         this.minWidth = 530.0
