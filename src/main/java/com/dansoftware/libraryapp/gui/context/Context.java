@@ -126,6 +126,10 @@ public interface Context {
         });
     }
 
+    static Context empty() {
+        return new EmptyContext();
+    }
+
     static Context from(@NotNull Workbench workbench) {
         return new WorkbenchContextAdapter(workbench);
     }
