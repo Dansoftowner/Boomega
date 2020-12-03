@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.gui.util.loadImageResource
 import com.dansoftware.libraryapp.gui.util.typeEquals
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.main.ApplicationRestart
-import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableStringValue
@@ -18,6 +17,7 @@ import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
+import javafx.stage.WindowEvent
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -127,18 +127,25 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
     }
 
     private fun buildExitDialogEvent() {
-        this.setOnCloseRequest { event ->
+        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST) { event ->
             when {
-                exitDialogNeeded ->
+                exitDialogNeeded -> {
                     content.context.showConfirmationDialog(
                         I18N.getGeneralWord("window.close.dialog.title"),
                         I18N.getGeneralWord("window.close.dialog.msg")
                     ) {
                         when {
-                            it.typeEquals(ButtonType.YES) -> Platform.exit()
+                            it.typeEquals(ButtonType.NO) -> {
+                                event.consume()
+                                com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
+                            }
+                            else ->
+                                com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
                         }
                     }
+                }
             }
+            com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this)
         }
     }
 
