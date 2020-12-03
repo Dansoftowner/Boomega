@@ -3,11 +3,39 @@ package com.dansoftware.libraryapp.gui.util
 import com.dansoftware.libraryapp.locale.I18N
 import javafx.scene.control.ButtonBar
 import javafx.scene.control.ButtonType
+import javafx.scene.control.TextFormatter
+import javafx.scene.image.Image
+import org.apache.commons.lang3.StringUtils
+import java.io.BufferedInputStream
+import kotlin.reflect.KClass
+
 
 /**
  * Determines that a ButtonType's button data is the same.
  */
 fun ButtonType.typeEquals(other: ButtonType) = this.buttonData == other.buttonData
+
+/**
+ * Loads a resource into a javaFX [Image]
+ */
+fun KClass<*>.loadImageResource(resource: String): Image {
+    BufferedInputStream(this.java.getResourceAsStream(resource)).use {
+        return Image(it)
+    }
+}
+
+/**
+ * A SpaceValidator can be used for [TextInputControl] objects (for example: [javafx.scene.control.TextField])
+ * to avoid whitespaces.
+ */
+class SpaceValidator : TextFormatter<TextFormatter.Change?>({ change: Change ->
+    val text = change.text
+    when {
+        StringUtils.isEmpty(text) -> change.text = text.replace("\\s+".toRegex(), StringUtils.EMPTY)
+    }
+
+    change
+})
 
 /**
  * Provides internationalized [ButtonType] constants for the app.
