@@ -55,6 +55,7 @@ private class EmptyContext : Context {
 
     override fun stopProgress() {}
 
-    override fun showProgress(done: Long, max: Long, type: Context.ProgressType) {
-    }
+    override fun showProgress(done: Long, max: Long, type: Context.ProgressType) {}
+
+    override fun isReachable(): Boolean = false
 }

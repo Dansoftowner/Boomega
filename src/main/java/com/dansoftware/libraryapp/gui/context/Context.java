@@ -108,6 +108,13 @@ public interface Context {
 
     void showProgress(long done, long max, @NotNull ProgressType type);
 
+    /**
+     * Returns {@code true} if the {@link Context} is actually performs actions on a particular gui.
+     */
+    default boolean isReachable() {
+        return true;
+    }
+
     default void close() {
         Window window = getContextWindow();
         if (window instanceof Stage)
