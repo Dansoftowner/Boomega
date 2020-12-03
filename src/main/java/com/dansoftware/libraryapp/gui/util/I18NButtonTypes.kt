@@ -5,6 +5,11 @@ import javafx.scene.control.ButtonBar
 import javafx.scene.control.ButtonType
 
 /**
+ * Determines that a ButtonType's button data is the same.
+ */
+fun ButtonType.typeEquals(other: ButtonType) = this.buttonData == other.buttonData
+
+/**
  * Provides internationalized [ButtonType] constants for the app.
  *
  * @author Daniel Gyorffy
