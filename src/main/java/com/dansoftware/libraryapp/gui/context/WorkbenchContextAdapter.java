@@ -140,6 +140,6 @@ final class WorkbenchContextAdapter implements Context {
     private static WorkbenchDialog buildConfirmationDialog(@NotNull String title,
                                                            @NotNull String message,
                                                            @NotNull Consumer<ButtonType> onResult) {
-        return WorkbenchDialog.builder(title, message, I18NButtonTypes.NO, I18NButtonTypes.YES).build();
+        return WorkbenchDialog.builder(title, message, I18NButtonTypes.NO, I18NButtonTypes.YES).onResult(onResult).build();
     }
 }
