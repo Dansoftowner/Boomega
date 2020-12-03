@@ -4,7 +4,7 @@ import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.context.ContextSupplier;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Gyorffy
  */
-public class EntryActivity implements ContextSupplier, DatabaseLoginListener {
+public class EntryActivity implements ContextTransformable, DatabaseLoginListener {
 
     private static final List<WeakReference<EntryActivity>> instances =
             Collections.synchronizedList(new LinkedList<>());

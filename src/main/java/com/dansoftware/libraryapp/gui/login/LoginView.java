@@ -5,7 +5,7 @@ import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.context.ContextSupplier;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.login.form.LoginForm;
@@ -32,7 +32,7 @@ import java.io.File;
  *
  * @author Daniel Gyorffy
  */
-public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements Themeable, ContextSupplier {
+public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements Themeable, ContextTransformable {
 
     private final Context asContext;
     private final LoginForm loginForm;

@@ -21,7 +21,7 @@ import java.util.*
  * configurations.
  */
 private class LoginWindow(private val root: LoginView, private val preferences: Preferences) :
-    LibraryAppStage("window.login.title", " - ", root.titleProperty(), root),
+    LibraryAppStage<LoginView>("window.login.title", " - ", root.titleProperty(), root),
     EventHandler<WindowEvent> {
 
     init {

@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.firsttime.imp;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
@@ -21,12 +22,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Daniel Gyorffy
  */
-public class ConfigurationImportView extends Workbench implements Themeable {
+public class ConfigurationImportView extends Workbench implements Themeable, ContextTransformable {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationImportView.class);
 
     private final ConfigurationImportController controller;
     private final Node content;
+
+    private final Context asContext;
 
     /**
      * Creates a normal {@link ConfigurationImportView}.
@@ -35,7 +38,8 @@ public class ConfigurationImportView extends Workbench implements Themeable {
      */
     public ConfigurationImportView(@NotNull Preferences target) {
         super();
-        this.controller = new ConfigurationImportController(Context.from(this), target);
+        this.asContext = Context.from(this);
+        this.controller = new ConfigurationImportController(asContext, target);
         this.content = loadContent(controller);
         this.getModules().add(this.new SingleModule());
         Theme.registerThemeable(this);
@@ -62,6 +66,11 @@ public class ConfigurationImportView extends Workbench implements Themeable {
     public void handleThemeApply(Theme oldTheme, Theme newTheme) {
         oldTheme.applyBack(this);
         newTheme.apply(this);
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return this.asContext;
     }
 
     private final class SingleModule extends WorkbenchModule {

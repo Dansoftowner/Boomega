@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.pluginmanager;
 
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.pluginmanager.adder.PluginAdderModule;
 import com.dansoftware.libraryapp.gui.pluginmanager.list.PluginListModule;
 import com.dansoftware.libraryapp.gui.theme.Theme;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.List;
 
-public class PluginManager extends Workbench implements Themeable {
+public class PluginManager extends Workbench implements Themeable, ContextTransformable {
 
     private final Context asContext;
 
@@ -28,5 +29,10 @@ public class PluginManager extends Workbench implements Themeable {
     public void handleThemeApply(Theme oldTheme, Theme newTheme) {
         oldTheme.getGlobalApplier().applyBack(this);
         newTheme.getGlobalApplier().apply(this);
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return this.asContext;
     }
 }

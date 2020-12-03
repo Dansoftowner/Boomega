@@ -3,10 +3,10 @@ package com.dansoftware.libraryapp.gui.context;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A {@link ContextSupplier} can provide a {@link Context} object.
+ * A {@link ContextTransformable} can provide a {@link Context} object.
  *
  * @author Daniel Gyorffy
  */
-public interface ContextSupplier {
+public interface ContextTransformable {
     @NotNull Context getContext();
 }

@@ -9,7 +9,8 @@ import javafx.stage.Window
  *
  * @author Daniel Gyorffy
  */
-class DependenciesWindow(dependencyTable: DependencyTable, owner: Window?) : LibraryAppStage("window.dependencies.title", dependencyTable) {
+class DependenciesWindow(dependencyTable: DependencyTable, owner: Window?) :
+    LibraryAppStage<DependencyTable>("window.dependencies.title", dependencyTable) {
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)

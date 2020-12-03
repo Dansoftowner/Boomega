@@ -8,7 +8,8 @@ import javafx.stage.Window
  * A DatabaseCreatorWindow is a javaFX [Stage] that should be
  * used to display [DatabaseCreatorView] gui-objects.
  */
-class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) : LibraryAppStage("window.dbcreator.title", view) {
+class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) :
+    LibraryAppStage<DatabaseCreatorView>("window.dbcreator.title", view) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         initOwner(owner)

@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.gui.firsttime.dialog;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.locale.I18N;
@@ -18,7 +20,7 @@ import java.util.Collections;
  *
  * @author Daniel Gyorffy
  */
-public class FirstTimeDialog extends SegmentDialog implements Themeable {
+public class FirstTimeDialog extends SegmentDialog implements Themeable, ContextTransformable {
 
     private static final String STYLE_CLASS = "firstTimeDialog";
 
@@ -34,6 +36,11 @@ public class FirstTimeDialog extends SegmentDialog implements Themeable {
     public void handleThemeApply(Theme oldTheme, Theme newTheme) {
         oldTheme.applyBack(this);
         newTheme.apply(this);
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return Context.empty();
     }
 
     private class SkipButton extends Button implements EventHandler<ActionEvent> {

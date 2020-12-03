@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.dbmanager;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
@@ -23,7 +24,9 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> implements Themeable {
+public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> implements Themeable, ContextTransformable {
+
+    private final Context asContext;
 
     /**
      * Creates a {@link DatabaseManagerView} with a list of database-information ({@link DatabaseMeta}) objects.
@@ -32,8 +35,9 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
      */
     public DatabaseManagerView(@NotNull DatabaseTracker databaseTracker) {
         super(I18N.getDatabaseManagerValue("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
-        setContent(new DatabaseManagerTable(Context.from(this), databaseTracker));
-        createToolbarControls();
+        this.asContext = Context.from(this);
+        this.setContent(new DatabaseManagerTable(asContext, databaseTracker));
+        this.createToolbarControls();
         Theme.registerThemeable(this);
     }
 
@@ -61,5 +65,10 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
     public void handleThemeApply(Theme oldTheme, Theme newTheme) {
         oldTheme.applyBack(this);
         newTheme.apply(this);
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return asContext;
     }
 }

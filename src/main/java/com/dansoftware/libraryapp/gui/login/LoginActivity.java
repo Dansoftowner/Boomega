@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.gui.login;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.context.ContextSupplier;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.login.form.DatabaseLoginListener;
 import javafx.beans.property.BooleanProperty;
@@ -19,7 +19,7 @@ import java.util.Objects;
  * <p>
  * It can be started by the {@link LoginActivity#show()}.
  */
-public class LoginActivity implements ContextSupplier {
+public class LoginActivity implements ContextTransformable {
 
     private final Preferences preferences;
     private final BooleanProperty showing;

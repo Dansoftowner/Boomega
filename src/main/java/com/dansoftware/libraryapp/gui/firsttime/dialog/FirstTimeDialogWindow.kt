@@ -8,7 +8,8 @@ import javafx.stage.Modality
  *
  * @author Daniel Gyorffy
  */
-class FirstTimeDialogWindow(firstTimeDialog: FirstTimeDialog) : LibraryAppStage("window.firsttime.title", firstTimeDialog) {
+class FirstTimeDialogWindow(firstTimeDialog: FirstTimeDialog) :
+    LibraryAppStage<FirstTimeDialog>("window.firsttime.title", firstTimeDialog) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         isAlwaysOnTop = true

@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.dbcreator;
 
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.context.ContextSupplier;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements Themeable, ContextSupplier {
+public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements Themeable, ContextTransformable {
 
     private final DatabaseCreatorForm form;
     private final Context asContext;

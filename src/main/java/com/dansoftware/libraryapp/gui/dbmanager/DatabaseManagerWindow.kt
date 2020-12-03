@@ -7,7 +7,8 @@ import javafx.stage.Window
 /**
  * A DBManagerWindow is used for displaying a [DatabaseManagerView] in a window.
  */
-class DatabaseManagerWindow(view: DatabaseManagerView, owner: Window?) : LibraryAppStage("window.dbmanager.title", view) {
+class DatabaseManagerWindow(view: DatabaseManagerView, owner: Window?) :
+    LibraryAppStage<DatabaseManagerView>("window.dbmanager.title", view) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         initOwner(owner)

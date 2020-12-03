@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.gui.info.dependency;
 
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.info.dependency.meta.DependencyInfo;
 import com.dansoftware.libraryapp.gui.info.dependency.meta.LicenseInfo;
 import com.dansoftware.libraryapp.gui.theme.Theme;
@@ -22,7 +24,7 @@ import java.util.List;
  * @link Daniel Gyorffy
  */
 public class DependencyTable extends TableView<DependencyInfo>
-        implements Themeable {
+        implements Themeable, ContextTransformable {
 
     private static final Logger logger = LoggerFactory.getLogger(DependencyTable.class);
 
@@ -37,6 +39,11 @@ public class DependencyTable extends TableView<DependencyInfo>
     public void handleThemeApply(Theme oldTheme, Theme newTheme) {
         oldTheme.applyBack(this);
         newTheme.apply(this);
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return Context.empty();
     }
 
     /**
