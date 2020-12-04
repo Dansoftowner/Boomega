@@ -115,11 +115,13 @@
     -fx-fill: green;
 }
 
-/**
-UPDATE VIEW
- */
+/* Update dialog */
 .update-view-available-label {
     -fx-font-size: 32px;
+}
+
+.updateDialog {
+    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
 }
 
 .progress-bar.paused .bar {
@@ -197,11 +199,6 @@ UPDATE VIEW
 
 .segmentLabelSeparator .graphic {
     -fx-image: url("/com/dansoftware/libraryapp/image/firsttime/right-arrow.png");
-}
-
-/* Update dialog */
-.updateDialog {
-    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
 }
 
 /*
