@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 
 import java.util.Objects;
 
-import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralValue;
 
 /**
  * A BrowserToolBar is a GUI element for operating on a particular {@link WebContentRenderer}.
@@ -56,7 +56,7 @@ public class BrowserToolBar extends BorderPane {
         previousBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         previousBtn.setOnAction(event -> webContentRenderer.goToPreviousPage());
 
-        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.backward"));
+        Tooltip tooltip = new Tooltip(getGeneralValue("browser.toolbar.backward"));
         previousBtn.setTooltip(tooltip);
 
         previousBtn.getStyleClass().add("browser-previous-btn");
@@ -69,7 +69,7 @@ public class BrowserToolBar extends BorderPane {
         forwardBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         forwardBtn.setOnAction(event -> this.webContentRenderer.goToForwardPage());
 
-        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.forward"));
+        Tooltip tooltip = new Tooltip(getGeneralValue("browser.toolbar.forward"));
         forwardBtn.setTooltip(tooltip);
 
         forwardBtn.getStyleClass().add("browser-forward-btn");
@@ -101,7 +101,7 @@ public class BrowserToolBar extends BorderPane {
             clipboard.setContent(clipboardContent);
         });
 
-        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.copy.url"));
+        Tooltip tooltip = new Tooltip(getGeneralValue("browser.toolbar.copy.url"));
         copier.setTooltip(tooltip);
 
         copier.getStyleClass().add("browser-url-copier-btn");
@@ -118,7 +118,7 @@ public class BrowserToolBar extends BorderPane {
             }
         });
 
-        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.open.browser"));
+        Tooltip tooltip = new Tooltip(getGeneralValue("browser.toolbar.open.browser"));
         opener.setTooltip(tooltip);
 
         opener.getStyleClass().add("browser-default-opener-btn");
@@ -130,7 +130,7 @@ public class BrowserToolBar extends BorderPane {
         Button reloadButton = new Button();
         reloadButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
-        Tooltip tooltip = new Tooltip(getGeneralWord("browser.toolbar.reload"));
+        Tooltip tooltip = new Tooltip(getGeneralValue("browser.toolbar.reload"));
         reloadButton.setTooltip(tooltip);
 
         reloadButton.setOnAction(event -> this.webContentRenderer.reload());

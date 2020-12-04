@@ -19,7 +19,7 @@ public class DarkTheme extends Theme {
     private static final String GLOBAL_DARK_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-dark.css";
 
     private static final ThemeMeta<DarkTheme> THEME_META =
-            new ThemeMeta<>(DarkTheme.class, () -> I18N.getGeneralWord("theme.dark"), InternalThemeDesigner.INSTANCE);
+            new ThemeMeta<>(DarkTheme.class, () -> I18N.getGeneralValue("theme.dark"), InternalThemeDesigner.INSTANCE);
 
     static {
         registerTheme(THEME_META);

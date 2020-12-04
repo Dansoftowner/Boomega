@@ -140,12 +140,12 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                             var indicator = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
                             indicator.getStyleClass().add(NOT_EXISTS_CLASS);
                             setGraphic(indicator);
-                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("file.not.exists")));
+                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralValue("file.not.exists")));
                         } else if (DatabaseManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
                             var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
                             indicator.getStyleClass().add(USED_CLASS);
                             setGraphic(indicator);
-                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralWord("database.currently.used")));
+                            getTableRow().setTooltip(new Tooltip(I18N.getGeneralValue("database.currently.used")));
                         } else {
                             setGraphic(null);
                             getTableRow().setTooltip(null);

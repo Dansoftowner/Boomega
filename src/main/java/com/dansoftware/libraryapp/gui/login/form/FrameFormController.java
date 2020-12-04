@@ -219,12 +219,12 @@ public class FrameFormController
                     var indicator = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
                     indicator.getStyleClass().add(NOT_EXISTS_CLASS);
                     setGraphic(indicator);
-                    setTooltip(new Tooltip(I18N.getGeneralWord("file.not.exists")));
+                    setTooltip(new Tooltip(I18N.getGeneralValue("file.not.exists")));
                 } else if (databaseTracker.isDatabaseUsed(item)) {
                     var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
                     indicator.getStyleClass().add(USED_CLASS);
                     setGraphic(indicator);
-                    setTooltip(new Tooltip(I18N.getGeneralWord("database.currently.used")));
+                    setTooltip(new Tooltip(I18N.getGeneralValue("database.currently.used")));
                 } else {
                     setGraphic(null);
                     setTooltip(null);

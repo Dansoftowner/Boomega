@@ -20,7 +20,7 @@ public class LightTheme extends Theme {
     private static final String GLOBAL_LIGHT_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-light.css";
 
     private static final ThemeMeta<LightTheme> THEME_META =
-            new ThemeMeta<>(LightTheme.class, () -> I18N.getGeneralWord("theme.light"), InternalThemeDesigner.INSTANCE);
+            new ThemeMeta<>(LightTheme.class, () -> I18N.getGeneralValue("theme.light"), InternalThemeDesigner.INSTANCE);
 
     static {
         registerTheme(THEME_META);

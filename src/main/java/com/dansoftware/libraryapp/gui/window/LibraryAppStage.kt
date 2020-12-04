@@ -131,8 +131,8 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
             when {
                 exitDialogNeeded -> {
                     content.context.showConfirmationDialog(
-                        I18N.getGeneralWord("window.close.dialog.title"),
-                        I18N.getGeneralWord("window.close.dialog.msg")
+                        I18N.getGeneralValue("window.close.dialog.title"),
+                        I18N.getGeneralValue("window.close.dialog.msg")
                     ) {
                         when {
                             it.typeEquals(ButtonType.NO) -> {
@@ -157,8 +157,8 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
                     newValue.setOnKeyPressed { keyEvent ->
                         if (restartKeyCombination.match(keyEvent)) {
                             content.context.showConfirmationDialog(
-                                I18N.getGeneralWord("app.restart.dialog.title"),
-                                I18N.getGeneralWord("app.restart.dialog.msg")
+                                I18N.getGeneralValue("app.restart.dialog.title"),
+                                I18N.getGeneralValue("app.restart.dialog.msg")
                             ) {
                                 when {
                                     it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()

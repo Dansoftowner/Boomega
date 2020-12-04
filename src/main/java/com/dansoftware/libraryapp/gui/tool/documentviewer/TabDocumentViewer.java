@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralValue;
 import static java.util.Objects.isNull;
 
 /**
@@ -99,7 +99,7 @@ public class TabDocumentViewer extends DocumentViewer {
 
     @Override
     public void load(String title, String url) throws IOException {
-        MenuItem openInDefaultViewerItem = new MenuItem(getGeneralWord("document.viewer.tab.open.default"));
+        MenuItem openInDefaultViewerItem = new MenuItem(getGeneralValue("document.viewer.tab.open.default"));
         openInDefaultViewerItem.setOnAction(e -> {
             if (SystemBrowser.isSupported())
                 new SystemBrowser().browse(url);
@@ -110,12 +110,12 @@ public class TabDocumentViewer extends DocumentViewer {
 
     @Override
     public void load(String title, InputStream inputStream) throws IOException {
-        this.createTab(title, () -> getGeneralWord("document.viewer.tab.untitled"), renderer -> renderer.load(inputStream), null);
+        this.createTab(title, () -> getGeneralValue("document.viewer.tab.untitled"), renderer -> renderer.load(inputStream), null);
     }
 
     @Override
     public void load(String title, File file) throws IOException {
-        MenuItem openInDefaultViewerItem = new MenuItem(getGeneralWord("document.viewer.tab.open.default"));
+        MenuItem openInDefaultViewerItem = new MenuItem(getGeneralValue("document.viewer.tab.open.default"));
         openInDefaultViewerItem.setOnAction(e -> {
             CaughtRunnable runnable = () -> {
                 if (Desktop.isDesktopSupported()) {

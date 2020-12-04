@@ -42,7 +42,7 @@ public class I18N {
     }
 
     @NotNull
-    public static String getGeneralWord(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
+    public static String getGeneralValue(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
         return getValue(getGenerals(), key, args);
     }
 

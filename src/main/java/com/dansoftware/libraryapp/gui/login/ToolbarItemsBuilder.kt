@@ -32,7 +32,7 @@ private class ToolbarItemsBuilder(val context: Context) {
     }
 
     private fun menuToolbarItem(): ToolbarItem = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.SETTINGS),
-            MenuItem(I18N.getGeneralWord("update.search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)) {
+            MenuItem(I18N.getGeneralValue("update.search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)) {
                 val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
                     override fun call() = UpdateSearcher.defaultInstance().search()
                 }
@@ -43,10 +43,10 @@ private class ToolbarItemsBuilder(val context: Context) {
                 task.setOnRunning { context.showIndeterminateProgress() }
                 Thread(task).start()
             },
-            MenuItem(I18N.getGeneralWord("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)) {
+            MenuItem(I18N.getGeneralValue("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)) {
                 PluginManagerActivity().show(context)
             },
-            MenuItem(I18N.getGeneralWord("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)) {
+            MenuItem(I18N.getGeneralValue("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)) {
                 // TODO: Showing settings window
             }
     )

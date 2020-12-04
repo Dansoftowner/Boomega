@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralValue;
 
 /**
  * A DocumentViewerPlaceHolderGUI is a placeholder- gui panel that should
@@ -20,7 +20,7 @@ public class DocumentViewerPlaceHolderGUI extends StackPane {
         ImageView imgView = new ImageView();
         imgView.getStyleClass().add("center-image-view");
 
-        Label label = new Label(getGeneralWord("document.viewer.placeholder.empty"));
+        Label label = new Label(getGeneralValue("document.viewer.placeholder.empty"));
 
         Group group = new Group(new VBox(30, imgView, new StackPane(label)));
 

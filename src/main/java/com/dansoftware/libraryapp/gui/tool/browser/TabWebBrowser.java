@@ -12,7 +12,7 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.dansoftware.libraryapp.locale.I18N.getGeneralWord;
+import static com.dansoftware.libraryapp.locale.I18N.getGeneralValue;
 
 /**
  * A TabWebBrowser can load and show web pages in separate tabs
@@ -52,7 +52,7 @@ public class TabWebBrowser extends Browser {
         Tab tab = new Tab();
 
         MenuItem pageDuplicatorMenuItem = new MenuItem(
-                getGeneralWord("browser.tab.duplicate")
+                getGeneralValue("browser.tab.duplicate")
         );
         pageDuplicatorMenuItem.setOnAction(event -> load(title, url));
 

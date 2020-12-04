@@ -20,7 +20,7 @@ public class OsSynchronizedTheme extends Theme {
     private static final Logger logger = LoggerFactory.getLogger(OsSynchronizedTheme.class);
 
     private static final ThemeMeta<OsSynchronizedTheme> THEME_META =
-            new ThemeMeta<>(OsSynchronizedTheme.class, () -> I18N.getGeneralWord("theme.sync"), InternalThemeDesigner.INSTANCE);
+            new ThemeMeta<>(OsSynchronizedTheme.class, () -> I18N.getGeneralValue("theme.sync"), InternalThemeDesigner.INSTANCE);
 
     static {
         registerTheme(THEME_META);
