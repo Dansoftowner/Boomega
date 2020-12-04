@@ -105,7 +105,7 @@ public class DownloadSegmentController implements Initializable {
     @FXML
     private void pauseDownload() {
         //we pause if it's running; or we start if it's paused
-        downloaderTaskExecutor.setPaused(!downloaderTaskExecutor.isPaused());
+        downloaderTaskExecutor.startPause();
 
         //we set the right icon depending on it's paused or not
         downloadPauseBtn.setGraphic(new MaterialDesignIconView(
@@ -163,7 +163,7 @@ public class DownloadSegmentController implements Initializable {
             binaries.forEach(binary ->
                     radioBtnVBox.getChildren().add(new BinaryEntryRadioButton(radioGroup, binary)));
         } else {
-            //radioBtnVBox.getChildren().add()
+            radioBtnVBox.getChildren().add(new NoBinaryAvailablePlaceHolder());
         }
     }
 
