@@ -124,6 +124,10 @@ public class ApplicationInstanceService implements MessageHandler {
         }
     }
 
+    public static synchronized void release() {
+        JUnique.releaseLock(APPLICATION_ID);
+    }
+
     private static class ActivityLauncherImpl extends ActivityLauncher {
 
         private final LoginData loginData;

@@ -1,11 +1,21 @@
 package com.dansoftware.libraryapp.main;
 
+import com.dansoftware.libraryapp.instance.ApplicationInstanceService;
+import com.dansoftware.libraryapp.util.OsInfo;
+import it.sauronsoftware.junique.JUnique;
 import javafx.application.Platform;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import oshi.SystemInfo;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
@@ -14,6 +24,11 @@ import java.util.Optional;
  * @author Daniel Gyorffy
  */
 public class ApplicationRestart {
+
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationRestart.class);
+
+    private static final char NUL_CHAR = '\00';
+    private static final char SPACE = '\u0020';
 
     /**
      * Restarts the application.
@@ -24,7 +39,8 @@ public class ApplicationRestart {
         try {
             Optional<OSProcess> appProcess = getAppProcess();
             if (appProcess.isPresent()) {
-                Runtime.getRuntime().exec(appProcess.get().getCommandLine());
+                ApplicationInstanceService.release();
+                Runtime.getRuntime().exec(getCommandLine(appProcess.get()));
             } else throw new RestartException("Couldn't identify the process by PID");
             Platform.exit();
         } catch (IOException e) {
@@ -37,6 +53,13 @@ public class ApplicationRestart {
         OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
         int currentPID = operatingSystem.getProcessId();
         return Optional.ofNullable(operatingSystem.getProcess(currentPID));
+    }
+
+    private String getCommandLine(@NotNull OSProcess osProcess) {
+        if (OsInfo.isLinux() || OsInfo.isMac()) {
+            return osProcess.getCommandLine().replace(NUL_CHAR, SPACE);
+        }
+        return osProcess.getCommandLine();
     }
 
     /**
