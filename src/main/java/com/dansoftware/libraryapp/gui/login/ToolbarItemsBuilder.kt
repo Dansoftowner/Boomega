@@ -44,7 +44,7 @@ private class ToolbarItemsBuilder(val context: Context) {
                 Thread(task).start()
             },
             MenuItem(I18N.getGeneralValue("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)) {
-                PluginManagerActivity().show(context)
+                PluginManagerActivity().show(context.contextWindow)
             },
             MenuItem(I18N.getGeneralValue("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)) {
                 // TODO: Showing settings window

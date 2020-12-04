@@ -1,15 +1,18 @@
 package com.dansoftware.libraryapp.gui.pluginmanager
 
-import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.plugin.PluginDirectory
+import javafx.stage.Window
 import java.io.File
 
 class PluginManagerActivity {
-    fun show(context: Context?) {
-        show(context, PluginDirectory.getPluginFiles()?.asList())
+
+    fun show() = show(null)
+
+    fun show(ownerWindow: Window?) {
+        show(ownerWindow, PluginDirectory.getPluginFiles()?.asList())
     }
 
-    fun show(context: Context?, pluginFiles: List<File>?) {
-        PluginManagerWindow(context, PluginManager(pluginFiles ?: emptyList())).show()
+    fun show(ownerWindow: Window?, pluginFiles: List<File>?) {
+        PluginManagerWindow(ownerWindow, PluginManager(pluginFiles ?: emptyList())).show()
     }
 }
