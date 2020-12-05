@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableStringValue
 import javafx.beans.value.ObservableValue
+import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
@@ -20,7 +21,6 @@ import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 import org.apache.commons.lang3.StringUtils
-import java.beans.EventHandler
 
 /**
  * Represents the key-combination that is used for
@@ -129,7 +129,7 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
     }
 
     private fun buildExitDialogEvent() {
-        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, object : javafx.event.EventHandler<WindowEvent> {
+        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, object : EventHandler<WindowEvent> {
             private var dialog: ContextDialog? = null
 
             override fun handle(event: WindowEvent) {
@@ -158,47 +158,33 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
                 }
             }
         })
-
-//        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST) { event ->
-//            when {
-//                exitDialogNeeded -> {
-//                    val dialog = content.context.showConfirmationDialog(
-//                        I18N.getGeneralValue("window.close.dialog.title"),
-//                        I18N.getGeneralValue("window.close.dialog.msg")
-//                    ) {
-//                        when {
-//                            it.typeEquals(ButtonType.NO) -> {
-//                                event.consume()
-//                                com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
-//                            }
-//                            else ->
-//                                com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
-//                        }
-//                    }
-//                }
-//            }
-//            com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this)
-//        }
     }
 
     private fun buildRestartKeyCombination() {
 
+        val onRestartKeyCombinationPressed = object : EventHandler<KeyEvent> {
+            private var dialog: ContextDialog? = null
+
+            override fun handle(keyEvent: KeyEvent) {
+                if (dialog == null && restartKeyCombination.match(keyEvent)) {
+                    dialog = content.context.showConfirmationDialog(
+                        I18N.getGeneralValue("app.restart.dialog.title"),
+                        I18N.getGeneralValue("app.restart.dialog.msg")
+                    ) {
+                        when {
+                            it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
+                        }
+                        dialog = null
+                    }
+
+                }
+            }
+        }
+
         sceneProperty().addListener(object : ChangeListener<Scene> {
             override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
                 if (newValue != null) {
-                    newValue.setOnKeyPressed { keyEvent ->
-                        if (restartKeyCombination.match(keyEvent)) {
-                            content.context.showConfirmationDialog(
-                                I18N.getGeneralValue("app.restart.dialog.title"),
-                                I18N.getGeneralValue("app.restart.dialog.msg")
-                            ) {
-                                when {
-                                    it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
-                                }
-                            }
-
-                        }
-                    }
+                    newValue.onKeyPressed = onRestartKeyCombinationPressed
                     observable.removeListener(this)
                 }
             }
