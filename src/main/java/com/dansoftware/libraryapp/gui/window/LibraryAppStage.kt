@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.window
 
+import com.dansoftware.libraryapp.gui.context.ContextDialog
 import com.dansoftware.libraryapp.gui.context.ContextTransformable
 import com.dansoftware.libraryapp.gui.util.loadImageResource
 import com.dansoftware.libraryapp.gui.util.typeEquals
@@ -19,6 +20,7 @@ import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 import org.apache.commons.lang3.StringUtils
+import java.beans.EventHandler
 
 /**
  * Represents the key-combination that is used for
@@ -127,26 +129,56 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
     }
 
     private fun buildExitDialogEvent() {
-        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST) { event ->
-            when {
-                exitDialogNeeded -> {
-                    content.context.showConfirmationDialog(
-                        I18N.getGeneralValue("window.close.dialog.title"),
-                        I18N.getGeneralValue("window.close.dialog.msg")
-                    ) {
-                        when {
-                            it.typeEquals(ButtonType.NO) -> {
-                                event.consume()
-                                com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
+        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, object : javafx.event.EventHandler<WindowEvent> {
+            private var dialog: ContextDialog? = null
+
+            override fun handle(event: WindowEvent) {
+                when (dialog) {
+                    null -> {
+                        if (exitDialogNeeded) {
+                            dialog = content.context.showConfirmationDialog(
+                                I18N.getGeneralValue("window.close.dialog.title"),
+                                I18N.getGeneralValue("window.close.dialog.msg")
+                            ) {
+                                when {
+                                    it.typeEquals(ButtonType.NO) -> {
+                                        event.consume()
+                                        com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
+                                    }
+                                    else ->
+                                        com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
+                                }
+                                dialog = null
                             }
-                            else ->
-                                com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
+
+                            com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this)
                         }
                     }
+                    else -> event.consume()
                 }
             }
-            com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this)
-        }
+        })
+
+//        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST) { event ->
+//            when {
+//                exitDialogNeeded -> {
+//                    val dialog = content.context.showConfirmationDialog(
+//                        I18N.getGeneralValue("window.close.dialog.title"),
+//                        I18N.getGeneralValue("window.close.dialog.msg")
+//                    ) {
+//                        when {
+//                            it.typeEquals(ButtonType.NO) -> {
+//                                event.consume()
+//                                com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
+//                            }
+//                            else ->
+//                                com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
+//                        }
+//                    }
+//                }
+//            }
+//            com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this)
+//        }
     }
 
     private fun buildRestartKeyCombination() {
