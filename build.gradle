@@ -112,7 +112,7 @@ dependencies {
     libraries 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
     libraries 'io.github.typhon0:AnimateFX:1.2.1'
     libraries "com.sandec:mdfx:0.1.6"
-    libraries 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.2.7'
+    libraries 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.3'
     libraries 'com.github.Dansoftowner:SegmentDialogFX:2.0'
 
     //nitrite database
