@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.pluginmanager.list;
+package com.dansoftware.libraryapp.gui.pluginmngr.list;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.FXCollectionUtils;

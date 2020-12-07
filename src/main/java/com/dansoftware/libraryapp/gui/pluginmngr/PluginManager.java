@@ -1,9 +1,9 @@
-package com.dansoftware.libraryapp.gui.pluginmanager;
+package com.dansoftware.libraryapp.gui.pluginmngr;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextTransformable;
-import com.dansoftware.libraryapp.gui.pluginmanager.adder.PluginAdderModule;
-import com.dansoftware.libraryapp.gui.pluginmanager.list.PluginListModule;
+import com.dansoftware.libraryapp.gui.pluginmngr.adder.PluginAdderModule;
+import com.dansoftware.libraryapp.gui.pluginmngr.list.PluginListModule;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dlsc.workbenchfx.Workbench;

@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.pluginmanager;
+package com.dansoftware.libraryapp.gui.pluginmngr;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.theme.Theme;

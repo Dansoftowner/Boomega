@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.pluginmanager.adder;
+package com.dansoftware.libraryapp.gui.pluginmngr.adder;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.theme.Theme;

@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.login
 
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.info.InformationActivity
-import com.dansoftware.libraryapp.gui.pluginmanager.PluginManagerActivity
+import com.dansoftware.libraryapp.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.update.UpdateSearcher

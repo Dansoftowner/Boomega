@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.pluginmanager
+package com.dansoftware.libraryapp.gui.pluginmngr
 
 import com.dansoftware.libraryapp.plugin.PluginDirectory
 import javafx.stage.Window
