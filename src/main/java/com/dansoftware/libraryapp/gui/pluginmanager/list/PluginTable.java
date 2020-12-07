@@ -26,6 +26,11 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * A {@link TableView} for displaying the list of plugin files to the user.
+ *
+ * @author Daniel Gyorffy
+ */
 public class PluginTable extends TableView<File> {
 
     private static final Logger logger = LoggerFactory.getLogger(PluginTable.class);

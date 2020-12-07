@@ -4,6 +4,11 @@ import com.dansoftware.libraryapp.plugin.PluginDirectory
 import javafx.stage.Window
 import java.io.File
 
+/**
+ * For showing a [PluginManager] with a [PluginManagerWindow].
+ *
+ * @author Daniel Gyorffy
+ */
 class PluginManagerActivity {
 
     fun show() = show(null)

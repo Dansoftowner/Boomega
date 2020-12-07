@@ -23,6 +23,12 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Gui panel for adding plugins to the application from the file system.
+ * Supports drag and drop also.
+ *
+ * @author Daniel Gyoerffy
+ */
 public final class PluginAdderPane extends StackPane {
 
     private static final Logger logger = LoggerFactory.getLogger(PluginAdderPane.class);

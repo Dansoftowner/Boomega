@@ -12,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+/**
+ * A {@link WorkbenchModule} for displaying a {@link PluginAdderPane}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class PluginAdderModule extends WorkbenchModule implements Themeable {
 
     private final PluginAdderPane pluginAdderPane;
@@ -28,6 +33,7 @@ public class PluginAdderModule extends WorkbenchModule implements Themeable {
 
     @Override
     public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-
+        oldTheme.applyBack(this.pluginAdderPane);
+        newTheme.apply(this.pluginAdderPane);
     }
 }

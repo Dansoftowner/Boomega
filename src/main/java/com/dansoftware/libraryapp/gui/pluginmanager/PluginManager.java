@@ -14,6 +14,11 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.List;
 
+/**
+ * A {@link PluginManager} is a place where the user can add/remove application plugins.
+ *
+ * @author Daniel Gyorffy
+ */
 public class PluginManager extends Workbench implements Themeable, ContextTransformable {
 
     private final Context asContext;

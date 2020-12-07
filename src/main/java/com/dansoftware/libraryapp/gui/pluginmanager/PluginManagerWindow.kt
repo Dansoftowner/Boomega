@@ -4,7 +4,12 @@ import com.dansoftware.libraryapp.gui.window.BaseWindow
 import javafx.stage.Modality
 import javafx.stage.Window
 
-class PluginManagerWindow(owner: Window?, view: PluginManager) :
+/**
+ * A [javafx.stage.Stage] for showing a [PluginManager]
+ *
+ * @author Daniel Gyorffy
+ */
+private class PluginManagerWindow(owner: Window?, view: PluginManager) :
     BaseWindow<PluginManager>("window.pluginmanager.title", view) {
     init {
         initOwner(owner)

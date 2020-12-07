@@ -12,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+/**
+ * A {@link WorkbenchModule} for displaying a {@link PluginTable}.
+ *
+ * @author Daniel Gyorffy
+ */
 public class PluginListModule extends WorkbenchModule implements Themeable {
 
     private final PluginTable pluginTable;
