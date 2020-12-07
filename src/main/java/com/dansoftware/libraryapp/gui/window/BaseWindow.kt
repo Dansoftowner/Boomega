@@ -48,7 +48,7 @@ abstract class BaseWindow<C> : Stage
         where C : Parent, C : ContextTransformable {
 
     private lateinit var content: C
-    var exitDialog: Boolean = false
+    protected var exitDialog: Boolean = false
 
     init {
         this.icons.addAll(
