@@ -70,6 +70,46 @@ final class WorkbenchContextAdapter implements Context {
     }
 
     @Override
+    public ButtonType showErrorDialogAndWait(String title, String message) {
+        showErrorDialog(title, message, buttonType -> {
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+        });
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+    }
+
+    @Override
+    public ButtonType showErrorDialogAndWait(String title, String message, Exception e) {
+        showErrorDialog(title, message, e, buttonType -> {
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+        });
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+    }
+
+    @Override
+    public ButtonType showInformationDialogAndWait(String title, String message) {
+        showInformationDialog(title, message, buttonType -> {
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+        });
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+    }
+
+    @Override
+    public ButtonType showConfirmationDialogAndWait(String title, String message) {
+        showConfirmationDialog(title, message, buttonType -> {
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+        });
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+    }
+
+    @Override
+    public ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes) {
+        this.showDialog(title, content,  buttonType -> {
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+        }, buttonTypes);
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+    }
+
+    @Override
     public Window getContextWindow() {
         return WindowUtils.getWindowOf(workbench);
     }

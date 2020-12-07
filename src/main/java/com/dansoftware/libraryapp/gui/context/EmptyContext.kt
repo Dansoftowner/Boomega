@@ -43,6 +43,16 @@ private class EmptyContext : Context {
         vararg buttonTypes: ButtonType?
     ): ContextDialog = null!!
 
+    override fun showErrorDialogAndWait(title: String?, message: String?): ButtonType? = null
+
+    override fun showErrorDialogAndWait(title: String?, message: String?, e: java.lang.Exception?): ButtonType? = null
+
+    override fun showInformationDialogAndWait(title: String?, message: String?): ButtonType? = null
+
+    override fun showConfirmationDialogAndWait(title: String?, message: String?): ButtonType? = null
+
+    override fun showDialogAndWait(title: String?, content: Node?, vararg buttonTypes: ButtonType?): ButtonType? = null
+
     override fun getContextWindow(): Window? = null
 
     override fun requestFocus() {}

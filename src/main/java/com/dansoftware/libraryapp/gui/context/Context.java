@@ -88,6 +88,16 @@ public interface Context {
     @NotNull
     ContextDialog showDialog(String title, Node content, Consumer<ButtonType> onResult, ButtonType... buttonTypes);
 
+    ButtonType showErrorDialogAndWait(String title, String message);
+
+    ButtonType showErrorDialogAndWait(String title, String message, Exception e);
+
+    ButtonType showInformationDialogAndWait(String title, String message);
+
+    ButtonType showConfirmationDialogAndWait(String title, String message);
+
+    ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes);
+
     Window getContextWindow();
 
     /**
