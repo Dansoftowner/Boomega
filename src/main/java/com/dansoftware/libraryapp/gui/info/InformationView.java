@@ -21,16 +21,14 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static com.dansoftware.libraryapp.gui.info.ApplicationInfoCopyKt.getApplicationInfoCopy;
 
 /**
  * An InformationView is the actual GUI element that shows the
@@ -127,28 +125,10 @@ public class InformationView extends SimpleHeaderView<Node>
     }
 
     private void onCopy(Event event) {
-        try {
-            String resourcePath = "/com/dansoftware/libraryapp/gui/info/toCopy.txt";
-            String resource = IOUtils.resourceToString(resourcePath, StandardCharsets.UTF_8);
-
-            String toCopy = MessageFormat.format(resource,
-                    System.getProperty("libraryapp.version"),
-                    System.getProperty("libraryapp.build.info"),
-                    System.getProperty("os.name"),
-                    System.getProperty("os.version"),
-                    System.getProperty("java.vm.name"),
-                    System.getProperty("java.vendor"),
-                    System.getProperty("java.version"),
-                    System.getProperty("javafx.version")
-            );
-
-            ClipboardContent content = new ClipboardContent();
-            content.putString(toCopy);
-            Clipboard clipboard = Clipboard.getSystemClipboard();
-            clipboard.setContent(content);
-        } catch (IOException e) {
-//            showErrorDialog()
-        }
+        ClipboardContent content = new ClipboardContent();
+        content.putString(getApplicationInfoCopy());
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        clipboard.setContent(content);
     }
 
     @FXML
