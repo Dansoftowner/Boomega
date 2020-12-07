@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.gui.window
 
-import com.dansoftware.libraryapp.gui.context.ContextDialog
 import com.dansoftware.libraryapp.gui.context.ContextTransformable
 import com.dansoftware.libraryapp.gui.util.loadImageResource
 import com.dansoftware.libraryapp.gui.util.typeEquals
@@ -130,31 +129,24 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
 
     private fun buildExitDialogEvent() {
         this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, object : EventHandler<WindowEvent> {
-            private var dialog: ContextDialog? = null
+            private var dialogShowing: Boolean = false
 
             override fun handle(event: WindowEvent) {
-                when (dialog) {
-                    null -> {
-                        if (exitDialogNeeded) {
-                            dialog = content.context.showConfirmationDialog(
+                if (exitDialogNeeded) {
+                    when {
+                        dialogShowing.not() -> {
+                            dialogShowing = true
+                            val buttonType = content.context.showConfirmationDialogAndWait(
                                 I18N.getGeneralValue("window.close.dialog.title"),
                                 I18N.getGeneralValue("window.close.dialog.msg")
-                            ) {
-                                when {
-                                    it.typeEquals(ButtonType.NO) -> {
-                                        event.consume()
-                                        com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
-                                    }
-                                    else ->
-                                        com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, null)
-                                }
-                                dialog = null
+                            )
+                            dialogShowing = false
+                            if (buttonType.typeEquals(ButtonType.NO)) {
+                                event.consume()
                             }
-
-                            com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this)
                         }
+                        else -> event.consume()
                     }
-                    else -> event.consume()
                 }
             }
         })
@@ -162,21 +154,22 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
 
     private fun buildRestartKeyCombination() {
 
-        val onRestartKeyCombinationPressed = object : EventHandler<KeyEvent> {
-            private var dialog: ContextDialog? = null
+        class RestartKeyCombinationPressedHandler : EventHandler<KeyEvent> {
+
+            private var dialogShowing: Boolean = false
 
             override fun handle(keyEvent: KeyEvent) {
-                if (dialog == null && restartKeyCombination.match(keyEvent)) {
-                    dialog = content.context.showConfirmationDialog(
+                if (dialogShowing.not() && restartKeyCombination.match(keyEvent)) {
+                    dialogShowing = true
+                    content.context.showConfirmationDialog(
                         I18N.getGeneralValue("app.restart.dialog.title"),
                         I18N.getGeneralValue("app.restart.dialog.msg")
                     ) {
                         when {
                             it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
                         }
-                        dialog = null
+                        dialogShowing = false
                     }
-
                 }
             }
         }
@@ -184,7 +177,7 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
         sceneProperty().addListener(object : ChangeListener<Scene> {
             override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
                 if (newValue != null) {
-                    newValue.onKeyPressed = onRestartKeyCombinationPressed
+                    newValue.onKeyPressed = RestartKeyCombinationPressedHandler()
                     observable.removeListener(this)
                 }
             }
