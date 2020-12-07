@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.firsttime.dialog
 
-import com.dansoftware.libraryapp.gui.window.LibraryAppStage
+import com.dansoftware.libraryapp.gui.window.BaseWindow
 import javafx.stage.Modality
 
 /**
@@ -9,7 +9,7 @@ import javafx.stage.Modality
  * @author Daniel Gyorffy
  */
 class FirstTimeDialogWindow(firstTimeDialog: FirstTimeDialog) :
-    LibraryAppStage<FirstTimeDialog>("window.firsttime.title", firstTimeDialog) {
+    BaseWindow<FirstTimeDialog>("window.firsttime.title", firstTimeDialog) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         isAlwaysOnTop = true

@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.info.dependency
 
-import com.dansoftware.libraryapp.gui.window.LibraryAppStage
+import com.dansoftware.libraryapp.gui.window.BaseWindow
 import javafx.stage.Modality
 import javafx.stage.Window
 
@@ -10,7 +10,7 @@ import javafx.stage.Window
  * @author Daniel Gyorffy
  */
 class DependenciesWindow(dependencyTable: DependencyTable, owner: Window?) :
-    LibraryAppStage<DependencyTable>("window.dependencies.title", dependencyTable) {
+    BaseWindow<DependencyTable>("window.dependencies.title", dependencyTable) {
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)

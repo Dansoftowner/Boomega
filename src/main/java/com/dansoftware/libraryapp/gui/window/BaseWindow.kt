@@ -36,57 +36,27 @@ private val restartKeyCombination = KeyCodeCombination(
 
 
 /**
- * A [LibraryAppStage] is a [Stage] implementation that
+ * A [BaseWindow] is a [Stage] implementation that
  * supports internationalized titles and automatically adds the libraryapp icon-bundle.
  *
- * @param C the type of the content that is shown in the scene
+ * Also, it provides support for dialogs on restart key combination, and on window close event.
+ *
+ * @param C the type of the content that is shown in the Window's scene
  * @author Daniel Gyorffy
  */
-abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransformable {
-
-    /**
-     * For defining the resource-locations for window-icons
-     *
-     * The icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [ www.flaticon.com](https://www.flaticon.com/)
-     * [Go to website](https://www.flaticon.com/free-icon/bookshelf_3100669?term=library&page=1&position=12)
-     */
-    private companion object Icon {
-        /**
-         * The 16px libraryapp icon's path.
-         */
-        private const val LOGO_16 = "/com/dansoftware/libraryapp/image/logo/bookshelf_16.png"
-
-        /**
-         * The 32px libraryapp icon's path.
-         */
-        private const val LOGO_32 = "/com/dansoftware/libraryapp/image/logo/bookshelf_32.png"
-
-        /**
-         * The 128px libraryapp icon's path.
-         */
-        private const val LOGO_128 = "/com/dansoftware/libraryapp/image/logo/bookshelf_128.png"
-
-        /**
-         * The 256px libraryapp icon's path.
-         */
-        private const val LOGO_256 = "/com/dansoftware/libraryapp/image/logo/bookshelf_256.png"
-
-        /**
-         * The 512px libraryapp icon's path.
-         */
-        private const val LOGO_512 = "/com/dansoftware/libraryapp/image/logo/bookshelf_512.png"
-    }
+abstract class BaseWindow<C> : Stage
+        where C : Parent, C : ContextTransformable {
 
     private lateinit var content: C
-    private var exitDialogNeeded: Boolean = false
+    var exitDialog: Boolean = false
 
     init {
         this.icons.addAll(
-            LibraryAppStage::class.loadImageResource(LOGO_16),
-            LibraryAppStage::class.loadImageResource(LOGO_32),
-            LibraryAppStage::class.loadImageResource(LOGO_128),
-            LibraryAppStage::class.loadImageResource(LOGO_256),
-            LibraryAppStage::class.loadImageResource(LOGO_512)
+            BaseWindow::class.loadImageResource(LOGO_16),
+            BaseWindow::class.loadImageResource(LOGO_32),
+            BaseWindow::class.loadImageResource(LOGO_128),
+            BaseWindow::class.loadImageResource(LOGO_256),
+            BaseWindow::class.loadImageResource(LOGO_512)
         )
         buildRestartKeyCombination()
         buildExitDialogEvent()
@@ -120,11 +90,7 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
     protected constructor(i18n: String, separator: String, changingString: ObservableStringValue, content: C) {
         this.content = content
         this.scene = Scene(content)
-        this.titleProperty().bind(buildTitleProperty(i18n, separator, changingString))
-    }
-
-    fun setExitDialog(value: Boolean) {
-        this.exitDialogNeeded = value
+        this.titleProperty().bind(TitleProperty(i18n, separator, changingString))
     }
 
     private fun buildExitDialogEvent() {
@@ -132,7 +98,7 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
             private var dialogShowing: Boolean = false
 
             override fun handle(event: WindowEvent) {
-                if (exitDialogNeeded) {
+                if (exitDialog) {
                     when {
                         dialogShowing.not() -> {
                             dialogShowing = true
@@ -184,39 +150,6 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
         })
     }
 
-    private fun buildTitleProperty(
-        i18n: String,
-        separator: String,
-        changingString: ObservableStringValue
-    ): ObservableValue<String> {
-
-        class ChangingProperty : SimpleStringProperty(), ChangeListener<String> {
-            private val separatorAndValueProperty = SimpleStringProperty(separator).concat(changingString)
-
-            init {
-                setValue()
-                changingString.addListener(this)
-            }
-
-            private fun setValue() {
-                when {
-                    changingString.get() == "null" -> {
-                        this.unbind()
-                        this.set(StringUtils.EMPTY)
-                    }
-                    else -> {
-                        this.bind(separatorAndValueProperty)
-                    }
-                }
-            }
-
-            override fun changed(observable: ObservableValue<out String>?, oldValue: String?, newValue: String?) =
-                setValue()
-        }
-
-        return SimpleStringProperty(I18N.getWindowTitles().getString(i18n)).concat(ChangingProperty())
-    }
-
     /**
      * Sets the full screen key combination.
      */
@@ -226,5 +159,73 @@ abstract class LibraryAppStage<C> : Stage where C : Parent, C : ContextTransform
                 isFullScreen = isFullScreen.not()
             }
         }
+    }
+
+    /**
+     * A [TitleProperty] is a utility for creating dynamically changing window title
+     */
+    private class TitleProperty(i18n: String, separator: String, changingString: ObservableStringValue) :
+        SimpleStringProperty() {
+
+        init {
+            this.bind(
+                SimpleStringProperty(I18N.getWindowTitles().getString(i18n))
+                    .concat(buildSeparatorAndChangingObservable(separator, changingString))
+            )
+        }
+
+        private fun buildSeparatorAndChangingObservable(
+            separator: String,
+            changingString: ObservableStringValue
+        ): ObservableStringValue =
+            object : SimpleStringProperty(), ChangeListener<String> {
+                init {
+                    copyValue(separator, changingString.value)
+                    changingString.addListener(this)
+                }
+
+                private fun copyValue(separator: String, newValue: String) {
+                    when (newValue) {
+                        "null" -> this.set(StringUtils.EMPTY)
+                        else -> this.set(separator.plus(newValue))
+                    }
+                }
+
+                override fun changed(observable: ObservableValue<out String>, oldValue: String, newValue: String) =
+                    copyValue(separator, newValue)
+            }
+    }
+
+    /**
+     * For defining the resource-locations for window-icons
+     *
+     * The icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [ www.flaticon.com](https://www.flaticon.com/)
+     * [Go to website](https://www.flaticon.com/free-icon/bookshelf_3100669?term=library&page=1&position=12)
+     */
+    private companion object Icon {
+        /**
+         * The 16px libraryapp icon's path.
+         */
+        private const val LOGO_16 = "/com/dansoftware/libraryapp/image/logo/bookshelf_16.png"
+
+        /**
+         * The 32px libraryapp icon's path.
+         */
+        private const val LOGO_32 = "/com/dansoftware/libraryapp/image/logo/bookshelf_32.png"
+
+        /**
+         * The 128px libraryapp icon's path.
+         */
+        private const val LOGO_128 = "/com/dansoftware/libraryapp/image/logo/bookshelf_128.png"
+
+        /**
+         * The 256px libraryapp icon's path.
+         */
+        private const val LOGO_256 = "/com/dansoftware/libraryapp/image/logo/bookshelf_256.png"
+
+        /**
+         * The 512px libraryapp icon's path.
+         */
+        private const val LOGO_512 = "/com/dansoftware/libraryapp/image/logo/bookshelf_512.png"
     }
 }

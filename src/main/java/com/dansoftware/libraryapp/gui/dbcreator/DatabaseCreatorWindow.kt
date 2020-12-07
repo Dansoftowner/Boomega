@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.dbcreator
 
-import com.dansoftware.libraryapp.gui.window.LibraryAppStage
+import com.dansoftware.libraryapp.gui.window.BaseWindow
 import javafx.stage.Modality
 import javafx.stage.Window
 
@@ -9,7 +9,7 @@ import javafx.stage.Window
  * used to display [DatabaseCreatorView] gui-objects.
  */
 class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) :
-    LibraryAppStage<DatabaseCreatorView>("window.dbcreator.title", view) {
+    BaseWindow<DatabaseCreatorView>("window.dbcreator.title", view) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         initOwner(owner)

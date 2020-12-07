@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.login
 
 import com.dansoftware.libraryapp.appdata.Preferences
 import com.dansoftware.libraryapp.gui.login.form.LoginDataSaving
-import com.dansoftware.libraryapp.gui.window.LibraryAppStage
+import com.dansoftware.libraryapp.gui.window.BaseWindow
 import com.dansoftware.libraryapp.locale.I18N
 import javafx.event.EventHandler
 import javafx.scene.input.KeyCode
@@ -21,7 +21,7 @@ import java.util.*
  * configurations.
  */
 private class LoginWindow(private val root: LoginView, private val preferences: Preferences) :
-    LibraryAppStage<LoginView>("window.login.title", " - ", root.titleProperty(), root),
+    BaseWindow<LoginView>("window.login.title", " - ", root.titleProperty(), root),
     EventHandler<WindowEvent> {
 
     init {
@@ -29,7 +29,7 @@ private class LoginWindow(private val root: LoginView, private val preferences: 
         Objects.requireNonNull(root, "LoginView shouldn't be null")
         this.setFullScreenKeyCombination(KeyCodeCombination(KeyCode.F11))
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this)
-        this.setExitDialog(true)
+        this.exitDialog = true
         this.fullScreenExitHint = I18N.getGeneralValue("window.fullscreen.hint")
         this.isMaximized = true
         this.minWidth = 530.0

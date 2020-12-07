@@ -1,11 +1,11 @@
 package com.dansoftware.libraryapp.gui.pluginmanager
 
-import com.dansoftware.libraryapp.gui.window.LibraryAppStage
+import com.dansoftware.libraryapp.gui.window.BaseWindow
 import javafx.stage.Modality
 import javafx.stage.Window
 
 class PluginManagerWindow(owner: Window?, view: PluginManager) :
-    LibraryAppStage<PluginManager>("window.pluginmanager.title", view) {
+    BaseWindow<PluginManager>("window.pluginmanager.title", view) {
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)

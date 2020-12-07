@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.firsttime.imp
 
-import com.dansoftware.libraryapp.gui.window.LibraryAppStage
+import com.dansoftware.libraryapp.gui.window.BaseWindow
 import javafx.stage.Modality
 
 /**
@@ -9,7 +9,7 @@ import javafx.stage.Modality
  * @author Daniel Gyorffy
  */
 class ConfigurationImportWindow(view: ConfigurationImportView) :
-    LibraryAppStage<ConfigurationImportView>("window.config.import.title", view) {
+    BaseWindow<ConfigurationImportView>("window.config.import.title", view) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         isAlwaysOnTop = true
