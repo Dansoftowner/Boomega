@@ -8,23 +8,22 @@ import oshi.SystemInfo
  *
  * @author Daniel Gyorffy
  */
-@Suppress("MemberVisibilityCanBePrivate", "unused")
+@Suppress("unused")
 object OsInfo {
-    private val platformType: PlatformEnum = SystemInfo.getCurrentPlatformEnum()
-    private val version: String = SystemInfo().operatingSystem.versionInfo.version
+    private val platformType: PlatformEnum
+    private val version: String
+    private val buildNumber: String
+    private val name: String
 
-    @JvmStatic
-    fun getPlatformType(): PlatformEnum = platformType
+    init {
+        val operatingSystem = SystemInfo().operatingSystem
+        val osVersionInfo = operatingSystem.versionInfo
 
-    @JvmStatic
-    fun getPlatformVersion(): String = version
-
-    @JvmStatic
-    fun hasTypeAndVersion(platformType: PlatformEnum, versionStarts: String): Boolean =
-            hasType(platformType) && this.version.startsWith(versionStarts)
-
-    @JvmStatic
-    fun hasType(platformType: PlatformEnum): Boolean = this.platformType == platformType
+        this.platformType = SystemInfo.getCurrentPlatformEnum()
+        this.version = osVersionInfo.version
+        this.buildNumber = osVersionInfo.buildNumber
+        this.name = operatingSystem.family
+    }
 
     @JvmStatic
     fun isWindows(): Boolean = hasType(PlatformEnum.WINDOWS)
@@ -37,4 +36,26 @@ object OsInfo {
 
     @JvmStatic
     fun isWindows10(): Boolean = hasTypeAndVersion(PlatformEnum.WINDOWS, "10")
+
+    @JvmStatic
+    fun getName(): String = name
+
+    @JvmStatic
+    fun getVersion(): String = version
+
+    @JvmStatic
+    fun getBuildNumber(): String = buildNumber
+
+    @JvmStatic
+    fun getPlatformVersion(): String = version
+
+    @JvmStatic
+    fun getPlatformType(): PlatformEnum = platformType
+
+    @JvmStatic
+    fun hasTypeAndVersion(platformType: PlatformEnum, versionStarts: String): Boolean =
+            hasType(platformType) && this.version.startsWith(versionStarts)
+
+    @JvmStatic
+    fun hasType(platformType: PlatformEnum): Boolean = this.platformType == platformType
 }
