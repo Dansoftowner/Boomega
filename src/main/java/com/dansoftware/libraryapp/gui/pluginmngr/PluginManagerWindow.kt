@@ -9,8 +9,9 @@ import javafx.stage.Window
  *
  * @author Daniel Gyorffy
  */
-private class PluginManagerWindow(owner: Window?, view: PluginManager) :
+internal class PluginManagerWindow(owner: Window?, view: PluginManager) :
     BaseWindow<PluginManager>("window.pluginmanager.title", view) {
+
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)
