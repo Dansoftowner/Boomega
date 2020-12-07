@@ -71,42 +71,47 @@ final class WorkbenchContextAdapter implements Context {
 
     @Override
     public ButtonType showErrorDialogAndWait(String title, String message) {
+        final var key = new Object();
         showErrorDialog(title, message, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
         });
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showErrorDialogAndWait(String title, String message, Exception e) {
+        final var key = new Object();
         showErrorDialog(title, message, e, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
         });
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showInformationDialogAndWait(String title, String message) {
+        final var key = new Object();
         showInformationDialog(title, message, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
         });
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showConfirmationDialogAndWait(String title, String message) {
+        final var key = new Object();
         showConfirmationDialog(title, message, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
         });
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes) {
+        final var key = new Object();
         this.showDialog(title, content,  buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(this, buttonType);
+            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
         }, buttonTypes);
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(this);
+        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
     }
 
     @Override
