@@ -1,11 +1,14 @@
 package com.dansoftware.libraryapp.gui.context;
 
 import com.dlsc.workbenchfx.Workbench;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -97,6 +100,25 @@ public interface Context {
     ButtonType showConfirmationDialogAndWait(String title, String message);
 
     ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes);
+
+    void showErrorNotification(String title, String message);
+    void showErrorNotification(String title, String message, EventHandler<MouseEvent> onClicked);
+
+    void showErrorNotification(String title, String message, Duration duration);
+    void showErrorNotification(String title, String message, Duration duration,  EventHandler<MouseEvent> onClicked);
+
+    void showWarningNotification(String title, String message);
+    void showWarningNotification(String title, String message, EventHandler<MouseEvent> onClicked);
+
+    void showWarningNotification(String title, String message, Duration duration);
+    void showWarningNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
+
+    void showInformationNotification(String title, String message);
+    void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked);
+
+    void showInformationNotification(String title, String message, Duration duration);
+    void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
+
 
     Window getContextWindow();
 

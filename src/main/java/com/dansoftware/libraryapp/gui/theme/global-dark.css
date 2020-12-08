@@ -350,3 +350,17 @@ custom
 .windowIconArea .graphic {
 
 }
+
+/** Notification node **/
+.notification-node {
+    -fx-background-color: #353535;
+    -fx-border-color: lightgray;
+    -fx-padding: 5 30 5 15;
+}
+
+.notification-node .content-panel .title {
+    -fx-font-size: 25px;
+}
+.notification-node .content-panel .message {
+    -fx-font-size: 15px;
+}

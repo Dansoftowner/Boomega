@@ -1,9 +1,12 @@
 package com.dansoftware.libraryapp.gui.context
 
+import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.control.ButtonType
+import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Region
 import javafx.stage.Window
+import javafx.util.Duration
 import java.util.function.Consumer
 
 private class EmptyContext : Context {
@@ -52,6 +55,68 @@ private class EmptyContext : Context {
     override fun showConfirmationDialogAndWait(title: String?, message: String?): ButtonType? = null
 
     override fun showDialogAndWait(title: String?, content: Node?, vararg buttonTypes: ButtonType?): ButtonType? = null
+    override fun showErrorNotification(title: String?, message: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showErrorNotification(title: String?, message: String?, onClicked: EventHandler<MouseEvent>?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showErrorNotification(title: String?, message: String?, duration: Duration?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showErrorNotification(
+        title: String?,
+        message: String?,
+        duration: Duration?,
+        onClicked: EventHandler<MouseEvent>?
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showWarningNotification(title: String?, message: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showWarningNotification(title: String?, message: String?, onClicked: EventHandler<MouseEvent>?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showWarningNotification(title: String?, message: String?, duration: Duration?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showWarningNotification(
+        title: String?,
+        message: String?,
+        duration: Duration?,
+        onClicked: EventHandler<MouseEvent>?
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showInformationNotification(title: String?, message: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showInformationNotification(title: String?, message: String?, onClicked: EventHandler<MouseEvent>?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showInformationNotification(title: String?, message: String?, duration: Duration?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showInformationNotification(
+        title: String?,
+        message: String?,
+        duration: Duration?,
+        onClicked: EventHandler<MouseEvent>?
+    ) {
+        TODO("Not yet implemented")
+    }
 
     override fun getContextWindow(): Window? = null
 

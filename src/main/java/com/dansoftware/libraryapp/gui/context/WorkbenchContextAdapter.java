@@ -1,20 +1,38 @@
 package com.dansoftware.libraryapp.gui.context;
 
+import animatefx.animation.AnimationFX;
+import animatefx.animation.FadeOut;
 import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
+import com.dlsc.workbenchfx.WorkbenchSkin;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
+import com.dlsc.workbenchfx.view.WorkbenchView;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Skin;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
 /**
@@ -26,13 +44,40 @@ import java.util.function.Consumer;
  */
 final class WorkbenchContextAdapter implements Context {
 
+    private static final Logger logger = LoggerFactory.getLogger(WorkbenchContextAdapter.class);
+
     private final Workbench workbench;
+    private WorkbenchView workbenchView;
 
     private TaskbarProgressbar taskbarProgressbarCache;
 
+
     WorkbenchContextAdapter(@NotNull Workbench workbench) {
         this.workbench = workbench;
+        retrieveWorkbenchView(workbench);
     }
+
+    private void retrieveWorkbenchView(Workbench workbench) {
+        final ObjectProperty<Skin<?>> skinProperty = workbench.skinProperty();
+        skinProperty.addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> skin) {
+                if (skin != null) {
+                    try {
+                        final var workbenchSkin = (WorkbenchSkin) skin;
+                        Class<? extends WorkbenchSkin> workbenchSkinClass = workbenchSkin.getClass();
+                        Field workbenchView = workbenchSkinClass.getDeclaredField("workbenchView");
+                        workbenchView.setAccessible(true);
+                        WorkbenchContextAdapter.this.workbenchView = (WorkbenchView) workbenchView.get(skin);
+                    } catch (RuntimeException | ReflectiveOperationException e) {
+                        logger.error("Couldn't retrieve WorkbenchView", e);
+                    }
+                    observable.removeListener(this);
+                }
+            }
+        });
+    }
+
 
     @Override
     public void showOverlay(Region region, boolean blocking) {
@@ -108,10 +153,100 @@ final class WorkbenchContextAdapter implements Context {
     @Override
     public ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes) {
         final var key = new Object();
-        this.showDialog(title, content,  buttonType -> {
+        this.showDialog(title, content, buttonType -> {
             com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
         }, buttonTypes);
         return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
+    }
+
+    private void showNotification(NotificationNode.NotificationType type,
+                                  String title,
+                                  String message,
+                                  Duration duration,
+                                  EventHandler<MouseEvent> onClicked) {
+        final var notificationNode = new NotificationNode(type, title, message);
+        StackPane.setAlignment(notificationNode, Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(notificationNode, new Insets(0, 10, 10, 0));
+        notificationNode.setOnMouseClicked(event -> {
+            if (onClicked != null) {
+                onClicked.handle(event);
+            }
+            final var animation = new FadeOut(notificationNode);
+            animation.setOnFinished(e -> {
+                workbenchView.getChildren().remove(notificationNode);
+            });
+            animation.play();
+        });
+
+        if (duration != null) {
+            final var animation = new FadeOut(notificationNode).setDelay(duration);
+            animation.setOnFinished(e -> {
+                workbenchView.getChildren().remove(notificationNode);
+            });
+            animation.play();
+        }
+        workbenchView.getChildren().add(notificationNode);
+        new animatefx.animation.FadeIn(notificationNode).play();
+    }
+
+    @Override
+    public void showErrorNotification(String title, String message) {
+        showNotification(NotificationNode.NotificationType.ERROR, title, message, null, null);
+    }
+
+    @Override
+    public void showErrorNotification(String title, String message, EventHandler<MouseEvent> onClicked) {
+        showNotification(NotificationNode.NotificationType.ERROR, title, message, null, onClicked);
+    }
+
+    @Override
+    public void showErrorNotification(String title, String message, Duration duration) {
+        showNotification(NotificationNode.NotificationType.ERROR, title, message, duration, null);
+    }
+
+    @Override
+    public void showErrorNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
+        showNotification(NotificationNode.NotificationType.ERROR, title, message, duration, onClicked);
+    }
+
+    @Override
+    public void showWarningNotification(String title, String message) {
+        showNotification(NotificationNode.NotificationType.WARNING, title, message, null, null);
+    }
+
+    @Override
+    public void showWarningNotification(String title, String message, EventHandler<MouseEvent> onClicked) {
+        showNotification(NotificationNode.NotificationType.WARNING, title, message, null, onClicked);
+    }
+
+    @Override
+    public void showWarningNotification(String title, String message, Duration duration) {
+        showNotification(NotificationNode.NotificationType.WARNING, title, message, duration, null);
+    }
+
+    @Override
+    public void showWarningNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
+        showNotification(NotificationNode.NotificationType.WARNING, title, message, duration, onClicked);
+    }
+
+    @Override
+    public void showInformationNotification(String title, String message) {
+        showNotification(NotificationNode.NotificationType.INFO, title, message, null, null);
+    }
+
+    @Override
+    public void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked) {
+        showNotification(NotificationNode.NotificationType.INFO, title, message, null, onClicked);
+    }
+
+    @Override
+    public void showInformationNotification(String title, String message, Duration duration) {
+        showNotification(NotificationNode.NotificationType.INFO, title, message, duration, null);
+    }
+
+    @Override
+    public void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
+        showNotification(NotificationNode.NotificationType.INFO, title, message, duration, onClicked);
     }
 
     @Override
