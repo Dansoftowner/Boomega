@@ -51,13 +51,7 @@ abstract class BaseWindow<C> : Stage
     protected var exitDialog: Boolean = false
 
     init {
-        this.icons.addAll(
-            BaseWindow::class.loadImageResource(LOGO_16),
-            BaseWindow::class.loadImageResource(LOGO_32),
-            BaseWindow::class.loadImageResource(LOGO_128),
-            BaseWindow::class.loadImageResource(LOGO_256),
-            BaseWindow::class.loadImageResource(LOGO_512)
-        )
+        setupIconPack()
         buildRestartKeyCombination()
         buildExitDialogEvent()
     }
@@ -93,57 +87,24 @@ abstract class BaseWindow<C> : Stage
         this.titleProperty().bind(TitleProperty(i18n, separator, changingString))
     }
 
-    private fun buildExitDialogEvent() {
-        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, object : EventHandler<WindowEvent> {
-            private var dialogShowing: Boolean = false
+    private fun setupIconPack() {
+        this.icons.addAll(
+            BaseWindow::class.loadImageResource(LOGO_16),
+            BaseWindow::class.loadImageResource(LOGO_32),
+            BaseWindow::class.loadImageResource(LOGO_128),
+            BaseWindow::class.loadImageResource(LOGO_256),
+            BaseWindow::class.loadImageResource(LOGO_512)
+        )
+    }
 
-            override fun handle(event: WindowEvent) {
-                if (exitDialog) {
-                    when {
-                        dialogShowing.not() -> {
-                            dialogShowing = true
-                            val buttonType = content.context.showConfirmationDialogAndWait(
-                                I18N.getGeneralValue("window.close.dialog.title"),
-                                I18N.getGeneralValue("window.close.dialog.msg")
-                            )
-                            dialogShowing = false
-                            if (buttonType.typeEquals(ButtonType.NO)) {
-                                event.consume()
-                            }
-                        }
-                        else -> event.consume()
-                    }
-                }
-            }
-        })
+    private fun buildExitDialogEvent() {
+        this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, WindowCloseRequestHandler())
     }
 
     private fun buildRestartKeyCombination() {
-
-        class RestartKeyCombinationPressedHandler : EventHandler<KeyEvent> {
-
-            private var dialogShowing: Boolean = false
-
-            override fun handle(keyEvent: KeyEvent) {
-                if (dialogShowing.not() && restartKeyCombination.match(keyEvent)) {
-                    dialogShowing = true
-                    content.context.showConfirmationDialog(
-                        I18N.getGeneralValue("app.restart.dialog.title"),
-                        I18N.getGeneralValue("app.restart.dialog.msg")
-                    ) {
-                        when {
-                            it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
-                        }
-                        dialogShowing = false
-                    }
-                }
-            }
-        }
-
         sceneProperty().addListener(object : ChangeListener<Scene> {
             override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
-                if (newValue != null) {
-                    newValue.onKeyPressed = RestartKeyCombinationPressedHandler()
+                newValue?.onKeyPressed = RestartKeyCombinationPressedHandler().also {
                     observable.removeListener(this)
                 }
             }
@@ -168,10 +129,9 @@ abstract class BaseWindow<C> : Stage
         SimpleStringProperty() {
 
         init {
-            this.bind(
-                SimpleStringProperty(I18N.getWindowTitles().getString(i18n))
-                    .concat(buildSeparatorAndChangingObservable(separator, changingString))
-            )
+            val baseTitle = SimpleStringProperty(I18N.getWindowTitles().getString(i18n))
+            val separatorAndChangingObservable = buildSeparatorAndChangingObservable(separator, changingString)
+            this.bind(baseTitle.concat(separatorAndChangingObservable))
         }
 
         private fun buildSeparatorAndChangingObservable(
@@ -194,6 +154,52 @@ abstract class BaseWindow<C> : Stage
                 override fun changed(observable: ObservableValue<out String>, oldValue: String, newValue: String) =
                     copyValue(separator, newValue)
             }
+    }
+
+    /**
+     * Key event handler for detecting the restart key combination and showing a restart dialog for the user.
+     */
+    private inner class RestartKeyCombinationPressedHandler : EventHandler<KeyEvent> {
+        private var dialogShowing: Boolean = false
+
+        override fun handle(keyEvent: KeyEvent) {
+            if (dialogShowing.not() && restartKeyCombination.match(keyEvent)) {
+                dialogShowing = true
+                this@BaseWindow.content.context.showConfirmationDialog(
+                    I18N.getGeneralValue("app.restart.dialog.title"),
+                    I18N.getGeneralValue("app.restart.dialog.msg")
+                ) {
+                    when {
+                        it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
+                    }
+                    dialogShowing = false
+                }
+            }
+        }
+    }
+
+    private inner class WindowCloseRequestHandler : EventHandler<WindowEvent> {
+
+        private var dialogShowing: Boolean = false
+
+        override fun handle(event: WindowEvent) {
+            if (this@BaseWindow.exitDialog) {
+                when {
+                    dialogShowing.not() -> {
+                        dialogShowing = true
+                        val buttonType = this@BaseWindow.content.context.showConfirmationDialogAndWait(
+                            I18N.getGeneralValue("window.close.dialog.title"),
+                            I18N.getGeneralValue("window.close.dialog.msg")
+                        )
+                        dialogShowing = false
+                        if (buttonType.typeEquals(ButtonType.NO)) {
+                            event.consume()
+                        }
+                    }
+                    else -> event.consume()
+                }
+            }
+        }
     }
 
     /**
