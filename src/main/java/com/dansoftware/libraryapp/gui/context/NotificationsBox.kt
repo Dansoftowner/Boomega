@@ -42,11 +42,10 @@ internal class NotificationsBox : Group() {
     }
 
     fun removeItem(notificationNode: NotificationNode) {
-        val animation = animatefx.animation.FadeOut(notificationNode).also {
+        animatefx.animation.FadeOut(notificationNode).also {
             it.setOnFinished {
                 this.vBox.children.remove(notificationNode)
             }
-        }
-        animation.play()
+        }.play()
     }
 }
