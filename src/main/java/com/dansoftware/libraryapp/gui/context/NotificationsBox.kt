@@ -19,7 +19,7 @@ private class NotificationsBox : Group() {
 
     init {
         StackPane.setAlignment(this, Pos.BOTTOM_RIGHT)
-        StackPane.setMargin(this, Insets(5.0, 10.0, 10.0, 5.0))
+        StackPane.setMargin(this, Insets(20.0))
         children.add(VBox(10.0).also {
             vBox = it
             it.alignment = Pos.CENTER_RIGHT
