@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
@@ -11,10 +12,12 @@ import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity;
 import com.dansoftware.libraryapp.instance.ApplicationInstanceService;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
+import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -187,9 +190,19 @@ public class Main extends BaseApplication {
         }
 
         @Override
-        protected void onActivityLaunched(Context context) {
+        protected void onActivityLaunched(@NotNull Context context) {
             UpdateActivity updateActivity = new UpdateActivity(context, searchResult);
             updateActivity.show(false);
+        }
+
+        @Override
+        protected void onActivityLaunched(@NotNull Context context, @Nullable DatabaseMeta launchedDatabase) {
+            super.onActivityLaunched(context, launchedDatabase);
+            if (launchedDatabase != null) {
+                context.showInformationNotification(
+                        I18N.getProgressMessage("database.file.launched", launchedDatabase.getName()), null
+                );
+            }
         }
     }
 }
