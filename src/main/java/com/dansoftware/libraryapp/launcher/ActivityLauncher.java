@@ -189,7 +189,7 @@ public abstract class ActivityLauncher implements Runnable {
         if (database != null) {
             logger.debug("signed in into the argument-database successfully, launching a MainActivity...");
             Platform.runLater(() -> {
-                onActivityLaunched(showMainActivity(database).getContext());
+                onActivityLaunched(showMainActivity(database).getContext(), argument);
             });
         }
 
@@ -341,6 +341,10 @@ public abstract class ActivityLauncher implements Runnable {
      *
      * @param context the 'activity' through the {@link Context} interface
      */
-    protected abstract void onActivityLaunched(Context context);
+    protected abstract void onActivityLaunched(@NotNull Context context);
+
+    protected void onActivityLaunched(@NotNull Context context, @Nullable DatabaseMeta launchedDatabase) {
+        onActivityLaunched(context);
+    }
 
 }
