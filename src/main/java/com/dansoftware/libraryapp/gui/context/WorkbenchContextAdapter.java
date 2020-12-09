@@ -1,7 +1,5 @@
 package com.dansoftware.libraryapp.gui.context;
 
-import animatefx.animation.AnimationFX;
-import animatefx.animation.FadeOut;
 import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
@@ -10,7 +8,6 @@ import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.dlsc.workbenchfx.view.WorkbenchView;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -47,17 +44,18 @@ final class WorkbenchContextAdapter implements Context {
     private static final Logger logger = LoggerFactory.getLogger(WorkbenchContextAdapter.class);
 
     private final Workbench workbench;
-    private WorkbenchView workbenchView;
+    private final NotificationsBox notificationsBox;
 
     private TaskbarProgressbar taskbarProgressbarCache;
 
 
     WorkbenchContextAdapter(@NotNull Workbench workbench) {
         this.workbench = workbench;
-        retrieveWorkbenchView(workbench);
+        this.notificationsBox = new NotificationsBox();
+        initToWorkbenchView(workbench, notificationsBox);
     }
 
-    private void retrieveWorkbenchView(Workbench workbench) {
+    private void initToWorkbenchView(Workbench workbench, Node child) {
         final ObjectProperty<Skin<?>> skinProperty = workbench.skinProperty();
         skinProperty.addListener(new ChangeListener<>() {
             @Override
@@ -66,9 +64,10 @@ final class WorkbenchContextAdapter implements Context {
                     try {
                         final var workbenchSkin = (WorkbenchSkin) skin;
                         Class<? extends WorkbenchSkin> workbenchSkinClass = workbenchSkin.getClass();
-                        Field workbenchView = workbenchSkinClass.getDeclaredField("workbenchView");
-                        workbenchView.setAccessible(true);
-                        WorkbenchContextAdapter.this.workbenchView = (WorkbenchView) workbenchView.get(skin);
+                        Field workbenchViewField = workbenchSkinClass.getDeclaredField("workbenchView");
+                        workbenchViewField.setAccessible(true);
+                        final var workbenchView = (WorkbenchView) workbenchViewField.get(skin);
+                        workbenchView.getChildren().add(child);
                     } catch (RuntimeException | ReflectiveOperationException e) {
                         logger.error("Couldn't retrieve WorkbenchView", e);
                     }
@@ -159,34 +158,30 @@ final class WorkbenchContextAdapter implements Context {
         return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
     }
 
-    private void showNotification(NotificationNode.NotificationType type,
-                                  String title,
-                                  String message,
-                                  Duration duration,
-                                  EventHandler<MouseEvent> onClicked) {
-        final var notificationNode = new NotificationNode(type, title, message);
+    private NotificationNode buildNotificationNode(NotificationNode.NotificationType type,
+                                                   String title,
+                                                   String message,
+                                                   Consumer<NotificationNode> closeAction,
+                                                   EventHandler<MouseEvent> onClicked) {
+        final var notificationNode = new NotificationNode(type, title, message, closeAction);
         StackPane.setAlignment(notificationNode, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(notificationNode, new Insets(0, 10, 10, 0));
         notificationNode.setOnMouseClicked(event -> {
             if (onClicked != null) {
                 onClicked.handle(event);
             }
-            final var animation = new FadeOut(notificationNode);
-            animation.setOnFinished(e -> {
-                workbenchView.getChildren().remove(notificationNode);
-            });
-            animation.play();
+            closeAction.accept(notificationNode);
         });
+        return notificationNode;
+    }
 
-        if (duration != null) {
-            final var animation = new FadeOut(notificationNode).setDelay(duration);
-            animation.setOnFinished(e -> {
-                workbenchView.getChildren().remove(notificationNode);
-            });
-            animation.play();
-        }
-        workbenchView.getChildren().add(notificationNode);
-        new animatefx.animation.FadeIn(notificationNode).play();
+    private void showNotification(NotificationNode.NotificationType type,
+                                  String title,
+                                  String message,
+                                  Duration duration,
+                                  EventHandler<MouseEvent> onClicked) {
+        final NotificationNode notificationNode = buildNotificationNode(type, title, message, notificationsBox::removeItem, onClicked);
+        notificationsBox.pushItem(notificationNode, duration);
     }
 
     @Override
