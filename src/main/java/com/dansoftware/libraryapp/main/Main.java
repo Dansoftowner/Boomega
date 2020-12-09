@@ -72,11 +72,11 @@ public class Main extends BaseApplication {
             getFormattedArgument(ArgumentTransformer::transform).ifPresent(file ->
                     notifyPreloader(new Preloader.FixedMessageNotification("preloader.file.open", file.getName())));
 
-            notifyPreloader(new Preloader.MessageNotification("preloader.plugins.load"));
+            notifyPreloader("preloader.plugins.load");
             PluginClassLoader.getInstance();
             logger.info("Plugins loaded successfully!");
 
-            notifyPreloader(new Preloader.MessageNotification("preloader.preferences.read"));
+            notifyPreloader("preloader.preferences.read");
             Preferences preferences = Preferences.getPreferences();
             logger.info("Configurations has been read successfully!");
 
@@ -84,7 +84,7 @@ public class Main extends BaseApplication {
 
             //creating and showing a FirstTimeDialog
             if (FirstTimeActivity.isNeeded()) {
-                notifyPreloader(new Preloader.HideNotification());
+                hidePreloader();
                 logger.debug("FirstTimeDialog needed");
                 Platform.runLater(() -> {
                     synchronized (initThreadLock) {
@@ -95,12 +95,11 @@ public class Main extends BaseApplication {
                 });
                 //we wait until the FirstTimeDialog completes
                 initThreadLock.wait();
-                notifyPreloader(new Preloader.ShowNotification());
+                showPreloader();
             } else {
-                notifyPreloader(new Preloader.MessageNotification("preloader.lang"));
+                notifyPreloader("preloader.lang");
                 Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
-
-                notifyPreloader(new Preloader.MessageNotification("preloader.theme"));
+                notifyPreloader("preloader.theme");
                 Theme.setDefault(preferences.get(Preferences.Key.THEME));
             }
 
@@ -108,7 +107,7 @@ public class Main extends BaseApplication {
             logger.debug("Locale is: {}", Locale.getDefault());
 
             //adding the saved databases from the login-data to DatabaseTracker
-            notifyPreloader(new Preloader.MessageNotification("preloader.logindata"));
+            notifyPreloader("preloader.logindata");
             DatabaseTracker databaseTracker = DatabaseTracker.getGlobal();
             LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
             loginData.getSavedDatabases().forEach(databaseTracker::addDatabase);
@@ -116,7 +115,7 @@ public class Main extends BaseApplication {
             //searching for updates, if necessary
             final UpdateSearcher.UpdateSearchResult searchResult = searchForUpdates(preferences);
 
-            notifyPreloader(new Preloader.MessageNotification("preloader.gui.build"));
+            notifyPreloader("preloader.gui.build");
             new InitActivityLauncher(
                     getApplicationArgs(),
                     preferences,
@@ -129,7 +128,7 @@ public class Main extends BaseApplication {
 
     private UpdateSearcher.UpdateSearchResult searchForUpdates(@NotNull Preferences preferences) {
         if (preferences.get(Preferences.Key.SEARCH_UPDATES)) {
-            notifyPreloader(new Preloader.MessageNotification("preloader.update.search"));
+            notifyPreloader("preloader.update.search");
             UpdateSearcher updateSearcher = UpdateSearcher.defaultInstance();
             return updateSearcher.search();
         }

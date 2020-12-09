@@ -30,6 +30,18 @@ public abstract class BaseApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
     }
 
+    protected void notifyPreloader(String i18n) {
+        notifyPreloader(new Preloader.MessageNotification(i18n));
+    }
+
+    protected void hidePreloader() {
+        notifyPreloader(new Preloader.HideNotification());
+    }
+
+    protected void showPreloader() {
+        notifyPreloader(new Preloader.ShowNotification());
+    }
+
     /**
      * Returns the application-arguments <i>(command-line params)</i> in a {@link List}.
      *
