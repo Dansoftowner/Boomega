@@ -13,7 +13,7 @@ import javafx.util.Duration
  *
  * @author Daniel Gyorffy
  */
-internal class NotificationsBox : Group() {
+private class NotificationsBox : Group() {
 
     private var vBox: VBox
 
