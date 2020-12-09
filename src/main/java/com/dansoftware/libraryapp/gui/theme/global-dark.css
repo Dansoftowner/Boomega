@@ -358,7 +358,7 @@ custom
     -fx-border-width: 0.5;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
-    -fx-padding: 5;
+    -fx-padding: 10;
 }
 
 .notification-node .content-panel {

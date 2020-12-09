@@ -19,7 +19,7 @@ internal class NotificationsBox : Group() {
 
     init {
         StackPane.setAlignment(this, Pos.BOTTOM_RIGHT)
-        StackPane.setMargin(this, Insets(5.0))
+        StackPane.setMargin(this, Insets(5.0, 10.0, 10.0, 5.0))
         children.add(VBox(10.0).also {
             vBox = it
             it.alignment = Pos.CENTER_RIGHT
@@ -28,14 +28,17 @@ internal class NotificationsBox : Group() {
 
     fun pushItem(notificationNode: NotificationNode, duration: Duration?) {
         this.vBox.children.add(notificationNode)
-        animatefx.animation.FadeIn(notificationNode).play()
-        if (duration != null) {
-            val animation = animatefx.animation.FadeOut(notificationNode).setDelay(duration)
-            animation.setOnFinished {
-                this.vBox.children.remove(notificationNode)
+        animatefx.animation.FadeIn(notificationNode).also {
+            if (duration != null) {
+                it.setOnFinished {
+                    val animation = animatefx.animation.FadeOut(notificationNode).setDelay(duration)
+                    animation.setOnFinished {
+                        this.vBox.children.remove(notificationNode)
+                    }
+                    animation.play()
+                }
             }
-            animation.play()
-        }
+        }.play()
     }
 
     fun removeItem(notificationNode: NotificationNode) {
