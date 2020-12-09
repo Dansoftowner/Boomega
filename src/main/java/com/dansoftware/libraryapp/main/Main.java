@@ -113,10 +113,8 @@ public class Main extends BaseApplication {
             LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
             loginData.getSavedDatabases().forEach(databaseTracker::addDatabase);
 
-            //searching for updates
-            notifyPreloader(new Preloader.MessageNotification("preloader.update.search"));
-            UpdateSearcher updateSearcher = UpdateSearcher.defaultInstance();
-            UpdateSearcher.UpdateSearchResult searchResult = updateSearcher.search();
+            //searching for updates, if necessary
+            final UpdateSearcher.UpdateSearchResult searchResult = searchForUpdates(preferences);
 
             notifyPreloader(new Preloader.MessageNotification("preloader.gui.build"));
             new InitActivityLauncher(
@@ -127,6 +125,15 @@ public class Main extends BaseApplication {
                     searchResult
             ).launch();
         }
+    }
+
+    private UpdateSearcher.UpdateSearchResult searchForUpdates(@NotNull Preferences preferences) {
+        if (preferences.get(Preferences.Key.SEARCH_UPDATES)) {
+            notifyPreloader(new Preloader.MessageNotification("preloader.update.search"));
+            UpdateSearcher updateSearcher = UpdateSearcher.defaultInstance();
+            return updateSearcher.search();
+        }
+        return new UpdateSearcher.UpdateSearchResult();
     }
 
 
