@@ -17,8 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 /**
  * An ActivityLauncher can launch the right "activity" ({@link EntryActivity}, {@link MainActivity}) depending
@@ -54,6 +56,7 @@ public abstract class ActivityLauncher implements Runnable {
     private final DatabaseMeta argument;
     private final Preferences preferences;
     private final DatabaseTracker databaseTracker;
+    private PostLaunchQueue postLaunchQueue;
 
     /**
      * Creates a basic ActivityLauncher with the {@link LauncherMode#INIT} mode.
@@ -91,6 +94,15 @@ public abstract class ActivityLauncher implements Runnable {
                             @NotNull DatabaseTracker databaseTracker,
                             @Nullable List<String> params) {
         this(mode, ArgumentTransformer.transform(params), preferences, databaseTracker);
+    }
+
+    public ActivityLauncher(@NotNull LauncherMode mode,
+                            @NotNull Preferences preferences,
+                            @NotNull DatabaseTracker databaseTracker,
+                            @Nullable PostLaunchQueue postLaunchQueue,
+                            @Nullable List<String> params) {
+        this(mode, ArgumentTransformer.transform(params), preferences, databaseTracker);
+        this.postLaunchQueue = postLaunchQueue;
     }
 
     /**
@@ -181,7 +193,7 @@ public abstract class ActivityLauncher implements Runnable {
 
                         EntryActivity entryActivity = showEntryActivity();
                         entryActivity.getContext().showErrorDialog(title, message, (Exception) t);
-                        onActivityLaunched(entryActivity.getContext());
+                        onActivityLaunched(entryActivity.getContext(), null);
                     });
                 }).auth(argument);
 
@@ -242,7 +254,7 @@ public abstract class ActivityLauncher implements Runnable {
         } else {
             //if auto login is turned off
             logger.debug("auto-login is turned off, launching a basic EntryActivity...");
-            Platform.runLater(() -> onActivityLaunched(showEntryActivity().getContext()));
+            Platform.runLater(() -> onActivityLaunched(showEntryActivity().getContext(), null));
         }
 
     }
@@ -276,7 +288,7 @@ public abstract class ActivityLauncher implements Runnable {
                     Platform.runLater(() -> {
                         EntryActivity entryActivity = showEntryActivity();
                         entryActivity.getContext().showErrorDialog(title, message, (Exception) t);
-                        onActivityLaunched(entryActivity.getContext());
+                        onActivityLaunched(entryActivity.getContext(), null);
                     });
                 }).auth(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
 
@@ -285,7 +297,7 @@ public abstract class ActivityLauncher implements Runnable {
             logger.debug("signed in into the auto-login database successfully, launching a MainActivity...");
 
             Platform.runLater(() -> {
-                onActivityLaunched(showMainActivity(database).getContext());
+                onActivityLaunched(showMainActivity(database).getContext(), argument);
             });
         }
     }
@@ -345,6 +357,18 @@ public abstract class ActivityLauncher implements Runnable {
 
     protected void onActivityLaunched(@NotNull Context context, @Nullable DatabaseMeta launchedDatabase) {
         onActivityLaunched(context);
+        postLaunchQueue.items.forEach(consumer -> consumer.accept(context, launchedDatabase));
     }
 
+    public static final class PostLaunchQueue {
+        private final List<BiConsumer<Context, DatabaseMeta>> items = new LinkedList<>();
+
+        public void pushItem(BiConsumer<Context, DatabaseMeta> item) {
+            items.add(item);
+        }
+
+        public void removeItem(BiConsumer<Context, DatabaseMeta> item) {
+            items.remove(item);
+        }
+    }
 }
