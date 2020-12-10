@@ -18,6 +18,8 @@ object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls()
 
     fun isEmpty(): Boolean = PluginDirectory.isEmpty()
 
+    fun getReadPluginsCount() = this.urLs.size
+
     override fun close() {
         super.close()
         PluginDirectory.clear()
