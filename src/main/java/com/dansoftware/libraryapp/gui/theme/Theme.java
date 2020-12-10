@@ -57,9 +57,7 @@ public abstract class Theme {
     /**
      * Holds the current default theme
      */
-    @SuppressWarnings("StaticInitializerReferencesSubClass")
-    @NotNull
-    private static Theme defaultTheme = new LightTheme();
+    private static Theme defaultTheme;
 
     static {
         loadThemes();
@@ -182,6 +180,9 @@ public abstract class Theme {
      * @return the default theme
      */
     public static Theme getDefault() {
+        if (defaultTheme == null) {
+            defaultTheme = DefaultThemeFactory.INSTANCE.get();
+        }
         return defaultTheme;
     }
 
