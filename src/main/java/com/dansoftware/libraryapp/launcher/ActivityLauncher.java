@@ -16,11 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * An ActivityLauncher can launch the right "activity" ({@link EntryActivity}, {@link MainActivity}) depending
@@ -355,13 +353,27 @@ public abstract class ActivityLauncher implements Runnable {
      */
     protected abstract void onActivityLaunched(@NotNull Context context);
 
+    /**
+     * Called on the UI-thread, when an 'activity' is launched.
+     * If you want to override this in your own {@link ActivityLauncher}
+     * implementation, you should call the super method, because it also
+     * iterates over the possible {@link PostLaunchQueue}.
+     *
+     * @param context          the context
+     * @param launchedDatabase the launched database; if any; may be null
+     */
     protected void onActivityLaunched(@NotNull Context context, @Nullable DatabaseMeta launchedDatabase) {
         onActivityLaunched(context);
-        postLaunchQueue.items.forEach(consumer -> consumer.accept(context, launchedDatabase));
+        if (postLaunchQueue != null)
+            postLaunchQueue.forEach(consumer -> consumer.accept(context, launchedDatabase));
     }
 
+    /**
+     * Used for collecting actions that should be executed by the {@link ActivityLauncher}
+     * when an activity is launched.
+     */
     public static final class PostLaunchQueue {
-        private final List<BiConsumer<Context, DatabaseMeta>> items = new LinkedList<>();
+        private final Queue<BiConsumer<Context, DatabaseMeta>> items = new LinkedList<>();
 
         public void pushItem(BiConsumer<Context, DatabaseMeta> item) {
             items.add(item);
@@ -369,6 +381,11 @@ public abstract class ActivityLauncher implements Runnable {
 
         public void removeItem(BiConsumer<Context, DatabaseMeta> item) {
             items.remove(item);
+        }
+
+        public void forEach(Consumer<BiConsumer<Context, DatabaseMeta>> action) {
+            while (!items.isEmpty())
+                action.accept(items.poll());
         }
     }
 }
