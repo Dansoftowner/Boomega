@@ -15,6 +15,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableStringValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -99,7 +100,7 @@ public class FrameFormController
         this.fileChooserBtn.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN));
         this.managerBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
         this.databaseChooser.setCellFactory(col -> new DatabaseChooserItem());
-        this.databaseChooser.setButtonCell(new DatabaseChooserItem());
+        this.databaseChooser.setButtonCell(new ComboBoxButtonCell());
     }
 
     private void setInternalFormBehaviour() {
@@ -229,6 +230,16 @@ public class FrameFormController
                     setGraphic(null);
                     setTooltip(null);
                 }
+            }
+        }
+    }
+
+    private class ComboBoxButtonCell extends DatabaseChooserItem {
+        @Override
+        protected void updateItem(DatabaseMeta item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item == null) {
+                setText(I18N.getLoginViewValue("login.source.combo.promt"));
             }
         }
     }
