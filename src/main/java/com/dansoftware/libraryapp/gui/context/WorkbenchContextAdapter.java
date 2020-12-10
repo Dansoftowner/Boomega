@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.context;
 
+import com.dansoftware.libraryapp.gui.util.ExceptionDisplayPane;
 import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
@@ -298,10 +299,16 @@ final class WorkbenchContextAdapter implements Context {
                                                     @NotNull String message,
                                                     @Nullable Exception exception,
                                                     @NotNull Consumer<ButtonType> onResult) {
+        if (exception != null) {
+            final ExceptionDisplayPane content = new ExceptionDisplayPane(exception);
+            return WorkbenchDialog.builder(title, content, I18NButtonTypes.OK)
+                    .onResult(onResult)
+                    .build();
+        }
         return WorkbenchDialog.builder(title, message, I18NButtonTypes.OK)
-                .exception(exception)
                 .onResult(onResult)
                 .build();
+
     }
 
     private static WorkbenchDialog buildInformationDialog(@NotNull String title,
