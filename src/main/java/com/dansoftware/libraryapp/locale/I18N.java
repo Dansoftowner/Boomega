@@ -52,6 +52,11 @@ public class I18N {
     }
 
     @NotNull
+    public static String getNotificationMessage(@NotNull String key, @Nullable Object... args) {
+        return getValue(getNotificationMessages(), key, args);
+    }
+
+    @NotNull
     public static String getPluginManagerValue(@NotNull String key, @Nullable Object... args) {
         return getValue(getPluginManagerValues(), key, args);
     }
@@ -144,6 +149,12 @@ public class I18N {
     public static ResourceBundle getDatabaseManagerValues() {
         recognizeLanguagePack();
         return languagePack.getDatabaseManagerValues();
+    }
+
+    @NotNull
+    public static ResourceBundle getNotificationMessages() {
+        recognizeLanguagePack();
+        return languagePack.getNotificationMessages();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
