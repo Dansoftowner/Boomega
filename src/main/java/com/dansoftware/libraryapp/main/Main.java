@@ -2,7 +2,6 @@ package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
-import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
@@ -15,18 +14,18 @@ import com.dansoftware.libraryapp.launcher.LauncherMode;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
+import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.BiConsumer;
 
 /**
  * The main class and javafx application starter.
@@ -39,7 +38,6 @@ import java.util.function.BiConsumer;
 public class Main extends BaseApplication {
 
     private static final Logger logger;
-
     private static final Object initThreadLock;
 
     static {
@@ -76,11 +74,11 @@ public class Main extends BaseApplication {
         //the list that holds the actions that will be executed by the InitActivityLauncher
         final var queue = new ActivityLauncher.PostLaunchQueue();
         handleApplicationArgument(queue);
-        loadPlugins();
+        loadPlugins(queue);
         Preferences preferences = readConfigurations(queue);
 
         if (!showFirstTimeActivity(preferences))
-            setSomeDefaults(preferences);
+            applyBaseConfigurations(preferences);
 
         logger.debug("Theme is: {}", Theme.getDefault());
         logger.debug("Locale is: {}", Locale.getDefault());
@@ -91,6 +89,16 @@ public class Main extends BaseApplication {
         //searching for updates, if necessary
         final UpdateSearcher.UpdateSearchResult searchResult = searchForUpdates(preferences);
 
+        //launching the main gui environment
+        launchGUI(preferences, databaseTracker, loginData, searchResult, queue);
+    }
+
+    @Init
+    private void launchGUI(@NotNull Preferences preferences,
+                           @NotNull DatabaseTracker databaseTracker,
+                           @NotNull LoginData loginData,
+                           @NotNull UpdateSearcher.UpdateSearchResult searchResult,
+                           @NotNull ActivityLauncher.PostLaunchQueue queue) {
         notifyPreloader("preloader.gui.build");
         new InitActivityLauncher(
                 getApplicationArgs(),
@@ -102,18 +110,19 @@ public class Main extends BaseApplication {
         ).launch();
     }
 
-    private void setSomeDefaults(Preferences preferences) {
-        notifyPreloader("preloader.lang");
-        Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
-        notifyPreloader("preloader.theme");
-        Theme.setDefault(preferences.get(Preferences.Key.THEME));
-    }
-
-    private void handleApplicationArgument(ActivityLauncher.PostLaunchQueue onActivityLaunched) {
+    /**
+     * Displays the application argument on the Preloader.
+     * Also it pushes an action to the given queue for displaying
+     * a notification message about the successful database-launch.
+     *
+     * @param queue the queue that will be iterated by the {@link ActivityLauncher}
+     */
+    @Init
+    private void handleApplicationArgument(@NotNull ActivityLauncher.PostLaunchQueue queue) {
         //if a file is passed as a parameter, we show a message about it on the Preloader
         getFormattedArgument(ArgumentTransformer::transform).ifPresent(file ->
                 notifyPreloader(new Preloader.FixedMessageNotification("preloader.file.open", file.getName())));
-        onActivityLaunched.pushItem((context, launchedDatabase) -> {
+        queue.pushItem((context, launchedDatabase) -> {
             if (launchedDatabase != null) {
                 context.showInformationNotification(
                         I18N.getProgressMessage("database.file.launched", launchedDatabase.getName()), null
@@ -122,13 +131,40 @@ public class Main extends BaseApplication {
         });
     }
 
-    private void loadPlugins() {
+    /**
+     * Calls the {@link PluginClassLoader} and prepares a notification message about the read plugin count.
+     * Also displays a preloader message about it
+     *
+     * @param queue the queue that will be iterated by the {@link ActivityLauncher}
+     */
+    @Init
+    private void loadPlugins(@NotNull ActivityLauncher.PostLaunchQueue queue) {
         notifyPreloader("preloader.plugins.load");
-        PluginClassLoader.getInstance();
+        final PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance();
+        final int readPluginsCount = pluginClassLoader.getReadPluginsCount();
+        if (readPluginsCount > 0)
+            queue.pushItem((context, databaseMeta) -> {
+                context.showInformationNotification(
+                        I18N.getNotificationMessage("plugins.read.count.title", readPluginsCount),
+                        null,
+                        Duration.minutes(1)
+                );
+            });
         logger.info("Plugins loaded successfully!");
     }
 
-    private Preferences readConfigurations(ActivityLauncher.PostLaunchQueue onActivityLaunched) {
+    /**
+     * Reads the configurations into the {@link Preferences} object and notifies
+     * the Preloader about it.
+     * <p>
+     * Also, it pushes a notification action to the given queue, that will display
+     * a notification message if the reading of the configurations failed.
+     *
+     * @param queue the queue that will be iterated by the {@link ActivityLauncher}
+     * @return the preferences object
+     */
+    @Init
+    private Preferences readConfigurations(ActivityLauncher.PostLaunchQueue queue) {
         notifyPreloader("preloader.preferences.read");
         try {
             final Preferences preferences = Preferences.getPreferences();
@@ -136,7 +172,7 @@ public class Main extends BaseApplication {
             return preferences;
         } catch (RuntimeException e) {
             logger.error("Couldn't read configurations ", e);
-            onActivityLaunched.pushItem((context, databaseMeta) -> {
+            queue.pushItem((context, databaseMeta) -> {
                 context.showErrorNotification(
                         I18N.getNotificationMessage("preferences.read.failed.title"), null, event -> {
                             context.showErrorDialog(
@@ -148,6 +184,14 @@ public class Main extends BaseApplication {
         return Preferences.getOnlyOutputPreferences();
     }
 
+    /**
+     * Shows the {@link FirstTimeActivity} and hides/resumes the Preloader when necessary.
+     *
+     * @param preferences the object that holds the configurations; the first-time activity needs it
+     * @return {@code true} if the first time dialog was shown; {@code false} otherwise
+     * @throws InterruptedException if some threading issues became place
+     */
+    @Init
     private boolean showFirstTimeActivity(@NotNull Preferences preferences) throws InterruptedException {
         synchronized (initThreadLock) {
             //creating and showing a FirstTimeDialog
@@ -170,6 +214,32 @@ public class Main extends BaseApplication {
         }
     }
 
+    /**
+     * Reads some configurations from the particular {@link Preferences} object and
+     * applies them and shows preloader notifications.
+     * <p>
+     * Called when a {@link FirstTimeActivity} didn't launched because if it was
+     * that would mean that the First time activity already applied them.
+     *
+     * @param preferences the preferences object
+     */
+    @Init
+    private void applyBaseConfigurations(@NotNull Preferences preferences) {
+        notifyPreloader("preloader.lang");
+        Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
+        notifyPreloader("preloader.theme");
+        Theme.setDefault(preferences.get(Preferences.Key.THEME));
+    }
+
+    /**
+     * Reads the {@link LoginData} from the particular {@link Preferences}
+     * object and adds the saved database to the given {@link DatabaseTracker}.
+     *
+     * @param preferences     the preferences object
+     * @param databaseTracker the database-tracker object
+     * @return read {@link LoginData} object
+     */
+    @Init
     private LoginData readLoginData(@NotNull Preferences preferences, @NotNull DatabaseTracker databaseTracker) {
         //adding the saved databases from the login-data to DatabaseTracker
         notifyPreloader("preloader.logindata");
@@ -178,6 +248,14 @@ public class Main extends BaseApplication {
         return loginData;
     }
 
+    /**
+     * Searchers for updates if the configuration read from the given {@link Preferences} object
+     * says that automatic update searching is turned on.
+     *
+     * @param preferences the preferences object
+     * @return the update-search result object
+     */
+    @Init
     private UpdateSearcher.UpdateSearchResult searchForUpdates(@NotNull Preferences preferences) {
         if (preferences.get(Preferences.Key.SEARCH_UPDATES)) {
             notifyPreloader("preloader.update.search");
@@ -244,5 +322,13 @@ public class Main extends BaseApplication {
             UpdateActivity updateActivity = new UpdateActivity(context, searchResult);
             updateActivity.show(false);
         }
+    }
+
+    /**
+     * We mark the methods by this annotation that are representing some subtasks
+     * that is used by the {@link Application#init()} method
+     */
+    @Target(ElementType.METHOD)
+    private @interface Init {
     }
 }
