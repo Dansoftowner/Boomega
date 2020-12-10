@@ -22,8 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiConsumer;
 
 /**
  * The main class and javafx application starter.
@@ -70,21 +73,83 @@ public class Main extends BaseApplication {
 
     @Override
     public void init() throws Exception {
-        synchronized (initThreadLock) {
-            //if a file is passed as a parameter, we show a message about it on the Preloader
-            getFormattedArgument(ArgumentTransformer::transform).ifPresent(file ->
-                    notifyPreloader(new Preloader.FixedMessageNotification("preloader.file.open", file.getName())));
+        //the list that holds the actions that will be executed by the InitActivityLauncher
+        final var queue = new ActivityLauncher.PostLaunchQueue();
+        handleApplicationArgument(queue);
+        loadPlugins();
+        Preferences preferences = readConfigurations(queue);
 
-            notifyPreloader("preloader.plugins.load");
-            PluginClassLoader.getInstance();
-            logger.info("Plugins loaded successfully!");
+        if (!showFirstTimeActivity(preferences))
+            setSomeDefaults(preferences);
 
-            notifyPreloader("preloader.preferences.read");
-            Preferences preferences = Preferences.getPreferences();
+        logger.debug("Theme is: {}", Theme.getDefault());
+        logger.debug("Locale is: {}", Locale.getDefault());
+
+        final DatabaseTracker databaseTracker = DatabaseTracker.getGlobal();
+        final LoginData loginData = readLoginData(preferences, databaseTracker);
+
+        //searching for updates, if necessary
+        final UpdateSearcher.UpdateSearchResult searchResult = searchForUpdates(preferences);
+
+        notifyPreloader("preloader.gui.build");
+        new InitActivityLauncher(
+                getApplicationArgs(),
+                preferences,
+                databaseTracker,
+                loginData,
+                searchResult,
+                queue
+        ).launch();
+    }
+
+    private void setSomeDefaults(Preferences preferences) {
+        notifyPreloader("preloader.lang");
+        Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
+        notifyPreloader("preloader.theme");
+        Theme.setDefault(preferences.get(Preferences.Key.THEME));
+    }
+
+    private void handleApplicationArgument(ActivityLauncher.PostLaunchQueue onActivityLaunched) {
+        //if a file is passed as a parameter, we show a message about it on the Preloader
+        getFormattedArgument(ArgumentTransformer::transform).ifPresent(file ->
+                notifyPreloader(new Preloader.FixedMessageNotification("preloader.file.open", file.getName())));
+        onActivityLaunched.pushItem((context, launchedDatabase) -> {
+            if (launchedDatabase != null) {
+                context.showInformationNotification(
+                        I18N.getProgressMessage("database.file.launched", launchedDatabase.getName()), null
+                );
+            }
+        });
+    }
+
+    private void loadPlugins() {
+        notifyPreloader("preloader.plugins.load");
+        PluginClassLoader.getInstance();
+        logger.info("Plugins loaded successfully!");
+    }
+
+    private Preferences readConfigurations(ActivityLauncher.PostLaunchQueue onActivityLaunched) {
+        notifyPreloader("preloader.preferences.read");
+        try {
+            final Preferences preferences = Preferences.getPreferences();
             logger.info("Configurations has been read successfully!");
+            return preferences;
+        } catch (RuntimeException e) {
+            logger.error("Couldn't read configurations ", e);
+            onActivityLaunched.pushItem((context, databaseMeta) -> {
+                context.showErrorNotification(
+                        I18N.getNotificationMessage("preferences.read.failed.title"), null, event -> {
+                            context.showErrorDialog(
+                                    I18N.getNotificationMessage("preferences.read.failed.title"),
+                                    I18N.getNotificationMessage("preferences.read.failed.msg"), e);
+                        });
+            });
+        }
+        return Preferences.getOnlyOutputPreferences();
+    }
 
-            logger.debug("Entering synchronized block with FirstTimeDialog.threadLock");
-
+    private boolean showFirstTimeActivity(@NotNull Preferences preferences) throws InterruptedException {
+        synchronized (initThreadLock) {
             //creating and showing a FirstTimeDialog
             if (FirstTimeActivity.isNeeded()) {
                 hidePreloader();
@@ -99,34 +164,18 @@ public class Main extends BaseApplication {
                 //we wait until the FirstTimeDialog completes
                 initThreadLock.wait();
                 showPreloader();
-            } else {
-                notifyPreloader("preloader.lang");
-                Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
-                notifyPreloader("preloader.theme");
-                Theme.setDefault(preferences.get(Preferences.Key.THEME));
+                return true;
             }
-
-            logger.debug("Theme is: {}", Theme.getDefault());
-            logger.debug("Locale is: {}", Locale.getDefault());
-
-            //adding the saved databases from the login-data to DatabaseTracker
-            notifyPreloader("preloader.logindata");
-            DatabaseTracker databaseTracker = DatabaseTracker.getGlobal();
-            LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
-            loginData.getSavedDatabases().forEach(databaseTracker::addDatabase);
-
-            //searching for updates, if necessary
-            final UpdateSearcher.UpdateSearchResult searchResult = searchForUpdates(preferences);
-
-            notifyPreloader("preloader.gui.build");
-            new InitActivityLauncher(
-                    getApplicationArgs(),
-                    preferences,
-                    databaseTracker,
-                    loginData,
-                    searchResult
-            ).launch();
+            return false;
         }
+    }
+
+    private LoginData readLoginData(@NotNull Preferences preferences, @NotNull DatabaseTracker databaseTracker) {
+        //adding the saved databases from the login-data to DatabaseTracker
+        notifyPreloader("preloader.logindata");
+        LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
+        loginData.getSavedDatabases().forEach(databaseTracker::addDatabase);
+        return loginData;
     }
 
     private UpdateSearcher.UpdateSearchResult searchForUpdates(@NotNull Preferences preferences) {
@@ -170,8 +219,9 @@ public class Main extends BaseApplication {
                                      @NotNull Preferences preferences,
                                      @NotNull DatabaseTracker databaseTracker,
                                      @NotNull LoginData loginData,
-                                     @NotNull UpdateSearcher.UpdateSearchResult searchResult) {
-            super(LauncherMode.INIT, preferences, databaseTracker, args);
+                                     @NotNull UpdateSearcher.UpdateSearchResult searchResult,
+                                     @NotNull PostLaunchQueue postLaunchQueue) {
+            super(LauncherMode.INIT, preferences, databaseTracker, postLaunchQueue, args);
             this.preferences = preferences;
             this.loginData = loginData;
             this.searchResult = searchResult;
@@ -193,16 +243,6 @@ public class Main extends BaseApplication {
         protected void onActivityLaunched(@NotNull Context context) {
             UpdateActivity updateActivity = new UpdateActivity(context, searchResult);
             updateActivity.show(false);
-        }
-
-        @Override
-        protected void onActivityLaunched(@NotNull Context context, @Nullable DatabaseMeta launchedDatabase) {
-            super.onActivityLaunched(context, launchedDatabase);
-            if (launchedDatabase != null) {
-                context.showInformationNotification(
-                        I18N.getProgressMessage("database.file.launched", launchedDatabase.getName()), null
-                );
-            }
         }
     }
 }
