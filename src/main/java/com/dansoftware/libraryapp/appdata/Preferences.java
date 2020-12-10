@@ -160,6 +160,14 @@ public class Preferences {
         return defaultPrefs;
     }
 
+    public static Preferences getOnlyOutputPreferences() {
+        try {
+            return new Preferences(InputStream::nullInputStream, () -> new FileOutputStream(ConfigFile.getConfigFile()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @NotNull
     public static Preferences getPreferences(File configFile) throws IOException {
         return new Preferences(() -> new FileInputStream(configFile), () -> new FileOutputStream(configFile));
