@@ -1,9 +1,8 @@
 package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
-import javafx.scene.control.ButtonBar
-import javafx.scene.control.ButtonType
-import javafx.scene.control.TextFormatter
+import com.dansoftware.libraryapp.util.adapter.ThrowableString
+import javafx.scene.control.*
 import javafx.scene.image.Image
 import org.apache.commons.lang3.StringUtils
 import java.io.BufferedInputStream
@@ -71,4 +70,11 @@ object I18NButtonTypes {
     val PREVIOUS = createButtonType("Dialog.previous.button", ButtonBar.ButtonData.BACK_PREVIOUS)
 
     private fun createButtonType(key: String, buttonData: ButtonBar.ButtonData) = ButtonType(I18N.getButtonTypeValues().getString(key), buttonData)
+}
+
+class ExceptionDisplayPane(exception: Exception?) : TitledPane() {
+    init {
+        content = TextArea(ThrowableString(exception).toString())
+        isAnimated = true
+    }
 }
