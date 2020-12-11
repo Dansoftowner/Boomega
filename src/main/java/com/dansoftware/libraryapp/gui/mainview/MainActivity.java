@@ -36,7 +36,7 @@ public class MainActivity implements ContextTransformable {
 
     @Override
     public @NotNull Context getContext() {
-        return null;
+        return Context.empty();
     }
 
     public static Optional<MainActivity> getByDatabase(DatabaseMeta databaseMeta) {
