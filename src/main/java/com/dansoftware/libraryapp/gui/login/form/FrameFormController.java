@@ -15,7 +15,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableStringValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -113,14 +112,8 @@ public class FrameFormController
 
     private Node loadInternalForm() {
         if (internalForm == null) {
-            var fxmlController = new InternalFormController(
-                    context,
-                    preferences,
-                    loginData,
-                    databaseLoginListener,
-                    () -> databaseChooser.getSelectionModel().getSelectedItem()
-            );
-
+            var fxmlController = new InternalFormController(context, preferences, loginData, databaseLoginListener,
+                    () -> databaseChooser.getSelectionModel().getSelectedItem());
             var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getLoginViewValues());
             internalForm = fxmlLoader.load();
         }
