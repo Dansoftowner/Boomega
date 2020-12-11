@@ -14,6 +14,7 @@ import java.io.IOException;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public class LoginDataSaving extends Thread {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginDataSaving.class);
@@ -30,6 +31,10 @@ public class LoginDataSaving extends Thread {
     @Override
     public void run() {
         try {
+
+            logger.debug("LoginData: {}", loginData);
+            logger.debug("LoginData credentials: {}",loginData.getAutoLoginCredentials());
+            logger.debug("LoginData autoLogin: {}", loginData.isAutoLogin());
             preferences.editor()
                     .set(Preferences.Key.LOGIN_DATA, loginData)
                     .commit();

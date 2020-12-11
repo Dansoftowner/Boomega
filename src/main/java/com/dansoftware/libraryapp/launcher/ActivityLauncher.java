@@ -245,7 +245,7 @@ public abstract class ActivityLauncher implements Runnable {
     private void handleNoArgumentInit() {
         //if there was no application-argument
         //it is basically a normal application-start.
-        if (getLoginData().autoLoginTurnedOn()) {
+        if (getLoginData().isAutoLogin()) {
             //if auto login is turned on
             logger.debug("auto login is turned on, trying to sign in into the database...");
             autoLogin();

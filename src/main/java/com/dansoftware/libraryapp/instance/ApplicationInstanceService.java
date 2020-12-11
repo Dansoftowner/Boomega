@@ -145,8 +145,7 @@ public class ApplicationInstanceService implements MessageHandler {
             LoginData loginData = getPreferences().get(Preferences.Key.LOGIN_DATA);
             loginData.getSavedDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);
-            loginData.setAutoLoginDatabase(null);
-
+            loginData.setAutoLogin(false);
             return loginData;
         }
 

@@ -4,8 +4,10 @@ import com.dansoftware.libraryapp.db.Credentials;
 import com.google.gson.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jasypt.util.text.StrongTextEncryptor;
+import org.jasypt.util.text.TextEncryptor;
 
 import java.lang.reflect.Type;
+import java.util.function.Predicate;
 
 public class CredentialsDeserializer implements JsonDeserializer<Credentials> {
 
@@ -15,8 +17,10 @@ public class CredentialsDeserializer implements JsonDeserializer<Credentials> {
 
     @Override
     public Credentials deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject jsonObject = json.getAsJsonObject();
+        return buildCredentials(json.getAsJsonObject());
+    }
 
+    private Credentials buildCredentials(JsonObject jsonObject) {
         JsonElement usernameJson = jsonObject.get(USERNAME);
         JsonElement passwordJson = jsonObject.get(PASSWORD);
         JsonElement encJson = jsonObject.get(ENCRYPTION_PASSWORD);
@@ -26,11 +30,16 @@ public class CredentialsDeserializer implements JsonDeserializer<Credentials> {
         String encryptionPassword = encJson != null ? encJson.getAsString() : null;
 
         if (StringUtils.isNotBlank(password) && StringUtils.isNotBlank(encryptionPassword)) {
-            StrongTextEncryptor textEncryptor = new StrongTextEncryptor();
-            textEncryptor.setPassword(encryptionPassword);
+            final TextEncryptor textEncryptor = buildEncryptor(encryptionPassword);
             password = textEncryptor.decrypt(password);
         }
 
         return new Credentials(username, password);
+    }
+
+    private TextEncryptor buildEncryptor(String encp) {
+        StrongTextEncryptor textEncryptor = new StrongTextEncryptor();
+        textEncryptor.setPassword(encp);
+        return textEncryptor;
     }
 }

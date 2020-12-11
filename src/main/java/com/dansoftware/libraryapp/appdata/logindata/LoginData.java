@@ -5,122 +5,47 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class LoginData {
 
     private final ObservableList<DatabaseMeta> savedDatabases;
     private DatabaseMeta selectedDatabase;
-    private DatabaseMeta autoLoginDatabase;
     private Credentials autoLoginCredentials;
+    private boolean autoLogin;
 
     public LoginData() {
         this(new ArrayList<>());
     }
 
     public LoginData(@NotNull List<DatabaseMeta> savedDatabases) {
-        this(savedDatabases, null);
-    }
-
-    public LoginData(@NotNull List<DatabaseMeta> savedDatabases,
-                     @Nullable DatabaseMeta selectedDatabase) {
-        this(savedDatabases, selectedDatabase, null);
-    }
-
-    public LoginData(@NotNull List<DatabaseMeta> savedDatabases,
-                     @Nullable DatabaseMeta selectedDatabase,
-                     @Nullable DatabaseMeta autoLoginDatabase) {
-        this(savedDatabases, selectedDatabase, autoLoginDatabase, null);
-    }
-
-    public LoginData(@NotNull List<DatabaseMeta> savedDatabases,
-                     @Nullable DatabaseMeta selectedDatabase,
-                     @Nullable DatabaseMeta autoLoginDatabase,
-                     @Nullable Credentials autoLoginCredentials) {
         this.savedDatabases = FXCollections.observableArrayList(savedDatabases);
-        this.setSelectedDatabase(selectedDatabase);
-        this.setAutoLoginDatabase(autoLoginDatabase);
-        this.autoLoginCredentials = autoLoginCredentials;
     }
 
-    public List<DatabaseMeta> getSavedDatabases() {
-        return savedDatabases;
-    }
-
-    public void setSavedDatabases(List<DatabaseMeta> savedDatabases) {
-        this.savedDatabases.setAll(
-                Objects.requireNonNull(savedDatabases, "lastDatabases mustn't be null")
-        );
-
-        selectedDatabase = savedDatabases.contains(selectedDatabase) ? selectedDatabase : null;
-        autoLoginDatabase = savedDatabases.contains(autoLoginDatabase) ? autoLoginDatabase : null;
-    }
-
-    public DatabaseMeta getSelectedDatabase() {
-        return selectedDatabase;
-    }
-
-    public DatabaseMeta getAutoLoginDatabase() {
-        return autoLoginDatabase;
-    }
-
-    /**
-     * Sets the "selected database" but it doesn't check that the 'lastDatabases' list contains
-     * it or not.
-     *
-     * @param selectedDatabase the database that should be selected in the login-form
-     */
-    void setSelectedDatabaseUnchecked(DatabaseMeta selectedDatabase) {
-        this.selectedDatabase = selectedDatabase;
-    }
-
-    /**
-     * Sets the "selected database".
-     *
-     * <p>
-     * If the 'lastDatabases' list doesn't contain the database, it will automatically add
-     * to that.
-     *
-     * @param selectedDatabase the database that should be selected in the login-form
-     */
     public void setSelectedDatabase(DatabaseMeta selectedDatabase) {
         //logger.debug("Setting the selectedDatabase to {} on Thread: {}", selectedDatabase, Thread.currentThread());
         if (selectedDatabase != null && !this.savedDatabases.contains(selectedDatabase)) {
             this.savedDatabases.add(selectedDatabase);
         }
-
         this.selectedDatabase = selectedDatabase;
     }
 
-    /**
-     * Sets the "auto-login database" but it doesn't check that the 'lastDatabases' list contains it
-     * or not.
-     *
-     * @param autoLoginDatabase the database that should be automatically launched when the app starts.
-     */
-    void setAutoLoginDatabaseUnchecked(DatabaseMeta autoLoginDatabase) {
-        this.autoLoginDatabase = autoLoginDatabase;
+    public void setSelectedDatabaseIndex(int index) {
+        try {
+            this.selectedDatabase = savedDatabases.get(index);
+        } catch (IndexOutOfBoundsException ignored) {
+        }
     }
 
-    /**
-     * Sets the "auto-login database".
-     *
-     * <p>
-     * If the 'lastDatabases' list doesn't contain the database, it will automatically add
-     * it to that.
-     *
-     * @param autoLoginDatabase the database that should be automatically launched when the app starts.
-     */
-    public void setAutoLoginDatabase(DatabaseMeta autoLoginDatabase) {
-        //logger.debug("Setting the autoLoginDatabase to {} on Thread: {}", selectedDatabase, Thread.currentThread());
-        if (autoLoginDatabase != null && !this.savedDatabases.contains(autoLoginDatabase)) {
-            this.savedDatabases.add(autoLoginDatabase);
-        }
-        this.autoLoginDatabase = autoLoginDatabase;
+    public int getSelectedDatabaseIndex() {
+        return this.savedDatabases.indexOf(selectedDatabase);
+    }
+
+    public DatabaseMeta getAutoLoginDatabase() {
+        return autoLogin ? selectedDatabase : null;
     }
 
     public Credentials getAutoLoginCredentials() {
@@ -128,20 +53,32 @@ public class LoginData {
                 Credentials.anonymous() : autoLoginCredentials;
     }
 
-    public void setAutoLoginCredentials(Credentials autoLoginCredentials) {
-        this.autoLoginCredentials = autoLoginCredentials;
+    public boolean isAutoLogin() {
+        return autoLogin && selectedDatabase != null;
     }
 
-    public boolean autoLoginTurnedOn() {
-        return getAutoLoginDatabase() != null;
+    public void setAutoLogin(boolean value) {
+        this.autoLogin = value;
+    }
+
+    public List<DatabaseMeta> getSavedDatabases() {
+        return savedDatabases;
+    }
+
+    public DatabaseMeta getSelectedDatabase() {
+        return selectedDatabase;
+    }
+
+    public void setAutoLoginCredentials(Credentials autoLoginCredentials) {
+        this.autoLoginCredentials = autoLoginCredentials;
     }
 
     @Override
     public String toString() {
         return "LoginData{" +
-                "lastDatabases=" + savedDatabases +
+                "savedDatabases=" + savedDatabases +
                 ", selectedDatabase=" + selectedDatabase +
-                ", autoLoginDatabase=" + autoLoginDatabase +
+                ", autoLogin=" + autoLogin +
                 '}';
     }
 

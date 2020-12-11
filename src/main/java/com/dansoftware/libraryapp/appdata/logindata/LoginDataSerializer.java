@@ -1,40 +1,39 @@
 package com.dansoftware.libraryapp.appdata.logindata;
 
 import com.dansoftware.libraryapp.db.Credentials;
-import com.dansoftware.libraryapp.db.DatabaseMeta;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 public class LoginDataSerializer implements JsonSerializer<LoginData> {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginDataSerializer.class);
 
-    private static final String AUTO_LOGIN_CREDENTIALS = "credentials";
-    private static final String LAST_DATABASES = "lastDatabases";
-    private static final String SELECTED_DATABASE_INDEX = "selectedAccountIndex";
-    private static final String AUTO_LOGIN_DATABASE_INDEX = "loggedAccountIndex";
+    private static final String SAVED_DATABASES = "svdbs";
+    private static final String SELECTED_DATABASE_INDEX = "slctdb";
+    private static final String AUTO_LOGIN = "autolgn";
+    private static final String AUTO_LOGIN_CREDENTIALS = "crdntls";
 
     @Override
     public JsonElement serialize(LoginData src, Type typeOfSrc, JsonSerializationContext context) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Credentials.class, new CredentialsSerializer())
-                .create();
+        return buildJsonObject(src);
+    }
 
-        List<DatabaseMeta> lastDatabases = src.getSavedDatabases();
+    private JsonObject buildJsonObject(LoginData src) {
+        Gson gson = buildGson();
+        var json = new JsonObject();
+        json.add(SAVED_DATABASES, gson.toJsonTree(src.getSavedDatabases()));
+        json.add(AUTO_LOGIN_CREDENTIALS, gson.toJsonTree(src.getAutoLoginCredentials(), new TypeToken<Credentials>() {}.getType()));
+        json.addProperty(AUTO_LOGIN, src.isAutoLogin());
+        json.addProperty(SELECTED_DATABASE_INDEX, src.getSelectedDatabaseIndex());
+        return json;
+    }
 
-        int autoLoginDatabaseIndex = lastDatabases.indexOf(src.getAutoLoginDatabase());
-        int selectedDatabaseIndex = lastDatabases.indexOf(src.getSelectedDatabase());
-
-        JsonObject jsonObjectResult = new JsonObject();
-        jsonObjectResult.add(LAST_DATABASES, gson.toJsonTree(lastDatabases));
-        jsonObjectResult.add(AUTO_LOGIN_CREDENTIALS, gson.toJsonTree(src.getAutoLoginCredentials()));
-        jsonObjectResult.addProperty(SELECTED_DATABASE_INDEX, selectedDatabaseIndex);
-        jsonObjectResult.addProperty(AUTO_LOGIN_DATABASE_INDEX, autoLoginDatabaseIndex);
-
-        return jsonObjectResult;
+    private Gson buildGson() {
+        return new GsonBuilder()
+                .registerTypeAdapter(Credentials.class, new CredentialsSerializer()).create();
     }
 }

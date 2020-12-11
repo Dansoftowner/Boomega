@@ -83,7 +83,7 @@ public class InternalFormController implements Initializable {
 
         //creating an object that holds the credentials (username/password)
         Credentials credentials = new Credentials(username, password);
-        loginData.setAutoLoginDatabase(rememberBox.isSelected() ? dbMeta : null);
+        loginData.setAutoLogin(rememberBox.isSelected());
         loginData.setAutoLoginCredentials(rememberBox.isSelected() ? credentials : null);
 
         Database database = NitriteDatabase.getAuthenticator()
