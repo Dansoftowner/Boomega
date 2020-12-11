@@ -165,9 +165,14 @@ public abstract class Theme {
 
     public static synchronized void setDefault(@NotNull Theme theme) {
         Objects.requireNonNull(theme);
-        if (!defaultTheme.getClass().isInstance(theme)) {
-            defaultTheme.onThemeDropped();
-            notifyThemeableInstances(Theme.defaultTheme, theme);
+        if (defaultTheme != null) {
+            if (!defaultTheme.getClass().isInstance(theme)) {
+                defaultTheme.onThemeDropped();
+                notifyThemeableInstances(Theme.defaultTheme, theme);
+                Theme.defaultTheme = theme;
+            }
+        } else {
+            notifyThemeableInstances(new EmptyTheme(), theme);
             Theme.defaultTheme = theme;
         }
     }
