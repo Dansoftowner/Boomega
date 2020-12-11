@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.login
 
 import com.dansoftware.libraryapp.appdata.Preferences
-import com.dansoftware.libraryapp.gui.login.form.LoginDataSaving
 import com.dansoftware.libraryapp.gui.window.BaseWindow
 import com.dansoftware.libraryapp.locale.I18N
 import javafx.event.EventHandler
@@ -37,8 +36,8 @@ private class LoginWindow(private val root: LoginView, private val preferences: 
     }
 
     override fun handle(event: WindowEvent) {
-        logger.debug("Starting a new thread for saving loginData...")
-        LoginDataSaving(preferences, root.loginData).start()
+        logger.debug("Putting loginData to Preferences")
+        preferences.editor().put(Preferences.Key.LOGIN_DATA, root.loginData)
     }
 
     companion object {

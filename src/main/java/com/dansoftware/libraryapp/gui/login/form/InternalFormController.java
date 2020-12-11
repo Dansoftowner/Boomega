@@ -96,7 +96,7 @@ public class InternalFormController implements Initializable {
         if (database != null) {
             //creating the database was successful
             logger.debug("Signing in was successful; closing the LoginWindow");
-            new LoginDataSaving(preferences, loginData).start();
+            preferences.editor().put(Preferences.Key.LOGIN_DATA, loginData);
             databaseLoginListener.onDatabaseOpened(database);
             context.close();
         }
