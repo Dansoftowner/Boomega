@@ -8,6 +8,8 @@ import com.dansoftware.sgmdialog.FixedContentSegment;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class NotificationSegment extends FixedContentSegment {
 
     private final Context context;
@@ -15,7 +17,7 @@ public class NotificationSegment extends FixedContentSegment {
 
     public NotificationSegment(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
         super(I18N.getUpdateDialogValues().getString("segment.dialog.start.name"));
-        this.context = context;
+        this.context = Objects.requireNonNull(context);
         this.updateInformation = updateInformation;
     }
 
