@@ -149,8 +149,7 @@ public final class ReflectionUtils {
      * @return the Set of class references
      */
     public static <T> Set<Class<? extends T>> getSubtypesOf(@NotNull Class<T> classRef) {
-        var reflections = new Reflections(classRef);
-        return reflections.getSubTypesOf(classRef);
+        return new Reflections(classRef).getSubTypesOf(classRef);
     }
 
     /**
@@ -163,11 +162,7 @@ public final class ReflectionUtils {
      */
     public static <T> Set<Class<? extends T>> getSubtypesOf(@NotNull Class<T> classRef,
                                                             @NotNull ClassLoader classLoader) {
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .addClassLoader(classLoader)
-                .addUrls(ClasspathHelper.forClassLoader(classLoader))
-                .setScanners(new SubTypesScanner()));
-        reflections.getSubTypesOf(classRef);
+        Reflections reflections = new Reflections(classLoader, classRef, new SubTypesScanner());
         return reflections.getSubTypesOf(classRef);
     }
 }
