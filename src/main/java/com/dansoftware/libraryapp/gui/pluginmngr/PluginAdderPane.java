@@ -1,6 +1,7 @@
-package com.dansoftware.libraryapp.gui.pluginmngr.adder;
+package com.dansoftware.libraryapp.gui.pluginmngr;
 
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.util.BaseFXUtilsKt;
 import com.dansoftware.libraryapp.gui.util.FileDraggingArea;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.main.ApplicationRestart;
@@ -43,7 +44,7 @@ public final class PluginAdderPane extends StackPane {
     private final Context context;
     private final ObservableList<File> pluginList;
 
-    PluginAdderPane(@NotNull Context context, @NotNull ObservableList<File> pluginList) {
+    public PluginAdderPane(@NotNull Context context, @NotNull ObservableList<File> pluginList) {
         this.context = context;
         this.pluginList = pluginList;
         getStyleClass().add(STYLE_CLASS);
@@ -70,7 +71,7 @@ public final class PluginAdderPane extends StackPane {
                 I18N.getPluginManagerValue("plugin.add.warning.title"),
                 I18N.getPluginManagerValue("plugin.add.warning.msg"),
                 buttonType -> {
-                    if (buttonType.equals(ButtonType.YES)) {
+                    if (BaseFXUtilsKt.typeEquals(buttonType, ButtonType.YES)) {
 
                         for (File file : files) {
                             PluginDirectory pluginDirectory = PluginDirectory.INSTANCE;

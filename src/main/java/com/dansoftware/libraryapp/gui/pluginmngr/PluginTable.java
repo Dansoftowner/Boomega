@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.pluginmngr.list;
+package com.dansoftware.libraryapp.gui.pluginmngr;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.FXCollectionUtils;
@@ -37,7 +37,7 @@ public class PluginTable extends TableView<File> {
 
     private final Context context;
 
-    PluginTable(@NotNull Context context, @NotNull ObservableList<File> pluginFiles) {
+    public PluginTable(@NotNull Context context, @NotNull ObservableList<File> pluginFiles) {
         this.context = context;
         setItems(pluginFiles);
         getColumns().addAll(List.of(new NameColumn(), new SizeColumn(), new DeleteColumn()));
