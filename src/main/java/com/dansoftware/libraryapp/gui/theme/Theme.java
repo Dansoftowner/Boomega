@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * A Theme can change the appearance of GUI elements.
@@ -59,24 +60,13 @@ public abstract class Theme {
      */
     private static Theme defaultTheme;
 
-    static {
-        loadThemes();
-    }
+    static { loadThemes(); }
 
     private static void loadThemes() {
         //collecting Themes from the core project
         ReflectionUtils.getSubtypesOf(Theme.class).forEach(ReflectionUtils::initializeClass);
-
         //collecting Themes from plugins
-        if (!PluginClassLoader.getInstance().isEmpty()) {
-            ReflectionUtils.getSubtypesOf(Theme.class, PluginClassLoader.getInstance()).forEach(classRef -> {
-                try {
-                    ReflectionUtils.initializeClass(classRef, PluginClassLoader.getInstance());
-                } catch (ExceptionInInitializerError e) {
-                    logger.error("Failed to initialize a theme called '{}'", classRef.getName(), e);
-                }
-            });
-        }
+        PluginClassLoader.getInstance().initializeSubtypeClasses(Theme.class);
     }
 
     protected static void registerTheme(@NotNull ThemeMeta<? extends Theme> themeMeta) {

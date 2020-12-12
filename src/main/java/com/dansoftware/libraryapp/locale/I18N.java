@@ -29,9 +29,7 @@ public class I18N {
      */
     private static volatile LanguagePack languagePack;
 
-    static {
-        loadPacks();
-    }
+    static { loadPacks(); }
 
     public static LanguagePack getLanguagePack() {
         return languagePack;
@@ -175,16 +173,6 @@ public class I18N {
     private static void loadPacks() {
         //Collecting LanguagePacks from the core project
         ReflectionUtils.getSubtypesOf(LanguagePack.class).forEach(ReflectionUtils::initializeClass);
-
-        //Collecting LanguagePacks from plugins
-        if (!PluginClassLoader.getInstance().isEmpty()) {
-            ReflectionUtils.getSubtypesOf(LanguagePack.class, PluginClassLoader.getInstance()).forEach(classRef -> {
-                try {
-                    ReflectionUtils.initializeClass(classRef, PluginClassLoader.getInstance());
-                } catch (ExceptionInInitializerError e) {
-                    logger.error("Failed to initialize a language pack called: {}", classRef.getName(), e);
-                }
-            });
-        }
+        PluginClassLoader.getInstance().initializeSubtypeClasses(LanguagePack.class);
     }
 }
