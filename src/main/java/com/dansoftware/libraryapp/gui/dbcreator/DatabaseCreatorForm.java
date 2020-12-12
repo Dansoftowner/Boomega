@@ -197,6 +197,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
                         .concat(".")
                         .concat(System.getProperty("libraryapp.file.extension"))
                 );
+        this.dirField.setText(System.getProperty("libraryapp.dir.default.path"));
 
         //We don't allow to put spaces in the following inputs
         this.nameField.setTextFormatter(new SpaceValidator());

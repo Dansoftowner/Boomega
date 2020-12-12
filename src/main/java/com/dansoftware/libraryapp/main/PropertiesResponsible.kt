@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
+import javax.swing.filechooser.FileSystemView
 
 /**
  * Responsible for adding the necessary system properties that are needed for the application.
@@ -22,6 +23,7 @@ object PropertiesResponsible {
     private const val LOG_FILE_FULL_PATH = "log.file.path.full"
     private const val PLUGIN_DIRECTORY_PATH = "libraryapp.plugin.dir"
     private const val CONFIG_FILE_PATH = "libraryapp.config.file.path"
+    private const val DEFAULT_DIRECTORY_PATH = "libraryapp.dir.default.path"
 
     /* **** VALUES **** */
 
@@ -82,7 +84,11 @@ object PropertiesResponsible {
         System.setProperty(LIBRARY_APP_FILE_EXTENSION, LIBRARY_APP_FILE_EXTENSION_VALUE)
         System.setProperty(PLUGIN_DIRECTORY_PATH, getPluginDirPath())
         System.setProperty(CONFIG_FILE_PATH, getConfigFilePath())
+        System.setProperty(DEFAULT_DIRECTORY_PATH, getDefaultDirectoryFilePath());
     }
+
+    private fun getDefaultDirectoryFilePath() =
+        File(FileSystemView.getFileSystemView().defaultDirectory, "LibraryAppDocuments").absolutePath
 
     /**
      * Returns the config file's path
