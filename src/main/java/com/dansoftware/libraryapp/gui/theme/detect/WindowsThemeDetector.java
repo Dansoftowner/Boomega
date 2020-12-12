@@ -51,7 +51,7 @@ class WindowsThemeDetector extends OsThemeDetector {
             }
         };
         RegistryWatcher.addRegistryListener(registryListener);
-        RegistryWatcher.watchKey(registryPath);
+        if (listeners.isEmpty()) RegistryWatcher.watchKey(registryPath);
         listeners.put(darkThemeListener, registryListener);
     }
 
