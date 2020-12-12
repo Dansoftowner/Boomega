@@ -9,6 +9,7 @@ import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import com.dlsc.workbenchfx.view.WorkbenchView;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -118,45 +119,45 @@ final class WorkbenchContextAdapter implements Context {
     public ButtonType showErrorDialogAndWait(String title, String message) {
         final var key = new Object();
         showErrorDialog(title, message, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
+            Platform.exitNestedEventLoop(key, buttonType);
         });
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
+        return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showErrorDialogAndWait(String title, String message, Exception e) {
         final var key = new Object();
         showErrorDialog(title, message, e, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
+            Platform.exitNestedEventLoop(key, buttonType);
         });
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
+        return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showInformationDialogAndWait(String title, String message) {
         final var key = new Object();
         showInformationDialog(title, message, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
+            Platform.exitNestedEventLoop(key, buttonType);
         });
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
+        return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showConfirmationDialogAndWait(String title, String message) {
         final var key = new Object();
         showConfirmationDialog(title, message, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
+            Platform.exitNestedEventLoop(key, buttonType);
         });
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
+        return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes) {
         final var key = new Object();
         this.showDialog(title, content, buttonType -> {
-            com.sun.javafx.tk.Toolkit.getToolkit().exitNestedEventLoop(key, buttonType);
+            Platform.exitNestedEventLoop(key, buttonType);
         }, buttonTypes);
-        return (ButtonType) com.sun.javafx.tk.Toolkit.getToolkit().enterNestedEventLoop(key);
+        return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     private NotificationNode buildNotificationNode(NotificationNode.NotificationType type,
