@@ -37,9 +37,8 @@ public class CredentialsSerializer implements JsonSerializer<Credentials> {
     }
 
     private TextEncryptor buildEncryptor(String encPass) {
-        String encryptionPassword = Double.toString(Math.random());
         StrongTextEncryptor textEncryptor = new StrongTextEncryptor();
-        textEncryptor.setPassword(encryptionPassword);
+        textEncryptor.setPassword(encPass);
         return textEncryptor;
     }
 }
