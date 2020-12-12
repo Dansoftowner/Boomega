@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -25,10 +26,12 @@ class WorkbenchDialogContextDialogAdapter implements ContextDialog {
     private static final String DIALOG_STYLE_CLASS = "alertDialog";
 
     private final WorkbenchDialog workbenchDialog;
+    private final Type type;
 
-    WorkbenchDialogContextDialogAdapter(@NotNull WorkbenchDialog workbenchDialog) {
+    WorkbenchDialogContextDialogAdapter(@NotNull WorkbenchDialog workbenchDialog, @Nullable Type type) {
         this.workbenchDialog = Objects.requireNonNull(workbenchDialog);
         this.workbenchDialog.getStyleClass().add(DIALOG_STYLE_CLASS);
+        this.type = workbenchDialog.getType() != null ? Type.valueOf(workbenchDialog.getType().toString()) : type;
     }
 
     @Override
@@ -63,7 +66,7 @@ class WorkbenchDialogContextDialogAdapter implements ContextDialog {
 
     @Override
     public Type getType() {
-        return Type.valueOf(workbenchDialog.getType().toString());
+        return type;
     }
 
     @Override

@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -126,6 +127,11 @@ public interface ContextDialog {
      */
     @NotNull
     static ContextDialog from(@NotNull WorkbenchDialog workbenchDialog) {
-        return new WorkbenchDialogContextDialogAdapter(workbenchDialog);
+        return from(workbenchDialog, null);
+    }
+
+    @NotNull
+    static ContextDialog from(@NotNull WorkbenchDialog workbenchDialog, @Nullable Type type) {
+        return new WorkbenchDialogContextDialogAdapter(workbenchDialog, type);
     }
 }
