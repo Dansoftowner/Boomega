@@ -7,6 +7,7 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.firsttime.FirstTimeActivity;
 import com.dansoftware.libraryapp.gui.theme.Theme;
+import com.dansoftware.libraryapp.gui.theme.detect.OsThemeDetector;
 import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity;
 import com.dansoftware.libraryapp.instance.ApplicationInstanceService;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
@@ -278,6 +279,9 @@ public class Main extends BaseApplication {
 
         logger.info("Closing down PluginClassLoader");
         PluginClassLoader.getInstance().close();
+
+        //terminating the whole application, because maybe some non-daemon thread stops that
+        System.exit(0);
     }
 
     /**
