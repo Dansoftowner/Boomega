@@ -21,6 +21,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,9 +41,6 @@ import static com.dansoftware.libraryapp.gui.info.ApplicationInfoCopyKt.getAppli
 public class InformationView extends SimpleHeaderView<Node>
         implements Initializable {
 
-    private static final double MAX_WIDTH = 600;
-    private static final double MAX_HEIGHT = 300;
-
     private final Context context;
 
     @FXML
@@ -55,6 +54,9 @@ public class InformationView extends SimpleHeaderView<Node>
 
     @FXML
     private Label javaVersionLabel;
+
+    @FXML
+    private Label javaHomeLabel;
 
     @FXML
     private Label javaFXVersionLabel;
@@ -79,10 +81,13 @@ public class InformationView extends SimpleHeaderView<Node>
         super("LibraryApp Info", new MaterialDesignIconView(MaterialDesignIcon.INFORMATION));
         this.context = context;
         this.setEffect(new DropShadow());
-        this.setMaxWidth(MAX_WIDTH);
-        this.setMaxHeight(MAX_HEIGHT);
         this.createToolbarControls();
         this.loadContent();
+    }
+
+    @FXML
+    private void showUsedDependencies(ActionEvent event) {
+        new DependencyViewerActivity(this.context).show();
     }
 
     private void createToolbarControls() {
@@ -100,21 +105,18 @@ public class InformationView extends SimpleHeaderView<Node>
         this.setContent(fxmlLoader.load());
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setDefaults();
-        setData();
-    }
-
-    private void setDefaults() {
-        gitHubBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX));
-        showDepsBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.CODE_BRACES));
+    private void onCopy(Event event) {
+        ClipboardContent content = new ClipboardContent();
+        content.putString(getApplicationInfoCopy());
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        clipboard.setContent(content);
     }
 
     private void setData() {
         versionLabel.setText(System.getProperty("libraryapp.version"));
         javaVMLabel.setText(System.getProperty("java.vm.name"));
         javaVendorLabel.setText(System.getProperty("java.vendor"));
+        javaHomeLabel.setText(System.getProperty("java.home"));
         javaVersionLabel.setText(System.getProperty("java.version"));
         javaFXVersionLabel.setText(System.getProperty("javafx.version"));
         logsLocationField.setText(System.getProperty("log.file.path.full"));
@@ -124,20 +126,14 @@ public class InformationView extends SimpleHeaderView<Node>
         else langTranslatorLabel.setText("?");
     }
 
-    private void onCopy(Event event) {
-        ClipboardContent content = new ClipboardContent();
-        content.putString(getApplicationInfoCopy());
-        Clipboard clipboard = Clipboard.getSystemClipboard();
-        clipboard.setContent(content);
+    private void setDefaults() {
+        gitHubBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX));
+        showDepsBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.CODE_BRACES));
     }
 
-    @FXML
-    private void showSoftwareDevelopers(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void showUsedDependencies(ActionEvent event) {
-        new DependencyViewerActivity(this.context).show();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setDefaults();
+        setData();
     }
 }
