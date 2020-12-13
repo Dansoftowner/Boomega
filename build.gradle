@@ -95,7 +95,7 @@ dependencies {
     libraries 'commons-io:commons-io:2.6'
     libraries 'org.apache.commons:commons-lang3:3.10'
     libraries 'commons-collections:commons-collections:3.2.2'
-    libraries 'com.github.Dansoftowner:jFileGoodies:1.2.2'
+    libraries 'com.github.Dansoftowner:jFileGoodies:1.2.3'
     libraries 'com.github.oshi:oshi-core:5.3.4'
 
     /*** JAVA FX LIBRARIES ***/
