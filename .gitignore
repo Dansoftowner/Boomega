@@ -126,7 +126,8 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/intellij,gradle
 
 
-distribution
+distribution/java-runtime
+distribution/application-package
 UML
 planning
 icon-sources.txt

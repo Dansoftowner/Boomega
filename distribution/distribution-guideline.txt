@@ -20,4 +20,8 @@ jlink --no-header-files --no-man-pages --compress=2 --strip-debug --module-path 
 (3) JPackage:
 --------
 
-....
+jpackage -t [PACKAGE_TYPE(app-image|native-options...)] --app-version [VERSION] --description [APP_DESCRIPTION] -n [APP_NAME]  -d [APPLICATION_PACKAGE] -vendor "Dansoftware" --runtime-image [JAVA_HOME] --icon [ICON_FILE] --main-jar [JAR_FILE] --input [JAR_FILE_DIR]  [ --file-associations -> if we create an installer]
+
+Example (on windows):
+jpackage -t "app-image" --app-version "0.0" --description "LibraryApp 2020" -n "LibraryApp2020" -d .\application-package --vendor "Dansoftware" --runtime-image "java-runtime" --icon "./icon/icon.ico" --main-jar "LibraryApp-0.0.0.jar" --input "..\build\libs"
+
