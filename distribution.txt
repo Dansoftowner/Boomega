@@ -1,0 +1,23 @@
+(1) Jdeps:
+----------
+jdeps --module-path [JAVAFX_JMODS_DIR] --add-modules=javafx.controls,javafx.web,javafx.base,javafx.fxml,javafx.graphics,javafx.media,javafx.swing --list-deps [JAR_FILE]
+
+Note:
+We can use '--print-module-deps' instead of '--list-deps' if it doesn't throw a Null pointer (bug)
+
+Example:
+jdeps --module-path "C:\Users\judal\Documents\javafx-sdk-14.0.1\javafx-jmods-14.0.1" --add-modules=javafx.controls,javafx.web,javafx.base,javafx.fxml,javafx.graphics,javafx.media,javafx.swing --list-deps LibraryApp-0.0.0.jar
+
+---------
+(2) JLink:
+---------
+jlink --no-header-files --no-man-pages --compress=2 --strip-debug --module-path [JAVAFX_JMODS_DIR] --add-modules [MODULES] --output [OUTPUT_DIR]
+
+Example:
+jlink --no-header-files --no-man-pages --compress=2 --strip-debug --module-path "C:\Users\judal\Documents\javafx-sdk-14.0.1\javafx-jmods-14.0.1" --add-modules java.base,java.datatransfer,java.desktop,java.scripting,java.xml,javafx.base,javafx.controls,javafx.graphics,javafx.media,javafx.web,jdk.jsobject,jdk.unsupported,jdk.xml.dom,java.naming,java.sql,javafx.fxml --output "C:\Users\judal\Documents\Projects\LibraryApp2020\distribution\java-runtime"
+
+--------
+(3) JPackage:
+--------
+
+....
