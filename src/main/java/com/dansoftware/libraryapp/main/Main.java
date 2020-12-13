@@ -279,9 +279,6 @@ public class Main extends BaseApplication {
 
         logger.info("Closing down PluginClassLoader");
         PluginClassLoader.getInstance().close();
-
-        //terminating the whole application, because maybe some non-daemon thread stops that
-        System.exit(0);
     }
 
     /**
