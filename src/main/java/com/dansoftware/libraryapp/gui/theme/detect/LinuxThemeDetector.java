@@ -54,11 +54,15 @@ class LinuxThemeDetector extends OsThemeDetector {
         return darkThemeNamePattern.matcher(gtkTheme).matches();
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public void registerListener(@NotNull Consumer<Boolean> darkThemeListener) {
         Objects.requireNonNull(darkThemeListener);
-        listeners.add(darkThemeListener);
-        if (!listeners.isEmpty()) {
+        final boolean listenerAdded = listeners.add(darkThemeListener);
+        final boolean singleListener = listenerAdded && listeners.size() == 1;
+        final boolean threadInterrupted = detectorThread != null && detectorThread.isInterrupted();
+
+        if (singleListener || threadInterrupted) {
             this.detectorThread = new DetectorThread(this);
             this.detectorThread.start();
         }
@@ -84,9 +88,9 @@ class LinuxThemeDetector extends OsThemeDetector {
         DetectorThread(@NotNull LinuxThemeDetector detector) {
             this.detector = detector;
             this.lastValue = detector.isDark();
-            setName("GTK Theme Detector Thread");
-            setDaemon(true);
-            setPriority(Thread.NORM_PRIORITY - 1);
+            this.setName("GTK Theme Detector Thread");
+            this.setDaemon(true);
+            this.setPriority(Thread.NORM_PRIORITY - 1);
         }
 
         @Override
@@ -104,13 +108,13 @@ class LinuxThemeDetector extends OsThemeDetector {
                         logger.debug("Theme changed detection, dark: {}", currentDetection);
                         if (currentDetection != lastValue) {
                             lastValue = currentDetection;
-                            detector.listeners.forEach(listener -> {
+                            for (var listener : detector.listeners) {
                                 try {
                                     listener.accept(currentDetection);
                                 } catch (RuntimeException e) {
                                     logger.error("Caught exception during listener notifying ", e);
                                 }
-                            });
+                            }
                         }
                     }
                     logger.debug("ThemeDetectorThread has been interrupted!");

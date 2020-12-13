@@ -38,6 +38,7 @@ class WindowsThemeDetector extends OsThemeDetector {
                 Advapi32Util.registryGetIntValue(WinReg.HKEY_CURRENT_USER, REGISTRY_PATH, REGISTRY_VALUE) == 0;
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public void registerListener(@NotNull Consumer<Boolean> darkThemeListener) {
         Objects.requireNonNull(darkThemeListener);
