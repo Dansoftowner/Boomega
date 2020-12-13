@@ -22,10 +22,12 @@ public abstract class OsThemeDetector {
     public static synchronized OsThemeDetector getDetector() {
         if (osThemeDetector != null) {
             return osThemeDetector;
-        } else if (OsInfo.isWindows10()) {
+        } else if (OsInfo.isWindows10OrLater()) {
             return osThemeDetector = new WindowsThemeDetector();
         } else if (OsInfo.isLinux()) {
             return osThemeDetector = new LinuxThemeDetector();
+        } else if (OsInfo.isMacOsMojaveOrLater()) {
+            return osThemeDetector = new MacOSThemeDetector();
         } else {
             return osThemeDetector = new EmptyDetector();
         }
