@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.appdata.logindata;
 
 import com.dansoftware.libraryapp.db.Credentials;
-import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +25,9 @@ public class LoginDataSerializer implements JsonSerializer<LoginData> {
         Gson gson = buildGson();
         var json = new JsonObject();
         json.add(SAVED_DATABASES, gson.toJsonTree(src.getSavedDatabases()));
-        json.add(AUTO_LOGIN_CREDENTIALS, gson.toJsonTree(src.getAutoLoginCredentials(), new TypeToken<Credentials>() {}.getType()));
         json.addProperty(AUTO_LOGIN, src.isAutoLogin());
         json.addProperty(SELECTED_DATABASE_INDEX, src.getSelectedDatabaseIndex());
+        if (src.isAutoLogin()) json.add(AUTO_LOGIN_CREDENTIALS, gson.toJsonTree(src.getAutoLoginCredentials()));
         return json;
     }
 
