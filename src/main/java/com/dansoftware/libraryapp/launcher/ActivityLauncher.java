@@ -307,7 +307,7 @@ public abstract class ActivityLauncher implements Runnable {
     }
 
     private MainActivity showMainActivity(Database database) {
-        MainActivity mainActivity = new MainActivity(database);
+        MainActivity mainActivity = new MainActivity(database, preferences, databaseTracker);
         mainActivity.show();
         return mainActivity;
     }

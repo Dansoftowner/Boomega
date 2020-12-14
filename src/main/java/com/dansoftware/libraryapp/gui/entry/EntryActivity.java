@@ -60,7 +60,7 @@ public class EntryActivity implements ContextTransformable, DatabaseLoginListene
 
     @Override
     public void onDatabaseOpened(@NotNull Database database) {
-        var mainActivity = new MainActivity(database);
+        var mainActivity = new MainActivity(database, preferences, databaseTracker);
         this.subContext = mainActivity.getContext();
         mainActivity.show();
     }
