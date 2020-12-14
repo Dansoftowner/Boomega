@@ -2,12 +2,18 @@ package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.adapter.ThrowableString
+import javafx.event.ActionEvent
+import javafx.event.EventHandler
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import org.apache.commons.lang3.StringUtils
 import java.io.BufferedInputStream
 import kotlin.reflect.KClass
 
+
+fun MenuItem.action(onAction: EventHandler<ActionEvent>): MenuItem = this.also { this.onAction = onAction }
+
+fun Menu.menuItem(item: MenuItem): Menu = this.also { this.items.add(item) }
 
 /**
  * Determines that a ButtonType's button data is the same.
@@ -69,7 +75,8 @@ object I18NButtonTypes {
     @JvmField
     val PREVIOUS = createButtonType("Dialog.previous.button", ButtonBar.ButtonData.BACK_PREVIOUS)
 
-    private fun createButtonType(key: String, buttonData: ButtonBar.ButtonData) = ButtonType(I18N.getButtonTypeValues().getString(key), buttonData)
+    private fun createButtonType(key: String, buttonData: ButtonBar.ButtonData) =
+        ButtonType(I18N.getButtonTypeValues().getString(key), buttonData)
 }
 
 class ExceptionDisplayPane(exception: Exception?) : TitledPane() {
