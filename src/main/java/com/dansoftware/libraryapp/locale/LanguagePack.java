@@ -146,4 +146,7 @@ public abstract class LanguagePack {
 
     @NotNull
     public abstract ResourceBundle getNotificationMessages();
+
+    @NotNull
+    public abstract ResourceBundle getMenuBarValues();
 }

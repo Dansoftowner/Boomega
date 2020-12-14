@@ -79,6 +79,11 @@ public class I18N {
         return getValue(getUpdateDialogValues(), key, args);
     }
 
+    @NotNull
+    public static String getMenuBarValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getMenuBarValues(), key, args);
+    }
+
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
         if (ArrayUtils.isEmpty(args)) return resourceBundle.getString(key);
         return getFormat(resourceBundle, key, args);
@@ -153,6 +158,12 @@ public class I18N {
     public static ResourceBundle getNotificationMessages() {
         recognizeLanguagePack();
         return languagePack.getNotificationMessages();
+    }
+
+    @NotNull
+    public static ResourceBundle getMenuBarValues() {
+        recognizeLanguagePack();
+        return languagePack.getMenuBarValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
