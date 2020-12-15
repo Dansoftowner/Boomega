@@ -8,12 +8,13 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker
 import com.dansoftware.libraryapp.gui.util.action
 import com.dansoftware.libraryapp.gui.util.menuItem
 import com.dansoftware.libraryapp.launcher.ActivityLauncher
+import com.dansoftware.libraryapp.launcher.LauncherMode
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.SingleThreadExecutor
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
-import javafx.scene.control.SeparatorMenuItem
+import org.jetbrains.annotations.NotNull
 
 class MenuBar(context: Context, preferences: Preferences, tracker: DatabaseTracker) : javafx.scene.control.MenuBar() {
     init {
@@ -27,22 +28,27 @@ class MenuBar(context: Context, preferences: Preferences, tracker: DatabaseTrack
 
         init {
             this.items.addAll(
-                MenuItem(I18N.getMenuBarValue("menubar.menu.file.new")).action { newLibraryAppEntry() },
-                SeparatorMenuItem(),
-                Menu(I18N.getMenuBarValue("menubar.menu.file.recent")).also {
-                    databaseTracker.savedDatabases.forEach { db ->
-                        it.menuItem(MenuItem(db.toString()).also {
-                            it.setOnAction {
-                                //
-                            }
-                        })
-                    }
-                }
+                newEntryMenuItem(),
+                recentDatabasesMenuItem()
             )
         }
 
-        private fun newLibraryAppEntry() {
-            SingleThreadExecutor.submit(Thread(object : Task<Unit>() {
+        private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getMenuBarValue("menubar.menu.file.new")).action {
+            startActivityLauncher {  RuntimeBasicActivityLauncher(preferences, databaseTracker) }
+        }
+
+        private fun recentDatabasesMenuItem(): MenuItem = Menu(I18N.getMenuBarValue("menubar.menu.file.recent")).also {
+            databaseTracker.savedDatabases.forEach { db ->
+                it.menuItem(MenuItem(db.toString()).also {
+                    it.setOnAction {
+                         startActivityLauncher { RuntimeOpenActivityLauncher(preferences, databaseTracker, db) }
+                    }
+                })
+            }
+        }
+
+        private fun startActivityLauncher(getActivityLauncher: () -> ActivityLauncher) {
+            SingleThreadExecutor.submit(object : Task<Unit>() {
                 init {
                     this.setOnRunning { context.showIndeterminateProgress() }
                     this.setOnFailed { context.stopProgress() }
@@ -50,33 +56,45 @@ class MenuBar(context: Context, preferences: Preferences, tracker: DatabaseTrack
                 }
 
                 override fun call() {
-                    RuntimeBasicActivityLauncher(preferences, databaseTracker).launch()
+                    getActivityLauncher().launch()
                 }
-            }))
+            })
         }
     }
 }
 
 private class RuntimeOpenActivityLauncher(
     preferences: Preferences,
-    databaseTracker: DatabaseTracker,
-    databaseMeta: DatabaseMeta
-) {
-    init {
-
-    }
-}
-
-private class RuntimeBasicActivityLauncher(preferences: Preferences, databaseTracker: DatabaseTracker) :
-    ActivityLauncher(preferences, databaseTracker) {
+    tracker: DatabaseTracker,
+    databaseMeta: DatabaseMeta,
+) : ActivityLauncher(LauncherMode.ALREADY_RUNNING, databaseMeta, preferences, tracker) {
 
     private var loginData: LoginData
 
     init {
-        loginData = preferences.get(Preferences.Key.LOGIN_DATA).also {
+        loginData = preferences.get(Preferences.Key.LOGIN_DATA)
+    }
+
+    override fun getLoginData(): LoginData = loginData
+
+    override fun saveLoginData(loginData: LoginData?) {
+        this.loginData = loginData!!
+    }
+
+    override fun onActivityLaunched(context: Context) {
+    }
+}
+
+private class RuntimeBasicActivityLauncher(preferences: Preferences, databaseTracker: DatabaseTracker) :
+    ActivityLauncher(LauncherMode.ALREADY_RUNNING, preferences, databaseTracker) {
+
+    private var loginData: LoginData
+
+    init {
+        loginData = preferences.get(Preferences.Key.LOGIN_DATA)/*.also {
             it.selectedDatabase = null
             it.isAutoLogin = false
-        }
+        }*/
     }
 
     override fun getLoginData() = loginData
