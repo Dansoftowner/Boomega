@@ -212,6 +212,10 @@ custom
     -fx-fill: black;
 }
 
+.text-field:readonly {
+    -right-button-visible: false;
+}
+
 /* Plugin manager  */
 
 .pluginAdderPane {
