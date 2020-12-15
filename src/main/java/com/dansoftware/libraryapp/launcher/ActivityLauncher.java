@@ -215,7 +215,7 @@ public abstract class ActivityLauncher implements Runnable {
         // otherwise we open a new activity for it
         MainActivity.getByDatabase(argument)
                 .map(MainActivity::getContext)
-                .ifPresentOrElse(Context::toFront, () -> {
+                .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> {
                     onNewDatabaseAdded(argument);
                     handleArgumentInit(argument);
                 });
