@@ -8,6 +8,7 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.theme.Themeable;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -19,7 +20,7 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
     private final Context asContext;
     private final Database database;
 
-    private final MenuBar menuBar;
+    private final MenuBarBase menuBar;
     private final MainContentView contentView;
 
     MainView(@NotNull MainActivity activity,
@@ -29,7 +30,7 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
         this.activity = Objects.requireNonNull(activity);
         this.asContext = Context.from(contentView = new MainContentView());
         this.database = database;
-        this.menuBar = new MenuBar(asContext, preferences, tracker);
+        this.menuBar = new MenuBarBase(new MenuBar(asContext, preferences, tracker));
         this.setTop(menuBar);
         this.setCenter(contentView);
         Theme.registerThemeable(this);
@@ -42,9 +43,18 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
 
     @Override
     public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.getCustomApplier().applyBack(this.menuBar);
-        newTheme.getCustomApplier().apply(this.menuBar);
+        oldTheme.applyBack(this.menuBar);
+        newTheme.apply(this.menuBar);
         oldTheme.getGlobalApplier().applyBack(this.contentView);
         newTheme.getGlobalApplier().apply(this.contentView);
+    }
+
+    private static final class MenuBarBase extends StackPane {
+        private static final String STYLE_CLASS = "menu-bar-base";
+
+        MenuBarBase(@NotNull javafx.scene.control.MenuBar menuBar) {
+            getChildren().add(menuBar);
+            getStyleClass().add(STYLE_CLASS);
+        }
     }
 }
