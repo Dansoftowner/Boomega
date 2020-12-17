@@ -236,6 +236,10 @@ custom
     /*-fx-fill: black;*/
 }
 
+.menu-bar-base {
+    -fx-background-color: #1d2129;
+}
+
 .text-field:readonly {
     -right-button-visible: false;
 }

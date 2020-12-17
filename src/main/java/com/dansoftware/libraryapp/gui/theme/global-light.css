@@ -88,14 +88,14 @@
 
 /**Workbench*/
 * {
-    -primary-color: #0078D7;
+    -primary-color: #e5e5e5;
     -primary-variant-color: #003d71;
     -secondary-color: #6300ff;
     -secondary-variant-color: #1e005f;
     -background-color: #FFFFFF;
     -surface-color: #FFFFFF;
     -error-color: #B00020;
-    -on-primary-color: #FFFFFF;
+    -on-primary-color: black;
     -on-secondary-color: #FFFFFF;
     -on-background-color: #000000;
     -on-surface-color: #000000;
