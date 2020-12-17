@@ -32,7 +32,7 @@
                                                 <Font size="14.0" />
                                             </font>
                                             <padding>
-                                                <Insets left="10.0" />
+                                                <Insets left="5.0" />
                                             </padding>
                                         </Label>
                                     </children>
@@ -54,7 +54,7 @@
                                                 <Font size="14.0" />
                                             </font>
                                             <padding>
-                                                <Insets left="10.0" />
+                                                <Insets left="5.0" />
                                             </padding>
                                         </Label>
                                     </children>
@@ -76,7 +76,7 @@
                                                 <Font size="14.0" />
                                             </font>
                                             <padding>
-                                                <Insets left="10.0" />
+                                                <Insets left="5.0" />
                                             </padding>
                                         </Label>
                                         <Label text="," />
@@ -85,7 +85,7 @@
                                                 <Font size="14.0" />
                                             </font>
                                             <padding>
-                                                <Insets left="10.0" />
+                                                <Insets left="5.0" />
                                             </padding>
                                         </Label>
                                         <Label text=":">
@@ -98,7 +98,7 @@
                                                 <Font size="14.0" />
                                             </font>
                                             <padding>
-                                                <Insets left="10.0" />
+                                                <Insets left="5.0" />
                                             </padding>
                                         </Label>
                                     </children>
@@ -118,7 +118,7 @@
                 <Separator prefWidth="200.0" />
             <VBox spacing="10.0">
                <children>
-                  <HBox layoutX="10.0" layoutY="70.0" spacing="10.0">
+                  <HBox layoutX="10.0" layoutY="70.0" spacing="5.0">
                      <children>
                         <Label text="Java home:" HBox.hgrow="ALWAYS">
                            <font>
@@ -156,7 +156,7 @@
                               </Label>
                           </children>
                       </HBox>
-                      <HBox spacing="10.0">
+                      <HBox spacing="5.0">
                           <children>
                               <Label text="Java version:" HBox.hgrow="ALWAYS">
                                   <font>
@@ -170,7 +170,7 @@
                               </Label>
                           </children>
                       </HBox>
-                      <HBox spacing="10.0">
+                      <HBox spacing="5.0">
                           <children>
                               <Label text="JavaFX version:" HBox.hgrow="ALWAYS">
                                   <font>
