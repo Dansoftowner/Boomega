@@ -6,6 +6,7 @@ import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.control.*
 import javafx.scene.image.Image
+import javafx.scene.input.KeyCombination
 import org.apache.commons.lang3.StringUtils
 import java.io.BufferedInputStream
 import kotlin.reflect.KClass
@@ -14,6 +15,8 @@ import kotlin.reflect.KClass
 fun MenuItem.action(onAction: EventHandler<ActionEvent>): MenuItem = this.also { this.onAction = onAction }
 
 fun Menu.menuItem(item: MenuItem): Menu = this.also { this.items.add(item) }
+
+fun MenuItem.keyCombination(combination: KeyCombination): MenuItem = this.also { it.accelerator = combination }
 
 /**
  * Determines that a ButtonType's button data is the same.
