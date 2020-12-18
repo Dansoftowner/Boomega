@@ -8,6 +8,8 @@ import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.entry.EntryActivity;
+import com.dansoftware.libraryapp.gui.login.DatabaseLoginListener;
+import com.dansoftware.libraryapp.gui.login.quick.QuickLoginActivity;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
 import com.dansoftware.libraryapp.main.ArgumentTransformer;
 import javafx.application.Platform;
@@ -160,6 +162,9 @@ public abstract class ActivityLauncher implements Runnable {
             case ALREADY_RUNNING:
                 handleArgumentAlreadyRunning(argument);
                 break;
+            case INTERNAL:
+                handleArgumentInternal(argument);
+                break;
         }
     }
 
@@ -221,6 +226,27 @@ public abstract class ActivityLauncher implements Runnable {
                 });
     }
 
+    private void handleArgumentInternal(DatabaseMeta argument) {
+        MainActivity.getByDatabase(argument)
+                .map(MainActivity::getContext)
+                .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> {
+                    final DatabaseLoginListener onDatabaseLogin = db -> onActivityLaunched(showMainActivity(db).getContext(), argument);
+                    Database database = NitriteDatabase.getAuthenticator()
+                            .onFailed((title, message, t) -> {
+                                Platform.runLater(() -> {
+                                    onActivityLaunched(showQuickLoginActivity(argument, onDatabaseLogin).getContext(), argument);
+                                });
+                            }).auth(argument);
+
+                    if (database != null) {
+                        logger.debug("Signed into the argument-database successfully, launching a MainActivity...");
+                        Platform.runLater(() -> {
+                            onDatabaseLogin.onDatabaseOpened(database);
+                        });
+                    }
+                });
+    }
+
     /**
      * Handles the situation when the application-argument not exists
      * depending on the launcher-mode.
@@ -229,6 +255,7 @@ public abstract class ActivityLauncher implements Runnable {
      */
     private void handleNoArgument(LauncherMode launcherMode) {
         switch (launcherMode) {
+            case INTERNAL:
             case INIT:
                 handleNoArgumentInit();
                 break;
@@ -312,6 +339,12 @@ public abstract class ActivityLauncher implements Runnable {
         return mainActivity;
     }
 
+    private QuickLoginActivity showQuickLoginActivity(DatabaseMeta databaseMeta, DatabaseLoginListener databaseLoginListener) {
+        final var quickLoginActivity = new QuickLoginActivity(databaseMeta, databaseLoginListener);
+        quickLoginActivity.show();
+        return quickLoginActivity;
+    }
+
     private EntryActivity newBasicEntryActivity() {
         return new EntryActivity(this.preferences, getLoginData(), databaseTracker);
     }
@@ -326,12 +359,16 @@ public abstract class ActivityLauncher implements Runnable {
      *
      * @return the {@link LoginData} object.
      */
-    protected abstract LoginData getLoginData();
+    protected LoginData getLoginData() {
+        return preferences.get(Preferences.Key.LOGIN_DATA);
+    }
 
     /**
      * Defines how to save the {@link LoginData} for the base {@link ActivityLauncher} object.
      */
-    protected abstract void saveLoginData(LoginData loginData);
+    protected void saveLoginData(LoginData loginData) {
+        preferences.editor().put(Preferences.Key.LOGIN_DATA, loginData);
+    }
 
     /**
      * Called, when a new database (from the arguments) is added to the login-data.
@@ -351,7 +388,8 @@ public abstract class ActivityLauncher implements Runnable {
      *
      * @param context the 'activity' through the {@link Context} interface
      */
-    protected abstract void onActivityLaunched(@NotNull Context context);
+    protected void onActivityLaunched(@NotNull Context context) {
+    }
 
     /**
      * Called on the UI-thread, when an 'activity' is launched.
