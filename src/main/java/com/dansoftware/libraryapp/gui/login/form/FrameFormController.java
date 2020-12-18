@@ -8,6 +8,7 @@ import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorActivity;
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener;
 import com.dansoftware.libraryapp.gui.dbmanager.DatabaseManagerActivity;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
+import com.dansoftware.libraryapp.gui.login.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.UIUtils;
 import com.dansoftware.libraryapp.locale.I18N;

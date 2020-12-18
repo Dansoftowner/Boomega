@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.login.form;
+package com.dansoftware.libraryapp.gui.login;
 
 import com.dansoftware.libraryapp.db.Database;
 import org.jetbrains.annotations.NotNull;
