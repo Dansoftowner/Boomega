@@ -48,7 +48,7 @@ import java.util.function.Consumer;
  * @author Daniel Gyorffy
  * @see LauncherMode
  */
-public abstract class ActivityLauncher implements Runnable {
+public class ActivityLauncher implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(ActivityLauncher.class);
 
