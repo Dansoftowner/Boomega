@@ -256,6 +256,8 @@ public abstract class ActivityLauncher implements Runnable {
     private void handleNoArgument(LauncherMode launcherMode) {
         switch (launcherMode) {
             case INTERNAL:
+                handleNoArgumentInternal();
+                break;
             case INIT:
                 handleNoArgumentInit();
                 break;
@@ -301,6 +303,10 @@ public abstract class ActivityLauncher implements Runnable {
                     .map(EntryActivity::getContext)
                     .ifPresent(Context::toFront);
         });
+    }
+
+    private void handleNoArgumentInternal() {
+        Platform.runLater(() -> onActivityLaunched(showEntryActivity().getContext(), null));
     }
 
     /**
