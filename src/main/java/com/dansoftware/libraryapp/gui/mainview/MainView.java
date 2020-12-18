@@ -30,7 +30,7 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
         this.activity = Objects.requireNonNull(activity);
         this.asContext = Context.from(contentView = new MainContentView());
         this.database = database;
-        this.menuBar = new MenuBarBase(new MenuBar(asContext, preferences, tracker));
+        this.menuBar = new MenuBarBase(new MenuBar(asContext, database.getMeta(), preferences, tracker));
         this.setTop(menuBar);
         this.setCenter(contentView);
         Theme.registerThemeable(this);
