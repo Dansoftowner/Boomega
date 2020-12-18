@@ -81,6 +81,12 @@ abstract class BaseWindow<C> : Stage
         this.scene = Scene(content)
     }
 
+    protected constructor(i18n: String, separator: String, additionalTitleValue: String, content: C) {
+        this.title = "${I18N.getWindowTitles().getString(i18n)} $separator $additionalTitleValue"
+        this.content = content
+        this.scene = Scene(content)
+    }
+
     protected constructor(i18n: String, separator: String, changingString: ObservableStringValue, content: C) {
         this.content = content
         this.scene = Scene(content)
