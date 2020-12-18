@@ -9,6 +9,7 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
@@ -31,10 +32,15 @@ public class MainActivity implements ContextTransformable {
         this.showing = new SimpleBooleanProperty();
         this.mainView = new MainView(this, database, preferences, databaseTracker);
         instances.add(new WeakReference<>(this));
+        databaseTracker.usingDatabase(database.getMeta());
     }
 
     public boolean show() {
-        new MainWindow(mainView).show();
+        final MainWindow mainWindow = new MainWindow(mainView);
+        mainWindow.show();
+        mainWindow.addEventHandler(
+                WindowEvent.WINDOW_CLOSE_REQUEST,
+                event -> databaseTracker.closingDatabase(database.getMeta()));
         return true;
     }
 
