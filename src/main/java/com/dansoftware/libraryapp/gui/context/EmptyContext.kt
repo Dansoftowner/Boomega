@@ -135,5 +135,7 @@ private class EmptyContext : Context {
 
     override fun showProgress(done: Long, max: Long, type: Context.ProgressType) {}
 
+    override fun onWindowPresent(action: Consumer<Window>?) { }
+
     override fun isReachable(): Boolean = false
 }

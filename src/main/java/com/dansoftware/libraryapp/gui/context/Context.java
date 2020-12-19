@@ -145,6 +145,8 @@ public interface Context {
 
     void showProgress(long done, long max, @NotNull ProgressType type);
 
+    void onWindowPresent(Consumer<Window> action);
+
     /**
      * Returns {@code true} if the {@link Context} is actually performs actions on a particular gui.
      */

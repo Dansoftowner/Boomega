@@ -11,16 +11,48 @@ import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.adapter.ThrowableString
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.property.ReadOnlyObjectProperty
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
+import javafx.scene.Node
+import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
+import javafx.stage.Window
 import org.apache.commons.lang3.StringUtils
 import java.io.BufferedInputStream
+import java.util.function.Consumer
 import kotlin.reflect.KClass
+
+fun Node.onWindowPresent(action: Consumer<Window>) {
+    this.scene?.window?.also { action.accept(it) }
+    this.sceneProperty().addListener(object: ChangeListener<Scene> {
+        override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
+            if (newValue != null) {
+                scene.windowProperty().addListener(object: ChangeListener<Window> {
+                    override fun changed(
+                        observable: ObservableValue<out Window>,
+                        oldValue: Window?,
+                        newValue: Window?
+                    ) {
+                        if (newValue != null) {
+                            action.accept(newValue)
+                            observable.removeListener(this)
+                        }
+                    }
+
+                })
+                observable.removeListener(this)
+            }
+        }
+    })
+
+}
 
 /**
  * Sets the action of the [MenuItem] and then returns the object itself

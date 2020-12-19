@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.context;
 
+import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
 import com.dansoftware.libraryapp.gui.util.ExceptionDisplayPane;
 import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
@@ -280,6 +281,11 @@ final class WorkbenchContextAdapter implements Context {
     public void showProgress(long done, long max, @NotNull ProgressType type) {
         workbench.setCursor(Cursor.DEFAULT);
         getTaskbarProgressbar().showCustomProgress(done, max, TaskbarProgressbar.Type.valueOf(type.name()));
+    }
+
+    @Override
+    public void onWindowPresent(Consumer<Window> action) {
+        BaseFXUtils.onWindowPresent(workbench, action);
     }
 
     @Override
