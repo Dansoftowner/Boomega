@@ -10,4 +10,5 @@ object DefaultKeyBindings {
     val OPEN_DATABASE = KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN)
     val CREATE_DATABASE = KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN)
     val OPEN_DATABASE_MANAGER = KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN)
+    val FULL_SCREEN = KeyCodeCombination(KeyCode.F11)
 }

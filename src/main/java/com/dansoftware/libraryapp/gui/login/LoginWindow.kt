@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.login
 
 import com.dansoftware.libraryapp.appdata.Preferences
+import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
 import com.dansoftware.libraryapp.gui.window.BaseWindow
 import com.dansoftware.libraryapp.locale.I18N
 import javafx.event.EventHandler
@@ -11,12 +12,12 @@ import org.slf4j.LoggerFactory
 import java.util.*
 
 /**
- * A LoginWindow is a javaFX [Stage] that should be
+ * A LoginWindow is a javaFX [javafx.stage.Stage] that should be
  * used to display [LoginView] gui-objects.
  *
  *
  *
- * Also, when a user closes the LoginWindow, it will save the [LoginData] to the
+ * Also, when a user closes the LoginWindow, it will save the [com.dansoftware.libraryapp.appdata.logindata.LoginData] to the
  * configurations.
  */
 private class LoginWindow(private val root: LoginView, private val preferences: Preferences) :
@@ -26,7 +27,7 @@ private class LoginWindow(private val root: LoginView, private val preferences: 
     init {
         Objects.requireNonNull(preferences)
         Objects.requireNonNull(root, "LoginView shouldn't be null")
-        this.setFullScreenKeyCombination(KeyCodeCombination(KeyCode.F11))
+        this.setFullScreenKeyCombination(DefaultKeyBindings.FULL_SCREEN)
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this)
         this.exitDialog = true
         this.fullScreenExitHint = I18N.getGeneralValue("window.fullscreen.hint")
