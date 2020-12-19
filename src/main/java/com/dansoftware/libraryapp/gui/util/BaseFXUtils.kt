@@ -1,22 +1,67 @@
+/**
+ * Provides utilities in the subject of JavaFX
+ *
+ * @author Daniel Gyorffy
+ */
+@file:JvmName("BaseFXUtils")
+
 package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.adapter.ThrowableString
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.control.*
 import javafx.scene.image.Image
+import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
+import javafx.scene.input.KeyEvent
 import org.apache.commons.lang3.StringUtils
 import java.io.BufferedInputStream
 import kotlin.reflect.KClass
 
-
+/**
+ * Sets the action of the [MenuItem] and then returns the object itself
+ */
 fun MenuItem.action(onAction: EventHandler<ActionEvent>): MenuItem = this.also { this.onAction = onAction }
 
+/**
+ * Sets the key combination of the [MenuItem] and then returns the object itself
+ */
+fun MenuItem.keyCombination(combination: KeyCombination): MenuItem = this.also { it.accelerator = combination }
+
+/**
+ * Sets the icon of the [MenuItem] and then returns the object itself
+ */
+fun MenuItem.graphic(icon: MaterialDesignIcon): MenuItem = this.also { it.graphic = MaterialDesignIconView(icon) }
+
+/**
+ * Adds a sub menu item into the [Menu] and then returns the object itself
+ */
 fun Menu.menuItem(item: MenuItem): Menu = this.also { this.items.add(item) }
 
-fun MenuItem.keyCombination(combination: KeyCombination): MenuItem = this.also { it.accelerator = combination }
+/**
+ * Adds a [SeparatorMenuItem] into the [Menu] and then returns the object itself
+ */
+fun Menu.separator(): Menu = this.also { this.items.add(SeparatorMenuItem()) }
+
+/**
+ * Utility function that converts a [KeyCodeCombination] into a [KeyEvent] object,
+ * simulating that the particular key-combination is pressed by the user
+ */
+fun KeyCodeCombination.asKeyEvent(): KeyEvent =
+    KeyEvent(
+        KeyEvent.KEY_PRESSED,
+        this.code.toString(),
+        this.displayText,
+        this.code,
+        this.shift == KeyCombination.ModifierValue.DOWN,
+        this.control == KeyCombination.ModifierValue.DOWN,
+        this.alt == KeyCombination.ModifierValue.DOWN,
+        this.meta == KeyCombination.ModifierValue.DOWN
+    )
 
 /**
  * Determines that a ButtonType's button data is the same.
