@@ -16,15 +16,21 @@ import com.dansoftware.libraryapp.util.SingleThreadExecutor
 import com.dansoftware.libraryapp.util.revealInExplorer
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
+import javafx.collections.ListChangeListener
 import javafx.concurrent.Task
+import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
+import javafx.stage.Stage
+import javafx.stage.Window
+import java.lang.ref.WeakReference
 
 class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Preferences, tracker: DatabaseTracker) :
     javafx.scene.control.MenuBar() {
     init {
         this.menus.addAll(
-            FileMenu(context, databaseMeta, preferences, tracker)
+            FileMenu(context, databaseMeta, preferences, tracker),
+            WindowMenu(context)
         )
     }
 
@@ -158,6 +164,64 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
                 }
             })
         }
+    }
+
+    /**
+     * The 'Window' menu
+     */
+    private class WindowMenu(val context: Context) :
+        Menu(I18N.getMenuBarValue("menubar.menu.window")) {
+
+        private val windowsChangeOperator = object {
+            fun onWindowsAdded(windows: List<Window>) {
+                windows.filter { it is Stage && it.owner == null} .map { it as Stage }.forEach { window ->
+                    this@WindowMenu.menuItem(CheckMenuItem().also {
+                        it.userData = WeakReference<Window>(window)
+                        it.textProperty().bind(window.titleProperty())
+                        window.focusedProperty().addListener { _, _, yes ->
+                            it.isSelected = yes
+                        }
+                        it.setOnAction { window.toFront() }
+                    })
+                }
+            }
+
+            fun onWindowsRemoved(windows: List<Window>) {
+                windows.filter { it is Stage && it.owner == null}.forEach { window ->
+                    val iterator = this@WindowMenu.items.iterator()
+                    while (iterator.hasNext()) {
+                        val element = iterator.next()
+                        if (element.userData is WeakReference<*>) {
+                            when {
+                                element.userData === null || (element.userData as WeakReference<*>).get() == window ->
+                                    iterator.remove()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private val windowListChangeListener = ListChangeListener<Window> { change ->
+            while (change.next()) {
+                when {
+                    change.wasAdded() -> windowsChangeOperator.onWindowsAdded(change.addedSubList)
+                    change.wasRemoved() -> windowsChangeOperator.onWindowsRemoved(change.removed)
+                }
+            }
+        }
+
+        init {
+            this.menuItem(fullScreenMenuItem()).separator()
+            windowsChangeOperator.onWindowsAdded(Window.getWindows())
+            Window.getWindows().addListener(windowListChangeListener)
+        }
+
+        private fun fullScreenMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.window.fullscreen"))
+            .also { context.contextWindow }
+            .action { context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() } }
+            .keyCombination(DefaultKeyBindings.FULL_SCREEN)
+            .graphic(MaterialDesignIcon.FULLSCREEN)
     }
 }
 
