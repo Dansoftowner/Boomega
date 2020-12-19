@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.mainview;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
@@ -39,6 +40,10 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
     @Override
     public @NotNull Context getContext() {
         return asContext;
+    }
+
+    public DatabaseMeta getOpenedDatabase() {
+        return database.getMeta();
     }
 
     @Override
