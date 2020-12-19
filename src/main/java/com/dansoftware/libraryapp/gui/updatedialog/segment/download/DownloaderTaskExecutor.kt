@@ -151,7 +151,7 @@ class DownloaderTaskExecutor(val context: Context,
 
         downloaderTask.setOnSucceeded {
             context.stopProgress()
-            context.contextWindow.requestFocus()
+            context.contextWindow?.requestFocus()
             clearProgress()
         }
 
