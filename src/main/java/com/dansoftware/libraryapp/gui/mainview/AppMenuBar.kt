@@ -3,25 +3,22 @@ package com.dansoftware.libraryapp.gui.mainview
 import com.dansoftware.libraryapp.appdata.Preferences
 import com.dansoftware.libraryapp.db.DatabaseMeta
 import com.dansoftware.libraryapp.gui.context.Context
+import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener
 import com.dansoftware.libraryapp.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker
-import com.dansoftware.libraryapp.gui.util.action
-import com.dansoftware.libraryapp.gui.util.keyCombination
-import com.dansoftware.libraryapp.gui.util.menuItem
+import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
+import com.dansoftware.libraryapp.gui.util.*
 import com.dansoftware.libraryapp.launcher.ActivityLauncher
 import com.dansoftware.libraryapp.launcher.LauncherMode
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.SingleThreadExecutor
 import com.dansoftware.libraryapp.util.revealInExplorer
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
-import javafx.scene.control.SeparatorMenuItem
-import javafx.scene.input.KeyCode
-import javafx.scene.input.KeyCodeCombination
-import javafx.scene.input.KeyCombination
 
 class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Preferences, tracker: DatabaseTracker) :
     javafx.scene.control.MenuBar() {
@@ -42,42 +39,60 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
     ) : Menu(I18N.getMenuBarValue("menubar.menu.file")) {
 
         init {
-            this.items.addAll(
-                newEntryMenuItem(),
-                openMenuItem(),
-                databaseManagerMenuItem(),
-                recentDatabasesMenuItem(),
-                SeparatorMenuItem(),
-                revealInExplorerMenuItem(),
-                SeparatorMenuItem(),
-                closeWindowMenuItem(),
-                SeparatorMenuItem(),
-                quitMenuItem()
-            )
+            this.menuItem(newEntryMenuItem())
+                .menuItem(openMenuItem())
+                .menuItem(databaseCreatorMenuItem())
+                .menuItem(databaseManagerMenuItem())
+                .menuItem(recentDatabasesMenuItem())
+                .separator()
+                .menuItem(revealInExplorerMenuItem())
+                .separator()
+                .menuItem(closeWindowMenuItem())
+                .separator()
+                .menuItem(restartMenuItem())
+                .menuItem(quitMenuItem())
         }
 
         /**
          * Menu item that allows the user to show a new entry point (LoginActivity)
          */
-        private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getMenuBarValue("menubar.menu.file.new")).action {
-            startActivityLauncher { RuntimeBasicActivityLauncher(preferences, databaseTracker) }
-        }.keyCombination(KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN))
+        private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getMenuBarValue("menubar.menu.file.new"))
+            .action { startActivityLauncher { RuntimeBasicActivityLauncher(preferences, databaseTracker) } }
+            .keyCombination(DefaultKeyBindings.NEW_ENTRY)
+            .graphic(MaterialDesignIcon.DATABASE)
 
         /**
          * Menu item that allows the user to open a database file from the file system
          */
-        private fun openMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.open")).action {
-            DatabaseOpener().showOpenDialog(context.contextWindow)?.also {
-                startActivityLauncher {
-                    ActivityLauncher(
-                        LauncherMode.ALREADY_RUNNING,
-                        it,
-                        preferences,
-                        databaseTracker
-                    )
+        private fun openMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.open"))
+            .action {
+                DatabaseOpener().showOpenDialog(context.contextWindow)?.also {
+                    startActivityLauncher {
+                        ActivityLauncher(
+                            LauncherMode.ALREADY_RUNNING,
+                            it,
+                            preferences,
+                            databaseTracker
+                        )
+                    }
                 }
             }
-        }.keyCombination(KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN))
+            .keyCombination(DefaultKeyBindings.OPEN_DATABASE)
+            .graphic(MaterialDesignIcon.FILE)
+
+        private fun databaseCreatorMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.dbcreate"))
+            .action {
+                DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent { db ->
+                    startActivityLauncher { RuntimeOpenActivityLauncher(preferences, databaseTracker, db) }
+                }
+            }
+            .keyCombination(DefaultKeyBindings.CREATE_DATABASE)
+            .graphic(MaterialDesignIcon.DATABASE_PLUS)
+
+        private fun databaseManagerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.dbmanager"))
+            .action { DatabaseManagerActivity().show(databaseTracker, context.contextWindow) }
+            .keyCombination(DefaultKeyBindings.OPEN_DATABASE_MANAGER)
+            .graphic(MaterialDesignIcon.DATABASE)
 
         /**
          * Menu that allows the user to access the recent databases
@@ -108,22 +123,26 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
                 init {
                     databaseTracker.savedDatabases.forEach { db -> this.menuItem(menuItemFactory.invoke(db)) }
                     databaseTracker.registerObserver(trackerObserver)
+                    this.graphic(MaterialDesignIcon.BOOK_OPEN_VARIANT)
                 }
             }
 
-        private fun revealInExplorerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.reveal")).action {
-            databaseMeta.file.revealInExplorer()
-        }
+        private fun revealInExplorerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.reveal"))
+            .action { databaseMeta.file.revealInExplorer() }
+            .graphic(MaterialDesignIcon.FOLDER)
 
-        private fun databaseManagerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.dbmanager")).action {
-            DatabaseManagerActivity().show(databaseTracker, context.contextWindow)
-        }.keyCombination(KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN))
+        private fun closeWindowMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.closewindow"))
+            .action { context.close() }
+            .graphic(MaterialDesignIcon.CLOSE)
 
-        private fun closeWindowMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.closewindow")).action {
-            context.close()
-        }
+        private fun restartMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.restart"))
+            .action { context.contextScene?.onKeyPressed?.handle(DefaultKeyBindings.RESTART_APPLICATION.asKeyEvent()) }
+            .keyCombination(DefaultKeyBindings.RESTART_APPLICATION)
+            .graphic(MaterialDesignIcon.UPDATE)
 
-        private fun quitMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.quit")).action { Platform.exit() }
+        private fun quitMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.quit"))
+            .action { Platform.exit() }
+            .graphic(MaterialDesignIcon.CLOSE_BOX)
 
         private fun startActivityLauncher(getActivityLauncher: () -> ActivityLauncher) {
             SingleThreadExecutor.submit(object : Task<Unit>() {
