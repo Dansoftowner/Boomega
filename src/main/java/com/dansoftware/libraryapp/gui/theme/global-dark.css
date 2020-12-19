@@ -240,6 +240,10 @@ custom
     -fx-background-color: #1d2129;
 }
 
+.menu-bar .menu-item .glyph-icon {
+    -fx-fill: white;
+}
+
 .text-field:readonly {
     -right-button-visible: false;
 }
@@ -379,7 +383,9 @@ custom
 .notification-node .content-panel .title {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
+    -fx-text-fill: white;
 }
 .notification-node .content-panel .message {
     -fx-font-size: 10px;
+    -fx-text-fill: white;
 }
