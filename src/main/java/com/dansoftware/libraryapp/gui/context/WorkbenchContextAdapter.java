@@ -18,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
@@ -118,45 +119,35 @@ final class WorkbenchContextAdapter implements Context {
     @Override
     public ButtonType showErrorDialogAndWait(String title, String message) {
         final var key = new Object();
-        showErrorDialog(title, message, buttonType -> {
-            Platform.exitNestedEventLoop(key, buttonType);
-        });
+        showErrorDialog(title, message, buttonType -> Platform.exitNestedEventLoop(key, buttonType));
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showErrorDialogAndWait(String title, String message, Exception e) {
         final var key = new Object();
-        showErrorDialog(title, message, e, buttonType -> {
-            Platform.exitNestedEventLoop(key, buttonType);
-        });
+        showErrorDialog(title, message, e, buttonType -> Platform.exitNestedEventLoop(key, buttonType));
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showInformationDialogAndWait(String title, String message) {
         final var key = new Object();
-        showInformationDialog(title, message, buttonType -> {
-            Platform.exitNestedEventLoop(key, buttonType);
-        });
+        showInformationDialog(title, message, buttonType -> Platform.exitNestedEventLoop(key, buttonType));
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showConfirmationDialogAndWait(String title, String message) {
         final var key = new Object();
-        showConfirmationDialog(title, message, buttonType -> {
-            Platform.exitNestedEventLoop(key, buttonType);
-        });
+        showConfirmationDialog(title, message, buttonType -> Platform.exitNestedEventLoop(key, buttonType));
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
     public ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes) {
         final var key = new Object();
-        this.showDialog(title, content, buttonType -> {
-            Platform.exitNestedEventLoop(key, buttonType);
-        }, buttonTypes);
+        this.showDialog(title, content, buttonType -> Platform.exitNestedEventLoop(key, buttonType), buttonTypes);
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
@@ -247,13 +238,20 @@ final class WorkbenchContextAdapter implements Context {
     }
 
     @Override
+    public Scene getContextScene() {
+        return workbench.getScene();
+    }
+
+    @Override
     public Window getContextWindow() {
         return WindowUtils.getWindowOf(workbench);
     }
 
     @Override
     public void requestFocus() {
-        getContextWindow().requestFocus();
+        final Window contextWindow = getContextWindow();
+        if (contextWindow != null)
+            contextWindow.requestFocus();
     }
 
     @Override
@@ -268,7 +266,8 @@ final class WorkbenchContextAdapter implements Context {
 
     @Override
     public boolean isShowing() {
-        return getContextWindow().isShowing();
+        final Window contextWindow = getContextWindow();
+        return contextWindow != null && contextWindow.isShowing();
     }
 
     @Override

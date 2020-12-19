@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.context;
 import com.dlsc.workbenchfx.Workbench;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
@@ -10,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -119,7 +121,10 @@ public interface Context {
     void showInformationNotification(String title, String message, Duration duration);
     void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
 
+    @Nullable
+    Scene getContextScene();
 
+    @Nullable
     Window getContextWindow();
 
     /**
@@ -151,7 +156,7 @@ public interface Context {
         Window window = getContextWindow();
         if (window instanceof Stage)
             ((Stage) window).close();
-        else
+        else if (window != null)
             window.hide();
     }
 

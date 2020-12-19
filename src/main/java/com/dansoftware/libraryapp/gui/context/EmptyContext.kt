@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.context
 
 import javafx.event.EventHandler
 import javafx.scene.Node
+import javafx.scene.Scene
 import javafx.scene.control.ButtonType
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Region
@@ -117,6 +118,8 @@ private class EmptyContext : Context {
     ) {
         TODO("Not yet implemented")
     }
+
+    override fun getContextScene(): Scene? = null
 
     override fun getContextWindow(): Window? = null
 
