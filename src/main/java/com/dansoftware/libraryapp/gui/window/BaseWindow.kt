@@ -54,6 +54,7 @@ abstract class BaseWindow<C> : Stage
         setupIconPack()
         buildRestartKeyCombination()
         buildExitDialogEvent()
+        buildFullScreenExitHint()
     }
 
     /**
@@ -115,6 +116,10 @@ abstract class BaseWindow<C> : Stage
                 }
             }
         })
+    }
+
+    private fun buildFullScreenExitHint() {
+        fullScreenExitHint = I18N.getGeneralValue("window.fullscreen.hint")
     }
 
     /**
