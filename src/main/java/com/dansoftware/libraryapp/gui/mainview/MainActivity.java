@@ -40,7 +40,10 @@ public class MainActivity implements ContextTransformable {
         mainWindow.show();
         mainWindow.addEventHandler(
                 WindowEvent.WINDOW_CLOSE_REQUEST,
-                event -> databaseTracker.closingDatabase(database.getMeta()));
+                event -> {
+                    database.close();
+                    databaseTracker.closingDatabase(database.getMeta());
+                });
         return true;
     }
 
