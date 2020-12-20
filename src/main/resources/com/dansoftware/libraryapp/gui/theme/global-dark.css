@@ -1,0 +1,43 @@
+/*Some tab pane trifles*/
+.tab .tab-close-button {
+    -fx-background-color: whitesmoke;
+}
+
+.tab .tab-close-button:hover {
+    -fx-background-color: red;
+}
+
+/** MDFXNode */
+* {
+    -mdfx-font-color: white;
+    -mdfx-border-color-1: #ffffff;
+
+    -mdfx-bg-color-1: #ccc;
+    -mdfx-bg-color-2: #ddd;
+    -mdfx-bg-color-3: #eee;
+}
+.markdown-text {
+    -fx-font-family: ARIAL;
+}
+.markdown-italic {
+    -fx-font-style: italic;
+}
+.markdown-bold {
+    -fx-font-weight: bold;
+}
+
+.button .glyph-icon {
+    /*-fx-fill: black;*/
+}
+
+.menu-bar-base {
+    -fx-background-color: #1d2129;
+}
+
+.menu-bar .menu-item .glyph-icon {
+    -fx-fill: white;
+}
+
+.text-field:readonly {
+    -right-button-visible: false;
+}

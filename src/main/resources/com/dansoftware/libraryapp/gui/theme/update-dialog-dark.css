@@ -1,0 +1,15 @@
+.update-view-available-label {
+    -fx-font-size: 32px;
+}
+
+.no-binary-available-place-holder .label {
+    -fx-text-fill: red;
+}
+
+.updateDialog {
+    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
+}
+
+.progress-bar.paused .bar {
+    -fx-background-color: #e5c405;
+}

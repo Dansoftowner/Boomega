@@ -4,6 +4,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * A {@link StyleSheetThemeApplier} is a {@link ThemeApplier} that
  * can apply css-style resources on GUI elements.
@@ -12,34 +14,34 @@ import org.jetbrains.annotations.NotNull;
  */
 public class StyleSheetThemeApplier implements ThemeApplier {
 
-    private final String styleSheetPath;
+    private final List<String> styleSheets;
 
     /**
      * Creates a normal {@link StyleSheetThemeApplier}.
      *
-     * @param styleSheetPath the stylesheet path
+     * @param styleSheets List of stylesheet paths
      */
-    public StyleSheetThemeApplier(@NotNull String styleSheetPath) {
-        this.styleSheetPath = styleSheetPath;
+    public StyleSheetThemeApplier(@NotNull List<String> styleSheets) {
+        this.styleSheets = styleSheets;
     }
 
     @Override
     public void apply(@NotNull Scene scene) {
-        scene.getStylesheets().add(styleSheetPath);
+        scene.getStylesheets().addAll(styleSheets);
     }
 
     @Override
     public void apply(@NotNull Parent parent) {
-        parent.getStylesheets().add(styleSheetPath);
+        parent.getStylesheets().addAll(styleSheets);
     }
 
     @Override
     public void applyBack(@NotNull Scene scene) {
-        scene.getStylesheets().remove(styleSheetPath);
+        scene.getStylesheets().removeAll(styleSheets);
     }
 
     @Override
     public void applyBack(@NotNull Parent parent) {
-        parent.getStylesheets().remove(styleSheetPath);
+        parent.getStylesheets().removeAll(styleSheets);
     }
 }

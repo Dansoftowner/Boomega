@@ -1,0 +1,28 @@
+* {
+    -primary-color: #e5e5e5;
+    -primary-variant-color: #003d71;
+    -secondary-color: #6300ff;
+    -secondary-variant-color: #1e005f;
+    -background-color: #FFFFFF;
+    -surface-color: #FFFFFF;
+    -error-color: #B00020;
+    -on-primary-color: black;
+    -on-secondary-color: #FFFFFF;
+    -on-background-color: #000000;
+    -on-surface-color: #000000;
+    -on-error-color: #FFFFFF;
+}
+
+.alertDialog .button {
+    -fx-padding: 5;
+}
+
+#add-button {
+    -fx-background-radius: 5 5 0 0;
+    -fx-border-radius: 5 5 0 0;
+}
+
+#add-button:focused {
+    -fx-border-color: gray;
+    -fx-border-style: solid;
+}

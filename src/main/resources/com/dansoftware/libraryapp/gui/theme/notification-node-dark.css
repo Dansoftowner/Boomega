@@ -1,0 +1,25 @@
+.notification-node {
+    -fx-background-color: #262626;
+    -fx-border-color: lightgray;
+    -fx-border-width: 0.5;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-padding: 10;
+}
+
+.notification-node .content-panel {
+    -fx-padding: 0 25 0 0;
+}
+
+.notification-node .close-btn {
+}
+
+.notification-node .content-panel .title {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+.notification-node .content-panel .message {
+    -fx-font-size: 10px;
+    -fx-text-fill: white;
+}

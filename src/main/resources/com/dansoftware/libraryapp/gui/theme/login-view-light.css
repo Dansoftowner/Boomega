@@ -1,0 +1,20 @@
+.login-form {
+    -fx-background-image: url("/com/dansoftware/libraryapp/image/backgrounds/background-light.jpg");
+    -fx-background-size: stretch;
+}
+
+.login-box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.source-adder {
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.login-box .header .logo {
+    -fx-image: url("/com/dansoftware/libraryapp/image/login/form-header_light.png");
+}

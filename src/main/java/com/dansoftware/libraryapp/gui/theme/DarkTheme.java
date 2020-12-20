@@ -4,6 +4,8 @@ import com.dansoftware.libraryapp.locale.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * A DarkTheme is a {@link Theme} implementation that applies a dark-looking theme.
  *
@@ -16,8 +18,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DarkTheme extends Theme {
 
-    private static final String GLOBAL_DARK_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-dark.css";
-
     private static final ThemeMeta<DarkTheme> THEME_META =
             new ThemeMeta<>(DarkTheme.class, () -> I18N.getGeneralValue("theme.dark"), InternalThemeDesigner.INSTANCE);
 
@@ -25,12 +25,24 @@ public class DarkTheme extends Theme {
         registerTheme(THEME_META);
     }
 
+    private final List<String> styleSheets = List.of(
+            "/com/dansoftware/libraryapp/gui/theme/database-manager-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/first-time-dialog-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/global-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/global-workbench-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/info-view-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/login-view-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/notification-node-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/plugin-manager-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/update-dialog-dark.css"
+    );
+
     private final ThemeApplier globalApplier;
     private final ThemeApplier customApplier;
 
     public DarkTheme() {
         super();
-        this.globalApplier = new StyleSheetThemeApplier(GLOBAL_DARK_STYLE_SHEET);
+        this.globalApplier = new StyleSheetThemeApplier(styleSheets);
         this.customApplier = new JMetroThemeApplier(Style.DARK);
     }
 

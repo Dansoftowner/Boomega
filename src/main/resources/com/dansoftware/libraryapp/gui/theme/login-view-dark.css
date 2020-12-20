@@ -1,0 +1,29 @@
+.login-form {
+    -fx-background-image: url("/com/dansoftware/libraryapp/image/backgrounds/background-dark.jpg");
+    -fx-background-size: stretch;
+}
+
+
+.login-box {
+    -fx-background-color: #202530;
+    -fx-effect: dropshadow(three-pass-box, #757575, 10.0, 0, 0, 0);
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.login-box .button {
+    -fx-background-color: #14181f;
+}
+
+.login-box .button:default {
+    -fx-background-color: #0078D7;
+}
+
+.login-box .source-adder {
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.login-box .header .logo {
+    -fx-image: url("/com/dansoftware/libraryapp/image/login/form-header_dark.png");
+}

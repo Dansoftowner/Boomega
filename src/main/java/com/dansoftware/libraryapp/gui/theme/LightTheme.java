@@ -4,6 +4,8 @@ import com.dansoftware.libraryapp.locale.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * A LightTheme is a {@link Theme} implementation that applies a light theme.
  * It's also considered to be the default application theme.
@@ -17,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LightTheme extends Theme {
 
-    private static final String GLOBAL_LIGHT_STYLE_SHEET = "/com/dansoftware/libraryapp/gui/theme/global-light.css";
-
     private static final ThemeMeta<LightTheme> THEME_META =
             new ThemeMeta<>(LightTheme.class, () -> I18N.getGeneralValue("theme.light"), InternalThemeDesigner.INSTANCE);
 
@@ -26,12 +26,24 @@ public class LightTheme extends Theme {
         registerTheme(THEME_META);
     }
 
+    private final List<String> styleSheets = List.of(
+            "/com/dansoftware/libraryapp/gui/theme/database-manager-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/first-time-dialog-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/global-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/global-workbench-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/info-view-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/login-view-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/notification-node-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/plugin-manager-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/update-dialog-light.css"
+    );
+
     private final ThemeApplier globalApplier;
     private final ThemeApplier customApplier;
 
     public LightTheme() {
         super();
-        this.globalApplier = new StyleSheetThemeApplier(GLOBAL_LIGHT_STYLE_SHEET);
+        this.globalApplier = new StyleSheetThemeApplier(styleSheets);
         this.customApplier = new JMetroThemeApplier(Style.LIGHT);
     }
 

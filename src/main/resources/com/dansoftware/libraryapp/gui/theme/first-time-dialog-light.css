@@ -1,0 +1,44 @@
+.firstTimeDialog .radio-button:hover {
+    -fx-background-color: #b8d5ea;
+}
+
+.firstTimeDialog .radio-button:selected {
+    -fx-background-color: #a5c4d9;
+}
+
+.nextSegmentButton {
+}
+
+.prevSegmentButton {
+}
+
+.segmentLabelArea {
+    -fx-padding: 5 5 10 5;
+}
+
+.segmentDialogBottom {
+    -fx-padding: 10;
+}
+
+.segmentLabelSeparator .graphic {
+    /*-fx-image: url("right-arrow.png");*/
+}
+
+.segmentLabel {
+}
+
+.segmentLabel:focused {
+    -fx-font-weight: bold;
+    -fx-border-width: 0 0 2.5 0;
+    -fx-border-color: #356ec8;
+}
+
+.segmentTitleLabel {
+    -fx-padding: 10;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+.segmentLabelSeparator .graphic {
+    -fx-image: url("/com/dansoftware/libraryapp/image/firsttime/right-arrow.png");
+}
