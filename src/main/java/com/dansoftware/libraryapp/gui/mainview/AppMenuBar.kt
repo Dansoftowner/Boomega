@@ -11,30 +11,40 @@ import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
 import com.dansoftware.libraryapp.gui.info.InformationActivity
 import com.dansoftware.libraryapp.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.libraryapp.gui.theme.Theme
+import com.dansoftware.libraryapp.gui.theme.Themeable
 import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity
 import com.dansoftware.libraryapp.gui.util.*
 import com.dansoftware.libraryapp.launcher.ActivityLauncher
 import com.dansoftware.libraryapp.launcher.LauncherMode
 import com.dansoftware.libraryapp.locale.I18N
+import com.dansoftware.libraryapp.main.ApplicationRestart
 import com.dansoftware.libraryapp.update.UpdateSearcher
+import com.dansoftware.libraryapp.util.ReflectionUtils
 import com.dansoftware.libraryapp.util.SingleThreadExecutor
 import com.dansoftware.libraryapp.util.revealInExplorer
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
 import javafx.collections.ListChangeListener
 import javafx.concurrent.Task
-import javafx.scene.control.CheckMenuItem
-import javafx.scene.control.Menu
-import javafx.scene.control.MenuItem
+import javafx.scene.control.*
 import javafx.stage.Stage
 import javafx.stage.Window
+import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
+import java.util.*
 
 class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Preferences, tracker: DatabaseTracker) :
     javafx.scene.control.MenuBar() {
+
+    companion object {
+        @JvmStatic
+        val logger = LoggerFactory.getLogger(AppMenuBar::class.java)
+    }
+
     init {
         this.menus.addAll(
             FileMenu(context, databaseMeta, preferences, tracker),
+            PreferencesMenu(context, preferences),
             WindowMenu(context),
             HelpMenu(context)
         )
@@ -176,6 +186,82 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
             })
         }
     }
+
+    /**
+     * The Preferences/Settings menu
+     */
+    private class PreferencesMenu(val context: Context, val preferences: Preferences) :
+        Menu(I18N.getMenuBarValue("menubar.menu.preferences")) {
+        init {
+            this.menuItem(settingsMenu())
+                .separator()
+                .menuItem(themeMenu())
+                .menuItem(langMenu())
+        }
+
+        private fun settingsMenu() = MenuItem(I18N.getMenuBarValue("menubar.menu.preferences.settings"))
+            .action { }
+            .graphic(MaterialDesignIcon.SETTINGS)
+
+        private fun themeMenu() = object : Menu(I18N.getMenuBarValue("menubar.menu.preferences.theme")) {
+
+            private val themeChangeListener = Themeable { _, newTheme ->
+                items.forEach { if (it is RadioMenuItem) it.isSelected = newTheme.javaClass == it.userData }
+            }
+
+            init {
+                Theme.registerThemeable(themeChangeListener)
+                this.graphic(MaterialDesignIcon.FORMAT_PAINT)
+                this.buildItems()
+            }
+
+            private fun buildItems() {
+                val toggleGroup = ToggleGroup()
+                Theme.getAvailableThemesData().forEach { themeMeta ->
+                    this.menuItem(RadioMenuItem(themeMeta.displayNameSupplier.get()).also {
+                        it.toggleGroup = toggleGroup
+                        it.userData = themeMeta.themeClass
+                        it.isSelected = Theme.getDefault().javaClass == themeMeta.themeClass
+                        it.action {
+                            try {
+                                val themeObject = ReflectionUtils.constructObject(themeMeta.themeClass)
+                                logger.debug("The theme object: {}", themeObject)
+                                Theme.setDefault(themeObject)
+                                preferences.editor().put(Preferences.Key.THEME, themeObject)
+                            } catch (e: Exception) {
+                                logger.error("Couldn't set the theme", e)
+                                // TODO: error dialog
+                            }
+                        }
+                    })
+                }
+            }
+        }
+
+        private fun langMenu() = Menu(I18N.getMenuBarValue("menubar.menu.preferences.lang"))
+            .also { menu ->
+                val toggleGroup = ToggleGroup()
+                I18N.getAvailableLocales().forEach { locale ->
+                    menu.menuItem(RadioMenuItem(locale.displayLanguage).also {
+                        it.toggleGroup = toggleGroup
+                        it.isSelected = Locale.getDefault() == locale
+                        it.setOnAction {
+                            preferences.editor().put(Preferences.Key.LOCALE, locale)
+                            context.showConfirmationDialog(
+                                I18N.getGeneralValue("app.lang.restart.title"),
+                                I18N.getGeneralValue("app.lang.restart.msg")
+                            ) { btn ->
+                                when {
+                                    btn.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+            .graphic(MaterialDesignIcon.TRANSLATE)
+    }
+
 
     /**
      * The 'Window' menu
