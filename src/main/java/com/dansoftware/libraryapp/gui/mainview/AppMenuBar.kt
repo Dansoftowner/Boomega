@@ -8,10 +8,14 @@ import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener
 import com.dansoftware.libraryapp.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker
 import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
+import com.dansoftware.libraryapp.gui.info.InformationActivity
+import com.dansoftware.libraryapp.gui.theme.Theme
+import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity
 import com.dansoftware.libraryapp.gui.util.*
 import com.dansoftware.libraryapp.launcher.ActivityLauncher
 import com.dansoftware.libraryapp.launcher.LauncherMode
 import com.dansoftware.libraryapp.locale.I18N
+import com.dansoftware.libraryapp.update.UpdateSearcher
 import com.dansoftware.libraryapp.util.SingleThreadExecutor
 import com.dansoftware.libraryapp.util.revealInExplorer
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -30,7 +34,8 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
     init {
         this.menus.addAll(
             FileMenu(context, databaseMeta, preferences, tracker),
-            WindowMenu(context)
+            WindowMenu(context),
+            HelpMenu(context)
         )
     }
 
@@ -169,12 +174,11 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
     /**
      * The 'Window' menu
      */
-    private class WindowMenu(val context: Context) :
-        Menu(I18N.getMenuBarValue("menubar.menu.window")) {
+    private class WindowMenu(val context: Context) : Menu(I18N.getMenuBarValue("menubar.menu.window")) {
 
         private val windowsChangeOperator = object {
             fun onWindowsAdded(windows: List<Window>) {
-                windows.filter { it is Stage && it.owner == null} .map { it as Stage }.forEach { window ->
+                windows.filter { it is Stage && it.owner == null }.map { it as Stage }.forEach { window ->
                     this@WindowMenu.menuItem(CheckMenuItem().also {
                         it.userData = WeakReference<Window>(window)
                         it.textProperty().bind(window.titleProperty())
@@ -187,7 +191,7 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
             }
 
             fun onWindowsRemoved(windows: List<Window>) {
-                windows.filter { it is Stage && it.owner == null}.forEach { window ->
+                windows.filter { it is Stage && it.owner == null }.forEach { window ->
                     val iterator = this@WindowMenu.items.iterator()
                     while (iterator.hasNext()) {
                         val element = iterator.next()
@@ -222,6 +226,22 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
             .action { context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() } }
             .keyCombination(DefaultKeyBindings.FULL_SCREEN)
             .graphic(MaterialDesignIcon.FULLSCREEN)
+    }
+
+    private class HelpMenu(val context: Context) : Menu(I18N.getMenuBarValue("menubar.menu.help")) {
+
+        init {
+            this.menuItem(updateSearcherMenuItem())
+                .menuItem(infoMenuItem())
+        }
+
+        private fun updateSearcherMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.help.update"))
+            .action { UpdateActivity(context, UpdateSearcher.defaultInstance().search()).show(true) }
+            .graphic(MaterialDesignIcon.UPDATE)
+
+        private fun infoMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.help.about"))
+            .action { InformationActivity(context).show() }
+            .graphic(MaterialDesignIcon.INFORMATION)
     }
 }
 
