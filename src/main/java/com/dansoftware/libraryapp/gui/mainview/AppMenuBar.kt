@@ -9,6 +9,7 @@ import com.dansoftware.libraryapp.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker
 import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
 import com.dansoftware.libraryapp.gui.info.InformationActivity
+import com.dansoftware.libraryapp.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.libraryapp.gui.theme.Theme
 import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity
 import com.dansoftware.libraryapp.gui.util.*
@@ -56,10 +57,11 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
                 .menuItem(databaseManagerMenuItem())
                 .menuItem(recentDatabasesMenuItem())
                 .separator()
+                .menuItem(pluginManagerMenuItem())
+                .separator()
                 .menuItem(revealInExplorerMenuItem())
                 .separator()
                 .menuItem(closeWindowMenuItem())
-                .separator()
                 .menuItem(restartMenuItem())
                 .menuItem(quitMenuItem())
         }
@@ -137,6 +139,10 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
                     this.graphic(MaterialDesignIcon.BOOK_OPEN_VARIANT)
                 }
             }
+
+        private fun pluginManagerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.pluginmanager"))
+            .action { PluginManagerActivity().show(context.contextWindow) }
+            .graphic(MaterialDesignIcon.POWER_PLUG)
 
         private fun revealInExplorerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.reveal"))
             .action { databaseMeta.file.revealInExplorer() }
