@@ -78,6 +78,10 @@ public abstract class Theme {
         return registeredThemes.keySet();
     }
 
+    public static Collection<ThemeMeta<? extends Theme>> getAvailableThemesData() {
+        return registeredThemes.values();
+    }
+
     protected Theme() {
     }
 
