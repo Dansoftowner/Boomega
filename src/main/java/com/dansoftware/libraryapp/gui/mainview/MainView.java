@@ -48,10 +48,8 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
 
     @Override
     public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.applyBack(this.menuBar);
-        newTheme.apply(this.menuBar);
-        oldTheme.getGlobalApplier().applyBack(this.contentView);
-        newTheme.getGlobalApplier().apply(this.contentView);
+        oldTheme.applyBack(this);
+        newTheme.apply(this);
     }
 
     private static final class MenuBarBase extends StackPane {
