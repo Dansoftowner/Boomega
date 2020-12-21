@@ -33,15 +33,20 @@ import java.io.File;
  */
 public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements Themeable, ContextTransformable {
 
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private final LoginActivity loginActivity;
+
     private final Context asContext;
     private final LoginForm loginForm;
     private final ObjectProperty<Database> createdDatabase;
 
-    public LoginView(@NotNull DatabaseLoginListener databaseLoginListener,
+    public LoginView(@NotNull LoginActivity loginActivity,
+                     @NotNull DatabaseLoginListener databaseLoginListener,
                      @NotNull Preferences preferences,
                      @NotNull LoginData loginData,
                      @NotNull DatabaseTracker tracker) {
         super(I18N.getGeneralValue("database.auth"), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
+        this.loginActivity = loginActivity;
         this.asContext = Context.from(this);
         this.createdDatabase = new SimpleObjectProperty<>();
         this.loginForm = new LoginForm(asContext, preferences, loginData, tracker, databaseLoginListener);
