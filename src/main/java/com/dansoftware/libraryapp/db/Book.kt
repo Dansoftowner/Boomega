@@ -28,18 +28,19 @@ data class Book(
 ) {
     var googleID: String? = null
 
-    private constructor(builder: Builder) {
-        title = Objects.requireNonNull(builder.title)
-        authors = Objects.requireNonNull(builder.authors)
-        publishedYear = builder.publishedYear
-        numberOfCopies = builder.numberOfCopies
-        numberOfPages = builder.numberOfPages
-        language = builder.language
-        notes = builder.notes
-        isbn = builder.isbn
-        publisher = builder.publisher
-        subject = builder.subject
-    }
+    private constructor(builder: Builder) : this(
+        null,
+        builder.publishedYear,
+        builder.numberOfCopies,
+        builder.numberOfPages,
+        builder.authors,
+        builder.title,
+        builder.language,
+        builder.notes,
+        builder.isbn,
+        builder.publisher,
+        builder.subject
+    )
 
     override fun toString(): String {
         return "Book{id=$id, authors=$authors, title='$title', isbn='$isbn'}"
