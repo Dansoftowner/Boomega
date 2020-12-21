@@ -76,7 +76,7 @@ public class LoginActivity implements ContextTransformable {
         return loginView.getContext();
     }
 
-    public static List<LoginActivity> getActiveLoginActivites() {
+    public static List<LoginActivity> getActiveLoginActivities() {
         return instances.stream()
                 .map(WeakReference::get)
                 .filter(Objects::nonNull)
