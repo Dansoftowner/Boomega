@@ -33,6 +33,11 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * Controller for the whole login box that has the database chooser and other additional controls.
+ *
+ * @author Daniel Gyorffy
+ */
 public class FrameFormController
         implements Initializable, DatabaseTracker.Observer {
 

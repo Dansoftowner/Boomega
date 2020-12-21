@@ -24,6 +24,11 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
+/**
+ * Controller for the actual login form; handles the login requests
+ *
+ * @author Daniel Gyorffy
+ */
 public class InternalFormController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(InternalFormController.class);
