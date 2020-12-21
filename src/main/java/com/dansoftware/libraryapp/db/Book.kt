@@ -1,235 +1,92 @@
-package com.dansoftware.libraryapp.db;
+package com.dansoftware.libraryapp.db
 
-import org.dizitart.no2.IndexType;
-import org.dizitart.no2.NitriteId;
-import org.dizitart.no2.objects.Id;
-import org.dizitart.no2.objects.Index;
-import org.dizitart.no2.objects.Indices;
-
-import java.util.List;
-import java.util.Objects;
+import org.dizitart.no2.IndexType
+import org.dizitart.no2.NitriteId
+import org.dizitart.no2.objects.Id
+import org.dizitart.no2.objects.Index
+import org.dizitart.no2.objects.Indices
+import java.util.*
 
 /**
- * A Book is a Plain Java Object that represents a <i>document</i> or a <i>record</i> in the database.
+ * A Book is a Plain Java Object that represents a *document* or a *record* in the database.
  *
- * <p>
- * Compatible with the <i>Nitrite</i> database api.
+ * Compatible with the *Nitrite* database api.
  */
-@Indices({ @Index(value = "isbn", type = IndexType.Unique) })
-public class Book {
+@Indices(Index(value = "isbn", type = IndexType.Unique))
+data class Book(
+    @field:Id var id: NitriteId? = null,
+    var publishedYear: Int,
+    var numberOfCopies: Int,
+    var numberOfPages: Int,
+    var authors: List<String>?,
+    var title: String?,
+    var language: String?,
+    var notes: String?,
+    var isbn: String?,
+    var publisher: String?,
+    var subject: String?
+) {
+    var googleID: String? = null
 
-    @Id
-    private NitriteId id;
-
-    private int publishedYear;
-    private int numberOfPages;
-    private int numberOfCopies;
-
-    private List<String> authors;
-    private String title;
-    private String language;
-    private String notes;
-    private String isbn;
-    private String publisher;
-    private String subject;
-
-    private String googleBookVolumeID;
-
-    public Book() {
+    private constructor(builder: Builder) {
+        title = Objects.requireNonNull(builder.title)
+        authors = Objects.requireNonNull(builder.authors)
+        publishedYear = builder.publishedYear
+        numberOfCopies = builder.numberOfCopies
+        numberOfPages = builder.numberOfPages
+        language = builder.language
+        notes = builder.notes
+        isbn = builder.isbn
+        publisher = builder.publisher
+        subject = builder.subject
     }
 
-    private Book(Builder builder) {
-        this.title = Objects.requireNonNull(builder.title);
-        this.authors = Objects.requireNonNull(builder.authors);
-        this.publishedYear = builder.publishedYear;
-        this.numberOfCopies = builder.numberOfCopies;
-        this.numberOfPages = builder.numberOfPages;
-        this.language = builder.language;
-        this.notes = builder.notes;
-        this.isbn = builder.isbn;
-        this.publisher = builder.publisher;
-        this.subject = builder.subject;
+    override fun toString(): String {
+        return "Book{id=$id, authors=$authors, title='$title', isbn='$isbn'}"
     }
 
-    public int getPublishedYear() {
-        return publishedYear;
-    }
+    class Builder {
+        var publishedYear = 0
+            private set
+        var numberOfPages = 0
+            private set
+        var numberOfCopies = 0
+            private set
+        var title: String? = null
+            private set
+        var language: String? = null
+            private set
+        var notes: String? = null
+            private set
+        var isbn: String? = null
+            private set
+        var publisher: String? = null
+            private set
+        var subject: String? = null
+            private set
+        var authors: List<String>? = null
+            private set
 
-    public void setPublishedYear(int publishedYear) {
-        this.publishedYear = publishedYear;
-    }
+        fun publishedYear(publishedYear: Int) = this.also { this.publishedYear = publishedYear }
 
-    public int getNumberOfPages() {
-        return numberOfPages;
-    }
+        fun numberOfPages(numberOfPages: Int) = this.also { this.numberOfPages = numberOfPages }
 
-    public void setNumberOfPages(int numberOfPages) {
-        this.numberOfPages = numberOfPages;
-    }
+        fun numberOfCopies(numberOfCopies: Int) = this.also { this.numberOfCopies = numberOfCopies }
 
-    public int getNumberOfCopies() {
-        return numberOfCopies;
-    }
+        fun title(title: String?) = this.also { this.title = title }
 
-    public void setNumberOfCopies(int numberOfCopies) {
-        this.numberOfCopies = numberOfCopies;
-    }
+        fun language(language: String?) = this.also { this.language = language }
 
-    public String getTitle() {
-        return title;
-    }
+        fun notes(notes: String?) = this.also { this.notes = notes }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+        fun isbn(isbn: String?) = this.also { this.isbn = isbn }
 
-    public String getLanguage() {
-        return language;
-    }
+        fun publisher(publisher: String?) = this.also { this.publisher = publisher }
 
-    public void setLanguage(String language) {
-        this.language = language;
-    }
+        fun subject(subject: String?) = this.also { this.subject = subject }
 
-    public String getNotes() {
-        return notes;
-    }
+        fun authors(authors: List<String>?) = this.also { this.authors = authors }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public List<String> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<String> authors) {
-        this.authors = authors;
-    }
-
-    public String getGoogleBookVolumeID() {
-        return googleBookVolumeID;
-    }
-
-    public void setGoogleBookVolumeID(String googleBookVolumeID) {
-        this.googleBookVolumeID = googleBookVolumeID;
-    }
-
-    public NitriteId getId() {
-        return id;
-    }
-
-    public void setId(NitriteId id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", authors=" + authors +
-                ", title='" + title + '\'' +
-                ", isbn='" + isbn + '\'' +
-                '}';
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private Builder() { }
-
-        private int publishedYear;
-        private int numberOfPages;
-        private int numberOfCopies;
-
-        private String title;
-        private String language;
-        private String notes;
-        private String isbn;
-
-        private String publisher;
-        private String subject;
-
-        private List<String> authors;
-
-        public Builder publishedYear(int publishedYear) {
-            this.publishedYear = publishedYear;
-            return this;
-        }
-
-        public Builder numberOfPages(int numberOfPages) {
-            this.numberOfPages = numberOfPages;
-            return this;
-        }
-
-        public Builder numberOfCopies(int numberOfCopies) {
-            this.numberOfCopies = numberOfCopies;
-            return this;
-        }
-
-        public Builder title(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public Builder language(String language) {
-            this.language = language;
-            return this;
-        }
-
-        public Builder notes(String notes) {
-            this.notes = notes;
-            return this;
-        }
-
-        public Builder isbn(String isbn) {
-            this.isbn = isbn;
-            return this;
-        }
-
-        public Builder publisher(String publisher) {
-            this.publisher = publisher;
-            return this;
-        }
-
-        public Builder subject(String subject) {
-            this.subject = subject;
-            return this;
-        }
-
-        public Builder authors(List<String> authors) {
-            this.authors = authors;
-            return this;
-        }
-
-        public Book build() {
-            return new Book(this);
-        }
+        fun build() = Book(this)
     }
 }
