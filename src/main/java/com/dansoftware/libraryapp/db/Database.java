@@ -1,35 +1,42 @@
 package com.dansoftware.libraryapp.db;
 
+import org.dizitart.no2.FindOptions;
+import org.dizitart.no2.objects.ObjectFilter;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
  * A Database object can communicate with a particular data source.
  *
  * <p>
- * It supports the CRUD operations with {@link Book} objects.
+ * It supports the CRUD operations with {@link Book} and {@link Magazine} objects.
  */
 public interface Database {
 
-    /**
-     * Inserts a book into the database.
-     *
-     * @param book the book to insert
-     */
-    void insertBook(Book book);
+    void insertMagazine(@NotNull Magazine magazine);
+
+    void updateMagazine(@NotNull Magazine magazine);
+
+    void removeMagazine(@NotNull Magazine magazine);
 
     /**
-     * Updates a book in the database.
+     * Loads all magazines into a {@link List}.
      *
-     * @param book the book to update
+     * @param fromCache if true the books will be loaded from a local cache.
+     * @return the {@link Magazine} objects
      */
-    void updateBook(Book book);
+    List<Magazine> getMagazines(boolean fromCache);
 
-    /**
-     * Removes a book from the database
-     *
-     * @param book the book to remove
-     */
-    void removeBook(Book book);
+    List<Magazine> getMagazines(FindOptions findOptions);
+
+    List<Magazine> getMagazines(ObjectFilter objectFilter, FindOptions findOptions);
+
+    void insertBook(@NotNull Book book);
+
+    void updateBook(@NotNull Book book);
+
+    void removeBook(@NotNull Book book);
 
     /**
      * Loads all books into a {@link List}.
@@ -39,6 +46,10 @@ public interface Database {
      * @return the {@link Book} objects
      */
     List<Book> getBooks(boolean fromCache);
+
+    List<Book> getBooks(FindOptions findOptions);
+
+    List<Book> getBooks(ObjectFilter objectFilter, FindOptions findOptions);
 
     /**
      * Removes all cache from memory.

@@ -1,7 +1,10 @@
 package com.dansoftware.libraryapp.db;
 
+import org.dizitart.no2.IndexType;
 import org.dizitart.no2.NitriteId;
 import org.dizitart.no2.objects.Id;
+import org.dizitart.no2.objects.Index;
+import org.dizitart.no2.objects.Indices;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +15,7 @@ import java.util.Objects;
  * <p>
  * Compatible with the <i>Nitrite</i> database api.
  */
+@Indices({ @Index(value = "isbn", type = IndexType.Unique) })
 public class Book {
 
     @Id
@@ -20,13 +24,16 @@ public class Book {
     private int publishedYear;
     private int numberOfPages;
     private int numberOfCopies;
+
+    private List<String> authors;
     private String title;
     private String language;
     private String notes;
     private String isbn;
     private String publisher;
     private String subject;
-    private List<String> authors;
+
+    private String googleBookVolumeID;
 
     public Book() {
     }
@@ -124,12 +131,30 @@ public class Book {
         this.authors = authors;
     }
 
+    public String getGoogleBookVolumeID() {
+        return googleBookVolumeID;
+    }
+
+    public void setGoogleBookVolumeID(String googleBookVolumeID) {
+        this.googleBookVolumeID = googleBookVolumeID;
+    }
+
     public NitriteId getId() {
         return id;
     }
 
     public void setId(NitriteId id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", authors=" + authors +
+                ", title='" + title + '\'' +
+                ", isbn='" + isbn + '\'' +
+                '}';
     }
 
     public static Builder builder() {
