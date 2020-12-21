@@ -132,7 +132,13 @@ public class Book {
         this.id = id;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
+        private Builder() { }
+
         private int publishedYear;
         private int numberOfPages;
         private int numberOfCopies;
