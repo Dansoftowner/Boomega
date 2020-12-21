@@ -21,6 +21,8 @@ object DependencyLister {
             DependencyInfo("Apache Commons IO", "http://commons.apache.org/proper/commons-io/", LicenseInfo.apache20License()),
             DependencyInfo("Apache Commons Lang", "https://commons.apache.org/proper/commons-lang/", LicenseInfo.apache20License()),
             DependencyInfo("Gson", "https://github.com/google/gson", LicenseInfo.apache20License()),
+            DependencyInfo("Google Books API Client Library", "https://github.com/googleapis/google-api-java-client-services/tree/master/clients/google-api-services-books/v1", LicenseInfo.apache20License()),
+            DependencyInfo("OkHttp", "https://square.github.io/okhttp/", LicenseInfo.apache20License()),
             DependencyInfo("Jetbrains annotations", "https://github.com/JetBrains/java-annotations", LicenseInfo.apache20License()),
             DependencyInfo("Jasypt", "http://www.jasypt.org/index.html", LicenseInfo.apache20License()),
             DependencyInfo("jUnit 5", "https://junit.org/junit5/", LicenseInfo("Eclipse Public License - v 2.0", "https://github.com/junit-team/junit5/blob/main/LICENSE.md")),
