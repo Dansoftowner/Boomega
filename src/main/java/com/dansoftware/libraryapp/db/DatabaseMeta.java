@@ -14,6 +14,8 @@ public class DatabaseMeta {
     private String name;
     private File file;
 
+    private String stringFormat;
+
     public DatabaseMeta(@NotNull File file) {
         this.file = Objects.requireNonNull(file, "file mustn't be null");
         this.name = FilenameUtils.getBaseName(file.getName());
@@ -55,7 +57,9 @@ public class DatabaseMeta {
 
     @Override
     public String toString() {
-        return this.name + " (" + FileGoodies.shortenedFilePath(file, 1) + ")";
+        if (this.stringFormat == null)
+            this.stringFormat = this.name + " (" + FileGoodies.shortenedFilePath(file, 1) + ")";
+        return this.stringFormat;
     }
 
     public static DatabaseMeta parseFrom(String filePath) {
