@@ -98,6 +98,8 @@ dependencies {
     libraries 'com.github.Dansoftowner:jFileGoodies:1.2.6'
     libraries 'com.github.oshi:oshi-core:5.3.4'
 
+    libraries 'com.squareup.okhttp3:okhttp:4.9.0'
+
     /*** JAVA FX LIBRARIES ***/
 
     libraries 'com.jfoenix:jfoenix:9.0.9'
