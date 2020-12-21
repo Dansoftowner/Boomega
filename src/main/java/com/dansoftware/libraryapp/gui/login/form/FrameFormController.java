@@ -113,7 +113,7 @@ public class FrameFormController
 
     private Node loadInternalForm() {
         if (internalForm == null) {
-            var fxmlController = new InternalFormController(context, preferences, loginData, databaseLoginListener,
+            var fxmlController = new InternalFormController(context, preferences, databaseTracker, loginData, databaseLoginListener,
                     () -> databaseChooser.getSelectionModel().getSelectedItem());
             var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getLoginViewValues());
             internalForm = fxmlLoader.load();

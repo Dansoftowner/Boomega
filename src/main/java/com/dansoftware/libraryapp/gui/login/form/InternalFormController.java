@@ -7,7 +7,9 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.login.DatabaseLoginListener;
+import com.dansoftware.libraryapp.gui.mainview.MainActivity;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -35,24 +37,22 @@ public class InternalFormController implements Initializable {
     @FXML
     private CheckBox rememberBox;
 
-
     private final Context context;
-
     private final Preferences preferences;
-
+    private final DatabaseTracker databaseTracker;
     private final LoginData loginData;
-
     private final Supplier<DatabaseMeta> selectedItemAccessor;
-
     private final DatabaseLoginListener databaseLoginListener;
 
     public InternalFormController(@NotNull Context context,
                                   @NotNull Preferences preferences,
+                                  @NotNull DatabaseTracker databaseTracker,
                                   @NotNull LoginData loginData,
                                   @NotNull DatabaseLoginListener databaseLoginListener,
                                   @NotNull Supplier<DatabaseMeta> selectedItemAccessor) {
         this.context = Objects.requireNonNull(context, "Context shouldn't be null");
         this.preferences = Objects.requireNonNull(preferences);
+        this.databaseTracker = Objects.requireNonNull(databaseTracker);
         this.loginData = Objects.requireNonNull(loginData, "LoginData shouldn't be null");
         this.selectedItemAccessor = Objects.requireNonNull(selectedItemAccessor, "SelectedItemAccessor shouldn't be null");
         this.databaseLoginListener = Objects.requireNonNull(databaseLoginListener, "DatabaseLoginListener shouldn't be null");
@@ -79,6 +79,13 @@ public class InternalFormController implements Initializable {
     @FXML
     private void login() {
         DatabaseMeta dbMeta = selectedItemAccessor.get();
+        if (databaseTracker.isDatabaseUsed(dbMeta)) {
+            MainActivity.getByDatabase(dbMeta)
+                    .map(MainActivity::getContext)
+                    .ifPresent(Context::toFront);
+            return;
+        }
+
         String username = StringUtils.trim(usernameInput.getText());
         String password = StringUtils.trim(passwordInput.getText());
 
