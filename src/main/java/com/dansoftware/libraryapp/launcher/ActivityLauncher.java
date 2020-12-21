@@ -9,6 +9,7 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.entry.EntryActivity;
 import com.dansoftware.libraryapp.gui.login.DatabaseLoginListener;
+import com.dansoftware.libraryapp.gui.login.LoginActivity;
 import com.dansoftware.libraryapp.gui.login.quick.QuickLoginActivity;
 import com.dansoftware.libraryapp.gui.mainview.MainActivity;
 import com.dansoftware.libraryapp.main.ArgumentTransformer;
@@ -306,7 +307,15 @@ public class ActivityLauncher implements Runnable {
     }
 
     private void handleNoArgumentInternal() {
-        Platform.runLater(() -> onActivityLaunched(showEntryActivity().getContext(), null));
+        Platform.runLater(() -> {
+            LoginActivity.getActiveLoginActivities().stream()
+                    .map(LoginActivity::getContext)
+                    .findAny()
+                    .ifPresentOrElse(loginActivityContext -> {
+                        loginActivityContext.toFront();
+                        onActivityLaunched(loginActivityContext, null);
+                    }, () -> onActivityLaunched(showEntryActivity().getContext(), null));
+        });
     }
 
     /**
