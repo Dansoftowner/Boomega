@@ -100,9 +100,6 @@ dependencies {
     // OkHttp
     libraries 'com.squareup.okhttp3:okhttp:4.9.0'
 
-    // Google books api client library
-    libraries 'com.google.apis:google-api-services-books:v1-rev20201021-1.31.0'
-
     /*** JAVA FX LIBRARIES ***/
 
     libraries 'com.jfoenix:jfoenix:9.0.9'
