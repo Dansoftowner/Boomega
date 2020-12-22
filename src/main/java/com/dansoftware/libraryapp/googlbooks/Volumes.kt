@@ -43,6 +43,9 @@ data class Volume(var id: String?) {
             var small: String? = null
             var smallThumbnail: String? = null
             var thumbnail: String? = null
+
+            fun getLargest(): String =
+                listOfNotNull(extraLarge, large, medium, thumbnail, small, smallThumbnail).first()
         }
 
         class IndustryIdentifier {
