@@ -100,6 +100,8 @@ dependencies {
     // OkHttp
     libraries 'com.squareup.okhttp3:okhttp:4.9.0'
 
+    libraries 'org.apache.httpcomponents:httpclient:4.5.13'
+
     /*** JAVA FX LIBRARIES ***/
 
     libraries 'com.jfoenix:jfoenix:9.0.9'
