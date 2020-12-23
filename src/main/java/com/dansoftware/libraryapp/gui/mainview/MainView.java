@@ -18,7 +18,6 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
 
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final MainActivity activity;
-    private final Context asContext;
     private final Database database;
 
     private final MenuBarBase menuBar;
@@ -29,9 +28,9 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
              @NotNull Preferences preferences,
              @NotNull DatabaseTracker tracker) {
         this.activity = Objects.requireNonNull(activity);
-        this.asContext = Context.from(contentView = new MainContentView());
+        this.contentView = new MainContentView(database);
         this.database = database;
-        this.menuBar = new MenuBarBase(new AppMenuBar(asContext, database.getMeta(), preferences, tracker));
+        this.menuBar = new MenuBarBase(new AppMenuBar(contentView.getContext(), database.getMeta(), preferences, tracker));
         this.setTop(menuBar);
         this.setCenter(contentView);
         Theme.registerThemeable(this);
@@ -39,7 +38,7 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
 
     @Override
     public @NotNull Context getContext() {
-        return asContext;
+        return contentView.getContext();
     }
 
     public DatabaseMeta getOpenedDatabase() {
