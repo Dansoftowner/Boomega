@@ -86,6 +86,11 @@ public class I18N {
         return getValue(getMenuBarValues(), key, args);
     }
 
+    @NotNull
+    public static String getGoogleBooksImportValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getGoogleBooksImportValues(), key, args);
+    }
+
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
         if (ArrayUtils.isEmpty(args)) return resourceBundle.getString(key);
         return getFormat(resourceBundle, key, args);
