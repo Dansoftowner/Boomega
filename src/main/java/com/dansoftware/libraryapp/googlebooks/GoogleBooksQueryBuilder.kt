@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.googlebooks
 
 import com.dansoftware.libraryapp.util.Entry
+import com.dansoftware.libraryapp.util.ifNotEmpty
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.client.utils.URIBuilder
 import java.net.URISyntaxException
@@ -29,22 +30,32 @@ class GoogleBooksQueryBuilder {
         //pagination parameters
         private const val START_INDEX = "startIndex"
         private const val MAX_RESULTS = "maxResults"
-        private const val START_INDEX_DEFAULT = 0
-        private const val MAX_RESULTS_DEFAULT = 10
-
         //restriction parameters by printType
         private const val PRINT_TYPE = "printType"
         private const val ALL = "all"
+
         private const val BOOKS = "books"
         private const val MAGAZINES = "magazines"
-
         //Sorting
         private const val ORDER_BY = "orderBy"
         private const val NEWEST = "newest"
-        private const val RELEVANCE = "relevance"
 
+        private const val RELEVANCE = "relevance"
         //Filtering by language
         private const val LANG_RESTRICT = "langRestrict"
+
+        //defaults
+        private const val START_INDEX_DEFAULT = 0
+        private const val MAX_RESULTS_DEFAULT = 10
+        @JvmStatic private val TEXT_DEFAULT = null
+        @JvmStatic private val AUTHOR_DEFAULT = null
+        @JvmStatic private val TITLE_DEFAULT = null
+        @JvmStatic private val PUBLISHER_DEFAULT = null
+        @JvmStatic private val SUBJECT_DEFAULT = null
+        @JvmStatic private val ISBN_DEFAULT = null
+        @JvmStatic private val LANG_DEFAULT = null
+        @JvmStatic private val PRINT_TYPE_DEFAULT = null
+        @JvmStatic private val SORT_TYPE_DEFAULT = null
 
         @JvmStatic
         private fun encode(value: String): String {
@@ -57,6 +68,7 @@ class GoogleBooksQueryBuilder {
         }
     }
 
+    private var inText: String? = null
     private var inTitle: String? = null
     private var inAuthor: String? = null
     private var inPublisher: String? = null
@@ -68,15 +80,17 @@ class GoogleBooksQueryBuilder {
     private var printType: PrintType? = null
     private var sortType: SortType? = null
 
-    fun inTitle(inTitle: String?) = this.also { it.inTitle = inTitle }
+    fun inText(inText: String?) = this.also { it.inText = StringUtils.getIfBlank(inText, TEXT_DEFAULT) }
 
-    fun inAuthor(inAuthor: String?) = this.also { it.inAuthor = inAuthor }
+    fun inTitle(inTitle: String?) = this.also { it.inTitle = StringUtils.getIfBlank(inTitle, TITLE_DEFAULT) }
 
-    fun inPublisher(inPublisher: String?) = this.also { it.inPublisher = inPublisher }
+    fun inAuthor(inAuthor: String?) = this.also { it.inAuthor = StringUtils.getIfBlank(inAuthor, AUTHOR_DEFAULT) }
 
-    fun subject(subject: String?) = this.also { it.subject = subject }
+    fun inPublisher(inPublisher: String?) = this.also { it.inPublisher = StringUtils.getIfBlank(inPublisher, PUBLISHER_DEFAULT) }
 
-    fun isbn(isbn: String?) = this.also { it.isbn = isbn }
+    fun subject(subject: String?) = this.also { it.subject = StringUtils.getIfBlank(subject, SUBJECT_DEFAULT) }
+
+    fun isbn(isbn: String?) = this.also { it.isbn = StringUtils.getIfBlank(isbn, ISBN_DEFAULT) }
 
     fun startIndex(startIndex: Int) = this.also {
         require(startIndex >= 0) { "Start index can't be less than 0!" }
@@ -92,10 +106,12 @@ class GoogleBooksQueryBuilder {
 
     fun sortType(sortType: SortType?) = this.also { it.sortType = sortType }
 
-    fun language(lang: String?) = this.also { it.lang = lang }
+    fun language(lang: String?) = this.also { it.lang = StringUtils.getIfBlank(lang, LANG_DEFAULT) }
 
     private fun buildBaseQueryUrl(): String {
         val baseQueryBuilder = StringBuilder(BASE_URL).append("?q=")
+        inText?.let { baseQueryBuilder.append(encode(it)) }
+
         val queryParams: MutableList<String> = LinkedList()
         Stream.of(
             Entry(TITLE_FLAG, inTitle),
@@ -104,9 +120,10 @@ class GoogleBooksQueryBuilder {
             Entry(ISBN_FLAG, isbn),
             Entry(SUBJECT_FLAG, subject)
         ).forEach { entry ->
-            if (!StringUtils.isBlank(entry.value))
-                queryParams.add(entry.key + encode(entry.value!!))
+            if (entry.value !== null)
+                queryParams.add(entry.key + encode(entry.value))
         }
+        queryParams.ifNotEmpty { if (inText !== null) baseQueryBuilder.append('+') }
         return baseQueryBuilder
             .append(queryParams.joinToString("+"))
             .toString()
@@ -120,9 +137,9 @@ class GoogleBooksQueryBuilder {
             Stream.of(
                 ArgumentInfo(START_INDEX, startIndex, START_INDEX_DEFAULT),
                 ArgumentInfo(MAX_RESULTS, maxResults, MAX_RESULTS_DEFAULT),
-                ArgumentInfo(PRINT_TYPE, printType?.value, null),
-                ArgumentInfo(ORDER_BY, sortType?.value, null),
-                ArgumentInfo(LANG_RESTRICT, lang, null)
+                ArgumentInfo(PRINT_TYPE, printType?.value, PRINT_TYPE_DEFAULT),
+                ArgumentInfo(ORDER_BY, sortType?.value, SORT_TYPE_DEFAULT),
+                ArgumentInfo(LANG_RESTRICT, lang, LANG_DEFAULT)
             ).forEach { argumentInfo: ArgumentInfo ->
                 if (argumentInfo.value !== argumentInfo.defaultValue) {
                     additionalQueryBuilder.addParameter(argumentInfo.key.toString(), argumentInfo.value.toString())
