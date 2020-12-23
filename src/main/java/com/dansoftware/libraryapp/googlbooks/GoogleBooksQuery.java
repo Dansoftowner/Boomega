@@ -13,7 +13,7 @@ import java.net.URL;
  *
  * @author Daniel Gyorffy
  */
-public class GoogleBooksQuery extends Task<Volumes> {
+public class GoogleBooksQuery {
 
     private final String url;
 
@@ -25,10 +25,5 @@ public class GoogleBooksQuery extends Task<Volumes> {
         try(var reader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             return new Gson().fromJson(reader, Volumes.class);
         }
-    }
-
-    @Override
-    protected Volumes call() throws Exception {
-        return load();
     }
 }

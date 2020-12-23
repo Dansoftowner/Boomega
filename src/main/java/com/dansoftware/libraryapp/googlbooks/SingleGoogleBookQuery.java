@@ -14,7 +14,7 @@ import java.net.URL;
  *
  * @author Daniel Gyorffy
  */
-public class SingleGoogleBookQuery extends Task<Volume> {
+public class SingleGoogleBookQuery {
 
     private final String url;
 
@@ -26,10 +26,5 @@ public class SingleGoogleBookQuery extends Task<Volume> {
         try(var input = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             return new Gson().fromJson(input, Volume.class);
         }
-    }
-
-    @Override
-    protected Volume call() throws Exception {
-        return load();
     }
 }
