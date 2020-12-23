@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Used for loading the data of one particular Google Book.
@@ -22,7 +23,7 @@ public class SingleGoogleBookQuery {
     }
 
     public Volume load() throws IOException {
-        try (var input = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+        try (var input = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))) {
             return new Gson().fromJson(input, Volume.class);
         }
     }
