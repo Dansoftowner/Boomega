@@ -168,6 +168,12 @@ public class I18N {
         return languagePack.getMenuBarValues();
     }
 
+    @NotNull
+    public static ResourceBundle getGoogleBooksImportValues() {
+        recognizeLanguagePack();
+        return languagePack.getGoogleBooksImportValues();
+    }
+
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
         return MessageFormat.format(resourceBundle.getString(key), args);
     }
