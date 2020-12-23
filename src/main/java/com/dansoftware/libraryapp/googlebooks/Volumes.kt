@@ -22,8 +22,12 @@ data class Volume(var id: String?) {
     var kind: String? = null
     var selfLink: String? = null
     var volumeInfo: VolumeInfo? = null
+    get() = field?.also { it.id = this.id }
 
     class VolumeInfo {
+        //not in the original format
+        var id: String? = null
+
         var title: String? = null
         var subtitle: String? = null
         var authors: List<String>? = null
