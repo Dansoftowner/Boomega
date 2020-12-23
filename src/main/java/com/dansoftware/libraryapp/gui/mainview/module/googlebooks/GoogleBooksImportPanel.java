@@ -88,7 +88,11 @@ class GoogleBooksImportPanel extends VBox {
                 context.stopProgress();
                 Throwable exception = e.getSource().getException();
                 logger.error("Search problem ", exception);
-                // TODO: error dialog if the search was unsuccessfull
+                context.showErrorDialog(
+                        I18N.getGoogleBooksImportValue("google.books.search.failed.title"),
+                        I18N.getGoogleBooksImportValue("google.books.search.failed.msg"),
+                        (Exception) exception,
+                        buttonType -> {});
             });
             setOnSucceeded(e -> {
                 context.stopProgress();
