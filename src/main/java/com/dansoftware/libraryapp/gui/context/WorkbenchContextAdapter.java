@@ -21,10 +21,12 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -307,7 +309,7 @@ final class WorkbenchContextAdapter implements Context {
                                                     @NotNull Consumer<ButtonType> onResult) {
         if (exception != null) {
             final ExceptionDisplayPane content = new ExceptionDisplayPane(exception);
-            return WorkbenchDialog.builder(title, content, I18NButtonTypes.OK)
+            return WorkbenchDialog.builder(title, new VBox(new Label(message), content) {{setSpacing(10);}}, I18NButtonTypes.OK)
                     .onResult(onResult)
                     .build();
         }
