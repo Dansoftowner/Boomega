@@ -47,7 +47,6 @@ class GoogleBooksImportPanel extends VBox {
     }
 
     private void buildUI() {
-        setSpacing(10);
         getChildren().add(form.getRenderer());
         getChildren().add(buildSearchButton());
         getChildren().add(table);
@@ -56,7 +55,7 @@ class GoogleBooksImportPanel extends VBox {
     private Button buildSearchButton() {
         Button button = new Button(I18N.getGoogleBooksImportValue("google.books.add.form.search"));
         button.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.SEARCH));
-        VBox.setMargin(button, new Insets(0, 5, 0, 5));
+        VBox.setMargin(button, new Insets(0, 20, 10, 20));
         button.setDefaultButton(true);
         button.prefWidthProperty().bind(this.widthProperty());
         button.setOnAction(e -> {

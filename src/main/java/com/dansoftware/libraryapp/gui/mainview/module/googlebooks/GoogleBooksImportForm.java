@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.model.structure.Group;
+import com.dlsc.formsfx.model.structure.Section;
 import com.dlsc.formsfx.model.util.BindingMode;
 import com.dlsc.formsfx.model.util.ResourceBundleService;
 import com.dlsc.formsfx.model.validators.IntegerRangeValidator;
@@ -68,7 +69,7 @@ class GoogleBooksImportForm {
 
     private Form buildForm() {
         return Form.of(
-                Group.of(
+                Section.of(
                         Field.ofStringType(generalText)
                                 .placeholder("google.books.add.form.gtext.prompt")
                                 .label("google.books.add.form.gtext"),
@@ -103,7 +104,7 @@ class GoogleBooksImportForm {
                         Field.ofIntegerType(maxResults)
                                 .label("google.books.add.form.maxresults")
                                 .validate(IntegerRangeValidator.between(1, 40, "google.books.add.form.maxresults.incorrect"))
-                )
+                ).title("google.books.add.form.section.title")
         ).title("google.books.add.form.ftitle").binding(BindingMode.CONTINUOUS).i18n(new ResourceBundleService(resourceBundle));
     }
 
