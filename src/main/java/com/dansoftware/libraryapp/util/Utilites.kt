@@ -6,3 +6,9 @@ import java.io.File
 fun File.revealInExplorer() {
     FileExplorers.get().openSelect(this)
 }
+
+fun <I, T : Collection<I>> T.ifNotEmpty(block: (T) -> Unit): T {
+    if (this.isNotEmpty())
+        block(this)
+    return this
+}
