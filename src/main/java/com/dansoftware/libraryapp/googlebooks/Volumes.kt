@@ -35,6 +35,9 @@ data class Volume(var id: String?) {
         var imageLinks: ImageLinks? = null
         var language: String? = null
         var previewLink: String? = null
+        var printType: String? = null
+
+        fun isMagazine(): Boolean = printType == "MAGAZINE"
 
         class ImageLinks {
             var extraLarge: String? = null
