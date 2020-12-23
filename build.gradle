@@ -107,6 +107,7 @@ dependencies {
     libraries 'com.jfoenix:jfoenix:9.0.9'
     libraries 'org.jfxtras:jmetro:11.6.14'
     libraries 'org.controlsfx:controlsfx:11.0.1'
+    libraries 'com.dlsc.formsfx:formsfx-core:11.4.1'
 
     //Modified WorkBenchFX
     //Original: 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
