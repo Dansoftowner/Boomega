@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.googlbooks
+package com.dansoftware.libraryapp.googlebooks
 
 import com.dansoftware.libraryapp.util.Entry
 import org.apache.commons.lang3.StringUtils
@@ -53,7 +53,7 @@ class GoogleBooksQueryBuilder {
 
         @JvmStatic
         fun byId(id: String): SingleGoogleBookQuery {
-            return SingleGoogleBookQuery(String.format("%s/%s", BASE_URL, id))
+            return SingleGoogleBookQuery("${BASE_URL}/${id}")
         }
     }
 

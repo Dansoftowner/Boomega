@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.googlbooks
+package com.dansoftware.libraryapp.googlebooks
 
 /**
  * Represents a collection of [Volume]s pulled from a Google Books server
