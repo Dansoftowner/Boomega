@@ -60,7 +60,7 @@ object OsInfo {
 
     @JvmStatic
     fun hasTypeAndVersion(platformType: PlatformEnum, versionStarts: String): Boolean =
-            hasType(platformType) && this.version.startsWith(versionStarts)
+        hasType(platformType) && this.version.startsWith(versionStarts)
 
     @JvmStatic
     fun hasTypeAndVersionOrHigher(platformType: PlatformEnum, version: String): Boolean =

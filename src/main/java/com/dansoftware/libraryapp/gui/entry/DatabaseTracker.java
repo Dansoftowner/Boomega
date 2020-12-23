@@ -138,12 +138,16 @@ public class DatabaseTracker {
     }
 
     public interface Observer {
-        default void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) { }
+        default void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        }
 
-        default void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) { }
+        default void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        }
 
-        default void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) { }
+        default void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
+        }
 
-        default void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) { }
+        default void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
+        }
     }
 }

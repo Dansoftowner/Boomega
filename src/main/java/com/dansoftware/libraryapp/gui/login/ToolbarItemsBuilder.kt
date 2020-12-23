@@ -32,27 +32,28 @@ private class ToolbarItemsBuilder(val context: Context) {
     }
 
     private fun menuToolbarItem(): ToolbarItem = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.SETTINGS),
-            MenuItem(I18N.getGeneralValue("update.search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)) {
-                val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
-                    override fun call() = UpdateSearcher.defaultInstance().search()
-                }
-                task.setOnSucceeded {
-                    context.stopProgress()
-                    UpdateActivity(context, it.source.value as UpdateSearcher.UpdateSearchResult).show()
-                }
-                task.setOnRunning { context.showIndeterminateProgress() }
-                Thread(task).start()
-            },
-            MenuItem(I18N.getGeneralValue("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)) {
-                PluginManagerActivity().show(context.contextWindow)
-            },
-            MenuItem(I18N.getGeneralValue("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)) {
-                // TODO: Showing settings window
+        MenuItem(I18N.getGeneralValue("update.search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)) {
+            val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
+                override fun call() = UpdateSearcher.defaultInstance().search()
             }
+            task.setOnSucceeded {
+                context.stopProgress()
+                UpdateActivity(context, it.source.value as UpdateSearcher.UpdateSearchResult).show()
+            }
+            task.setOnRunning { context.showIndeterminateProgress() }
+            Thread(task).start()
+        },
+        MenuItem(I18N.getGeneralValue("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)) {
+            PluginManagerActivity().show(context.contextWindow)
+        },
+        MenuItem(I18N.getGeneralValue("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)) {
+            // TODO: Showing settings window
+        }
     )
 
 
-    private class MenuItem(text: String, graphic: Node, onAction: EventHandler<ActionEvent>) : javafx.scene.control.MenuItem(text, graphic) {
+    private class MenuItem(text: String, graphic: Node, onAction: EventHandler<ActionEvent>) :
+        javafx.scene.control.MenuItem(text, graphic) {
         init {
             this.onAction = onAction
         }

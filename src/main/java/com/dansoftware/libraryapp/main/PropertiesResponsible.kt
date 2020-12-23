@@ -50,7 +50,8 @@ object PropertiesResponsible {
     /**
      * The log-file's path with the extension
      */
-    private val LOG_FILE_FULL_PATH_VALUE: String = listOf(LOG_FILE_PATH_VALUE, "log").joinToString(FilenameUtils.EXTENSION_SEPARATOR_STR)
+    private val LOG_FILE_FULL_PATH_VALUE: String =
+        listOf(LOG_FILE_PATH_VALUE, "log").joinToString(FilenameUtils.EXTENSION_SEPARATOR_STR)
 
     /**
      * Puts all the necessary system-properties that the application needs.
@@ -94,7 +95,7 @@ object PropertiesResponsible {
      * Returns the config file's path
      */
     private fun getConfigFilePath() =
-            listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "config.conf").joinToString(File.separator)
+        listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "config.conf").joinToString(File.separator)
 
     /**
      * Returns the plugin directory's path
@@ -105,12 +106,22 @@ object PropertiesResponsible {
             if (StringUtils.isBlank(rootDir)) {
                 rootDir = FileUtils.getUserDirectoryPath()
             }
-            File(File(rootDir), listOf("Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)).absolutePath
+            File(
+                File(rootDir),
+                listOf("Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
+            ).absolutePath
         }
         OsInfo.isLinux() ->
-            listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "profiles", "plugin").joinToString(File.separator)
+            listOf(
+                FileUtils.getUserDirectoryPath(),
+                ".libraryapp2020",
+                "profiles",
+                "plugin"
+            ).joinToString(File.separator)
         OsInfo.isMac() ->
-            listOf("~", "Library", "Application", "Support", "Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
+            listOf("~", "Library", "Application", "Support", "Dansoftware", "libraryapp2020", "plugin").joinToString(
+                File.separator
+            )
         else -> "plugin"
     }
 }

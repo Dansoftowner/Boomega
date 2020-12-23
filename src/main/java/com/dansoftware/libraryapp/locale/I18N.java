@@ -29,7 +29,9 @@ public class I18N {
      */
     private static volatile LanguagePack languagePack;
 
-    static { loadPacks(); }
+    static {
+        loadPacks();
+    }
 
     public static LanguagePack getLanguagePack() {
         return languagePack;

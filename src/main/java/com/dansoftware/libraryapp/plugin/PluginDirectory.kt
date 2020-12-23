@@ -38,7 +38,9 @@ object PluginDirectory {
      * Lists the plugin archives as [File] objects
      */
     fun getPluginFiles(): Array<File>? {
-        return directory.listFiles { _, name -> JAR_EXTENSION_PATTERN.matcher(name).matches() && registeredFiles.contains(name) }
+        return directory.listFiles { _, name ->
+            JAR_EXTENSION_PATTERN.matcher(name).matches() && registeredFiles.contains(name)
+        }
     }
 
     /**

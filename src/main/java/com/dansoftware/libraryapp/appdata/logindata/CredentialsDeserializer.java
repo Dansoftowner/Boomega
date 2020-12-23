@@ -7,7 +7,6 @@ import org.jasypt.util.text.StrongTextEncryptor;
 import org.jasypt.util.text.TextEncryptor;
 
 import java.lang.reflect.Type;
-import java.util.function.Predicate;
 
 public class CredentialsDeserializer implements JsonDeserializer<Credentials> {
 

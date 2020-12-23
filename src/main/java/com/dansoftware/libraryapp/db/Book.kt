@@ -5,7 +5,6 @@ import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
 import org.dizitart.no2.objects.Index
 import org.dizitart.no2.objects.Indices
-import java.util.*
 
 /**
  * A Book is a Plain Java Object that represents a *document* or a *record* in the database.

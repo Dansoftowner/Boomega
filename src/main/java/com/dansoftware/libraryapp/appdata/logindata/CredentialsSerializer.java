@@ -27,7 +27,7 @@ public class CredentialsSerializer implements JsonSerializer<Credentials> {
 
         String username = src.getUsername();
         String password = src.getPassword();
-        password  = textEncryptor.encrypt(password);
+        password = textEncryptor.encrypt(password);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(USERNAME, username);

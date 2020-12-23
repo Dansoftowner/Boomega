@@ -13,15 +13,16 @@ import java.net.URL
 class SystemBrowser {
     companion object {
         @JvmStatic
-        fun isSupported(): Boolean = Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)
+        fun isSupported(): Boolean =
+            Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)
     }
 
     fun browse(url: String) =
-            try {
-                Desktop.getDesktop().browse(URL(url).toURI())
-            } catch (e: IOException) {
-                throw RuntimeException(e)
-            } catch (e: URISyntaxException) {
-                throw RuntimeException(e)
-            }
+        try {
+            Desktop.getDesktop().browse(URL(url).toURI())
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        } catch (e: URISyntaxException) {
+            throw RuntimeException(e)
+        }
 }

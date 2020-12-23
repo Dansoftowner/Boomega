@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.googlbooks;
 
 import com.google.gson.Gson;
-import javafx.concurrent.Task;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class GoogleBooksQuery {
     }
 
     public Volumes load() throws IOException {
-        try(var reader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+        try (var reader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             return new Gson().fromJson(reader, Volumes.class);
         }
     }

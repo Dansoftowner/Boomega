@@ -13,7 +13,7 @@ import javafx.scene.layout.StackPane
 class InformationActivity(private val context: Context) {
     fun show() {
         val view = InformationView(context)
-        context.showOverlay(StackPane(Group(view)).also {  it.isPickOnBounds = false }, false)
+        context.showOverlay(StackPane(Group(view)).also { it.isPickOnBounds = false }, false)
         StackPane.setAlignment(view, Pos.CENTER)
     }
 }

@@ -32,7 +32,7 @@ object SingleThreadExecutor : ExecutorService {
         timeout: Long,
         unit: TimeUnit
     ): MutableList<Future<T>> {
-       return  back.invokeAll(tasks, timeout, unit)
+        return back.invokeAll(tasks, timeout, unit)
     }
 
     override fun <T : Any?> invokeAny(tasks: MutableCollection<out Callable<T>>): T = back.invokeAny(tasks)

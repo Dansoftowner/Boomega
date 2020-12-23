@@ -104,21 +104,27 @@ public interface Context {
     ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes);
 
     void showErrorNotification(String title, String message);
+
     void showErrorNotification(String title, String message, EventHandler<MouseEvent> onClicked);
 
     void showErrorNotification(String title, String message, Duration duration);
-    void showErrorNotification(String title, String message, Duration duration,  EventHandler<MouseEvent> onClicked);
+
+    void showErrorNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
 
     void showWarningNotification(String title, String message);
+
     void showWarningNotification(String title, String message, EventHandler<MouseEvent> onClicked);
 
     void showWarningNotification(String title, String message, Duration duration);
+
     void showWarningNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
 
     void showInformationNotification(String title, String message);
+
     void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked);
 
     void showInformationNotification(String title, String message, Duration duration);
+
     void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
 
     @Nullable

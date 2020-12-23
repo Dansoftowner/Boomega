@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;

@@ -22,7 +22,10 @@ import java.io.File
  * @author Daniel Gyorffy
  */
 class PluginManager(pluginFiles: List<File>) :
-    SimpleHeaderView<StackPane>(I18N.getPluginManagerValue("plugin.manager"), FontAwesomeIconView(FontAwesomeIcon.PLUG)),
+    SimpleHeaderView<StackPane>(
+        I18N.getPluginManagerValue("plugin.manager"),
+        FontAwesomeIconView(FontAwesomeIcon.PLUG)
+    ),
     Themeable,
     ContextTransformable {
 

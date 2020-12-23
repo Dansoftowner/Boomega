@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.googlbooks;
 
 import com.google.gson.Gson;
-import javafx.concurrent.Task;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -23,7 +22,7 @@ public class SingleGoogleBookQuery {
     }
 
     public Volume load() throws IOException {
-        try(var input = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+        try (var input = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             return new Gson().fromJson(input, Volume.class);
         }
     }

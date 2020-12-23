@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * A Theme can change the appearance of GUI elements.
@@ -60,7 +59,9 @@ public abstract class Theme {
      */
     private static Theme defaultTheme;
 
-    static { loadThemes(); }
+    static {
+        loadThemes();
+    }
 
     private static void loadThemes() {
         //collecting Themes from the core project

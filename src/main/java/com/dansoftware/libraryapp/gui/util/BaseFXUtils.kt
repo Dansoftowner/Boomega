@@ -11,7 +11,6 @@ import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.adapter.ThrowableString
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
-import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.event.ActionEvent
@@ -31,10 +30,10 @@ import kotlin.reflect.KClass
 
 fun Node.onWindowPresent(action: Consumer<Window>) {
     this.scene?.window?.also { action.accept(it) }
-    this.sceneProperty().addListener(object: ChangeListener<Scene> {
+    this.sceneProperty().addListener(object : ChangeListener<Scene> {
         override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
             if (newValue != null) {
-                scene.windowProperty().addListener(object: ChangeListener<Window> {
+                scene.windowProperty().addListener(object : ChangeListener<Window> {
                     override fun changed(
                         observable: ObservableValue<out Window>,
                         oldValue: Window?,

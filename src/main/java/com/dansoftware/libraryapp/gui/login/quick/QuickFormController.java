@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.gui.login.quick;
 
-import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.Credentials;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.DatabaseMeta;

@@ -17,9 +17,11 @@ import java.io.File
  *
  * @author Daniel Gyorffy
  */
-class DownloaderTaskExecutor(val context: Context,
-                             val updateInformation: UpdateInformation,
-                             val controller: DownloadSegmentController) {
+class DownloaderTaskExecutor(
+    val context: Context,
+    val updateInformation: UpdateInformation,
+    val controller: DownloadSegmentController
+) {
 
     companion object {
         @JvmStatic
@@ -56,8 +58,8 @@ class DownloaderTaskExecutor(val context: Context,
     }
 
     fun getResult(): File? =
-            if (this.downloaderTask === null || this.downloaderTask!!.isRunning) null
-            else downloaderTask!!.value
+        if (this.downloaderTask === null || this.downloaderTask!!.isRunning) null
+        else downloaderTask!!.value
 
     fun isDone(): Boolean = downloaderTask?.isDone ?: false
 
@@ -134,18 +136,19 @@ class DownloaderTaskExecutor(val context: Context,
 
         downloaderTask.setOnFailed { event ->
             context.showProgress(
-                    downloaderTask.workDone.toLong(),
-                    downloaderTask.totalWork.toLong(),
-                    Context.ProgressType.ERROR
+                downloaderTask.workDone.toLong(),
+                downloaderTask.totalWork.toLong(),
+                Context.ProgressType.ERROR
             )
             val cause = event.source.exception
 
             logger.error("DownloaderTask failed with an exception: {}", cause)
 
             context.showErrorDialog(
-                    I18N.getUpdateDialogValue("update.view.download.failed.title"),
-                    I18N.getUpdateDialogValue("update.view.download.failed.msg"),
-                    cause as Exception) { context.stopProgress() }
+                I18N.getUpdateDialogValue("update.view.download.failed.title"),
+                I18N.getUpdateDialogValue("update.view.download.failed.msg"),
+                cause as Exception
+            ) { context.stopProgress() }
             clearProgress()
         }
 
@@ -157,12 +160,12 @@ class DownloaderTaskExecutor(val context: Context,
 
         downloaderTask.progressProperty().addListener { _, _, _ ->
             context.showProgress(
-                    downloaderTask.workDone.toLong(),
-                    downloaderTask.totalWork.toLong(),
-                    when {
-                        isPaused() -> Context.ProgressType.PAUSED
-                        else -> Context.ProgressType.NORMAL
-                    }
+                downloaderTask.workDone.toLong(),
+                downloaderTask.totalWork.toLong(),
+                when {
+                    isPaused() -> Context.ProgressType.PAUSED
+                    else -> Context.ProgressType.NORMAL
+                }
             )
         }
 

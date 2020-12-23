@@ -7,7 +7,11 @@ import java.util.function.Supplier
 /**
  * Used for storing some meta-data about a [Theme] implementation
  */
-data class ThemeMeta<T : Theme>(val themeClass: Class<T>, val displayNameSupplier: Supplier<String>, val designer: ThemeDesigner) {
+data class ThemeMeta<T : Theme>(
+    val themeClass: Class<T>,
+    val displayNameSupplier: Supplier<String>,
+    val designer: ThemeDesigner
+) {
     init {
         Objects.requireNonNull(themeClass)
         Objects.requireNonNull(designer)
