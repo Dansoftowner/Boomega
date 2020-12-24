@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
 import java.util.Optional;
 
 public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
@@ -39,7 +40,7 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
                 new ISBNColumn(),
                 new AuthorColumn(),
                 new TitleColumn(),
-                new DescriptionColumn(),
+                new PublisherColumn(),
                 new DateColumn(),
                 new BrowserColumn()
         );
@@ -226,36 +227,10 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    private static final class DescriptionColumn extends TableColumn<Volume.VolumeInfo, String> implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
-        DescriptionColumn() {
-            setText(I18N.getGoogleBooksImportValue("google.books.table.column.desc"));
-            setCellFactory(this);
-        }
-
-        @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setGraphic(null);
-                        setTooltip(null);
-                    } else {
-                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
-                        Optional.ofNullable(volume.getDescription())
-                                .ifPresentOrElse(desc -> {
-                                    setGraphic(new Text(desc));
-                                    setTooltip(new Tooltip(desc));
-                                }, () -> {
-                                    setGraphic(null);
-                                    setTooltip(null);
-                                    setText("-");
-                                });
-                    }
-                }
-            };
+    private static final class PublisherColumn extends TableColumn<Volume.VolumeInfo, String> {
+        PublisherColumn() {
+            setText(I18N.getGoogleBooksImportValue("google.books.table.column.publisher"));
+            setCellValueFactory(new PropertyValueFactory<>("publisher"));
         }
     }
 
