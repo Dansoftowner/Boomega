@@ -40,6 +40,8 @@ data class Volume(var id: String?) {
         var language: String? = null
         var previewLink: String? = null
         var printType: String? = null
+        var averageRating: Double? = null
+        var ratingsCount: Int = 0
 
         fun isMagazine(): Boolean = printType == "MAGAZINE"
 
