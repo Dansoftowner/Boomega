@@ -9,24 +9,45 @@ package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.adapter.ThrowableString
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
+import javafx.scene.SnapshotParameters
 import javafx.scene.control.*
 import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
+import javafx.scene.input.MouseEvent
+import javafx.scene.layout.StackPane
+import javafx.scene.text.Font
+import javafx.scene.text.Text
 import javafx.stage.Window
 import org.apache.commons.lang3.StringUtils
 import java.io.BufferedInputStream
 import java.util.function.Consumer
 import kotlin.reflect.KClass
+
+fun loadImage(resource: String, onImageReady: Consumer<Image>) {
+    val image = Image(resource, true)
+    image.progressProperty().addListener(object : ChangeListener<Number> {
+        override fun changed(observable: ObservableValue<out Number>, oldValue: Number, newValue: Number) {
+            if (newValue == 1.0 && image.isError.not()) {
+                onImageReady.accept(image)
+                observable.removeListener(this)
+            }
+        }
+    })
+}
 
 fun Node.onWindowPresent(action: Consumer<Window>) {
     this.scene?.window?.also { action.accept(it) }
@@ -108,6 +129,12 @@ fun KClass<*>.loadImageResource(resource: String): Image {
     }
 }
 
+class ImagePlaceHolder(size: Double) : Text("\uF2E9") {
+    init {
+        this.font = Font.font("Material Design Icons", size)
+        this.styleClass.add("glyph-icon")
+    }
+}
 /**
  * A SpaceValidator can be used for [TextInputControl] objects (for example: [javafx.scene.control.TextField])
  * to avoid whitespaces.
