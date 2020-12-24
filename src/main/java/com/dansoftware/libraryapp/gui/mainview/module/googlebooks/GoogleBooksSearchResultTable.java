@@ -2,6 +2,8 @@ package com.dansoftware.libraryapp.gui.mainview.module.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.Volume;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
+import com.dansoftware.libraryapp.gui.util.ImagePlaceHolder;
 import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -9,16 +11,17 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
 import java.util.Optional;
 
 public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
@@ -153,7 +156,8 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
                         Optional.ofNullable(volume.getImageLinks())
                                 .map(Volume.VolumeInfo.ImageLinks::getThumbnail)
                                 .ifPresentOrElse(thumbnail -> {
-                                    setGraphic(new ImageView(thumbnail));
+                                    setGraphic(new ImagePlaceHolder(80));
+                                    BaseFXUtils.loadImage(thumbnail, image -> setGraphic(new ImageView(image)));
                                     setText(null);
                                 }, () -> {
                                     setGraphic(null);
