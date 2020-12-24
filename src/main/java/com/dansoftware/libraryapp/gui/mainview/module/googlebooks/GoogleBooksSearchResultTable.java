@@ -11,17 +11,21 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
 import java.util.Optional;
 
 public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
@@ -44,7 +48,9 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
                 new AuthorColumn(),
                 new TitleColumn(),
                 new PublisherColumn(),
+                new LangColumn(),
                 new DateColumn(),
+                new RankColumn(),
                 new BrowserColumn()
         );
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -216,7 +222,7 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
                     } else {
                         Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
                         Optional.ofNullable(volume.getAuthors())
-                                .ifPresentOrElse(authors -> setText(String.join(",", authors)),
+                                .ifPresentOrElse(authors -> setText(String.join(", ", authors)),
                                         () -> setText("-"));
                     }
                 }
@@ -238,11 +244,77 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
+    private static final class LangColumn extends TableColumn<Volume.VolumeInfo, String>
+            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+        LangColumn() {
+            setText(I18N.getGoogleBooksImportValue("google.books.table.column.lang"));
+            setCellFactory(this);
+        }
+
+        @Override
+        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+            return new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        Volume.VolumeInfo volumeInfo = getTableView().getItems().get(getIndex());
+                        Optional.ofNullable(volumeInfo.getLanguage())
+                                .map(Locale::forLanguageTag)
+                                .map(Locale::getDisplayLanguage)
+                                .ifPresentOrElse(this::setText, () -> setText(null));
+                    }
+                }
+            };
+        }
+    }
+
     private static final class DateColumn extends TableColumn<Volume.VolumeInfo, String> {
 
         DateColumn() {
             super(I18N.getGoogleBooksImportValue("google.books.table.column.date"));
             setCellValueFactory(new PropertyValueFactory<>("publishedDate"));
+        }
+    }
+
+    private static final class RankColumn extends TableColumn<Volume.VolumeInfo, String> implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+
+        RankColumn() {
+            super(I18N.getGoogleBooksImportValue("google.books.table.column.rank"));
+            setCellFactory(this);
+        }
+
+        @Override
+        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+            return new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        Volume.VolumeInfo volumeInfo = getTableView().getItems().get(getIndex());
+                        Optional.ofNullable(volumeInfo.getAverageRating())
+                                .ifPresentOrElse(rating -> {
+                                    setGraphic(buildGraphic(rating.intValue(), volumeInfo.getRatingsCount()));
+                                    setText(null);
+                                }, () -> {
+                                    setGraphic(null);
+                                    setText("-");
+                                });
+                    }
+                }
+
+                private Node buildGraphic(int rating, int ratingsCount) {
+                    Rating ratingGraphic = new Rating(5, rating);
+                    ratingGraphic.addEventFilter(MouseEvent.MOUSE_CLICKED, MouseEvent::consume);
+                    return new Group(new VBox(3, ratingGraphic, new StackPane(new Label("(" + ratingsCount + ")"))));
+                }
+            };
         }
     }
 
