@@ -1,191 +1,235 @@
 package com.dansoftware.libraryapp.gui.mainview.module.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
+import com.dansoftware.libraryapp.gui.util.LanguageSelection;
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.model.structure.Group;
-import com.dlsc.formsfx.model.structure.Section;
 import com.dlsc.formsfx.model.util.BindingMode;
 import com.dlsc.formsfx.model.util.ResourceBundleService;
 import com.dlsc.formsfx.model.validators.IntegerRangeValidator;
 import com.dlsc.formsfx.view.controls.SimpleRadioButtonControl;
+import com.dlsc.formsfx.view.controls.SimpleTextControl;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
 import com.dlsc.formsfx.view.util.ColSpan;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
-class GoogleBooksImportForm {
+class GoogleBooksImportForm extends TitledPane {
 
+    private final Context context;
+    private final SearchData searchData;
     private final Form form;
 
-    private final ResourceBundle resourceBundle;
-
-    private StringProperty generalText;
-    private StringProperty author;
-    private StringProperty title;
-    private StringProperty publisher;
-    private StringProperty isbn;
-    private StringProperty language;
-    private ObservableList<Filter> selectableFilters;
-
-    private ObjectProperty<Filter> filter;
-    private ObservableList<SortType> selectableSorts;
-
-    private ObjectProperty<SortType> sort;
-    private IntegerProperty maxResults;
-
-    GoogleBooksImportForm(@NotNull ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-        this.initProperties();
+    GoogleBooksImportForm(@NotNull Context context, @NotNull Consumer<SearchData> onSearch) {
+        super(I18N.getGoogleBooksImportValue("google.books.add.form.section.title"), null);
+        this.context = context;
+        this.searchData = new SearchData(new SimpleBooleanProperty());
         this.form = buildForm();
+        this.searchData.validProperty().bind(form.validProperty());
+        this.setContent(buildContent(onSearch));
     }
 
-    private void initProperties() {
-        generalText = new SimpleStringProperty("");
-        author = new SimpleStringProperty("");
-        title = new SimpleStringProperty("");
-        publisher = new SimpleStringProperty("");
-        isbn = new SimpleStringProperty("");
-        language = new SimpleStringProperty("");
+    private Node buildContent(Consumer<SearchData> onSearch) {
+        var form = new FormRenderer(this.form);
+        addAutoCompletionToLangField(form);
+        return new VBox(form, buildButton(onSearch));
+    }
 
-        selectableFilters = FXCollections.observableArrayList(
-                new Filter(GoogleBooksQueryBuilder.PrintType.ALL, resourceBundle, "google.books.add.form.filter.all"),
-                new Filter(GoogleBooksQueryBuilder.PrintType.BOOKS, resourceBundle, "google.books.add.form.filter.books"),
-                new Filter(GoogleBooksQueryBuilder.PrintType.MAGAZINES, resourceBundle, "google.books.add.form.filter.magazines")
-        );
-        filter = new SimpleObjectProperty<>(selectableFilters.get(0));
+    private Button buildButton(Consumer<SearchData> onSearch) {
+        Button button = new Button(I18N.getGoogleBooksImportValue("google.books.add.form.search"));
+        button.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.SEARCH));
+        button.setDefaultButton(true);
+        button.prefWidthProperty().bind(this.widthProperty());
+        button.setOnAction(e -> onSearch.accept(searchData));
+        VBox.setMargin(button, new Insets(0, 20, 10, 20));
+        return button;
+    }
 
-        selectableSorts = FXCollections.observableArrayList(
-                new SortType(GoogleBooksQueryBuilder.SortType.REVELANCE, resourceBundle, "google.books.add.form.sort.relevance"),
-                new SortType(GoogleBooksQueryBuilder.SortType.NEWEST, resourceBundle, "google.books.add.form.sort.newest")
-        );
-        sort = new SimpleObjectProperty<>(selectableSorts.get(0));
-        maxResults = new SimpleIntegerProperty(10);
+    private void addAutoCompletionToLangField(FormRenderer src) {
+        SimpleTextControl control = (SimpleTextControl) src.lookup(".languageSelector");
+        TextField textField = (TextField) ( (StackPane) control.getChildren().get(1)).getChildren().get(0);
+        textField.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                new LanguageSelection(context, locale -> textField.setText(locale.getLanguage())).show();
+            }
+        });
     }
 
     private Form buildForm() {
         return Form.of(
-                Section.of(
-                        Field.ofStringType(generalText)
+                Group.of(
+                        Field.ofStringType(searchData.generalText)
                                 .placeholder("google.books.add.form.gtext.prompt")
                                 .label("google.books.add.form.gtext"),
-                        Field.ofStringType(author)
+                        Field.ofStringType(searchData.author)
                                 .placeholder("google.books.add.form.author.prompt")
                                 .label("google.books.add.form.author")
                                 .span(ColSpan.THIRD),
-                        Field.ofStringType(title)
+                        Field.ofStringType(searchData.title)
                                 .placeholder("google.books.add.form.title.prompt")
                                 .label("google.books.add.form.title")
                                 .span(ColSpan.THIRD),
-                        Field.ofStringType(publisher)
+                        Field.ofStringType(searchData.publisher)
                                 .placeholder("google.books.add.form.publisher.prompt")
                                 .label("google.books.add.form.publisher")
                                 .span(ColSpan.THIRD),
-                        Field.ofStringType(isbn)
+                        Field.ofStringType(searchData.isbn)
                                 .placeholder("google.books.add.form.isbn.prompt")
                                 .label("google.books.add.form.isbn")
                                 .span(ColSpan.TWO_THIRD),
-                        Field.ofStringType(language)
+                        Field.ofStringType(searchData.language)
+                                .styleClass("languageSelector")
                                 .placeholder("google.books.add.form.lang.prompt")
                                 .label("google.books.add.form.lang")
                                 .span(ColSpan.THIRD),
-                        Field.ofSingleSelectionType(new SimpleListProperty<>(selectableFilters), filter)
+                        Field.ofSingleSelectionType(new SimpleListProperty<>(searchData.selectableFilters), searchData.filter)
                                 .label("google.books.add.form.filter")
                                 .span(ColSpan.HALF)
                                 .render(new SimpleRadioButtonControl<>()),
-                        Field.ofSingleSelectionType(new SimpleListProperty<>(selectableSorts), sort)
+                        Field.ofSingleSelectionType(new SimpleListProperty<>(searchData.selectableSorts), searchData.sort)
                                 .label("google.books.add.form.sort")
                                 .span(ColSpan.HALF)
                                 .render(new SimpleRadioButtonControl<>()),
-                        Field.ofIntegerType(maxResults)
+                        Field.ofIntegerType(searchData.maxResults)
                                 .label("google.books.add.form.maxresults")
                                 .validate(IntegerRangeValidator.between(1, 40, "google.books.add.form.maxresults.incorrect"))
-                ).title("google.books.add.form.section.title")
-        ).title("google.books.add.form.ftitle").binding(BindingMode.CONTINUOUS).i18n(new ResourceBundleService(resourceBundle));
+                )
+        ).title("google.books.add.form.ftitle").binding(BindingMode.CONTINUOUS)
+                .i18n(new ResourceBundleService(I18N.getGoogleBooksImportValues()));
     }
 
-    public boolean isValid() {
-        return form.isValid();
-    }
+    final static class SearchData {
+        private final BooleanProperty valid;
 
-    public FormRenderer getRenderer() {
-        return new FormRenderer(this.form);
-    }
+        private SearchData(@NotNull BooleanProperty validProperty) {
+            this.valid = validProperty;
+        }
 
-    public String getGeneralText() {
-        return generalText.get();
-    }
+        private final StringProperty generalText = new SimpleStringProperty("");
+        private final StringProperty author = new SimpleStringProperty("");
+        private final StringProperty title = new SimpleStringProperty("");
+        private final StringProperty publisher = new SimpleStringProperty("");
+        private final StringProperty isbn = new SimpleStringProperty("");
+        private final StringProperty language = new SimpleStringProperty("");
+        private final IntegerProperty maxResults = new SimpleIntegerProperty(10);
 
-    public StringProperty generalTextProperty() {
-        return generalText;
-    }
+        private final ObservableList<Filter> selectableFilters = FXCollections.observableArrayList(
+                new Filter(GoogleBooksQueryBuilder.PrintType.ALL, I18N.getGoogleBooksImportValues(), "google.books.add.form.filter.all"),
+                new Filter(GoogleBooksQueryBuilder.PrintType.BOOKS, I18N.getGoogleBooksImportValues(), "google.books.add.form.filter.books"),
+                new Filter(GoogleBooksQueryBuilder.PrintType.MAGAZINES, I18N.getGoogleBooksImportValues(), "google.books.add.form.filter.magazines")
+        );
+        private final ObjectProperty<Filter> filter = new SimpleObjectProperty<>(selectableFilters.get(0));
 
-    public String getAuthor() {
-        return author.get();
-    }
+        private final ObservableList<SortType> selectableSorts = FXCollections.observableArrayList(
+                new SortType(GoogleBooksQueryBuilder.SortType.REVELANCE, I18N.getGoogleBooksImportValues(), "google.books.add.form.sort.relevance"),
+                new SortType(GoogleBooksQueryBuilder.SortType.NEWEST, I18N.getGoogleBooksImportValues(), "google.books.add.form.sort.newest")
+        );
+        private final ObjectProperty<SortType> sort = new SimpleObjectProperty<>(selectableSorts.get(0));
 
-    public StringProperty authorProperty() {
-        return author;
-    }
+        public boolean isValid() {
+            return valid.get();
+        }
 
-    public String getTitle() {
-        return title.get();
-    }
+        public BooleanProperty validProperty() {
+            return valid;
+        }
 
-    public StringProperty titleProperty() {
-        return title;
-    }
+        public String getGeneralText() {
+            return generalText.get();
+        }
 
-    public String getPublisher() {
-        return publisher.get();
-    }
+        public StringProperty generalTextProperty() {
+            return generalText;
+        }
 
-    public StringProperty publisherProperty() {
-        return publisher;
-    }
+        public String getAuthor() {
+            return author.get();
+        }
 
-    public String getIsbn() {
-        return isbn.get();
-    }
+        public StringProperty authorProperty() {
+            return author;
+        }
 
-    public StringProperty isbnProperty() {
-        return isbn;
-    }
+        public String getTitle() {
+            return title.get();
+        }
 
-    public String getLanguage() {
-        return language.get();
-    }
+        public StringProperty titleProperty() {
+            return title;
+        }
 
-    public StringProperty languageProperty() {
-        return language;
-    }
+        public String getPublisher() {
+            return publisher.get();
+        }
 
-    public Filter getFilter() {
-        return filter.get();
-    }
+        public StringProperty publisherProperty() {
+            return publisher;
+        }
 
-    public ObjectProperty<Filter> filterProperty() {
-        return filter;
-    }
+        public String getIsbn() {
+            return isbn.get();
+        }
 
-    public SortType getSort() {
-        return sort.get();
-    }
+        public StringProperty isbnProperty() {
+            return isbn;
+        }
 
-    public ObjectProperty<SortType> sortProperty() {
-        return sort;
-    }
+        public String getLanguage() {
+            return language.get();
+        }
 
-    public int getMaxResults() {
-        return maxResults.get();
-    }
+        public StringProperty languageProperty() {
+            return language;
+        }
 
-    public IntegerProperty maxResultsProperty() {
-        return maxResults;
+        public int getMaxResults() {
+            return maxResults.get();
+        }
+
+        public IntegerProperty maxResultsProperty() {
+            return maxResults;
+        }
+
+        public ObservableList<Filter> getSelectableFilters() {
+            return selectableFilters;
+        }
+
+        public Filter getFilter() {
+            return filter.get();
+        }
+
+        public ObjectProperty<Filter> filterProperty() {
+            return filter;
+        }
+
+        public ObservableList<SortType> getSelectableSorts() {
+            return selectableSorts;
+        }
+
+        public SortType getSort() {
+            return sort.get();
+        }
+
+        public ObjectProperty<SortType> sortProperty() {
+            return sort;
+        }
     }
 
     static class SortType {

@@ -8,11 +8,7 @@ import com.dansoftware.libraryapp.googlebooks.Volumes;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.concurrent.Task;
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 class GoogleBooksImportPanel extends VBox {
@@ -35,9 +32,22 @@ class GoogleBooksImportPanel extends VBox {
     GoogleBooksImportPanel(@NotNull Context context, @NotNull Database database) {
         this.context = context;
         this.database = database;
-        this.form = new GoogleBooksImportForm(I18N.getGoogleBooksImportValues());
+        this.form = createForm(context);
         this.table = buildTable();
         this.buildUI();
+    }
+
+    private GoogleBooksImportForm createForm(Context context) {
+        return new GoogleBooksImportForm(context, buildOnSearchAction());
+    }
+
+    private Consumer<GoogleBooksImportForm.SearchData> buildOnSearchAction() {
+       return searchData -> {
+            if (searchData.isValid())
+                ExploitativeExecutor.INSTANCE.submit(new SearchTask(context, searchData, table));
+            else ;
+            //TODO: DIALOG ABOUT NOT VALID FORM
+        };
     }
 
     private GoogleBooksSearchResultTable buildTable() {
@@ -47,37 +57,21 @@ class GoogleBooksImportPanel extends VBox {
     }
 
     private void buildUI() {
-        getChildren().add(form.getRenderer());
-        getChildren().add(buildSearchButton());
+        getChildren().add(form);
         getChildren().add(table);
-    }
-
-    private Button buildSearchButton() {
-        Button button = new Button(I18N.getGoogleBooksImportValue("google.books.add.form.search"));
-        button.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.SEARCH));
-        VBox.setMargin(button, new Insets(0, 20, 10, 20));
-        button.setDefaultButton(true);
-        button.prefWidthProperty().bind(this.widthProperty());
-        button.setOnAction(e -> {
-            if (form.isValid())
-                ExploitativeExecutor.INSTANCE.submit(new SearchTask(context, form, table));
-            else ;
-                //TODO: DIALOG ABOUT NOT VALID FORM
-        });
-        return button;
     }
 
     private static final class SearchTask extends Task<Volumes> {
 
         private final Context context;
-        private final GoogleBooksImportForm form;
+        private final GoogleBooksImportForm.SearchData searchData;
         private final GoogleBooksSearchResultTable table;
 
         SearchTask(@NotNull Context context,
-                   @NotNull GoogleBooksImportForm form,
+                   @NotNull GoogleBooksImportForm.SearchData searchData,
                    @NotNull GoogleBooksSearchResultTable table) {
             this.context = context;
-            this.form = form;
+            this.searchData = searchData;
             this.table = table;
             this.addEventHandlers();
         }
@@ -107,15 +101,15 @@ class GoogleBooksImportPanel extends VBox {
         @Override
         protected Volumes call() throws Exception {
             GoogleBooksQuery query = new GoogleBooksQueryBuilder()
-                    .inText(form.getGeneralText())
-                    .inAuthor(form.getAuthor())
-                    .inTitle(form.getTitle())
-                    .inPublisher(form.getPublisher())
-                    .isbn(form.getIsbn())
-                    .language(form.getLanguage())
-                    .printType(form.getFilter().getType())
-                    .sortType(form.getSort().getType())
-                    .maxResults(form.getMaxResults())
+                    .inText(searchData.getGeneralText())
+                    .inAuthor(searchData.getAuthor())
+                    .inTitle(searchData.getTitle())
+                    .inPublisher(searchData.getPublisher())
+                    .isbn(searchData.getIsbn())
+                    .language(searchData.getLanguage())
+                    .printType(searchData.getFilter().getType())
+                    .sortType(searchData.getSort().getType())
+                    .maxResults(searchData.getMaxResults())
                     .build();
             return query.load();
         }
