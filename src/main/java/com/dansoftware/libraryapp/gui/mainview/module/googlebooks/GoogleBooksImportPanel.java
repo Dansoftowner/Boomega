@@ -44,10 +44,35 @@ class GoogleBooksImportPanel extends VBox {
     private Consumer<GoogleBooksImportForm.SearchData> buildOnSearchAction() {
        return searchData -> {
             if (searchData.isValid())
-                ExploitativeExecutor.INSTANCE.submit(new SearchTask(context, searchData, table));
+                ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData));
             else ;
             //TODO: DIALOG ABOUT NOT VALID FORM
         };
+    }
+
+    private SearchTask buildSearchTask(GoogleBooksImportForm.SearchData searchData) {
+        var searchTask = new SearchTask(searchData);
+        searchTask.setOnRunning(e -> context.showIndeterminateProgress());
+        searchTask.setOnFailed(e -> {
+            context.stopProgress();
+            Throwable exception = e.getSource().getException();
+            logger.error("Search problem ", exception);
+            context.showErrorDialog(
+                    I18N.getGoogleBooksImportValue("google.books.search.failed.title"),
+                    I18N.getGoogleBooksImportValue("google.books.search.failed.msg"),
+                    (Exception) exception,
+                    buttonType -> {});
+        });
+        searchTask.setOnSucceeded(e -> {
+            context.stopProgress();
+            form.setExpanded(false);
+            Volumes volumes = searchTask.getValue();
+            List<Volume> items = volumes.getItems();
+            table.getItems().clear();
+            if (items != null && !items.isEmpty())
+                table.getItems().setAll(items.stream().map(Volume::getVolumeInfo).collect(Collectors.toList()));
+        });
+        return searchTask;
     }
 
     private GoogleBooksSearchResultTable buildTable() {
@@ -63,39 +88,10 @@ class GoogleBooksImportPanel extends VBox {
 
     private static final class SearchTask extends Task<Volumes> {
 
-        private final Context context;
         private final GoogleBooksImportForm.SearchData searchData;
-        private final GoogleBooksSearchResultTable table;
 
-        SearchTask(@NotNull Context context,
-                   @NotNull GoogleBooksImportForm.SearchData searchData,
-                   @NotNull GoogleBooksSearchResultTable table) {
-            this.context = context;
+        SearchTask(@NotNull GoogleBooksImportForm.SearchData searchData) {
             this.searchData = searchData;
-            this.table = table;
-            this.addEventHandlers();
-        }
-
-        private void addEventHandlers() {
-            setOnRunning(e -> context.showIndeterminateProgress());
-            setOnFailed(e -> {
-                context.stopProgress();
-                Throwable exception = e.getSource().getException();
-                logger.error("Search problem ", exception);
-                context.showErrorDialog(
-                        I18N.getGoogleBooksImportValue("google.books.search.failed.title"),
-                        I18N.getGoogleBooksImportValue("google.books.search.failed.msg"),
-                        (Exception) exception,
-                        buttonType -> {});
-            });
-            setOnSucceeded(e -> {
-                context.stopProgress();
-                Volumes volumes = this.getValue();
-                List<Volume> items = volumes.getItems();
-                table.getItems().clear();
-                if (items != null && !items.isEmpty())
-                    table.getItems().setAll(items.stream().map(Volume::getVolumeInfo).collect(Collectors.toList()));
-            });
         }
 
         @Override
