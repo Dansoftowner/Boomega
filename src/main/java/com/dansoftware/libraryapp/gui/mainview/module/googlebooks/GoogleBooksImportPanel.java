@@ -27,13 +27,13 @@ class GoogleBooksImportPanel extends VBox {
 
     private final Context context;
     private final GoogleBooksImportForm form;
-    private final GoogleBooksSearchResultTable table;
+    private final GoogleBooksResultPagination table;
 
     GoogleBooksImportPanel(@NotNull Context context, @NotNull Database database) {
         this.context = context;
         this.database = database;
         this.form = createForm(context);
-        this.table = buildTable();
+        this.table = buildPagination();
         this.buildUI();
     }
 
@@ -42,16 +42,18 @@ class GoogleBooksImportPanel extends VBox {
     }
 
     private Consumer<GoogleBooksImportForm.SearchData> buildOnSearchAction() {
-       return searchData -> {
+        return searchData -> {
             if (searchData.isValid())
-                ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData));
+                ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData.asBluePrint(), 0, true));
             else ;
             //TODO: DIALOG ABOUT NOT VALID FORM
         };
     }
 
-    private SearchTask buildSearchTask(GoogleBooksImportForm.SearchData searchData) {
-        var searchTask = new SearchTask(searchData);
+    private SearchTask buildSearchTask(GoogleBooksImportForm.SearchData.BluePrint searchData,
+                                       int startIndex,
+                                       boolean starterTask) {
+        var searchTask = new SearchTask(searchData, startIndex);
         searchTask.setOnRunning(e -> context.showIndeterminateProgress());
         searchTask.setOnFailed(e -> {
             context.stopProgress();
@@ -61,24 +63,32 @@ class GoogleBooksImportPanel extends VBox {
                     I18N.getGoogleBooksImportValue("google.books.search.failed.title"),
                     I18N.getGoogleBooksImportValue("google.books.search.failed.msg"),
                     (Exception) exception,
-                    buttonType -> {});
+                    buttonType -> {
+                    });
         });
         searchTask.setOnSucceeded(e -> {
             context.stopProgress();
             form.setExpanded(false);
             Volumes volumes = searchTask.getValue();
+            logger.debug("Total items: {}", volumes.getTotalItems());
+            if (starterTask) {
+                table.setItemsPerPage(searchData.getMaxResults());
+                table.setTotalItems(volumes.getTotalItems());
+            }
             List<Volume> items = volumes.getItems();
-            table.getItems().clear();
-            if (items != null && !items.isEmpty())
-                table.getItems().setAll(items.stream().map(Volume::getVolumeInfo).collect(Collectors.toList()));
+            if (items != null && !items.isEmpty()) {
+                table.setOnContentRequest((start, size) -> ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData, start, false)));
+                table.setItems(items.stream().map(Volume::getVolumeInfo).collect(Collectors.toList()));
+            } else
+                table.clear();
         });
         return searchTask;
     }
 
-    private GoogleBooksSearchResultTable buildTable() {
-        var table = new GoogleBooksSearchResultTable(context, 0);
-        VBox.setVgrow(table, Priority.ALWAYS);
-        return table;
+    private GoogleBooksResultPagination buildPagination() {
+        var pagination = new GoogleBooksResultPagination();
+        VBox.setVgrow(pagination, Priority.ALWAYS);
+        return pagination;
     }
 
     private void buildUI() {
@@ -88,10 +98,12 @@ class GoogleBooksImportPanel extends VBox {
 
     private static final class SearchTask extends Task<Volumes> {
 
-        private final GoogleBooksImportForm.SearchData searchData;
+        private final GoogleBooksImportForm.SearchData.BluePrint searchData;
+        private final int startIndex;
 
-        SearchTask(@NotNull GoogleBooksImportForm.SearchData searchData) {
+        SearchTask(@NotNull GoogleBooksImportForm.SearchData.BluePrint searchData, int startIndex) {
             this.searchData = searchData;
+            this.startIndex = startIndex;
         }
 
         @Override
@@ -106,6 +118,7 @@ class GoogleBooksImportPanel extends VBox {
                     .printType(searchData.getFilter().getType())
                     .sortType(searchData.getSort().getType())
                     .maxResults(searchData.getMaxResults())
+                    .startIndex(startIndex)
                     .build();
             return query.load();
         }
