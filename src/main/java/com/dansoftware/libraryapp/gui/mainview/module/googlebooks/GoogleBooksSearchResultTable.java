@@ -80,6 +80,7 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
 
     private static final class IndexColumn extends TableColumn<Volume.VolumeInfo, String>
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+        private static final int COLUMN_WIDTH_UNIT = 60;
 
         private final IntegerProperty startIndexProperty;
 
@@ -87,12 +88,12 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
             this.startIndexProperty = startIndexProperty;
             setCellFactory(this);
             setReorderable(false);
-            setMinWidth(50);
-            setMaxWidth(60);
+            setMinWidth(COLUMN_WIDTH_UNIT);
+            setMaxWidth(COLUMN_WIDTH_UNIT);
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> tableCol) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -102,6 +103,11 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
                         setGraphic(null);
                     } else {
                         setText(Integer.toString(startIndexProperty.get() + getIndex() + 1));
+                        int preferredColumnWidth = getText().length() * COLUMN_WIDTH_UNIT;
+                        if (tableCol.getWidth() < preferredColumnWidth) {
+                            tableCol.setMinWidth(preferredColumnWidth);
+                            tableCol.setMaxWidth(preferredColumnWidth);
+                        }
                     }
                 }
             };
