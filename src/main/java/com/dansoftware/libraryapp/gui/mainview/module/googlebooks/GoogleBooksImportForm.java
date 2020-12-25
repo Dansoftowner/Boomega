@@ -230,6 +230,87 @@ class GoogleBooksImportForm extends TitledPane {
         public ObjectProperty<SortType> sortProperty() {
             return sort;
         }
+
+        public BluePrint asBluePrint() {
+            return new BluePrint(
+                    generalText.get(),
+                    author.get(),
+                    title.get(),
+                    publisher.get(),
+                    isbn.get(),
+                    language.get(),
+                    maxResults.get(),
+                    filter.get(),
+                    sort.get());
+        }
+
+        static class BluePrint {
+            private final String generalText;
+            private final String author;
+            private final String title;
+            private final String publisher;
+            private final String isbn;
+            private final String language;
+            private final Integer maxResults;
+            private final Filter filter;
+            private final SortType sort;
+
+            public BluePrint(String generalText,
+                             String author,
+                             String title,
+                             String publisher,
+                             String isbn,
+                             String language,
+                             Integer maxResults,
+                             Filter filter,
+                             SortType sort) {
+                this.generalText = generalText;
+                this.author = author;
+                this.title = title;
+                this.publisher = publisher;
+                this.isbn = isbn;
+                this.language = language;
+                this.maxResults = maxResults;
+                this.filter = filter;
+                this.sort = sort;
+            }
+
+            public String getGeneralText() {
+                return generalText;
+            }
+
+            public String getAuthor() {
+                return author;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public String getPublisher() {
+                return publisher;
+            }
+
+            public String getIsbn() {
+                return isbn;
+            }
+
+            public String getLanguage() {
+                return language;
+            }
+
+            public Integer getMaxResults() {
+                return maxResults;
+            }
+
+            public Filter getFilter() {
+                return filter;
+            }
+
+            public SortType getSort() {
+                return sort;
+            }
+        }
     }
 
     static class SortType {
