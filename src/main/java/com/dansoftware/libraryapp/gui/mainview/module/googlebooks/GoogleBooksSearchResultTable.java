@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.mainview.module.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.Volume;
-import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
 import com.dansoftware.libraryapp.gui.util.ImagePlaceHolder;
 import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink;
@@ -23,18 +22,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.controlsfx.control.Rating;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Optional;
 
 public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
 
-    private final Context context;
     private final IntegerProperty startIndex;
 
-    GoogleBooksSearchResultTable(@NotNull Context context, int startIndex) {
-        this.context = context;
+    GoogleBooksSearchResultTable(int startIndex) {
         this.startIndex = new SimpleIntegerProperty(startIndex);
         this.init();
     }
