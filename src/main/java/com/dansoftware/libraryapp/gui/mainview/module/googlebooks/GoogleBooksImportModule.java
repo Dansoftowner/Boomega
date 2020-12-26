@@ -50,10 +50,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
     }
 
     private ToolbarItem buildClearItem() {
-        return buildToolbarItem(MaterialDesignIcon.DELETE, "google.books.toolbar.clear", event -> {
-            if (SystemBrowser.isSupported())
-                new SystemBrowser().browse("https://books.google.com/advanced_book_search");
-        });
+        return buildToolbarItem(MaterialDesignIcon.DELETE, "google.books.toolbar.clear", event -> content.clear());
     }
 
     private ToolbarItem buildToolbarItem(MaterialDesignIcon icon, String i18nTooltip, EventHandler<MouseEvent> onClick) {
