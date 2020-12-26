@@ -189,5 +189,6 @@ class ExceptionDisplayPane(exception: Exception?) : TitledPane() {
     init {
         content = TextArea(ThrowableString(exception).toString())
         isAnimated = true
+        isExpanded = false
     }
 }
