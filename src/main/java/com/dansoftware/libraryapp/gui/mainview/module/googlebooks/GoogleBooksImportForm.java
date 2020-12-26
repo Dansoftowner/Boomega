@@ -26,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ResourceBundle;
@@ -113,6 +114,10 @@ class GoogleBooksImportForm extends TitledPane {
                 )
         ).title("google.books.add.form.ftitle").binding(BindingMode.CONTINUOUS)
                 .i18n(new ResourceBundleService(I18N.getGoogleBooksImportValues()));
+    }
+
+    public void clear() {
+        this.searchData.clear();
     }
 
     final static class SearchData {
@@ -229,6 +234,15 @@ class GoogleBooksImportForm extends TitledPane {
 
         public ObjectProperty<SortType> sortProperty() {
             return sort;
+        }
+
+        private void clear() {
+            generalText.set(StringUtils.EMPTY);
+            author.set(StringUtils.EMPTY);
+            isbn.set(StringUtils.EMPTY);
+            title.set(StringUtils.EMPTY);
+            publisher.set(StringUtils.EMPTY);
+            language.set(StringUtils.EMPTY);
         }
 
         public BluePrint asBluePrint() {
