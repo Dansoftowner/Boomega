@@ -34,6 +34,8 @@ import java.util.function.Consumer;
 
 class GoogleBooksImportForm extends TitledPane {
 
+    private static final String STYLE_CLASS = "google-books-import-form";
+
     private final Context context;
     private final SearchData searchData;
     private final Form form;
@@ -45,6 +47,7 @@ class GoogleBooksImportForm extends TitledPane {
         this.form = buildForm();
         this.searchData.validProperty().bind(form.validProperty());
         this.setContent(buildContent(onSearch));
+        this.getStyleClass().add(STYLE_CLASS);
     }
 
     private Node buildContent(Consumer<SearchData> onSearch) {

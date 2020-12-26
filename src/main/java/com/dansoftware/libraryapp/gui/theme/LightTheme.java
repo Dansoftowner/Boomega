@@ -35,7 +35,8 @@ public class LightTheme extends Theme {
             "/com/dansoftware/libraryapp/gui/theme/login-view-light.css",
             "/com/dansoftware/libraryapp/gui/theme/notification-node-light.css",
             "/com/dansoftware/libraryapp/gui/theme/plugin-manager-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/update-dialog-light.css"
+            "/com/dansoftware/libraryapp/gui/theme/update-dialog-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/google-books-module-light.css"
     );
 
     private final ThemeApplier globalApplier;

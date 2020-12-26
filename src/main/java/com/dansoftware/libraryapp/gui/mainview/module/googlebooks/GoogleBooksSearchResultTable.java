@@ -28,6 +28,8 @@ import java.util.Optional;
 
 public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
 
+    private static final String STYLE_CLASS = "google-books-table";
+
     private final IntegerProperty startIndex;
 
     GoogleBooksSearchResultTable(int startIndex) {
@@ -36,6 +38,7 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
     }
 
     private void init() {
+        getStyleClass().add(STYLE_CLASS);
         this.getColumns().addAll(
                 new IndexColumn(startIndex),
                 new TypeIndicatorColumn(),
