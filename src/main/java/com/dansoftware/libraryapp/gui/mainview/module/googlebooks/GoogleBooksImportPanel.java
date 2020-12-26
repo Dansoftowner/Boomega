@@ -27,14 +27,31 @@ class GoogleBooksImportPanel extends VBox {
 
     private final Context context;
     private final GoogleBooksImportForm form;
-    private final GoogleBooksResultPagination table;
+    private final GoogleBooksResultPagination tablePagination;
+
+    private Runnable onRefreshRequest;
 
     GoogleBooksImportPanel(@NotNull Context context, @NotNull Database database) {
         this.context = context;
         this.database = database;
         this.form = createForm(context);
-        this.table = buildPagination();
+        this.tablePagination = buildPagination();
         this.buildUI();
+    }
+
+    public void refresh() {
+        if (onRefreshRequest != null)
+            onRefreshRequest.run();
+    }
+
+    public void clear() {
+        this.tablePagination.clear();
+        this.form.clear();
+        this.form.setExpanded(true);
+    }
+
+    public void scrollToTop() {
+        this.tablePagination.scrollToTop();
     }
 
     private GoogleBooksImportForm createForm(Context context) {
@@ -43,9 +60,12 @@ class GoogleBooksImportPanel extends VBox {
 
     private Consumer<GoogleBooksImportForm.SearchData> buildOnSearchAction() {
         return searchData -> {
-            if (searchData.isValid())
-                ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData.asBluePrint(), 0, true));
-            else ;
+            if (searchData.isValid()) {
+                Runnable action = () ->
+                        ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData.asBluePrint(), 0, true));
+                action.run();
+                onRefreshRequest = action;
+            } else ;
             //TODO: DIALOG ABOUT NOT VALID FORM
         };
     }
@@ -72,15 +92,19 @@ class GoogleBooksImportPanel extends VBox {
             Volumes volumes = searchTask.getValue();
             logger.debug("Total items: {}", volumes.getTotalItems());
             if (starterTask) {
-                table.setItemsPerPage(searchData.getMaxResults());
-                table.setTotalItems(volumes.getTotalItems());
+                tablePagination.setItemsPerPage(searchData.getMaxResults());
+                tablePagination.setTotalItems(volumes.getTotalItems());
             }
             List<Volume> items = volumes.getItems();
             if (items != null && !items.isEmpty()) {
-                table.setOnContentRequest((start, size) -> ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData, start, false)));
-                table.setItems(items.stream().map(Volume::getVolumeInfo).collect(Collectors.toList()));
+                tablePagination.setOnNewContentRequest((start, size) -> {
+                    Runnable action = () -> ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData, start, false));
+                    action.run();
+                    onRefreshRequest = action;
+                });
+                tablePagination.setItems(items.stream().map(Volume::getVolumeInfo).collect(Collectors.toList()));
             } else
-                table.clear();
+                tablePagination.clear();
         });
         return searchTask;
     }
@@ -93,7 +117,7 @@ class GoogleBooksImportPanel extends VBox {
 
     private void buildUI() {
         getChildren().add(form);
-        getChildren().add(table);
+        getChildren().add(tablePagination);
     }
 
     private static final class SearchTask extends Task<Volumes> {
@@ -120,6 +144,7 @@ class GoogleBooksImportPanel extends VBox {
                     .maxResults(searchData.getMaxResults())
                     .startIndex(startIndex)
                     .build();
+            logger.debug("Google books request: {}", query);
             return query.load();
         }
     }

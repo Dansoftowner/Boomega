@@ -60,14 +60,18 @@ public class GoogleBooksResultPagination extends VBox {
         }
     }
 
-    public void clear() {
-        this.getChildren().remove(headerArea);
-        table.getItems().clear();
-        headerArea.onContentRequest = null;
+    public void scrollToTop() {
+        table.scrollTo(0);
     }
 
-    public void setOnContentRequest(BiConsumer<Integer, Integer> onContentRequest) {
-        this.headerArea.onContentRequest = onContentRequest;
+    public void clear() {
+        table.getItems().clear();
+        headerArea.clear();
+        this.getChildren().remove(headerArea);
+    }
+
+    public void setOnNewContentRequest(BiConsumer<Integer, Integer> onContentRequest) {
+        this.headerArea.onNewContentRequest = onContentRequest;
     }
 
     public int getTotalItems() {
@@ -104,7 +108,7 @@ public class GoogleBooksResultPagination extends VBox {
         private final Button prevBtn;
         private final Button nextBtn;
 
-        private BiConsumer<Integer, Integer> onContentRequest;
+        private BiConsumer<Integer, Integer> onNewContentRequest;
 
         HeaderArea(@NotNull IntegerProperty totalItems,
                    @NotNull IntegerProperty itemsPerPage,
@@ -138,8 +142,8 @@ public class GoogleBooksResultPagination extends VBox {
                 pageIndex.set(pageIndex.get() - 1);
                 int firstItemIndex = ((pageIndex.intValue() + 1) * itemsPerPage.intValue()) - itemsPerPage.intValue();
                 tableStartIndex.set(firstItemIndex);
-                if (onContentRequest != null)
-                    onContentRequest.accept(firstItemIndex, itemsPerPage.intValue());
+                if (onNewContentRequest != null)
+                    onNewContentRequest.accept(firstItemIndex, itemsPerPage.intValue());
             });
             return btn;
         }
@@ -152,8 +156,8 @@ public class GoogleBooksResultPagination extends VBox {
                 pageIndex.set(pageIndex.get() + 1);
                 int firstItemIndex = ((pageIndex.intValue() + 1) * itemsPerPage.intValue()) - itemsPerPage.intValue();
                 tableStartIndex.set(firstItemIndex);
-                if (onContentRequest != null)
-                    onContentRequest.accept(firstItemIndex, itemsPerPage.intValue());
+                if (onNewContentRequest != null)
+                    onNewContentRequest.accept(firstItemIndex, itemsPerPage.intValue());
             });
             return btn;
         }
@@ -183,5 +187,11 @@ public class GoogleBooksResultPagination extends VBox {
             this.getChildren().add(nextBtn);
         }
 
+        public void clear() {
+            this.onNewContentRequest = null;
+            this.pageIndex.set(0);
+            this.pageCount.set(0);
+            this.itemsPerPage.set(0);
+        }
     }
 }
