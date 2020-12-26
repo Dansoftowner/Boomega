@@ -27,4 +27,9 @@ public class SingleGoogleBookQuery {
             return new Gson().fromJson(input, Volume.class);
         }
     }
+
+    @Override
+    public String toString() {
+        return url;
+    }
 }

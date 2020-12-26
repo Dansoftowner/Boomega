@@ -26,4 +26,9 @@ public class GoogleBooksQuery {
             return new Gson().fromJson(reader, Volumes.class);
         }
     }
+
+    @Override
+    public String toString() {
+        return this.url;
+    }
 }
