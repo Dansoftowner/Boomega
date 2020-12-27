@@ -156,18 +156,22 @@ public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
         @Override
         public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
             return new TableCell<>() {
+                private static final int PREF_HEIGHT = 184;
+
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setText(null);
                         setGraphic(null);
+                        setPrefHeight(USE_COMPUTED_SIZE);
                     } else {
+                        setPrefHeight(PREF_HEIGHT);
                         Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
                         Optional.ofNullable(volume.getImageLinks())
                                 .map(Volume.VolumeInfo.ImageLinks::getThumbnail)
                                 .ifPresentOrElse(thumbnail -> {
-                                    setGraphic(new ImagePlaceHolder(80));
+                                    setGraphic(new ImagePlaceHolder(80) {{ setHeight(PREF_HEIGHT); }});
                                     BaseFXUtils.loadImage(thumbnail, image -> setGraphic(new ImageView(image)));
                                     setText(null);
                                 }, () -> {
