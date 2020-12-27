@@ -1,8 +1,8 @@
 package com.dansoftware.libraryapp.gui.mainview.module.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
-import com.dansoftware.libraryapp.gui.util.LanguageSelection;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.util.LanguageSelection;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
@@ -68,7 +68,7 @@ class GoogleBooksImportForm extends TitledPane {
 
     private void addAutoCompletionToLangField(FormRenderer src) {
         SimpleTextControl control = (SimpleTextControl) src.lookup(".languageSelector");
-        TextField textField = (TextField) ( (StackPane) control.getChildren().get(1)).getChildren().get(0);
+        TextField textField = (TextField) ((StackPane) control.getChildren().get(1)).getChildren().get(0);
         textField.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 new LanguageSelection(context, locale -> textField.setText(locale.getLanguage())).show();
@@ -85,15 +85,19 @@ class GoogleBooksImportForm extends TitledPane {
                         Field.ofStringType(searchData.author)
                                 .placeholder("google.books.add.form.author.prompt")
                                 .label("google.books.add.form.author")
-                                .span(ColSpan.THIRD),
+                                .span(ColSpan.HALF),
                         Field.ofStringType(searchData.title)
                                 .placeholder("google.books.add.form.title.prompt")
                                 .label("google.books.add.form.title")
-                                .span(ColSpan.THIRD),
+                                .span(ColSpan.HALF),
                         Field.ofStringType(searchData.publisher)
                                 .placeholder("google.books.add.form.publisher.prompt")
                                 .label("google.books.add.form.publisher")
-                                .span(ColSpan.THIRD),
+                                .span(ColSpan.HALF),
+                        Field.ofStringType(searchData.subject)
+                                .placeholder("google.books.add.form.subject.prompt")
+                                .label("google.books.add.form.subject")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(searchData.isbn)
                                 .placeholder("google.books.add.form.isbn.prompt")
                                 .label("google.books.add.form.isbn")
@@ -134,6 +138,7 @@ class GoogleBooksImportForm extends TitledPane {
         private final StringProperty author = new SimpleStringProperty("");
         private final StringProperty title = new SimpleStringProperty("");
         private final StringProperty publisher = new SimpleStringProperty("");
+        private final StringProperty subject = new SimpleStringProperty("");
         private final StringProperty isbn = new SimpleStringProperty("");
         private final StringProperty language = new SimpleStringProperty("");
         private final IntegerProperty maxResults = new SimpleIntegerProperty(10);
@@ -157,6 +162,14 @@ class GoogleBooksImportForm extends TitledPane {
 
         public BooleanProperty validProperty() {
             return valid;
+        }
+
+        public String getSubject() {
+            return subject.get();
+        }
+
+        public StringProperty subjectProperty() {
+            return subject;
         }
 
         public String getGeneralText() {
@@ -254,6 +267,7 @@ class GoogleBooksImportForm extends TitledPane {
                     author.get(),
                     title.get(),
                     publisher.get(),
+                    subject.get(),
                     isbn.get(),
                     language.get(),
                     maxResults.get(),
@@ -266,6 +280,7 @@ class GoogleBooksImportForm extends TitledPane {
             private final String author;
             private final String title;
             private final String publisher;
+            private final String subject;
             private final String isbn;
             private final String language;
             private final Integer maxResults;
@@ -276,6 +291,7 @@ class GoogleBooksImportForm extends TitledPane {
                              String author,
                              String title,
                              String publisher,
+                             String subject,
                              String isbn,
                              String language,
                              Integer maxResults,
@@ -285,11 +301,16 @@ class GoogleBooksImportForm extends TitledPane {
                 this.author = author;
                 this.title = title;
                 this.publisher = publisher;
+                this.subject = subject;
                 this.isbn = isbn;
                 this.language = language;
                 this.maxResults = maxResults;
                 this.filter = filter;
                 this.sort = sort;
+            }
+
+            public String getSubject() {
+                return subject;
             }
 
             public String getGeneralText() {

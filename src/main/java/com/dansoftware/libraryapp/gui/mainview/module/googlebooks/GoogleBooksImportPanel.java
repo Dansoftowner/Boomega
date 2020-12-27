@@ -137,6 +137,7 @@ class GoogleBooksImportPanel extends VBox {
                     .inAuthor(searchData.getAuthor())
                     .inTitle(searchData.getTitle())
                     .inPublisher(searchData.getPublisher())
+                    .subject(searchData.getSubject())
                     .isbn(searchData.getIsbn())
                     .language(searchData.getLanguage())
                     .printType(searchData.getFilter().getType())
