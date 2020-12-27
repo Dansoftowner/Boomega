@@ -129,7 +129,7 @@ fun KClass<*>.loadImageResource(resource: String): Image {
     }
 }
 
-class ImagePlaceHolder(size: Double) : Text("\uF2E9") {
+open class ImagePlaceHolder(size: Double) : Text("\uF2E9") {
     init {
         this.font = Font.font("Material Design Icons", size)
         this.styleClass.add("glyph-icon")
