@@ -39,6 +39,10 @@ class GoogleBooksImportPanel extends VBox {
         this.buildUI();
     }
 
+    public GoogleBooksTable getTable() {
+        return tablePagination.getTable();
+    }
+
     public void refresh() {
         if (onRefreshRequest != null)
             onRefreshRequest.run();

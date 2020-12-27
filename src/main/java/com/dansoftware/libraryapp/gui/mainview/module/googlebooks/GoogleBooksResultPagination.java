@@ -74,6 +74,10 @@ public class GoogleBooksResultPagination extends VBox {
         this.headerArea.onNewContentRequest = onContentRequest;
     }
 
+    public GoogleBooksTable getTable() {
+        return this.table;
+    }
+
     public int getTotalItems() {
         return totalItems.get();
     }
