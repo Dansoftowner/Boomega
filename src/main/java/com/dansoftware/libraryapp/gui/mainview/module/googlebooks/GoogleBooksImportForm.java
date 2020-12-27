@@ -16,6 +16,7 @@ import com.dlsc.formsfx.view.renderer.FormRenderer;
 import com.dlsc.formsfx.view.util.ColSpan;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,9 +44,8 @@ class GoogleBooksImportForm extends TitledPane {
     GoogleBooksImportForm(@NotNull Context context, @NotNull Consumer<SearchData> onSearch) {
         super(I18N.getGoogleBooksImportValue("google.books.add.form.section.title"), null);
         this.context = context;
-        this.searchData = new SearchData(new SimpleBooleanProperty());
+        this.searchData = new SearchData();
         this.form = buildForm();
-        this.searchData.validProperty().bind(form.validProperty());
         this.setContent(buildContent(onSearch));
         this.getStyleClass().add(STYLE_CLASS);
     }
@@ -62,6 +62,7 @@ class GoogleBooksImportForm extends TitledPane {
         button.setDefaultButton(true);
         button.prefWidthProperty().bind(this.widthProperty());
         button.setOnAction(e -> onSearch.accept(searchData));
+        button.disableProperty().bind(searchData.valid.not().or(form.validProperty().not()));
         VBox.setMargin(button, new Insets(0, 20, 10, 20));
         return button;
     }
@@ -128,10 +129,15 @@ class GoogleBooksImportForm extends TitledPane {
     }
 
     final static class SearchData {
-        private final BooleanProperty valid;
+        private final BooleanBinding valid;
 
-        private SearchData(@NotNull BooleanProperty validProperty) {
-            this.valid = validProperty;
+        private SearchData() {
+            this.valid = generalText.isNotEmpty()
+                            .or(author.isNotEmpty())
+                            .or(title.isNotEmpty())
+                            .or(publisher.isNotEmpty())
+                            .or(subject.isNotEmpty())
+                            .or(isbn.isNotEmpty());
         }
 
         private final StringProperty generalText = new SimpleStringProperty("");
@@ -155,14 +161,6 @@ class GoogleBooksImportForm extends TitledPane {
                 new SortType(GoogleBooksQueryBuilder.SortType.NEWEST, I18N.getGoogleBooksImportValues(), "google.books.add.form.sort.newest")
         );
         private final ObjectProperty<SortType> sort = new SimpleObjectProperty<>(selectableSorts.get(0));
-
-        public boolean isValid() {
-            return valid.get();
-        }
-
-        public BooleanProperty validProperty() {
-            return valid;
-        }
 
         public String getSubject() {
             return subject.get();

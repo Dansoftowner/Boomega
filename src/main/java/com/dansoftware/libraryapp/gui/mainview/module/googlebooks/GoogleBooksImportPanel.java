@@ -60,13 +60,10 @@ class GoogleBooksImportPanel extends VBox {
 
     private Consumer<GoogleBooksImportForm.SearchData> buildOnSearchAction() {
         return searchData -> {
-            if (searchData.isValid()) {
-                Runnable action = () ->
-                        ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData.asBluePrint(), 0, true));
-                action.run();
-                onRefreshRequest = action;
-            } else ;
-            //TODO: DIALOG ABOUT NOT VALID FORM
+            Runnable action = () ->
+                    ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData.asBluePrint(), 0, true));
+            action.run();
+            onRefreshRequest = action;
         };
     }
 
