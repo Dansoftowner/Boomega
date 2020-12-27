@@ -92,6 +92,7 @@ class GoogleBooksImportPanel extends VBox {
             Volumes volumes = searchTask.getValue();
             logger.debug("Total items: {}", volumes.getTotalItems());
             if (starterTask) {
+                tablePagination.clear();
                 tablePagination.setItemsPerPage(searchData.getMaxResults());
                 tablePagination.setTotalItems(volumes.getTotalItems());
             }
