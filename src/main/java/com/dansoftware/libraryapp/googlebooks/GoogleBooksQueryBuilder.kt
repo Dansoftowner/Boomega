@@ -1,14 +1,9 @@
 package com.dansoftware.libraryapp.googlebooks
 
-import com.dansoftware.libraryapp.util.Entry
-import com.dansoftware.libraryapp.util.ifNotEmpty
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.client.utils.URIBuilder
 import java.net.URISyntaxException
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import java.util.*
-import java.util.stream.Stream
 
 /**
  * Used for building queries that are capable to download data
@@ -17,6 +12,7 @@ import java.util.stream.Stream
  * @author Daniel Gyorffy
  */
 class GoogleBooksQueryBuilder {
+
     companion object {
         private const val BASE_URL = "https://www.googleapis.com/books/v1/volumes"
 
@@ -47,20 +43,8 @@ class GoogleBooksQueryBuilder {
         //defaults
         private const val START_INDEX_DEFAULT = 0
         private const val MAX_RESULTS_DEFAULT = 10
-        @JvmStatic private val TEXT_DEFAULT = null
-        @JvmStatic private val AUTHOR_DEFAULT = null
-        @JvmStatic private val TITLE_DEFAULT = null
-        @JvmStatic private val PUBLISHER_DEFAULT = null
-        @JvmStatic private val SUBJECT_DEFAULT = null
-        @JvmStatic private val ISBN_DEFAULT = null
-        @JvmStatic private val LANG_DEFAULT = null
-        @JvmStatic private val PRINT_TYPE_DEFAULT = null
-        @JvmStatic private val SORT_TYPE_DEFAULT = null
-
-        @JvmStatic
-        private fun encode(value: String): String {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8)
-        }
+        @JvmStatic private val PRINT_TYPE_DEFAULT = PrintType.ALL
+        @JvmStatic private val SORT_TYPE_DEFAULT = SortType.REVELANCE
 
         @JvmStatic
         fun byId(id: String): SingleGoogleBookQuery {
@@ -80,17 +64,17 @@ class GoogleBooksQueryBuilder {
     private var printType: PrintType? = null
     private var sortType: SortType? = null
 
-    fun inText(inText: String?) = this.also { it.inText = StringUtils.getIfBlank(inText, TEXT_DEFAULT) }
+    fun inText(inText: String?) = this.also { it.inText = StringUtils.getIfBlank(inText, null) }
 
-    fun inTitle(inTitle: String?) = this.also { it.inTitle = StringUtils.getIfBlank(inTitle, TITLE_DEFAULT) }
+    fun inTitle(inTitle: String?) = this.also { it.inTitle = StringUtils.getIfBlank(inTitle, null) }
 
-    fun inAuthor(inAuthor: String?) = this.also { it.inAuthor = StringUtils.getIfBlank(inAuthor, AUTHOR_DEFAULT) }
+    fun inAuthor(inAuthor: String?) = this.also { it.inAuthor = StringUtils.getIfBlank(inAuthor, null) }
 
-    fun inPublisher(inPublisher: String?) = this.also { it.inPublisher = StringUtils.getIfBlank(inPublisher, PUBLISHER_DEFAULT) }
+    fun inPublisher(inPublisher: String?) = this.also { it.inPublisher = StringUtils.getIfBlank(inPublisher, null) }
 
-    fun subject(subject: String?) = this.also { it.subject = StringUtils.getIfBlank(subject, SUBJECT_DEFAULT) }
+    fun subject(subject: String?) = this.also { it.subject = StringUtils.getIfBlank(subject, null) }
 
-    fun isbn(isbn: String?) = this.also { it.isbn = StringUtils.getIfBlank(isbn, ISBN_DEFAULT) }
+    fun isbn(isbn: String?) = this.also { it.isbn = StringUtils.getIfBlank(isbn, null) }
 
     fun startIndex(startIndex: Int) = this.also {
         require(startIndex >= 0) { "Start index can't be less than 0!" }
@@ -106,47 +90,29 @@ class GoogleBooksQueryBuilder {
 
     fun sortType(sortType: SortType?) = this.also { it.sortType = sortType }
 
-    fun language(lang: String?) = this.also { it.lang = StringUtils.getIfBlank(lang, LANG_DEFAULT) }
+    fun language(lang: String?) = this.also { it.lang = StringUtils.getIfBlank(lang, null) }
 
-    private fun buildBaseQueryUrl(): String {
-        val baseQueryBuilder = StringBuilder(BASE_URL).append("?q=")
-        inText?.let { baseQueryBuilder.append(encode(it)) }
-
-        val queryParams: MutableList<String> = LinkedList()
-        Stream.of(
-            Entry(TITLE_FLAG, inTitle),
-            Entry(AUTHOR_FLAG, inAuthor),
-            Entry(PUBLISHER_FLAG, inPublisher),
-            Entry(ISBN_FLAG, isbn),
-            Entry(SUBJECT_FLAG, subject)
-        ).forEach { entry ->
-            if (entry.value !== null)
-                queryParams.add(entry.key + encode(entry.value))
-        }
-        queryParams.ifNotEmpty { if (inText !== null) baseQueryBuilder.append('+') }
-        return baseQueryBuilder
-            .append(queryParams.joinToString("+"))
-            .toString()
+    private fun buildQueryString(): String {
+        return LinkedList<String>().also { members ->
+            inText?.let { members.add(it) }
+            inTitle?.let { members.add(TITLE_FLAG + it) }
+            inAuthor?.let { members.add(AUTHOR_FLAG + it) }
+            inPublisher?.let { members.add(PUBLISHER_FLAG + it) }
+            isbn?.let { members.add(ISBN_FLAG + it) }
+            subject?.let { members.add(SUBJECT_FLAG + it) }
+        }.joinToString(" ")
     }
 
     fun build(): GoogleBooksQuery {
         return try {
-            class ArgumentInfo(val key: Any, val value: Any?, val defaultValue: Any?)
-
-            val additionalQueryBuilder = URIBuilder(buildBaseQueryUrl())
-            Stream.of(
-                ArgumentInfo(START_INDEX, startIndex, START_INDEX_DEFAULT),
-                ArgumentInfo(MAX_RESULTS, maxResults, MAX_RESULTS_DEFAULT),
-                ArgumentInfo(PRINT_TYPE, printType?.value, PRINT_TYPE_DEFAULT),
-                ArgumentInfo(ORDER_BY, sortType?.value, SORT_TYPE_DEFAULT),
-                ArgumentInfo(LANG_RESTRICT, lang, LANG_DEFAULT)
-            ).forEach { argumentInfo: ArgumentInfo ->
-                if (argumentInfo.value !== argumentInfo.defaultValue) {
-                    additionalQueryBuilder.addParameter(argumentInfo.key.toString(), argumentInfo.value.toString())
-                }
-            }
-
-            GoogleBooksQuery(additionalQueryBuilder.toString())
+            URIBuilder(BASE_URL).also { uriBuilder ->
+                uriBuilder.addParameter("q", buildQueryString())
+                startIndex.takeIf { it != START_INDEX_DEFAULT }?.let { uriBuilder.addParameter(START_INDEX, it.toString()) }
+                maxResults.takeIf { it != MAX_RESULTS_DEFAULT }?.let { uriBuilder.addParameter(MAX_RESULTS, it.toString()) }
+                printType.takeIf { it != PRINT_TYPE_DEFAULT }?.let { uriBuilder.addParameter(PRINT_TYPE, it.toString()) }
+                sortType.takeIf { it != SORT_TYPE_DEFAULT }?.let { uriBuilder.addParameter(ORDER_BY, it.value) }
+                lang?.let { uriBuilder.addParameter(LANG_RESTRICT, lang) }
+            }.let { GoogleBooksQuery(it.toString()) }
         } catch (e: URISyntaxException) {
             throw RuntimeException(e)
         }
