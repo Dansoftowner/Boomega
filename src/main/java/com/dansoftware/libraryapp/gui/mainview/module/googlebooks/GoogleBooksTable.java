@@ -26,13 +26,13 @@ import org.controlsfx.control.Rating;
 import java.util.Locale;
 import java.util.Optional;
 
-public class GoogleBooksSearchResultTable extends TableView<Volume.VolumeInfo> {
+public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
 
     private static final String STYLE_CLASS = "google-books-table";
 
     private final IntegerProperty startIndex;
 
-    GoogleBooksSearchResultTable(int startIndex) {
+    GoogleBooksTable(int startIndex) {
         this.startIndex = new SimpleIntegerProperty(startIndex);
         this.init();
     }

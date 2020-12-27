@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 public class GoogleBooksResultPagination extends VBox {
 
     private final HeaderArea headerArea;
-    private final GoogleBooksSearchResultTable table;
+    private final GoogleBooksTable table;
 
     private final IntegerProperty totalItems;
     private final IntegerProperty itemsPerPage;
@@ -37,8 +37,8 @@ public class GoogleBooksResultPagination extends VBox {
         this.buildUI();
     }
 
-    private GoogleBooksSearchResultTable buildTable() {
-        var table = new GoogleBooksSearchResultTable(0);
+    private GoogleBooksTable buildTable() {
+        var table = new GoogleBooksTable(0);
         VBox.setVgrow(table, Priority.ALWAYS);
         return table;
     }
