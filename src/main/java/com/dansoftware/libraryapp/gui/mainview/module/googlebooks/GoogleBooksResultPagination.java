@@ -151,7 +151,7 @@ public class GoogleBooksResultPagination extends VBox {
         private Button buildNextBtn() {
             var btn = new Button(null, new MaterialDesignIconView(MaterialDesignIcon.STEP_FORWARD));
             btn.setTooltip(new Tooltip(I18N.getGoogleBooksImportValue("google.books.pagination.next")));
-            btn.disableProperty().bind(pageIndex.isEqualTo(pageCount));
+            btn.disableProperty().bind(pageIndex.add(1).isEqualTo(pageCount));
             btn.setOnAction(e -> {
                 pageIndex.set(pageIndex.get() + 1);
                 int firstItemIndex = ((pageIndex.intValue() + 1) * itemsPerPage.intValue()) - itemsPerPage.intValue();
