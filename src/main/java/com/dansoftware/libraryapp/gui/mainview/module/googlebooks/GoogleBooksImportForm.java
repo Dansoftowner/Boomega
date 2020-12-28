@@ -102,12 +102,12 @@ class GoogleBooksImportForm extends TitledPane {
                         Field.ofStringType(searchData.isbn)
                                 .placeholder("google.books.add.form.isbn.prompt")
                                 .label("google.books.add.form.isbn")
-                                .span(ColSpan.TWO_THIRD),
+                                .span(ColSpan.HALF),
                         Field.ofStringType(searchData.language)
                                 .styleClass("languageSelector")
                                 .placeholder("google.books.add.form.lang.prompt")
                                 .label("google.books.add.form.lang")
-                                .span(ColSpan.THIRD),
+                                .span(ColSpan.HALF),
                         Field.ofSingleSelectionType(new SimpleListProperty<>(searchData.selectableFilters), searchData.filter)
                                 .label("google.books.add.form.filter")
                                 .span(ColSpan.HALF)
