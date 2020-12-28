@@ -35,6 +35,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         ISBN_COLUMN( "google.books.table.column.isbn", ISBNColumn.class, true, table -> new ISBNColumn()),
         AUTHOR_COLUMN("google.books.table.column.author", AuthorColumn.class, true, table -> new AuthorColumn()),
         TITLE_COLUMN( "google.books.table.column.title", TitleColumn.class, true, table -> new TitleColumn()),
+        SUB_TITLE_COLUMN("google.books.table.column.subtitle", SubtitleColumn.class, false, table -> new SubtitleColumn()),
         PUBLISHER_COLUMN("google.books.table.column.publisher", PublisherColumn.class, true, table -> new PublisherColumn()),
         LANG_COLUMN( "google.books.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
         DATE_COLUMN( "google.books.table.column.date", DateColumn.class, true, table -> new DateColumn()),
@@ -312,6 +313,13 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         TitleColumn() {
             super(ColumnType.TITLE_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("title"));
+        }
+    }
+
+    private static final class SubtitleColumn extends Column {
+        SubtitleColumn() {
+            super(ColumnType.SUB_TITLE_COLUMN);
+            setCellValueFactory(new PropertyValueFactory<>("subtitle"));
         }
     }
 
