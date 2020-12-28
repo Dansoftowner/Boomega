@@ -21,6 +21,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+/**
+ * A {@link GoogleBooksResultPagination} used for showing Google Books elements
+ * in a {@link GoogleBooksTable}, but also provides a pagination control for loading
+ * new and new content.
+ *
+ * @author Daniel Gyorffy
+ */
 public class GoogleBooksResultPagination extends VBox {
 
     private final HeaderArea headerArea;

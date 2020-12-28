@@ -19,6 +19,12 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * A {@link GoogleBooksImportPanel} allows to search on Google Books (through a {@link GoogleBooksImportForm}) and also
+ * displays them (through a {@link GoogleBooksResultPagination}).
+ *
+ * @author Daniel Gyoerffy
+ */
 class GoogleBooksImportPanel extends VBox {
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleBooksImportPanel.class);

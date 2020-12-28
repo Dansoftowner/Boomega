@@ -18,7 +18,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +28,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The {@link GoogleBooksImportModule} is a module that allows to search books
+ * through the Google Books service and also allows to import books and add them into
+ * the local database.
+ *
+ * @author Daniel Gyorffy
+ */
 public class GoogleBooksImportModule extends WorkbenchModule {
 
     private static final Preferences.Key<TableColumnsInfo> colConfigKey =

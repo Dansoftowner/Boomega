@@ -26,6 +26,13 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * A {@link GoogleBooksTable} is a table-view that used for showing Google Books.
+ * <p>
+ * It's columns are represented by the {@link ColumnType} enum.
+ *
+ * @author Daniel Gyorffy
+ */
 public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
 
     public enum ColumnType {
