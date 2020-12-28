@@ -20,17 +20,17 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
 
     public enum ColumnType {
-        INDEX_COLUMN( "", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
-        TYPE_INDICATOR_COLUMN( "", TypeIndicatorColumn.class, true, table -> new TypeIndicatorColumn()),
+        INDEX_COLUMN("google.books.table.column.index", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
+        TYPE_INDICATOR_COLUMN("google.books.table.column.typeindicator", TypeIndicatorColumn.class, true, table -> new TypeIndicatorColumn()),
         THUMBNAIL_COLUMN( "google.books.table.column.thumbnail", ThumbnailColumn.class, true, table -> new ThumbnailColumn()),
         ISBN_COLUMN( "google.books.table.column.isbn", ISBNColumn.class, true, table -> new ISBNColumn()),
         AUTHOR_COLUMN("google.books.table.column.author", AuthorColumn.class, true, table -> new AuthorColumn()),
@@ -39,7 +39,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         LANG_COLUMN( "google.books.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
         DATE_COLUMN( "google.books.table.column.date", DateColumn.class, true, table -> new DateColumn()),
         RANK_COLUMN( "google.books.table.column.rank", RankColumn.class, true, table -> new RankColumn()),
-        BROWSER_COLUMN( "", BrowserColumn.class,false, table -> new BrowserColumn());
+        BROWSER_COLUMN("google.books.table.column.browse", BrowserColumn.class,false, table -> new BrowserColumn());
 
         private final String i18n;
         private final Class<? extends TableColumn<Volume.VolumeInfo, String>> tableColumnClass;
@@ -77,21 +77,28 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     private void init() {
         getStyleClass().add(STYLE_CLASS);
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        this.getColumns().addAll(
-                new IndexColumn(startIndex),
-                new TypeIndicatorColumn(),
-                new ThumbnailColumn(),
-                new ISBNColumn(),
-                new AuthorColumn(),
-                new TitleColumn(),
-                new PublisherColumn(),
-                new LangColumn(),
-                new DateColumn(),
-                new RankColumn(),
-                new BrowserColumn()
-        );
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.setPlaceholder(new PlaceHolder());
+    }
+
+    public void buildDefaultColumns() {
+        Arrays.stream(ColumnType.values())
+                .filter(ColumnType::isDefaultVisible)
+                .forEach(this::createColumn);
+    }
+
+    public List<ColumnType> getShowingColumns() {
+        return getColumns().stream()
+                .map(col -> (Column) col)
+                .map(col -> col.columnType)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isColumnShown(@Nullable ColumnType columnType) {
+        return getColumns().stream()
+                .map(col -> (Column) col)
+                .map(col -> col.columnType)
+                .anyMatch(col -> col.equals(columnType));
     }
 
     public void createColumn(@NotNull ColumnType columnType) {
@@ -124,27 +131,27 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    public static class Column extends TableColumn<Volume.VolumeInfo, String> {
+    private static class Column extends TableColumn<Volume.VolumeInfo, String> {
         private final ColumnType columnType;
 
-        public Column(@NotNull ColumnType columnType) {
+        public Column(@NotNull ColumnType columnType, boolean i18n) {
             this.columnType = Objects.requireNonNull(columnType);
+            if (i18n) setText(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
         }
 
-        public Column(@NotNull ColumnType columnType, @NotNull String i18n) {
-            super(I18N.getGoogleBooksImportValue(i18n));
-            this.columnType = Objects.requireNonNull(columnType);
+        public Column(@NotNull ColumnType columnType) {
+            this(columnType, true);
         }
     }
 
-    public static final class IndexColumn extends Column
+    private static final class IndexColumn extends Column
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
         private static final int COLUMN_WIDTH_UNIT = 60;
 
         private final IntegerProperty startIndexProperty;
 
         IndexColumn(IntegerProperty startIndexProperty) {
-            super(ColumnType.INDEX_COLUMN);
+            super(ColumnType.INDEX_COLUMN, false);
             this.startIndexProperty = startIndexProperty;
             setCellFactory(this);
             setReorderable(false);
@@ -174,11 +181,11 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    public static final class TypeIndicatorColumn extends Column
+    private static final class TypeIndicatorColumn extends Column
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
 
         TypeIndicatorColumn() {
-            super(ColumnType.TYPE_INDICATOR_COLUMN);
+            super(ColumnType.TYPE_INDICATOR_COLUMN, false);
             setCellFactory(this);
             setReorderable(false);
             setMinWidth(50);
@@ -204,11 +211,11 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
 
     }
 
-    public static final class ThumbnailColumn extends Column
+    private static final class ThumbnailColumn extends Column
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
 
         ThumbnailColumn() {
-            super(ColumnType.THUMBNAIL_COLUMN, "google.books.table.column.thumbnail");
+            super(ColumnType.THUMBNAIL_COLUMN);
             setCellFactory(this);
             setMinWidth(20);
             setPrefWidth(200);
@@ -246,10 +253,10 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    public static final class ISBNColumn extends Column
+    private static final class ISBNColumn extends Column
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
         ISBNColumn() {
-            super(ColumnType.ISBN_COLUMN,"google.books.table.column.isbn");
+            super(ColumnType.ISBN_COLUMN);
             setCellFactory(this);
         }
 
@@ -274,10 +281,10 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    public static final class AuthorColumn extends Column
+    private static final class AuthorColumn extends Column
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
         AuthorColumn() {
-            super(ColumnType.AUTHOR_COLUMN, "google.books.table.column.author");
+            super(ColumnType.AUTHOR_COLUMN);
             setCellFactory(this);
         }
 
@@ -301,24 +308,24 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    public static final class TitleColumn extends Column {
+    private static final class TitleColumn extends Column {
         TitleColumn() {
-            super(ColumnType.TITLE_COLUMN, "google.books.table.column.title");
+            super(ColumnType.TITLE_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("title"));
         }
     }
 
-    public static final class PublisherColumn extends Column {
+    private static final class PublisherColumn extends Column {
         PublisherColumn() {
-            super(ColumnType.PUBLISHER_COLUMN, "google.books.table.column.publisher");
+            super(ColumnType.PUBLISHER_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("publisher"));
         }
     }
 
-    public static final class LangColumn extends Column
+    private static final class LangColumn extends Column
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
         LangColumn() {
-            super(ColumnType.LANG_COLUMN, "google.books.table.column.lang");
+            super(ColumnType.LANG_COLUMN);
             setCellFactory(this);
         }
 
@@ -343,19 +350,19 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    public static final class DateColumn extends Column {
+    private static final class DateColumn extends Column {
 
         DateColumn() {
-            super(ColumnType.DATE_COLUMN, "google.books.table.column.date");
+            super(ColumnType.DATE_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("publishedDate"));
         }
     }
 
-    public static final class RankColumn extends Column
+    private static final class RankColumn extends Column
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
 
         RankColumn() {
-            super(ColumnType.RANK_COLUMN,"google.books.table.column.rank");
+            super(ColumnType.RANK_COLUMN);
             setCellFactory(this);
         }
 
@@ -390,10 +397,10 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    public static final class BrowserColumn extends Column
+    private static final class BrowserColumn extends Column
             implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
         BrowserColumn() {
-            super(ColumnType.BROWSER_COLUMN);
+            super(ColumnType.BROWSER_COLUMN, false);
             setCellFactory(this);
             setReorderable(false);
             setMinWidth(50);
