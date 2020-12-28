@@ -167,10 +167,9 @@ public class GoogleBooksImportModule extends WorkbenchModule {
                 } else {
                     getTable().removeAllColumns();
                     columnChooserItem.getItems().stream()
-                            .map(menuItem -> (CheckMenuItem) menuItem)
+                            .map(menuItem -> (TableColumnMenuItem) menuItem)
                             .filter(CheckMenuItem::isSelected)
-                            .map(MenuItem::getUserData)
-                            .map(obj -> (GoogleBooksTable.ColumnType) obj)
+                            .map(menuItem -> menuItem.columnType)
                             .forEach(colType -> getTable().addColumn(colType));
                 }
             });
