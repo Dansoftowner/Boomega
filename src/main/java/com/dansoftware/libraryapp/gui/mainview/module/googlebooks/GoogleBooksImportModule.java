@@ -5,10 +5,15 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.SystemBrowser;
+import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.CheckMenuItem;
@@ -17,26 +22,65 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GoogleBooksImportModule extends WorkbenchModule {
 
-    private static final Preferences.Key<VisibleTableColumnsInfo> colConfigKey =
-            new Preferences.Key<>("google.books.module.table.columns", VisibleTableColumnsInfo.class, VisibleTableColumnsInfo::byDefault);
+    private static final Preferences.Key<TableColumnsInfo> colConfigKey =
+            new Preferences.Key<>("google.books.module.table.columns", TableColumnsInfo.class, TableColumnsInfo::byDefault);
 
     private final Context context;
+    private final Preferences preferences;
     private final Database database;
-    private GoogleBooksImportPanel content;
+    private final ObjectProperty<GoogleBooksImportPanel> content =
+            new SimpleObjectProperty<>();
 
-    public GoogleBooksImportModule(@NotNull Context context, @NotNull Database database) {
+    private ToolbarItem columnChooserItem;
+
+    public GoogleBooksImportModule(@NotNull Context context,
+                                   @NotNull Preferences preferences,
+                                   @NotNull Database database) {
         super(I18N.getGoogleBooksImportValue("google.books.import.module.title"), MaterialDesignIcon.GOOGLE);
         this.context = context;
         this.database = database;
+        this.preferences = preferences;
+    }
+
+    @Override
+    public void init(Workbench workbench) {
+        super.init(workbench);
+        this.buildTableConfiguration();
         this.buildToolbar();
+    }
+
+    @Override
+    public Node activate() {
+        if (content.get() == null)
+            content.set(new GoogleBooksImportPanel(context, database));
+        return content.get();
+    }
+
+    @Override
+    public boolean destroy() {
+        preferences.editor().put(colConfigKey, new TableColumnsInfo(getTable().getShowingColumns()));
+        content.set(null);
+        return true;
+    }
+
+    private void buildTableConfiguration() {
+        content.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                GoogleBooksTable table = newValue.getTable();
+                List<GoogleBooksTable.ColumnType> columnTypes =
+                        preferences.get(colConfigKey).columnTypes;
+                columnTypes.forEach(table::createColumn);
+                columnChooserItem.getItems().stream()
+                        .map(menuItem -> (CheckMenuItem) menuItem)
+                        .forEach(menuItem -> menuItem.setSelected(table.isColumnShown((GoogleBooksTable.ColumnType) menuItem.getUserData())));
+            }
+        });
     }
 
     private void buildToolbar() {
@@ -45,15 +89,15 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         this.getToolbarControlsRight().add(buildClearItem());
         this.getToolbarControlsRight().add(buildBrowserItem());
 
-        this.getToolbarControlsLeft().add(buildColumnChooserItem());
+        this.getToolbarControlsLeft().add(columnChooserItem = buildColumnChooserItem());
     }
 
     private ToolbarItem buildRefreshItem() {
-        return buildToolbarItem(MaterialDesignIcon.REFRESH, "google.books.toolbar.refresh", event -> this.content.refresh());
+        return buildToolbarItem(MaterialDesignIcon.REFRESH, "google.books.toolbar.refresh", event -> getContent().refresh());
     }
 
     private ToolbarItem buildScrollToTopItem() {
-        return buildToolbarItem(MaterialDesignIcon.BORDER_TOP, "google.books.toolbar.scrolltop", event -> content.scrollToTop());
+        return buildToolbarItem(MaterialDesignIcon.BORDER_TOP, "google.books.toolbar.scrolltop", event -> getContent().scrollToTop());
     }
 
     private ToolbarItem buildBrowserItem() {
@@ -64,30 +108,30 @@ public class GoogleBooksImportModule extends WorkbenchModule {
     }
 
     private ToolbarItem buildClearItem() {
-        return buildToolbarItem(MaterialDesignIcon.DELETE, "google.books.toolbar.clear", event -> content.clear());
+        return buildToolbarItem(MaterialDesignIcon.DELETE, "google.books.toolbar.clear", event -> getContent().clear());
     }
 
     private ToolbarItem buildColumnChooserItem() {
-
-        var toolbarItem = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.TABLE_COLUMN_PLUS_AFTER));
-        class MenuItemImpl extends CheckMenuItem {
-            MenuItemImpl(GoogleBooksTable.ColumnType columnType, boolean selected) {
+        var toolbarItem = new ToolbarItem(
+                I18N.getGoogleBooksImportValue("google.books.toolbar.columns"),
+                new FontAwesomeIconView(FontAwesomeIcon.COLUMNS));
+        class TableColumnMenuItem extends CheckMenuItem {
+            TableColumnMenuItem(GoogleBooksTable.ColumnType columnType) {
                 super(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
-                this.setSelected(selected);
                 this.setUserData(columnType);
                 this.setOnAction(e -> {
+                    getTable().getColumns().clear();
                     toolbarItem.getItems().stream()
                             .map(menuItem -> (CheckMenuItem) menuItem)
                             .filter(CheckMenuItem::isSelected)
                             .map(MenuItem::getUserData)
                             .map(obj -> (GoogleBooksTable.ColumnType) obj)
-                            .forEach(colType -> content.getTable().createColumn(columnType));
+                            .forEach(colType -> getTable().createColumn(colType));
                 });
             }
         }
-
         Stream.of(GoogleBooksTable.ColumnType.values())
-                .map(columnType -> new MenuItemImpl(columnType, columnType.isDefaultVisible()))
+                .map(TableColumnMenuItem::new)
                 .forEach(toolbarItem.getItems()::add);
         return toolbarItem;
     }
@@ -98,29 +142,27 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         return toolbarItem;
     }
 
-    @Override
-    public Node activate() {
-        if (content == null) {
-            content = new GoogleBooksImportPanel(context, database);
-        }
-        return content;
+    private GoogleBooksImportPanel getContent() {
+        return content.get();
     }
 
-    @Override
-    public boolean destroy() {
-        content = null;
-        return true;
+    private GoogleBooksTable getTable() {
+        return getContent().getTable();
     }
 
-    static class VisibleTableColumnsInfo {
+    /**
+     * Used for storing the preferred table columns in the configurations.
+     */
+    static class TableColumnsInfo {
+
         private final List<GoogleBooksTable.ColumnType> columnTypes;
 
-        VisibleTableColumnsInfo(@NotNull List<GoogleBooksTable.ColumnType> columnTypes) {
+        TableColumnsInfo(@NotNull List<GoogleBooksTable.ColumnType> columnTypes) {
             this.columnTypes = Objects.requireNonNull(columnTypes);
         }
 
-        public static VisibleTableColumnsInfo byDefault() {
-            return new VisibleTableColumnsInfo(
+        public static TableColumnsInfo byDefault() {
+            return new TableColumnsInfo(
                     Arrays.stream(GoogleBooksTable.ColumnType.values())
                             .filter(GoogleBooksTable.ColumnType::isDefaultVisible)
                             .collect(Collectors.toList())

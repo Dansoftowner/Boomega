@@ -28,7 +28,7 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
              @NotNull Preferences preferences,
              @NotNull DatabaseTracker tracker) {
         this.activity = Objects.requireNonNull(activity);
-        this.contentView = new MainContentView(database);
+        this.contentView = new MainContentView(preferences, database);
         this.database = database;
         this.menuBar = new MenuBarBase(new AppMenuBar(contentView.getContext(), database.getMeta(), preferences, tracker));
         this.setTop(menuBar);
