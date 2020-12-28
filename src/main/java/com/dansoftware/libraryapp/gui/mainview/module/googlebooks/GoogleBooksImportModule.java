@@ -75,7 +75,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
                 GoogleBooksTable table = newValue.getTable();
                 List<GoogleBooksTable.ColumnType> columnTypes =
                         preferences.get(colConfigKey).columnTypes;
-                columnTypes.forEach(table::createColumn);
+                columnTypes.forEach(table::addColumn);
                 columnChooserItem.getItems().stream()
                         .map(menuItem -> (CheckMenuItem) menuItem)
                         .forEach(menuItem -> menuItem.setSelected(table.isColumnShown((GoogleBooksTable.ColumnType) menuItem.getUserData())));
@@ -120,13 +120,17 @@ public class GoogleBooksImportModule extends WorkbenchModule {
                 super(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
                 this.setUserData(columnType);
                 this.setOnAction(e -> {
-                    getTable().getColumns().clear();
-                    toolbarItem.getItems().stream()
-                            .map(menuItem -> (CheckMenuItem) menuItem)
-                            .filter(CheckMenuItem::isSelected)
-                            .map(MenuItem::getUserData)
-                            .map(obj -> (GoogleBooksTable.ColumnType) obj)
-                            .forEach(colType -> getTable().createColumn(colType));
+                    if (!this.isSelected()) {
+                        getTable().removeColumn(columnType);
+                    } else {
+                        getTable().removeAllColumns();
+                        toolbarItem.getItems().stream()
+                                .map(menuItem -> (CheckMenuItem) menuItem)
+                                .filter(CheckMenuItem::isSelected)
+                                .map(MenuItem::getUserData)
+                                .map(obj -> (GoogleBooksTable.ColumnType) obj)
+                                .forEach(colType -> getTable().addColumn(colType));
+                    }
                 });
             }
         }

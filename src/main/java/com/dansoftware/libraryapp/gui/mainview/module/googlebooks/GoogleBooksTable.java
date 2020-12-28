@@ -85,7 +85,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     public void buildDefaultColumns() {
         Arrays.stream(ColumnType.values())
                 .filter(ColumnType::isDefaultVisible)
-                .forEach(this::createColumn);
+                .forEach(this::addColumn);
     }
 
     public List<ColumnType> getShowingColumns() {
@@ -102,12 +102,20 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                 .anyMatch(col -> col.equals(columnType));
     }
 
-    public void createColumn(@NotNull ColumnType columnType) {
-        createColumn(columnType.tableColumnClass, columnType.createPolicy);
+    public void removeAllColumns() {
+        this.getColumns().clear();
     }
 
-    private void createColumn(Class<? extends TableColumn<Volume.VolumeInfo, String>> tableColumnClass,
-                              Function<GoogleBooksTable, ? extends TableColumn<Volume.VolumeInfo, String>> createAction) {
+    public void removeColumn(@NotNull ColumnType columnType) {
+        this.getColumns().removeIf(col -> ((Column) col).columnType.equals(columnType));
+    }
+
+    public void addColumn(@NotNull ColumnType columnType) {
+        addColumn(columnType.tableColumnClass, columnType.createPolicy);
+    }
+
+    private void addColumn(Class<? extends TableColumn<Volume.VolumeInfo, String>> tableColumnClass,
+                           Function<GoogleBooksTable, ? extends TableColumn<Volume.VolumeInfo, String>> createAction) {
             this.getColumns().add(createAction.apply(this));
     }
 
