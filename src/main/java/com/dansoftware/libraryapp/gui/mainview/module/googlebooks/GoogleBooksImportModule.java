@@ -18,11 +18,14 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -77,8 +80,8 @@ public class GoogleBooksImportModule extends WorkbenchModule {
                         preferences.get(colConfigKey).columnTypes;
                 columnTypes.forEach(table::addColumn);
                 columnChooserItem.getItems().stream()
-                        .map(menuItem -> (CheckMenuItem) menuItem)
-                        .forEach(menuItem -> menuItem.setSelected(table.isColumnShown((GoogleBooksTable.ColumnType) menuItem.getUserData())));
+                        .map(menuItem -> (TableColumnMenuItem) menuItem)
+                        .forEach(menuItem -> menuItem.setSelected(table.isColumnShown(menuItem.columnType)));
             }
         });
     }
@@ -90,6 +93,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         this.getToolbarControlsRight().add(buildBrowserItem());
 
         this.getToolbarControlsLeft().add(columnChooserItem = buildColumnChooserItem());
+        this.getToolbarControlsLeft().add(buildColumnResetItem());
     }
 
     private ToolbarItem buildRefreshItem() {
@@ -115,29 +119,19 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         var toolbarItem = new ToolbarItem(
                 I18N.getGoogleBooksImportValue("google.books.toolbar.columns"),
                 new FontAwesomeIconView(FontAwesomeIcon.COLUMNS));
-        class TableColumnMenuItem extends CheckMenuItem {
-            TableColumnMenuItem(GoogleBooksTable.ColumnType columnType) {
-                super(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
-                this.setUserData(columnType);
-                this.setOnAction(e -> {
-                    if (!this.isSelected()) {
-                        getTable().removeColumn(columnType);
-                    } else {
-                        getTable().removeAllColumns();
-                        toolbarItem.getItems().stream()
-                                .map(menuItem -> (CheckMenuItem) menuItem)
-                                .filter(CheckMenuItem::isSelected)
-                                .map(MenuItem::getUserData)
-                                .map(obj -> (GoogleBooksTable.ColumnType) obj)
-                                .forEach(colType -> getTable().addColumn(colType));
-                    }
-                });
-            }
-        }
         Stream.of(GoogleBooksTable.ColumnType.values())
                 .map(TableColumnMenuItem::new)
                 .forEach(toolbarItem.getItems()::add);
         return toolbarItem;
+    }
+
+    private ToolbarItem buildColumnResetItem() {
+        return buildToolbarItem(MaterialDesignIcon.TABLE, "google.books.toolbar.colreset", event -> {
+            getTable().buildDefaultColumns();
+            columnChooserItem.getItems().stream()
+                    .map(item -> (TableColumnMenuItem) item)
+                    .forEach(item -> item.setSelected(item.columnType.isDefaultVisible()));
+        });
     }
 
     private ToolbarItem buildToolbarItem(MaterialDesignIcon icon, String i18nTooltip, EventHandler<MouseEvent> onClick) {
@@ -152,6 +146,29 @@ public class GoogleBooksImportModule extends WorkbenchModule {
 
     private GoogleBooksTable getTable() {
         return getContent().getTable();
+    }
+
+    private final class TableColumnMenuItem extends CheckMenuItem {
+
+        private final GoogleBooksTable.ColumnType columnType;
+
+        TableColumnMenuItem(GoogleBooksTable.ColumnType columnType) {
+            super(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
+            this.columnType = columnType;
+            this.setOnAction(e -> {
+                if (!this.isSelected()) {
+                    getTable().removeColumn(columnType);
+                } else {
+                    getTable().removeAllColumns();
+                    columnChooserItem.getItems().stream()
+                            .map(menuItem -> (CheckMenuItem) menuItem)
+                            .filter(CheckMenuItem::isSelected)
+                            .map(MenuItem::getUserData)
+                            .map(obj -> (GoogleBooksTable.ColumnType) obj)
+                            .forEach(colType -> getTable().addColumn(colType));
+                }
+            });
+        }
     }
 
     /**

@@ -83,6 +83,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     }
 
     public void buildDefaultColumns() {
+        this.getColumns().clear();
         Arrays.stream(ColumnType.values())
                 .filter(ColumnType::isDefaultVisible)
                 .forEach(this::addColumn);
