@@ -38,16 +38,18 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     public enum ColumnType {
         INDEX_COLUMN("google.books.table.column.index", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
         TYPE_INDICATOR_COLUMN("google.books.table.column.typeindicator", TypeIndicatorColumn.class, true, table -> new TypeIndicatorColumn()),
-        THUMBNAIL_COLUMN( "google.books.table.column.thumbnail", ThumbnailColumn.class, true, table -> new ThumbnailColumn()),
-        ISBN_COLUMN( "google.books.table.column.isbn", ISBNColumn.class, true, table -> new ISBNColumn()),
+        THUMBNAIL_COLUMN("google.books.table.column.thumbnail", ThumbnailColumn.class, true, table -> new ThumbnailColumn()),
+        ISBN_COLUMN("google.books.table.column.isbn", ISBNColumn.class, false, table -> new ISBNColumn()),
+        ISBN_10_COLUMN("google.books.table.column.isbn10", ISBN10Column.class, false, table -> new ISBN10Column()),
+        ISBN_13_COLUMN("google.books.table.column.isbn13", ISBN13Column.class, true, table -> new ISBN13Column()),
         AUTHOR_COLUMN("google.books.table.column.author", AuthorColumn.class, true, table -> new AuthorColumn()),
-        TITLE_COLUMN( "google.books.table.column.title", TitleColumn.class, true, table -> new TitleColumn()),
+        TITLE_COLUMN("google.books.table.column.title", TitleColumn.class, true, table -> new TitleColumn()),
         SUB_TITLE_COLUMN("google.books.table.column.subtitle", SubtitleColumn.class, false, table -> new SubtitleColumn()),
         PUBLISHER_COLUMN("google.books.table.column.publisher", PublisherColumn.class, true, table -> new PublisherColumn()),
-        LANG_COLUMN( "google.books.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
-        DATE_COLUMN( "google.books.table.column.date", DateColumn.class, true, table -> new DateColumn()),
-        RANK_COLUMN( "google.books.table.column.rank", RankColumn.class, true, table -> new RankColumn()),
-        BROWSER_COLUMN("google.books.table.column.browse", BrowserColumn.class,false, table -> new BrowserColumn());
+        LANG_COLUMN("google.books.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
+        DATE_COLUMN("google.books.table.column.date", DateColumn.class, true, table -> new DateColumn()),
+        RANK_COLUMN("google.books.table.column.rank", RankColumn.class, true, table -> new RankColumn()),
+        BROWSER_COLUMN("google.books.table.column.browse", BrowserColumn.class, false, table -> new BrowserColumn());
 
         private final String i18n;
         private final Class<? extends TableColumn<Volume.VolumeInfo, String>> tableColumnClass;
@@ -124,7 +126,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
 
     private void addColumn(Class<? extends TableColumn<Volume.VolumeInfo, String>> tableColumnClass,
                            Function<GoogleBooksTable, ? extends TableColumn<Volume.VolumeInfo, String>> createAction) {
-            this.getColumns().add(createAction.apply(this));
+        this.getColumns().add(createAction.apply(this));
     }
 
     public int getStartIndex() {
@@ -257,13 +259,81 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         Optional.ofNullable(volume.getImageLinks())
                                 .map(Volume.VolumeInfo.ImageLinks::getThumbnail)
                                 .ifPresentOrElse(thumbnail -> {
-                                    setGraphic(new ImagePlaceHolder(80) {{ setHeight(PREF_HEIGHT); }});
+                                    setGraphic(new ImagePlaceHolder(80) {{
+                                        setHeight(PREF_HEIGHT);
+                                    }});
                                     BaseFXUtils.loadImage(thumbnail, image -> setGraphic(new ImageView(image)));
                                     setText(null);
                                 }, () -> {
                                     setGraphic(null);
                                     setText(I18N.getGoogleBooksImportValue("google.books.table.thumbnail.not.available"));
                                 });
+                    }
+                }
+            };
+        }
+    }
+
+    private static final class ISBN10Column extends Column
+            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+
+        ISBN10Column() {
+            super(ColumnType.ISBN_10_COLUMN);
+            setCellFactory(this);
+        }
+
+        @Override
+        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+            return new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Optional.ofNullable(volume.getIndustryIdentifiers())
+                                .ifPresentOrElse(industryIdentifiers -> industryIdentifiers.stream().filter(identifier ->
+                                                identifier.getType()
+                                                        .equals(Volume.VolumeInfo.IndustryIdentifier.ISBN_10))
+                                                .findAny()
+                                                .ifPresentOrElse(identifier -> setText(identifier.getIdentifier()),
+                                                        () -> setText(" - ")),
+                                        () -> setText(" - "));
+                    }
+                }
+            };
+        }
+    }
+
+    private static final class ISBN13Column extends Column
+            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+
+        ISBN13Column() {
+            super(ColumnType.ISBN_13_COLUMN);
+            setCellFactory(this);
+        }
+
+        @Override
+        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+            return new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Optional.ofNullable(volume.getIndustryIdentifiers())
+                                .ifPresentOrElse(industryIdentifiers -> industryIdentifiers.stream().filter(identifier ->
+                                                identifier.getType()
+                                                        .equals(Volume.VolumeInfo.IndustryIdentifier.ISBN_13))
+                                                .findAny()
+                                                .ifPresentOrElse(identifier -> setText(identifier.getIdentifier()),
+                                                        () -> setText(" - ")),
+                                        () -> setText(" - "));
                     }
                 }
             };
@@ -289,9 +359,12 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                     } else {
                         Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
                         Optional.ofNullable(volume.getIndustryIdentifiers())
-                                .map(identifiers -> identifiers.get(0))
-                                .map(Volume.VolumeInfo.IndustryIdentifier::getIdentifier)
-                                .ifPresentOrElse(this::setText, () -> setText("-"));
+                                .ifPresentOrElse(industryIdentifiers -> setText(industryIdentifiers.stream()
+                                        .map(industryIdentifier ->
+                                                String.join(" : ",
+                                                        industryIdentifier.getType().replace('_', ' '),
+                                                        industryIdentifier.getIdentifier())
+                                        ).collect(Collectors.joining("\n"))), () -> setText(" - "));
                     }
                 }
             };
