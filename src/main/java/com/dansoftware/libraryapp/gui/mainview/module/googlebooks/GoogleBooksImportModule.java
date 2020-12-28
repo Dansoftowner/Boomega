@@ -15,11 +15,16 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -98,8 +103,18 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         this.getToolbarControlsRight().add(buildClearItem());
         this.getToolbarControlsRight().add(buildBrowserItem());
 
+        this.getToolbarControlsLeft().add(buildGoogleLogoItem());
         this.getToolbarControlsLeft().add(columnChooserItem = buildColumnChooserItem());
         this.getToolbarControlsLeft().add(buildColumnResetItem());
+    }
+
+    private ToolbarItem buildGoogleLogoItem() {
+        return new ToolbarItem(
+                new StackPane(new Group(new HBox(5,
+                        new ImageView("/com/dansoftware/libraryapp/image/util/google_24px.png"),
+                        new Label("Google Books") {{ setFont(Font.font(20)); }}
+                )))
+        );
     }
 
     private ToolbarItem buildRefreshItem() {
