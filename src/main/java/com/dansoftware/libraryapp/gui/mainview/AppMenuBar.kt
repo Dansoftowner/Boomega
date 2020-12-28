@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
 import java.util.*
 
-class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Preferences, tracker: DatabaseTracker) :
+class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences, tracker: DatabaseTracker) :
     javafx.scene.control.MenuBar() {
 
     companion object {
@@ -43,7 +43,8 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
 
     init {
         this.menus.addAll(
-            FileMenu(context, databaseMeta, preferences, tracker),
+            FileMenu(context, mainView.openedDatabase, preferences, tracker),
+            ModuleMenu(mainView.contentView),
             PreferencesMenu(context, preferences),
             WindowMenu(context),
             HelpMenu(context)
@@ -184,6 +185,14 @@ class AppMenuBar(context: Context, databaseMeta: DatabaseMeta, preferences: Pref
                     databaseTracker.savedDatabases.forEach { println(it) }
                 }
             })
+        }
+    }
+
+    private class ModuleMenu(val contentView: MainContentView) : Menu(I18N.getMenuBarValue("menubar.menu.modules")) {
+        init {
+            contentView.modules.forEach {
+                this.menuItem(MenuItem(it.name, it.icon).action { _ -> contentView.openModule(it) })
+            }
         }
     }
 
