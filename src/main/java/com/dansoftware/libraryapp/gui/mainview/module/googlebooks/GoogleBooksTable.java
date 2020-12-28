@@ -155,6 +155,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
 
         public Column(@NotNull ColumnType columnType, boolean i18n) {
             this.columnType = Objects.requireNonNull(columnType);
+            this.setReorderable(false);
             if (i18n) setText(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
         }
 
@@ -173,7 +174,6 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
             super(ColumnType.INDEX_COLUMN, false);
             this.startIndexProperty = startIndexProperty;
             setCellFactory(this);
-            setReorderable(false);
             setMinWidth(COLUMN_WIDTH_UNIT);
             setMaxWidth(COLUMN_WIDTH_UNIT);
         }
@@ -206,7 +206,6 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         TypeIndicatorColumn() {
             super(ColumnType.TYPE_INDICATOR_COLUMN, false);
             setCellFactory(this);
-            setReorderable(false);
             setMinWidth(50);
             setMaxWidth(60);
         }
@@ -238,7 +237,6 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
             setCellFactory(this);
             setMinWidth(20);
             setPrefWidth(200);
-            setReorderable(false);
         }
 
         @Override
