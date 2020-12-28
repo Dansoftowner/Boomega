@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-class MainView extends BorderPane implements ContextTransformable, Themeable {
+public class MainView extends BorderPane implements ContextTransformable, Themeable {
 
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final MainActivity activity;
@@ -34,6 +34,10 @@ class MainView extends BorderPane implements ContextTransformable, Themeable {
         this.setTop(menuBar);
         this.setCenter(contentView);
         Theme.registerThemeable(this);
+    }
+
+    public MainContentView getContentView() {
+        return this.contentView;
     }
 
     @Override
