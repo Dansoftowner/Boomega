@@ -12,11 +12,27 @@ import org.jetbrains.annotations.NotNull
  */
 object DependencyLister {
     @JvmStatic
-    fun listDependencies(): @NotNull List<DependencyInfo> = listOf(
-        DependencyInfo("JavaFX", "https://openjfx.io/", LicenseInfo.gnu2ClassPath()),
-        DependencyInfo("OpenJDK", "http://openjdk.java.net/", LicenseInfo.gnu2ClassPath()),
-        DependencyInfo("OSHI", "https://github.com/oshi/oshi", LicenseInfo.mitLicense()),
-        DependencyInfo("AnimateFX", "https://github.com/Typhon0/AnimateFX", LicenseInfo.apache20License()),
+    fun listDependencies(): List<DependencyInfo> = listOf(
+        DependencyInfo(
+            "JavaFX",
+            "https://openjfx.io/",
+            LicenseInfo.gnu2ClassPath()
+        ),
+        DependencyInfo(
+            "OpenJDK",
+            "http://openjdk.java.net/",
+            LicenseInfo.gnu2ClassPath()
+        ),
+        DependencyInfo(
+            "OSHI",
+            "https://github.com/oshi/oshi",
+            LicenseInfo.mitLicense()
+        ),
+        DependencyInfo(
+            "AnimateFX",
+            "https://github.com/Typhon0/AnimateFX",
+            LicenseInfo.apache20License()
+        ),
         DependencyInfo(
             "FontAwesomeFX",
             "https://bitbucket.org/Jerady/fontawesomefx/src/master/",
@@ -32,26 +48,44 @@ object DependencyLister {
             "https://commons.apache.org/proper/commons-lang/",
             LicenseInfo.apache20License()
         ),
-        DependencyInfo("Gson", "https://github.com/google/gson", LicenseInfo.apache20License()),
         DependencyInfo(
-            "Google Books API Client Library",
-            "https://github.com/googleapis/google-api-java-client-services/tree/master/clients/google-api-services-books/v1",
+            "Gson",
+            "https://github.com/google/gson",
             LicenseInfo.apache20License()
         ),
-        DependencyInfo("OkHttp", "https://square.github.io/okhttp/", LicenseInfo.apache20License()),
+        DependencyInfo(
+            "OkHttp",
+            "https://square.github.io/okhttp/",
+            LicenseInfo.apache20License()
+        ),
         DependencyInfo(
             "Jetbrains annotations",
             "https://github.com/JetBrains/java-annotations",
             LicenseInfo.apache20License()
         ),
-        DependencyInfo("Jasypt", "http://www.jasypt.org/index.html", LicenseInfo.apache20License()),
+        DependencyInfo(
+            "Jasypt",
+            "http://www.jasypt.org/index.html",
+            LicenseInfo.apache20License()
+        ),
         DependencyInfo(
             "jUnit 5",
             "https://junit.org/junit5/",
-            LicenseInfo("Eclipse Public License - v 2.0", "https://github.com/junit-team/junit5/blob/main/LICENSE.md")
+            LicenseInfo(
+                "Eclipse Public License - v 2.0",
+                "https://github.com/junit-team/junit5/blob/main/LICENSE.md"
+            )
         ),
-        DependencyInfo("jFileGoodies", "https://github.com/Dansoftowner/jFileGoodies", LicenseInfo.apache20License()),
-        DependencyInfo("JFoenix", "http://www.jfoenix.com/", LicenseInfo.apache20License()),
+        DependencyInfo(
+            "jFileGoodies",
+            "https://github.com/Dansoftowner/jFileGoodies",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
+            "JFoenix",
+            "http://www.jfoenix.com/",
+            LicenseInfo.apache20License()
+        ),
         DependencyInfo(
             "JMetro",
             "https://pixelduke.com/java-javafx-theme-jmetro/",
@@ -60,9 +94,21 @@ object DependencyLister {
                 "http://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_.28.22Revised_BSD_License.22.2C_.22New_BSD_License.22.2C_or_.22Modified_BSD_License.22.29"
             )
         ),
-        DependencyInfo("JUnique", "http://www.sauronsoftware.it/projects/junique/", LicenseInfo("LGPL", null)),
-        DependencyInfo("Reflections", "https://github.com/ronmamo/reflections", LicenseInfo.wtfplLicense()),
-        DependencyInfo("SLF4J API", "http://www.slf4j.org/", LicenseInfo.mitLicense()),
+        DependencyInfo(
+            "JUnique",
+            "http://www.sauronsoftware.it/projects/junique/",
+            LicenseInfo("LGPL", null)
+        ),
+        DependencyInfo(
+            "Reflections",
+            "https://github.com/ronmamo/reflections",
+            LicenseInfo.wtfplLicense()
+        ),
+        DependencyInfo(
+            "SLF4J API",
+            "http://www.slf4j.org/",
+            LicenseInfo.mitLicense()
+        ),
         DependencyInfo(
             "Logback Project",
             "http://logback.qos.ch/",
@@ -83,8 +129,20 @@ object DependencyLister {
             "https://github.com/dlsc-software-consulting-gmbh/WorkbenchFX",
             LicenseInfo.apache20License()
         ),
-        DependencyInfo("MDFX", "https://github.com/JPro-one/markdown-javafx-renderer", LicenseInfo.apache20License()),
-        DependencyInfo("Nitrite Database", "https://github.com/nitrite/nitrite-java", LicenseInfo.apache20License()),
-        DependencyInfo("PDFViewerFX", "https://github.com/Dansoftowner/PDFViewerFX", LicenseInfo.apache20License())
+        DependencyInfo(
+            "MDFX",
+            "https://github.com/JPro-one/markdown-javafx-renderer",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
+            "Nitrite Database",
+            "https://github.com/nitrite/nitrite-java",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
+            "PDFViewerFX",
+            "https://github.com/Dansoftowner/PDFViewerFX",
+            LicenseInfo.apache20License()
+        )
     )
 }
