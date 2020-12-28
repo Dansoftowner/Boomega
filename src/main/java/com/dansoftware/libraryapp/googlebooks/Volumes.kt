@@ -58,6 +58,12 @@ data class Volume(var id: String?) {
         }
 
         class IndustryIdentifier {
+
+            companion object {
+                const val ISBN_10 = "ISBN_10"
+                const val ISBN_13 = "ISBN_13"
+            }
+
             var type: String? = null
             var identifier: String? = null
         }
