@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.googlebooks
 
+import com.dansoftware.libraryapp.util.surrounding
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.client.utils.URIBuilder
 import java.net.URISyntaxException
@@ -95,11 +96,11 @@ class GoogleBooksQueryBuilder {
     private fun buildQueryString(): String {
         return LinkedList<String>().also { members ->
             inText?.let { members.add(it) }
-            inTitle?.let { members.add(TITLE_FLAG + it) }
-            inAuthor?.let { members.add(AUTHOR_FLAG + it) }
-            inPublisher?.let { members.add(PUBLISHER_FLAG + it) }
+            inTitle?.let { members.add(TITLE_FLAG + it.surrounding("\"")) }
+            inAuthor?.let { members.add(AUTHOR_FLAG + it.surrounding("\"")) }
+            inPublisher?.let { members.add(PUBLISHER_FLAG + it.surrounding("\"")) }
             isbn?.let { members.add(ISBN_FLAG + it) }
-            subject?.let { members.add(SUBJECT_FLAG + it) }
+            subject?.let { members.add(SUBJECT_FLAG + it.surrounding("\"")) }
         }.joinToString(" ")
     }
 
