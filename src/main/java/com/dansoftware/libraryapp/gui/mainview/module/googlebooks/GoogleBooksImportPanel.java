@@ -108,6 +108,7 @@ class GoogleBooksImportPanel extends VBox {
                 tablePagination.setOnNewContentRequest((start, size) -> {
                     Runnable action = () -> ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData, start, false));
                     action.run();
+                    tablePagination.scrollToTop();
                     onRefreshRequest = action;
                 });
                 tablePagination.setItems(items);
