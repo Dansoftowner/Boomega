@@ -110,7 +110,7 @@ class GoogleBooksImportPanel extends VBox {
                     action.run();
                     onRefreshRequest = action;
                 });
-                tablePagination.setItems(items.stream().map(Volume::getVolumeInfo).collect(Collectors.toList()));
+                tablePagination.setItems(items);
             } else
                 tablePagination.clear();
         });

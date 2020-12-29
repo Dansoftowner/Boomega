@@ -58,7 +58,7 @@ public class GoogleBooksResultPagination extends VBox {
         this.getChildren().add(table);
     }
 
-    public void setItems(List<Volume.VolumeInfo> items) {
+    public void setItems(List<Volume> items) {
         if (items != null && !items.isEmpty()) {
             table.getItems().clear();
             table.getItems().addAll(items);

@@ -9,6 +9,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Gyorffy
  */
-public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
+public class GoogleBooksTable extends TableView<Volume> {
 
     public enum ColumnType {
         INDEX_COLUMN("google.books.table.column.index", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
@@ -52,11 +53,11 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         BROWSER_COLUMN("google.books.table.column.browse", BrowserColumn.class, false, table -> new BrowserColumn());
 
         private final String i18n;
-        private final Class<? extends TableColumn<Volume.VolumeInfo, String>> tableColumnClass;
+        private final Class<? extends TableColumn<Volume, String>> tableColumnClass;
         private final boolean defaultVisible;
-        private final Function<GoogleBooksTable, ? extends TableColumn<Volume.VolumeInfo, String>> createPolicy;
+        private final Function<GoogleBooksTable, ? extends TableColumn<Volume, String>> createPolicy;
 
-        <T extends TableColumn<Volume.VolumeInfo, String>> ColumnType(String i18n,
+        <T extends TableColumn<Volume, String>> ColumnType(String i18n,
                                                                       Class<T> tableColumnClass,
                                                                       boolean defaultVisible,
                                                                       Function<GoogleBooksTable, T> createPolicy) {
@@ -124,8 +125,8 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         addColumn(columnType.tableColumnClass, columnType.createPolicy);
     }
 
-    private void addColumn(Class<? extends TableColumn<Volume.VolumeInfo, String>> tableColumnClass,
-                           Function<GoogleBooksTable, ? extends TableColumn<Volume.VolumeInfo, String>> createAction) {
+    private void addColumn(Class<? extends TableColumn<Volume, String>> tableColumnClass,
+                           Function<GoogleBooksTable, ? extends TableColumn<Volume, String>> createAction) {
         this.getColumns().add(createAction.apply(this));
     }
 
@@ -150,7 +151,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    private static class Column extends TableColumn<Volume.VolumeInfo, String> {
+    private static class Column extends TableColumn<Volume, String> {
         private final ColumnType columnType;
 
         public Column(@NotNull ColumnType columnType, boolean i18n) {
@@ -163,17 +164,50 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
             this(columnType, true);
         }
 
-        protected Volume.VolumeInfo getVolumeInfo(TableCell<Volume.VolumeInfo, String> tableCell) {
+        protected Volume.VolumeInfo getVolumeInfo(TableCell<Volume, String> tableCell) {
             try {
-                return getTableView().getItems().get(tableCell.getIndex());
+                return getTableView().getItems().get(tableCell.getIndex()).getVolumeInfo();
             } catch (java.lang.IndexOutOfBoundsException e) {
                 return null;
             }
         }
     }
 
+    private static abstract class SimpleVolumeInfoColumn extends Column
+        implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>>{
+
+        public SimpleVolumeInfoColumn(@NotNull ColumnType columnType) {
+            this(columnType, true);
+        }
+
+        public SimpleVolumeInfoColumn(@NotNull ColumnType columnType, boolean i18n) {
+            super(columnType, i18n);
+            setCellFactory(this);
+        }
+
+        protected abstract Object getValue(Volume.VolumeInfo volumeInfo);
+
+        @Override
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
+            return new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        Object value = getValue(getVolumeInfo(this));
+                        setText(value == null ? " - " : value.toString());
+                    }
+                }
+            };
+        }
+    }
+
+
     private static final class IndexColumn extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
         private static final int COLUMN_WIDTH_UNIT = 60;
 
         private final IntegerProperty startIndexProperty;
@@ -187,7 +221,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> tableCol) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> tableCol) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -209,7 +243,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     }
 
     private static final class TypeIndicatorColumn extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         TypeIndicatorColumn() {
             super(ColumnType.TYPE_INDICATOR_COLUMN, false);
@@ -219,7 +253,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -238,7 +272,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     }
 
     private static final class ThumbnailColumn extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         ThumbnailColumn() {
             super(ColumnType.THUMBNAIL_COLUMN);
@@ -248,7 +282,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 private static final int PREF_HEIGHT = 184;
 
@@ -285,7 +319,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     }
 
     private static final class ISBN10Column extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         ISBN10Column() {
             super(ColumnType.ISBN_10_COLUMN);
@@ -293,7 +327,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -318,7 +352,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     }
 
     private static final class ISBN13Column extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         ISBN13Column() {
             super(ColumnType.ISBN_13_COLUMN);
@@ -326,7 +360,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -351,14 +385,14 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     }
 
     private static final class ISBNColumn extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
         ISBNColumn() {
             super(ColumnType.ISBN_COLUMN);
             setCellFactory(this);
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -382,14 +416,14 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     }
 
     private static final class AuthorColumn extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
         AuthorColumn() {
             super(ColumnType.AUTHOR_COLUMN);
             setCellFactory(this);
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -408,36 +442,48 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    private static final class TitleColumn extends Column {
+    private static final class TitleColumn extends SimpleVolumeInfoColumn {
         TitleColumn() {
             super(ColumnType.TITLE_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("title"));
+        }
+
+        @Override
+        protected Object getValue(Volume.VolumeInfo volumeInfo) {
+            return volumeInfo.getTitle();
         }
     }
 
-    private static final class SubtitleColumn extends Column {
+    private static final class SubtitleColumn extends SimpleVolumeInfoColumn {
         SubtitleColumn() {
             super(ColumnType.SUB_TITLE_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("subtitle"));
+        }
+
+        @Override
+        protected Object getValue(Volume.VolumeInfo volumeInfo) {
+            return volumeInfo.getSubtitle();
         }
     }
 
-    private static final class PublisherColumn extends Column {
+    private static final class PublisherColumn extends SimpleVolumeInfoColumn {
         PublisherColumn() {
             super(ColumnType.PUBLISHER_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        }
+
+        @Override
+        protected Object getValue(Volume.VolumeInfo volumeInfo) {
+            return volumeInfo.getPublisher();
         }
     }
 
     private static final class LangColumn extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
         LangColumn() {
             super(ColumnType.LANG_COLUMN);
             setCellFactory(this);
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -457,16 +503,20 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
     }
 
-    private static final class DateColumn extends Column {
+    private static final class DateColumn extends SimpleVolumeInfoColumn {
 
         DateColumn() {
             super(ColumnType.DATE_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("publishedDate"));
+        }
+
+        @Override
+        protected Object getValue(Volume.VolumeInfo volumeInfo) {
+            return volumeInfo.getPublishedDate();
         }
     }
 
     private static final class RankColumn extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         RankColumn() {
             super(ColumnType.RANK_COLUMN);
@@ -474,7 +524,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -505,7 +555,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
     }
 
     private static final class BrowserColumn extends Column
-            implements Callback<TableColumn<Volume.VolumeInfo, String>, TableCell<Volume.VolumeInfo, String>> {
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
         BrowserColumn() {
             super(ColumnType.BROWSER_COLUMN, false);
             setCellFactory(this);
@@ -515,7 +565,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         }
 
         @Override
-        public TableCell<Volume.VolumeInfo, String> call(TableColumn<Volume.VolumeInfo, String> param) {
+        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
