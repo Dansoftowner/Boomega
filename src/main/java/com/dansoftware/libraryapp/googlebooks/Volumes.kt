@@ -22,11 +22,13 @@ data class Volume(var id: String?) {
     var kind: String? = null
     var selfLink: String? = null
     var volumeInfo: VolumeInfo? = null
-    get() = field?.also { it.id = this.id }
+    var saleInfo: SaleInfo? = null
 
     class VolumeInfo {
-        //not in the original format
-        var id: String? = null
+        companion object PrintType {
+            const val MAGAZINE = "MAGAZINE"
+            const val BOOK = "BOOK"
+        }
 
         var title: String? = null
         var subtitle: String? = null
@@ -43,7 +45,7 @@ data class Volume(var id: String?) {
         var averageRating: Double? = null
         var ratingsCount: Int = 0
 
-        fun isMagazine(): Boolean = printType == "MAGAZINE"
+        fun isMagazine(): Boolean = printType == MAGAZINE
 
         class ImageLinks {
             var extraLarge: String? = null
@@ -66,6 +68,31 @@ data class Volume(var id: String?) {
 
             var type: String? = null
             var identifier: String? = null
+        }
+    }
+
+    class SaleInfo {
+
+        companion object Saleability {
+            const val FOR_SALE = "FOR_SALE"
+            const val NOT_FOR_SALE = "NOT_FOR_SALE"
+        }
+
+        var buyLink: String? = null
+        var country: String? = null
+        var isEbook: Boolean = false
+        var listPrice: ListPrice? = null
+        var retailPrice: RetailPrice? = null
+        var saleability: String? = null
+
+        class ListPrice {
+            var amount: Double = 0.0
+            var currencyCode: String? = null
+        }
+
+        class RetailPrice {
+            var amount: Double = 0.0
+            var currencyCode: String? = null
         }
     }
 }
