@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.mainview.module.googlebooks;
+package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.googlebooks.GoogleBooksQuery;
@@ -17,27 +17,26 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
- * A {@link GoogleBooksImportPanel} allows to search on Google Books (through a {@link GoogleBooksImportForm}) and also
- * displays them (through a {@link GoogleBooksResultPagination}).
+ * A {@link GoogleBooksSearchPanel} allows to search on Google Books (through a {@link GoogleBooksSearchForm}) and also
+ * displays them (through a {@link GoogleBooksPagination}).
  *
  * @author Daniel Gyoerffy
  */
-class GoogleBooksImportPanel extends VBox {
+class GoogleBooksSearchPanel extends VBox {
 
-    private static final Logger logger = LoggerFactory.getLogger(GoogleBooksImportPanel.class);
+    private static final Logger logger = LoggerFactory.getLogger(GoogleBooksSearchPanel.class);
 
     private final Database database;
 
     private final Context context;
-    private final GoogleBooksImportForm form;
-    private final GoogleBooksResultPagination tablePagination;
+    private final GoogleBooksSearchForm form;
+    private final GoogleBooksPagination tablePagination;
 
     private Runnable onRefreshRequest;
 
-    GoogleBooksImportPanel(@NotNull Context context, @NotNull Database database) {
+    GoogleBooksSearchPanel(@NotNull Context context, @NotNull Database database) {
         this.context = context;
         this.database = database;
         this.form = createForm(context);
@@ -64,11 +63,11 @@ class GoogleBooksImportPanel extends VBox {
         this.tablePagination.scrollToTop();
     }
 
-    private GoogleBooksImportForm createForm(Context context) {
-        return new GoogleBooksImportForm(context, buildOnSearchAction());
+    private GoogleBooksSearchForm createForm(Context context) {
+        return new GoogleBooksSearchForm(context, buildOnSearchAction());
     }
 
-    private Consumer<GoogleBooksImportForm.SearchData> buildOnSearchAction() {
+    private Consumer<GoogleBooksSearchForm.SearchData> buildOnSearchAction() {
         return searchData -> {
             Runnable action = () ->
                     ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData.asBluePrint(), 0, true));
@@ -77,7 +76,7 @@ class GoogleBooksImportPanel extends VBox {
         };
     }
 
-    private SearchTask buildSearchTask(GoogleBooksImportForm.SearchData.BluePrint searchData,
+    private SearchTask buildSearchTask(GoogleBooksSearchForm.SearchData.BluePrint searchData,
                                        int startIndex,
                                        boolean starterTask) {
         var searchTask = new SearchTask(searchData, startIndex);
@@ -118,8 +117,8 @@ class GoogleBooksImportPanel extends VBox {
         return searchTask;
     }
 
-    private GoogleBooksResultPagination buildPagination() {
-        var pagination = new GoogleBooksResultPagination();
+    private GoogleBooksPagination buildPagination() {
+        var pagination = new GoogleBooksPagination();
         VBox.setVgrow(pagination, Priority.ALWAYS);
         return pagination;
     }
@@ -131,10 +130,10 @@ class GoogleBooksImportPanel extends VBox {
 
     private static final class SearchTask extends Task<Volumes> {
 
-        private final GoogleBooksImportForm.SearchData.BluePrint searchData;
+        private final GoogleBooksSearchForm.SearchData.BluePrint searchData;
         private final int startIndex;
 
-        SearchTask(@NotNull GoogleBooksImportForm.SearchData.BluePrint searchData, int startIndex) {
+        SearchTask(@NotNull GoogleBooksSearchForm.SearchData.BluePrint searchData, int startIndex) {
             this.searchData = searchData;
             this.startIndex = startIndex;
         }

@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.mainview.module.googlebooks;
+package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.libraryapp.gui.context.Context;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-class GoogleBooksImportForm extends TitledPane {
+class GoogleBooksSearchForm extends TitledPane {
 
     private static final String STYLE_CLASS = "google-books-import-form";
 
@@ -41,7 +41,7 @@ class GoogleBooksImportForm extends TitledPane {
     private final SearchData searchData;
     private final Form form;
 
-    GoogleBooksImportForm(@NotNull Context context, @NotNull Consumer<SearchData> onSearch) {
+    GoogleBooksSearchForm(@NotNull Context context, @NotNull Consumer<SearchData> onSearch) {
         super(I18N.getGoogleBooksImportValue("google.books.add.form.section.title"), null);
         this.context = context;
         this.searchData = new SearchData();

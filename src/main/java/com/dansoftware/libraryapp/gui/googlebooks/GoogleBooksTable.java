@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.mainview.module.googlebooks;
+package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.Volume;
 import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
@@ -9,11 +9,9 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;

@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.mainview.module.googlebooks;
+package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.Volume;
 import com.dansoftware.libraryapp.locale.I18N;
@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
- * A {@link GoogleBooksResultPagination} used for showing Google Books elements
+ * A {@link GoogleBooksPagination} used for showing Google Books elements
  * in a {@link GoogleBooksTable}, but also provides a pagination control for loading
  * new and new content.
  *
  * @author Daniel Gyorffy
  */
-public class GoogleBooksResultPagination extends VBox {
+public class GoogleBooksPagination extends VBox {
 
     private final HeaderArea headerArea;
     private final GoogleBooksTable table;
@@ -36,7 +36,7 @@ public class GoogleBooksResultPagination extends VBox {
     private final IntegerProperty totalItems;
     private final IntegerProperty itemsPerPage;
 
-    GoogleBooksResultPagination() {
+    GoogleBooksPagination() {
         this.totalItems = new SimpleIntegerProperty();
         this.itemsPerPage = new SimpleIntegerProperty();
         this.table = buildTable();
