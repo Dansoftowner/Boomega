@@ -162,6 +162,14 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
         public Column(@NotNull ColumnType columnType) {
             this(columnType, true);
         }
+
+        protected Volume.VolumeInfo getVolumeInfo(TableCell<Volume.VolumeInfo, String> tableCell) {
+            try {
+                return getTableView().getItems().get(tableCell.getIndex());
+            } catch (java.lang.IndexOutOfBoundsException e) {
+                return null;
+            }
+        }
     }
 
     private static final class IndexColumn extends Column
@@ -220,7 +228,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volume = getVolumeInfo(this);
                         setGraphic(new MaterialDesignIconView(volume.isMagazine() ? MaterialDesignIcon.NEWSPAPER : MaterialDesignIcon.BOOK));
                     }
                 }
@@ -253,14 +261,18 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setPrefHeight(USE_COMPUTED_SIZE);
                     } else {
                         setPrefHeight(PREF_HEIGHT);
-                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volume = getVolumeInfo(this);
                         Optional.ofNullable(volume.getImageLinks())
                                 .map(Volume.VolumeInfo.ImageLinks::getThumbnail)
                                 .ifPresentOrElse(thumbnail -> {
                                     setGraphic(new ImagePlaceHolder(80) {{
                                         setHeight(PREF_HEIGHT);
                                     }});
-                                    BaseFXUtils.loadImage(thumbnail, image -> setGraphic(new ImageView(image)));
+                                    BaseFXUtils.loadImage(thumbnail, image -> {
+                                        if (volume.equals(getVolumeInfo(this))) {
+                                            setGraphic(new ImageView(image));
+                                        }
+                                    });
                                     setText(null);
                                 }, () -> {
                                     setGraphic(null);
@@ -290,7 +302,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volume = getVolumeInfo(this);
                         Optional.ofNullable(volume.getIndustryIdentifiers())
                                 .ifPresentOrElse(industryIdentifiers -> industryIdentifiers.stream().filter(identifier ->
                                                 identifier.getType()
@@ -323,7 +335,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volume = getVolumeInfo(this);
                         Optional.ofNullable(volume.getIndustryIdentifiers())
                                 .ifPresentOrElse(industryIdentifiers -> industryIdentifiers.stream().filter(identifier ->
                                                 identifier.getType()
@@ -355,7 +367,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volume = getVolumeInfo(this);
                         Optional.ofNullable(volume.getIndustryIdentifiers())
                                 .ifPresentOrElse(industryIdentifiers -> setText(industryIdentifiers.stream()
                                         .map(industryIdentifier ->
@@ -386,7 +398,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volume = getVolumeInfo(this);
                         Optional.ofNullable(volume.getAuthors())
                                 .ifPresentOrElse(authors -> setText(String.join(", ", authors)),
                                         () -> setText("-"));
@@ -434,7 +446,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        Volume.VolumeInfo volumeInfo = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volumeInfo = getVolumeInfo(this);
                         Optional.ofNullable(volumeInfo.getLanguage())
                                 .map(Locale::forLanguageTag)
                                 .map(Locale::getDisplayLanguage)
@@ -471,7 +483,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        Volume.VolumeInfo volumeInfo = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volumeInfo = getVolumeInfo(this);
                         Optional.ofNullable(volumeInfo.getAverageRating())
                                 .ifPresentOrElse(rating -> {
                                     setGraphic(buildGraphic(rating.intValue(), volumeInfo.getRatingsCount()));
@@ -512,7 +524,7 @@ public class GoogleBooksTable extends TableView<Volume.VolumeInfo> {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        Volume.VolumeInfo volume = getTableView().getItems().get(getIndex());
+                        Volume.VolumeInfo volume = getVolumeInfo(this);
                         Optional.ofNullable(volume.getPreviewLink())
                                 .ifPresent(link -> setGraphic(new WebsiteHyperLink(I18N.getGoogleBooksImportValue("google.books.table.browser.open"), link)));
                     }
