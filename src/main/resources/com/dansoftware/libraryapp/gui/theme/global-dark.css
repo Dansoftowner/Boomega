@@ -41,3 +41,7 @@
 .text-field:readonly {
     -right-button-visible: false;
 }
+
+.selectable-label:focused {
+    -fx-text-fill: white;
+}

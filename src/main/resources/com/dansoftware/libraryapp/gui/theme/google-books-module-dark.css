@@ -15,7 +15,11 @@
     -fx-font-size: 17px;
 }
 
-.google-book-details-pane .header-area .property-mark-label {
+.google-book-details-pane .info-panel .label {
+    -fx-font-size: 15px;
+}
+
+.google-book-details-pane .property-mark-label {
     -fx-font-weight: bold;
 }
 
@@ -25,5 +29,5 @@
 
 .google-book-details-title-bar {
     -fx-padding: 5;
-    -fx-background-color: #303030;
+    -fx-background-color: #2c3649;
 }
