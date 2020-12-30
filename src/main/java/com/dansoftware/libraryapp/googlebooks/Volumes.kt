@@ -49,6 +49,8 @@ data class Volume(var id: String?) {
         val isMagazine: Boolean
         get() = (printType == MAGAZINE)
 
+        fun getIndustryIdentifiersAsString() = industryIdentifiers?.joinToString("\n")
+
         class ImageLinks {
             var extraLarge: String? = null
             var large: String? = null
@@ -70,6 +72,9 @@ data class Volume(var id: String?) {
 
             var type: String? = null
             var identifier: String? = null
+
+            override fun toString() =
+                listOf(type?.replace('_', ' '), identifier).joinToString(": ")
         }
     }
 
