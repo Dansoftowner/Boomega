@@ -9,26 +9,19 @@ package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.adapter.ThrowableString
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
-import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
-import javafx.scene.SnapshotParameters
 import javafx.scene.control.*
 import javafx.scene.image.Image
-import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
-import javafx.scene.input.MouseEvent
-import javafx.scene.layout.StackPane
 import javafx.scene.text.Font
 import javafx.scene.text.Text
 import javafx.stage.Window
@@ -126,6 +119,16 @@ fun ButtonType.typeEquals(other: ButtonType) = this.buttonData == other.buttonDa
 fun KClass<*>.loadImageResource(resource: String): Image {
     BufferedInputStream(this.java.getResourceAsStream(resource)).use {
         return Image(it)
+    }
+}
+
+/**
+ * The [RadioToggleButton] is a [RadioButton] styled as a [ToggleButton]
+ */
+class RadioToggleButton(text: String? = null) : RadioButton(text) {
+    init {
+        styleClass.remove("radio-button")
+        styleClass.add("toggle-button")
     }
 }
 
