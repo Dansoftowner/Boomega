@@ -24,11 +24,14 @@ import com.dansoftware.libraryapp.util.SingleThreadExecutor
 import com.dansoftware.libraryapp.util.revealInExplorer
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
+import javafx.beans.binding.Bindings
+import javafx.beans.binding.BooleanBinding
 import javafx.collections.ListChangeListener
 import javafx.concurrent.Task
 import javafx.scene.control.*
 import javafx.stage.Stage
 import javafx.stage.Window
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
 import java.util.*
@@ -38,10 +41,13 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
 
     companion object {
         @JvmStatic
-        val logger = LoggerFactory.getLogger(AppMenuBar::class.java)
+        val logger: Logger = LoggerFactory.getLogger(AppMenuBar::class.java)
     }
 
+    private lateinit var overlayNotShowing: BooleanBinding
+
     init {
+        initDisablePolicy(mainView)
         this.menus.addAll(
             FileMenu(context, mainView.openedDatabase, preferences, tracker),
             ModuleMenu(mainView.contentView),
@@ -49,6 +55,18 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             WindowMenu(context),
             HelpMenu(context)
         )
+    }
+
+    private fun initDisablePolicy(mainView: MainView) {
+        mainView.contentView.let {
+            this.overlayNotShowing =
+                Bindings.isEmpty(it.blockingOverlaysShown).and(Bindings.isEmpty(it.nonBlockingOverlaysShown))
+                    .also { observable ->
+                        observable.addListener { _, _, isEmpty ->
+                            this.isDisable = isEmpty.not()
+                        }
+                    }
+        }
     }
 
     /**
