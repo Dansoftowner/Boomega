@@ -45,7 +45,9 @@ data class Volume(var id: String?) {
         var averageRating: Double? = null
         var ratingsCount: Int = 0
 
-        fun isMagazine(): Boolean = printType == MAGAZINE
+        //Not in the original format
+        val isMagazine: Boolean
+        get() = (printType == MAGAZINE)
 
         class ImageLinks {
             var extraLarge: String? = null
