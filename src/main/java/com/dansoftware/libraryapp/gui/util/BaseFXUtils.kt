@@ -22,10 +22,12 @@ import javafx.scene.image.Image
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
+import javafx.scene.input.MouseEvent
 import javafx.scene.text.Font
 import javafx.scene.text.Text
 import javafx.stage.Window
 import org.apache.commons.lang3.StringUtils
+import org.controlsfx.control.Rating
 import java.io.BufferedInputStream
 import java.util.function.Consumer
 import kotlin.reflect.KClass
@@ -119,6 +121,12 @@ fun ButtonType.typeEquals(other: ButtonType) = this.buttonData == other.buttonDa
 fun KClass<*>.loadImageResource(resource: String): Image {
     BufferedInputStream(this.java.getResourceAsStream(resource)).use {
         return Image(it)
+    }
+}
+
+class ReadOnlyRating(max: Int, value: Int) : Rating(max, value) {
+    init {
+        this.addEventFilter(MouseEvent.MOUSE_CLICKED) { it.consume() }
     }
 }
 
