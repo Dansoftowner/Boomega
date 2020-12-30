@@ -6,3 +6,24 @@
 .google-books-import-form .text-field {
     -fx-padding: 5 10 5 5;
 }
+
+.google-book-details-pane {
+    -fx-padding: 10;
+}
+
+.google-book-details-pane .header-area .label {
+    -fx-font-size: 17px;
+}
+
+.google-book-details-pane .header-area .property-mark-label {
+    -fx-font-weight: bold;
+}
+
+.google-book-details-pane .header-area .main-header-area {
+    -fx-padding: 5;
+}
+
+.google-book-details-title-bar {
+    -fx-padding: 5;
+    -fx-background-color: #d9d9d9;
+}
