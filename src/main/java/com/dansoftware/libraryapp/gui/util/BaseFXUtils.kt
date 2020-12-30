@@ -133,6 +133,7 @@ class ReadOnlyRating(max: Int, value: Int) : Rating(max, value) {
 class SelectableLabel(text: String? = null) : TextField(text) {
     init {
         this.styleClass.remove("text-field")
+        this.styleClass.add("selectable-label")
         this.style = "-fx-background-color: transparent;-fx-padding: 0;"
         this.prefColumnCount = 15
         this.styleClass.add("label")
