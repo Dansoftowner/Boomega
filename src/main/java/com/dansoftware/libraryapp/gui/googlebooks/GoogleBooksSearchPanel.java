@@ -8,7 +8,9 @@ import com.dansoftware.libraryapp.googlebooks.Volumes;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +44,7 @@ class GoogleBooksSearchPanel extends VBox {
         this.form = createForm(context);
         this.tablePagination = buildPagination();
         this.buildUI();
+        this.buildTableSelectionPolicy();
     }
 
     public GoogleBooksTable getTable() {
@@ -61,6 +64,17 @@ class GoogleBooksSearchPanel extends VBox {
 
     public void scrollToTop() {
         this.tablePagination.scrollToTop();
+    }
+
+    private void buildTableSelectionPolicy() {
+        getTable().setOnMouseClicked(event -> {
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+                ObservableList<Volume> selectedItems = getTable().getSelectionModel().getSelectedItems();
+                if (selectedItems != null && !selectedItems.isEmpty()) {
+                    context.showOverlay(new GoogleBookDetailedPane(selectedItems.get(0)));
+                }
+            }
+        });
     }
 
     private GoogleBooksSearchForm createForm(Context context) {
