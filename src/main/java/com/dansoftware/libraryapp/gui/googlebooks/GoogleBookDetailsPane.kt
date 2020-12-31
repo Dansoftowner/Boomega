@@ -2,11 +2,9 @@ package com.dansoftware.libraryapp.gui.googlebooks
 
 import com.dansoftware.libraryapp.googlebooks.Volume
 import com.dansoftware.libraryapp.gui.context.Context
+import com.dansoftware.libraryapp.gui.googlebooks.preview.GoogleBookPreviewActivity
 import com.dansoftware.libraryapp.gui.imgviewer.ImageViewerActivity
-import com.dansoftware.libraryapp.gui.util.RadioToggleButton
-import com.dansoftware.libraryapp.gui.util.ReadOnlyRating
-import com.dansoftware.libraryapp.gui.util.SelectableLabel
-import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink
+import com.dansoftware.libraryapp.gui.util.*
 import com.dansoftware.libraryapp.locale.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
@@ -59,7 +57,7 @@ class GoogleBookDetailsPane(context: Context, volume: Volume) : VBox(TitleBar(),
         private fun buildUI(volume: Volume) {
             children.add(HeaderArea(context, volume))
             ScrollArea().also {
-                children.add(PaneChooserArea(it, volume))
+                children.add(PaneChooserArea(context, it, volume))
                 children.add(it)
             }
         }
@@ -169,7 +167,7 @@ class GoogleBookDetailsPane(context: Context, volume: Volume) : VBox(TitleBar(),
          * The pane chooser area is the place where the user can select the information panel or the
          * sale information panel to be shown
          */
-        private class PaneChooserArea(scrollArea: ScrollPane, volume: Volume) : StackPane(Group(HBox(3.0).also { hBox ->
+        private class PaneChooserArea(val context: Context, scrollArea: ScrollPane, volume: Volume) : StackPane(Group(HBox(3.0).also { hBox ->
             val tgglGroup = ToggleGroup()
             tgglGroup.selectedToggleProperty().addListener { _, _, toggle ->
                 @Suppress("UNCHECKED_CAST")
@@ -178,7 +176,7 @@ class GoogleBookDetailsPane(context: Context, volume: Volume) : VBox(TitleBar(),
 
             hBox.children.add(RadioToggleButton(I18N.getGoogleBooksImportValue("google.books.details.info")).also { toggle ->
                 toggle.toggleGroup = tgglGroup
-                toggle.userData = Consumer<ScrollPane> { it.content = InfoPane(volume) }
+                toggle.userData = Consumer<ScrollPane> { it.content = InfoPane(context, volume) }
                 toggle.isSelected = true
             })
             hBox.children.add(RadioToggleButton(I18N.getGoogleBooksImportValue("google.books.details.sale")).also { toggle ->
@@ -200,7 +198,7 @@ class GoogleBookDetailsPane(context: Context, volume: Volume) : VBox(TitleBar(),
         /**
          * The panel that shows the volume-info
          */
-        private class InfoPane(volume: Volume) : VBox(10.0) {
+        private class InfoPane(val context: Context, volume: Volume) : VBox(10.0) {
             init {
                 this.styleClass.add("info-panel")
                 this.children.add(buildISBNLabel(volume))
@@ -274,7 +272,14 @@ class GoogleBookDetailsPane(context: Context, volume: Volume) : VBox(TitleBar(),
                 StackPane(WebsiteHyperLink(
                     I18N.getGoogleBooksImportValue("google.books.details.preview"),
                     volume.volumeInfo?.previewLink
-                ))
+                ).also {
+                    it.contextMenu = ContextMenu().also { menu ->
+                        menu.items.add(
+                            MenuItem(I18N.getGoogleBooksImportValue("google.books.preview.open.embedded"))
+                                .action { GoogleBookPreviewActivity(volume, context.contextWindow).show() }
+                        )
+                    }
+                })
         }
 
         /**
