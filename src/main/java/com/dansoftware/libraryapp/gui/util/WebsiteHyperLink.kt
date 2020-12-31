@@ -21,7 +21,7 @@ import javafx.scene.control.Tooltip
  */
 class WebsiteHyperLink(
     text: String,
-    url: String
+    url: String?
 ) : Hyperlink(), EventHandler<ActionEvent> {
 
     private val url: StringProperty
@@ -34,7 +34,7 @@ class WebsiteHyperLink(
     }
 
     override fun handle(event: ActionEvent) {
-        if (isSupported()) {
+        if (isSupported().and(url.get() != null)) {
             val systemBrowser = SystemBrowser()
             systemBrowser.browse(url.get())
         }
