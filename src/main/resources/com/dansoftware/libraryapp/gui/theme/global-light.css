@@ -24,6 +24,10 @@
     -fx-fill: black;
 }
 
+.button:default .glyph-icon {
+    -fx-fill: white;
+}
+
 .text-field:readonly {
     -right-button-visible: false;
 }
