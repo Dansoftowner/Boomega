@@ -52,14 +52,19 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
         }
 
         private fun buildUI(volume: Volume) {
-            //TODO: Title bar
             children.add(HeaderArea(volume))
-            val scrollArea = ScrollArea()
-            children.add(PaneChooserArea(scrollArea, volume))
-            children.add(scrollArea)
+            ScrollArea().also {
+                children.add(PaneChooserArea(it, volume))
+                children.add(it)
+            }
         }
 
+        /**
+         * The header area is the place where the thumbnail and the main information of the
+         * book is displayed
+         */
         private class HeaderArea(volume: Volume) : HBox(5.0) {
+
             init {
                 styleClass.add("header-area")
                 children.add(buildThumbnail(volume))
@@ -69,7 +74,10 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
             private fun buildThumbnail(volume: Volume): Node =
                 volume.volumeInfo?.imageLinks?.thumbnail?.let { StackPane(ImageView(it)) } ?: ThumbnailPlaceHolder()
 
-
+            /**
+             * The main header area is the place where the main information is displayed.
+             * It is next to the thumbnail
+             */
             private class MainHeaderArea(volume: Volume) : VBox(5.0) {
                 init {
                     HBox.setHgrow(this, Priority.ALWAYS)
@@ -134,10 +142,17 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
                     )
             }
 
+            /**
+             * Used as a place holder if the thumbnail is not available
+             */
             private class ThumbnailPlaceHolder :
                 StackPane(Label(I18N.getGoogleBooksImportValue("google.books.table.thumbnail.not.available")))
         }
 
+        /**
+         * The pane chooser area is the place where the user can select the information panel or the
+         * sale information panel to be shown
+         */
         private class PaneChooserArea(scrollArea: ScrollPane, volume: Volume) : StackPane(Group(HBox(3.0).also { hBox ->
             val tgglGroup = ToggleGroup()
             tgglGroup.selectedToggleProperty().addListener { _, _, toggle ->
@@ -156,6 +171,9 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
             })
         }))
 
+        /**
+         * The scroll-pane where the [InfoPane] or the [SaleInfoPane] is displayed
+         */
         private class ScrollArea : ScrollPane() {
             init {
                 this.maxHeight = 250.0
@@ -163,6 +181,9 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
             }
         }
 
+        /**
+         * The panel that shows the volume-info
+         */
         private class InfoPane(volume: Volume) : VBox(10.0) {
             init {
                 this.styleClass.add("info-panel")
@@ -233,6 +254,9 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
                 }
         }
 
+        /**
+         * The panel that shows the sale-info
+         */
         private class SaleInfoPane(volume: Volume) : VBox(10.0) {
             init {
                 when (volume.saleInfo?.saleability) {
