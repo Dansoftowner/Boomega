@@ -260,9 +260,11 @@ public class GoogleBooksTable extends TableView<Volume> {
                     if (empty) {
                         setGraphic(null);
                         setText(null);
+                        setTooltip(null);
                     } else {
                         Volume.VolumeInfo volume = getVolumeInfo(this);
                         setGraphic(new MaterialDesignIconView(volume.isMagazine() ? MaterialDesignIcon.NEWSPAPER : MaterialDesignIcon.BOOK));
+                        setTooltip(new Tooltip(I18N.getGoogleBooksImportValue(volume.isMagazine() ? "google.books.magazine" : "google.books.book")));
                     }
                 }
             };
