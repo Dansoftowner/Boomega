@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.googlebooks
 
 import com.dansoftware.libraryapp.googlebooks.Volume
+import com.dansoftware.libraryapp.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.libraryapp.gui.util.RadioToggleButton
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating
 import com.dansoftware.libraryapp.gui.util.SelectableLabel
@@ -8,10 +9,13 @@ import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink
 import com.dansoftware.libraryapp.locale.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import javafx.scene.input.MouseButton
 import javafx.scene.layout.*
 import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.*
@@ -72,7 +76,15 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
             }
 
             private fun buildThumbnail(volume: Volume): Node =
-                volume.volumeInfo?.imageLinks?.thumbnail?.let { StackPane(ImageView(it)) } ?: ThumbnailPlaceHolder()
+                volume.volumeInfo?.imageLinks?.thumbnail?.let { StackPane(ImageView(it).also { imageView ->
+                    imageView.cursor = Cursor.HAND
+                    imageView.setOnMouseClicked { event ->
+                        when {
+                            event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
+                                ImageViewerActivity(Image(volume.volumeInfo?.imageLinks?.getLargest())).show()
+                        }
+                  }
+                }) } ?: ThumbnailPlaceHolder()
 
             /**
              * The main header area is the place where the main information is displayed.
