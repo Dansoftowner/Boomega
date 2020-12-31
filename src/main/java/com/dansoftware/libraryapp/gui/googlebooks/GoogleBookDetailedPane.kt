@@ -4,9 +4,11 @@ import com.dansoftware.libraryapp.googlebooks.Volume
 import com.dansoftware.libraryapp.gui.util.RadioToggleButton
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating
 import com.dansoftware.libraryapp.gui.util.SelectableLabel
+import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink
 import com.dansoftware.libraryapp.locale.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.geometry.Insets
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.*
@@ -200,7 +202,8 @@ class GoogleBookDetailedPane(volume: Volume) : StackPane(Group(VBox(TitleBar(), 
                         VBox(2.0).also { listView ->
                             categories.forEach {
                                 listView.children.add(
-                                    HBox(2.0,
+                                    HBox(
+                                        2.0,
                                         Label("${8226.toChar()}"),
                                         SelectableLabel(it)
                                     )
@@ -224,9 +227,69 @@ class GoogleBookDetailedPane(volume: Volume) : StackPane(Group(VBox(TitleBar(), 
                 }
         }
 
-        private class SaleInfoPane(volume: Volume) : VBox() {
+        private class SaleInfoPane(volume: Volume) : VBox(10.0) {
             init {
+                when (volume.saleInfo?.saleability) {
+                    Volume.SaleInfo.FOR_SALE -> {
+                        this.children.add(buildEBookIndicator(volume))
+                        this.children.add(buildCountryIndicator(volume))
+                        this.children.add(buildListPriceLabel(volume))
+                        this.children.add(buildRetailPriceLabel(volume))
+                        this.children.add(buildBuyLinkLabel(volume))
+                    }
+                    else -> {
+                        this.children.add(buildNotSaleablePlaceHolder())
+                    }
+                }
             }
+
+            private fun buildEBookIndicator(volume: Volume): Node =
+                PropertyValuePair(
+                    I18N.getGoogleBooksImportValue("google.books.details.sale.isebook"),
+                    I18N.getButtonTypeValues().getString(
+                        when (volume.saleInfo?.isEbook) {
+                            true -> "Dialog.yes.button"
+                            else -> "Dialog.no.button"
+                        }
+                    )
+                )
+
+            private fun buildCountryIndicator(volume: Volume): Node =
+                PropertyValuePair(
+                    I18N.getGoogleBooksImportValue("google.books.details.sale.country"),
+                    volume.saleInfo?.country
+                )
+
+            private fun buildListPriceLabel(volume: Volume): Node =
+                PropertyValuePair(
+                    I18N.getGoogleBooksImportValue("google.books.details.sale.listprice"),
+                    volume.saleInfo?.listPrice.toString()
+                )
+
+            private fun buildRetailPriceLabel(volume: Volume): Node =
+                PropertyValuePair(
+                    I18N.getGoogleBooksImportValue("google.books.details.sale.retailprice"),
+                    volume.saleInfo?.retailPrice.toString()
+                )
+
+            private fun buildBuyLinkLabel(volume: Volume): Node =
+                StackPane(
+                    Group(
+                        HBox(
+                            5.0,
+                            MaterialDesignIconView(MaterialDesignIcon.GOOGLE_PLAY),
+                            WebsiteHyperLink(
+                                I18N.getGoogleBooksImportValue("google.books.details.sale.buylink"),
+                                volume.saleInfo?.buyLink
+                            ).also { it.styleClass.add("buy-link-label") }
+                        )
+                    )
+                )
+
+            private fun buildNotSaleablePlaceHolder(): Node =
+                Label(I18N.getGoogleBooksImportValue("google.books.details.notforsale")).also {
+                    it.styleClass.add("not-for-sale-place-holder")
+                }
         }
 
     }
