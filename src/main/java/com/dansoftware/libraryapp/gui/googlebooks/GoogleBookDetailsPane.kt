@@ -8,7 +8,6 @@ import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink
 import com.dansoftware.libraryapp.locale.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
-import javafx.geometry.Insets
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.*
@@ -19,15 +18,22 @@ import java.util.*
 import java.util.function.Consumer
 
 /**
+ * Used for displaying a [GoogleBookDetailsPane] as an overlay
+ *
+ * @author Daniel Gyorffy
+ */
+class GoogleBookDetailsOverlay(volume: Volume) : StackPane(Group(GoogleBookDetailsPane(volume))) {
+    init {
+        isPickOnBounds = false
+    }
+}
+
+/**
  * Used for displaying more detailed data about a Google Book
  *
  * @author Daniel Gyorffy
  */
-class GoogleBookDetailedPane(volume: Volume) : StackPane(Group(VBox(TitleBar(), MainVBox(volume)))) {
-
-    init {
-        isPickOnBounds = false
-    }
+class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume)) {
 
     private class TitleBar : HBox(5.0) {
         init {
