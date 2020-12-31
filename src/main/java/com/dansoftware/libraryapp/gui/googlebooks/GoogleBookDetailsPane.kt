@@ -192,6 +192,7 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
                 this.children.add(buildDescriptionArea(volume))
                 this.children.add(buildCategoriesIndicator(volume))
                 this.children.add(buildRatingsIndicator(volume))
+                this.children.add(buildPreviewHyperLink(volume))
             }
 
             private fun buildISBNLabel(volume: Volume): Node =
@@ -252,6 +253,12 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
                         }
                     } ?: it.children.add(Label("-"))
                 }
+
+            private fun buildPreviewHyperLink(volume: Volume): Node =
+                StackPane(WebsiteHyperLink(
+                    I18N.getGoogleBooksImportValue("google.books.details.preview"),
+                    volume.volumeInfo?.previewLink
+                ))
         }
 
         /**
@@ -311,7 +318,7 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
                             WebsiteHyperLink(
                                 I18N.getGoogleBooksImportValue("google.books.details.sale.buylink"),
                                 volume.saleInfo?.buyLink
-                            ).also { it.styleClass.add("buy-link-label") }
+                            )
                         )
                     )
                 )
