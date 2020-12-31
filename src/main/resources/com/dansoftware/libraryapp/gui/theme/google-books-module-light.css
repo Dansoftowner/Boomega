@@ -36,7 +36,7 @@
     -fx-font-weight: bold;
 }
 
-.google-book-details-pane .buy-link-label {
+.google-book-details-pane .hyperlink {
     -fx-padding: 0;
     -fx-font-weight: bold;
 }
