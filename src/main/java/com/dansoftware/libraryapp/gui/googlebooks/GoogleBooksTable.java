@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.googlebooks;
 import com.dansoftware.libraryapp.googlebooks.Volume;
 import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
 import com.dansoftware.libraryapp.gui.util.ImagePlaceHolder;
+import com.dansoftware.libraryapp.gui.util.ReadOnlyRating;
 import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -13,10 +14,10 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -336,12 +337,16 @@ public class GoogleBooksTable extends TableView<Volume> {
                     } else {
                         Volume.VolumeInfo volume = getVolumeInfo(this);
                         Optional.ofNullable(volume.getIndustryIdentifiers())
-                                .ifPresentOrElse(industryIdentifiers -> industryIdentifiers.stream().filter(identifier ->
-                                                identifier.getType()
-                                                        .equals(Volume.VolumeInfo.IndustryIdentifier.ISBN_10))
-                                                .findAny()
-                                                .ifPresentOrElse(identifier -> setText(identifier.getIdentifier()),
-                                                        () -> setText(" - ")),
+                                .ifPresentOrElse(industryIdentifiers ->
+                                                industryIdentifiers.stream()
+                                                        .filter(identifier ->
+                                                                Volume
+                                                                .VolumeInfo
+                                                                .IndustryIdentifier
+                                                                .ISBN_10
+                                                                .equals(identifier.getType()))
+                                                        .findAny()
+                                                        .ifPresentOrElse(identifier -> setText(identifier.getIdentifier()), () -> setText(" - ")),
                                         () -> setText(" - "));
                     }
                 }
@@ -400,13 +405,7 @@ public class GoogleBooksTable extends TableView<Volume> {
                         setText(null);
                     } else {
                         Volume.VolumeInfo volume = getVolumeInfo(this);
-                        Optional.ofNullable(volume.getIndustryIdentifiers())
-                                .ifPresentOrElse(industryIdentifiers -> setText(industryIdentifiers.stream()
-                                        .map(industryIdentifier ->
-                                                String.join(" : ",
-                                                        industryIdentifier.getType().replace('_', ' '),
-                                                        industryIdentifier.getIdentifier())
-                                        ).collect(Collectors.joining("\n"))), () -> setText(" - "));
+                        setText(StringUtils.getIfBlank(volume.getIndustryIdentifiersAsString(), () -> "-"));
                     }
                 }
             };
@@ -544,8 +543,7 @@ public class GoogleBooksTable extends TableView<Volume> {
                 }
 
                 private Node buildGraphic(int rating, int ratingsCount) {
-                    Rating ratingGraphic = new Rating(5, rating);
-                    ratingGraphic.addEventFilter(MouseEvent.MOUSE_CLICKED, MouseEvent::consume);
+                    Rating ratingGraphic = new ReadOnlyRating(5, rating);
                     return new Group(new VBox(3, ratingGraphic, new StackPane(new Label("(" + ratingsCount + ")"))));
                 }
             };
