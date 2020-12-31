@@ -39,6 +39,11 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
+            "GestureFX",
+            "https://github.com/tom91136/GestureFX",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
             "Apache Commons IO",
             "http://commons.apache.org/proper/commons-io/",
             LicenseInfo.apache20License()

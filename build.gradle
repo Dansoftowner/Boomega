@@ -34,6 +34,7 @@ compileTestJava {
 
 repositories {
     mavenCentral()
+    jcenter()
 
     //JitPack repository
     maven { url "https://jitpack.io" }
@@ -108,6 +109,7 @@ dependencies {
     libraries 'org.jfxtras:jmetro:11.6.14'
     libraries 'org.controlsfx:controlsfx:11.0.1'
     libraries 'com.dlsc.formsfx:formsfx-core:11.4.1'
+    libraries 'net.kurobako:gesturefx:0.6.0'
 
     //Modified WorkBenchFX
     //Original: 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
