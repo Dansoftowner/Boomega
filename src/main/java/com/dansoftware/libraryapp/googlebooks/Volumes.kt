@@ -95,11 +95,15 @@ data class Volume(var id: String?) {
         class ListPrice {
             var amount: Double = 0.0
             var currencyCode: String? = null
+
+            override fun toString() = "$amount $currencyCode"
         }
 
         class RetailPrice {
             var amount: Double = 0.0
             var currencyCode: String? = null
+
+            override fun toString() = "$amount $currencyCode"
         }
     }
 }
