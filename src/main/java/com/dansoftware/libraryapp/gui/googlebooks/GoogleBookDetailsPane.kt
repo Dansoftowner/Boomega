@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.googlebooks
 
 import com.dansoftware.libraryapp.googlebooks.Volume
+import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.libraryapp.gui.util.RadioToggleButton
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating
@@ -26,7 +27,7 @@ import java.util.function.Consumer
  *
  * @author Daniel Gyorffy
  */
-class GoogleBookDetailsOverlay(volume: Volume) : StackPane(Group(GoogleBookDetailsPane(volume))) {
+class GoogleBookDetailsOverlay(context: Context, volume: Volume) : StackPane(Group(GoogleBookDetailsPane(context, volume))) {
     init {
         isPickOnBounds = false
     }
@@ -37,7 +38,7 @@ class GoogleBookDetailsOverlay(volume: Volume) : StackPane(Group(GoogleBookDetai
  *
  * @author Daniel Gyorffy
  */
-class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume)) {
+class GoogleBookDetailsPane(context: Context, volume: Volume) : VBox(TitleBar(), MainVBox(context, volume)) {
 
     private class TitleBar : HBox(5.0) {
         init {
@@ -47,7 +48,7 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
         }
     }
 
-    private class MainVBox(volume: Volume) : VBox(10.0) {
+    private class MainVBox(val context: Context, volume: Volume) : VBox(10.0) {
 
         init {
             styleClass.add("google-book-details-pane")
@@ -56,7 +57,7 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
         }
 
         private fun buildUI(volume: Volume) {
-            children.add(HeaderArea(volume))
+            children.add(HeaderArea(context, volume))
             ScrollArea().also {
                 children.add(PaneChooserArea(it, volume))
                 children.add(it)
@@ -67,7 +68,7 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
          * The header area is the place where the thumbnail and the main information of the
          * book is displayed
          */
-        private class HeaderArea(volume: Volume) : HBox(5.0) {
+        private class HeaderArea(val context: Context, volume: Volume) : HBox(5.0) {
 
             init {
                 styleClass.add("header-area")
@@ -81,7 +82,10 @@ class GoogleBookDetailsPane(volume: Volume) : VBox(TitleBar(), MainVBox(volume))
                     imageView.setOnMouseClicked { event ->
                         when {
                             event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
-                                ImageViewerActivity(Image(volume.volumeInfo?.imageLinks?.getLargest())).show()
+                                ImageViewerActivity(
+                                    Image(volume.volumeInfo?.imageLinks?.getLargest()),
+                                    context.contextWindow
+                                ).show()
                         }
                   }
                 }) } ?: ThumbnailPlaceHolder()
