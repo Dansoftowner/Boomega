@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.db
+package com.dansoftware.libraryapp.db.data
 
 import org.dizitart.no2.IndexType
 import org.dizitart.no2.NitriteId
@@ -14,7 +14,7 @@ import org.dizitart.no2.objects.Indices
 @Indices(Index(value = "isbn", type = IndexType.Unique))
 data class Book(
     @field:Id var id: NitriteId? = null,
-    var publishedYear: Int,
+    var publishedDate: String?,
     var numberOfCopies: Int,
     var numberOfPages: Int,
     var authors: List<String>?,
@@ -23,13 +23,14 @@ data class Book(
     var notes: String?,
     var isbn: String?,
     var publisher: String?,
-    var subject: String?
+    var subject: String?,
+    var rating: Int
 ) {
-    var googleID: String? = null
+    var serviceConnection: ServiceConnection? = null
 
     private constructor(builder: Builder) : this(
         null,
-        builder.publishedYear,
+        builder.publishedDate,
         builder.numberOfCopies,
         builder.numberOfPages,
         builder.authors,
@@ -38,7 +39,8 @@ data class Book(
         builder.notes,
         builder.isbn,
         builder.publisher,
-        builder.subject
+        builder.subject,
+        builder.rating
     )
 
     override fun toString(): String {
@@ -46,7 +48,7 @@ data class Book(
     }
 
     class Builder {
-        var publishedYear = 0
+        var publishedDate: String? = null
             private set
         var numberOfPages = 0
             private set
@@ -66,8 +68,10 @@ data class Book(
             private set
         var authors: List<String>? = null
             private set
+        var rating = 0
+            private set
 
-        fun publishedYear(publishedYear: Int) = this.also { this.publishedYear = publishedYear }
+        fun publishedDate(publishedYear: String?) = this.also { this.publishedDate = publishedYear }
 
         fun numberOfPages(numberOfPages: Int) = this.also { this.numberOfPages = numberOfPages }
 
@@ -86,6 +90,8 @@ data class Book(
         fun subject(subject: String?) = this.also { this.subject = subject }
 
         fun authors(authors: List<String>?) = this.also { this.authors = authors }
+
+        fun rating(rating: Int) = this.also { this.rating = rating }
 
         fun build() = Book(this)
     }

@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.db
+package com.dansoftware.libraryapp.db.data
 
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
@@ -15,4 +15,6 @@ data class Magazine(
     var magazineName: String,
     var title: String,
     var publishedDate: Date
-)
+) {
+    var serviceConnection: ServiceConnection? = null
+}

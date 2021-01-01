@@ -2,6 +2,8 @@ package com.dansoftware.libraryapp.db;
 
 import com.dansoftware.libraryapp.db.auth.DatabaseAuthenticator;
 import com.dansoftware.libraryapp.db.auth.FailListener;
+import com.dansoftware.libraryapp.db.data.Book;
+import com.dansoftware.libraryapp.db.data.Magazine;
 import org.dizitart.no2.FindOptions;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;

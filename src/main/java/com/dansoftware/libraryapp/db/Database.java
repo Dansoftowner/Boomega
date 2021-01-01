@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.db;
 
+import com.dansoftware.libraryapp.db.data.Book;
+import com.dansoftware.libraryapp.db.data.Magazine;
 import org.dizitart.no2.FindOptions;
 import org.dizitart.no2.objects.ObjectFilter;
 import org.jetbrains.annotations.NotNull;
