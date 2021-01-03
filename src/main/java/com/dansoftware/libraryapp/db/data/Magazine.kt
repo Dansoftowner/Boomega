@@ -13,7 +13,9 @@ data class Magazine(
     var publisher: String?,
     var magazineName: String?,
     var title: String?,
-    var publishedDate: String?
+    var publishedDate: String?,
+    var notes: String?,
+    var rating: Int
 ) {
     var serviceConnection: ServiceConnection? = null
 }
