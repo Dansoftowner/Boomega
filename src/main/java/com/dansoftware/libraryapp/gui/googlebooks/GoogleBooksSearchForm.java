@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.util.LanguageSelection;
+import com.dansoftware.libraryapp.gui.util.LanguageSelections;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
@@ -69,12 +69,8 @@ class GoogleBooksSearchForm extends TitledPane {
 
     private void addAutoCompletionToLangField(FormRenderer src) {
         SimpleTextControl control = (SimpleTextControl) src.lookup(".languageSelector");
-        TextField textField = (TextField) ((StackPane) control.getChildren().get(1)).getChildren().get(0);
-        textField.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                new LanguageSelection(context, locale -> textField.setText(locale.getLanguage())).show();
-            }
-        });
+        TextField textField = (TextField) control.lookup(".text-field");
+        LanguageSelections.applyOnTextField(context, textField);
     }
 
     private Form buildForm() {
