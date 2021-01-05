@@ -13,4 +13,6 @@ fun <I, T : Collection<I>> T.ifNotEmpty(block: (T) -> Unit): T {
     return this
 }
 
-fun String.surrounding(prefixSuffix: String) = (prefixSuffix + this + prefixSuffix)
+fun String.surrounding(prefixSuffix: String) = this.surrounding(prefixSuffix, prefixSuffix)
+
+fun String.surrounding(prefix: String, suffix: String) = (prefix + this + suffix)
