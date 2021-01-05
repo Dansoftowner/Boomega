@@ -31,3 +31,7 @@
 .text-field:readonly {
     -right-button-visible: false;
 }
+
+.text-field .langSelectorControl {
+    -fx-fill: black;
+}

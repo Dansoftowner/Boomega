@@ -42,6 +42,14 @@
     -right-button-visible: false;
 }
 
+.text-field .langSelectorControl {
+    -fx-fill: white;
+}
+
+.text-field:focused .langSelectorControl {
+    -fx-fill: black;
+}
+
 .selectable-label:focused {
     -fx-text-fill: white;
 }
