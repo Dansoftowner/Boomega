@@ -3,6 +3,7 @@
 package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.gui.context.Context
+import com.dansoftware.libraryapp.util.surrounding
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.value.ChangeListener
@@ -20,8 +21,10 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 import javafx.util.Callback
+import org.apache.commons.lang3.StringUtils
 import java.util.*
 import java.util.function.Consumer
+import kotlin.collections.HashSet
 
 /**
  * Adds a [TextFieldLanguageSelectorControl] to a [TextField]
@@ -72,7 +75,7 @@ class LanguageSelection(private val context: Context, onSelection: Consumer<Loca
     init {
         isPickOnBounds = false
         children.add(Group(ListView<Locale>().also {
-            it.items.addAll(Locale.getAvailableLocales())
+            it.items.addAll(listLocales())
             it.cellFactory = this
             it.setOnMouseClicked { event ->
                 if (event.clickCount == 2) {
@@ -82,6 +85,19 @@ class LanguageSelection(private val context: Context, onSelection: Consumer<Loca
             }
         }))
     }
+
+    private fun listLocales(): List<Locale> =
+        LinkedList<Locale>().also { locales ->
+            val set = HashSet<String>()
+            Locale.getAvailableLocales().forEach {
+                if (set.add(it.language)) {
+                    locales.add(it)
+                }
+            }
+            val basicComparator = String.CASE_INSENSITIVE_ORDER
+            locales.sortWith { o1, o2 -> basicComparator.compare(o1.displayLanguage, o2.displayLanguage) }
+        }
+
 
     fun show() = context.showOverlay(this)
 
@@ -93,7 +109,15 @@ class LanguageSelection(private val context: Context, onSelection: Consumer<Loca
                     null
                 }
                 else -> {
-                    item?.displayLanguage ?: "-"
+                    item?.let {
+                        "${it.displayLanguage} ${
+                            when {
+                                StringUtils.isNotBlank(it.language) -> 
+                                    it.language.surrounding("(", ")")
+                                else -> ""
+                            } 
+                        }"
+                    } ?: "-"
                 }
             }
         }
