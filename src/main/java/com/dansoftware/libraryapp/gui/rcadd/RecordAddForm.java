@@ -1,42 +1,28 @@
 package com.dansoftware.libraryapp.gui.rcadd;
 
+import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.model.structure.Group;
+import com.dlsc.formsfx.model.util.BindingMode;
+import com.dlsc.formsfx.model.util.ResourceBundleService;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
+import com.dlsc.formsfx.view.util.ColSpan;
 import javafx.beans.property.*;
-import javafx.scene.Node;
-import javafx.scene.control.Control;
-import javafx.scene.control.Skin;
-import javafx.scene.control.SkinBase;
-import javafx.scene.control.Skinnable;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
+
 public class RecordAddForm extends VBox {
 
-    private final ObjectProperty<RecordType> recordType =
-            new SimpleObjectProperty<>() {{
-                addListener((observable, oldValue, newValue) -> {
-                    var rating = new Rating(5);
-                    rating.ratingProperty()
-                            .addListener((o, old, newRating) ->
-                                    RecordAddForm.this.rating.set((Integer) newRating));
-                    switch (newValue) {
-                        case BOOK:
-                            getChildren().setAll(new FormRenderer(buildBookForm()), rating);
-                            break;
-                        case MAGAZINE:
-                            getChildren().setAll(new FormRenderer(buildMagazineForm()), rating);
-                            break;
-                    }
-                });
-            }};
+    private final ObjectProperty<RecordType> recordType = new SimpleObjectProperty<>() {{
+        addListener((observable, oldValue, newValue) -> handleTypeChange(newValue));
+    }};
 
     private final StringProperty title = new SimpleStringProperty("");
-    private final StringProperty publishedDate = new SimpleStringProperty("");
+    private final ObjectProperty<LocalDate> publishedDate = new SimpleObjectProperty<>();
     private final StringProperty publisher = new SimpleStringProperty("");
     private final StringProperty magazineName = new SimpleStringProperty("");
     private final StringProperty authors = new SimpleStringProperty("");
@@ -53,78 +39,99 @@ public class RecordAddForm extends VBox {
         this.recordType.set(initialType);
     }
 
+    private void handleTypeChange(@NotNull RecordType recordType) {
+        switch (recordType) {
+            case BOOK:
+                getChildren().setAll(new FormRenderer(buildBookForm()), buildNewRatingControl());
+                break;
+            case MAGAZINE:
+                getChildren().setAll(new FormRenderer(buildMagazineForm()), buildNewRatingControl());
+                break;
+        }
+    }
+
+    private Rating buildNewRatingControl() {
+        var rating = new Rating(5);
+        rating.ratingProperty()
+                .addListener((o, old, newRating) -> this.rating.set(newRating.intValue()));
+        return rating;
+    }
+
     private Form buildBookForm() {
         return Form.of(
                 Group.of(
                         Field.ofStringType(authors)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.authors")
+                                .placeholder("record.add.form.authors.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(title)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.title")
+                                .placeholder("record.add.form.title.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(isbn)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.isbn")
+                                .placeholder("record.add.form.isbn.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(language)
-                        //TODO: style class
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.lang")
+                                .placeholder("record.add.form.lang.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(publisher)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.publisher")
+                                .placeholder("record.add.form.publisher.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(subject)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
-                        Field.ofStringType(publishedDate)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.subject")
+                                .placeholder("record.add.form.subject.prompt")
+                                .span(ColSpan.HALF),
+                        Field.ofDate(publishedDate)
+                                .label("record.add.form.date")
+                                .placeholder("record.add.form.date.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofIntegerType(numberOfCopies)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.nofcopies")
+                                .placeholder("record.add.form.nofcopies.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofIntegerType(numberOfPages)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.nofpages")
+                                .placeholder("record.add.form.nofpages.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(notes)
-                        //TODO: Label
-                        //TODO: Place holder
+                                .label("record.add.form.notes")
+                                .placeholder("record.add.form.notes.prompt")
+                                .multiline(true)
 
                 )
-        );
+        ).i18n(new ResourceBundleService(I18N.getRecordAddFormValues()))
+                .binding(BindingMode.CONTINUOUS);
     }
 
     private Form buildMagazineForm() {
         return Form.of(
                 Group.of(
                         Field.ofStringType(magazineName)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.magazinename")
+                                .placeholder("record.add.form.magazinename.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(title)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.title")
+                                .placeholder("record.add.form.title.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(publisher)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
-                        Field.ofStringType(publishedDate)
-                        //TODO: Label
-                        //TODO: Place holder
-                        ,
+                                .label("record.add.form.publisher")
+                                .placeholder("record.add.form.publisher.prompt")
+                                .span(ColSpan.HALF),
+                        Field.ofDate(publishedDate)
+                                .label("record.add.form.date")
+                                .placeholder("record.add.form.date.prompt")
+                                .span(ColSpan.HALF),
                         Field.ofStringType(notes)
-                        //TODO: Label
-                        //TODO: Place holder
+                                .label("record.add.form.notes")
+                                .placeholder("record.add.form.notes.prompt")
+                                .multiline(true)
                 )
-        );
+        ).i18n(new ResourceBundleService(I18N.getRecordAddFormValues()))
+                .binding(BindingMode.CONTINUOUS);
     }
 
     public String getTitle() {
@@ -135,11 +142,11 @@ public class RecordAddForm extends VBox {
         return title;
     }
 
-    public String getPublishedDate() {
+    public LocalDate getPublishedDate() {
         return publishedDate.get();
     }
 
-    public StringProperty publishedDateProperty() {
+    public ObjectProperty<LocalDate> publishedDateProperty() {
         return publishedDate;
     }
 
