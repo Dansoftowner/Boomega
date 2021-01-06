@@ -47,7 +47,7 @@ data class Volume(var id: String?) {
 
         //Not in the original format
         val isMagazine: Boolean
-        get() = (printType == MAGAZINE)
+            get() = (printType == MAGAZINE)
 
         fun getIndustryIdentifiersAsString() = industryIdentifiers?.joinToString("\n")
 

@@ -27,25 +27,30 @@ class GoogleBooksQueryBuilder {
         //pagination parameters
         private const val START_INDEX = "startIndex"
         private const val MAX_RESULTS = "maxResults"
+
         //restriction parameters by printType
         private const val PRINT_TYPE = "printType"
         private const val ALL = "all"
 
         private const val BOOKS = "books"
         private const val MAGAZINES = "magazines"
+
         //Sorting
         private const val ORDER_BY = "orderBy"
         private const val NEWEST = "newest"
 
         private const val RELEVANCE = "relevance"
+
         //Filtering by language
         private const val LANG_RESTRICT = "langRestrict"
 
         //defaults
         private const val START_INDEX_DEFAULT = 0
         private const val MAX_RESULTS_DEFAULT = 10
-        @JvmStatic private val PRINT_TYPE_DEFAULT = PrintType.ALL
-        @JvmStatic private val SORT_TYPE_DEFAULT = SortType.REVELANCE
+        @JvmStatic
+        private val PRINT_TYPE_DEFAULT = PrintType.ALL
+        @JvmStatic
+        private val SORT_TYPE_DEFAULT = SortType.REVELANCE
 
         @JvmStatic
         fun byId(id: String): SingleGoogleBookQuery {
@@ -108,9 +113,12 @@ class GoogleBooksQueryBuilder {
         return try {
             URIBuilder(BASE_URL).also { uriBuilder ->
                 uriBuilder.addParameter("q", buildQueryString())
-                startIndex.takeIf { it != START_INDEX_DEFAULT }?.let { uriBuilder.addParameter(START_INDEX, it.toString()) }
-                maxResults.takeIf { it != MAX_RESULTS_DEFAULT }?.let { uriBuilder.addParameter(MAX_RESULTS, it.toString()) }
-                printType.takeIf { it != PRINT_TYPE_DEFAULT }?.let { uriBuilder.addParameter(PRINT_TYPE, it.toString()) }
+                startIndex.takeIf { it != START_INDEX_DEFAULT }
+                    ?.let { uriBuilder.addParameter(START_INDEX, it.toString()) }
+                maxResults.takeIf { it != MAX_RESULTS_DEFAULT }
+                    ?.let { uriBuilder.addParameter(MAX_RESULTS, it.toString()) }
+                printType.takeIf { it != PRINT_TYPE_DEFAULT }
+                    ?.let { uriBuilder.addParameter(PRINT_TYPE, it.toString()) }
                 sortType.takeIf { it != SORT_TYPE_DEFAULT }?.let { uriBuilder.addParameter(ORDER_BY, it.value) }
                 lang?.let { uriBuilder.addParameter(LANG_RESTRICT, lang) }
             }.let { GoogleBooksQuery(it.toString()) }

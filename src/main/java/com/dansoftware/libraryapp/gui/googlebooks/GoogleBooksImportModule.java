@@ -112,7 +112,9 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         return new ToolbarItem(
                 new StackPane(new Group(new HBox(5,
                         new ImageView("/com/dansoftware/libraryapp/image/util/google_24px.png"),
-                        new Label("Google Books") {{ setFont(Font.font(20)); }}
+                        new Label("Google Books") {{
+                            setFont(Font.font(20));
+                        }}
                 )))
         );
     }

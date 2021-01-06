@@ -25,7 +25,8 @@ import java.util.function.Consumer
  *
  * @author Daniel Gyorffy
  */
-class GoogleBookDetailsOverlay(context: Context, volume: Volume) : StackPane(Group(GoogleBookDetailsPane(context, volume))) {
+class GoogleBookDetailsOverlay(context: Context, volume: Volume) :
+    StackPane(Group(GoogleBookDetailsPane(context, volume))) {
     init {
         isPickOnBounds = false
     }
@@ -75,18 +76,20 @@ class GoogleBookDetailsPane(context: Context, volume: Volume) : VBox(TitleBar(),
             }
 
             private fun buildThumbnail(volume: Volume): Node =
-                volume.volumeInfo?.imageLinks?.thumbnail?.let { StackPane(ImageView(it).also { imageView ->
-                    imageView.cursor = Cursor.HAND
-                    imageView.setOnMouseClicked { event ->
-                        when {
-                            event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
-                                ImageViewerActivity(
-                                    Image(volume.volumeInfo?.imageLinks?.getLargest()),
-                                    context.contextWindow
-                                ).show()
+                volume.volumeInfo?.imageLinks?.thumbnail?.let {
+                    StackPane(ImageView(it).also { imageView ->
+                        imageView.cursor = Cursor.HAND
+                        imageView.setOnMouseClicked { event ->
+                            when {
+                                event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
+                                    ImageViewerActivity(
+                                        Image(volume.volumeInfo?.imageLinks?.getLargest()),
+                                        context.contextWindow
+                                    ).show()
+                            }
                         }
-                  }
-                }) } ?: ThumbnailPlaceHolder()
+                    })
+                } ?: ThumbnailPlaceHolder()
 
             /**
              * The main header area is the place where the main information is displayed.
@@ -167,23 +170,24 @@ class GoogleBookDetailsPane(context: Context, volume: Volume) : VBox(TitleBar(),
          * The pane chooser area is the place where the user can select the information panel or the
          * sale information panel to be shown
          */
-        private class PaneChooserArea(val context: Context, scrollArea: ScrollPane, volume: Volume) : StackPane(Group(HBox(3.0).also { hBox ->
-            val tgglGroup = ToggleGroup()
-            tgglGroup.selectedToggleProperty().addListener { _, _, toggle ->
-                @Suppress("UNCHECKED_CAST")
-                (toggle.userData as Consumer<ScrollPane>).accept(scrollArea)
-            }
+        private class PaneChooserArea(val context: Context, scrollArea: ScrollPane, volume: Volume) :
+            StackPane(Group(HBox(3.0).also { hBox ->
+                val tgglGroup = ToggleGroup()
+                tgglGroup.selectedToggleProperty().addListener { _, _, toggle ->
+                    @Suppress("UNCHECKED_CAST")
+                    (toggle.userData as Consumer<ScrollPane>).accept(scrollArea)
+                }
 
-            hBox.children.add(RadioToggleButton(I18N.getGoogleBooksImportValue("google.books.details.info")).also { toggle ->
-                toggle.toggleGroup = tgglGroup
-                toggle.userData = Consumer<ScrollPane> { it.content = InfoPane(context, volume) }
-                toggle.isSelected = true
-            })
-            hBox.children.add(RadioToggleButton(I18N.getGoogleBooksImportValue("google.books.details.sale")).also { toggle ->
-                toggle.toggleGroup = tgglGroup
-                toggle.userData = Consumer<ScrollPane> { it.content = SaleInfoPane(volume) }
-            })
-        }))
+                hBox.children.add(RadioToggleButton(I18N.getGoogleBooksImportValue("google.books.details.info")).also { toggle ->
+                    toggle.toggleGroup = tgglGroup
+                    toggle.userData = Consumer<ScrollPane> { it.content = InfoPane(context, volume) }
+                    toggle.isSelected = true
+                })
+                hBox.children.add(RadioToggleButton(I18N.getGoogleBooksImportValue("google.books.details.sale")).also { toggle ->
+                    toggle.toggleGroup = tgglGroup
+                    toggle.userData = Consumer<ScrollPane> { it.content = SaleInfoPane(volume) }
+                })
+            }))
 
         /**
          * The scroll-pane where the [InfoPane] or the [SaleInfoPane] is displayed

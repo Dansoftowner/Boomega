@@ -25,7 +25,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -129,11 +128,11 @@ class GoogleBooksSearchForm extends TitledPane {
 
         private SearchData() {
             this.valid = generalText.isNotEmpty()
-                            .or(author.isNotEmpty())
-                            .or(title.isNotEmpty())
-                            .or(publisher.isNotEmpty())
-                            .or(subject.isNotEmpty())
-                            .or(isbn.isNotEmpty());
+                    .or(author.isNotEmpty())
+                    .or(title.isNotEmpty())
+                    .or(publisher.isNotEmpty())
+                    .or(subject.isNotEmpty())
+                    .or(isbn.isNotEmpty());
         }
 
         private final StringProperty generalText = new SimpleStringProperty("");

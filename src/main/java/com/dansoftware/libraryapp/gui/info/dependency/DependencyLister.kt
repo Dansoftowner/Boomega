@@ -2,7 +2,6 @@ package com.dansoftware.libraryapp.gui.info.dependency
 
 import com.dansoftware.libraryapp.gui.info.dependency.meta.DependencyInfo
 import com.dansoftware.libraryapp.gui.info.dependency.meta.LicenseInfo
-import org.jetbrains.annotations.NotNull
 
 /**
  * Used for creating a [List] of [DependencyInfo] objects that represents the dependencies that are

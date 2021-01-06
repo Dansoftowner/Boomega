@@ -57,9 +57,9 @@ public class GoogleBooksTable extends TableView<Volume> {
         private final Function<GoogleBooksTable, ? extends TableColumn<Volume, String>> createPolicy;
 
         <T extends TableColumn<Volume, String>> ColumnType(String i18n,
-                                                                      Class<T> tableColumnClass,
-                                                                      boolean defaultVisible,
-                                                                      Function<GoogleBooksTable, T> createPolicy) {
+                                                           Class<T> tableColumnClass,
+                                                           boolean defaultVisible,
+                                                           Function<GoogleBooksTable, T> createPolicy) {
             this.i18n = i18n;
             this.tableColumnClass = tableColumnClass;
             this.defaultVisible = defaultVisible;
@@ -173,7 +173,7 @@ public class GoogleBooksTable extends TableView<Volume> {
     }
 
     private static abstract class SimpleVolumeInfoColumn extends Column
-        implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>>{
+            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         public SimpleVolumeInfoColumn(@NotNull ColumnType columnType) {
             this(columnType, true);
@@ -343,10 +343,10 @@ public class GoogleBooksTable extends TableView<Volume> {
                                                 industryIdentifiers.stream()
                                                         .filter(identifier ->
                                                                 Volume
-                                                                .VolumeInfo
-                                                                .IndustryIdentifier
-                                                                .ISBN_10
-                                                                .equals(identifier.getType()))
+                                                                        .VolumeInfo
+                                                                        .IndustryIdentifier
+                                                                        .ISBN_10
+                                                                        .equals(identifier.getType()))
                                                         .findAny()
                                                         .ifPresentOrElse(identifier -> setText(identifier.getIdentifier()), () -> setText(" - ")),
                                         () -> setText(" - "));

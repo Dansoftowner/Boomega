@@ -309,7 +309,9 @@ final class WorkbenchContextAdapter implements Context {
                                                     @NotNull Consumer<ButtonType> onResult) {
         if (exception != null) {
             final ExceptionDisplayPane content = new ExceptionDisplayPane(exception);
-            return WorkbenchDialog.builder(title, new VBox(new Label(message), content) {{setSpacing(10);}}, I18NButtonTypes.OK)
+            return WorkbenchDialog.builder(title, new VBox(new Label(message), content) {{
+                setSpacing(10);
+            }}, I18NButtonTypes.OK)
                     .onResult(onResult)
                     .build();
         }

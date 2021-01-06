@@ -101,25 +101,26 @@ class LanguageSelection(private val context: Context, onSelection: Consumer<Loca
 
     fun show() = context.showOverlay(this)
 
-    override fun call(param: ListView<Locale>): ListCell<Locale> = object : ListCell<Locale>() {
-        override fun updateItem(item: Locale?, empty: Boolean) {
-            super.updateItem(item, empty)
-            text = when {
-                empty -> {
-                    null
-                }
-                else -> {
-                    item?.let {
-                        "${it.displayLanguage} ${
-                            when {
-                                StringUtils.isNotBlank(it.language) -> 
-                                    it.language.surrounding("(", ")")
-                                else -> ""
-                            } 
-                        }"
-                    } ?: "-"
+    override fun call(param: ListView<Locale>): ListCell<Locale> =
+        object : ListCell<Locale>() {
+            override fun updateItem(item: Locale?, empty: Boolean) {
+                super.updateItem(item, empty)
+                this.text = when {
+                    empty -> {
+                        null
+                    }
+                    else -> {
+                        item?.let {
+                            "${it.displayLanguage} ${
+                                when {
+                                    StringUtils.isNotBlank(it.language) ->
+                                        it.language.surrounding("(", ")")
+                                    else -> ""
+                                }
+                            }"
+                        } ?: "-"
+                    }
                 }
             }
         }
-    }
 }

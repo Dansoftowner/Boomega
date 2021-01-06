@@ -157,6 +157,7 @@ open class ImagePlaceHolder(size: Double) : Text("\uF2E9") {
         this.styleClass.add("glyph-icon")
     }
 }
+
 /**
  * A SpaceValidator can be used for [TextInputControl] objects (for example: [javafx.scene.control.TextField])
  * to avoid whitespaces.

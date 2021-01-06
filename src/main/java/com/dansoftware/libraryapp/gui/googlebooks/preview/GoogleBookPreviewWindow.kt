@@ -13,14 +13,14 @@ import javafx.stage.WindowEvent
  */
 class GoogleBookPreviewWindow(owner: Window?, content: GoogleBookPreview) :
     BaseWindow<GoogleBookPreview>("window.google.book.preview.title", content) {
-        init {
-            initOwner(owner)
-            initModality(Modality.APPLICATION_MODAL)
-            addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, object: EventHandler<WindowEvent> {
-                override fun handle(event: WindowEvent?) {
-                    content.clean()
-                    removeEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this)
-                }
-            })
-        }
+    init {
+        initOwner(owner)
+        initModality(Modality.APPLICATION_MODAL)
+        addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, object : EventHandler<WindowEvent> {
+            override fun handle(event: WindowEvent?) {
+                content.clean()
+                removeEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this)
+            }
+        })
+    }
 }
