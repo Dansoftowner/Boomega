@@ -63,42 +63,52 @@ public class RecordAddForm extends VBox {
                         Field.ofStringType(authors)
                                 .label("record.add.form.authors")
                                 .placeholder("record.add.form.authors.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(title)
                                 .label("record.add.form.title")
                                 .placeholder("record.add.form.title.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(isbn)
                                 .label("record.add.form.isbn")
                                 .placeholder("record.add.form.isbn.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(language)
                                 .label("record.add.form.lang")
                                 .placeholder("record.add.form.lang.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(publisher)
                                 .label("record.add.form.publisher")
                                 .placeholder("record.add.form.publisher.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(subject)
                                 .label("record.add.form.subject")
                                 .placeholder("record.add.form.subject.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofDate(publishedDate)
                                 .label("record.add.form.date")
                                 .placeholder("record.add.form.date.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofIntegerType(numberOfCopies)
                                 .label("record.add.form.nofcopies")
+                                .required(false)
                                 .placeholder("record.add.form.nofcopies.prompt")
                                 .span(ColSpan.HALF),
                         Field.ofIntegerType(numberOfPages)
                                 .label("record.add.form.nofpages")
                                 .placeholder("record.add.form.nofpages.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(notes)
                                 .label("record.add.form.notes")
                                 .placeholder("record.add.form.notes.prompt")
+                                .required(false)
                                 .multiline(true)
 
                 )
@@ -112,22 +122,27 @@ public class RecordAddForm extends VBox {
                         Field.ofStringType(magazineName)
                                 .label("record.add.form.magazinename")
                                 .placeholder("record.add.form.magazinename.prompt")
+                                .required(true)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(title)
                                 .label("record.add.form.title")
                                 .placeholder("record.add.form.title.prompt")
+                                .required(true)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(publisher)
                                 .label("record.add.form.publisher")
                                 .placeholder("record.add.form.publisher.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofDate(publishedDate)
                                 .label("record.add.form.date")
                                 .placeholder("record.add.form.date.prompt")
+                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(notes)
                                 .label("record.add.form.notes")
                                 .placeholder("record.add.form.notes.prompt")
+                                .required(false)
                                 .multiline(true)
                 )
         ).i18n(new ResourceBundleService(I18N.getRecordAddFormValues()))
