@@ -91,6 +91,11 @@ public class I18N {
         return getValue(getGoogleBooksImportValues(), key, args);
     }
 
+    @NotNull
+    public static String getRecordAddFormValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getRecordAddFormValues(), key, args);
+    }
+
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
         if (ArrayUtils.isEmpty(args)) return resourceBundle.getString(key);
         return getFormat(resourceBundle, key, args);
@@ -177,6 +182,12 @@ public class I18N {
     public static ResourceBundle getGoogleBooksImportValues() {
         recognizeLanguagePack();
         return languagePack.getGoogleBooksImportValues();
+    }
+
+    @NotNull
+    public static ResourceBundle getRecordAddFormValues() {
+        recognizeLanguagePack();
+        return languagePack.getRecordAddFormValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
