@@ -13,6 +13,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
+import javafx.beans.value.ObservableValueBase
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Node
@@ -31,6 +32,11 @@ import org.controlsfx.control.Rating
 import java.io.BufferedInputStream
 import java.util.function.Consumer
 import kotlin.reflect.KClass
+
+fun <T> constantObservable(value: () -> T): ObservableValue<T> =
+    object : ObservableValueBase<T>() {
+        override fun getValue(): T = value()
+    }
 
 fun loadImage(resource: String, onImageReady: Consumer<Image>) {
     val image = Image(resource, true)
