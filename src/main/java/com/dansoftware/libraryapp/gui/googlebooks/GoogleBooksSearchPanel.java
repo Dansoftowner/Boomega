@@ -67,14 +67,7 @@ class GoogleBooksSearchPanel extends VBox {
     }
 
     private void buildTableSelectionPolicy() {
-        getTable().setOnMouseClicked(event -> {
-            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-                ObservableList<Volume> selectedItems = getTable().getSelectionModel().getSelectedItems();
-                if (selectedItems != null && !selectedItems.isEmpty()) {
-                    context.showOverlay(new GoogleBookDetailsOverlay(context, selectedItems.get(0)));
-                }
-            }
-        });
+        getTable().setOnItemDoubleClicked(item -> context.showOverlay(new GoogleBookDetailsOverlay(context, item)));
     }
 
     private GoogleBooksSearchForm createForm(Context context) {
