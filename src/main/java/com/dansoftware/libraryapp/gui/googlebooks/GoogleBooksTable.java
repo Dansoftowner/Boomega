@@ -9,12 +9,15 @@ import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -23,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -78,9 +82,11 @@ public class GoogleBooksTable extends TableView<Volume> {
     private static final String STYLE_CLASS = "google-books-table";
 
     private final IntegerProperty startIndex;
+    private final ObjectProperty<Consumer<Volume>> onItemDoubleClicked;
 
     GoogleBooksTable(int startIndex) {
         this.startIndex = new SimpleIntegerProperty(startIndex);
+        this.onItemDoubleClicked = new SimpleObjectProperty<>();
         this.init();
     }
 
@@ -89,6 +95,21 @@ public class GoogleBooksTable extends TableView<Volume> {
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.setPlaceholder(new PlaceHolder());
+        this.buildClickHandlingPolicy();
+    }
+
+    private void buildClickHandlingPolicy() {
+        this.setRowFactory(table -> {
+            TableRow<Volume> tableRow = new TableRow<>();
+            tableRow.setOnMouseClicked(event -> {
+                if (!tableRow.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                    if (onItemDoubleClicked.get() != null) {
+                        onItemDoubleClicked.get().accept(tableRow.getItem());
+                    }
+                }
+            });
+            return tableRow;
+        });
     }
 
     public void buildDefaultColumns() {
@@ -110,6 +131,10 @@ public class GoogleBooksTable extends TableView<Volume> {
                 .map(col -> (Column<?>) col)
                 .map(col -> col.columnType)
                 .anyMatch(col -> col.equals(columnType));
+    }
+
+    public void setOnItemDoubleClicked(Consumer<Volume> onItemDoubleClicked) {
+        this.onItemDoubleClicked.set(onItemDoubleClicked);
     }
 
     public void removeAllColumns() {
