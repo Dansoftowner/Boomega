@@ -10,6 +10,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -17,7 +18,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,14 +52,14 @@ public class GoogleBooksTable extends TableView<Volume> {
         BROWSER_COLUMN("google.books.table.column.browse", BrowserColumn.class, false, table -> new BrowserColumn());
 
         private final String i18n;
-        private final Class<? extends TableColumn<Volume, String>> tableColumnClass;
+        private final Class<? extends Column<?>> tableColumnClass;
         private final boolean defaultVisible;
-        private final Function<GoogleBooksTable, ? extends TableColumn<Volume, String>> createPolicy;
+        private final Function<GoogleBooksTable, ? extends Column<?>> createPolicy;
 
-        <T extends TableColumn<Volume, String>> ColumnType(String i18n,
-                                                           Class<T> tableColumnClass,
-                                                           boolean defaultVisible,
-                                                           Function<GoogleBooksTable, T> createPolicy) {
+        <T extends Column<?>> ColumnType(String i18n,
+                                         Class<T> tableColumnClass,
+                                         boolean defaultVisible,
+                                         Function<GoogleBooksTable, T> createPolicy) {
             this.i18n = i18n;
             this.tableColumnClass = tableColumnClass;
             this.defaultVisible = defaultVisible;
@@ -100,14 +100,14 @@ public class GoogleBooksTable extends TableView<Volume> {
 
     public List<ColumnType> getShowingColumns() {
         return getColumns().stream()
-                .map(col -> (Column) col)
+                .map(col -> (Column<?>) col)
                 .map(col -> col.columnType)
                 .collect(Collectors.toList());
     }
 
     public boolean isColumnShown(@Nullable ColumnType columnType) {
         return getColumns().stream()
-                .map(col -> (Column) col)
+                .map(col -> (Column<?>) col)
                 .map(col -> col.columnType)
                 .anyMatch(col -> col.equals(columnType));
     }
@@ -117,15 +117,15 @@ public class GoogleBooksTable extends TableView<Volume> {
     }
 
     public void removeColumn(@NotNull ColumnType columnType) {
-        this.getColumns().removeIf(col -> ((Column) col).columnType.equals(columnType));
+        this.getColumns().removeIf(col -> ((Column<?>) col).columnType.equals(columnType));
     }
 
     public void addColumn(@NotNull ColumnType columnType) {
         addColumn(columnType.tableColumnClass, columnType.createPolicy);
     }
 
-    private void addColumn(Class<? extends TableColumn<Volume, String>> tableColumnClass,
-                           Function<GoogleBooksTable, ? extends TableColumn<Volume, String>> createAction) {
+    private void addColumn(Class<? extends Column<?>> tableColumnClass,
+                           Function<GoogleBooksTable, ? extends Column<?>> createAction) {
         this.getColumns().add(createAction.apply(this));
     }
 
@@ -150,7 +150,7 @@ public class GoogleBooksTable extends TableView<Volume> {
         }
     }
 
-    private static class Column extends TableColumn<Volume, String> {
+    private static class Column<T> extends TableColumn<Volume, T> {
         private final ColumnType columnType;
 
         public Column(@NotNull ColumnType columnType, boolean i18n) {
@@ -172,7 +172,18 @@ public class GoogleBooksTable extends TableView<Volume> {
         }
     }
 
-    private static abstract class SimpleVolumeInfoColumn extends Column
+    private static abstract class AbcSortableColumn extends Column<String> {
+        AbcSortableColumn(@NotNull ColumnType columnType) {
+            this(columnType, true);
+        }
+
+        AbcSortableColumn(@NotNull ColumnType columnType, boolean i18n) {
+            super(columnType, i18n);
+            setSortable(true);
+        }
+    }
+
+    private static abstract class SimpleVolumeInfoColumn extends AbcSortableColumn
             implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         public SimpleVolumeInfoColumn(@NotNull ColumnType columnType) {
@@ -181,6 +192,12 @@ public class GoogleBooksTable extends TableView<Volume> {
 
         public SimpleVolumeInfoColumn(@NotNull ColumnType columnType, boolean i18n) {
             super(columnType, i18n);
+            setCellValueFactory(cellData ->
+                    BaseFXUtils.constantObservable(() ->
+                            Optional.ofNullable(getValue(cellData.getValue().getVolumeInfo()))
+                                    .map(Object::toString)
+                                    .orElse("-"))
+            );
             setCellFactory(this);
         }
 
@@ -202,50 +219,34 @@ public class GoogleBooksTable extends TableView<Volume> {
                 }
             };
         }
+
     }
 
-
-    private static final class IndexColumn extends Column
-            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
+    private static final class IndexColumn extends Column<Integer> {
         private static final int COLUMN_WIDTH_UNIT = 60;
-
-        private final IntegerProperty startIndexProperty;
 
         IndexColumn(IntegerProperty startIndexProperty) {
             super(ColumnType.INDEX_COLUMN, false);
-            this.startIndexProperty = startIndexProperty;
-            setCellFactory(this);
+            setSortable(false);
             setMinWidth(COLUMN_WIDTH_UNIT);
             setMaxWidth(COLUMN_WIDTH_UNIT);
-        }
-
-        @Override
-        public TableCell<Volume, String> call(TableColumn<Volume, String> tableCol) {
-            return new TableCell<>() {
+            setCellValueFactory(cellData -> new ObservableValueBase<>() {
                 @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        setText(Integer.toString(startIndexProperty.get() + getIndex() + 1));
-                        int preferredColumnWidth = getText().length() * COLUMN_WIDTH_UNIT;
-                        if (tableCol.getWidth() < preferredColumnWidth) {
-                            tableCol.setMinWidth(preferredColumnWidth);
-                            tableCol.setMaxWidth(preferredColumnWidth);
-                        }
-                    }
+                public Integer getValue() {
+                    return 1 + startIndexProperty.get() + cellData.getTableView()
+                            .getItems()
+                            .indexOf(cellData.getValue());
                 }
-            };
+            });
         }
     }
 
-    private static final class TypeIndicatorColumn extends Column
+    private static final class TypeIndicatorColumn extends Column<String>
             implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         TypeIndicatorColumn() {
             super(ColumnType.TYPE_INDICATOR_COLUMN, false);
+            setSortable(false);
             setCellFactory(this);
             setMinWidth(50);
             setMaxWidth(60);
@@ -272,11 +273,12 @@ public class GoogleBooksTable extends TableView<Volume> {
 
     }
 
-    private static final class ThumbnailColumn extends Column
+    private static final class ThumbnailColumn extends Column<String>
             implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         ThumbnailColumn() {
             super(ColumnType.THUMBNAIL_COLUMN);
+            setSortable(false);
             setCellFactory(this);
             setMinWidth(20);
             setPrefWidth(200);
@@ -319,125 +321,64 @@ public class GoogleBooksTable extends TableView<Volume> {
         }
     }
 
-    private static final class ISBN10Column extends Column
-            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
+    @SuppressWarnings("DuplicatedCode")
+    private static final class ISBN10Column extends Column<String> {
 
         ISBN10Column() {
             super(ColumnType.ISBN_10_COLUMN);
-            setCellFactory(this);
-        }
-
-        @Override
-        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        Volume.VolumeInfo volume = getVolumeInfo(this);
-                        Optional.ofNullable(volume.getIndustryIdentifiers())
-                                .ifPresentOrElse(industryIdentifiers ->
-                                                industryIdentifiers.stream()
-                                                        .filter(identifier ->
-                                                                Volume
-                                                                        .VolumeInfo
-                                                                        .IndustryIdentifier
-                                                                        .ISBN_10
-                                                                        .equals(identifier.getType()))
-                                                        .findAny()
-                                                        .ifPresentOrElse(identifier -> setText(identifier.getIdentifier()), () -> setText(" - ")),
-                                        () -> setText(" - "));
-                    }
-                }
-            };
+            setSortable(false);
+            setCellValueFactory(cellData -> BaseFXUtils.constantObservable(() ->
+                    Optional.ofNullable(cellData.getValue())
+                            .map(Volume::getVolumeInfo)
+                            .map(Volume.VolumeInfo::getIndustryIdentifiers)
+                            .flatMap(identifiers -> identifiers.stream()
+                                    .filter(Volume.VolumeInfo.IndustryIdentifier::isIsbn10)
+                                    .map(Volume.VolumeInfo.IndustryIdentifier::getIdentifier)
+                                    .findAny()).orElse("-"))
+            );
         }
     }
 
-    private static final class ISBN13Column extends Column
-            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
-
+    @SuppressWarnings("DuplicatedCode")
+    private static final class ISBN13Column extends Column<String> {
         ISBN13Column() {
             super(ColumnType.ISBN_13_COLUMN);
-            setCellFactory(this);
-        }
-
-        @Override
-        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        Volume.VolumeInfo volume = getVolumeInfo(this);
-                        Optional.ofNullable(volume.getIndustryIdentifiers())
-                                .ifPresentOrElse(industryIdentifiers -> industryIdentifiers.stream().filter(identifier ->
-                                                identifier.getType()
-                                                        .equals(Volume.VolumeInfo.IndustryIdentifier.ISBN_13))
-                                                .findAny()
-                                                .ifPresentOrElse(identifier -> setText(identifier.getIdentifier()),
-                                                        () -> setText(" - ")),
-                                        () -> setText(" - "));
-                    }
-                }
-            };
+            setSortable(false);
+            setCellValueFactory(cellData -> BaseFXUtils.constantObservable(() ->
+                    Optional.ofNullable(cellData.getValue())
+                            .map(Volume::getVolumeInfo)
+                            .map(Volume.VolumeInfo::getIndustryIdentifiers)
+                            .flatMap(identifiers -> identifiers.stream()
+                                    .filter(Volume.VolumeInfo.IndustryIdentifier::isIsbn13)
+                                    .map(Volume.VolumeInfo.IndustryIdentifier::getIdentifier)
+                                    .findAny()).orElse("-"))
+            );
         }
     }
 
-    private static final class ISBNColumn extends Column
-            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
+    private static final class ISBNColumn extends Column<String> {
         ISBNColumn() {
             super(ColumnType.ISBN_COLUMN);
-            setCellFactory(this);
-        }
-
-        @Override
-        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Volume.VolumeInfo volume = getVolumeInfo(this);
-                        setText(StringUtils.getIfBlank(volume.getIndustryIdentifiersAsString(), () -> "-"));
-                    }
-                }
-            };
+            setSortable(false);
+            setCellValueFactory(cellData ->
+                    BaseFXUtils.constantObservable(() ->
+                            Optional.ofNullable(cellData.getValue().getVolumeInfo())
+                                    .map(Volume.VolumeInfo::getIndustryIdentifiersAsString)
+                                    .orElse("-"))
+            );
         }
     }
 
-    private static final class AuthorColumn extends Column
-            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
+    private static final class AuthorColumn extends AbcSortableColumn {
         AuthorColumn() {
             super(ColumnType.AUTHOR_COLUMN);
-            setCellFactory(this);
-        }
-
-        @Override
-        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        Volume.VolumeInfo volume = getVolumeInfo(this);
-                        Optional.ofNullable(volume.getAuthors())
-                                .ifPresentOrElse(authors -> setText(String.join(", ", authors)),
-                                        () -> setText("-"));
-                    }
-                }
-            };
+            setCellValueFactory(cellData ->
+                    BaseFXUtils.constantObservable(() ->
+                            Optional.ofNullable(cellData.getValue().getVolumeInfo())
+                                    .map(Volume.VolumeInfo::getAuthors)
+                                    .map(authors -> String.join(", ", authors))
+                                    .orElse("-"))
+            );
         }
     }
 
@@ -474,31 +415,17 @@ public class GoogleBooksTable extends TableView<Volume> {
         }
     }
 
-    private static final class LangColumn extends Column
-            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
+    private static final class LangColumn extends Column<String> {
         LangColumn() {
             super(ColumnType.LANG_COLUMN);
-            setCellFactory(this);
-        }
-
-        @Override
-        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        Volume.VolumeInfo volumeInfo = getVolumeInfo(this);
-                        Optional.ofNullable(volumeInfo.getLanguage())
-                                .map(Locale::forLanguageTag)
-                                .map(Locale::getDisplayLanguage)
-                                .ifPresentOrElse(this::setText, () -> setText(null));
-                    }
-                }
-            };
+            setCellValueFactory(cellData ->
+                    BaseFXUtils.constantObservable(() ->
+                            Optional.ofNullable(cellData.getValue().getVolumeInfo())
+                                    .map(Volume.VolumeInfo::getLanguage)
+                                    .map(Locale::forLanguageTag)
+                                    .map(Locale::getDisplayLanguage)
+                                    .orElse("-"))
+            );
         }
     }
 
@@ -514,7 +441,7 @@ public class GoogleBooksTable extends TableView<Volume> {
         }
     }
 
-    private static final class RankColumn extends Column
+    private static final class RankColumn extends Column<String>
             implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
 
         RankColumn() {
@@ -552,7 +479,7 @@ public class GoogleBooksTable extends TableView<Volume> {
         }
     }
 
-    private static final class BrowserColumn extends Column
+    private static final class BrowserColumn extends Column<String>
             implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
         BrowserColumn() {
             super(ColumnType.BROWSER_COLUMN, false);
