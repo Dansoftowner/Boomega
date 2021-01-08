@@ -112,6 +112,13 @@ public class GoogleBooksTable extends TableView<Volume> {
         });
     }
 
+    public void setSortingComparator(@NotNull Comparator<String> comparator) {
+        this.getColumns().stream()
+                .filter(col -> col instanceof AbcSortableColumn)
+                .map(col -> (AbcSortableColumn) col)
+                .forEach(col -> col.setComparator(comparator));
+    }
+
     public void buildDefaultColumns() {
         this.getColumns().clear();
         Arrays.stream(ColumnType.values())
