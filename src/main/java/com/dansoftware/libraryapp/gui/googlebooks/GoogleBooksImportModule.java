@@ -3,9 +3,10 @@ package com.dansoftware.libraryapp.gui.googlebooks;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
+import com.dansoftware.libraryapp.locale.ABCCollators;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.SystemBrowser;
-import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -17,9 +18,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -27,9 +26,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.text.Collator;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,6 +44,13 @@ public class GoogleBooksImportModule extends WorkbenchModule {
     private static final Preferences.Key<TableColumnsInfo> colConfigKey =
             new Preferences.Key<>("google.books.module.table.columns", TableColumnsInfo.class, TableColumnsInfo::byDefault);
 
+    private static final Preferences.Key<Locale> abcConfigKey =
+            new Preferences.Key<>(
+                    "google.books.module.table.abcsort",
+                    Locale.class,
+                    Locale::getDefault
+            );
+
     private final Context context;
     private final Preferences preferences;
     private final Database database;
@@ -52,6 +58,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
             new SimpleObjectProperty<>();
 
     private ToolbarItem columnChooserItem;
+    private ToolbarItem abcChooserItem;
 
     public GoogleBooksImportModule(@NotNull Context context,
                                    @NotNull Preferences preferences,
@@ -71,9 +78,11 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         return content.get();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean destroy() {
         preferences.editor().put(colConfigKey, new TableColumnsInfo(getTable().getShowingColumns()));
+        preferences.editor().put(abcConfigKey, ((AbcMenuItem) BaseFXUtils.findSelectedRadioItem(abcChooserItem.getItems())).locale);
         content.set(null);
         return true;
     }
@@ -82,14 +91,27 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         content.addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 GoogleBooksTable table = newValue.getTable();
-                List<GoogleBooksTable.ColumnType> columnTypes =
-                        preferences.get(colConfigKey).columnTypes;
-                columnTypes.forEach(table::addColumn);
-                columnChooserItem.getItems().stream()
-                        .map(menuItem -> (TableColumnMenuItem) menuItem)
-                        .forEach(menuItem -> menuItem.setSelected(table.isColumnShown(menuItem.columnType)));
+                readColumnConfigurations(table);
+                readABCConfigurations();
             }
         });
+    }
+
+    private void readColumnConfigurations(GoogleBooksTable table) {
+        List<GoogleBooksTable.ColumnType> columnTypes =
+                preferences.get(colConfigKey).columnTypes;
+        columnTypes.forEach(table::addColumn);
+        columnChooserItem.getItems().stream()
+                .map(menuItem -> (TableColumnMenuItem) menuItem)
+                .forEach(menuItem -> menuItem.setSelected(table.isColumnShown(menuItem.columnType)));
+    }
+
+    private void readABCConfigurations() {
+        final Locale locale = preferences.get(abcConfigKey);
+        abcChooserItem.getItems().stream()
+                .map(item -> (AbcMenuItem) item)
+                .filter(item -> locale.equals(item.locale))
+                .forEach(item -> item.setSelected(true));
     }
 
     private void buildToolbar() {
@@ -101,15 +123,14 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         this.getToolbarControlsLeft().add(buildGoogleLogoItem());
         this.getToolbarControlsLeft().add(columnChooserItem = buildColumnChooserItem());
         this.getToolbarControlsLeft().add(buildColumnResetItem());
+        this.getToolbarControlsLeft().add(abcChooserItem = buildABCChooserItem());
     }
 
     private ToolbarItem buildGoogleLogoItem() {
         return new ToolbarItem(
                 new StackPane(new Group(new HBox(5,
                         new ImageView("/com/dansoftware/libraryapp/image/util/google_24px.png"),
-                        new Label("Google Books") {{
-                            setFont(Font.font(20));
-                        }}
+                        new Label("Google Books") {{ setFont(Font.font(20)); }}
                 )))
         );
     }
@@ -152,6 +173,15 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         });
     }
 
+    private ToolbarItem buildABCChooserItem() {
+        var toolbarItem = new ToolbarItem(I18N.getGoogleBooksImportValue("google.books.abc"));
+        var toggleGroup = new ToggleGroup();
+        ABCCollators.getAvailableCollators().forEach((locale, collatorSupplier) -> {
+            toolbarItem.getItems().add(new AbcMenuItem(locale, collatorSupplier, toggleGroup));
+        });
+        return toolbarItem;
+    }
+
     private ToolbarItem buildToolbarItem(MaterialDesignIcon icon, String i18nTooltip, EventHandler<MouseEvent> onClick) {
         var toolbarItem = new ToolbarItem(new MaterialDesignIconView(icon), onClick);
         toolbarItem.setTooltip(new Tooltip(I18N.getGoogleBooksImportValue(i18nTooltip)));
@@ -164,6 +194,23 @@ public class GoogleBooksImportModule extends WorkbenchModule {
 
     private GoogleBooksTable getTable() {
         return getContent().getTable();
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private final class AbcMenuItem extends RadioMenuItem {
+        private final Locale locale;
+
+        AbcMenuItem(@NotNull Locale locale,
+                    @NotNull Supplier<Collator> collatorSupplier,
+                    @NotNull ToggleGroup toggleGroup) {
+            super(locale.getDisplayLanguage(), new MaterialDesignIconView(MaterialDesignIcon.TRANSLATE));
+            this.locale = locale;
+            this.setUserData(locale);
+            selectedProperty().addListener((observable, oldValue, selected) -> {
+                if (selected) getTable().setSortingComparator((Comparator) collatorSupplier.get());
+            });
+            setToggleGroup(toggleGroup);
+        }
     }
 
     private final class TableColumnMenuItem extends CheckMenuItem {
