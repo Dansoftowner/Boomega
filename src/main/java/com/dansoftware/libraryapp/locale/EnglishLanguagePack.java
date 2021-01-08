@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.locale;
 
+import java.text.Collator;
 import java.util.Locale;
 
 /**
@@ -11,6 +12,7 @@ public class EnglishLanguagePack extends InternalLanguagePack {
 
     static {
         registerLanguagePack(Locale.ENGLISH, EnglishLanguagePack.class);
+        ABCCollators.registerCollator(Locale.ENGLISH, () -> Collator.getInstance(Locale.ENGLISH));
     }
 
     public EnglishLanguagePack() {

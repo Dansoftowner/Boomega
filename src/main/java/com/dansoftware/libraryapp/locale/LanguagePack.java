@@ -7,7 +7,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.Collator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A {@link LanguagePack} provides {@link ResourceBundle}s for a particular {@link Locale}.
