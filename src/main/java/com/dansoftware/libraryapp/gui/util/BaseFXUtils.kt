@@ -33,6 +33,10 @@ import java.io.BufferedInputStream
 import java.util.function.Consumer
 import kotlin.reflect.KClass
 
+fun findSelectedRadioItem(items: List<MenuItem>): MenuItem? =
+    items.filterIsInstance<RadioMenuItem>()
+        .find { it.isSelected }
+
 fun <T> constantObservable(value: () -> T): ObservableValue<T> =
     object : ObservableValueBase<T>() {
         override fun getValue(): T = value()
