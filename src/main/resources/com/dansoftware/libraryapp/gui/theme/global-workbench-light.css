@@ -23,6 +23,26 @@
 }
 
 #add-button:focused {
-    -fx-border-color: gray;
+    -fx-border-color: transparent;
     -fx-border-style: solid;
+}
+
+#add-button:focused:hover {
+    -fx-border-color: gray;
+    -fx-border-width: 2px;
+}
+
+.tile-box {
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+}
+
+.tab-control:selected {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.tab-box .button:hover, .tab-box .button:focused {
+    -fx-border-color: transparent;
 }

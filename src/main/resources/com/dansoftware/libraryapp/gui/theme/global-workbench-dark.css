@@ -1,5 +1,5 @@
 * {
-    -fx-light-text-color: rgba(100%, 100%, 100%, 0.7);
+    -fx-light-text-color: rgba(255, 255, 255, 0.7);
     -primary-color: #2c3649;
     -primary-variant-color: #293244;
     -secondary-color: #02ABF5;
@@ -15,16 +15,36 @@
 }
 
 #add-button {
-    -fx-background-radius: 5 5 0 0;
+    -fx-background-radius:  5 5 0 0;
     -fx-border-radius: 5 5 0 0;
     -fx-background-color: #242424;
 }
 
 #add-button:focused {
-    -fx-border-color: #4f4f4f;
+    -fx-border-color: transparent;
     -fx-border-style: solid;
+}
+
+#add-button:focused:hover {
+    -fx-border-color: lightgray;
+    -fx-border-width: 2px;
 }
 
 .alertDialog .button {
     -fx-padding: 5;
+}
+
+.tile-box {
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+}
+
+.tab-control:selected {
+    -fx-background-color: #202530;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.tab-box .button:hover, .tab-box .button:focused {
+    -fx-border-color: transparent;
 }
