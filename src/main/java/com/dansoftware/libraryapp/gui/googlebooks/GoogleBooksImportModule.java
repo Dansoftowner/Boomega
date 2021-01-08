@@ -60,11 +60,6 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         this.context = context;
         this.database = database;
         this.preferences = preferences;
-    }
-
-    @Override
-    public void init(Workbench workbench) {
-        super.init(workbench);
         this.buildTableConfiguration();
         this.buildToolbar();
     }
