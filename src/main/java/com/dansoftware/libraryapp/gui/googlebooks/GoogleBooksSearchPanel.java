@@ -8,9 +8,7 @@ import com.dansoftware.libraryapp.googlebooks.Volumes;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -85,43 +83,47 @@ class GoogleBooksSearchPanel extends VBox {
 
     private SearchTask buildSearchTask(GoogleBooksSearchForm.SearchData.BluePrint searchData,
                                        int startIndex,
-                                       boolean starterTask) {
+                                       boolean isInitSearch) {
         var searchTask = new SearchTask(searchData, startIndex);
         searchTask.setOnRunning(e -> context.showIndeterminateProgress());
-        searchTask.setOnFailed(e -> {
-            context.stopProgress();
-            Throwable exception = e.getSource().getException();
-            logger.error("Search problem ", exception);
-            context.showErrorDialog(
-                    I18N.getGoogleBooksImportValue("google.books.search.failed.title"),
-                    I18N.getGoogleBooksImportValue("google.books.search.failed.msg"),
-                    (Exception) exception,
-                    buttonType -> {
-                    });
-        });
-        searchTask.setOnSucceeded(e -> {
-            context.stopProgress();
-            form.setExpanded(false);
-            Volumes volumes = searchTask.getValue();
-            logger.debug("Total items: {}", volumes.getTotalItems());
-            if (starterTask) {
-                tablePagination.clear();
-                tablePagination.setItemsPerPage(searchData.getMaxResults());
-                tablePagination.setTotalItems(volumes.getTotalItems());
-            }
-            List<Volume> items = volumes.getItems();
-            if (items != null && !items.isEmpty()) {
-                tablePagination.setOnNewContentRequest((start, size) -> {
-                    Runnable action = () -> ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData, start, false));
-                    action.run();
-                    tablePagination.scrollToTop();
-                    onRefreshRequest = action;
-                });
-                tablePagination.setItems(items);
-            } else
-                tablePagination.clear();
-        });
+        searchTask.setOnFailed(e -> failedSearch(e.getSource().getException()));
+        searchTask.setOnSucceeded(e -> postSearch(searchTask.getValue(), searchData, isInitSearch));
         return searchTask;
+    }
+
+    private void failedSearch(Throwable cause) {
+        context.stopProgress();
+        logger.error("Search problem ", cause);
+        context.showErrorDialog(
+                I18N.getGoogleBooksImportValue("google.books.search.failed.title"),
+                I18N.getGoogleBooksImportValue("google.books.search.failed.msg"),
+                (Exception) cause,
+                buttonType -> {
+                });
+    }
+
+    private void postSearch(@NotNull Volumes volumes,
+                            @NotNull GoogleBooksSearchForm.SearchData.BluePrint searchData,
+                            boolean isInitSearch) {
+        context.stopProgress();
+        form.setExpanded(false);
+        logger.debug("Total items: {}", volumes.getTotalItems());
+        if (isInitSearch) {
+            tablePagination.clear();
+            tablePagination.setItemsPerPage(searchData.getMaxResults());
+            tablePagination.setTotalItems(volumes.getTotalItems());
+        }
+        List<Volume> items = volumes.getItems();
+        if (items != null && !items.isEmpty()) {
+            tablePagination.setOnNewContentRequest((start, size) -> {
+                Runnable action = () -> ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchData, start, false));
+                action.run();
+                tablePagination.scrollToTop();
+                onRefreshRequest = action;
+            });
+            tablePagination.setItems(items);
+        } else
+            tablePagination.clear();
     }
 
     private GoogleBooksPagination buildPagination() {

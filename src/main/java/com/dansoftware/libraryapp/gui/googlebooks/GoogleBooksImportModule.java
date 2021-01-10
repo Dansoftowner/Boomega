@@ -60,6 +60,9 @@ public class GoogleBooksImportModule extends WorkbenchModule {
     private ToolbarItem columnChooserItem;
     private ToolbarItem abcChooserItem;
 
+    private final ObjectProperty<Locale> abcLocale =
+            new SimpleObjectProperty<>();
+
     public GoogleBooksImportModule(@NotNull Context context,
                                    @NotNull Preferences preferences,
                                    @NotNull Database database) {
@@ -82,7 +85,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
     @Override
     public boolean destroy() {
         preferences.editor().put(colConfigKey, new TableColumnsInfo(getTable().getShowingColumns()));
-        preferences.editor().put(abcConfigKey, ((AbcMenuItem) BaseFXUtils.findSelectedRadioItem(abcChooserItem.getItems())).locale);
+        preferences.editor().put(abcConfigKey, abcLocale.get());
         content.set(null);
         return true;
     }
@@ -207,7 +210,10 @@ public class GoogleBooksImportModule extends WorkbenchModule {
             this.locale = locale;
             this.setUserData(locale);
             selectedProperty().addListener((observable, oldValue, selected) -> {
-                if (selected) getTable().setSortingComparator((Comparator) collatorSupplier.get());
+                if (selected) {
+                    getTable().setSortingComparator((Comparator) collatorSupplier.get());
+                    GoogleBooksImportModule.this.abcLocale.set(locale);
+                }
             });
             setToggleGroup(toggleGroup);
         }
