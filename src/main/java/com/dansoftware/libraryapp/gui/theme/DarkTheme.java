@@ -35,7 +35,8 @@ public class DarkTheme extends Theme {
             "/com/dansoftware/libraryapp/gui/theme/notification-node-dark.css",
             "/com/dansoftware/libraryapp/gui/theme/plugin-manager-dark.css",
             "/com/dansoftware/libraryapp/gui/theme/update-dialog-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/google-books-module-dark.css"
+            "/com/dansoftware/libraryapp/gui/theme/google-books-module-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/record-add-form-dark.css"
     );
 
     private final ThemeApplier globalApplier;
