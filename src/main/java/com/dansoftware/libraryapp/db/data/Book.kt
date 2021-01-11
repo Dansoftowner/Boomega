@@ -19,6 +19,7 @@ data class Book(
     var numberOfPages: Int,
     var authors: List<String>?,
     var title: String?,
+    var subtitle: String?,
     var language: String?,
     var notes: String?,
     var isbn: String?,
@@ -35,6 +36,7 @@ data class Book(
         builder.numberOfPages,
         builder.authors,
         builder.title,
+        builder.subtitle,
         builder.language,
         builder.notes,
         builder.isbn,
@@ -55,6 +57,8 @@ data class Book(
         var numberOfCopies = 0
             private set
         var title: String? = null
+            private set
+        var subtitle: String? = null
             private set
         var language: String? = null
             private set
@@ -78,6 +82,8 @@ data class Book(
         fun numberOfCopies(numberOfCopies: Int) = this.also { this.numberOfCopies = numberOfCopies }
 
         fun title(title: String?) = this.also { this.title = title }
+
+        fun subtitle(subtitle: String?) = this.also { this.subtitle = subtitle }
 
         fun language(language: String?) = this.also { this.language = language }
 
