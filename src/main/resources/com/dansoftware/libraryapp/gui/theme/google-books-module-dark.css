@@ -44,3 +44,8 @@
     -fx-padding: 0;
     -fx-font-weight: bold;
 }
+
+.google-books-joiner-panel .title-bar {
+    -fx-padding: 5;
+    -fx-background-color: #2c3649;
+}
