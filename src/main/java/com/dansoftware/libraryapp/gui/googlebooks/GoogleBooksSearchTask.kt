@@ -180,7 +180,7 @@ class GoogleBooksPaginationSearchTask(
         when {
             items?.isEmpty() ?: true -> tablePagination.clear()
             else -> {
-                tablePagination.setOnNewContentRequest { start, size ->
+                tablePagination.setOnNewContentRequest { start, _ ->
                     Runnable {
                         ExploitativeExecutor.submit(
                             GoogleBooksPaginationSearchTask(
