@@ -36,7 +36,7 @@ public class GoogleBooksPagination extends VBox {
     private final IntegerProperty totalItems;
     private final IntegerProperty itemsPerPage;
 
-    GoogleBooksPagination() {
+    public GoogleBooksPagination() {
         this.totalItems = new SimpleIntegerProperty();
         this.itemsPerPage = new SimpleIntegerProperty();
         this.table = buildTable();
