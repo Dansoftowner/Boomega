@@ -37,31 +37,31 @@ class GoogleBooksSearchForm extends TitledPane {
     private static final String STYLE_CLASS = "google-books-import-form";
 
     private final Context context;
-    private final SearchData searchData;
+    private final FormProperties formProperties;
     private final Form form;
 
-    GoogleBooksSearchForm(@NotNull Context context, @NotNull Consumer<SearchData> onSearch) {
+    GoogleBooksSearchForm(@NotNull Context context, @NotNull Consumer<SearchParameters> onSearch) {
         super(I18N.getGoogleBooksImportValue("google.books.add.form.section.title"), null);
         this.context = context;
-        this.searchData = new SearchData();
+        this.formProperties = new FormProperties();
         this.form = buildForm();
         this.setContent(buildContent(onSearch));
         this.getStyleClass().add(STYLE_CLASS);
     }
 
-    private Node buildContent(Consumer<SearchData> onSearch) {
+    private Node buildContent(Consumer<SearchParameters> onSearch) {
         var form = new FormRenderer(this.form);
         addAutoCompletionToLangField(form);
         return new VBox(form, buildButton(onSearch));
     }
 
-    private Button buildButton(Consumer<SearchData> onSearch) {
+    private Button buildButton(Consumer<SearchParameters> onSearch) {
         Button button = new Button(I18N.getGoogleBooksImportValue("google.books.add.form.search"));
         button.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.SEARCH));
         button.setDefaultButton(true);
         button.prefWidthProperty().bind(this.widthProperty());
-        button.setOnAction(e -> onSearch.accept(searchData));
-        button.disableProperty().bind(searchData.valid.not().or(form.validProperty().not()));
+        button.setOnAction(e -> onSearch.accept(formProperties.asSearchParams()));
+        button.disableProperty().bind(formProperties.valid.not().or(form.validProperty().not()));
         VBox.setMargin(button, new Insets(0, 20, 10, 20));
         return button;
     }
@@ -75,43 +75,43 @@ class GoogleBooksSearchForm extends TitledPane {
     private Form buildForm() {
         return Form.of(
                 Group.of(
-                        Field.ofStringType(searchData.generalText)
+                        Field.ofStringType(formProperties.generalText)
                                 .placeholder("google.books.add.form.gtext.prompt")
                                 .label("google.books.add.form.gtext"),
-                        Field.ofStringType(searchData.author)
+                        Field.ofStringType(formProperties.author)
                                 .placeholder("google.books.add.form.author.prompt")
                                 .label("google.books.add.form.author")
                                 .span(ColSpan.HALF),
-                        Field.ofStringType(searchData.title)
+                        Field.ofStringType(formProperties.title)
                                 .placeholder("google.books.add.form.title.prompt")
                                 .label("google.books.add.form.title")
                                 .span(ColSpan.HALF),
-                        Field.ofStringType(searchData.publisher)
+                        Field.ofStringType(formProperties.publisher)
                                 .placeholder("google.books.add.form.publisher.prompt")
                                 .label("google.books.add.form.publisher")
                                 .span(ColSpan.HALF),
-                        Field.ofStringType(searchData.subject)
+                        Field.ofStringType(formProperties.subject)
                                 .placeholder("google.books.add.form.subject.prompt")
                                 .label("google.books.add.form.subject")
                                 .span(ColSpan.HALF),
-                        Field.ofStringType(searchData.isbn)
+                        Field.ofStringType(formProperties.isbn)
                                 .placeholder("google.books.add.form.isbn.prompt")
                                 .label("google.books.add.form.isbn")
                                 .span(ColSpan.HALF),
-                        Field.ofStringType(searchData.language)
+                        Field.ofStringType(formProperties.language)
                                 .styleClass("languageSelector")
                                 .placeholder("google.books.add.form.lang.prompt")
                                 .label("google.books.add.form.lang")
                                 .span(ColSpan.HALF),
-                        Field.ofSingleSelectionType(new SimpleListProperty<>(searchData.selectableFilters), searchData.filter)
+                        Field.ofSingleSelectionType(new SimpleListProperty<>(formProperties.selectableFilters), formProperties.filter)
                                 .label("google.books.add.form.filter")
                                 .span(ColSpan.HALF)
                                 .render(new SimpleRadioButtonControl<>()),
-                        Field.ofSingleSelectionType(new SimpleListProperty<>(searchData.selectableSorts), searchData.sort)
+                        Field.ofSingleSelectionType(new SimpleListProperty<>(formProperties.selectableSorts), formProperties.sort)
                                 .label("google.books.add.form.sort")
                                 .span(ColSpan.HALF)
                                 .render(new SimpleRadioButtonControl<>()),
-                        Field.ofIntegerType(searchData.maxResults)
+                        Field.ofIntegerType(formProperties.maxResults)
                                 .label("google.books.add.form.maxresults")
                                 .validate(IntegerRangeValidator.between(1, 40, "google.books.add.form.maxresults.incorrect"))
                 )
@@ -120,13 +120,13 @@ class GoogleBooksSearchForm extends TitledPane {
     }
 
     public void clear() {
-        this.searchData.clear();
+        this.formProperties.clear();
     }
 
-    final static class SearchData {
+    private final static class FormProperties {
         private final BooleanBinding valid;
 
-        private SearchData() {
+        private FormProperties() {
             this.valid = generalText.isNotEmpty()
                     .or(author.isNotEmpty())
                     .or(title.isNotEmpty())
@@ -254,94 +254,20 @@ class GoogleBooksSearchForm extends TitledPane {
             language.set(StringUtils.EMPTY);
         }
 
-        public BluePrint asBluePrint() {
-            return new BluePrint(
-                    generalText.get(),
-                    author.get(),
-                    title.get(),
-                    publisher.get(),
-                    subject.get(),
-                    isbn.get(),
-                    language.get(),
-                    maxResults.get(),
-                    filter.get(),
-                    sort.get());
+        public SearchParameters asSearchParams() {
+            return new SearchParameters()
+                    .inText(generalText.get())
+                    .authors(author.get())
+                    .title(title.get())
+                    .publisher(publisher.get())
+                    .subject(subject.get())
+                    .isbn(isbn.get())
+                    .language(language.get())
+                    .maxResults(maxResults.get())
+                    .printType(filter.get().getType())
+                    .sortType(sort.get().getType());
         }
 
-        static class BluePrint {
-            private final String generalText;
-            private final String author;
-            private final String title;
-            private final String publisher;
-            private final String subject;
-            private final String isbn;
-            private final String language;
-            private final Integer maxResults;
-            private final Filter filter;
-            private final SortType sort;
-
-            public BluePrint(String generalText,
-                             String author,
-                             String title,
-                             String publisher,
-                             String subject,
-                             String isbn,
-                             String language,
-                             Integer maxResults,
-                             Filter filter,
-                             SortType sort) {
-                this.generalText = generalText;
-                this.author = author;
-                this.title = title;
-                this.publisher = publisher;
-                this.subject = subject;
-                this.isbn = isbn;
-                this.language = language;
-                this.maxResults = maxResults;
-                this.filter = filter;
-                this.sort = sort;
-            }
-
-            public String getSubject() {
-                return subject;
-            }
-
-            public String getGeneralText() {
-                return generalText;
-            }
-
-            public String getAuthor() {
-                return author;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public String getPublisher() {
-                return publisher;
-            }
-
-            public String getIsbn() {
-                return isbn;
-            }
-
-            public String getLanguage() {
-                return language;
-            }
-
-            public Integer getMaxResults() {
-                return maxResults;
-            }
-
-            public Filter getFilter() {
-                return filter;
-            }
-
-            public SortType getSort() {
-                return sort;
-            }
-        }
     }
 
     static class SortType {
