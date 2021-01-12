@@ -1,5 +1,12 @@
 package com.dansoftware.libraryapp.gui.rcadd;
 
+import com.dansoftware.libraryapp.db.data.Book;
+import com.dansoftware.libraryapp.db.data.Magazine;
+import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
+import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
+import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerOverlay;
+import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerPanel;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
@@ -8,20 +15,39 @@ import com.dlsc.formsfx.model.util.BindingMode;
 import com.dlsc.formsfx.model.util.ResourceBundleService;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
 import com.dlsc.formsfx.view.util.ColSpan;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.*;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
 public class RecordAddForm extends VBox {
+
+    private static final String STYLE_CLASS = "record-add-form";
 
     private final ObjectProperty<RecordType> recordType = new SimpleObjectProperty<>() {{
         addListener((observable, oldValue, newValue) -> handleTypeChange(newValue));
     }};
 
+    private final ObjectProperty<Consumer<Book>> onBookAdded =
+            new SimpleObjectProperty<>();
+
+    private final ObjectProperty<Consumer<Magazine>> onMagazineAdded =
+            new SimpleObjectProperty<>();
+
     private final StringProperty title = new SimpleStringProperty("");
+    private final StringProperty subtitle = new SimpleStringProperty("");
     private final ObjectProperty<LocalDate> publishedDate = new SimpleObjectProperty<>();
     private final StringProperty publisher = new SimpleStringProperty("");
     private final StringProperty magazineName = new SimpleStringProperty("");
@@ -34,27 +60,57 @@ public class RecordAddForm extends VBox {
     private final IntegerProperty numberOfPages = new SimpleIntegerProperty();
     private final IntegerProperty rating = new SimpleIntegerProperty();
 
+    private final Context context;
 
-    public RecordAddForm(@NotNull RecordType initialType) {
+    public RecordAddForm(@NotNull Context context, @NotNull RecordType initialType) {
+        this.context = context;
         this.recordType.set(initialType);
+        this.getStyleClass().add(STYLE_CLASS);
     }
 
     private void handleTypeChange(@NotNull RecordType recordType) {
         switch (recordType) {
             case BOOK:
-                getChildren().setAll(new FormRenderer(buildBookForm()), buildNewRatingControl());
+                getChildren().setAll(new FormRenderer(buildBookForm()), buildNewRatingControl(), buildGoogleBooksJoiner());
                 break;
             case MAGAZINE:
-                getChildren().setAll(new FormRenderer(buildMagazineForm()), buildNewRatingControl());
+                getChildren().setAll(new FormRenderer(buildMagazineForm()), buildNewRatingControl(), buildGoogleBooksJoiner());
                 break;
         }
     }
 
-    private Rating buildNewRatingControl() {
+    private Node buildNewRatingControl() {
         var rating = new Rating(5);
         rating.ratingProperty()
                 .addListener((o, old, newRating) -> this.rating.set(newRating.intValue()));
-        return rating;
+        var hBox = new HBox(
+                5,
+                new StackPane(new Label(I18N.getRecordAddFormValue("record.add.form.rating"))),
+                new StackPane(rating) {{ HBox.setHgrow(this, Priority.ALWAYS); }}
+        );
+        VBox.setMargin(hBox, new Insets(0, 0, 0, 40));
+        return hBox;
+    }
+
+    private Node buildGoogleBooksJoiner() {
+        var button = new Button(I18N.getRecordAddFormValue("record.add.form.gjoin"), new MaterialDesignIconView(MaterialDesignIcon.GOOGLE));
+        var hBox = new HBox(
+                5,
+                button
+        );
+        button.setOnAction(event -> {
+            context.showOverlay(new GoogleBookJoinerOverlay(
+                    context, new SearchParameters()
+                                .printType(recordType.get().printType)
+                                .isbn(isbn.get())
+                                .authors(authors.get())
+                                .publisher(publisher.get())
+                                .title(title.get())
+                                .language(language.get())
+            ));
+        });
+        VBox.setMargin(hBox, new Insets(0, 0, 0, 40));
+        return hBox;
     }
 
     private Form buildBookForm() {
@@ -68,7 +124,12 @@ public class RecordAddForm extends VBox {
                         Field.ofStringType(title)
                                 .label("record.add.form.title")
                                 .placeholder("record.add.form.title.prompt")
-                                .required(false)
+                                .required(true)
+                                .span(ColSpan.HALF),
+                        Field.ofStringType(subtitle)
+                                .label("record.add.form.subtitle")
+                                .placeholder("record.add.form.subtitle.prompt")
+                                .required(true)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(isbn)
                                 .label("record.add.form.isbn")
@@ -149,12 +210,44 @@ public class RecordAddForm extends VBox {
                 .binding(BindingMode.CONTINUOUS);
     }
 
+    public Consumer<Book> getOnBookAdded() {
+        return onBookAdded.get();
+    }
+
+    public ObjectProperty<Consumer<Book>> onBookAddedProperty() {
+        return onBookAdded;
+    }
+
+    public void setOnBookAdded(Consumer<Book> onBookAdded) {
+        this.onBookAdded.set(onBookAdded);
+    }
+
+    public Consumer<Magazine> getOnMagazineAdded() {
+        return onMagazineAdded.get();
+    }
+
+    public ObjectProperty<Consumer<Magazine>> onMagazineAddedProperty() {
+        return onMagazineAdded;
+    }
+
+    public void setOnMagazineAdded(Consumer<Magazine> onMagazineAdded) {
+        this.onMagazineAdded.set(onMagazineAdded);
+    }
+
     public String getTitle() {
         return title.get();
     }
 
     public StringProperty titleProperty() {
         return title;
+    }
+
+    public String getSubtitle() {
+        return subtitle.get();
+    }
+
+    public StringProperty subtitleProperty() {
+        return subtitle;
     }
 
     public LocalDate getPublishedDate() {
@@ -254,6 +347,12 @@ public class RecordAddForm extends VBox {
     }
 
     public enum RecordType {
-        BOOK, MAGAZINE
+        BOOK(GoogleBooksQueryBuilder.PrintType.BOOKS), MAGAZINE(GoogleBooksQueryBuilder.PrintType.MAGAZINES);
+
+        private GoogleBooksQueryBuilder.PrintType printType;
+
+        RecordType(GoogleBooksQueryBuilder.PrintType printType) {
+            this.printType = printType;
+        }
     }
 }

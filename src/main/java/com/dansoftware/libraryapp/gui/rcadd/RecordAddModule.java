@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.rcadd;
 
+import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
@@ -10,14 +11,18 @@ import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
+import org.jetbrains.annotations.NotNull;
 
 public class RecordAddModule extends WorkbenchModule {
 
     private final ObjectProperty<RecordAddForm> content =
             new SimpleObjectProperty<>();
 
-    public RecordAddModule() {
+    private final Context context;
+
+    public RecordAddModule(@NotNull Context context) {
         super(I18N.getRecordAddFormValue("record.add.module.title"), MaterialDesignIcon.PLUS_BOX);
+        this.context = context;
         buildToolbar();
     }
 
@@ -53,7 +58,7 @@ public class RecordAddModule extends WorkbenchModule {
     @Override
     public Node activate() {
         if (content.get() == null)
-            content.set(new RecordAddForm(RecordAddForm.RecordType.BOOK));
+            content.set(new RecordAddForm(context, RecordAddForm.RecordType.BOOK));
         return content.get();
     }
 
