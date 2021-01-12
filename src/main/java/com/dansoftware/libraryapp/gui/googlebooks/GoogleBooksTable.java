@@ -152,6 +152,12 @@ public class GoogleBooksTable extends TableView<Volume> {
         this.getColumns().removeIf(col -> ((Column<?>) col).columnType.equals(columnType));
     }
 
+    public void addColumns(ColumnType... columnTypes) {
+        for (ColumnType columnType : columnTypes) {
+            addColumn(columnType);
+        }
+    }
+
     public void addColumn(@NotNull ColumnType columnType) {
         addColumn(columnType.tableColumnClass, columnType.createPolicy);
     }
