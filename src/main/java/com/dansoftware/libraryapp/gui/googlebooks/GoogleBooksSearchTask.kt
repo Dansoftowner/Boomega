@@ -187,8 +187,8 @@ class GoogleBooksPaginationSearchTask(
                                 false,
                                 searchParameters.startIndex(start)
                             ).also {
-                                it.setOnNewContentRequestCreated(onNewContentRequestCreated.get())
-                                it.setOnBeforeResultsDisplayed(onBeforeResultsDisplayed.get())
+                                onNewContentRequestCreated.get()?.let { value -> it.setOnNewContentRequestCreated(value) }
+                                onBeforeResultsDisplayed.get()?.let { value -> it.setOnBeforeResultsDisplayed(value) }
                             }
                         )
                     }.also {
