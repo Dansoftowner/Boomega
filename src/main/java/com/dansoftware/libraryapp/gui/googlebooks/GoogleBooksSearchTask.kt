@@ -104,8 +104,14 @@ class SearchParameters {
  * A JavaFX [Task] used for loading a Google Books query result.
  */
 open class GoogleBooksSearchTask(private val searchParameters: SearchParameters) : Task<Volumes>() {
-    override fun call(): Volumes =
-        GoogleBooksQueryBuilder()
+
+    companion object {
+        @JvmStatic
+        protected val logger: Logger = LoggerFactory.getLogger(GoogleBooksSearchTask::class.java)
+    }
+
+    override fun call(): Volumes {
+        return GoogleBooksQueryBuilder()
             .inText(searchParameters.inText)
             .inAuthor(searchParameters.authors)
             .inTitle(searchParameters.title)
@@ -117,7 +123,8 @@ open class GoogleBooksSearchTask(private val searchParameters: SearchParameters)
             .sortType(searchParameters.sortType)
             .maxResults(searchParameters.maxResults)
             .startIndex(searchParameters.startIndex)
-            .build().load()
+            .build().also { logger.debug("Google books query: {}", it) }.load()
+    }
 }
 
 /**
@@ -134,11 +141,6 @@ class GoogleBooksPaginationSearchTask(
     private val isInitSearch: Boolean,
     searchParameters: SearchParameters
 ) : GoogleBooksSearchTask(searchParameters) {
-
-    companion object {
-        @JvmStatic
-        private val logger: Logger = LoggerFactory.getLogger(GoogleBooksSearchTask::class.java)
-    }
 
     private val onBeforeResultsDisplayed: ObjectProperty<Runnable> = SimpleObjectProperty()
     private val onNewContentRequestCreated: ObjectProperty<Consumer<Runnable>> = SimpleObjectProperty()
