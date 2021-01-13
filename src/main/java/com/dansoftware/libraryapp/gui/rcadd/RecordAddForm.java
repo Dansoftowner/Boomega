@@ -6,7 +6,7 @@ import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
 import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerOverlay;
-import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerPanel;
+import com.dansoftware.libraryapp.gui.googlebooks.tile.GoogleBookTile;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
@@ -18,6 +18,8 @@ import com.dlsc.formsfx.view.util.ColSpan;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -46,6 +48,9 @@ public class RecordAddForm extends VBox {
     private final ObjectProperty<Consumer<Magazine>> onMagazineAdded =
             new SimpleObjectProperty<>();
 
+    private final ObjectProperty<Form> currentForm =
+            new SimpleObjectProperty<>();
+
     private final StringProperty title = new SimpleStringProperty("");
     private final StringProperty subtitle = new SimpleStringProperty("");
     private final ObjectProperty<LocalDate> publishedDate = new SimpleObjectProperty<>();
@@ -69,14 +74,17 @@ public class RecordAddForm extends VBox {
     }
 
     private void handleTypeChange(@NotNull RecordType recordType) {
+        Form form = null;
         switch (recordType) {
             case BOOK:
-                getChildren().setAll(new FormRenderer(buildBookForm()), buildNewRatingControl(), buildGoogleBooksJoiner());
+                form = buildBookForm();
                 break;
             case MAGAZINE:
-                getChildren().setAll(new FormRenderer(buildMagazineForm()), buildNewRatingControl(), buildGoogleBooksJoiner());
+                form = buildMagazineForm();
                 break;
         }
+        currentForm.set(form);
+        getChildren().setAll(new FormRenderer(form), buildNewRatingControl(), buildBottom());
     }
 
     private Node buildNewRatingControl() {
@@ -92,25 +100,42 @@ public class RecordAddForm extends VBox {
         return hBox;
     }
 
-    private Node buildGoogleBooksJoiner() {
-        var button = new Button(I18N.getRecordAddFormValue("record.add.form.gjoin"), new MaterialDesignIconView(MaterialDesignIcon.GOOGLE));
-        var hBox = new HBox(
-                5,
-                button
+    private Node buildBottom() {
+        var hBox = new HBox(5, buildGoogleBookJoiner(), buildCommitButton());
+        VBox.setMargin(hBox, new Insets(10, 0, 0, 40));
+        return hBox;
+    }
+
+    private Node buildGoogleBookJoiner() {
+        var button = new Button(
+                I18N.getRecordAddFormValue("record.add.form.gjoin"),
+                new MaterialDesignIconView(MaterialDesignIcon.GOOGLE)
         );
         button.setOnAction(event -> {
             context.showOverlay(new GoogleBookJoinerOverlay(
                     context, new SearchParameters()
-                                .printType(recordType.get().printType)
-                                .isbn(isbn.get())
-                                .authors(authors.get())
-                                .publisher(publisher.get())
-                                .title(title.get())
-                                .language(language.get())
-            ));
+                    .printType(recordType.get().printType)
+                    .isbn(isbn.get())
+                    .authors(authors.get())
+                    .publisher(publisher.get())
+                    .title(title.get())
+                    .language(language.get()),
+                    volume -> this.getChildren().add(new GoogleBookTile(volume))));
         });
-        VBox.setMargin(hBox, new Insets(0, 0, 0, 40));
-        return hBox;
+        return button;
+    }
+
+    private Node buildCommitButton() {
+        var button = new Button(
+                I18N.getRecordAddFormValue("record.add.form.commit"),
+                new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE));
+        button.disableProperty().bind(currentForm.get().validProperty().not());
+        button.setOnAction(event -> {
+            if (currentForm.get().isPersistable()) {
+                currentForm.get().persist();
+            }
+        });
+        return button;
     }
 
     private Form buildBookForm() {
