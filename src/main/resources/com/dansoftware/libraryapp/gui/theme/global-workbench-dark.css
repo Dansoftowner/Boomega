@@ -48,3 +48,13 @@
 .tab-box .button:hover, .tab-box .button:focused {
     -fx-border-color: transparent;
 }
+
+.overlay-box {
+    -fx-border-color: gray;
+    -fx-border-width: 0.5;
+}
+
+.overlay-box .title-bar {
+    -fx-padding: 5;
+    -fx-background-color: #2c3649;
+}

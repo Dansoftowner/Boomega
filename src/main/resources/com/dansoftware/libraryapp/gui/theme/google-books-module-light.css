@@ -31,11 +31,6 @@
     -fx-padding: 5;
 }
 
-.google-book-details-title-bar {
-    -fx-padding: 5;
-    -fx-background-color: #d9d9d9;
-}
-
 .google-book-details-pane .not-for-sale-place-holder {
     -fx-font-weight: bold;
 }
@@ -43,9 +38,4 @@
 .google-book-details-pane .hyperlink {
     -fx-padding: 0;
     -fx-font-weight: bold;
-}
-
-.google-books-joiner-panel .title-bar {
-    -fx-padding: 5;
-    -fx-background-color: #d9d9d9;
 }
