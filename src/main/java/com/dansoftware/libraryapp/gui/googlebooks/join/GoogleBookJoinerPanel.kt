@@ -7,9 +7,11 @@ import com.dansoftware.libraryapp.gui.googlebooks.*
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.ExploitativeExecutor
 import javafx.beans.binding.BooleanBinding
-import javafx.beans.property.*
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.ReadOnlyObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.geometry.Insets
-import javafx.scene.Group
 import javafx.scene.control.CheckBox
 import javafx.scene.control.Label
 import javafx.scene.control.Spinner
@@ -20,15 +22,19 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
-import java.util.*
 import java.util.function.Consumer
 
-class GoogleBookJoinerOverlay(context: Context, searchParameters: SearchParameters) :
-    TitledOverlayBox(
-        I18N.getGoogleBooksImportValue("google.books.joiner.titlebar"),
-        ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
-        GoogleBookJoinerPanel(context, searchParameters)
-    )
+class GoogleBookJoinerOverlay(
+    context: Context,
+    searchParameters: SearchParameters,
+    onVolumeSelected: Consumer<Volume>
+) : TitledOverlayBox(
+    I18N.getGoogleBooksImportValue("google.books.joiner.titlebar"),
+    ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
+    GoogleBookJoinerPanel(context, searchParameters).also {
+        it.setOnVolumeSelected(onVolumeSelected)
+    }
+)
 
 class GoogleBookJoinerPanel(
     private val context: Context,
@@ -61,7 +67,14 @@ class GoogleBookJoinerPanel(
     private fun buildTable() =
         GoogleBooksPagination().also {
             it.table.setOnItemDoubleClicked { volume -> onVolumeSelected.get()?.accept(volume) }
-            it.table.setOnItemSecondaryDoubleClicked { volume -> context.showOverlay(GoogleBookDetailsOverlay(context, volume)) }
+            it.table.setOnItemSecondaryDoubleClicked { volume ->
+                context.showOverlay(
+                    GoogleBookDetailsOverlay(
+                        context,
+                        volume
+                    )
+                )
+            }
             it.table.addColumns(
                 GoogleBooksTable.ColumnType.INDEX_COLUMN,
                 GoogleBooksTable.ColumnType.TYPE_INDICATOR_COLUMN,
