@@ -83,10 +83,12 @@ public class GoogleBooksTable extends TableView<Volume> {
 
     private final IntegerProperty startIndex;
     private final ObjectProperty<Consumer<Volume>> onItemDoubleClicked;
+    private final ObjectProperty<Consumer<Volume>> onItemSecondaryDoubleClicked;
 
     GoogleBooksTable(int startIndex) {
         this.startIndex = new SimpleIntegerProperty(startIndex);
         this.onItemDoubleClicked = new SimpleObjectProperty<>();
+        this.onItemSecondaryDoubleClicked = new SimpleObjectProperty<>();
         this.init();
     }
 
@@ -105,6 +107,10 @@ public class GoogleBooksTable extends TableView<Volume> {
                 if (!tableRow.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                     if (onItemDoubleClicked.get() != null) {
                         onItemDoubleClicked.get().accept(tableRow.getItem());
+                    }
+                } else if (event.getButton() == MouseButton.SECONDARY && event.getClickCount() == 2) {
+                    if (onItemSecondaryDoubleClicked.get() != null) {
+                        onItemSecondaryDoubleClicked.get().accept(tableRow.getItem());
                     }
                 }
             });
@@ -142,6 +148,10 @@ public class GoogleBooksTable extends TableView<Volume> {
 
     public void setOnItemDoubleClicked(Consumer<Volume> onItemDoubleClicked) {
         this.onItemDoubleClicked.set(onItemDoubleClicked);
+    }
+
+    public void setOnItemSecondaryDoubleClicked(Consumer<Volume> onItemSecondaryDoubleClicked) {
+        this.onItemSecondaryDoubleClicked.set(onItemSecondaryDoubleClicked);
     }
 
     public void removeAllColumns() {
