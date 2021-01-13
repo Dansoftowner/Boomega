@@ -23,6 +23,8 @@ import java.util.function.Consumer;
  */
 public interface Context {
 
+    /* Overlays */
+
     /**
      * Shows a popup (on the center) with the GUI-element defined.
      *
@@ -46,6 +48,21 @@ public interface Context {
      * @param region to be hidden
      */
     void hideOverlay(Region region);
+
+    /**
+     * Shows an overlay popup with a title-bar.
+     *
+     * @param title the title
+     * @param graphic the icon displayed on the title-bar
+     * @param content the content
+     */
+    void showTitledOverlay(String title, Node graphic, Node content);
+
+    default void showTitledOverlay(String title, Node content) {
+        showTitledOverlay(title, null, content);
+    }
+
+    /* Dialogs */
 
     /**
      * Shows an error alert dialog.
@@ -103,6 +120,8 @@ public interface Context {
 
     ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes);
 
+    /* Notifications */
+
     void showErrorNotification(String title, String message);
 
     void showErrorNotification(String title, String message, EventHandler<MouseEvent> onClicked);
@@ -126,6 +145,7 @@ public interface Context {
     void showInformationNotification(String title, String message, Duration duration);
 
     void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
+
 
     @Nullable
     Scene getContextScene();

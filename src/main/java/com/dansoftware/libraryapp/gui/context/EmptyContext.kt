@@ -13,7 +13,10 @@ import java.util.function.Consumer
 private class EmptyContext : Context {
 
     override fun showOverlay(region: Region?, blocking: Boolean) {}
+
     override fun hideOverlay(region: Region?) {}
+
+    override fun showTitledOverlay(title: String?, graphic: Node?, content: Node?) {}
 
     override fun showErrorDialog(
         title: String?,
