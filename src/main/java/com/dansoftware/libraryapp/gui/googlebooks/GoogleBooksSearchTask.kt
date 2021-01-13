@@ -123,7 +123,14 @@ open class GoogleBooksSearchTask(private val searchParameters: SearchParameters)
             .sortType(searchParameters.sortType)
             .maxResults(searchParameters.maxResults)
             .startIndex(searchParameters.startIndex)
-            .build().also { logger.debug("Google books query: {}", it) }.load()
+            .build()
+            .also { logger.debug("Google books query: {}", it) }
+            .let {
+                when {
+                    it.isEmpty -> Volumes()
+                    else -> it.load()
+                }
+            }
     }
 }
 
