@@ -2,5 +2,10 @@
     -fx-border-color: transparent;
 }
 
+.record-add-form .text-field .right-button {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
 .record-add-form .text-area {
 }
