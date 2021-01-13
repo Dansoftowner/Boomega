@@ -2,10 +2,8 @@ package com.dansoftware.libraryapp.gui.googlebooks.join
 
 import com.dansoftware.libraryapp.googlebooks.Volume
 import com.dansoftware.libraryapp.gui.context.Context
-import com.dansoftware.libraryapp.gui.googlebooks.GoogleBooksPagination
-import com.dansoftware.libraryapp.gui.googlebooks.GoogleBooksPaginationSearchTask
-import com.dansoftware.libraryapp.gui.googlebooks.GoogleBooksTable
-import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters
+import com.dansoftware.libraryapp.gui.context.TitledOverlayBox
+import com.dansoftware.libraryapp.gui.googlebooks.*
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.ExploitativeExecutor
 import javafx.beans.binding.BooleanBinding
@@ -18,6 +16,7 @@ import javafx.scene.control.Spinner
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
@@ -25,11 +24,11 @@ import java.util.*
 import java.util.function.Consumer
 
 class GoogleBookJoinerOverlay(context: Context, searchParameters: SearchParameters) :
-    StackPane(Group(GoogleBookJoinerPanel(context, searchParameters))) {
-    init {
-        isPickOnBounds = false
-    }
-}
+    TitledOverlayBox(
+        I18N.getGoogleBooksImportValue("google.books.joiner.titlebar"),
+        ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
+        GoogleBookJoinerPanel(context, searchParameters)
+    )
 
 class GoogleBookJoinerPanel(
     private val context: Context,
@@ -48,8 +47,7 @@ class GoogleBookJoinerPanel(
         styleClass.add(JMetroStyleClass.BACKGROUND)
         propertyChooserPane = buildPropertyChooserPane()
         tablePagination = buildTable()
-        children.add(TitleBar())
-        children.add(propertyChooserPane)
+        children.add(StackPane(propertyChooserPane))
         children.add(tablePagination)
         propertyChooserPane.monitor()
     }
@@ -63,6 +61,7 @@ class GoogleBookJoinerPanel(
     private fun buildTable() =
         GoogleBooksPagination().also {
             it.table.setOnItemDoubleClicked { volume -> onVolumeSelected.get()?.accept(volume) }
+            it.table.setOnItemSecondaryDoubleClicked { volume -> context.showOverlay(GoogleBookDetailsOverlay(context, volume)) }
             it.table.addColumns(
                 GoogleBooksTable.ColumnType.INDEX_COLUMN,
                 GoogleBooksTable.ColumnType.TYPE_INDICATOR_COLUMN,
@@ -74,14 +73,6 @@ class GoogleBookJoinerPanel(
 
     fun setOnVolumeSelected(onVolumeSelected: Consumer<Volume>) {
         this.onVolumeSelected.set(onVolumeSelected)
-    }
-
-    private class TitleBar : HBox(5.0) {
-        init {
-            styleClass.add("title-bar")
-            children.add(ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")))
-            children.add(Label(I18N.getGoogleBooksImportValue("google.books.joiner.titlebar")))
-        }
     }
 
     private class PropertyChooserPane(
@@ -125,6 +116,7 @@ class GoogleBookJoinerPanel(
 
         private fun buildLeftBox(): VBox =
             VBox(3.0).also { vBox ->
+                setHgrow(vBox, Priority.ALWAYS)
                 vBox.children.add(CheckBox(I18N.getGoogleBooksImportValue("google.books.joiner.isbn")).also { checkBox ->
                     checkBox.isSelected = true
                     this.isbnSelected = checkBox.selectedProperty().also {
@@ -163,6 +155,7 @@ class GoogleBookJoinerPanel(
 
         private fun buildRightBox(): VBox =
             VBox(3.0).also { vBox ->
+                setHgrow(vBox, Priority.ALWAYS)
                 vBox.children.add(CheckBox(I18N.getGoogleBooksImportValue("google.books.joiner.language")).also { checkBox ->
                     this.languageSelected = checkBox.selectedProperty().also {
                         it.addListener { _, _, yes ->
@@ -172,15 +165,14 @@ class GoogleBookJoinerPanel(
                     checkBox.disableProperty().bind(this.validProperty.not())
                 })
 
-                vBox.children.add(
-                    HBox(10.0,
-                        Label(I18N.getGoogleBooksImportValue("google.books.joiner.maxresults")),
-                        Spinner<Int>(1, 40, 10).also { spinner ->
-                            this.maxResults = spinner.valueProperty().also {
-                                searchParameters.maxResults(it.get())
-                            }
-                        })
-                )
+                vBox.children.add(Label(I18N.getGoogleBooksImportValue("google.books.joiner.maxresults")))
+                vBox.children.add(Spinner<Int>(1, 40, 10).also { spinner ->
+                    this.maxResults = spinner.valueProperty().also {
+                        it.addListener { _, _, newValue ->
+                            searchParameters.maxResults(newValue)
+                        }
+                    }
+                })
             }
 
     }
