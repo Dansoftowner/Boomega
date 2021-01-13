@@ -49,19 +49,6 @@ public interface Context {
      */
     void hideOverlay(Region region);
 
-    /**
-     * Shows an overlay popup with a title-bar.
-     *
-     * @param title the title
-     * @param graphic the icon displayed on the title-bar
-     * @param content the content
-     */
-    void showTitledOverlay(String title, Node graphic, Node content);
-
-    default void showTitledOverlay(String title, Node content) {
-        showTitledOverlay(title, null, content);
-    }
-
     /* Dialogs */
 
     /**

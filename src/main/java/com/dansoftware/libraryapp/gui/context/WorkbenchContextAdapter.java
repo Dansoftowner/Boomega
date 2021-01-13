@@ -95,11 +95,6 @@ final class WorkbenchContextAdapter implements Context {
     }
 
     @Override
-    public void showTitledOverlay(String title, Node graphic, Node content) {
-        showOverlay(new TitledOverlayBox(title, graphic, content));
-    }
-
-    @Override
     public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
         return showErrorDialog(title, message, null, onResult);
     }

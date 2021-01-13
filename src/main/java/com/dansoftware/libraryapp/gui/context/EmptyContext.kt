@@ -16,8 +16,6 @@ private class EmptyContext : Context {
 
     override fun hideOverlay(region: Region?) {}
 
-    override fun showTitledOverlay(title: String?, graphic: Node?, content: Node?) {}
-
     override fun showErrorDialog(
         title: String?,
         message: String?,
