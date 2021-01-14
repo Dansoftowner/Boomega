@@ -1,11 +1,11 @@
 * {
     -fx-light-text-color: rgba(255, 255, 255, 0.7);
-    -primary-color: #2c3649;
-    -primary-variant-color: #293244;
+    -primary-color: #343333;
+    -primary-variant-color: #282828;
     -secondary-color: #02ABF5;
     -secondary-variant-color: #005fa3;
-    -background-color: #202530;
-    -surface-color: #2e3540;
+    -background-color: #252525;
+    -surface-color: #2b2b2b;
     -error-color: #B00020;
     -on-primary-color: -fx-light-text-color;
     -on-secondary-color: -fx-light-text-color;
@@ -37,10 +37,12 @@
 .tile-box {
     -fx-border-radius: 0px;
     -fx-background-radius: 0px;
+    -fx-border-width: 0.2;
+    -fx-border-color: lightgray;
 }
 
 .tab-control:selected {
-    -fx-background-color: #202530;
+    -fx-background-color: #252525;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
 }

@@ -5,14 +5,14 @@
 
 
 .login-box {
-    -fx-background-color: #202530;
+    -fx-background-color: #252525;
     -fx-effect: dropshadow(three-pass-box, #757575, 10.0, 0, 0, 0);
     -fx-border-radius: 0 0 10 10;
     -fx-background-radius: 0 0 10 10;
 }
 
 .login-box .button {
-    -fx-background-color: #14181f;
+    -fx-background-color: #1c1c1c;
 }
 
 .login-box .button:default {
