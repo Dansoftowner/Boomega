@@ -26,17 +26,17 @@ public class DarkTheme extends Theme {
     }
 
     private final List<String> styleSheets = List.of(
-            "/com/dansoftware/libraryapp/gui/theme/database-manager-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/first-time-dialog-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/global-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/global-workbench-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/info-view-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/login-view-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/notification-node-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/plugin-manager-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/update-dialog-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/google-books-module-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/record-add-form-dark.css"
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/database-manager-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/first-time-dialog-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/global-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/global-workbench-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/info-view-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/login-view-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/notification-node-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/plugin-manager-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/update-dialog-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/google-books-module-dark.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/dark/record-add-form-dark.css"
     );
 
     private final ThemeApplier globalApplier;

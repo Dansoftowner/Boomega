@@ -27,17 +27,17 @@ public class LightTheme extends Theme {
     }
 
     private final List<String> styleSheets = List.of(
-            "/com/dansoftware/libraryapp/gui/theme/database-manager-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/first-time-dialog-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/global-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/global-workbench-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/info-view-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/login-view-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/notification-node-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/plugin-manager-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/update-dialog-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/google-books-module-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/record-add-form-light.css"
+            "/com/dansoftware/libraryapp/gui/theme/css/light/database-manager-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/first-time-dialog-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/global-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/global-workbench-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/info-view-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/login-view-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/notification-node-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/plugin-manager-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/update-dialog-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/google-books-module-light.css",
+            "/com/dansoftware/libraryapp/gui/theme/css/light/record-add-form-light.css"
     );
 
     private final ThemeApplier globalApplier;
