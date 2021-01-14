@@ -47,6 +47,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
     }
 
     private fun buildUI(volume: Volume) {
+        setVgrow(this, Priority.ALWAYS)
         children.add(HeaderArea(context, volume))
         ScrollArea().also {
             children.add(PaneChooserArea(context, it, volume))
@@ -185,8 +186,10 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
      */
     private class ScrollArea : ScrollPane() {
         init {
-            this.maxHeight = 250.0
+            //this.maxHeight = 250.0
+            setVgrow(this, Priority.ALWAYS)
             this.isFitToWidth = true
+            this.prefHeight = 250.0
         }
     }
 
