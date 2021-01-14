@@ -49,6 +49,7 @@ class GoogleBookJoinerPanel(
     private val tablePagination: GoogleBooksPagination
 
     init {
+        setVgrow(this, Priority.ALWAYS)
         styleClass.add("google-books-joiner-panel")
         styleClass.add(JMetroStyleClass.BACKGROUND)
         propertyChooserPane = buildPropertyChooserPane()
@@ -66,6 +67,7 @@ class GoogleBookJoinerPanel(
 
     private fun buildTable() =
         GoogleBooksPagination().also {
+            VBox.setVgrow(it, Priority.ALWAYS)
             it.table.setOnItemDoubleClicked { volume -> onVolumeSelected.get()?.accept(volume) }
             it.table.setOnItemSecondaryDoubleClicked { volume ->
                 context.showOverlay(
