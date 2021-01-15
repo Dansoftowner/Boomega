@@ -6,7 +6,7 @@
 
 .login-box {
     -fx-background-color: #252525;
-    -fx-effect: dropshadow(three-pass-box, #757575, 10.0, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, #282828, 10.0, 0, 0, 0);
     -fx-border-radius: 0 0 10 10;
     -fx-background-radius: 0 0 10 10;
 }
