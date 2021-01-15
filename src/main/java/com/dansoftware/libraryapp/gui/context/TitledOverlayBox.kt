@@ -13,14 +13,28 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.layout.*
 
-open class TitledOverlayBox(title: String, graphic: Node, content: Node) :
-    StackPane(Group(ResizablePane(InnerVBox(title, graphic, content)))) {
+open class TitledOverlayBox(
+    title: String,
+    graphic: Node,
+    content: Node,
+    resizableH: Boolean,
+    resizableV: Boolean
+) : StackPane(Group(ResizablePane(InnerVBox(title, graphic, content, resizableH, resizableV)))) {
+
+    constructor(title: String, graphic: Node, content: Node) :
+            this(title, graphic, content, true, true)
 
     init {
         this.isPickOnBounds = false
     }
 
-    private class TitleBar(title: String, graphic: Node, content: VBox) : BorderPane() {
+    private class TitleBar(
+        title: String,
+        graphic: Node,
+        content: VBox,
+        val resizableH: Boolean,
+        val resizableV: Boolean
+    ) : BorderPane() {
 
         companion object {
             const val RESIZE_UNIT = 35.0
@@ -28,31 +42,35 @@ open class TitledOverlayBox(title: String, graphic: Node, content: Node) :
 
         init {
             styleClass.add("title-bar")
-            left = graphic.also { setAlignment(it, Pos.CENTER)}
+            left = graphic.also { setAlignment(it, Pos.CENTER) }
             center = buildTitleLabel(title)
             right = buildRightBox(content)
         }
 
         private fun buildTitleLabel(title: String) = Label(title).also {
             setAlignment(it, Pos.CENTER_LEFT)
-            setMargin(it, Insets(0.0,0.0,0.0,5.0))
+            setMargin(it, Insets(0.0, 0.0, 0.0, 5.0))
         }
 
         private fun buildRightBox(content: VBox): Node =
             HBox(5.0).also { hBox ->
                 setAlignment(hBox, Pos.CENTER_RIGHT)
-                hBox.children.add(buildButton(MaterialDesignIcon.ARROW_UP) {
-                    content.prefHeight = content.height + RESIZE_UNIT
-                })
-                hBox.children.add(buildButton(MaterialDesignIcon.ARROW_DOWN) {
-                    content.prefHeight = content.height - RESIZE_UNIT
-                })
-                hBox.children.add(buildButton(MaterialDesignIcon.ARROW_LEFT) {
-                    content.prefWidth = content.width - RESIZE_UNIT
-                })
-                hBox.children.add(buildButton(MaterialDesignIcon.ARROW_RIGHT) {
-                    content.prefWidth = content.width + RESIZE_UNIT
-                })
+                if (resizableV) {
+                    hBox.children.add(buildButton(MaterialDesignIcon.ARROW_UP) {
+                        content.prefHeight = content.height + RESIZE_UNIT
+                    })
+                    hBox.children.add(buildButton(MaterialDesignIcon.ARROW_DOWN) {
+                        content.prefHeight = content.height - RESIZE_UNIT
+                    })
+                }
+                if (resizableH) {
+                    hBox.children.add(buildButton(MaterialDesignIcon.ARROW_LEFT) {
+                        content.prefWidth = content.width - RESIZE_UNIT
+                    })
+                    hBox.children.add(buildButton(MaterialDesignIcon.ARROW_RIGHT) {
+                        content.prefWidth = content.width + RESIZE_UNIT
+                    })
+                }
             }
 
         private fun buildButton(icon: MaterialDesignIcon, action: EventHandler<ActionEvent>): Node =
@@ -63,15 +81,22 @@ open class TitledOverlayBox(title: String, graphic: Node, content: Node) :
 
     }
 
-    private class InnerVBox(title: String, graphic: Node, content: Node): VBox() {
+    private class InnerVBox(
+        title: String,
+        graphic: Node,
+        content: Node,
+        val isResizableH: Boolean,
+        val isResizableV: Boolean
+    ) : VBox() {
         init {
             setVgrow(this, Priority.ALWAYS)
             styleClass.add("overlay-box")
-            children.add(TitleBar(title, graphic, this))
+            children.add(TitleBar(title, graphic, this, isResizableH, isResizableV))
             children.add(content)
         }
     }
-    private class ResizablePane(val content: VBox): BorderPane(content) {
+
+    private class ResizablePane(val content: InnerVBox) : BorderPane(content) {
 
         companion object {
             const val PREFERRED_RESIZE_AREA_SIZE = 3.5
@@ -79,10 +104,14 @@ open class TitledOverlayBox(title: String, graphic: Node, content: Node) :
         }
 
         init {
-            top = buildTop()
-            bottom = buildBottom()
-            right = buildRight()
-            left = buildLeft()
+            if (content.isResizableV) {
+                top = buildTop()
+                bottom = buildBottom()
+            }
+            if (content.isResizableH) {
+                right = buildRight()
+                left = buildLeft()
+            }
         }
 
         private fun buildTop() = StackPane().also {
@@ -132,6 +161,7 @@ open class TitledOverlayBox(title: String, graphic: Node, content: Node) :
                 lastX = event.sceneX
             }
         }
+
         private fun buildRight() = StackPane().also {
             it.cursor = Cursor.H_RESIZE
             it.prefWidth = PREFERRED_RESIZE_AREA_SIZE
