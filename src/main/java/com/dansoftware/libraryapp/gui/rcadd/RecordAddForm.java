@@ -120,7 +120,7 @@ public class RecordAddForm extends VBox {
                     .publisher(publisher.get())
                     .title(title.get())
                     .language(language.get()),
-                    volume -> this.getChildren().add(new GoogleBookTile(volume))));
+                    volume -> this.getChildren().add(new GoogleBookTile(context, volume))));
         });
         return button;
     }
