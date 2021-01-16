@@ -17,10 +17,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.Spinner
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
-import javafx.scene.layout.StackPane
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
 import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.function.Consumer
 
@@ -31,14 +28,14 @@ class GoogleBookJoinerOverlay(
 ) : TitledOverlayBox(
     I18N.getGoogleBooksImportValue("google.books.joiner.titlebar"),
     ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
-    GoogleBookJoinerPanel(context, searchParameters).also {
-        it.setOnVolumeSelected(onVolumeSelected)
-    }
+    GoogleBookJoinerPanel(context, searchParameters) { context.hideOverlay(it.parent?.parent?.parent?.parent as Region?) } //TODO: not so good solution
+        .also { it.setOnVolumeSelected(onVolumeSelected) }
 )
 
 class GoogleBookJoinerPanel(
     private val context: Context,
-    private val searchParameters: SearchParameters
+    private val searchParameters: SearchParameters,
+    private val hideMethod: (GoogleBookJoinerPanel) -> Unit
 ) : VBox(5.0) {
 
     private val onVolumeSelected: ObjectProperty<Consumer<Volume>> = SimpleObjectProperty()
@@ -68,7 +65,10 @@ class GoogleBookJoinerPanel(
     private fun buildTable() =
         GoogleBooksPagination().also {
             VBox.setVgrow(it, Priority.ALWAYS)
-            it.table.setOnItemDoubleClicked { volume -> onVolumeSelected.get()?.accept(volume) }
+            it.table.setOnItemDoubleClicked { volume ->
+                onVolumeSelected.get()?.accept(volume)
+                hideMethod(this)
+            }
             it.table.setOnItemSecondaryDoubleClicked { volume ->
                 context.showOverlay(
                     GoogleBookDetailsOverlay(
