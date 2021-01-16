@@ -39,3 +39,32 @@
     -fx-padding: 0;
     -fx-font-weight: bold;
 }
+
+.google-book-tile {
+    -fx-background-color: #3b3b3b;
+    -fx-padding: 10;
+    -fx-border-width: 0.3;
+    -fx-border-color: #999999;
+}
+
+
+.google-book-tile:hover {
+    -fx-background-color: #565656;
+}
+
+.google-book-tile .tile-title {
+    -fx-font-weight: bold;
+}
+
+.google-book-tile .title-label {
+    -fx-font-size: 25px;
+}
+
+.google-book-tile .sub-title-label {
+    -fx-font-size: 20px;
+}
+
+.google-book-tile .authors-label {
+    -fx-font-size: 17px;
+    -fx-font-style: italic;
+}
