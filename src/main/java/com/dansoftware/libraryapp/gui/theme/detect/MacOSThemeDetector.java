@@ -1,20 +1,24 @@
 package com.dansoftware.libraryapp.gui.theme.detect;
 
+import com.sun.jna.Callback;
+import de.jangassen.jfa.foundation.Foundation;
+import de.jangassen.jfa.foundation.ID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 /**
- * Determines the dark/light theme on Mac System.
+ * Determines the dark/light theme on Mac System through the <i>Apple Foundation framework</i>.
  *
- * <b>DOESN'T WORKS YET</b>
+ * <p>
+ * This solution was written based on the <a href="https://github.com/JetBrains/intellij-community/blob/5c7e93fa35cb544e87c283888f5d92a001fa7260/platform/platform-impl/src/com/intellij/ide/ui/laf/SystemDarkThemeDetector.kt">INTELLIJ IDEA'S MacOS DARK THEME DETECTION IMPLEMENTATION</a>.
  *
  * @author Daniel Gyorffy
  */
@@ -22,24 +26,56 @@ public class MacOSThemeDetector extends OsThemeDetector {
 
     private static final Logger logger = LoggerFactory.getLogger(MacOSThemeDetector.class);
 
-    private static final String CMD = "defaults read -g AppleInterfaceStyle";
-
+    private final Set<Consumer<Boolean>> listeners = Collections.synchronizedSet(new HashSet<>());
     private final Pattern themeNamePattern = Pattern.compile(".*dark.*", Pattern.CASE_INSENSITIVE);
+
+    private final Callback themeChangedCallback = new Callback() {
+        @SuppressWarnings("unused")
+        public void callback() {
+            notifyListeners();
+        }
+    };
+
+    MacOSThemeDetector() {
+        initObserver();
+    }
+
+    private void initObserver() {
+        final var pool = new Foundation.NSAutoreleasePool();
+        try {
+            final var delegateClass = Foundation.allocateObjcClassPair(Foundation.getObjcClass("NSObject"), "NSColorChangesObserver");
+            if (!ID.NIL.equals(delegateClass)) {
+                if (!Foundation.addMethod(delegateClass, Foundation.createSelector("handleAppleThemeChanged:"), themeChangedCallback, "v@")) {
+                    throw new RuntimeException("Observer method cannot be added");
+                }
+                Foundation.registerObjcClassPair(delegateClass);
+            }
+
+            final var delegate = Foundation.invoke("NSColorChangesObserver", "new");
+            Foundation.invoke(
+                    Foundation.invoke("NSDistributedNotificationCenter", "defaultCenter"),
+                    "addObserver:selector:name:object:",
+                    delegate,
+                    Foundation.createSelector("handleAppleThemeChanged:"),
+                    Foundation.nsString("AppleInterfaceThemeChangedNotification"),
+                    ID.NIL);
+        } finally {
+            pool.drain();
+        }
+    }
 
     @SuppressWarnings("DuplicatedCode")
     @Override
     public boolean isDark() {
+        final var pool = new Foundation.NSAutoreleasePool();
         try {
-            Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec(CMD);
-            try (var reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String readLine = reader.readLine();
-                if (readLine != null) {
-                    return isDarkTheme(readLine);
-                }
-            }
-        } catch (IOException e) {
+            final var userDefaults = Foundation.invoke("NSUserDefaults", "standardUserDefaults");
+            final var appleInterfaceStyle = Foundation.toStringViaUTF8(Foundation.invoke(userDefaults, "objectForKey:", Foundation.nsString("AppleInterfaceStyle")));
+            return isDarkTheme(appleInterfaceStyle);
+        } catch (RuntimeException e) {
             logger.error("Couldn't execute theme name query with the Os", e);
+        } finally {
+            pool.drain();
         }
         return false;
     }
@@ -50,9 +86,15 @@ public class MacOSThemeDetector extends OsThemeDetector {
 
     @Override
     public void registerListener(@NotNull Consumer<Boolean> darkThemeListener) {
+        listeners.add(darkThemeListener);
     }
 
     @Override
     public void removeListener(@Nullable Consumer<Boolean> darkThemeListener) {
+        listeners.remove(darkThemeListener);
+    }
+
+    private void notifyListeners() {
+        listeners.forEach(listener -> listener.accept(isDark()));
     }
 }
