@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.theme;
 
-import com.dansoftware.libraryapp.gui.theme.detect.OsThemeDetector;
 import com.dansoftware.libraryapp.locale.I18N;
+import com.jthemedetecor.OsThemeDetector;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
