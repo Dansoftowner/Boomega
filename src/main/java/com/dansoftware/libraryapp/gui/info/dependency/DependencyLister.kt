@@ -63,6 +63,11 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
+            "jSystemThemeDetector",
+            "https://github.com/Dansoftowner/jSystemThemeDetector",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
             "Jetbrains annotations",
             "https://github.com/JetBrains/java-annotations",
             LicenseInfo.apache20License()
