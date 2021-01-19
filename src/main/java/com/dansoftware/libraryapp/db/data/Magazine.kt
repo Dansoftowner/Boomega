@@ -15,6 +15,7 @@ data class Magazine(
     var magazineName: String?,
     var title: String?,
     var publishedDate: String?,
+    var language: String?,
     var notes: String?,
     var rating: Int?
 ) {
@@ -26,6 +27,7 @@ data class Magazine(
         builder.magazineName,
         builder.title,
         builder.publishedDate,
+        builder.language,
         builder.notes,
         builder.rating
     ) { this.serviceConnection = builder.serviceConnection }
@@ -40,6 +42,8 @@ data class Magazine(
         var publishedDate: String? = null
             private set
         var notes: String? = null
+            private set
+        var language: String? = null
             private set
         var rating: Int? = null
             private set
@@ -60,6 +64,10 @@ data class Magazine(
 
         fun publishedDate(publishedDate: String?) = this.also {
             this.publishedDate = StringUtils.getIfBlank(publishedDate, null)
+        }
+
+        fun language(language: String?) = this.also {
+            this.language = language;
         }
 
         fun notes(notes: String?) = this.also {
