@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.db.data
 
+import org.apache.commons.lang3.StringUtils
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
 
@@ -9,13 +10,73 @@ import org.dizitart.no2.objects.Id
  * @author Daniel Gyorffy
  */
 data class Magazine(
-    @field:Id val id: NitriteId,
+    @field:Id val id: NitriteId?,
     var publisher: String?,
     var magazineName: String?,
     var title: String?,
     var publishedDate: String?,
     var notes: String?,
-    var rating: Int
+    var rating: Int?
 ) {
     var serviceConnection: ServiceConnection? = null
+
+    private constructor(builder: Builder) : this(
+        null,
+        builder.publisher,
+        builder.magazineName,
+        builder.title,
+        builder.publishedDate,
+        builder.notes,
+        builder.rating
+    ) { this.serviceConnection = builder.serviceConnection }
+
+    class Builder {
+        var publisher: String? = null
+            private set
+        var magazineName: String? = null
+            private set
+        var title: String? = null
+            private set
+        var publishedDate: String? = null
+            private set
+        var notes: String? = null
+            private set
+        var rating: Int? = null
+            private set
+        var serviceConnection: ServiceConnection? = null
+            private set
+
+        fun publisher(publisher: String?) = this.also {
+            this.publisher = StringUtils.getIfBlank(publisher, null)
+        }
+
+        fun magazineName(magazineName: String?) = this.also {
+            this.magazineName = StringUtils.getIfBlank(magazineName, null)
+        }
+
+        fun title(title: String?) = this.also {
+            this.title = StringUtils.getIfBlank(title, null)
+        }
+
+        fun publishedDate(publishedDate: String?) = this.also {
+            this.publishedDate = StringUtils.getIfBlank(publishedDate, null)
+        }
+
+        fun notes(notes: String?) = this.also {
+            this.notes = StringUtils.getIfBlank(notes, null)
+        }
+
+        fun rating(rating: Int?) = this.also {
+            this.rating = rating
+        }
+
+        fun serviceConnection(serviceConnection: ServiceConnection?) = this.also {
+            when {
+                serviceConnection?.isEmpty()?.not() ?: false ->
+                    this.serviceConnection = serviceConnection
+            }
+        }
+
+        fun build() = Magazine(this)
+    }
 }
