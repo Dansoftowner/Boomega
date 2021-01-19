@@ -6,6 +6,8 @@ import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
 import org.dizitart.no2.objects.Index
 import org.dizitart.no2.objects.Indices
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * A Book is a Plain Java Object that represents a *document* or a *record* in the database.
@@ -80,6 +82,10 @@ data class Book(
 
         fun publishedDate(publishedYear: String?) = this.also {
             this.publishedDate = StringUtils.getIfBlank(publishedYear, null)
+        }
+
+        fun publishedDate(publishedDate: LocalDate?) = this.also {
+            this.publishedDate = publishedDate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         }
 
         fun numberOfPages(numberOfPages: Int) = this.also {
