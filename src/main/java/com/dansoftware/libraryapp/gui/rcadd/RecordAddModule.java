@@ -1,5 +1,8 @@
 package com.dansoftware.libraryapp.gui.rcadd;
 
+import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.data.Book;
+import com.dansoftware.libraryapp.db.data.Magazine;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
@@ -11,7 +14,10 @@ import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
+import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public class RecordAddModule extends WorkbenchModule {
 
@@ -19,10 +25,13 @@ public class RecordAddModule extends WorkbenchModule {
             new SimpleObjectProperty<>();
 
     private final Context context;
+    private final Database database;
 
-    public RecordAddModule(@NotNull Context context) {
+    public RecordAddModule(@NotNull Context context,
+                           @NotNull Database database) {
         super(I18N.getRecordAddFormValue("record.add.module.title"), MaterialDesignIcon.PLUS_BOX);
         this.context = context;
+        this.database = database;
         buildToolbar();
     }
 
@@ -58,7 +67,7 @@ public class RecordAddModule extends WorkbenchModule {
     @Override
     public Node activate() {
         if (content.get() == null)
-            content.set(new RecordAddForm(context, RecordAddForm.RecordType.BOOK));
+            content.set(buildForm());
         return content.get();
     }
 
@@ -66,5 +75,30 @@ public class RecordAddModule extends WorkbenchModule {
     public boolean destroy() {
         this.content.set(null);
         return true;
+    }
+
+    private RecordAddForm buildForm() {
+        var form = new RecordAddForm(context, RecordAddForm.RecordType.BOOK);
+        form.setOnBookAdded(buildBookAddAction());
+        form.setOnMagazineAdded(buildMagazineAddAction());
+        return form;
+    }
+
+    private Consumer<Book> buildBookAddAction() {
+        return book -> {
+            //TODO: exception handling
+            database.insertBook(book);
+            //TODO: internationalizing message
+            context.showInformationNotification("TEST SUCCESS", null, Duration.millis(3000));
+        };
+    }
+
+    private Consumer<Magazine> buildMagazineAddAction() {
+        return magazine -> {
+            //TODO: exception handling
+            database.insertMagazine(magazine);
+            //TODO: internationalizing message
+            context.showInformationNotification("TEST SUCCESS", null, Duration.millis(3000));
+        };
     }
 }
