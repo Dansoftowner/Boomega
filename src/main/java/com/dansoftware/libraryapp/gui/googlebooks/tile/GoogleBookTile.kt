@@ -20,6 +20,7 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
+import org.apache.commons.lang3.StringUtils
 import java.util.function.Consumer
 
 class GoogleBookTile(
@@ -84,8 +85,8 @@ class GoogleBookTile(
             VBox(3.0).also { vBox ->
                 setVgrow(vBox, Priority.ALWAYS)
                 vBox.children.also { elements ->
-                    volume.volumeInfo?.title?.let { elements.add(buildTitle(it)) }
-                    volume.volumeInfo?.subtitle?.let { elements.add(buildSubtitle(it)) }
+                    StringUtils.getIfBlank(volume.volumeInfo?.title) { null }?.let { elements.add(buildTitle(it)) }
+                    StringUtils.getIfBlank(volume.volumeInfo?.subtitle) { null } ?.let { elements.add(buildSubtitle(it)) }
                     volume.volumeInfo?.authors?.let { elements.add(buildAuthorsLabel(it)) }
                 }
             }
