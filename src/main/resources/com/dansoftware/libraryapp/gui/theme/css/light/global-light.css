@@ -35,3 +35,7 @@
 .text-field .langSelectorControl {
     -fx-fill: black;
 }
+
+.languageSelector .text-field {
+    -right-button-visible: false;
+}

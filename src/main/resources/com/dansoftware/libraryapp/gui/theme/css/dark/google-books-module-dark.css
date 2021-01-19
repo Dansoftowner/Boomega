@@ -7,10 +7,6 @@
     -fx-padding: 5 10 5 5;
 }
 
-.google-books-import-form .languageSelector .text-field {
-    -right-button-visible: false;
-}
-
 .google-book-details-pane {
     -fx-padding: 10;
 }

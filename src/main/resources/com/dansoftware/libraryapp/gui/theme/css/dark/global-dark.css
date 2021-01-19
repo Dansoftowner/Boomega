@@ -53,3 +53,7 @@
 .selectable-label:focused {
     -fx-text-fill: white;
 }
+
+.languageSelector .text-field {
+    -right-button-visible: false;
+}
