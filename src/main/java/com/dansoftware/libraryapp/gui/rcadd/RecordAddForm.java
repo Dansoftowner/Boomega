@@ -9,12 +9,14 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
 import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerOverlay;
 import com.dansoftware.libraryapp.gui.googlebooks.tile.GoogleBookTile;
+import com.dansoftware.libraryapp.gui.util.LanguageSelections;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.model.structure.Group;
 import com.dlsc.formsfx.model.util.BindingMode;
 import com.dlsc.formsfx.model.util.ResourceBundleService;
+import com.dlsc.formsfx.view.controls.SimpleTextControl;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
 import com.dlsc.formsfx.view.util.ColSpan;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -26,6 +28,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +42,6 @@ public class RecordAddForm extends ScrollPane {
 
     private static final String STYLE_CLASS = "record-add-form";
 
-    private Runnable googleBookTileRemoveAction;
 
     private final ObjectProperty<RecordType> recordType = new SimpleObjectProperty<>() {{
         addListener((observable, oldValue, newValue) -> handleTypeChange(newValue));
@@ -72,6 +74,8 @@ public class RecordAddForm extends ScrollPane {
     private final VBox contentVBox;
     private final Context context;
 
+    private Runnable googleBookTileRemoveAction;
+
     public RecordAddForm(@NotNull Context context, @NotNull RecordType initialType) {
         this.context = context;
         this.contentVBox = new VBox();
@@ -97,11 +101,23 @@ public class RecordAddForm extends ScrollPane {
 
     private void buildFormUI() {
         contentVBox.getChildren().setAll(
-                new FormRenderer(currentForm.get()),
+                renderForm(),
                 buildNewRatingControl(),
                 buildGoogleBookJoiner(),
                 buildCommitButton(contentVBox)
         );
+    }
+
+    private Node renderForm() {
+        var formRenderer = new FormRenderer(currentForm.get());
+        addAutoCompletionToLangField(formRenderer);
+        return formRenderer;
+    }
+
+    private void addAutoCompletionToLangField(FormRenderer src) {
+        SimpleTextControl control = (SimpleTextControl) src.lookup(".languageSelector");
+        TextField textField = (TextField) control.lookup(".text-field");
+        LanguageSelections.applyOnTextField(context, textField);
     }
 
     private Node buildNewRatingControl() {
@@ -135,11 +151,12 @@ public class RecordAddForm extends ScrollPane {
                         .authors(authors.get())
                         .publisher(publisher.get())
                         .title(title.get())
-                        .language(language.get()), volume -> {
-                    googleBookLink.set(volume.getSelfLink());
-                    googleBookTileRemoveAction.run();
-                    vBox.getChildren().add(createGoogleBookTile(context, volume, vBox));
-                }))
+                        .language(language.get()),
+                        volume -> {
+                            googleBookLink.set(volume.getSelfLink());
+                            googleBookTileRemoveAction.run();
+                            vBox.getChildren().add(createGoogleBookTile(context, volume, vBox));
+                        }))
         );
         button.prefWidthProperty().bind(vBox.widthProperty());
         VBox.setMargin(button, new Insets(15, 40, 10, 40));
@@ -261,6 +278,7 @@ public class RecordAddForm extends ScrollPane {
                                 .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(language)
+                                .styleClass("languageSelector")
                                 .label("record.add.form.lang")
                                 .placeholder("record.add.form.lang.prompt")
                                 .required(false)
