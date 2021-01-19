@@ -42,7 +42,6 @@ public class RecordAddForm extends ScrollPane {
 
     private static final String STYLE_CLASS = "record-add-form";
 
-
     private final ObjectProperty<RecordType> recordType = new SimpleObjectProperty<>() {{
         addListener((observable, oldValue, newValue) -> handleTypeChange(newValue));
     }};
@@ -123,6 +122,7 @@ public class RecordAddForm extends ScrollPane {
     private Node buildNewRatingControl() {
         var rating = new Rating(5);
         StackPane.setAlignment(rating, Pos.CENTER_LEFT);
+        rating.setRating(this.rating.get());
         rating.ratingProperty().addListener((o, old, newRating) -> this.rating.set(newRating.intValue()));
         var hBox = new HBox(
                 5,
@@ -250,6 +250,7 @@ public class RecordAddForm extends ScrollPane {
                 .publishedDate(publishedDate.get().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .notes(notes.get())
                 .rating(rating.get())
+                .language(language.get())
                 .serviceConnection(new ServiceConnection(googleBookLink.get()))
                 .build();
     }
@@ -340,6 +341,12 @@ public class RecordAddForm extends ScrollPane {
                         Field.ofDate(publishedDate)
                                 .label("record.add.form.date")
                                 .placeholder("record.add.form.date.prompt")
+                                .required(false)
+                                .span(ColSpan.HALF),
+                        Field.ofStringType(language)
+                                .styleClass("languageSelector")
+                                .label("record.add.form.lang")
+                                .placeholder("record.add.form.lang.prompt")
                                 .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(notes)
