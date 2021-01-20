@@ -3,7 +3,10 @@ package com.dansoftware.libraryapp.locale;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.Collator;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ABCCollators {

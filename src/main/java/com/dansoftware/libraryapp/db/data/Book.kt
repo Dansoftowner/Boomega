@@ -46,7 +46,9 @@ data class Book(
         builder.publisher,
         builder.subject,
         builder.rating
-    ) { this.serviceConnection = builder.serviceConnection }
+    ) {
+        this.serviceConnection = builder.serviceConnection
+    }
 
     override fun toString(): String {
         return "Book{id=$id, authors=$authors, title='$title', isbn='$isbn'}"

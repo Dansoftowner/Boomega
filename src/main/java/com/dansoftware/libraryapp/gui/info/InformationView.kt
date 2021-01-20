@@ -106,7 +106,7 @@ class InformationView(val context: Context) : VBox(5.0) {
             I18N.getInfoViewValues().getString("info.show.github"),
             MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX)
         ).also {
-                // TODO: github button action
+            // TODO: github button action
         }
 
     private fun buildCopyButton() =

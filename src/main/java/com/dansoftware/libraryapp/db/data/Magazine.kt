@@ -30,7 +30,9 @@ data class Magazine(
         builder.language,
         builder.notes,
         builder.rating
-    ) { this.serviceConnection = builder.serviceConnection }
+    ) {
+        this.serviceConnection = builder.serviceConnection
+    }
 
     class Builder {
         var publisher: String? = null

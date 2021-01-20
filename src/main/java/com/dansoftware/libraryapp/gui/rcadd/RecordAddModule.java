@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.rcadd;
 
 import com.dansoftware.libraryapp.db.Database;
-import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.data.Book;
 import com.dansoftware.libraryapp.db.data.Magazine;
 import com.dansoftware.libraryapp.gui.context.Context;

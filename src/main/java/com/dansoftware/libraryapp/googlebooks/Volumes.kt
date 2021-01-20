@@ -74,9 +74,9 @@ data class Volume(var id: String?) {
             var identifier: String? = null
 
             val isIsbn10: Boolean
-            get() = type == ISBN_10
+                get() = type == ISBN_10
             val isIsbn13: Boolean
-            get() = type == ISBN_13
+                get() = type == ISBN_13
 
             override fun toString() =
                 listOf(type?.replace('_', ' '), identifier).joinToString(": ")

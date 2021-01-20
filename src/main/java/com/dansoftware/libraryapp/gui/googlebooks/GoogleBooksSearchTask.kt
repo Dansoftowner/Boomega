@@ -196,7 +196,8 @@ class GoogleBooksPaginationSearchTask(
                                 false,
                                 searchParameters.startIndex(start)
                             ).also {
-                                onNewContentRequestCreated.get()?.let { value -> it.setOnNewContentRequestCreated(value) }
+                                onNewContentRequestCreated.get()
+                                    ?.let { value -> it.setOnNewContentRequestCreated(value) }
                                 onBeforeResultsDisplayed.get()?.let { value -> it.setOnBeforeResultsDisplayed(value) }
                             }
                         )

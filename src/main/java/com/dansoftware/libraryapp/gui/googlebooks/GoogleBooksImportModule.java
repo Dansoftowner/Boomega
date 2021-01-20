@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
-import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.locale.ABCCollators;
 import com.dansoftware.libraryapp.locale.I18N;
@@ -77,7 +76,6 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         return content.get();
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean destroy() {
         preferences.editor().put(colConfigKey, new TableColumnsInfo(getTable().getShowingColumns()));
@@ -129,7 +127,9 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         return new ToolbarItem(
                 new StackPane(new Group(new HBox(5,
                         new ImageView("/com/dansoftware/libraryapp/image/util/google_24px.png"),
-                        new Label("Google Books") {{ setFont(Font.font(20)); }}
+                        new Label("Google Books") {{
+                            setFont(Font.font(20));
+                        }}
                 )))
         );
     }

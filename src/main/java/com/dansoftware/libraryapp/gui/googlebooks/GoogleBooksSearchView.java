@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.gui.googlebooks;
 
-import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
 import javafx.scene.layout.Priority;

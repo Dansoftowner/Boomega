@@ -144,7 +144,7 @@ public class RecordAddForm extends ScrollPane {
             );
             try {
                 this.publishedDate.setValue(LocalDate.parse(values.publishedDate));
-            } catch(RuntimeException e) {
+            } catch (RuntimeException e) {
                 logger.error("Couldn't parse date ", e);
             }
         }
@@ -164,7 +164,9 @@ public class RecordAddForm extends ScrollPane {
         var hBox = new HBox(
                 5,
                 new StackPane(new Label(I18N.getRecordAddFormValue("record.add.form.rating"))),
-                new StackPane(rating) {{ HBox.setHgrow(this, Priority.ALWAYS); }}
+                new StackPane(rating) {{
+                    HBox.setHgrow(this, Priority.ALWAYS);
+                }}
         );
         VBox.setMargin(hBox, new Insets(0, 0, 0, 40));
         return hBox;
@@ -583,42 +585,52 @@ public class RecordAddForm extends ScrollPane {
             this.publishedDate = StringUtils.getIfBlank(date, null);
             return this;
         }
+
         public Values publisher(String publisher) {
             this.publisher = StringUtils.getIfBlank(publisher, null);
             return this;
         }
+
         public Values magazineName(String magazineName) {
             this.magazineName = StringUtils.getIfBlank(magazineName, null);
             return this;
         }
+
         public Values authors(String authors) {
             this.authors = StringUtils.getIfBlank(authors, null);
             return this;
         }
+
         public Values language(String language) {
             this.language = StringUtils.getIfBlank(language, null);
             return this;
         }
+
         public Values isbn(String isbn) {
             this.isbn = StringUtils.getIfBlank(isbn, null);
             return this;
         }
+
         public Values subject(String subject) {
             this.subject = StringUtils.getIfBlank(subject, null);
             return this;
         }
+
         public Values notes(String notes) {
             this.notes = StringUtils.getIfBlank(notes, null);
             return this;
         }
+
         public Values numberOfCopies(Integer numberOfCopies) {
             this.numberOfCopies = numberOfCopies;
             return this;
         }
+
         public Values numberOfPages(Integer numberOfPages) {
             this.numberOfPages = numberOfPages;
             return this;
         }
+
         public Values rating(Integer rating) {
             this.rating = rating;
             return this;

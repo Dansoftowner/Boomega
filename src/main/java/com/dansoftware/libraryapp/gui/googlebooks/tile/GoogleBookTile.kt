@@ -86,7 +86,8 @@ class GoogleBookTile(
                 setVgrow(vBox, Priority.ALWAYS)
                 vBox.children.also { elements ->
                     StringUtils.getIfBlank(volume.volumeInfo?.title) { null }?.let { elements.add(buildTitle(it)) }
-                    StringUtils.getIfBlank(volume.volumeInfo?.subtitle) { null } ?.let { elements.add(buildSubtitle(it)) }
+                    StringUtils.getIfBlank(volume.volumeInfo?.subtitle) { null }
+                        ?.let { elements.add(buildSubtitle(it)) }
                     volume.volumeInfo?.authors?.let { elements.add(buildAuthorsLabel(it)) }
                 }
             }

@@ -47,8 +47,10 @@ class GoogleBooksQueryBuilder {
         //defaults
         private const val START_INDEX_DEFAULT = 0
         private const val MAX_RESULTS_DEFAULT = 10
+
         @JvmStatic
         private val PRINT_TYPE_DEFAULT = PrintType.ALL
+
         @JvmStatic
         private val SORT_TYPE_DEFAULT = SortType.REVELANCE
 

@@ -28,7 +28,10 @@ class GoogleBookJoinerOverlay(
 ) : TitledOverlayBox(
     I18N.getGoogleBooksImportValue("google.books.joiner.titlebar"),
     ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
-    GoogleBookJoinerPanel(context, searchParameters) { context.hideOverlay(it.parent?.parent?.parent?.parent as Region?) } //TODO: not so good solution
+    GoogleBookJoinerPanel(
+        context,
+        searchParameters
+    ) { context.hideOverlay(it.parent?.parent?.parent?.parent as Region?) } //TODO: not so good solution
         .also { it.setOnVolumeSelected(onVolumeSelected) }
 )
 
