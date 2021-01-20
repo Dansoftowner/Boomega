@@ -120,6 +120,12 @@ private class EmptyContext : Context {
         TODO("Not yet implemented")
     }
 
+    override fun showModule(classRef: Class<*>) {
+    }
+
+    override fun showModule(classRef: Class<out NotifiableModule>, data: Any?) {
+    }
+
     override fun getContextScene(): Scene? = null
 
     override fun getContextWindow(): Window? = null
