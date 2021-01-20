@@ -86,19 +86,37 @@ public class RecordAddModule extends WorkbenchModule {
 
     private Consumer<Book> buildBookAddAction() {
         return book -> {
-            //TODO: exception handling
-            database.insertBook(book);
-            //TODO: internationalizing message
-            context.showInformationNotification("TEST SUCCESS", null, Duration.millis(3000));
+            try {
+                database.insertBook(book);
+                context.showInformationNotification(
+                        I18N.getRecordAddFormValue("record.book.success.notification"),
+                        null,
+                        Duration.millis(5000)
+                );
+            } catch (RuntimeException e) {
+                context.showErrorDialog(
+                        I18N.getRecordAddFormValue("record.book.error.title"),
+                        I18N.getRecordAddFormValue("record.book.error.msg"), e
+                );
+            }
         };
     }
 
     private Consumer<Magazine> buildMagazineAddAction() {
         return magazine -> {
-            //TODO: exception handling
-            database.insertMagazine(magazine);
-            //TODO: internationalizing message
-            context.showInformationNotification("TEST SUCCESS", null, Duration.millis(3000));
+            try {
+                database.insertMagazine(magazine);
+                context.showInformationNotification(
+                        I18N.getRecordAddFormValue("record.magazine.success.notification"),
+                        null,
+                        Duration.millis(5000)
+                );
+            } catch (RuntimeException e) {
+                context.showErrorDialog(
+                        I18N.getRecordAddFormValue("record.magazine.error.title"),
+                        I18N.getRecordAddFormValue("record.magazine.error.msg"), e
+                );
+            }
         };
     }
 }
