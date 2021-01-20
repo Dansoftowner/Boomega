@@ -4,25 +4,40 @@ import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.rcadd.RecordAddForm
 import com.dansoftware.libraryapp.gui.rcadd.RecordAddModule
 import com.dansoftware.libraryapp.locale.I18N
+import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Button
+import org.apache.commons.lang3.StringUtils
 
 private class GoogleBooksImportView(val context: Context) : GoogleBooksSearchView(context) {
 
     init {
+        styleClass.add("google-books-import-view")
         table.selectionModel
         children.add(buildButton())
     }
 
     private fun buildButton(): Button =
         Button().also { btn ->
+            btn.styleClass.add("google-books-import-btn")
             btn.prefWidthProperty().bind(this.widthProperty())
             btn.disableProperty().bind(table.selectionModel.selectedItemProperty().isNull)
-            btn.text = I18N.getGoogleBooksImportValue("google.books.import.button")
+            btn.textProperty().bind(
+                SimpleStringProperty(I18N.getGoogleBooksImportValue("google.books.import.button"))
+                    .let {
+                        it.concat(SimpleStringProperty().also { titleProp ->
+                            table.selectionModel.selectedItemProperty().addListener { _, _, newItem ->
+                                when {
+                                    newItem === null -> titleProp.set(StringUtils.EMPTY)
+                                    else -> titleProp.set(" (${newItem.volumeInfo?.title}) ")
+                                }
+                            }
+                        })
+                    }
+            )
             btn.isDefaultButton = true
             btn.setOnAction {
                 context.showModule(RecordAddModule::class.java, RecordAddForm.Values().also { values ->
                     table.selectionModel.selectedItem.also { volume ->
-                        values.googleBookLink(volume.selfLink)
                         values.authors(volume.volumeInfo?.authors?.joinToString(", "))
                         values.date(volume.volumeInfo?.publishedDate)
                         values.isbn(volume.volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier)
