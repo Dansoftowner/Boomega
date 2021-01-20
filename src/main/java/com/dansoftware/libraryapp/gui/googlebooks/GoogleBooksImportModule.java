@@ -3,7 +3,6 @@ package com.dansoftware.libraryapp.gui.googlebooks;
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
 import com.dansoftware.libraryapp.locale.ABCCollators;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dansoftware.libraryapp.util.SystemBrowser;
@@ -54,7 +53,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
     private final Context context;
     private final Preferences preferences;
     private final Database database;
-    private final ObjectProperty<GoogleBooksSearchPanel> content =
+    private final ObjectProperty<GoogleBooksImportView> content =
             new SimpleObjectProperty<>();
 
     private ToolbarItem columnChooserItem;
@@ -77,7 +76,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
     @Override
     public Node activate() {
         if (content.get() == null)
-            content.set(new GoogleBooksSearchPanel(context, database));
+            content.set(new GoogleBooksImportView(context));
         return content.get();
     }
 
@@ -191,7 +190,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         return toolbarItem;
     }
 
-    private GoogleBooksSearchPanel getContent() {
+    private GoogleBooksSearchView getContent() {
         return content.get();
     }
 
