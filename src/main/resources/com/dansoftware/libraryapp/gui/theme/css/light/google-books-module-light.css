@@ -63,3 +63,8 @@
     -fx-font-size: 17px;
     -fx-font-style: italic;
 }
+
+.google-books-import-view .google-books-import-btn {
+    -fx-pref-height: 40px;
+    -fx-font-weight: bold;
+}
