@@ -12,16 +12,14 @@ import org.slf4j.LoggerFactory;
 import java.util.function.Consumer;
 
 /**
- * A {@link GoogleBooksSearchPanel} allows to search on Google Books (through a {@link GoogleBooksSearchForm}) and also
+ * A {@link GoogleBooksSearchView} allows to search on Google Books (through a {@link GoogleBooksSearchForm}) and also
  * displays them (through a {@link GoogleBooksPagination}).
  *
  * @author Daniel Gyoerffy
  */
-class GoogleBooksSearchPanel extends VBox {
+class GoogleBooksSearchView extends VBox {
 
-    private static final Logger logger = LoggerFactory.getLogger(GoogleBooksSearchPanel.class);
-
-    private final Database database;
+    private static final Logger logger = LoggerFactory.getLogger(GoogleBooksSearchView.class);
 
     private final Context context;
     private final GoogleBooksSearchForm form;
@@ -29,9 +27,8 @@ class GoogleBooksSearchPanel extends VBox {
 
     private Runnable onRefreshRequest;
 
-    GoogleBooksSearchPanel(@NotNull Context context, @NotNull Database database) {
+    GoogleBooksSearchView(@NotNull Context context) {
         this.context = context;
-        this.database = database;
         this.form = createForm(context);
         this.tablePagination = buildPagination();
         this.buildUI();
