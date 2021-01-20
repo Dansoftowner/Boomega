@@ -35,7 +35,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.lang.reflect.Field;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -178,6 +180,13 @@ final class WorkbenchContextAdapter implements Context {
                                   EventHandler<MouseEvent> onClicked) {
         final NotificationNode notificationNode = buildNotificationNode(type, title, message, notificationsBox::removeItem, onClicked);
         notificationsBox.pushItem(notificationNode, duration);
+        playNotificationSound();
+    }
+
+    private void playNotificationSound() {
+        Optional.ofNullable(Toolkit.getDefaultToolkit().getDesktopProperty("win.sound.hand"))
+                .map(it -> (Runnable) it)
+                .ifPresent(Runnable::run);
     }
 
     @Override
