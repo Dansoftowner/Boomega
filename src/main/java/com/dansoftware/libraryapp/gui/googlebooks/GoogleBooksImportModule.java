@@ -52,7 +52,6 @@ public class GoogleBooksImportModule extends WorkbenchModule {
 
     private final Context context;
     private final Preferences preferences;
-    private final Database database;
     private final ObjectProperty<GoogleBooksImportView> content =
             new SimpleObjectProperty<>();
 
@@ -63,11 +62,9 @@ public class GoogleBooksImportModule extends WorkbenchModule {
             new SimpleObjectProperty<>();
 
     public GoogleBooksImportModule(@NotNull Context context,
-                                   @NotNull Preferences preferences,
-                                   @NotNull Database database) {
+                                   @NotNull Preferences preferences) {
         super(I18N.getGoogleBooksImportValue("google.books.import.module.title"), MaterialDesignIcon.GOOGLE);
         this.context = context;
-        this.database = database;
         this.preferences = preferences;
         this.buildTableConfiguration();
         this.buildToolbar();

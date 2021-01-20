@@ -23,7 +23,7 @@ public class MainContentView extends Workbench implements ContextTransformable {
     }
 
     private void initModules() {
-        getModules().add(new GoogleBooksImportModule(asContext, preferences, database));
+        getModules().add(new GoogleBooksImportModule(asContext, preferences));
         getModules().add(new RecordAddModule(asContext, database));
     }
 
