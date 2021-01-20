@@ -1,9 +1,11 @@
 package com.dansoftware.libraryapp.gui.rcadd;
 
 import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.NitriteDatabase;
 import com.dansoftware.libraryapp.db.data.Book;
 import com.dansoftware.libraryapp.db.data.Magazine;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.context.NotifiableModule;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
@@ -19,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class RecordAddModule extends WorkbenchModule {
+public class RecordAddModule extends WorkbenchModule implements NotifiableModule {
 
     private final ObjectProperty<RecordAddForm> content =
             new SimpleObjectProperty<>();
@@ -62,6 +64,13 @@ public class RecordAddModule extends WorkbenchModule {
             this.setOnAction(event -> content.get().recordTypeProperty().set(RecordAddForm.RecordType.MAGAZINE));
         }});
         return toolbarItem;
+    }
+
+    @Override
+    public void commitData(Object data) {
+        if (data instanceof RecordAddForm.Values) {
+            content.get().setValues((RecordAddForm.Values) data);
+        }
     }
 
     @Override
