@@ -133,6 +133,23 @@ public interface Context {
 
     void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
 
+    /* SHOWING MODULES */
+
+    /**
+     * Shows the module that is identifiable by the given class
+     *
+     * @param classRef the class reference
+     */
+    void showModule(@NotNull Class<?> classRef);
+
+    /**
+     * Shows the module and commits the given object to
+     * her.
+     *
+     * @param classRef the class reference
+     * @param data the object that holds data
+     */
+    void showModule(@NotNull Class<? extends NotifiableModule> classRef, Object data);
 
     @Nullable
     Scene getContextScene();

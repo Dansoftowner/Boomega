@@ -7,6 +7,7 @@ import com.dansoftware.libraryapp.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.WorkbenchSkin;
 import com.dlsc.workbenchfx.model.WorkbenchDialog;
+import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.WorkbenchView;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
@@ -247,6 +248,26 @@ final class WorkbenchContextAdapter implements Context {
     @Override
     public void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.INFO, title, message, duration, onClicked);
+    }
+
+    @Override
+    public void showModule(@NotNull Class<?> classRef) {
+        workbench.getModules().stream()
+                .filter(module -> module.getClass().equals(classRef))
+                .findFirst()
+                .ifPresent(workbench::openModule);
+    }
+
+    @Override
+    public void showModule(@NotNull Class<? extends NotifiableModule> classRef, Object data) {
+        workbench.getModules().stream()
+                .filter(module -> module.getClass().equals(classRef))
+                .map(module -> (WorkbenchModule & NotifiableModule) module)
+                .findFirst()
+                .ifPresent(module -> {
+                    workbench.openModule(module);
+                    module.commitData(data);
+                });
     }
 
     @Override
