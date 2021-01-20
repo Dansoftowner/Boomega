@@ -94,7 +94,7 @@ public class GoogleBooksTable extends TableView<Volume> {
 
     private void init() {
         getStyleClass().add(STYLE_CLASS);
-        getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.setPlaceholder(new PlaceHolder());
         this.buildClickHandlingPolicy();
