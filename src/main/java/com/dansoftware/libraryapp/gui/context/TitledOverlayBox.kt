@@ -5,21 +5,25 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.geometry.Insets
+import javafx.geometry.Orientation
 import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.Label
+import javafx.scene.control.Separator
 import javafx.scene.layout.*
+import javafx.scene.shape.Line
 
 open class TitledOverlayBox(
     title: String,
     graphic: Node,
     content: Node,
     resizableH: Boolean,
-    resizableV: Boolean
-) : StackPane(Group(ResizablePane(InnerVBox(title, graphic, content, resizableH, resizableV)))) {
+    resizableV: Boolean,
+    vararg customTitleBarItems : Node
+) : StackPane(Group(ResizablePane(InnerVBox(title, graphic, content, resizableH, resizableV, customTitleBarItems)))) {
 
     constructor(title: String, graphic: Node, content: Node) :
             this(title, graphic, content, true, true)
@@ -33,7 +37,8 @@ open class TitledOverlayBox(
         graphic: Node,
         content: VBox,
         val resizableH: Boolean,
-        val resizableV: Boolean
+        val resizableV: Boolean,
+        val customTitleBarItems: Array<out Node>
     ) : BorderPane() {
 
         companion object {
@@ -58,6 +63,12 @@ open class TitledOverlayBox(
         private fun buildRightBox(content: VBox): Node =
             HBox(5.0).also { hBox ->
                 setAlignment(hBox, Pos.CENTER_RIGHT)
+                when {
+                    customTitleBarItems.isNullOrEmpty().not() -> {
+                        customTitleBarItems.forEach { hBox.children.add(it) }
+                        hBox.children.add(Separator(Orientation.VERTICAL))
+                    }
+                }
                 if (resizableV) {
                     hBox.children.add(buildButton(MaterialDesignIcon.ARROW_UP) {
                         content.prefHeight = content.height + RESIZE_UNIT
@@ -89,12 +100,13 @@ open class TitledOverlayBox(
         graphic: Node,
         content: Node,
         val isResizableH: Boolean,
-        val isResizableV: Boolean
+        val isResizableV: Boolean,
+        customTitleBarItems: Array<out Node>
     ) : VBox() {
         init {
             setVgrow(this, Priority.ALWAYS)
             styleClass.add("overlay-box")
-            children.add(TitleBar(title, graphic, this, isResizableH, isResizableV))
+            children.add(TitleBar(title, graphic, this, isResizableH, isResizableV, customTitleBarItems))
             children.add(content.also { it.styleClass.add("content") })
         }
     }
