@@ -42,8 +42,8 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -140,6 +140,7 @@ public class RecordAddForm extends ScrollPane {
         if (values == null) {
             clearForm();
         } else {
+            this.recordType.set(values.recordType);
             this.title.setValue(values.title);
             this.subtitle.setValue(values.subtitle);
             this.publisher.setValue(values.publisher);
@@ -562,6 +563,8 @@ public class RecordAddForm extends ScrollPane {
 
     public static class Values {
 
+        @NotNull
+        private RecordType recordType = RecordType.BOOK;
         private String title = StringUtils.EMPTY;
         private String subtitle = StringUtils.EMPTY;
         private LocalDate publishedDate;
@@ -575,9 +578,13 @@ public class RecordAddForm extends ScrollPane {
         private Integer numberOfCopies;
         private Integer numberOfPages;
         private Integer rating;
-        private String googleBookLink;
 
         private Volume volumeObject;
+
+        public Values recordType(@NotNull RecordType recordType) {
+            this.recordType = Objects.requireNonNull(recordType);
+            return this;
+        }
 
         public Values title(String title) {
             this.title = StringUtils.getIfBlank(title, () -> StringUtils.EMPTY);

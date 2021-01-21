@@ -47,6 +47,10 @@ private class GoogleBooksImportView(val context: Context) : GoogleBooksSearchVie
     private fun buildButtonAction() = EventHandler<ActionEvent> {
         context.showModule(RecordAddModule::class.java, RecordAddForm.Values().also { values ->
             table.selectionModel.selectedItem.also { volume ->
+                values.recordType(when {
+                    volume.volumeInfo?.isMagazine ?: false -> RecordAddForm.RecordType.MAGAZINE
+                    else -> RecordAddForm.RecordType.BOOK
+                })
                 values.authors(volume.volumeInfo?.authors?.joinToString(", "))
                 values.date(volume.volumeInfo?.getPublishedDateObject())
                 values.isbn(volume.volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier)
