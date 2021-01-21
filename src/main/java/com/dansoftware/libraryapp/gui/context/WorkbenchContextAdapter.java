@@ -258,6 +258,7 @@ final class WorkbenchContextAdapter implements Context {
                 .ifPresent(workbench::openModule);
     }
 
+    @SuppressWarnings({"unchecked", "RedundantSuppression"})
     @Override
     public <D> void showModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data) {
         workbench.getModules().stream()
