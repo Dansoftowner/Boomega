@@ -25,7 +25,8 @@ import java.util.function.Consumer;
  *
  * @author Daniel Gyorffy
  */
-public class RecordAddModule extends WorkbenchModule implements NotifiableModule {
+public class RecordAddModule extends WorkbenchModule
+        implements NotifiableModule<RecordAddForm.Values> {
 
     private final ObjectProperty<RecordAddForm> content =
             new SimpleObjectProperty<>();
@@ -71,9 +72,9 @@ public class RecordAddModule extends WorkbenchModule implements NotifiableModule
     }
 
     @Override
-    public void commitData(Object data) {
-        if (data instanceof RecordAddForm.Values) {
-            content.get().setValues((RecordAddForm.Values) data);
+    public void commitData(RecordAddForm.Values data) {
+        if (data != null) {
+            content.get().setValues(data);
         }
     }
 

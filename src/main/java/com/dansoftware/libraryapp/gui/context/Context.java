@@ -149,7 +149,7 @@ public interface Context {
      * @param classRef the class reference
      * @param data     the object that holds data
      */
-    void showModule(@NotNull Class<? extends NotifiableModule> classRef, Object data);
+    <D> void showModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data);
 
     @Nullable
     Scene getContextScene();
