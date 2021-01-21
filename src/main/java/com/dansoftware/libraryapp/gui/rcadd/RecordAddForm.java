@@ -154,11 +154,7 @@ public class RecordAddForm extends ScrollPane {
             this.rating.setValue(values.rating);
             this.removeGoogleBookConnection();
             this.createGoogleBookConnection(values.volumeObject);
-            try {
-                this.publishedDate.setValue(LocalDate.parse(values.publishedDate));
-            } catch (DateTimeParseException e) {
-                logger.error("Couldn't parse date ", e);
-            }
+            this.publishedDate.setValue(values.publishedDate);
         }
     }
 
@@ -568,7 +564,7 @@ public class RecordAddForm extends ScrollPane {
 
         private String title = StringUtils.EMPTY;
         private String subtitle = StringUtils.EMPTY;
-        private String publishedDate = StringUtils.EMPTY;
+        private LocalDate publishedDate;
         private String publisher = StringUtils.EMPTY;
         private String magazineName = StringUtils.EMPTY;
         private String authors = StringUtils.EMPTY;
@@ -593,8 +589,8 @@ public class RecordAddForm extends ScrollPane {
             return this;
         }
 
-        public Values date(String date) {
-            this.publishedDate = StringUtils.getIfBlank(date, () -> StringUtils.EMPTY);
+        public Values date(LocalDate date) {
+            this.publishedDate = date;
             return this;
         }
 

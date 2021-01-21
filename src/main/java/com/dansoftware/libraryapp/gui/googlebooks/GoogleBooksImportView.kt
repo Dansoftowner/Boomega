@@ -31,7 +31,7 @@ private class GoogleBooksImportView(val context: Context) : GoogleBooksSearchVie
             btn.disableProperty().bind(table.selectionModel.selectedItemProperty().isNull)
             btn.textProperty().bind(
                 SimpleStringProperty(I18N.getGoogleBooksImportValue("google.books.import.button"))
-                    .concat(SimpleStringProperty().also { titleProp ->
+                    .concat(SimpleStringProperty(StringUtils.EMPTY).also { titleProp ->
                         table.selectionModel.selectedItemProperty().addListener { _, _, newItem ->
                             when {
                                 newItem === null -> titleProp.set(StringUtils.EMPTY)
@@ -48,7 +48,7 @@ private class GoogleBooksImportView(val context: Context) : GoogleBooksSearchVie
         context.showModule(RecordAddModule::class.java, RecordAddForm.Values().also { values ->
             table.selectionModel.selectedItem.also { volume ->
                 values.authors(volume.volumeInfo?.authors?.joinToString(", "))
-                values.date(volume.volumeInfo?.publishedDate)
+                values.date(volume.volumeInfo?.getPublishedDateObject())
                 values.isbn(volume.volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier)
                 values.language(volume.volumeInfo?.language)
                 values.title(volume.volumeInfo?.title)
