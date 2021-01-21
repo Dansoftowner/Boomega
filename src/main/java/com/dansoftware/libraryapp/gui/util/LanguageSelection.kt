@@ -50,17 +50,18 @@ class TextFieldLanguageSelectorControl(context: Context, textField: TextField) :
     }
 
     private fun buildGraphic(context: Context, textField: TextField): Node =
-        MaterialDesignIconView(MaterialDesignIcon.VIEW_LIST).also {
-            it.cursor = Cursor.HAND
-            setAlignment(it, Pos.CENTER_RIGHT)
-            it.setOnMouseClicked { event: MouseEvent ->
+        MaterialDesignIconView(MaterialDesignIcon.VIEW_LIST).also { icon ->
+            icon.cursor = Cursor.HAND
+            setAlignment(icon, Pos.CENTER_RIGHT)
+            icon.setOnMouseClicked { event: MouseEvent ->
                 if (event.button == MouseButton.PRIMARY) {
                     LanguageSelection(
-                        context
+                        context,
+                        textField.text?.let { Locale.forLanguageTag(it) }
                     ) { locale: Locale -> textField.text = locale.language }.show()
                 }
             }
-            it.styleClass.add("langSelectorControl")
+            icon.styleClass.add("langSelectorControl")
         }
 }
 
@@ -69,19 +70,23 @@ class TextFieldLanguageSelectorControl(context: Context, textField: TextField) :
  *
  * @author Daniel Gyorffy
  */
-class LanguageSelection(private val context: Context, onSelection: Consumer<Locale>) : StackPane(),
-    Callback<ListView<Locale>, ListCell<Locale>> {
+class LanguageSelection(private val context: Context, initialSelected: Locale?, onSelection: Consumer<Locale>) :
+    StackPane(), Callback<ListView<Locale>, ListCell<Locale>> {
 
     init {
         isPickOnBounds = false
-        children.add(Group(ListView<Locale>().also {
-            it.items.addAll(listLocales())
-            it.cellFactory = this
-            it.setOnMouseClicked { event ->
+        children.add(Group(ListView<Locale>().also { listView ->
+            listView.items.addAll(listLocales())
+            listView.cellFactory = this
+            listView.setOnMouseClicked { event ->
                 if (event.clickCount == 2) {
-                    it.selectionModel.selectedItem?.let { locale -> onSelection.accept(locale) }
+                    listView.selectionModel.selectedItem?.let { locale -> onSelection.accept(locale) }
                     context.hideOverlay(this)
                 }
+            }
+            listView.items.firstOrNull { it.language == initialSelected?.language }?.also {
+                listView.selectionModel.select(it)
+                listView.scrollTo(it)
             }
         }))
     }
