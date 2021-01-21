@@ -3,16 +3,15 @@ package com.dansoftware.libraryapp.gui.info
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.TitledOverlayBox
 import com.dansoftware.libraryapp.gui.info.dependency.DependencyViewerActivity
+import com.dansoftware.libraryapp.gui.util.SelectableLabel
 import com.dansoftware.libraryapp.locale.I18N
+import com.dansoftware.libraryapp.util.SystemBrowser
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.geometry.Insets
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.control.Button
-import javafx.scene.control.Label
-import javafx.scene.control.Separator
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
 import javafx.scene.layout.HBox
@@ -29,10 +28,26 @@ class InformationViewOverlay(context: Context) :
         MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
         InformationView(context),
         resizableH = true,
-        resizableV = false
+        resizableV = false,
+        Button().also {
+            it.contentDisplay = ContentDisplay.GRAPHIC_ONLY
+            it.graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)
+            it.tooltip = Tooltip(I18N.getInfoViewValues().getString("info.copy"))
+            it.setOnAction {
+                ClipboardContent().also { clipboardContent ->
+                    clipboardContent.putString(getApplicationInfoCopy())
+                    Clipboard.getSystemClipboard().setContent(clipboardContent)
+                }
+            }
+            it.padding = Insets(0.0)
+        }
     )
 
 class InformationView(val context: Context) : VBox(5.0) {
+
+    companion object {
+        const val GITHUB_REPO_URL = "https://github.com/Dansoftowner/LibraryApp2020"
+    }
 
     init {
         styleClass.add("information-view")
@@ -51,17 +66,8 @@ class InformationView(val context: Context) : VBox(5.0) {
     private fun buildProgramInfo() {
         children.add(KeyValuePair("info.version", System.getProperty("libraryapp.version")))
         children.add(KeyValuePair("info.developer", "Györffy Dániel"))
-        children.add(
-            HBox(
-                2.0,
-                KeyValuePair("info.lang", Locale.getDefault().displayLanguage),
-                Label(","),
-                KeyValuePair(
-                    "info.lang.translator",
-                    I18N.getLanguagePack().translator?.getDisplayName(Locale.getDefault())
-                )
-            )
-        )
+        children.add(KeyValuePair("info.lang", Locale.getDefault().displayLanguage))
+        children.add(KeyValuePair("info.lang.translator", I18N.getLanguagePack().translator?.getDisplayName(Locale.getDefault())))
     }
 
     private fun buildJavaInfo() {
@@ -78,17 +84,12 @@ class InformationView(val context: Context) : VBox(5.0) {
     }
 
     private fun buildLogInfo() {
-        children.add(KeyValuePair("info.logs.loc", TextField(System.getProperty("log.file.path.full")).also {
-            it.isEditable = false
-            HBox.setMargin(it, Insets(0.0, 0.0, 0.0, 5.0))
-            HBox.setHgrow(it, Priority.ALWAYS)
-        }))
+        children.add(KeyValuePair("info.logs.loc", System.getProperty("log.file.path.full")))
     }
 
     private fun buildBottom() = StackPane(Group(HBox(10.0).also {
         it.children.add(buildGithubButton())
         it.children.add(buildDependencyButton())
-        it.children.add(buildCopyButton())
     })).also { children.add(it) }
 
     private fun buildDependencyButton() =
@@ -106,31 +107,26 @@ class InformationView(val context: Context) : VBox(5.0) {
             I18N.getInfoViewValues().getString("info.show.github"),
             MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX)
         ).also {
-            // TODO: github button action
-        }
-
-    private fun buildCopyButton() =
-        Button(
-            I18N.getInfoViewValues().getString("info.copy"),
-            MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)
-        ).also {
             it.setOnAction {
-                ClipboardContent().also { clipboardContent ->
-                    clipboardContent.putString(getApplicationInfoCopy())
-                    Clipboard.getSystemClipboard().setContent(clipboardContent)
+                when {
+                    SystemBrowser.isSupported() ->
+                        SystemBrowser().browse(GITHUB_REPO_URL)
                 }
             }
         }
 
+
     private class KeyValuePair(i18n: String, value: Node) : HBox() {
 
-        constructor(i18n: String, value: String?) : this(i18n, Label(value).also {
-            it.padding = Insets(0.0, 0.0, 0.0, 5.0)
+        constructor(i18n: String, value: String?) : this(i18n, SelectableLabel(value).also {
+            setHgrow(it, Priority.ALWAYS)
         })
 
         init {
             children.add(Label(I18N.getInfoViewValues().getString(i18n)))
-            children.add(Label(":"))
+            children.add(Label(":").also {
+                it.padding = Insets(0.0, 5.0, 0.0, 0.0)
+            })
             children.add(value)
         }
 
