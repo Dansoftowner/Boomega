@@ -28,17 +28,17 @@ class GoogleBookJoinerOverlay(
 ) : TitledOverlayBox(
     I18N.getGoogleBooksImportValue("google.books.joiner.titlebar"),
     ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
-    GoogleBookJoinerPanel(
+    GoogleBookJoinerView(
         context,
         searchParameters
     ) { context.hideOverlay(it.parent?.parent?.parent?.parent as Region?) } //TODO: not so good solution
         .also { it.setOnVolumeSelected(onVolumeSelected) }
 )
 
-class GoogleBookJoinerPanel(
+class GoogleBookJoinerView(
     private val context: Context,
     private val searchParameters: SearchParameters,
-    private val hideMethod: (GoogleBookJoinerPanel) -> Unit
+    private val hideMethod: (GoogleBookJoinerView) -> Unit
 ) : VBox(5.0) {
 
     private val onVolumeSelected: ObjectProperty<Consumer<Volume>> = SimpleObjectProperty()
