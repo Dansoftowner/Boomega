@@ -33,16 +33,16 @@
 }
 
 .tile-box {
-    -fx-border-radius: 0px;
-    -fx-background-radius: 0px;
+    -fx-border-radius: 5 5 0 0;
+    -fx-background-radius: 5 5 0 0;
     -fx-border-width: 0.35;
     -fx-border-color: gray;
 }
 
 .tab-control:selected {
     -fx-background-color: #FFFFFF;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
 }
 
 .tab-box .button:hover, .tab-box .button:focused {
@@ -50,11 +50,15 @@
 }
 
 .overlay-box {
-    -fx-border-color: #484848;
-    -fx-border-width: 0.5;
+    -fx-effect: -drop-shadow-3;
 }
 
 .overlay-box .title-bar {
     -fx-padding: 5;
     -fx-background-color: #d9d9d9;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.overlay-box .content {
+    /*-fx-background-radius: 0 0 5 5;*/
 }
