@@ -13,11 +13,6 @@
     -on-error-color: #FFFFFF;
 }
 
-.dialog-pane {
-    -fx-border-radius: 0px;
-    -fx-background-radius: 0px;
-}
-
 .alertDialog .button {
     -fx-padding: 5;
 }
