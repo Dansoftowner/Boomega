@@ -23,6 +23,11 @@ import javafx.scene.layout.VBox
 import org.apache.commons.lang3.StringUtils
 import java.util.function.Consumer
 
+/**
+ * A [GoogleBookTile] is a gui-tile that shows some information about a [Volume].
+ *
+ * @author Daniel Gyorffy
+ */
 class GoogleBookTile(
     private val context: Context,
     private val volume: Volume

@@ -46,6 +46,19 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * A {@link RecordAddForm} provides a UI for typing Book/Magazine data.
+ *
+ * <p>
+ * It has a {@link RecordType} property that represents what type of database record
+ * typed.
+ *
+ * <p>
+ * The {@link #setOnBookAdded(Consumer)} and {@link #setOnMagazineAdded(Consumer)} can be used
+ * for listening to commits.
+ *
+ * @author Daniel Gyorffy
+ */
 public class RecordAddForm extends ScrollPane {
 
     private static final Logger logger = LoggerFactory.getLogger(RecordAddForm.class);

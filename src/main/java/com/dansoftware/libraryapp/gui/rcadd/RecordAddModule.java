@@ -20,6 +20,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+/**
+ * A {@link RecordAddModule} is a module that allows the user to add records to the database.
+ *
+ * @author Daniel Gyorffy
+ */
 public class RecordAddModule extends WorkbenchModule implements NotifiableModule {
 
     private final ObjectProperty<RecordAddForm> content =
