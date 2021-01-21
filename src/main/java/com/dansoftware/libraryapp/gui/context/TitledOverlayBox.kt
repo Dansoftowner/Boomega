@@ -42,7 +42,10 @@ open class TitledOverlayBox(
 
         init {
             styleClass.add("title-bar")
-            left = graphic.also { setAlignment(it, Pos.CENTER) }
+            left = graphic.also {
+                setAlignment(it, Pos.CENTER)
+                setMargin(it, Insets(0.0, 0.0, 0.0, 5.0))
+            }
             center = buildTitleLabel(title)
             right = buildRightBox(content)
         }
@@ -92,7 +95,7 @@ open class TitledOverlayBox(
             setVgrow(this, Priority.ALWAYS)
             styleClass.add("overlay-box")
             children.add(TitleBar(title, graphic, this, isResizableH, isResizableV))
-            children.add(content)
+            children.add(content.also { it.styleClass.add("content") })
         }
     }
 
