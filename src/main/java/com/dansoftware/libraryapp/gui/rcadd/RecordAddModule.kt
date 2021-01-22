@@ -2,14 +2,13 @@ package com.dansoftware.libraryapp.gui.rcadd
 
 import com.dansoftware.libraryapp.db.Database
 import com.dansoftware.libraryapp.db.data.Book
-import com.dlsc.workbenchfx.model.WorkbenchModule
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import com.dansoftware.libraryapp.gui.context.NotifiableModule
-import com.dlsc.workbenchfx.view.controls.ToolbarItem
-import java.lang.RuntimeException
 import com.dansoftware.libraryapp.db.data.Magazine
 import com.dansoftware.libraryapp.gui.context.Context
+import com.dansoftware.libraryapp.gui.context.NotifiableModule
 import com.dansoftware.libraryapp.locale.I18N
+import com.dlsc.workbenchfx.model.WorkbenchModule
+import com.dlsc.workbenchfx.view.controls.ToolbarItem
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
@@ -76,56 +75,47 @@ class RecordAddModule(
         }
     }
 
-    override fun activate(): Node {
-        if (content.get() == null) content.set(buildForm())
-        return content.get()
-    }
+    override fun activate(): Node = content.get() ?: buildForm().also { content.set(it) }
 
-    override fun destroy(): Boolean {
-        content.set(null)
-        return true
-    }
+    override fun destroy(): Boolean = content.set(null).let { true }
 
-    private fun buildForm(): RecordAddForm {
-        val form = RecordAddForm(context, RecordAddForm.RecordType.BOOK)
-        form.onBookAdded = buildBookAddAction()
-        form.onMagazineAdded = buildMagazineAddAction()
-        return form
-    }
+    private fun buildForm(): RecordAddForm =
+        RecordAddForm(context, RecordAddForm.RecordType.BOOK).also {
+            it.onBookAdded = buildBookAddAction()
+            it.onMagazineAdded = buildMagazineAddAction()
+        }
 
-    private fun buildBookAddAction(): Consumer<Book> {
-        return Consumer { book: Book? ->
-            try {
-                database.insertBook(book!!)
-                context.showInformationNotification(
-                    I18N.getRecordAddFormValue("record.book.success.notification"),
-                    null,
-                    Duration.millis(5000.0)
-                )
-            } catch (e: RuntimeException) {
-                context.showErrorDialog(
-                    I18N.getRecordAddFormValue("record.book.error.title"),
-                    I18N.getRecordAddFormValue("record.book.error.msg"), e
-                )
-            }
+    private fun buildBookAddAction() = Consumer<Book> { book ->
+        try {
+            database.insertBook(book)
+            context.showInformationNotification(
+                I18N.getRecordAddFormValue("record.book.success.notification"),
+                null,
+                Duration.millis(5000.0)
+            )
+        } catch (e: RuntimeException) {
+            context.showErrorDialog(
+                I18N.getRecordAddFormValue("record.book.error.title"),
+                I18N.getRecordAddFormValue("record.book.error.msg"), e
+            )
         }
     }
 
-    private fun buildMagazineAddAction(): Consumer<Magazine> {
-        return Consumer { magazine: Magazine? ->
-            try {
-                database.insertMagazine(magazine!!)
-                context.showInformationNotification(
-                    I18N.getRecordAddFormValue("record.magazine.success.notification"),
-                    null,
-                    Duration.millis(5000.0)
-                )
-            } catch (e: RuntimeException) {
-                context.showErrorDialog(
-                    I18N.getRecordAddFormValue("record.magazine.error.title"),
-                    I18N.getRecordAddFormValue("record.magazine.error.msg"), e
-                )
-            }
+
+    private fun buildMagazineAddAction() = Consumer<Magazine> { magazine ->
+        try {
+            database.insertMagazine(magazine)
+            context.showInformationNotification(
+                I18N.getRecordAddFormValue("record.magazine.success.notification"),
+                null,
+                Duration.millis(5000.0)
+            )
+        } catch (e: RuntimeException) {
+            context.showErrorDialog(
+                I18N.getRecordAddFormValue("record.magazine.error.title"),
+                I18N.getRecordAddFormValue("record.magazine.error.msg"), e
+            )
         }
     }
 }
+
