@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements Themeable, ContextTransformable {
+public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements ContextTransformable {
 
     private final DatabaseCreatorForm form;
     private final Context asContext;
@@ -29,17 +29,10 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
                 new MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS));
         this.asContext = Context.from(this);
         super.setContent(this.form = new DatabaseCreatorForm(asContext, databaseTracker));
-        Theme.registerThemeable(this);
     }
 
     public DatabaseMeta getCreatedDatabase() {
         return this.form.createdDatabaseProperty().get();
-    }
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.applyBack(this);
-        newTheme.apply(this);
     }
 
     @Override

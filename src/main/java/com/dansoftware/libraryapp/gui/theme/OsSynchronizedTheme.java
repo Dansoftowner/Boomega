@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import com.dansoftware.libraryapp.gui.theme.applier.ThemeApplier;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.jthemedetecor.OsThemeDetector;
 import javafx.application.Platform;
@@ -42,6 +43,12 @@ public class OsSynchronizedTheme extends Theme {
         this.currentTheme = getCurrentTheme();
     }
 
+    @NotNull
+    @Override
+    protected ThemeApplier getApplier() {
+        return currentTheme.getApplier();
+    }
+
     private Theme getCurrentTheme() {
         return this.osThemeDetector.isDark() ? darkTheme : lightTheme;
     }
@@ -51,15 +58,7 @@ public class OsSynchronizedTheme extends Theme {
         osThemeDetector.removeListener(osThemeListener);
     }
 
-    @Override
-    public @NotNull ThemeApplier getGlobalApplier() {
-        return currentTheme.getGlobalApplier();
-    }
 
-    @Override
-    public @NotNull ThemeApplier getCustomApplier() {
-        return currentTheme.getCustomApplier();
-    }
 
     private static final class SyncFunction implements Consumer<Boolean> {
 

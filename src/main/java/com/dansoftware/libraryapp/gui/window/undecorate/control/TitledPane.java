@@ -7,14 +7,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
-public class TitledPane extends BorderPane implements Themeable {
+public class TitledPane extends BorderPane {
 
     private static final String STYLE_CLASS = "internalTitledPane";
     private final TitleBar titleBar;
 
     public TitledPane(@NotNull Stage stage, @NotNull Node center) {
         super(center);
-        Theme.registerThemeable(this);
         this.getStyleClass().add(STYLE_CLASS);
         this.titleBar = new TitleBar(stage);
         this.setTop(titleBar);
@@ -22,11 +21,5 @@ public class TitledPane extends BorderPane implements Themeable {
 
     public TitleBar getTitleBar() {
         return titleBar;
-    }
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.getGlobalApplier().applyBack(this);
-        newTheme.getGlobalApplier().apply(this);
     }
 }

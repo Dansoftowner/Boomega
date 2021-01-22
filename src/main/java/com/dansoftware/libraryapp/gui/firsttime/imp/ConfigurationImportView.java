@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Daniel Gyorffy
  */
-public class ConfigurationImportView extends Workbench implements Themeable, ContextTransformable {
+public class ConfigurationImportView extends Workbench implements ContextTransformable {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationImportView.class);
 
@@ -42,7 +42,6 @@ public class ConfigurationImportView extends Workbench implements Themeable, Con
         this.controller = new ConfigurationImportController(asContext, target);
         this.content = loadContent(controller);
         this.getModules().add(this.new SingleModule());
-        Theme.registerThemeable(this);
     }
 
     private Node loadContent(Initializable controller) {
@@ -60,12 +59,6 @@ public class ConfigurationImportView extends Workbench implements Themeable, Con
      */
     public boolean externalSettingsImported() {
         return controller.isImported();
-    }
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.applyBack(this);
-        newTheme.apply(this);
     }
 
     @Override

@@ -1,5 +1,6 @@
-package com.dansoftware.libraryapp.gui.theme;
+package com.dansoftware.libraryapp.gui.theme.applier;
 
+import com.dansoftware.libraryapp.gui.theme.Theme;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.jetbrains.annotations.NotNull;

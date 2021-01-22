@@ -20,7 +20,7 @@ import java.util.Collections;
  *
  * @author Daniel Gyorffy
  */
-public class FirstTimeDialog extends SegmentDialog implements Themeable, ContextTransformable {
+public class FirstTimeDialog extends SegmentDialog implements ContextTransformable {
 
     private static final String STYLE_CLASS = "firstTimeDialog";
 
@@ -29,13 +29,6 @@ public class FirstTimeDialog extends SegmentDialog implements Themeable, Context
         setCustomButtons(Collections.singletonList(new SkipButton()));
         getStyleClass().add(JMetroStyleClass.BACKGROUND);
         getStyleClass().add(STYLE_CLASS);
-        Theme.registerThemeable(this);
-    }
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.applyBack(this);
-        newTheme.apply(this);
     }
 
     @Override

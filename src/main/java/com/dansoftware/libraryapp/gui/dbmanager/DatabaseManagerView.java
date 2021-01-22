@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> implements Themeable, ContextTransformable {
+public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> implements ContextTransformable {
 
     private final Context asContext;
 
@@ -38,7 +38,6 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
         this.asContext = Context.from(this);
         this.setContent(new DatabaseManagerTable(asContext, databaseTracker));
         this.createToolbarControls();
-        Theme.registerThemeable(this);
     }
 
     private void createToolbarControls() {
@@ -59,12 +58,6 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
             this.getContent().refresh();
             new animatefx.animation.RotateIn(source.getGraphic()).play();
         }));
-    }
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.applyBack(this);
-        newTheme.apply(this);
     }
 
     @Override

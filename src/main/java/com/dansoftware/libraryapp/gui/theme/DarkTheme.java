@@ -1,5 +1,9 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import com.dansoftware.libraryapp.gui.theme.applier.AndThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.applier.JMetroThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.applier.StyleSheetThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.applier.ThemeApplier;
 import com.dansoftware.libraryapp.locale.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
@@ -25,36 +29,31 @@ public class DarkTheme extends Theme {
         registerTheme(THEME_META);
     }
 
-    private final List<String> styleSheets = List.of(
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/database-manager-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/first-time-dialog-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/global-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/global-workbench-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/info-view-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/login-view-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/notification-node-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/plugin-manager-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/update-dialog-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/google-books-module-dark.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/dark/record-add-form-dark.css"
-    );
-
-    private final ThemeApplier globalApplier;
-    private final ThemeApplier customApplier;
+    private final ThemeApplier applier;
 
     public DarkTheme() {
-        super();
-        this.globalApplier = new StyleSheetThemeApplier(styleSheets);
-        this.customApplier = new JMetroThemeApplier(Style.DARK);
+        this.applier = new AndThemeApplier(new StyleSheetThemeApplier(getStyleSheets()), new JMetroThemeApplier(Style.DARK));
     }
 
     @Override
-    public @NotNull ThemeApplier getGlobalApplier() {
-        return this.globalApplier;
+    protected @NotNull ThemeApplier getApplier() {
+        return applier;
     }
 
-    @Override
-    public @NotNull ThemeApplier getCustomApplier() {
-        return this.customApplier;
+    @NotNull
+    private List<String> getStyleSheets() {
+        return List.of(
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/database-manager-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/first-time-dialog-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/global-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/global-workbench-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/info-view-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/login-view-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/notification-node-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/plugin-manager-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/update-dialog-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/google-books-module-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/record-add-form-dark.css"
+        );
     }
 }

@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.theme;
+package com.dansoftware.libraryapp.gui.theme.applier;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;

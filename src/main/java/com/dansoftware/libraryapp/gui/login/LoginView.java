@@ -31,7 +31,7 @@ import java.io.File;
  *
  * @author Daniel Gyorffy
  */
-public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements Themeable, ContextTransformable {
+public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements ContextTransformable {
 
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final LoginActivity loginActivity;
@@ -52,17 +52,10 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements T
         this.loginForm = new LoginForm(asContext, preferences, loginData, tracker, databaseLoginListener);
         this.setContent(new FormBase(loginForm, tracker));
         this.createToolbarControls();
-        Theme.registerThemeable(this);
     }
 
     private void createToolbarControls() {
         this.getToolbarControlsRight().addAll(new ToolbarItemsBuilder(asContext).build());
-    }
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.applyBack(this);
-        newTheme.apply(this);
     }
 
     public LoginData getLoginData() {

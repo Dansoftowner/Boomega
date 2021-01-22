@@ -1,8 +1,11 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import com.dansoftware.libraryapp.gui.theme.applier.ThemeApplier;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.dansoftware.libraryapp.util.IdentifiableWeakReference;
 import com.dansoftware.libraryapp.util.ReflectionUtils;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A Theme can change the appearance of GUI elements.
@@ -51,13 +55,16 @@ public abstract class Theme {
 
     private static final Logger logger = LoggerFactory.getLogger(Theme.class);
 
-    private static final Set<WeakReference<Themeable>> THEMEABLE_SET = new HashSet<>();
-    private static final Map<Class<? extends Theme>, ThemeMeta<? extends Theme>> registeredThemes = new HashMap<>();
+    private static final Set<WeakReference<Themeable>> THEMEABLE_SET =
+            Collections.synchronizedSet(new HashSet<>());
+
+    private static final Map<Class<? extends Theme>, ThemeMeta<? extends Theme>> REGISTERED_THEMES =
+            Collections.synchronizedMap(new LinkedHashMap<>());
 
     /**
      * Holds the current default theme
      */
-    private static Theme defaultTheme;
+    private static final ObjectProperty<Theme> defaultTheme = new SimpleObjectProperty<>();
 
     static {
         loadThemes();
@@ -72,19 +79,22 @@ public abstract class Theme {
 
     protected static void registerTheme(@NotNull ThemeMeta<? extends Theme> themeMeta) {
         Objects.requireNonNull(themeMeta);
-        registeredThemes.put(themeMeta.getThemeClass(), themeMeta);
+        REGISTERED_THEMES.put(themeMeta.getThemeClass(), themeMeta);
     }
 
     public static Set<Class<? extends Theme>> getAvailableThemes() {
-        return registeredThemes.keySet();
+        return REGISTERED_THEMES.keySet();
     }
 
     public static Collection<ThemeMeta<? extends Theme>> getAvailableThemesData() {
-        return registeredThemes.values();
+        return REGISTERED_THEMES.values();
     }
 
     protected Theme() {
     }
+
+    @NotNull
+    protected abstract ThemeApplier getApplier();
 
     protected void update(@NotNull Theme oldTheme) {
         notifyThemeableInstances(oldTheme, this);
@@ -101,47 +111,25 @@ public abstract class Theme {
     protected void onThemeDropped() {
     }
 
-    public void applyBack(@NotNull Scene scene,
-                          @NotNull ThemeApplier customApplier,
-                          @NotNull ThemeApplier globalApplier) {
-        customApplier.applyBack(scene);
-        globalApplier.applyBack(scene);
-    }
-
-    public void applyBack(@NotNull Parent parent,
-                          @NotNull ThemeApplier customApplier,
-                          @NotNull ThemeApplier globalApplier) {
-        customApplier.applyBack(parent);
-        globalApplier.applyBack(parent);
-    }
-
-    protected void applyBack(@NotNull Scene scene) {
-        applyBack(scene, getCustomApplier(), getGlobalApplier());
+    public void applyBack(@NotNull Scene scene) {
+        getApplier().applyBack(scene);
     }
 
     public void applyBack(@NotNull Parent parent) {
-        applyBack(parent, getCustomApplier(), getGlobalApplier());
+        getApplier().applyBack(parent);
     }
 
     public void apply(@NotNull Scene scene) {
-        ThemeApplier customApplier = getCustomApplier();
-        ThemeApplier globalApplier = getGlobalApplier();
-        applyBack(scene, customApplier, globalApplier);
-        customApplier.apply(scene);
-        globalApplier.apply(scene);
+        ThemeApplier applier = getApplier();
+        applier.applyBack(scene);
+        applier.apply(scene);
     }
 
     public void apply(@NotNull Parent parent) {
-        ThemeApplier customApplier = getCustomApplier();
-        ThemeApplier globalApplier = getGlobalApplier();
-        applyBack(parent, customApplier, globalApplier);
-        customApplier.apply(parent);
-        globalApplier.apply(parent);
+        ThemeApplier applier = getApplier();
+        applier.applyBack(parent);
+        applier.apply(parent);
     }
-
-    public abstract ThemeApplier getGlobalApplier();
-
-    public abstract ThemeApplier getCustomApplier();
 
     public static synchronized void registerThemeable(@NotNull Themeable themeable) {
         if (THEMEABLE_SET.add(new IdentifiableWeakReference<>(themeable))) {
@@ -160,15 +148,16 @@ public abstract class Theme {
 
     public static synchronized void setDefault(@NotNull Theme theme) {
         Objects.requireNonNull(theme);
-        if (defaultTheme != null) {
-            if (!defaultTheme.getClass().isInstance(theme)) {
-                defaultTheme.onThemeDropped();
-                notifyThemeableInstances(Theme.defaultTheme, theme);
-                Theme.defaultTheme = theme;
+        Theme currentTheme = defaultTheme.get();
+        if (currentTheme != null) {
+            if (!currentTheme.getClass().isInstance(theme)) {
+                currentTheme.onThemeDropped();
+                notifyThemeableInstances(currentTheme, theme);
+                Theme.defaultTheme.set(theme);
             }
         } else {
             notifyThemeableInstances(new EmptyTheme(), theme);
-            Theme.defaultTheme = theme;
+            Theme.defaultTheme.set(theme);
         }
     }
 
@@ -180,10 +169,10 @@ public abstract class Theme {
      * @return the default theme
      */
     public static Theme getDefault() {
-        if (defaultTheme == null) {
-            defaultTheme = DefaultThemeFactory.INSTANCE.get();
+        if (defaultTheme.get() != null) {
+            defaultTheme.set(DefaultThemeFactory.INSTANCE.get());
         }
-        return defaultTheme;
+        return defaultTheme.get();
     }
 
     public static void applyDefault(Scene scene) {
@@ -201,12 +190,7 @@ public abstract class Theme {
     private static final class EmptyTheme extends Theme {
 
         @Override
-        public ThemeApplier getGlobalApplier() {
-            return ThemeApplier.empty();
-        }
-
-        @Override
-        public ThemeApplier getCustomApplier() {
+        protected @NotNull ThemeApplier getApplier() {
             return ThemeApplier.empty();
         }
     }

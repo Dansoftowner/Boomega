@@ -26,7 +26,6 @@ class PluginManager(pluginFiles: List<File>) :
         I18N.getPluginManagerValue("plugin.manager"),
         FontAwesomeIconView(FontAwesomeIcon.PLUG)
     ),
-    Themeable,
     ContextTransformable {
 
     private val asContext: Context = Context.from(this)
@@ -35,7 +34,6 @@ class PluginManager(pluginFiles: List<File>) :
     init {
         this.content = StackPane(PluginTable(asContext, pluginList))
         this.buildToolbarControls()
-        Theme.registerThemeable(this)
     }
 
     private fun buildToolbarControls() {
@@ -60,11 +58,6 @@ class PluginManager(pluginFiles: List<File>) :
                     }
                 }
             })
-    }
-
-    override fun handleThemeApply(oldTheme: Theme, newTheme: Theme) {
-        oldTheme.applyBack(this)
-        newTheme.apply(this)
     }
 
     override fun getContext(): Context {

@@ -1,6 +1,8 @@
 package com.dansoftware.libraryapp.gui.window
 
 import com.dansoftware.libraryapp.gui.context.ContextTransformable
+import com.dansoftware.libraryapp.gui.theme.Theme
+import com.dansoftware.libraryapp.gui.theme.Themeable
 import com.dansoftware.libraryapp.gui.util.loadImageResource
 import com.dansoftware.libraryapp.gui.util.typeEquals
 import com.dansoftware.libraryapp.locale.I18N
@@ -44,7 +46,7 @@ private val restartKeyCombination = KeyCodeCombination(
  * @param C the type of the content that is shown in the Window's scene
  * @author Daniel Gyorffy
  */
-abstract class BaseWindow<C> : Stage
+abstract class BaseWindow<C> : Stage, Themeable
         where C : Parent, C : ContextTransformable {
 
     private lateinit var content: C
@@ -55,6 +57,7 @@ abstract class BaseWindow<C> : Stage
         buildRestartKeyCombination()
         buildExitDialogEvent()
         buildFullScreenExitHint()
+        addEventHandler(WindowEvent.WINDOW_SHOWING) { Theme.registerThemeable(this) }
     }
 
     /**
@@ -92,6 +95,13 @@ abstract class BaseWindow<C> : Stage
         this.content = content
         this.scene = Scene(content)
         this.titleProperty().bind(TitleProperty(i18n, separator, changingString))
+    }
+
+    override fun handleThemeApply(oldTheme: Theme, newTheme: Theme) {
+        scene?.root?.let {
+            oldTheme.applyBack(it)
+            newTheme.apply(it)
+        }
     }
 
     private fun setupIconPack() {

@@ -1,5 +1,9 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import com.dansoftware.libraryapp.gui.theme.applier.AndThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.applier.JMetroThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.applier.StyleSheetThemeApplier;
+import com.dansoftware.libraryapp.gui.theme.applier.ThemeApplier;
 import com.dansoftware.libraryapp.locale.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
@@ -26,36 +30,33 @@ public class LightTheme extends Theme {
         registerTheme(THEME_META);
     }
 
-    private final List<String> styleSheets = List.of(
-            "/com/dansoftware/libraryapp/gui/theme/css/light/database-manager-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/first-time-dialog-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/global-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/global-workbench-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/info-view-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/login-view-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/notification-node-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/plugin-manager-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/update-dialog-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/google-books-module-light.css",
-            "/com/dansoftware/libraryapp/gui/theme/css/light/record-add-form-light.css"
-    );
-
-    private final ThemeApplier globalApplier;
-    private final ThemeApplier customApplier;
+    private final ThemeApplier applier;
 
     public LightTheme() {
-        super();
-        this.globalApplier = new StyleSheetThemeApplier(styleSheets);
-        this.customApplier = new JMetroThemeApplier(Style.LIGHT);
+        this.applier = new AndThemeApplier(new StyleSheetThemeApplier(getStyleSheets()), new JMetroThemeApplier(Style.LIGHT));
     }
 
+    @NotNull
     @Override
-    public @NotNull ThemeApplier getGlobalApplier() {
-        return this.globalApplier;
+    protected ThemeApplier getApplier() {
+        return applier;
     }
 
-    @Override
-    public @NotNull ThemeApplier getCustomApplier() {
-        return this.customApplier;
+    @NotNull
+    private List<String> getStyleSheets() {
+        return List.of(
+                "/com/dansoftware/libraryapp/gui/theme/css/light/database-manager-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/first-time-dialog-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/global-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/global-workbench-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/info-view-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/login-view-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/notification-node-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/plugin-manager-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/update-dialog-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/google-books-module-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/record-add-form-light.css"
+        );
     }
+
 }

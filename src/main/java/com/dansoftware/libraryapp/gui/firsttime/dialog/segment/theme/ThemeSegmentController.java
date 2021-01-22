@@ -45,7 +45,6 @@ public class ThemeSegmentController implements Initializable, ChangeListener<Tog
 
     @Override
     public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-        Theme.registerThemeable(getParentDialog());
         if (darkThemeToggle.equals(newValue)) {
             DarkTheme darkTheme = new DarkTheme();
             preferences.editor().put(Preferences.Key.THEME, darkTheme).tryCommit();

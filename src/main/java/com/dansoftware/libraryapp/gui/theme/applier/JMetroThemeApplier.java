@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.theme;
+package com.dansoftware.libraryapp.gui.theme.applier;
 
 import com.dansoftware.libraryapp.util.ReflectionUtils;
 import javafx.scene.Parent;
@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A {@link JMetroThemeApplier} is a {@link ThemeApplier} that can apply
@@ -33,16 +34,7 @@ public class JMetroThemeApplier implements ThemeApplier {
      */
     private static List<String> getJMetroStyleSheets() {
         try {
-            List<Field> fields = List.of(
-                    JMetro.class.getDeclaredField("BASE_STYLESHEET_URL"),
-                    JMetro.class.getDeclaredField("PANES_STYLESHEET_URL"),
-                    JMetro.class.getDeclaredField("BASE_EXTRAS_STYLESHEET_URL"),
-                    JMetro.class.getDeclaredField("BASE_OTHER_LIBRARIES_STYLESHEET_URL"),
-                    Style.class.getDeclaredField("DARK_STYLE_SHEET_URL"),
-                    Style.class.getDeclaredField("LIGHT_STYLE_SHEET_URL")
-            );
-
-            return fields.stream()
+            return getJMetroStyleSheetFields()
                     .peek(field -> field.setAccessible(true))
                     .map(ReflectionUtils::getDeclaredStaticValue)
                     .map(String::valueOf)
@@ -50,6 +42,17 @@ public class JMetroThemeApplier implements ThemeApplier {
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Stream<Field> getJMetroStyleSheetFields() throws ReflectiveOperationException {
+        return Stream.of(
+                JMetro.class.getDeclaredField("BASE_STYLESHEET_URL"),
+                JMetro.class.getDeclaredField("PANES_STYLESHEET_URL"),
+                JMetro.class.getDeclaredField("BASE_EXTRAS_STYLESHEET_URL"),
+                JMetro.class.getDeclaredField("BASE_OTHER_LIBRARIES_STYLESHEET_URL"),
+                Style.class.getDeclaredField("DARK_STYLE_SHEET_URL"),
+                Style.class.getDeclaredField("LIGHT_STYLE_SHEET_URL")
+        );
     }
 
     /* * * * * * */

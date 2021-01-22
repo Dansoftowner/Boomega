@@ -24,7 +24,7 @@ import java.util.List;
  * @link Daniel Gyorffy
  */
 public class DependencyTable extends TableView<DependencyInfo>
-        implements Themeable, ContextTransformable {
+        implements ContextTransformable {
 
     private static final Logger logger = LoggerFactory.getLogger(DependencyTable.class);
 
@@ -32,13 +32,6 @@ public class DependencyTable extends TableView<DependencyInfo>
         getColumns().add(new NameColumn());
         getColumns().add(new LicenseColumn());
         getItems().addAll(dependencies);
-        Theme.registerThemeable(this);
-    }
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.applyBack(this);
-        newTheme.apply(this);
     }
 
     @Override

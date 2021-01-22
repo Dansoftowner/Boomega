@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.login.DatabaseLoginListener;
 import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.workbenchfx.SimpleHeaderView;
@@ -15,7 +14,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
-public class QuickLoginView extends SimpleHeaderView<Region> implements ContextTransformable, Themeable {
+public class QuickLoginView extends SimpleHeaderView<Region> implements ContextTransformable {
 
     private final Context asContext;
 
@@ -23,20 +22,12 @@ public class QuickLoginView extends SimpleHeaderView<Region> implements ContextT
         super(buildTitle(databaseMeta), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
         this.asContext = Context.from(this);
         this.setContent(loadContent(databaseMeta, loginListener));
-        Theme.registerThemeable(this);
     }
 
     private VBox loadContent(@NotNull DatabaseMeta databaseMeta, @NotNull DatabaseLoginListener loginListener) {
         return new ImprovedFXMLLoader(
                 new QuickFormController(asContext, databaseMeta, loginListener),
                 getClass().getResource("Form.fxml"), I18N.getLoginViewValues()).load();
-    }
-
-
-    @Override
-    public void handleThemeApply(Theme oldTheme, Theme newTheme) {
-        oldTheme.applyBack(this);
-        newTheme.apply(this);
     }
 
     private static String buildTitle(@NotNull DatabaseMeta databaseMeta) {
