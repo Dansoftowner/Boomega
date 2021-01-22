@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder
 import com.dansoftware.libraryapp.googlebooks.Volume
 import com.dansoftware.libraryapp.googlebooks.Volumes
 import com.dansoftware.libraryapp.gui.context.Context
+import com.dansoftware.libraryapp.gui.util.I18NButtonTypes
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.ExploitativeExecutor
 import javafx.beans.property.ObjectProperty
@@ -146,7 +147,7 @@ class GoogleBooksPaginationSearchTask(
     private val context: Context,
     private val tablePagination: GoogleBooksPagination,
     private val isInitSearch: Boolean,
-    searchParameters: SearchParameters
+    private val searchParameters: SearchParameters
 ) : GoogleBooksSearchTask(searchParameters) {
 
     private val onBeforeResultsDisplayed: ObjectProperty<Runnable> = SimpleObjectProperty()
@@ -169,7 +170,16 @@ class GoogleBooksPaginationSearchTask(
             I18N.getGoogleBooksImportValue("google.books.search.failed.title"),
             I18N.getGoogleBooksImportValue("google.books.search.failed.msg"),
             cause as Exception
-        ) { }
+        ) {
+            when (it) {
+                I18NButtonTypes.RETRY ->
+                    ExploitativeExecutor.submit(
+                        GoogleBooksPaginationSearchTask(context, tablePagination, isInitSearch, searchParameters)
+                    )
+            }
+        }.also {
+            it.buttonTypes.add(I18NButtonTypes.RETRY)
+        }
     }
 
     private fun postSearch(volumes: Volumes, searchParameters: SearchParameters) {
