@@ -10,19 +10,60 @@ import java.net.URL
  *
  * @author Daniel Gyorffy
  */
-class SystemBrowser {
-    companion object {
-        @JvmStatic
-        fun isSupported(): Boolean =
-            Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)
+object SystemBrowser {
+
+    private val browserCore: BrowserCore
+
+    init {
+        browserCore = when {
+            Desktop.isDesktopSupported() -> BaseBrowser()
+            OsInfo.isWindows() -> WindowsBrowser()
+            OsInfo.isMac() -> MacBrowser()
+            OsInfo.isLinux() -> LinuxBrowser()
+            else -> NullBrowser()
+        }
     }
 
-    fun browse(url: String) =
-        try {
+    fun browse(url: String) {
+        ExploitativeExecutor.submit { browserCore.browse(url) }
+    }
+
+    private abstract class BrowserCore {
+        abstract fun browse(url: String)
+    }
+
+    private class BaseBrowser : BrowserCore() {
+        override fun browse(url: String) {
             Desktop.getDesktop().browse(URL(url).toURI())
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        } catch (e: URISyntaxException) {
-            throw RuntimeException(e)
         }
+    }
+
+    private class WindowsBrowser : BrowserCore() {
+        override fun browse(url: String) {
+            Runtime.getRuntime().also {
+                it.exec("rundll32 url.dll,FileProtocolHandler $url")
+            }
+        }
+    }
+
+    private class MacBrowser : BrowserCore() {
+        override fun browse(url: String) {
+            Runtime.getRuntime().also {
+                it.exec("open $url")
+            }
+        }
+    }
+
+    private class LinuxBrowser : BrowserCore() {
+        override fun browse(url: String) {
+            Runtime.getRuntime().also {
+                it.exec("xdg-open $url")
+            }
+        }
+    }
+
+    private class NullBrowser : BrowserCore() {
+        override fun browse(url: String) {
+        }
+    }
 }

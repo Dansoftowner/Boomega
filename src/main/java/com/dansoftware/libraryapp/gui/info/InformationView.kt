@@ -108,10 +108,7 @@ class InformationView(val context: Context) : VBox(5.0) {
             MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX)
         ).also {
             it.setOnAction {
-                when {
-                    SystemBrowser.isSupported() ->
-                        SystemBrowser().browse(GITHUB_REPO_URL)
-                }
+               SystemBrowser.browse(GITHUB_REPO_URL)
             }
         }
 

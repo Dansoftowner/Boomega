@@ -1,7 +1,6 @@
 package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.util.SystemBrowser
-import com.dansoftware.libraryapp.util.SystemBrowser.Companion.isSupported
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.event.ActionEvent
@@ -34,10 +33,7 @@ class WebsiteHyperLink(
     }
 
     override fun handle(event: ActionEvent) {
-        if (isSupported().and(url.get() != null)) {
-            val systemBrowser = SystemBrowser()
-            systemBrowser.browse(url.get())
-        }
+        url.get()?.let { SystemBrowser.browse(it) }
     }
 
     fun getUrl(): String {
