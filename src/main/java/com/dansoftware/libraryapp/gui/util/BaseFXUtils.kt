@@ -214,6 +214,9 @@ object I18NButtonTypes {
     @JvmField
     val PREVIOUS = createButtonType("Dialog.previous.button", ButtonBar.ButtonData.BACK_PREVIOUS)
 
+    @JvmField
+    val RETRY = createButtonType("Dialog.retry.button", ButtonBar.ButtonData.YES)
+
     private fun createButtonType(key: String, buttonData: ButtonBar.ButtonData) =
         ButtonType(I18N.getButtonTypeValues().getString(key), buttonData)
 }
