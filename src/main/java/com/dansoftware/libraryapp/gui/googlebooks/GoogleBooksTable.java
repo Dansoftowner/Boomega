@@ -8,6 +8,8 @@ import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -96,7 +98,7 @@ public class GoogleBooksTable extends TableView<Volume> {
         getStyleClass().add(STYLE_CLASS);
         getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        this.setPlaceholder(new PlaceHolder());
+        this.setPlaceholder(new PlaceHolder(this));
         this.buildClickHandlingPolicy();
     }
 
@@ -190,10 +192,20 @@ public class GoogleBooksTable extends TableView<Volume> {
     }
 
     private static final class PlaceHolder extends StackPane {
-        PlaceHolder() {
+        private final BooleanBinding noColumns;
+
+        PlaceHolder(@NotNull TableView<?> tableView) {
+            this.noColumns = Bindings.isEmpty(tableView.getColumns());
             getChildren().add(new Group(new VBox(
                     //TODO: ICON
-                    new Label(I18N.getGoogleBooksImportValue("google.books.table.place.holder"))
+                    new Label() {{
+                        noColumns.addListener((observable, oldValue, noColumns) -> {
+                            if (noColumns)
+                                this.setText(I18N.getGoogleBooksImportValue("google.books.table.place.holder.no.col"));
+                            else
+                                this.setText(I18N.getGoogleBooksImportValue("google.books.table.place.holder"));
+                        });
+                    }}
             )));
         }
     }
