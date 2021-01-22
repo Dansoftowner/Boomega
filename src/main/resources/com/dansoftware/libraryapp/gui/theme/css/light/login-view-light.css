@@ -10,7 +10,7 @@
     -fx-background-radius: 0 0 10 10;
 }
 
-.source-adder {
+.login-box .source-adder {
     -fx-border-radius: 0 0 10 10;
     -fx-background-radius: 0 0 10 10;
 }
