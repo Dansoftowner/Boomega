@@ -141,7 +141,7 @@ class ReadOnlyRating(max: Int, value: Int) : Rating(max, value) {
     }
 }
 
-class SelectableLabel(text: String? = null) : TextField(text) {
+class HighlightableLabel(text: String? = null) : TextField(text) {
     init {
         this.styleClass.clear()
         this.styleClass.add("selectable-label")

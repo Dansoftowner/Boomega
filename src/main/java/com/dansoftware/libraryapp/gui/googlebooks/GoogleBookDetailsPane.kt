@@ -212,7 +212,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                 PropertyNameLabel(I18N.getGoogleBooksImportValue("google.books.table.column.isbn").plus(":")),
                 VBox(2.0).also { vBox ->
                     volume.volumeInfo?.industryIdentifiers?.map { it.toString() }?.forEach {
-                        vBox.children.add(SelectableLabel(it))
+                        vBox.children.add(HighlightableLabel(it))
                     }
                 }
             )
@@ -245,7 +245,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                                 HBox(
                                     2.0,
                                     Label("${8226.toChar()}"),
-                                    SelectableLabel(it)
+                                    HighlightableLabel(it)
                                 )
                             )
                         }
@@ -353,7 +353,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
     private class PropertyValuePair(key: String, value: String?) : HBox(5.0) {
         init {
             children.add(PropertyNameLabel("$key:"))
-            children.add(SelectableLabel(value ?: "-").also {
+            children.add(HighlightableLabel(value ?: "-").also {
                 HBox.setHgrow(it, Priority.ALWAYS)
             })
         }

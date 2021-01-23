@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.gui.googlebooks.tile
 import com.dansoftware.libraryapp.googlebooks.Volume
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.googlebooks.GoogleBookDetailsOverlay
-import com.dansoftware.libraryapp.gui.util.SelectableLabel
+import com.dansoftware.libraryapp.gui.util.HighlightableLabel
 import com.dansoftware.libraryapp.locale.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
@@ -98,12 +98,12 @@ class GoogleBookTile(
             }
 
         private fun buildTitle(title: String) =
-            SelectableLabel(title).also { it.styleClass.add("title-label") }
+            HighlightableLabel(title).also { it.styleClass.add("title-label") }
 
         private fun buildSubtitle(subtitle: String) =
-            SelectableLabel(subtitle).also { it.styleClass.add("sub-title-label") }
+            HighlightableLabel(subtitle).also { it.styleClass.add("sub-title-label") }
 
         private fun buildAuthorsLabel(authors: List<String>) =
-            SelectableLabel(authors.joinToString(", ")).also { it.styleClass.add("authors-label") }
+            HighlightableLabel(authors.joinToString(", ")).also { it.styleClass.add("authors-label") }
     }
 }

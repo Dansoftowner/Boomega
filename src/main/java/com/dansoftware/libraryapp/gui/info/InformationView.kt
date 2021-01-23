@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.gui.info
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.TitledOverlayBox
 import com.dansoftware.libraryapp.gui.info.dependency.DependencyViewerActivity
-import com.dansoftware.libraryapp.gui.util.SelectableLabel
+import com.dansoftware.libraryapp.gui.util.HighlightableLabel
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.SystemBrowser
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -115,7 +115,7 @@ class InformationView(val context: Context) : VBox(5.0) {
 
     private class KeyValuePair(i18n: String, value: Node) : HBox() {
 
-        constructor(i18n: String, value: String?) : this(i18n, SelectableLabel(value).also {
+        constructor(i18n: String, value: String?) : this(i18n, HighlightableLabel(value).also {
             setHgrow(it, Priority.ALWAYS)
         })
 
