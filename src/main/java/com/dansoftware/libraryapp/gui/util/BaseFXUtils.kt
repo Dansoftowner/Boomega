@@ -16,6 +16,7 @@ import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
+import javafx.scene.Cursor
 import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -142,8 +143,9 @@ class ReadOnlyRating(max: Int, value: Int) : Rating(max, value) {
 
 class SelectableLabel(text: String? = null) : TextField(text) {
     init {
-        this.styleClass.remove("text-field")
+        this.styleClass.clear()
         this.styleClass.add("selectable-label")
+        this.cursor = Cursor.TEXT
         this.style = "-fx-background-color: transparent;-fx-padding: 0;"
         this.prefColumnCount = 15
         this.styleClass.add("label")
