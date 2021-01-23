@@ -334,10 +334,22 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             }
         }
 
+        private class WeakWindowsChangeListener(val weakReference: WeakReference<ListChangeListener<Window>>) :
+            ListChangeListener<Window> {
+
+            init {
+                Window.getWindows().addListener(this)
+            }
+
+            override fun onChanged(c: ListChangeListener.Change<out Window>?) {
+                weakReference.get()?.onChanged(c) ?: Window.getWindows().removeListener(this)
+            }
+        }
+
         init {
             this.menuItem(fullScreenMenuItem()).separator()
             windowsChangeOperator.onWindowsAdded(Window.getWindows())
-            Window.getWindows().addListener(windowListChangeListener)
+            WeakWindowsChangeListener(WeakReference(windowListChangeListener))
         }
 
         private fun fullScreenMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.window.fullscreen"))
