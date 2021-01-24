@@ -33,6 +33,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
@@ -314,7 +315,7 @@ public class RecordAddForm extends ScrollPane {
                         Field.ofStringType(title)
                                 .label("record.add.form.title")
                                 .placeholder("record.add.form.title.prompt")
-                                .required(true)
+                                .required("record.title.required")
                                 .span(ColSpan.HALF),
                         Field.ofStringType(subtitle)
                                 .label("record.add.form.subtitle")
@@ -346,6 +347,7 @@ public class RecordAddForm extends ScrollPane {
                                 .label("record.add.form.date")
                                 .placeholder("record.add.form.date.prompt")
                                 .required(false)
+                                .format("record.date.error")
                                 .span(ColSpan.HALF),
                         Field.ofIntegerType(numberOfCopies)
                                 .label("record.add.form.nofcopies")
@@ -374,12 +376,12 @@ public class RecordAddForm extends ScrollPane {
                         Field.ofStringType(magazineName)
                                 .label("record.add.form.magazinename")
                                 .placeholder("record.add.form.magazinename.prompt")
-                                .required(true)
+                                .required("record.magazinename.required")
                                 .span(ColSpan.HALF),
                         Field.ofStringType(title)
                                 .label("record.add.form.title")
                                 .placeholder("record.add.form.title.prompt")
-                                .required(true)
+                                .required("record.title.required")
                                 .span(ColSpan.HALF),
                         Field.ofStringType(publisher)
                                 .label("record.add.form.publisher")
@@ -390,6 +392,7 @@ public class RecordAddForm extends ScrollPane {
                                 .label("record.add.form.date")
                                 .placeholder("record.add.form.date.prompt")
                                 .required(false)
+                                .format("record.date.error")
                                 .span(ColSpan.HALF),
                         Field.ofStringType(language)
                                 .styleClass("languageSelector")
