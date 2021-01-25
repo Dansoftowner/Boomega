@@ -28,7 +28,7 @@ import java.util.function.Consumer
 class RecordAddModule(
     private val context: Context,
     private val database: Database
-) : WorkbenchModule(I18N.getRecordsValue("record.add.module.title"), MaterialDesignIcon.PLUS_BOX),
+) : WorkbenchModule(I18N.getRecordAddFormValue("record.add.module.title"), MaterialDesignIcon.PLUS_BOX),
     NotifiableModule<RecordValues?> {
 
     private val content: ObjectProperty<RecordAddForm> = SimpleObjectProperty()
@@ -50,7 +50,7 @@ class RecordAddModule(
                     .addListener { _, _, newSelected -> toolbarItem.text = (newSelected as MenuItem?)?.text }
 
                 fun createItem(i18n: String, recordType: RecordType) =
-                    toolbarItem.items.add(RadioMenuItem(I18N.getRecordsValue(i18n)).also {
+                    toolbarItem.items.add(RadioMenuItem(I18N.getRecordAddFormValue(i18n)).also {
                         it.toggleGroup = toggleGroup
                         it.userData = recordType
                         it.setOnAction { content.get().recordTypeProperty().set(recordType) }
@@ -98,14 +98,14 @@ class RecordAddModule(
         try {
             database.insertBook(book)
             context.showInformationNotification(
-                I18N.getRecordsValue("record.book.success.notification"),
+                I18N.getRecordAddFormValue("record.book.success.notification"),
                 null,
                 Duration.millis(5000.0)
             )
         } catch (e: RuntimeException) {
             context.showErrorDialog(
-                I18N.getRecordsValue("record.book.error.title"),
-                I18N.getRecordsValue("record.book.error.msg"), e
+                I18N.getRecordAddFormValue("record.book.error.title"),
+                I18N.getRecordAddFormValue("record.book.error.msg"), e
             )
         }
     }
@@ -115,14 +115,14 @@ class RecordAddModule(
         try {
             database.insertMagazine(magazine)
             context.showInformationNotification(
-                I18N.getRecordsValue("record.magazine.success.notification"),
+                I18N.getRecordAddFormValue("record.magazine.success.notification"),
                 null,
                 Duration.millis(5000.0)
             )
         } catch (e: RuntimeException) {
             context.showErrorDialog(
-                I18N.getRecordsValue("record.magazine.error.title"),
-                I18N.getRecordsValue("record.magazine.error.msg"), e
+                I18N.getRecordAddFormValue("record.magazine.error.title"),
+                I18N.getRecordAddFormValue("record.magazine.error.msg"), e
             )
         }
     }
