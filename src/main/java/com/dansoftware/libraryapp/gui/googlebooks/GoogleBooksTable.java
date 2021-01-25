@@ -1,10 +1,7 @@
 package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.Volume;
-import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
-import com.dansoftware.libraryapp.gui.util.ImagePlaceHolder;
-import com.dansoftware.libraryapp.gui.util.ReadOnlyRating;
-import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink;
+import com.dansoftware.libraryapp.gui.util.*;
 import com.dansoftware.libraryapp.locale.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
@@ -98,7 +95,13 @@ public class GoogleBooksTable extends TableView<Volume> {
         getStyleClass().add(STYLE_CLASS);
         getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        this.setPlaceholder(new PlaceHolder(this));
+        this.setPlaceholder(
+                new TableViewPlaceHolder(
+                    this,
+                        () -> I18N.getGoogleBooksImportValue("google.books.table.place.holder"),
+                        () -> I18N.getGoogleBooksImportValue("google.books.table.place.holder.no.col")
+                )
+        );
         this.buildClickHandlingPolicy();
     }
 
@@ -189,25 +192,6 @@ public class GoogleBooksTable extends TableView<Volume> {
 
     public void setStartIndex(int startIndex) {
         this.startIndex.set(startIndex);
-    }
-
-    private static final class PlaceHolder extends StackPane {
-        private final BooleanBinding noColumns;
-
-        PlaceHolder(@NotNull TableView<?> tableView) {
-            this.noColumns = Bindings.isEmpty(tableView.getColumns());
-            getChildren().add(new Group(new VBox(
-                    //TODO: ICON
-                    new Label() {{
-                        noColumns.addListener((observable, oldValue, noColumns) -> {
-                            if (noColumns)
-                                this.setText(I18N.getGoogleBooksImportValue("google.books.table.place.holder.no.col"));
-                            else
-                                this.setText(I18N.getGoogleBooksImportValue("google.books.table.place.holder"));
-                        });
-                    }}
-            )));
-        }
     }
 
     private static class Column<T> extends TableColumn<Volume, T> {
