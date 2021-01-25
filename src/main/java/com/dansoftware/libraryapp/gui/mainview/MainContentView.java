@@ -5,7 +5,7 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.googlebooks.GoogleBooksImportModule;
-import com.dansoftware.libraryapp.gui.rcadd.RecordAddModule;
+import com.dansoftware.libraryapp.gui.record.add.RecordAddModule;
 import com.dlsc.workbenchfx.Workbench;
 import org.jetbrains.annotations.NotNull;
 

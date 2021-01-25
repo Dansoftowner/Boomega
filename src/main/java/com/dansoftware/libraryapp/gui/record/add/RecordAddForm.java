@@ -1,14 +1,15 @@
-package com.dansoftware.libraryapp.gui.rcadd;
+package com.dansoftware.libraryapp.gui.record.add;
 
 import com.dansoftware.libraryapp.db.data.Book;
 import com.dansoftware.libraryapp.db.data.Magazine;
 import com.dansoftware.libraryapp.db.data.ServiceConnection;
-import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.libraryapp.googlebooks.Volume;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
 import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerOverlay;
 import com.dansoftware.libraryapp.gui.googlebooks.tile.GoogleBookTile;
+import com.dansoftware.libraryapp.gui.record.RecordType;
+import com.dansoftware.libraryapp.gui.record.RecordValues;
 import com.dansoftware.libraryapp.gui.util.LanguageSelections;
 import com.dansoftware.libraryapp.locale.I18N;
 import com.dlsc.formsfx.model.structure.Field;
@@ -33,8 +34,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
-import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -137,26 +135,25 @@ public class RecordAddForm extends ScrollPane {
         return formRenderer;
     }
 
-    public void setValues(@Nullable Values values) {
+    public void setValues(@Nullable RecordValues values) {
         if (values == null) {
             clearForm();
         } else {
-            this.recordType.set(values.recordType);
-            this.title.setValue(values.title);
-            this.subtitle.setValue(values.subtitle);
-            this.publisher.setValue(values.publisher);
-            this.magazineName.setValue(values.magazineName);
-            this.authors.setValue(values.authors);
-            this.language.setValue(values.language);
-            this.isbn.setValue(values.isbn);
-            this.subject.setValue(values.subject);
-            this.notes.setValue(values.notes);
-            this.numberOfPages.setValue(values.numberOfCopies);
-            this.numberOfPages.setValue(values.numberOfPages);
-            this.rating.setValue(values.rating);
+            this.recordType.set(values.getRecordType());
+            this.title.setValue(values.getTitle());
+            this.subtitle.setValue(values.getSubtitle());
+            this.publisher.setValue(values.getPublisher());
+            this.magazineName.setValue(values.getMagazineName());
+            this.authors.setValue(values.getAuthors());
+            this.language.setValue(values.getLanguage());
+            this.isbn.setValue(values.getIsbn());
+            this.subject.setValue(values.getSubject());
+            this.notes.setValue(values.getNotes());
+            this.numberOfPages.setValue(values.getNumberOfPages());
+            this.rating.setValue(values.getRating());
             this.removeGoogleBookConnection();
-            this.createGoogleBookConnection(values.volumeObject);
-            this.publishedDate.setValue(values.publishedDate);
+            this.createGoogleBookConnection(values.getVolumeObject());
+            this.publishedDate.setValue(values.getPublishedDate());
         }
     }
 
@@ -195,7 +192,7 @@ public class RecordAddForm extends ScrollPane {
         button.setOnAction(event ->
                 context.showOverlay(new GoogleBookJoinerOverlay(
                         context, new SearchParameters()
-                        .printType(recordType.get().printType)
+                        .printType(recordType.get().getPrintType())
                         .isbn(isbn.get())
                         .authors(authors.get())
                         .publisher(publisher.get())
@@ -554,109 +551,4 @@ public class RecordAddForm extends ScrollPane {
         return googleBookLink;
     }
 
-    public enum RecordType {
-        BOOK(GoogleBooksQueryBuilder.PrintType.BOOKS), MAGAZINE(GoogleBooksQueryBuilder.PrintType.MAGAZINES);
-
-        private GoogleBooksQueryBuilder.PrintType printType;
-
-        RecordType(GoogleBooksQueryBuilder.PrintType printType) {
-            this.printType = printType;
-        }
-    }
-
-    public static class Values {
-
-        @NotNull
-        private RecordType recordType = RecordType.BOOK;
-        private String title = StringUtils.EMPTY;
-        private String subtitle = StringUtils.EMPTY;
-        private LocalDate publishedDate;
-        private String publisher = StringUtils.EMPTY;
-        private String magazineName = StringUtils.EMPTY;
-        private String authors = StringUtils.EMPTY;
-        private String language = StringUtils.EMPTY;
-        private String isbn = StringUtils.EMPTY;
-        private String subject = StringUtils.EMPTY;
-        private String notes = StringUtils.EMPTY;
-        private Integer numberOfCopies;
-        private Integer numberOfPages;
-        private Integer rating;
-
-        private Volume volumeObject;
-
-        public Values recordType(@NotNull RecordType recordType) {
-            this.recordType = Objects.requireNonNull(recordType);
-            return this;
-        }
-
-        public Values title(String title) {
-            this.title = StringUtils.getIfBlank(title, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values subtitle(String subtitle) {
-            this.subtitle = StringUtils.getIfBlank(subtitle, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values date(LocalDate date) {
-            this.publishedDate = date;
-            return this;
-        }
-
-        public Values publisher(String publisher) {
-            this.publisher = StringUtils.getIfBlank(publisher, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values magazineName(String magazineName) {
-            this.magazineName = StringUtils.getIfBlank(magazineName, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values authors(String authors) {
-            this.authors = StringUtils.getIfBlank(authors, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values language(String language) {
-            this.language = StringUtils.getIfBlank(language, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values isbn(String isbn) {
-            this.isbn = StringUtils.getIfBlank(isbn, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values subject(String subject) {
-            this.subject = StringUtils.getIfBlank(subject, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values notes(String notes) {
-            this.notes = StringUtils.getIfBlank(notes, () -> StringUtils.EMPTY);
-            return this;
-        }
-
-        public Values numberOfCopies(Integer numberOfCopies) {
-            this.numberOfCopies = numberOfCopies;
-            return this;
-        }
-
-        public Values numberOfPages(Integer numberOfPages) {
-            this.numberOfPages = numberOfPages;
-            return this;
-        }
-
-        public Values rating(Integer rating) {
-            this.rating = rating;
-            return this;
-        }
-
-        public Values googleVolumeObject(Volume volumeObject) {
-            this.volumeObject = volumeObject;
-            return this;
-        }
-    }
 }

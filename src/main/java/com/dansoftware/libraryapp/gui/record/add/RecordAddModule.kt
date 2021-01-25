@@ -1,10 +1,12 @@
-package com.dansoftware.libraryapp.gui.rcadd
+package com.dansoftware.libraryapp.gui.record.add
 
 import com.dansoftware.libraryapp.db.Database
 import com.dansoftware.libraryapp.db.data.Book
 import com.dansoftware.libraryapp.db.data.Magazine
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.NotifiableModule
+import com.dansoftware.libraryapp.gui.record.RecordType
+import com.dansoftware.libraryapp.gui.record.RecordValues
 import com.dansoftware.libraryapp.locale.I18N
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
@@ -27,7 +29,7 @@ class RecordAddModule(
     private val context: Context,
     private val database: Database
 ) : WorkbenchModule(I18N.getRecordAddFormValue("record.add.module.title"), MaterialDesignIcon.PLUS_BOX),
-    NotifiableModule<RecordAddForm.Values?> {
+    NotifiableModule<RecordValues?> {
 
     private val content: ObjectProperty<RecordAddForm> = SimpleObjectProperty()
     private lateinit var typeChooserItem: ToolbarItem
@@ -47,7 +49,7 @@ class RecordAddModule(
                 toggleGroup.selectedToggleProperty()
                     .addListener { _, _, newSelected -> toolbarItem.text = (newSelected as MenuItem?)?.text }
 
-                fun createItem(i18n: String, recordType: RecordAddForm.RecordType) =
+                fun createItem(i18n: String, recordType: RecordType) =
                     toolbarItem.items.add(RadioMenuItem(I18N.getRecordAddFormValue(i18n)).also {
                         it.toggleGroup = toggleGroup
                         it.userData = recordType
@@ -58,12 +60,16 @@ class RecordAddModule(
                     })
 
 
-                createItem("record.add.rectype.book", RecordAddForm.RecordType.BOOK)
-                createItem("record.add.rectype.magazine", RecordAddForm.RecordType.MAGAZINE)
+                createItem("record.add.rectype.book",
+                    RecordType.BOOK
+                )
+                createItem("record.add.rectype.magazine",
+                    RecordType.MAGAZINE
+                )
             }
         }
 
-    override fun commitData(data: RecordAddForm.Values?) {
+    override fun commitData(data: RecordValues?) {
         content.get()?.also { content ->
             data?.let {
                 content.setValues(data)
@@ -80,7 +86,10 @@ class RecordAddModule(
     override fun destroy(): Boolean = content.set(null).let { true }
 
     private fun buildForm(): RecordAddForm =
-        RecordAddForm(context, RecordAddForm.RecordType.BOOK).also {
+        RecordAddForm(
+            context,
+            RecordType.BOOK
+        ).also {
             it.onBookAdded = buildBookAddAction()
             it.onMagazineAdded = buildMagazineAddAction()
         }

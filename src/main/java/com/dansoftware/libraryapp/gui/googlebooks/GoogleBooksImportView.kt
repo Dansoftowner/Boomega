@@ -1,8 +1,10 @@
 package com.dansoftware.libraryapp.gui.googlebooks
 
 import com.dansoftware.libraryapp.gui.context.Context
-import com.dansoftware.libraryapp.gui.rcadd.RecordAddForm
-import com.dansoftware.libraryapp.gui.rcadd.RecordAddModule
+import com.dansoftware.libraryapp.gui.record.RecordType
+import com.dansoftware.libraryapp.gui.record.RecordValues
+import com.dansoftware.libraryapp.gui.record.add.RecordAddForm
+import com.dansoftware.libraryapp.gui.record.add.RecordAddModule
 import com.dansoftware.libraryapp.locale.I18N
 import javafx.beans.property.SimpleStringProperty
 import javafx.event.ActionEvent
@@ -45,11 +47,12 @@ private class GoogleBooksImportView(val context: Context) : GoogleBooksSearchVie
         }
 
     private fun buildButtonAction() = EventHandler<ActionEvent> {
-        context.showModule(RecordAddModule::class.java, RecordAddForm.Values().also { values ->
+        context.showModule(RecordAddModule::class.java, RecordValues()
+            .also { values ->
             table.selectionModel.selectedItem.also { volume ->
                 values.recordType(when {
-                    volume.volumeInfo?.isMagazine ?: false -> RecordAddForm.RecordType.MAGAZINE
-                    else -> RecordAddForm.RecordType.BOOK
+                    volume.volumeInfo?.isMagazine ?: false -> RecordType.MAGAZINE
+                    else -> RecordType.BOOK
                 })
                 values.authors(volume.volumeInfo?.authors?.joinToString(", "))
                 values.date(volume.volumeInfo?.getPublishedDateObject())
