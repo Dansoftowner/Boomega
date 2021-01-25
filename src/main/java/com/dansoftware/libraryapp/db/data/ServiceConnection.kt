@@ -9,5 +9,8 @@ import org.apache.commons.lang3.StringUtils
  * @author Daniel Gyorffy
  */
 class ServiceConnection(var googleBookLink: String?) {
+
+    constructor() : this(null)
+
     fun isEmpty() = StringUtils.isBlank(googleBookLink)
 }

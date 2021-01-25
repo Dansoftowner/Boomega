@@ -18,8 +18,8 @@ import java.time.format.DateTimeFormatter
 data class Book(
     @field:Id var id: NitriteId? = null,
     var publishedDate: String?,
-    var numberOfCopies: Int,
-    var numberOfPages: Int,
+    var numberOfCopies: Int?,
+    var numberOfPages: Int?,
     var authors: List<String>?,
     var title: String?,
     var subtitle: String?,
@@ -49,6 +49,22 @@ data class Book(
     ) {
         this.serviceConnection = builder.serviceConnection
     }
+
+    constructor() : this(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    )
 
     override fun toString(): String {
         return "Book{id=$id, authors=$authors, title='$title', isbn='$isbn'}"

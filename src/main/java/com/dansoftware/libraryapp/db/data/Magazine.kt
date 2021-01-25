@@ -34,6 +34,17 @@ data class Magazine(
         this.serviceConnection = builder.serviceConnection
     }
 
+    constructor() : this(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    )
+
     class Builder {
         var publisher: String? = null
             private set
