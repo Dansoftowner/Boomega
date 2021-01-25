@@ -96,6 +96,11 @@ public class I18N {
         return getValue(getRecordAddFormValues(), key, args);
     }
 
+    @NotNull
+    public static String getBookViewValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getBookViewValues(), key, args);
+    }
+
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
         if (ArrayUtils.isEmpty(args)) return resourceBundle.getString(key);
         return getFormat(resourceBundle, key, args);
@@ -188,6 +193,12 @@ public class I18N {
     public static ResourceBundle getRecordAddFormValues() {
         recognizeLanguagePack();
         return languagePack.getRecordAddFormValues();
+    }
+
+    @NotNull
+    public static ResourceBundle getBookViewValues() {
+        recognizeLanguagePack();
+        return languagePack.getBookViewValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
