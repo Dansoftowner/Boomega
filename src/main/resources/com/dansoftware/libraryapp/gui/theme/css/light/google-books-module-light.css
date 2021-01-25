@@ -1,8 +1,3 @@
-.google-books-table .table-row-cell:filled .table-cell {
-    -fx-border-color: #393939;
-    -fx-border-width: 0 0 0.25 0;
-}
-
 .google-books-import-form .text-field {
     -fx-padding: 5 10 5 5;
 }
