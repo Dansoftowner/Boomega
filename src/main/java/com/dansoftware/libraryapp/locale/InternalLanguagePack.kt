@@ -25,7 +25,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val NOTIFICATIONS = "com.dansoftware.libraryapp.locale.Notifications"
         private const val MENU_BAR = "com.dansoftware.libraryapp.locale.MenuBar"
         private const val GOOGLE_BOOKS_IMPORT = "com.dansoftware.libraryapp.locale.GoogleBooksImport"
-        private const val RECORDS = "com.dansoftware.libraryapp.locale.Records"
+        private const val RECORD_ADD_FORM = "com.dansoftware.libraryapp.locale.RecordAddForm"
     }
 
     override fun getTranslator(): LanguageTranslator? {
@@ -60,5 +60,5 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
 
     override fun getGoogleBooksImportValues(): ResourceBundle = getBundle(GOOGLE_BOOKS_IMPORT)
 
-    override fun getRecordsValues(): ResourceBundle = getBundle(RECORDS)
+    override fun getRecordAddFormValues(): ResourceBundle = getBundle(RECORD_ADD_FORM)
 }
