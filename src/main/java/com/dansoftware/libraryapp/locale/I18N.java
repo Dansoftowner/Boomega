@@ -92,8 +92,8 @@ public class I18N {
     }
 
     @NotNull
-    public static String getRecordAddFormValue(@NotNull String key, @Nullable Object... args) {
-        return getValue(getRecordAddFormValues(), key, args);
+    public static String getRecordsValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getRecordsValues(), key, args);
     }
 
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
@@ -185,9 +185,9 @@ public class I18N {
     }
 
     @NotNull
-    public static ResourceBundle getRecordAddFormValues() {
+    public static ResourceBundle getRecordsValues() {
         recognizeLanguagePack();
-        return languagePack.getRecordAddFormValues();
+        return languagePack.getRecordsValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {

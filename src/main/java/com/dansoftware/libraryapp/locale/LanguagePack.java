@@ -154,5 +154,5 @@ public abstract class LanguagePack {
     public abstract ResourceBundle getGoogleBooksImportValues();
 
     @NotNull
-    public abstract ResourceBundle getRecordAddFormValues();
+    public abstract ResourceBundle getRecordsValues();
 }
