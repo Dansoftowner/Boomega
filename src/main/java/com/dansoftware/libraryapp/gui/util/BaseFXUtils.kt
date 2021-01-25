@@ -9,14 +9,18 @@ package com.dansoftware.libraryapp.gui.util
 
 import com.dansoftware.libraryapp.locale.I18N
 import com.dansoftware.libraryapp.util.adapter.ThrowableString
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.binding.Bindings
+import javafx.beans.binding.BooleanBinding
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Cursor
+import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -25,6 +29,8 @@ import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
+import javafx.scene.layout.StackPane
+import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.Text
 import javafx.stage.Window
@@ -132,6 +138,31 @@ fun ButtonType.typeEquals(other: ButtonType) = this.buttonData == other.buttonDa
 fun KClass<*>.loadImageResource(resource: String): Image {
     BufferedInputStream(this.java.getResourceAsStream(resource)).use {
         return Image(it)
+    }
+}
+
+class TableViewPlaceHolder(tableView: TableView<*>, valueIfEmpty: () -> String, valueIfNoColumns: () -> String) : StackPane() {
+
+    @Suppress("JoinDeclarationAndAssignment")
+    private val noColumns: BooleanBinding
+
+    init {
+        this.noColumns = Bindings.isEmpty(tableView.columns)
+        this.buildUI(valueIfEmpty, valueIfNoColumns)
+    }
+
+    private fun buildUI(valueIfEmpty: () -> String, valueIfNoColumns: () -> String) {
+        children.add(Group(VBox(
+            // TODO: GRAPHIC,
+            Label().also {
+                noColumns.addListener { _, _, noColumns: Boolean ->
+                    it.text = when {
+                        noColumns -> valueIfNoColumns()
+                        else -> valueIfEmpty()
+                    }
+                }
+            }
+        )))
     }
 }
 
