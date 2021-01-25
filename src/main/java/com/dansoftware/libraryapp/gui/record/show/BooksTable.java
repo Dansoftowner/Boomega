@@ -2,13 +2,12 @@ package com.dansoftware.libraryapp.gui.record.show;
 
 import com.dansoftware.libraryapp.db.data.Book;
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating;
+import com.dansoftware.libraryapp.gui.util.TableViewPlaceHolder;
 import com.dansoftware.libraryapp.locale.I18N;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -16,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
+import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -60,7 +60,7 @@ public class BooksTable extends TableView<Book> {
         }
     }
 
-    private static final String STYLE_CLASS = "google-books-table";
+    private static final String STYLE_CLASS = "books-table";
 
     private final IntegerProperty startIndex;
 
@@ -73,8 +73,13 @@ public class BooksTable extends TableView<Book> {
         this.getStyleClass().add(STYLE_CLASS);
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
-        //TODO: PLACE HOLDER
-        //this.setPlaceholder(new TableViewPlaceHolder(this, ...));
+        this.setPlaceholder(
+                new TableViewPlaceHolder(
+                    this,
+                        () -> I18N.getBookViewValue("books.table.place.holder"),
+                        () -> I18N.getBookViewValue("books.table.place.holder.nocolumn")
+                )
+        );
     }
 
     public void setSortingComparator(@NotNull Comparator<String> comparator) {
@@ -124,7 +129,7 @@ public class BooksTable extends TableView<Book> {
         Column(@NotNull ColumnType columnType, boolean i18n) {
             this.columnType = Objects.requireNonNull(columnType);
             this.setReorderable(false);
-            if (i18n) setText(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
+            if (i18n) setText(I18N.getBookViewValue(columnType.getI18Nkey()));
         }
 
         public Column(@NotNull ColumnType columnType) {
@@ -143,7 +148,8 @@ public class BooksTable extends TableView<Book> {
         }
     }
 
-    private static final class IndexColumn extends Column<Integer> implements Callback<TableColumn.CellDataFeatures<Book, Integer>, ObservableValue<Integer>> {
+    private static final class IndexColumn extends Column<Integer>
+            implements Callback<TableColumn.CellDataFeatures<Book, Integer>, ObservableValue<Integer>> {
         private static final int COLUMN_WIDTH_UNIT = 60;
 
         private final IntegerProperty startIndexProperty;
@@ -169,7 +175,8 @@ public class BooksTable extends TableView<Book> {
         }
     }
 
-    private static final class AuthorColumn extends AbcSortableColumn implements Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>> {
+    private static final class AuthorColumn extends AbcSortableColumn
+            implements Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>> {
         AuthorColumn() {
             super(ColumnType.AUTHOR_COLUMN);
             setCellValueFactory(this);
@@ -210,7 +217,8 @@ public class BooksTable extends TableView<Book> {
         }
     }
 
-    private static final class LangColumn extends Column<String> implements Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>> {
+    private static final class LangColumn extends Column<String>
+            implements Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>> {
         LangColumn() {
             super(ColumnType.LANG_COLUMN);
             setCellValueFactory(this);
@@ -258,7 +266,8 @@ public class BooksTable extends TableView<Book> {
         }
     }
 
-    private static final class RankColumn extends Column<String> implements Callback<TableColumn<Book, String>, TableCell<Book, String>> {
+    private static final class RankColumn extends Column<String>
+            implements Callback<TableColumn<Book, String>, TableCell<Book, String>> {
         RankColumn() {
             super(ColumnType.RANK_COLUMN);
             setCellFactory(this);
@@ -277,8 +286,10 @@ public class BooksTable extends TableView<Book> {
                         Book book = getTableView().getItems().get(getIndex());
                         Optional.ofNullable(book.getRating())
                                 .ifPresentOrElse(rating -> {
-                                    setGraphic(buildGraphic(rating));
+                                    Rating graphic = buildGraphic(rating);
+                                    setGraphic(graphic);
                                     setText(null);
+                                    RankColumn.this.minWidthProperty().bind(graphic.widthProperty());
                                 }, () -> {
                                     setGraphic(null);
                                     setText("-");
@@ -286,8 +297,8 @@ public class BooksTable extends TableView<Book> {
                     }
                 }
 
-                private Node buildGraphic(int rating) {
-                    return new Group(new ReadOnlyRating(5, rating));
+                private Rating buildGraphic(int rating) {
+                    return new ReadOnlyRating(5, rating);
                 }
             };
         }
