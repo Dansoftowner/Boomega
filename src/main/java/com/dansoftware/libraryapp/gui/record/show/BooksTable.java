@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.record.show;
 
 import com.dansoftware.libraryapp.db.data.Book;
+import com.dansoftware.libraryapp.gui.googlebooks.GoogleBooksTable;
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating;
 import com.dansoftware.libraryapp.gui.util.TableViewPlaceHolder;
 import com.dansoftware.libraryapp.locale.I18N;
@@ -17,9 +18,11 @@ import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class BooksTable extends TableView<Book> {
 
@@ -80,6 +83,20 @@ public class BooksTable extends TableView<Book> {
                         () -> I18N.getBookViewValue("books.table.place.holder.nocolumn")
                 )
         );
+    }
+
+    public List<ColumnType> getShowingColumns() {
+        return getColumns().stream()
+                .map(col -> (Column<?>) col)
+                .map(col -> col.columnType)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isColumnShown(@Nullable ColumnType columnType) {
+        return getColumns().stream()
+                .map(col -> (Column<?>) col)
+                .map(col -> col.columnType)
+                .anyMatch(col -> col.equals(columnType));
     }
 
     public void setSortingComparator(@NotNull Comparator<String> comparator) {
