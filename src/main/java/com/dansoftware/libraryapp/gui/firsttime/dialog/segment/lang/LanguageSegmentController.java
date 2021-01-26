@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.firsttime.dialog.segment.lang;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;

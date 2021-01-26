@@ -3,9 +3,8 @@ package com.dansoftware.libraryapp.gui.googlebooks
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.record.RecordType
 import com.dansoftware.libraryapp.gui.record.RecordValues
-import com.dansoftware.libraryapp.gui.record.add.RecordAddForm
 import com.dansoftware.libraryapp.gui.record.add.RecordAddModule
-import com.dansoftware.libraryapp.locale.I18N
+import com.dansoftware.libraryapp.i18n.I18N
 import javafx.beans.property.SimpleStringProperty
 import javafx.event.ActionEvent
 import javafx.event.EventHandler

@@ -2,8 +2,8 @@ package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.locale.ABCCollators;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.ABCCollators;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.util.SystemBrowser;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;

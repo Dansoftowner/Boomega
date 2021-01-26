@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.locale;
+package com.dansoftware.libraryapp.i18n;
 
 import org.jetbrains.annotations.NotNull;
 

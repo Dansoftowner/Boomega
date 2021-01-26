@@ -4,7 +4,7 @@ import com.dansoftware.libraryapp.gui.theme.applier.AndThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.JMetroThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.StyleSheetThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.ThemeApplier;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
 

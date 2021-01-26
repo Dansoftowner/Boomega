@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.updatedialog.segment.detail;
 
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import com.dansoftware.sgmdialog.FixedContentSegment;
 import javafx.scene.Node;

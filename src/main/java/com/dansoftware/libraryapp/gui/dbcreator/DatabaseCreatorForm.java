@@ -9,7 +9,7 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.libraryapp.gui.util.SpaceValidator;
 import com.dansoftware.libraryapp.gui.util.WindowUtils;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.jfilegoodies.FileGoodies;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static com.dansoftware.libraryapp.locale.I18N.getDatabaseCreatorViewValues;
+import static com.dansoftware.libraryapp.i18n.I18N.getDatabaseCreatorViewValues;
 
 /**
  * A {@link DatabaseCreatorForm} is gui-form that lets the user to create

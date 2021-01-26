@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.firsttime.dialog.segment.theme;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.gui.util.ImprovedFXMLLoader;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.sgmdialog.FixedContentTitledSegment;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;

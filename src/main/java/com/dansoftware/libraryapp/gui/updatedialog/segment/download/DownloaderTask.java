@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.updatedialog.segment.download;
 
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.update.DownloadableBinary;
 import com.dansoftware.libraryapp.update.UpdateInformation;
 import javafx.application.Platform;

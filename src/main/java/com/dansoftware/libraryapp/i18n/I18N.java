@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.locale;
+package com.dansoftware.libraryapp.i18n;
 
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.dansoftware.libraryapp.util.ReflectionUtils;

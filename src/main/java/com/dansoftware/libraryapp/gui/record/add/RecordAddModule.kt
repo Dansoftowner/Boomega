@@ -7,7 +7,7 @@ import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.NotifiableModule
 import com.dansoftware.libraryapp.gui.record.RecordType
 import com.dansoftware.libraryapp.gui.record.RecordValues
-import com.dansoftware.libraryapp.locale.I18N
+import com.dansoftware.libraryapp.i18n.I18N
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon

@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.googlebooks.Volume;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;

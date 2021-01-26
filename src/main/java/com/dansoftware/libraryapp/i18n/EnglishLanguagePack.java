@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.locale;
+package com.dansoftware.libraryapp.i18n;
 
 import java.text.Collator;
 import java.util.Locale;

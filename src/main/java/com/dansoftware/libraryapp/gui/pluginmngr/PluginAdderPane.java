@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.gui.pluginmngr;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
 import com.dansoftware.libraryapp.gui.util.FileDraggingArea;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.main.ApplicationRestart;
 import com.dansoftware.libraryapp.plugin.PluginDirectory;
 import javafx.collections.ObservableList;

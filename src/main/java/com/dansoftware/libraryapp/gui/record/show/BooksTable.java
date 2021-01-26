@@ -1,10 +1,9 @@
 package com.dansoftware.libraryapp.gui.record.show;
 
 import com.dansoftware.libraryapp.db.data.Book;
-import com.dansoftware.libraryapp.gui.googlebooks.GoogleBooksTable;
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating;
 import com.dansoftware.libraryapp.gui.util.TableViewPlaceHolder;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;

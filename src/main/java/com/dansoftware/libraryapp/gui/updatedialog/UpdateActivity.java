@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.updatedialog;
 
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
 import javafx.scene.Group;
 import javafx.scene.layout.Region;

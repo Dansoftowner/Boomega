@@ -5,7 +5,7 @@ import com.dansoftware.libraryapp.gui.theme.Theme
 import com.dansoftware.libraryapp.gui.theme.Themeable
 import com.dansoftware.libraryapp.gui.util.loadImageResource
 import com.dansoftware.libraryapp.gui.util.typeEquals
-import com.dansoftware.libraryapp.locale.I18N
+import com.dansoftware.libraryapp.i18n.I18N
 import com.dansoftware.libraryapp.main.ApplicationRestart
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ChangeListener

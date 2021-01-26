@@ -18,7 +18,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
-import static com.dansoftware.libraryapp.locale.I18N.getLoginViewValue;
+import static com.dansoftware.libraryapp.i18n.I18N.getLoginViewValue;
 
 /**
  * A NitriteDatabase is a {@link Database} that basically wraps the

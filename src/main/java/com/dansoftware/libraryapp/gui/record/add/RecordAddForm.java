@@ -11,7 +11,7 @@ import com.dansoftware.libraryapp.gui.googlebooks.tile.GoogleBookTile;
 import com.dansoftware.libraryapp.gui.record.RecordType;
 import com.dansoftware.libraryapp.gui.record.RecordValues;
 import com.dansoftware.libraryapp.gui.util.LanguageSelections;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.model.structure.Group;

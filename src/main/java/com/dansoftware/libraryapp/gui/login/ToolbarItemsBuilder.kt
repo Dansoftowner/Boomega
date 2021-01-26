@@ -4,7 +4,7 @@ import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.info.InformationActivity
 import com.dansoftware.libraryapp.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity
-import com.dansoftware.libraryapp.locale.I18N
+import com.dansoftware.libraryapp.i18n.I18N
 import com.dansoftware.libraryapp.update.UpdateSearcher
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon

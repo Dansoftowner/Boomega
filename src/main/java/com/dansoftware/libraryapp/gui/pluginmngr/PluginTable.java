@@ -3,7 +3,7 @@ package com.dansoftware.libraryapp.gui.pluginmngr;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.util.FXCollectionUtils;
 import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
-import com.dansoftware.libraryapp.locale.I18N;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.plugin.PluginDirectory;
 import com.dansoftware.libraryapp.util.FileIOException;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;

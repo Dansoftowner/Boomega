@@ -6,7 +6,7 @@ import com.dansoftware.libraryapp.gui.context.TitledOverlayBox
 import com.dansoftware.libraryapp.gui.googlebooks.preview.GoogleBookPreviewActivity
 import com.dansoftware.libraryapp.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.libraryapp.gui.util.*
-import com.dansoftware.libraryapp.locale.I18N
+import com.dansoftware.libraryapp.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Cursor
