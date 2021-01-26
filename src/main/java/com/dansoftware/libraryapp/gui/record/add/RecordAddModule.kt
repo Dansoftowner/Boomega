@@ -7,6 +7,7 @@ import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.NotifiableModule
 import com.dansoftware.libraryapp.gui.record.RecordType
 import com.dansoftware.libraryapp.gui.record.RecordValues
+import com.dansoftware.libraryapp.gui.record.show.BooksViewModule
 import com.dansoftware.libraryapp.i18n.I18N
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
@@ -60,10 +61,12 @@ class RecordAddModule(
                     })
 
 
-                createItem("record.add.rectype.book",
+                createItem(
+                    "record.add.rectype.book",
                     RecordType.BOOK
                 )
-                createItem("record.add.rectype.magazine",
+                createItem(
+                    "record.add.rectype.magazine",
                     RecordType.MAGAZINE
                 )
             }
@@ -101,6 +104,10 @@ class RecordAddModule(
                 I18N.getRecordAddFormValue("record.book.success.notification"),
                 null,
                 Duration.millis(5000.0)
+            )
+            context.notifyModule(
+                BooksViewModule::class.java,
+                BooksViewModule.Message(book, BooksViewModule.Message.Action.INSERTED)
             )
         } catch (e: RuntimeException) {
             context.showErrorDialog(
