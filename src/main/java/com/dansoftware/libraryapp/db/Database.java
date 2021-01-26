@@ -16,23 +16,13 @@ import java.util.List;
  */
 public interface Database {
 
+    //CREATE, UPDATE, DELETE
+
     void insertMagazine(@NotNull Magazine magazine);
 
     void updateMagazine(@NotNull Magazine magazine);
 
     void removeMagazine(@NotNull Magazine magazine);
-
-    /**
-     * Loads all magazines into a {@link List}.
-     *
-     * @param fromCache if true the books will be loaded from a local cache.
-     * @return the {@link Magazine} objects
-     */
-    List<Magazine> getMagazines(boolean fromCache);
-
-    List<Magazine> getMagazines(FindOptions findOptions);
-
-    List<Magazine> getMagazines(ObjectFilter objectFilter, FindOptions findOptions);
 
     void insertBook(@NotNull Book book);
 
@@ -40,23 +30,33 @@ public interface Database {
 
     void removeBook(@NotNull Book book);
 
-    /**
-     * Loads all books into a {@link List}.
-     *
-     * @param fromCache if true the books will be loaded from a local cache.
-     *                  Otherwise the books will be loaded directly from the database
-     * @return the {@link Book} objects
-     */
-    List<Book> getBooks(boolean fromCache);
+    //READ
+
+    int getTotalMagazineCount();
+
+    int getTotalBookCount();
+
+    List<Magazine> getMagazines();
+
+    List<Magazine> getMagazines(FindOptions findOptions);
+
+    List<Magazine> getMagazines(ObjectFilter objectFilter, FindOptions findOptions);
+
+    List<Book> getBooks();
 
     List<Book> getBooks(FindOptions findOptions);
 
     List<Book> getBooks(ObjectFilter objectFilter, FindOptions findOptions);
 
-    /**
-     * Removes all cache from memory.
-     */
-    void clearCache();
+    default List<Magazine> getMagazines(int offSet, int size) {
+        return getMagazines(FindOptions.limit(offSet, size));
+    }
+
+    default List<Book> getBooks(int offSet, int size) {
+        return getBooks(FindOptions.limit(offSet, size));
+    }
+
+    //OTHER
 
     /**
      * Checks whether the db is closed.

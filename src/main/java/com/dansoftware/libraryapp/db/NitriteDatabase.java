@@ -11,6 +11,7 @@ import org.dizitart.no2.exceptions.ErrorMessage;
 import org.dizitart.no2.exceptions.NitriteIOException;
 import org.dizitart.no2.exceptions.SecurityException;
 import org.dizitart.no2.objects.ObjectFilter;
+import org.dizitart.no2.objects.ObjectRepository;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.dansoftware.libraryapp.locale.I18N.getLoginViewValue;
-import static java.util.Objects.isNull;
 
 /**
  * A NitriteDatabase is a {@link Database} that basically wraps the
@@ -29,20 +29,25 @@ import static java.util.Objects.isNull;
  */
 public class NitriteDatabase implements Database {
 
-    private List<Book> bookCache;
-    private List<Magazine> magazineCache;
-
     private final DatabaseMeta databaseMeta;
-    private final Nitrite dbImpl;
+    private final Nitrite nitriteClient;
 
-    public NitriteDatabase(@NotNull DatabaseMeta databaseMeta, @NotNull Credentials credentials) throws SecurityException, NitriteIOException {
+    private final ObjectRepository<Book> bookRepository;
+    private final ObjectRepository<Magazine> magazineRepository;
+
+    public NitriteDatabase(@NotNull DatabaseMeta databaseMeta,
+                           @NotNull Credentials credentials)
+            throws SecurityException, NitriteIOException {
         Objects.requireNonNull(credentials, "The Credentials must not be null!");
-        this.dbImpl = init(databaseMeta, credentials);
+        this.nitriteClient = init(databaseMeta, credentials);
         this.databaseMeta = databaseMeta;
+        this.bookRepository = nitriteClient.getRepository(Book.class);
+        this.magazineRepository = nitriteClient.getRepository(Magazine.class);
     }
 
     private Nitrite init(@NotNull DatabaseMeta databaseMeta,
-                         @NotNull Credentials credentials) throws SecurityException, NitriteIOException {
+                         @NotNull Credentials credentials)
+            throws SecurityException, NitriteIOException {
         String username = credentials.getUsername();
         String password = credentials.getPassword();
         File file = databaseMeta.getFile();
@@ -57,82 +62,82 @@ public class NitriteDatabase implements Database {
 
     @Override
     public void insertMagazine(@NotNull Magazine magazine) {
-        this.dbImpl.getRepository(Magazine.class).insert(magazine);
+        this.magazineRepository.insert(magazine);
     }
 
     @Override
     public void updateMagazine(@NotNull Magazine magazine) {
-        this.dbImpl.getRepository(Magazine.class).update(magazine);
+        this.magazineRepository.update(magazine);
     }
 
     @Override
     public void removeMagazine(@NotNull Magazine magazine) {
-        this.dbImpl.getRepository(Magazine.class).remove(magazine);
+        this.magazineRepository.remove(magazine);
     }
 
     @Override
-    public List<Magazine> getMagazines(boolean fromCache) {
-        if (fromCache) return magazineCache = isNull(magazineCache) ? getMagazines(false) : magazineCache;
-        return this.dbImpl.getRepository(Magazine.class).find().toList();
+    public List<Magazine> getMagazines() {
+        return this.magazineRepository.find().toList();
     }
 
     @Override
     public List<Magazine> getMagazines(FindOptions findOptions) {
-        return this.dbImpl.getRepository(Magazine.class).find(findOptions).toList();
+        return this.magazineRepository.find(findOptions).toList();
     }
 
     @Override
     public List<Magazine> getMagazines(ObjectFilter objectFilter, FindOptions findOptions) {
-        return this.dbImpl.getRepository(Magazine.class).find(objectFilter, findOptions).toList();
+        return this.magazineRepository.find(objectFilter, findOptions).toList();
     }
 
     @Override
     public void insertBook(@NotNull Book book) {
-        this.dbImpl.getRepository(Book.class).insert(book);
+        this.bookRepository.insert(book);
     }
 
     @Override
     public void updateBook(@NotNull Book book) {
-        this.dbImpl.getRepository(Book.class).update(book);
+        this.bookRepository.update(book);
     }
 
     @Override
     public void removeBook(@NotNull Book book) {
-        this.dbImpl.getRepository(Book.class).remove(book);
+        this.bookRepository.remove(book);
     }
 
     @Override
-    public List<Book> getBooks(boolean fromCache) {
-        if (fromCache) return bookCache = isNull(bookCache) ? getBooks(false) : bookCache;
-        return this.dbImpl.getRepository(Book.class).find().toList();
+    public int getTotalMagazineCount() {
+        return this.magazineRepository.find().totalCount();
+    }
+
+    @Override
+    public int getTotalBookCount() {
+        return this.bookRepository.find().totalCount();
+    }
+
+    @Override
+    public List<Book> getBooks() {
+        return this.bookRepository.find().toList();
     }
 
     @Override
     public List<Book> getBooks(FindOptions findOptions) {
-        return this.dbImpl.getRepository(Book.class).find(findOptions).toList();
+        return this.bookRepository.find(findOptions).toList();
     }
 
     @Override
     public List<Book> getBooks(ObjectFilter objectFilter, FindOptions findOptions) {
-        return this.dbImpl.getRepository(Book.class).find(objectFilter, findOptions).toList();
-    }
-
-    @Override
-    public void clearCache() {
-        this.bookCache.clear();
-        this.bookCache = null;
-        this.magazineCache.clear();
-        this.magazineCache = null;
+        return this.bookRepository.find(objectFilter, findOptions).toList();
     }
 
     @Override
     public boolean isClosed() {
-        return this.dbImpl.isClosed();
+        return this.nitriteClient.isClosed();
     }
 
     @Override
     public void close() {
-        this.dbImpl.close();
+        this.nitriteClient.close();
     }
 
     @Override
