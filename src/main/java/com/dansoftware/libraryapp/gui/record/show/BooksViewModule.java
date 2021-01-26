@@ -34,15 +34,20 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BooksViewModule extends WorkbenchModule implements NotifiableModule<BooksViewModule.BookInsertionDeletionMessage> {
+public class BooksViewModule extends WorkbenchModule
+        implements NotifiableModule<BooksViewModule.Message> {
 
-    public static final class BookInsertionDeletionMessage {
-        private final boolean inserted;
+    public static final class Message {
+        private final Action action;
         private final Book book;
 
-        public BookInsertionDeletionMessage(boolean inserted, Book book) {
-            this.inserted = inserted;
+        public Message(Book book, @NotNull Action action) {
             this.book = book;
+            this.action = action;
+        }
+
+        public enum Action {
+            DELETED, INSERTED, UPDATED
         }
     }
 
@@ -106,14 +111,22 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
     }
 
     @Override
-    public void commitData(BookInsertionDeletionMessage data) {
+    public void commitData(Message data) {
         if (content.get() != null) {
-            if (!data.inserted) {
-                getTable().getItems().remove(data.book);
-            } else if (itemsPerPage.get() > getTable().getItems().size()) {
-                getTable().getItems().add(data.book);
-                totalItems.set(totalItems.get() + 1);
+            switch (data.action) {
+                case DELETED:
+                    getTable().getItems().remove(data.book);
+                    break;
+                case INSERTED:
+                    if (itemsPerPage.get() > getTable().getItems().size()) {
+                        getTable().getItems().add(data.book);
+                        totalItems.set(totalItems.get() + 1);
+                    }
+                    break;
+                case UPDATED:
+                    break;
             }
+            getTable().refresh();
         }
     }
 
