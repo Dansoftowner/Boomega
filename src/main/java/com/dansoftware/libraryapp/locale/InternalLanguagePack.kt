@@ -26,7 +26,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val MENU_BAR = "com.dansoftware.libraryapp.locale.MenuBar"
         private const val GOOGLE_BOOKS_IMPORT = "com.dansoftware.libraryapp.locale.GoogleBooksImport"
         private const val RECORD_ADD_FORM = "com.dansoftware.libraryapp.locale.RecordAddForm"
-        private const val BOOK_VIEW = "com.dansoftware.libraryapp.locale.BookView"
+        private const val BOOK_VIEW = "com.dansoftware.libraryapp.locale.BooksView"
     }
 
     override fun getTranslator(): LanguageTranslator? {
