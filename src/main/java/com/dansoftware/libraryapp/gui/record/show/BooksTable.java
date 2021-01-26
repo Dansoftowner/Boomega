@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.record.show;
 
 import com.dansoftware.libraryapp.db.data.Book;
+import com.dansoftware.libraryapp.db.data.ServiceConnection;
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating;
 import com.dansoftware.libraryapp.gui.util.TableViewPlaceHolder;
 import com.dansoftware.libraryapp.i18n.I18N;
@@ -8,11 +9,13 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
@@ -36,7 +39,8 @@ public class BooksTable extends TableView<Book> {
         COPY_COUNT_COLUMN("record.table.column.copycount", CopyCountColumn.class, false, table -> new CopyCountColumn()),
         PAGE_COUNT_COLUMN("record.table.column.pagecount", PageCountColumn.class, false, table -> new PageCountColumn()),
         LANG_COLUMN("record.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
-        RANK_COLUMN("record.table.column.rank", RankColumn.class, true, table -> new RankColumn());
+        RANK_COLUMN("record.table.column.rank", RankColumn.class, true, table -> new RankColumn()),
+        SERVICE_CONNECTION_COLUMN("record.table.column.service", ServiceConnectionColumn.class, true, table -> new ServiceConnectionColumn());
 
         private final String i18n;
         private final Class<? extends Column<?>> tableColumnClass;
@@ -317,6 +321,46 @@ public class BooksTable extends TableView<Book> {
                     return new ReadOnlyRating(5, rating);
                 }
             };
+        }
+    }
+
+    private static final class ServiceConnectionColumn extends Column<String>
+            implements Callback<TableColumn<Book, String>, TableCell<Book, String>> {
+
+        private static final double WIDTH = 60;
+
+        ServiceConnectionColumn() {
+            super(ColumnType.SERVICE_CONNECTION_COLUMN, false);
+            this.setCellFactory(this);
+            this.setMinWidth(WIDTH);
+            this.setMaxWidth(WIDTH);
+        }
+
+        @Override
+        public TableCell<Book, String> call(TableColumn<Book, String> param) {
+            return new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        Book book = getTableView().getItems().get(getIndex());
+                        Optional.ofNullable(book.getServiceConnection())
+                                .map(ServiceConnection::getGoogleBookLink)
+                                .map(value -> StringUtils.getIfBlank(value, null))
+                                .ifPresentOrElse(
+                                        value -> setGraphic(buildGoogleBooksIcon()),
+                                        () -> setGraphic(null)
+                                );
+                    }
+                }
+            };
+        }
+
+        private Node buildGoogleBooksIcon() {
+            return new ImageView(new Image("/com/dansoftware/libraryapp/image/util/google_12px.png"));
         }
     }
 }
