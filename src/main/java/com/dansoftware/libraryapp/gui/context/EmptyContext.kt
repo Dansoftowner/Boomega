@@ -101,6 +101,8 @@ private class EmptyContext : Context {
 
     override fun <D> showModule(classRef: Class<out NotifiableModule<D>>, data: D) {}
 
+    override fun <D : Any?> notifyModule(classRef: Class<out NotifiableModule<D>>, data: D) {}
+
     override fun getContextScene(): Scene? = null
 
     override fun getContextWindow(): Window? = null

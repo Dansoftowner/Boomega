@@ -272,6 +272,15 @@ final class WorkbenchContextAdapter implements Context {
     }
 
     @Override
+    public <D> void notifyModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data) {
+        workbench.getModules().stream()
+                .filter(module -> module.getClass().equals(classRef))
+                .map(module -> (WorkbenchModule & NotifiableModule<D>) module)
+                .findFirst()
+                .ifPresent(module -> module.commitData(data));
+    }
+
+    @Override
     public Scene getContextScene() {
         return workbench.getScene();
     }

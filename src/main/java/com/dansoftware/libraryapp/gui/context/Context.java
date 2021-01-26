@@ -151,6 +151,16 @@ public interface Context {
      */
     <D> void showModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data);
 
+    /**
+     * Sends the given to the particular module.
+     * It does not show the module, just sends a message to her.
+     *
+     * @param classRef the class reference to the module
+     * @param data     the concrete message
+     * @param <D>      the type of the message
+     */
+    <D> void notifyModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data);
+
     @Nullable
     Scene getContextScene();
 
