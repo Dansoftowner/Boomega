@@ -82,7 +82,7 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
     public BooksViewModule(@NotNull Context context,
                            @NotNull Preferences preferences,
                            @NotNull Database database) {
-        super(I18N.getBookViewValue("books.view.module.name"), MaterialDesignIcon.LIBRARY_BOOKS);
+        super(I18N.getRecordsViewValue("record.book.view.module.name"), MaterialDesignIcon.LIBRARY_BOOKS);
         this.context = context;
         this.preferences = preferences;
         this.database = database;
@@ -165,7 +165,7 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
     private ToolbarItem buildCountItem() {
         var toolbarItem = new ToolbarItem();
         toolbarItem.textProperty().bind(
-                new SimpleStringProperty(I18N.getBookViewValue("books.count"))
+                new SimpleStringProperty(I18N.getRecordsViewValue("record.book.count"))
                         .concat(StringUtils.SPACE)
                         .concat(totalItems)
         );
@@ -181,7 +181,7 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
                         new Group(
                                 new HBox(2.5,
                                         new StackPane(
-                                                new Label(I18N.getBookViewValue("books.item.per.page"))
+                                                new Label(I18N.getRecordsViewValue("record.item.per.page"))
                                         ),
                                         spinner
                                 )
@@ -213,16 +213,16 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
     }
 
     private ToolbarItem buildRefreshItem() {
-        return buildToolbarItem(MaterialDesignIcon.REFRESH, "books.toolbar.refresh", event -> refresh());
+        return buildToolbarItem(MaterialDesignIcon.REFRESH, "record.toolbar.refresh", event -> refresh());
     }
 
     private ToolbarItem buildScrollToTopItem() {
-        return buildToolbarItem(MaterialDesignIcon.BORDER_TOP, "books.toolbar.scrolltop", event -> getContent().scrollToTop());
+        return buildToolbarItem(MaterialDesignIcon.BORDER_TOP, "record.table.scrolltop", event -> getContent().scrollToTop());
     }
 
     private ToolbarItem buildColumnChooserItem() {
         var toolbarItem = new ToolbarItem(
-                I18N.getBookViewValue("books.toolbar.columns"),
+                I18N.getRecordsViewValue("record.table.preferred.columns"),
                 new FontAwesomeIconView(FontAwesomeIcon.COLUMNS));
         Stream.of(BooksTable.ColumnType.values())
                 .map(TableColumnMenuItem::new)
@@ -231,7 +231,7 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
     }
 
     private ToolbarItem buildColumnResetItem() {
-        return buildToolbarItem(MaterialDesignIcon.TABLE, "books.toolbar.colreset", event -> {
+        return buildToolbarItem(MaterialDesignIcon.TABLE, "record.table.colreset", event -> {
             getTable().buildDefaultColumns();
             columnChooserItem.getItems().stream()
                     .map(item -> (TableColumnMenuItem) item)
@@ -240,7 +240,7 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
     }
 
     private ToolbarItem buildABCChooserItem() {
-        var toolbarItem = new ToolbarItem(I18N.getBookViewValue("books.abc"));
+        var toolbarItem = new ToolbarItem(I18N.getRecordsViewValue("record.table.abc"));
         var toggleGroup = new ToggleGroup();
         ABCCollators.getAvailableCollators().forEach((locale, collatorSupplier) -> {
             toolbarItem.getItems().add(new AbcMenuItem(locale, collatorSupplier, toggleGroup));
@@ -254,7 +254,7 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
 
     private ToolbarItem buildToolbarItem(MaterialDesignIcon icon, String i18nTooltip, EventHandler<MouseEvent> onClick) {
         var toolbarItem = new ToolbarItem(new MaterialDesignIconView(icon), onClick);
-        toolbarItem.setTooltip(new Tooltip(I18N.getBookViewValue(i18nTooltip)));
+        toolbarItem.setTooltip(new Tooltip(I18N.getRecordsViewValue(i18nTooltip)));
         return toolbarItem;
     }
 
@@ -288,7 +288,7 @@ public class BooksViewModule extends WorkbenchModule implements NotifiableModule
         private final BooksTable.ColumnType columnType;
 
         TableColumnMenuItem(BooksTable.ColumnType columnType) {
-            super(I18N.getBookViewValue(columnType.getI18Nkey()));
+            super(I18N.getRecordsViewValue(columnType.getI18Nkey()));
             this.columnType = columnType;
             this.setOnAction(e -> {
                 if (!this.isSelected()) {

@@ -97,8 +97,8 @@ public class I18N {
     }
 
     @NotNull
-    public static String getBookViewValue(@NotNull String key, @Nullable Object... args) {
-        return getValue(getBookViewValues(), key, args);
+    public static String getRecordsViewValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getRecordsViewValues(), key, args);
     }
 
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
@@ -196,9 +196,9 @@ public class I18N {
     }
 
     @NotNull
-    public static ResourceBundle getBookViewValues() {
+    public static ResourceBundle getRecordsViewValues() {
         recognizeLanguagePack();
-        return languagePack.getBookViewValues();
+        return languagePack.getRecordsViewValues();
     }
 
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {

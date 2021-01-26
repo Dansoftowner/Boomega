@@ -157,5 +157,5 @@ public abstract class LanguagePack {
     public abstract ResourceBundle getRecordAddFormValues();
 
     @NotNull
-    public abstract ResourceBundle getBookViewValues();
+    public abstract ResourceBundle getRecordsViewValues();
 }

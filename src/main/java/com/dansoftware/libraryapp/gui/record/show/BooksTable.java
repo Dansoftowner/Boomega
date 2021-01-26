@@ -26,17 +26,17 @@ import java.util.stream.Collectors;
 public class BooksTable extends TableView<Book> {
 
     public enum ColumnType {
-        INDEX_COLUMN("books.table.column.index", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
-        AUTHOR_COLUMN("books.table.column.author", AuthorColumn.class, true, table -> new AuthorColumn()),
-        TITLE_COLUMN("books.table.column.title", TitleColumn.class, true, table -> new TitleColumn()),
-        SUB_TITLE_COLUMN("books.table.column.subtitle", SubtitleColumn.class, false, table -> new SubtitleColumn()),
-        ISBN_COLUMN("books.table.column.isbn", ISBNColumn.class, true, table -> new ISBNColumn()),
-        PUBLISHER_COLUMN("books.table.column.publisher", PublisherColumn.class, true, table -> new PublisherColumn()),
-        DATE_COLUMN("books.table.column.date", DateColumn.class, true, table -> new DateColumn()),
-        COPY_COUNT_COLUMN("books.table.column.copycount", CopyCountColumn.class, false, table -> new CopyCountColumn()),
-        PAGE_COUNT_COLUMN("books.table.column.pagecount", PageCountColumn.class, false, table -> new PageCountColumn()),
-        LANG_COLUMN("books.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
-        RANK_COLUMN("books.table.column.rank", RankColumn.class, true, table -> new RankColumn());
+        INDEX_COLUMN("record.table.column.index", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
+        AUTHOR_COLUMN("record.table.column.author", AuthorColumn.class, true, table -> new AuthorColumn()),
+        TITLE_COLUMN("record.table.column.title", TitleColumn.class, true, table -> new TitleColumn()),
+        SUB_TITLE_COLUMN("record.table.column.subtitle", SubtitleColumn.class, false, table -> new SubtitleColumn()),
+        ISBN_COLUMN("record.table.column.isbn", ISBNColumn.class, true, table -> new ISBNColumn()),
+        PUBLISHER_COLUMN("record.table.column.publisher", PublisherColumn.class, true, table -> new PublisherColumn()),
+        DATE_COLUMN("record.table.column.date", DateColumn.class, true, table -> new DateColumn()),
+        COPY_COUNT_COLUMN("record.table.column.copycount", CopyCountColumn.class, false, table -> new CopyCountColumn()),
+        PAGE_COUNT_COLUMN("record.table.column.pagecount", PageCountColumn.class, false, table -> new PageCountColumn()),
+        LANG_COLUMN("record.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
+        RANK_COLUMN("record.table.column.rank", RankColumn.class, true, table -> new RankColumn());
 
         private final String i18n;
         private final Class<? extends Column<?>> tableColumnClass;
@@ -78,8 +78,8 @@ public class BooksTable extends TableView<Book> {
         this.setPlaceholder(
                 new TableViewPlaceHolder(
                     this,
-                        () -> I18N.getBookViewValue("books.table.place.holder"),
-                        () -> I18N.getBookViewValue("books.table.place.holder.nocolumn")
+                        () -> I18N.getRecordsViewValue("record.table.place.holder"),
+                        () -> I18N.getRecordsViewValue("record.table.place.holder.nocolumn")
                 )
         );
     }
@@ -145,7 +145,7 @@ public class BooksTable extends TableView<Book> {
         Column(@NotNull ColumnType columnType, boolean i18n) {
             this.columnType = Objects.requireNonNull(columnType);
             this.setReorderable(false);
-            if (i18n) setText(I18N.getBookViewValue(columnType.getI18Nkey()));
+            if (i18n) setText(I18N.getRecordsViewValue(columnType.getI18Nkey()));
         }
 
         public Column(@NotNull ColumnType columnType) {
