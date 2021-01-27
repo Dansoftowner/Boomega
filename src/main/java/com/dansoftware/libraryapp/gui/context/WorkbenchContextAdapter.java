@@ -272,6 +272,7 @@ final class WorkbenchContextAdapter implements Context {
     }
 
     @Override
+    @SuppressWarnings({"unchecked", "RedundantSuppression"})
     public <D> void notifyModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data) {
         workbench.getModules().stream()
                 .filter(module -> module.getClass().equals(classRef))
