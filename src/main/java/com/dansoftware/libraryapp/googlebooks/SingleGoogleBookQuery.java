@@ -18,7 +18,7 @@ public class SingleGoogleBookQuery {
 
     private final String url;
 
-    SingleGoogleBookQuery(@NotNull String url) {
+    public SingleGoogleBookQuery(@NotNull String url) {
         this.url = url;
     }
 
