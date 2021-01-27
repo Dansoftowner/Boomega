@@ -39,7 +39,7 @@ public class GoogleBookDockContent<T> extends VBox {
     private final Function<T, SearchParameters> searchParametersSupplier;
     private final Function<T, String> volumeHandleRetriever;
 
-    private GoogleBookDockContent(@NotNull Context context,
+    public GoogleBookDockContent(@NotNull Context context,
                                   @NotNull ObservableList<T> items,
                                   @NotNull BiConsumer<T, Volume> joinAction,
                                   @NotNull BiConsumer<T, Volume> removeAction,
@@ -143,7 +143,7 @@ public class GoogleBookDockContent<T> extends VBox {
             var task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    joinAction.accept(item, volume)
+                    joinAction.accept(item, volume);
                     return null;
                 }
             };
@@ -222,7 +222,7 @@ public class GoogleBookDockContent<T> extends VBox {
         }
 
         private void buildUI() {
-            this.getChildren().add(new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.multiple")))
+            this.getChildren().add(new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.multiple")));
         }
     }
 
