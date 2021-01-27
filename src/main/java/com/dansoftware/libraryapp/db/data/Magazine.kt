@@ -20,6 +20,7 @@ data class Magazine(
     var rating: Int?
 ) {
     var serviceConnection: ServiceConnection? = null
+    get() = field ?: ServiceConnection()
 
     private constructor(builder: Builder) : this(
         null,
