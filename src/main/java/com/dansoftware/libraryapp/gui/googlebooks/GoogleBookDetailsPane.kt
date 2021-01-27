@@ -7,16 +7,22 @@ import com.dansoftware.libraryapp.gui.googlebooks.preview.GoogleBookPreviewActiv
 import com.dansoftware.libraryapp.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.libraryapp.gui.util.*
 import com.dansoftware.libraryapp.i18n.I18N
+import com.dansoftware.libraryapp.util.ExploitativeExecutor
+import com.pnikosis.html2markdown.HTML2Md
+import com.sandec.mdfx.MDFXNode
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.concurrent.Task
 import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.scene.effect.BlendMode
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.*
+import javafx.scene.web.WebView
 import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.*
 import java.util.function.Consumer
@@ -224,15 +230,20 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
             )
 
         private fun buildDescriptionArea(volume: Volume): Node =
-            HBox(5.0,
-                PropertyNameLabel(I18N.getGoogleBooksImportValue("google.books.table.column.desc").plus(":")),
-                TextArea(volume.volumeInfo?.description).also {
-                    it.isWrapText = true
-                    it.prefWidth = Region.USE_COMPUTED_SIZE
-                    it.prefHeight = Region.USE_COMPUTED_SIZE
-                    it.isEditable = false
-                }
-            )
+            VBox(5.0,
+                PropertyNameLabel(I18N.getGoogleBooksImportValue("google.books.table.column.desc").plus(":"))
+            ).also { hBox ->
+                ExploitativeExecutor.submit(object : Task<String>() {
+                    override fun call(): String? = volume.volumeInfo?.description?.let { HTML2Md.convert(it) }
+                }.also { task ->
+                    task.setOnSucceeded {
+                        hBox.children.add(MDFXNode(task.value).also {
+                            it.styleClass.add("description-area")
+                            it.prefWidth = 200.0
+                        })
+                    }
+                })
+            }
 
         private fun buildCategoriesIndicator(volume: Volume): Node =
             HBox(
@@ -362,7 +373,8 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
     private class PropertyNameLabel(initial: String? = null) : Label(initial) {
         init {
             styleClass.add("property-mark-label")
-            this.isWrapText = true
+            //HBox.setHgrow(this, Priority.ALWAYS)
+            //this.isWrapText = true
         }
     }
 }
