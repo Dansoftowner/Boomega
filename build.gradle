@@ -99,6 +99,8 @@ dependencies {
     libraries 'com.github.oshi:oshi-core:5.3.4'
     libraries 'com.github.Dansoftowner:jSystemThemeDetector:2.1'
 
+    libraries 'org.jsoup:jsoup:1.13.1'
+
     // OkHttp
     libraries 'com.squareup.okhttp3:okhttp:4.9.0'
 
