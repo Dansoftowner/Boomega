@@ -68,6 +68,16 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
+            "jsoup",
+            "https://jsoup.org/",
+            LicenseInfo.mitLicense()
+        ),
+        DependencyInfo(
+            "jHTML2Md",
+            "https://github.com/nico2sh/jHTML2Md",
+            LicenseInfo("No license", "about:blank")
+        ),
+        DependencyInfo(
             "Jetbrains annotations",
             "https://github.com/JetBrains/java-annotations",
             LicenseInfo.apache20License()
