@@ -1,0 +1,135 @@
+/* Dock-frame */
+.border-button {
+    -fx-background-color: transparent;
+    -fx-padding: 2px;
+}
+
+.border-button :selected {
+    -fx-background-color: #262626;
+}
+
+.border-button .root-btn {
+    -fx-spacing: 10;
+    -fx-padding: 0 5 0 5;
+    -fx-min-height: 20;
+}
+
+.border-button .label {
+    -fx-font-size: 12;
+}
+
+.border-button .root-btn:hover {
+    -fx-background-color: #4c4c4c;
+}
+
+.border-edge, .border-toolbar {
+    -fx-background-color: #323232;
+    -fx-padding: 0;
+    -fx-min-width: 20;
+}
+
+.border-edge {
+    -fx-border-color: #323232;
+}
+
+.border-edge :vertical {
+}
+
+.border-edge :horizontal {
+    -fx-padding: 0 20 0 20;
+}
+
+/* Dock-node*/
+.dock-node {
+    /*-fx-border-color: #D1D1D1;*/
+}
+
+.dock-title-bar {
+    /*-fx-background-color: #F4F4F4;*/
+    -fx-background-color: #343333;
+    -fx-pref-height: 28px;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #323232;
+    -fx-padding: 0 4px 0 4px;
+}
+
+.dock-title-bar .label {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.dock-title-bar .button:hover {
+    -fx-background-color: #4C5052;
+}
+
+.dock-title-bar .options-btn {
+    -fx-graphic: url(/com/dansoftware/dock/image/options_white.png);
+    -fx-padding: 2px;
+}
+
+.dock-title-bar .close-btn {
+    -fx-graphic: url(/com/dansoftware/dock/image/hide_white.png);
+    -fx-padding: 2px;
+}
+
+.dock-title-bar .options-btn, .dock-title-bar .close-btn {
+    -fx-background-color: transparent;
+}
+
+.dock-options-menu {
+    -fx-padding: 4 0 4 0;
+}
+
+.dock-options-menu .menu-item {
+    -fx-padding: 3;
+}
+
+.dock-options-menu .menu-item .label {
+    -fx-font-size: 12px;
+}
+
+.window {
+    -fx-image: url(/com/dansoftware/dock/image/view_mode/window_white.png);
+}
+
+.float {
+    -fx-image: url(/com/dansoftware/dock/image/view_mode/float_white.png);
+}
+
+.pinned {
+    -fx-image: url(/com/dansoftware/dock/image/view_mode/docked_white.png);
+}
+
+.bottom-right {
+    -fx-image: url(/com/dansoftware/dock/image/pos/bottom_right_white.png);
+}
+
+.bottom-left {
+    -fx-image: url(/com/dansoftware/dock/image/pos/bottom_left_white.png);
+}
+
+.left-top {
+    -fx-image: url(/com/dansoftware/dock/image/pos/top_left_white.png);
+}
+
+.left-bottom {
+    -fx-image: url(/com/dansoftware/dock/image/pos/bottom_left_white.png);
+}
+
+.right-top {
+    -fx-image: url(/com/dansoftware/dock/image/pos/top_right_white.png);
+}
+
+.right-bottom {
+    -fx-image: url(/com/dansoftware/dock/image/pos/bottom_right_white.png);
+}
+
+.top-right {
+    -fx-image: url(/com/dansoftware/dock/image/pos/top_right_white.png);
+}
+
+.top-left{
+    -fx-image: url(/com/dansoftware/dock/image/pos/top_left_white.png);
+}

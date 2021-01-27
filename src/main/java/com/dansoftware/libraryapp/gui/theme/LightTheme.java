@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import com.dansoftware.dock.util.DockTool;
 import com.dansoftware.libraryapp.gui.theme.applier.AndThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.JMetroThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.StyleSheetThemeApplier;
@@ -55,7 +56,8 @@ public class LightTheme extends Theme {
                 "/com/dansoftware/libraryapp/gui/theme/css/light/plugin-manager-light.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/light/update-dialog-light.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/light/google-books-module-light.css",
-                "/com/dansoftware/libraryapp/gui/theme/css/light/record-add-form-light.css"
+                "/com/dansoftware/libraryapp/gui/theme/css/light/record-add-form-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/dock-system-light.css"
         );
     }
 

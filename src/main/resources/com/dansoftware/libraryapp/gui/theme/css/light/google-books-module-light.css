@@ -6,6 +6,11 @@
     -fx-padding: 10;
 }
 
+.google-book-details-pane .description-area {
+    -fx-border-color: gray;
+    -fx-padding: 2px;
+}
+
 .google-book-details-pane .header-area .label {
     -fx-font-size: 17px;
 }

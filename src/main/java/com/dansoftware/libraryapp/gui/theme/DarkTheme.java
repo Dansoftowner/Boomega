@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.theme;
 
+import com.dansoftware.dock.util.DockTool;
 import com.dansoftware.libraryapp.gui.theme.applier.AndThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.JMetroThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.StyleSheetThemeApplier;
@@ -53,7 +54,8 @@ public class DarkTheme extends Theme {
                 "/com/dansoftware/libraryapp/gui/theme/css/dark/plugin-manager-dark.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/dark/update-dialog-dark.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/dark/google-books-module-dark.css",
-                "/com/dansoftware/libraryapp/gui/theme/css/dark/record-add-form-dark.css"
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/record-add-form-dark.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/dark/dock-system-dark.css"
         );
     }
 }
