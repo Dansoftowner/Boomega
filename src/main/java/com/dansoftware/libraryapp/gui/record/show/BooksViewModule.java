@@ -156,7 +156,7 @@ public class BooksViewModule extends WorkbenchModule
     }
 
     private BooksView buildContent() {
-        BooksView booksView = new BooksView();
+        BooksView booksView = new BooksView(context);
         loadBooks(booksView);
         readColumnConfigurations(booksView.getBooksTable());
         return booksView;
