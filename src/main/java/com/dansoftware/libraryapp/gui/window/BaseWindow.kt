@@ -63,7 +63,7 @@ abstract class BaseWindow<C> : Stage, Themeable
     /**
      * Creates a normal LibraryAppStage.
      */
-    private constructor() : super()
+    constructor() : super()
 
     /**
      * Creates a LibraryAppStage and sets the title of it.
