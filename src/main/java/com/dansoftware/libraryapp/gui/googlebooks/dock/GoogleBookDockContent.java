@@ -20,10 +20,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -33,36 +35,35 @@ import java.util.stream.Collectors;
 public class GoogleBookDockContent<T> extends VBox {
 
     private final Context context;
-    private final ObservableList<T> items;
     private final BiConsumer<T, Volume> joinAction;
     private final BiConsumer<T, Volume> removeAction;
     private final Function<T, SearchParameters> searchParametersSupplier;
     private final Function<T, String> volumeHandleRetriever;
 
+    private List<T> items;
+
     public GoogleBookDockContent(@NotNull Context context,
-                                  @NotNull ObservableList<T> items,
-                                  @NotNull BiConsumer<T, Volume> joinAction,
-                                  @NotNull BiConsumer<T, Volume> removeAction,
-                                  @NotNull Function<T, SearchParameters> searchParametersSupplier,
-                                  @NotNull Function<T, String> volumeHandleRetriever) {
+                                 @Nullable List<T> items,
+                                 @NotNull BiConsumer<T, Volume> joinAction,
+                                 @NotNull BiConsumer<T, Volume> removeAction,
+                                 @NotNull Function<T, SearchParameters> searchParametersSupplier,
+                                 @NotNull Function<T, String> volumeHandleRetriever) {
         this.context = context;
-        this.items = items;
         this.joinAction = joinAction;
         this.removeAction = removeAction;
         this.searchParametersSupplier = searchParametersSupplier;
         this.volumeHandleRetriever = volumeHandleRetriever;
-        this.buildChangeDetection();
+        this.setItems(items);
+    }
+
+    public void setItems(List<T> items) {
+        this.items = items == null ? Collections.emptyList() : items;
+        buildBaseContent();
     }
 
     private void setContent(@NotNull Node content) {
-        VBox.setVgrow(content, Priority.ALWAYS);
         if (this.getChildren().isEmpty()) this.getChildren().add(content);
         else this.getChildren().set(0, content);
-    }
-
-    private void buildChangeDetection() {
-        buildBaseContent();
-        items.addListener((ListChangeListener<T>) change -> buildBaseContent());
     }
 
     private void buildBaseContent() {
@@ -79,7 +80,7 @@ public class GoogleBookDockContent<T> extends VBox {
     }
 
     @Nullable
-    private String retrieveGoogleBookHandle(@NotNull ObservableList<T> items) {
+    private String retrieveGoogleBookHandle(@NotNull List<T> items) {
         String googleBookHandle = null;
 
         List<String> distinctHandles = items.stream()
@@ -135,7 +136,7 @@ public class GoogleBookDockContent<T> extends VBox {
 
         public void run() {
             context.showOverlay(new GoogleBookJoinerOverlay(context, searchParametersSupplier.apply(item), volume -> {
-                 ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume));
+                ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume));
             }));
         }
 
@@ -172,11 +173,13 @@ public class GoogleBookDockContent<T> extends VBox {
         }
 
         private void buildUI() {
+            this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
             this.getChildren().add(
                     new Group(new VBox(5,
-                            new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.error"))),
-                            buildDetailsButton())
+                            new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.error")),
+                            buildDetailsButton()))
             );
+            VBox.setVgrow(this, Priority.ALWAYS);
         }
 
         private Button buildDetailsButton() {
@@ -199,10 +202,12 @@ public class GoogleBookDockContent<T> extends VBox {
         }
 
         private void buildUI() {
+            this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
             getChildren().add(new VBox(5,
                     new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.noconn")),
                     buildConnectionButton())
             );
+            VBox.setVgrow(this, Priority.ALWAYS);
         }
 
         private Button buildConnectionButton() {
@@ -222,7 +227,9 @@ public class GoogleBookDockContent<T> extends VBox {
         }
 
         private void buildUI() {
+            this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
             this.getChildren().add(new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.multiple")));
+            VBox.setVgrow(this, Priority.ALWAYS);
         }
     }
 
@@ -233,7 +240,9 @@ public class GoogleBookDockContent<T> extends VBox {
         }
 
         private void buildUI() {
+            this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
             this.getChildren().add(new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.noselection")));
+            VBox.setVgrow(this, Priority.ALWAYS);
         }
 
     }
