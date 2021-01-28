@@ -169,7 +169,7 @@ public abstract class Theme {
      * @return the default theme
      */
     public static Theme getDefault() {
-        if (defaultTheme.get() != null) {
+        if (defaultTheme.get() == null) {
             defaultTheme.set(DefaultThemeFactory.INSTANCE.get());
         }
         return defaultTheme.get();
