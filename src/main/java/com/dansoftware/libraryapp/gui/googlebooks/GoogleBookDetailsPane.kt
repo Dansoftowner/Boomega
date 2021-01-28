@@ -17,12 +17,13 @@ import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.*
-import javafx.scene.effect.BlendMode
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseButton
-import javafx.scene.layout.*
-import javafx.scene.web.WebView
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
+import javafx.scene.layout.StackPane
+import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.*
 import java.util.function.Consumer
@@ -230,17 +231,22 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
             )
 
         private fun buildDescriptionArea(volume: Volume): Node =
-            VBox(5.0,
+            VBox(
+                5.0,
                 PropertyNameLabel(I18N.getGoogleBooksImportValue("google.books.table.column.desc").plus(":"))
             ).also { hBox ->
                 ExploitativeExecutor.submit(object : Task<String>() {
                     override fun call(): String? = volume.volumeInfo?.description?.let { HTML2Md.convert(it) }
                 }.also { task ->
                     task.setOnSucceeded {
-                        hBox.children.add(MDFXNode(task.value).also {
-                            it.styleClass.add("description-area")
-                            it.prefWidth = 200.0
-                        })
+                        hBox.children.add(
+                            task.value?.let { result ->
+                                MDFXNode(result).also {
+                                    it.styleClass.add("description-area")
+                                    it.prefWidth = 200.0
+                                }
+                            } ?: Label("-")
+                        )
                     }
                 })
             }
@@ -260,6 +266,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                                 )
                             )
                         }
+                        HBox.setHgrow(listView, Priority.ALWAYS)
                     }
                 } ?: Label("-")
             )
