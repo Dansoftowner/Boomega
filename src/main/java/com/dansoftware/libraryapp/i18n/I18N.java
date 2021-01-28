@@ -201,6 +201,12 @@ public class I18N {
         return languagePack.getRecordsViewValues();
     }
 
+    @NotNull
+    public static ResourceBundle getDockSystemValues() {
+        recognizeLanguagePack();
+        return languagePack.getDockSystemValues();
+    }
+
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
         return MessageFormat.format(resourceBundle.getString(key), args);
     }

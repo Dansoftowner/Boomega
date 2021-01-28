@@ -158,4 +158,7 @@ public abstract class LanguagePack {
 
     @NotNull
     public abstract ResourceBundle getRecordsViewValues();
+
+    @NotNull
+    public abstract ResourceBundle getDockSystemValues();
 }

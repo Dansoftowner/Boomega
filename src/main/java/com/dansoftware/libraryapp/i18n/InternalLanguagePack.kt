@@ -27,6 +27,7 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
         private const val GOOGLE_BOOKS_IMPORT = "com.dansoftware.libraryapp.i18n.GoogleBooksImport"
         private const val RECORD_ADD_FORM = "com.dansoftware.libraryapp.i18n.RecordAddForm"
         private const val BOOK_VIEW = "com.dansoftware.libraryapp.i18n.RecordsView"
+        private const val DOCK_SYSTEM = "com.dansoftware.libraryapp.i18n.DockSystem"
     }
 
     override fun getTranslator(): LanguageTranslator? {
@@ -64,4 +65,6 @@ abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
     override fun getRecordAddFormValues(): ResourceBundle = getBundle(RECORD_ADD_FORM)
 
     override fun getRecordsViewValues(): ResourceBundle = getBundle(BOOK_VIEW)
+
+    override fun getDockSystemValues(): ResourceBundle = getBundle(DOCK_SYSTEM)
 }
