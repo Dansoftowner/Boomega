@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.db.data
 
+import com.dansoftware.libraryapp.gui.record.RecordType
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
 import java.time.LocalDate
@@ -7,6 +8,7 @@ import java.time.format.DateTimeFormatter
 
 class Record(
     @field:Id var id: NitriteId? = null,
+    var recordType: Type = Type.BOOK,
 
     //General
     var title: String? = null,
@@ -30,6 +32,7 @@ class Record(
 
     constructor(): this(
         null,
+        Type.BOOK,
         null,
         null,
         null,
@@ -45,6 +48,7 @@ class Record(
 
     private constructor(builder: Builder): this(
         null,
+        builder.recordType,
         builder.title,
         builder.language,
         builder.publisher,
@@ -60,7 +64,12 @@ class Record(
         builder.magazineName
     )
 
+    enum class Type {
+        BOOK, MAGAZINE
+    }
+
     class Builder(
+        var recordType: Type,
         var title: String? = null,
         var language: String? = null,
         var publisher: String? = null,
