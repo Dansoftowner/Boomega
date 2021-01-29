@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter
  *
  * Compatible with the *Nitrite* database api.
  */
+@Deprecated("")
 @Indices(Index(value = "isbn", type = IndexType.Unique))
 data class Book(
     @field:Id var id: NitriteId? = null,

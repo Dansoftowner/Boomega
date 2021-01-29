@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.db;
 
 import com.dansoftware.libraryapp.db.data.Book;
 import com.dansoftware.libraryapp.db.data.Magazine;
+import com.dansoftware.libraryapp.db.data.Record;
 import org.dizitart.no2.FindOptions;
 import org.dizitart.no2.objects.ObjectFilter;
 import org.jetbrains.annotations.NotNull;
@@ -18,42 +19,24 @@ public interface Database {
 
     //CREATE, UPDATE, DELETE
 
-    void insertMagazine(@NotNull Magazine magazine);
+    void insertRecord(@NotNull Record record);
 
-    void updateMagazine(@NotNull Magazine magazine);
+    void updateRecord(@NotNull Record record);
 
-    void removeMagazine(@NotNull Magazine magazine);
-
-    void insertBook(@NotNull Book book);
-
-    void updateBook(@NotNull Book book);
-
-    void removeBook(@NotNull Book book);
+    void removeRecord(@NotNull Record record);
 
     //READ
 
-    int getTotalMagazineCount();
+    int getTotalRecordCount();
 
-    int getTotalBookCount();
+    List<Record> getRecords();
 
-    List<Magazine> getMagazines();
+    List<Record> getRecords(@NotNull FindOptions findOptions);
 
-    List<Magazine> getMagazines(FindOptions findOptions);
+    List<Record> getRecords(@NotNull ObjectFilter objectFilter, @NotNull FindOptions findOptions);
 
-    List<Magazine> getMagazines(ObjectFilter objectFilter, FindOptions findOptions);
-
-    List<Book> getBooks();
-
-    List<Book> getBooks(FindOptions findOptions);
-
-    List<Book> getBooks(ObjectFilter objectFilter, FindOptions findOptions);
-
-    default List<Magazine> getMagazines(int offSet, int size) {
-        return getMagazines(FindOptions.limit(offSet, size));
-    }
-
-    default List<Book> getBooks(int offSet, int size) {
-        return getBooks(FindOptions.limit(offSet, size));
+    default List<Record> getRecords(int offSet, int size) {
+        return getRecords(FindOptions.limit(offSet, size));
     }
 
     //OTHER

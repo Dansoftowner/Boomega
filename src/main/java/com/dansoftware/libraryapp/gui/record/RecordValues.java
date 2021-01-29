@@ -1,5 +1,6 @@
 package com.dansoftware.libraryapp.gui.record;
 
+import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.googlebooks.Volume;
 import com.dansoftware.libraryapp.gui.record.add.RecordAddForm;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,7 @@ import java.util.Objects;
 public class RecordValues {
 
     @NotNull
-    private RecordType recordType = RecordType.BOOK;
+    private Record.Type recordType = Record.Type.BOOK;
     private String title = StringUtils.EMPTY;
     private String subtitle = StringUtils.EMPTY;
     private LocalDate publishedDate;
@@ -28,7 +29,7 @@ public class RecordValues {
 
     private Volume volumeObject;
 
-    public RecordValues recordType(@NotNull RecordType recordType) {
+    public RecordValues recordType(@NotNull Record.Type recordType) {
         this.recordType = Objects.requireNonNull(recordType);
         return this;
     }
@@ -103,7 +104,7 @@ public class RecordValues {
         return this;
     }
 
-    public RecordType getRecordType() {
+    public Record.Type getRecordType() {
         return recordType;
     }
 

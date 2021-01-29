@@ -2,7 +2,7 @@ package com.dansoftware.libraryapp.gui.record.show;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
 import com.dansoftware.libraryapp.db.Database;
-import com.dansoftware.libraryapp.db.data.Book;
+import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.NotifiableModule;
 import com.dansoftware.libraryapp.i18n.ABCCollators;
@@ -39,10 +39,10 @@ public class BooksViewModule extends WorkbenchModule
 
     public static final class Message {
         private final Action action;
-        private final Book book;
+        private final Record record;
 
-        public Message(Book book, @NotNull Action action) {
-            this.book = book;
+        public Message(Record record, @NotNull Action action) {
+            this.record = record;
             this.action = action;
         }
 
@@ -70,7 +70,7 @@ public class BooksViewModule extends WorkbenchModule
     private final Preferences preferences;
     private final Database database;
 
-    private final ObjectProperty<BooksView> content =
+    private final ObjectProperty<RecordsView> content =
             new SimpleObjectProperty<>();
 
     private final IntegerProperty itemsPerPage =
@@ -115,11 +115,11 @@ public class BooksViewModule extends WorkbenchModule
         if (content.get() != null) {
             switch (data.action) {
                 case DELETED:
-                    getTable().getItems().remove(data.book);
+                    getTable().getItems().remove(data.record);
                     break;
                 case INSERTED:
                     if (itemsPerPage.get() > getTable().getItems().size()) {
-                        getTable().getItems().add(data.book);
+                        getTable().getItems().add(data.record);
                         totalItems.set(totalItems.get() + 1);
                     }
                     break;
@@ -131,7 +131,7 @@ public class BooksViewModule extends WorkbenchModule
     }
 
     private void countTotalItems() {
-        ExploitativeExecutor.INSTANCE.submit(() -> totalItems.set(database.getTotalBookCount()));
+        ExploitativeExecutor.INSTANCE.submit(() -> totalItems.set(database.getTotalRecordCount()));
     }
 
     private void readConfig() {
@@ -139,8 +139,8 @@ public class BooksViewModule extends WorkbenchModule
         abcLocale.set(preferences.get(abcConfigKey));
     }
 
-    private void readColumnConfigurations(BooksTable table) {
-        List<BooksTable.ColumnType> columnTypes =
+    private void readColumnConfigurations(RecordTable table) {
+        List<RecordTable.ColumnType> columnTypes =
                 preferences.get(colConfigKey).columnTypes;
         columnTypes.forEach(table::addColumn);
         columnChooserItem.getItems().stream()
@@ -155,11 +155,11 @@ public class BooksViewModule extends WorkbenchModule
                 .put(abcConfigKey, abcLocale.get());
     }
 
-    private BooksView buildContent() {
-        BooksView booksView = new BooksView(context);
-        loadBooks(booksView);
-        readColumnConfigurations(booksView.getBooksTable());
-        return booksView;
+    private RecordsView buildContent() {
+        RecordsView recordsView = new RecordsView(context, database);
+        loadBooks(recordsView);
+        readColumnConfigurations(recordsView.getBooksTable());
+        return recordsView;
     }
 
     private void buildToolbar() {
@@ -211,7 +211,7 @@ public class BooksViewModule extends WorkbenchModule
                 logger.debug("Old value: {}, new value: {}", oldValueInt, newValueInt);
                 if (oldValueInt < newValueInt) {
                     ExploitativeExecutor.INSTANCE.submit(
-                            new TableBooksGetTask(context, getTable(), database, oldValueInt, newValueInt - oldValueInt)
+                            new TableRecordsGetTask(context, getTable(), database, oldValueInt, newValueInt - oldValueInt)
                     );
                 } else {
                     try {
@@ -237,7 +237,7 @@ public class BooksViewModule extends WorkbenchModule
         var toolbarItem = new ToolbarItem(
                 I18N.getRecordsViewValue("record.table.preferred.columns"),
                 new FontAwesomeIconView(FontAwesomeIcon.COLUMNS));
-        Stream.of(BooksTable.ColumnType.values())
+        Stream.of(RecordTable.ColumnType.values())
                 .map(TableColumnMenuItem::new)
                 .forEach(toolbarItem.getItems()::add);
         return toolbarItem;
@@ -271,11 +271,11 @@ public class BooksViewModule extends WorkbenchModule
         return toolbarItem;
     }
 
-    private BooksTable getTable() {
+    private RecordTable getTable() {
         return content.get().getBooksTable();
     }
 
-    private BooksView getContent() {
+    private RecordsView getContent() {
         return content.get();
     }
 
@@ -283,9 +283,9 @@ public class BooksViewModule extends WorkbenchModule
         this.loadBooks(getContent());
     }
 
-    private void loadBooks(BooksView content) {
+    private void loadBooks(RecordsView content) {
         ExploitativeExecutor.INSTANCE.submit(
-                new TableBooksGetTask(
+                new TableRecordsGetTask(
                         context,
                         content.getBooksTable(),
                         database,
@@ -298,9 +298,9 @@ public class BooksViewModule extends WorkbenchModule
     @SuppressWarnings("DuplicatedCode")
     private final class TableColumnMenuItem extends CheckMenuItem {
 
-        private final BooksTable.ColumnType columnType;
+        private final RecordTable.ColumnType columnType;
 
-        TableColumnMenuItem(BooksTable.ColumnType columnType) {
+        TableColumnMenuItem(RecordTable.ColumnType columnType) {
             super(I18N.getRecordsViewValue(columnType.getI18Nkey()));
             this.columnType = columnType;
             this.setOnAction(e -> {
@@ -344,16 +344,16 @@ public class BooksViewModule extends WorkbenchModule
      */
     static class TableColumnsInfo {
 
-        private final List<BooksTable.ColumnType> columnTypes;
+        private final List<RecordTable.ColumnType> columnTypes;
 
-        TableColumnsInfo(@NotNull List<BooksTable.ColumnType> columnTypes) {
+        TableColumnsInfo(@NotNull List<RecordTable.ColumnType> columnTypes) {
             this.columnTypes = Objects.requireNonNull(columnTypes);
         }
 
         public static TableColumnsInfo byDefault() {
             return new TableColumnsInfo(
-                    Arrays.stream(BooksTable.ColumnType.values())
-                            .filter(BooksTable.ColumnType::isDefaultVisible)
+                    Arrays.stream(RecordTable.ColumnType.values())
+                            .filter(RecordTable.ColumnType::isDefaultVisible)
                             .collect(Collectors.toList())
             );
         }

@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.googlebooks
 
+import com.dansoftware.libraryapp.db.data.Record
 import com.dansoftware.libraryapp.gui.context.Context
-import com.dansoftware.libraryapp.gui.record.RecordType
 import com.dansoftware.libraryapp.gui.record.RecordValues
 import com.dansoftware.libraryapp.gui.record.add.RecordAddModule
 import com.dansoftware.libraryapp.i18n.I18N
@@ -47,23 +47,25 @@ private class GoogleBooksImportView(val context: Context) : GoogleBooksSearchVie
 
     private fun buildButtonAction() = EventHandler<ActionEvent> {
         context.showModule(RecordAddModule::class.java, RecordValues()
-            .also { values ->
-            table.selectionModel.selectedItem.also { volume ->
-                values.recordType(when {
-                    volume.volumeInfo?.isMagazine ?: false -> RecordType.MAGAZINE
-                    else -> RecordType.BOOK
-                })
-                values.authors(volume.volumeInfo?.authors?.joinToString(", "))
-                values.date(volume.volumeInfo?.getPublishedDateObject())
-                values.isbn(volume.volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier)
-                values.language(volume.volumeInfo?.language)
-                values.title(volume.volumeInfo?.title)
-                values.subtitle(volume.volumeInfo?.subtitle)
-                values.notes(volume.volumeInfo?.description)
-                values.publisher(volume.volumeInfo?.publisher)
-                values.googleVolumeObject(volume)
-                values.rating(volume.volumeInfo?.averageRating?.toInt() ?: 5)
-            }
-        })
+            .apply {
+                table.selectionModel.selectedItem.also { volume ->
+                    recordType(
+                        when {
+                            volume.volumeInfo?.isMagazine ?: false -> Record.Type.MAGAZINE
+                            else -> Record.Type.BOOK
+                        }
+                    )
+                    authors(volume.volumeInfo?.authors?.joinToString(", "))
+                    date(volume.volumeInfo?.getPublishedDateObject())
+                    isbn(volume.volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier)
+                    language(volume.volumeInfo?.language)
+                    title(volume.volumeInfo?.title)
+                    subtitle(volume.volumeInfo?.subtitle)
+                    notes(volume.volumeInfo?.description)
+                    publisher(volume.volumeInfo?.publisher)
+                    googleVolumeObject(volume)
+                    rating(volume.volumeInfo?.averageRating?.toInt() ?: 5)
+                }
+            })
     }
 }

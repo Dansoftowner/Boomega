@@ -2,7 +2,9 @@ package com.dansoftware.libraryapp.gui.record.add;
 
 import com.dansoftware.libraryapp.db.data.Book;
 import com.dansoftware.libraryapp.db.data.Magazine;
+import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.db.data.ServiceConnection;
+import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.libraryapp.googlebooks.Volume;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
@@ -53,8 +55,7 @@ import java.util.function.Consumer;
  * typed.
  *
  * <p>
- * The {@link #setOnBookAdded(Consumer)} and {@link #setOnMagazineAdded(Consumer)} can be used
- * for listening to commits.
+ * The {@link #setOnRecordAdded(Consumer)} method can be used for listening to commits
  *
  * @author Daniel Gyorffy
  */
@@ -64,14 +65,11 @@ public class RecordAddForm extends ScrollPane {
 
     private static final String STYLE_CLASS = "record-add-form";
 
-    private final ObjectProperty<RecordType> recordType = new SimpleObjectProperty<>() {{
+    private final ObjectProperty<Record.Type> recordType = new SimpleObjectProperty<>() {{
         addListener((observable, oldValue, newValue) -> handleTypeChange(newValue));
     }};
 
-    private final ObjectProperty<Consumer<Book>> onBookAdded =
-            new SimpleObjectProperty<>();
-
-    private final ObjectProperty<Consumer<Magazine>> onMagazineAdded =
+    private final ObjectProperty<Consumer<Record>> onRecordAdded =
             new SimpleObjectProperty<>();
 
     private final ObjectProperty<Form> currentForm =
@@ -90,14 +88,14 @@ public class RecordAddForm extends ScrollPane {
     private final IntegerProperty numberOfCopies = new SimpleIntegerProperty(1);
     private final IntegerProperty numberOfPages = new SimpleIntegerProperty();
     private final IntegerProperty rating = new SimpleIntegerProperty(5);
-    private final StringProperty googleBookLink = new SimpleStringProperty();
+    private final StringProperty googleBookHandle = new SimpleStringProperty();
 
     private final VBox contentVBox;
     private final Context context;
 
     private VBox googleBookTileBox;
 
-    public RecordAddForm(@NotNull Context context, @NotNull RecordType initialType) {
+    public RecordAddForm(@NotNull Context context, @NotNull Record.Type initialType) {
         this.context = context;
         this.contentVBox = new VBox();
         this.recordType.set(initialType);
@@ -110,11 +108,11 @@ public class RecordAddForm extends ScrollPane {
         this.setFitToWidth(true);
     }
 
-    private void handleTypeChange(@NotNull RecordType recordType) {
+    private void handleTypeChange(@NotNull Record.Type recordType) {
         Form form = null;
-        if (recordType == RecordType.BOOK)
+        if (recordType == Record.Type.BOOK)
             form = buildBookForm();
-        else if (recordType == RecordType.MAGAZINE)
+        else if (recordType == Record.Type.MAGAZINE)
             form = buildMagazineForm();
         currentForm.set(form);
         buildFormUI();
@@ -192,7 +190,10 @@ public class RecordAddForm extends ScrollPane {
         button.setOnAction(event ->
                 context.showOverlay(new GoogleBookJoinerOverlay(
                         context, new SearchParameters()
-                        .printType(recordType.get().getPrintType())
+                        .printType(recordType.get() == Record.Type.BOOK ?
+                                GoogleBooksQueryBuilder.PrintType.BOOKS :
+                                GoogleBooksQueryBuilder.PrintType.MAGAZINES
+                        )
                         .isbn(isbn.get())
                         .authors(authors.get())
                         .publisher(publisher.get())
@@ -211,28 +212,17 @@ public class RecordAddForm extends ScrollPane {
                 new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE));
         button.setDefaultButton(true);
         button.disableProperty().bind(currentForm.get().validProperty().not());
-        button.setOnAction(event -> commitData());
+        button.setOnAction(event -> commitRecord());
         button.prefWidthProperty().bind(vBox.widthProperty());
         VBox.setMargin(button, new Insets(10, 40, 10, 40));
         return button;
     }
 
-    private void commitData() {
-        switch (recordType.get()) {
-            case BOOK:
-                var bookAddAction = onBookAdded.get();
-                if (bookAddAction != null) {
-                    bookAddAction.accept(buildBookObject());
-                    clearForm();
-                }
-                break;
-            case MAGAZINE:
-                var magazineAddAction = onMagazineAdded.get();
-                if (magazineAddAction != null) {
-                    magazineAddAction.accept(buildMagazineObject());
-                    clearForm();
-                }
-                break;
+    private void commitRecord() {
+        Consumer<Record> addAction = onRecordAdded.get();
+        if (addAction != null) {
+            addAction.accept(buildRecordObject());
+            clearForm();
         }
     }
 
@@ -250,13 +240,13 @@ public class RecordAddForm extends ScrollPane {
         numberOfCopies.setValue(null);
         numberOfPages.setValue(null);
         rating.setValue(null);
-        googleBookLink.set(null);
+        googleBookHandle.set(null);
         removeGoogleBookConnection();
     }
 
     private GoogleBookTile createGoogleBookTile(@NotNull Volume volume) {
         final var googleBookTile = new GoogleBookTile(context, volume, closedVolume -> {
-            googleBookLink.set(null);
+            googleBookHandle.set(null);
             googleBookTileBox.getChildren().removeIf(element -> element instanceof GoogleBookTile);
         });
         VBox.setMargin(googleBookTile, new Insets(0, 40, 0, 40));
@@ -265,17 +255,17 @@ public class RecordAddForm extends ScrollPane {
 
     private void createGoogleBookConnection(Volume volume) {
         this.googleBookTileBox.getChildren().removeIf(e -> e instanceof GoogleBookTile);
-        this.googleBookLink.setValue(volume.getSelfLink());
+        this.googleBookHandle.setValue(volume.getSelfLink());
         this.googleBookTileBox.getChildren().add(createGoogleBookTile(volume));
     }
 
     private void removeGoogleBookConnection() {
-        googleBookLink.set(null);
+        googleBookHandle.set(null);
         googleBookTileBox.getChildren().removeIf(e -> e instanceof GoogleBookTile);
     }
 
-    private Book buildBookObject() {
-        return new Book.Builder()
+    private Record buildRecordObject() {
+        return new Record.Builder(recordType.get())
                 .authors(List.of(authors.get().split(",")))
                 .isbn(isbn.get())
                 .publisher(publisher.get())
@@ -284,20 +274,7 @@ public class RecordAddForm extends ScrollPane {
                 .subject(subject.get())
                 .title(title.get())
                 .publishedDate(publishedDate.get())
-                .serviceConnection(new ServiceConnection(googleBookLink.get()))
-                .build();
-    }
-
-    private Magazine buildMagazineObject() {
-        return new Magazine.Builder()
-                .magazineName(magazineName.get())
-                .publisher(publisher.get())
-                .title(title.get())
-                .publishedDate(publishedDate.get().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .notes(notes.get())
-                .rating(rating.get())
-                .language(language.get())
-                .serviceConnection(new ServiceConnection(googleBookLink.get()))
+                .serviceConnection(new ServiceConnection(googleBookHandle.get()))
                 .build();
     }
 
@@ -407,28 +384,16 @@ public class RecordAddForm extends ScrollPane {
                 .binding(BindingMode.CONTINUOUS);
     }
 
-    public Consumer<Book> getOnBookAdded() {
-        return onBookAdded.get();
+    public Consumer<Record> getOnRecordAdded() {
+        return onRecordAdded.get();
     }
 
-    public ObjectProperty<Consumer<Book>> onBookAddedProperty() {
-        return onBookAdded;
+    public ObjectProperty<Consumer<Record>> onRecordAddedProperty() {
+        return onRecordAdded;
     }
 
-    public void setOnBookAdded(Consumer<Book> onBookAdded) {
-        this.onBookAdded.set(onBookAdded);
-    }
-
-    public Consumer<Magazine> getOnMagazineAdded() {
-        return onMagazineAdded.get();
-    }
-
-    public ObjectProperty<Consumer<Magazine>> onMagazineAddedProperty() {
-        return onMagazineAdded;
-    }
-
-    public void setOnMagazineAdded(Consumer<Magazine> onMagazineAdded) {
-        this.onMagazineAdded.set(onMagazineAdded);
+    public void setOnRecordAdded(Consumer<Record> onRecordAdded) {
+        this.onRecordAdded.set(onRecordAdded);
     }
 
     public String getTitle() {
@@ -535,20 +500,20 @@ public class RecordAddForm extends ScrollPane {
         return rating;
     }
 
-    public RecordType getRecordType() {
+    public Record.Type getRecordType() {
         return recordType.get();
     }
 
-    public ObjectProperty<RecordType> recordTypeProperty() {
+    public ObjectProperty<Record.Type> recordTypeProperty() {
         return recordType;
     }
 
-    public String getGoogleBookLink() {
-        return googleBookLink.get();
+    public String getGoogleBookHandle() {
+        return googleBookHandle.get();
     }
 
-    public StringProperty googleBookLinkProperty() {
-        return googleBookLink;
+    public StringProperty googleBookHandleProperty() {
+        return googleBookHandle;
     }
 
 }

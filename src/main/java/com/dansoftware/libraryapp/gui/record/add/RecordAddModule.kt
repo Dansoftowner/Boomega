@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.gui.record.add
 import com.dansoftware.libraryapp.db.Database
 import com.dansoftware.libraryapp.db.data.Book
 import com.dansoftware.libraryapp.db.data.Magazine
+import com.dansoftware.libraryapp.db.data.Record
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.NotifiableModule
 import com.dansoftware.libraryapp.gui.record.RecordType
@@ -50,7 +51,7 @@ class RecordAddModule(
                 toggleGroup.selectedToggleProperty()
                     .addListener { _, _, newSelected -> toolbarItem.text = (newSelected as MenuItem?)?.text }
 
-                fun createItem(i18n: String, recordType: RecordType) =
+                fun createItem(i18n: String, recordType: Record.Type) =
                     toolbarItem.items.add(RadioMenuItem(I18N.getRecordAddFormValue(i18n)).also {
                         it.toggleGroup = toggleGroup
                         it.userData = recordType
@@ -63,11 +64,11 @@ class RecordAddModule(
 
                 createItem(
                     "record.add.rectype.book",
-                    RecordType.BOOK
+                    Record.Type.BOOK
                 )
                 createItem(
                     "record.add.rectype.magazine",
-                    RecordType.MAGAZINE
+                    Record.Type.MAGAZINE
                 )
             }
         }
@@ -91,45 +92,37 @@ class RecordAddModule(
     private fun buildForm(): RecordAddForm =
         RecordAddForm(
             context,
-            RecordType.BOOK
+            Record.Type.BOOK
         ).also {
-            it.onBookAdded = buildBookAddAction()
-            it.onMagazineAdded = buildMagazineAddAction()
+            it.onRecordAdded = buildRecordAddAction()
         }
 
-    private fun buildBookAddAction() = Consumer<Book> { book ->
+    private fun buildRecordAddAction() = Consumer<Record> { record ->
         try {
-            database.insertBook(book)
+            database.insertRecord(record)
             context.showInformationNotification(
-                I18N.getRecordAddFormValue("record.book.success.notification"),
+                I18N.getRecordAddFormValue(when(record.recordType) {
+                    Record.Type.BOOK -> "record.book.success.notification"
+                    Record.Type.MAGAZINE -> "record.magazine.success.notification"
+                }),
                 null,
                 Duration.millis(5000.0)
             )
             context.notifyModule(
                 BooksViewModule::class.java,
-                BooksViewModule.Message(book, BooksViewModule.Message.Action.INSERTED)
+                BooksViewModule.Message(record, BooksViewModule.Message.Action.INSERTED)
             )
         } catch (e: RuntimeException) {
             context.showErrorDialog(
-                I18N.getRecordAddFormValue("record.book.error.title"),
-                I18N.getRecordAddFormValue("record.book.error.msg"), e
-            )
-        }
-    }
-
-
-    private fun buildMagazineAddAction() = Consumer<Magazine> { magazine ->
-        try {
-            database.insertMagazine(magazine)
-            context.showInformationNotification(
-                I18N.getRecordAddFormValue("record.magazine.success.notification"),
-                null,
-                Duration.millis(5000.0)
-            )
-        } catch (e: RuntimeException) {
-            context.showErrorDialog(
-                I18N.getRecordAddFormValue("record.magazine.error.title"),
-                I18N.getRecordAddFormValue("record.magazine.error.msg"), e
+                I18N.getRecordAddFormValue(when (record.recordType) {
+                    Record.Type.BOOK -> "record.book.error.title"
+                    Record.Type.MAGAZINE -> "record.magazine.error.title"
+                }),
+                I18N.getRecordAddFormValue(when (record.recordType) {
+                    Record.Type.BOOK -> "record.book.error.msg"
+                    Record.Type.MAGAZINE -> "record.magazine.error.msg"
+                }),
+                e
             )
         }
     }

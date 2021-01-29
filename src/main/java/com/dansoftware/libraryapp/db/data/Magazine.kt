@@ -9,6 +9,7 @@ import org.dizitart.no2.objects.Id
  *
  * @author Daniel Gyorffy
  */
+@Deprecated("")
 data class Magazine(
     @field:Id val id: NitriteId?,
     var publisher: String?,

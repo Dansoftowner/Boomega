@@ -1,5 +1,9 @@
 package com.dansoftware.libraryapp.gui.googlebooks.dock;
 
+import com.dansoftware.libraryapp.db.Database;
+import com.dansoftware.libraryapp.db.data.Record;
+import com.dansoftware.libraryapp.db.data.ServiceConnection;
+import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.libraryapp.googlebooks.SingleGoogleBookQuery;
 import com.dansoftware.libraryapp.googlebooks.Volume;
 import com.dansoftware.libraryapp.gui.context.Context;
@@ -10,13 +14,13 @@ import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -27,36 +31,28 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class GoogleBookDockContent<T> extends VBox {
+public class GoogleBookDockContent extends VBox {
 
     private final Context context;
-    private final BiConsumer<T, Volume> joinAction;
-    private final BiConsumer<T, Volume> removeAction;
-    private final Function<T, SearchParameters> searchParametersSupplier;
-    private final Function<T, String> volumeHandleRetriever;
+    private final Database database;
 
-    private List<T> items;
+    private List<Record> items;
 
     public GoogleBookDockContent(@NotNull Context context,
-                                 @Nullable List<T> items,
-                                 @NotNull BiConsumer<T, Volume> joinAction,
-                                 @NotNull BiConsumer<T, Volume> removeAction,
-                                 @NotNull Function<T, SearchParameters> searchParametersSupplier,
-                                 @NotNull Function<T, String> volumeHandleRetriever) {
+                                 @NotNull Database database,
+                                 @Nullable List<Record> items) {
         this.context = context;
-        this.joinAction = joinAction;
-        this.removeAction = removeAction;
-        this.searchParametersSupplier = searchParametersSupplier;
-        this.volumeHandleRetriever = volumeHandleRetriever;
+        this.database = database;
         this.setItems(items);
     }
 
-    public void setItems(List<T> items) {
+    public void setItems(List<Record> items) {
         this.items = items == null ? Collections.emptyList() : items;
         buildBaseContent();
     }
@@ -66,12 +62,22 @@ public class GoogleBookDockContent<T> extends VBox {
         else this.getChildren().set(0, content);
     }
 
+    private void showProgress() {
+        var progressBar = new ProgressBar();
+        progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+        getChildren().add(0, progressBar);
+    }
+
+    private void stopProgress() {
+        getChildren().removeIf(e -> e instanceof ProgressBar);
+    }
+
     private void buildBaseContent() {
         String googleHandle = retrieveGoogleBookHandle(items);
         if (googleHandle != null) {
             loadGoogleBookContent(googleHandle, e -> setContent(new ErrorPlaceHolder(context, e)));
         } else if (items.size() == 1) {
-            setContent(new NoConnectionPlaceHolder<T>(new CompleteJoinAction<>(context, items.get(0), searchParametersSupplier, joinAction)));
+            setContent(new NoConnectionPlaceHolder(context, database, items.get(0)));
         } else if (items.size() > 1) {
             setContent(new MultipleSelectionPlaceHolder());
         } else {
@@ -80,11 +86,11 @@ public class GoogleBookDockContent<T> extends VBox {
     }
 
     @Nullable
-    private String retrieveGoogleBookHandle(@NotNull List<T> items) {
+    private String retrieveGoogleBookHandle(@NotNull List<Record> items) {
         String googleBookHandle = null;
 
         List<String> distinctHandles = items.stream()
-                .map(volumeHandleRetriever)
+                .map(record -> record.getServiceConnection().getGoogleBookLink())
                 .distinct()
                 .collect(Collectors.toList());
 
@@ -112,53 +118,16 @@ public class GoogleBookDockContent<T> extends VBox {
                 return new SingleGoogleBookQuery(googleBook).load();
             }
         };
-        task.setOnSucceeded(event -> onSucceeded.accept(task.getValue()));
-        task.setOnFailed(event -> onFailed.accept(event.getSource().getException()));
+        task.setOnRunning(e -> showProgress());
+        task.setOnSucceeded(event -> {
+            stopProgress();
+            onSucceeded.accept(task.getValue());
+        });
+        task.setOnFailed(event -> {
+            stopProgress();
+            onFailed.accept(event.getSource().getException());
+        });
         return task;
-    }
-
-    private static final class CompleteJoinAction<T> {
-
-        private final Context context;
-        private final T item;
-        private final Function<T, SearchParameters> searchParametersSupplier;
-        private final BiConsumer<T, Volume> joinAction;
-
-        CompleteJoinAction(@NotNull Context context,
-                           @NotNull T item,
-                           @NotNull Function<T, SearchParameters> searchParametersSupplier,
-                           @NotNull BiConsumer<T, Volume> joinAction) {
-            this.context = context;
-            this.item = item;
-            this.searchParametersSupplier = searchParametersSupplier;
-            this.joinAction = joinAction;
-        }
-
-        public void run() {
-            context.showOverlay(new GoogleBookJoinerOverlay(context, searchParametersSupplier.apply(item), volume -> {
-                ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume));
-            }));
-        }
-
-        private Task<Void> buildJoinActionTask(Volume volume) {
-            var task = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    joinAction.accept(item, volume);
-                    return null;
-                }
-            };
-            task.setOnRunning(event -> context.showIndeterminateProgress());
-            task.setOnFailed(event -> {
-                //TODO: ERROR DIALOG
-                context.stopProgress();
-            });
-            task.setOnSucceeded(event -> {
-                context.stopProgress();
-                //TODO: NOTIFICATION MESSAGE
-            });
-            return task;
-        }
     }
 
     private static final class ErrorPlaceHolder extends StackPane {
@@ -192,12 +161,18 @@ public class GoogleBookDockContent<T> extends VBox {
         }
     }
 
-    private static final class NoConnectionPlaceHolder<T> extends StackPane {
+    private static final class NoConnectionPlaceHolder extends StackPane {
 
-        private final CompleteJoinAction<T> joinAction;
+        private final Context context;
+        private final Database database;
+        private final Record record;
 
-        NoConnectionPlaceHolder(@NotNull CompleteJoinAction<T> joinAction) {
-            this.joinAction = joinAction;
+        NoConnectionPlaceHolder(@NotNull Context context,
+                                @NotNull Database database,
+                                @NotNull Record record) {
+            this.context = context;
+            this.database = database;
+            this.record = record;
             buildUI();
         }
 
@@ -215,8 +190,49 @@ public class GoogleBookDockContent<T> extends VBox {
                     I18N.getGoogleBooksImportValue("google.books.dock.connection"),
                     new MaterialDesignIconView(MaterialDesignIcon.GOOGLE)
             );
-            button.setOnAction(event -> joinAction.run());
+            button.setOnAction(event -> showGoogleBookJoiner());
             return button;
+        }
+
+        public void showGoogleBookJoiner() {
+            context.showOverlay(
+                    new GoogleBookJoinerOverlay(context, buildSearchParameters(record),
+                    volume -> ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume)))
+            );
+        }
+
+        private SearchParameters buildSearchParameters(@NotNull Record record) {
+            return new SearchParameters()
+                    .printType(record.getRecordType() == Record.Type.BOOK ?
+                            GoogleBooksQueryBuilder.PrintType.BOOKS :
+                            GoogleBooksQueryBuilder.PrintType.MAGAZINES
+                    )
+                    .isbn(record.getIsbn())
+                    .authors(String.join(",", Optional.ofNullable(record.getAuthors()).orElse(Collections.emptyList())))
+                    .publisher(record.getPublisher())
+                    .title(record.getTitle())
+                    .language(record.getLanguage());
+        }
+
+        private Task<Void> buildJoinActionTask(Volume volume) {
+            var task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    record.setServiceConnection(new ServiceConnection(volume.getSelfLink()));
+                    database.updateRecord(record);
+                    return null;
+                }
+            };
+            task.setOnRunning(event -> context.showIndeterminateProgress());
+            task.setOnFailed(event -> {
+                //TODO: ERROR DIALOG
+                context.stopProgress();
+            });
+            task.setOnSucceeded(event -> {
+                context.stopProgress();
+                //TODO: NOTIFICATION MESSAGE
+            });
+            return task;
         }
     }
 

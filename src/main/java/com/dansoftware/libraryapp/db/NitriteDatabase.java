@@ -4,6 +4,7 @@ import com.dansoftware.libraryapp.db.auth.DatabaseAuthenticator;
 import com.dansoftware.libraryapp.db.auth.FailListener;
 import com.dansoftware.libraryapp.db.data.Book;
 import com.dansoftware.libraryapp.db.data.Magazine;
+import com.dansoftware.libraryapp.db.data.Record;
 import org.dizitart.no2.FindOptions;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteBuilder;
@@ -32,8 +33,7 @@ public class NitriteDatabase implements Database {
     private final DatabaseMeta databaseMeta;
     private final Nitrite nitriteClient;
 
-    private final ObjectRepository<Book> bookRepository;
-    private final ObjectRepository<Magazine> magazineRepository;
+    private final ObjectRepository<Record> recordRepository;
 
     public NitriteDatabase(@NotNull DatabaseMeta databaseMeta,
                            @NotNull Credentials credentials)
@@ -41,8 +41,7 @@ public class NitriteDatabase implements Database {
         Objects.requireNonNull(credentials, "The Credentials must not be null!");
         this.nitriteClient = init(databaseMeta, credentials);
         this.databaseMeta = databaseMeta;
-        this.bookRepository = nitriteClient.getRepository(Book.class);
-        this.magazineRepository = nitriteClient.getRepository(Magazine.class);
+        this.recordRepository = nitriteClient.getRepository(Record.class);
     }
 
     private Nitrite init(@NotNull DatabaseMeta databaseMeta,
@@ -61,73 +60,38 @@ public class NitriteDatabase implements Database {
     }
 
     @Override
-    public void insertMagazine(@NotNull Magazine magazine) {
-        this.magazineRepository.insert(magazine);
+    public void insertRecord(@NotNull Record record) {
+        this.recordRepository.insert(record);
     }
 
     @Override
-    public void updateMagazine(@NotNull Magazine magazine) {
-        this.magazineRepository.update(magazine);
+    public void updateRecord(@NotNull Record record) {
+        this.recordRepository.update(record);
     }
 
     @Override
-    public void removeMagazine(@NotNull Magazine magazine) {
-        this.magazineRepository.remove(magazine);
+    public void removeRecord(@NotNull Record record) {
+        this.recordRepository.remove(record);
     }
 
     @Override
-    public List<Magazine> getMagazines() {
-        return this.magazineRepository.find().toList();
+    public int getTotalRecordCount() {
+        return this.recordRepository.find().totalCount();
     }
 
     @Override
-    public List<Magazine> getMagazines(FindOptions findOptions) {
-        return this.magazineRepository.find(findOptions).toList();
+    public List<Record> getRecords() {
+        return this.recordRepository.find().toList();
     }
 
     @Override
-    public List<Magazine> getMagazines(ObjectFilter objectFilter, FindOptions findOptions) {
-        return this.magazineRepository.find(objectFilter, findOptions).toList();
+    public List<Record> getRecords(@NotNull FindOptions findOptions) {
+        return this.recordRepository.find(findOptions).toList();
     }
 
     @Override
-    public void insertBook(@NotNull Book book) {
-        this.bookRepository.insert(book);
-    }
-
-    @Override
-    public void updateBook(@NotNull Book book) {
-        this.bookRepository.update(book);
-    }
-
-    @Override
-    public void removeBook(@NotNull Book book) {
-        this.bookRepository.remove(book);
-    }
-
-    @Override
-    public int getTotalMagazineCount() {
-        return this.magazineRepository.find().totalCount();
-    }
-
-    @Override
-    public int getTotalBookCount() {
-        return this.bookRepository.find().totalCount();
-    }
-
-    @Override
-    public List<Book> getBooks() {
-        return this.bookRepository.find().toList();
-    }
-
-    @Override
-    public List<Book> getBooks(FindOptions findOptions) {
-        return this.bookRepository.find(findOptions).toList();
-    }
-
-    @Override
-    public List<Book> getBooks(ObjectFilter objectFilter, FindOptions findOptions) {
-        return this.bookRepository.find(objectFilter, findOptions).toList();
+    public List<Record> getRecords(@NotNull ObjectFilter objectFilter, @NotNull FindOptions findOptions) {
+        return this.recordRepository.find(objectFilter, findOptions).toList();
     }
 
     @Override

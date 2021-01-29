@@ -1,32 +1,32 @@
 package com.dansoftware.libraryapp.gui.record.show
 
 import com.dansoftware.libraryapp.db.Database
-import com.dansoftware.libraryapp.db.data.Book
+import com.dansoftware.libraryapp.db.data.Record
 import com.dansoftware.libraryapp.gui.context.Context
 import javafx.concurrent.Task
 
 /**
  * Task for loading books from the database
  */
-open class BooksGetTask(private val database: Database, private val offSet: Int, private val size: Int) :
-    Task<List<Book>>() {
+open class RecordsGetTask(private val database: Database, private val offSet: Int, private val size: Int) :
+    Task<List<Record>>() {
 
-    override fun call(): List<Book> {
-        return database.getBooks(offSet, size)
+    override fun call(): List<Record> {
+        return database.getRecords(offSet, size)
     }
 }
 
 /**
- * A [BooksGetTask] implementation for loading books from the database into
- * a [BooksTable].
+ * A [RecordsGetTask] implementation for loading books from the database into
+ * a [RecordTable].
  */
-class TableBooksGetTask(
+class TableRecordsGetTask(
     context: Context,
-    tableView: BooksTable,
+    tableView: RecordTable,
     database: Database,
     offSet: Int,
     size: Int
-) : BooksGetTask(database, offSet, size) {
+) : RecordsGetTask(database, offSet, size) {
     init {
         setOnRunning { context.showIndeterminateProgress() }
         setOnFailed {

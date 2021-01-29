@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.record.show;
 
-import com.dansoftware.libraryapp.db.data.Book;
+import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.db.data.ServiceConnection;
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating;
 import com.dansoftware.libraryapp.gui.util.TableViewPlaceHolder;
@@ -9,13 +9,11 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
@@ -26,7 +24,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class BooksTable extends TableView<Book> {
+public class RecordTable extends TableView<Record> {
 
     public enum ColumnType {
         INDEX_COLUMN("record.table.column.index", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
@@ -45,12 +43,12 @@ public class BooksTable extends TableView<Book> {
         private final String i18n;
         private final Class<? extends Column<?>> tableColumnClass;
         private final boolean defaultVisible;
-        private final Function<BooksTable, ? extends Column<?>> createPolicy;
+        private final Function<RecordTable, ? extends Column<?>> createPolicy;
 
         <T extends Column<?>> ColumnType(String i18n,
                                          Class<T> tableColumnClass,
                                          boolean defaultVisible,
-                                         Function<BooksTable, T> createPolicy) {
+                                         Function<RecordTable, T> createPolicy) {
             this.i18n = i18n;
             this.tableColumnClass = tableColumnClass;
             this.defaultVisible = defaultVisible;
@@ -70,7 +68,7 @@ public class BooksTable extends TableView<Book> {
 
     private final IntegerProperty startIndex;
 
-    public BooksTable(int startIndex) {
+    public RecordTable(int startIndex) {
         this.startIndex = new SimpleIntegerProperty(startIndex);
         this.init();
     }
@@ -135,7 +133,7 @@ public class BooksTable extends TableView<Book> {
     }
 
     private void addColumn(Class<? extends Column<?>> tableColumnClass,
-                           Function<BooksTable, ? extends Column<?>> createAction) {
+                           Function<RecordTable, ? extends Column<?>> createAction) {
         this.getColumns().add(createAction.apply(this));
     }
 
@@ -143,7 +141,7 @@ public class BooksTable extends TableView<Book> {
         return startIndex;
     }
 
-    private static class Column<T> extends TableColumn<Book, T> {
+    private static class Column<T> extends TableColumn<Record, T> {
         private final ColumnType columnType;
 
         Column(@NotNull ColumnType columnType, boolean i18n) {
@@ -154,6 +152,10 @@ public class BooksTable extends TableView<Book> {
 
         public Column(@NotNull ColumnType columnType) {
             this(columnType, true);
+        }
+
+        protected Record getRecordAtPosition(TableCell<Record, T> tableCell) {
+            return getTableView().getItems().get(tableCell.getIndex());
         }
     }
 
@@ -169,7 +171,7 @@ public class BooksTable extends TableView<Book> {
     }
 
     private static final class IndexColumn extends Column<Integer>
-            implements Callback<TableColumn.CellDataFeatures<Book, Integer>, ObservableValue<Integer>> {
+            implements Callback<TableColumn.CellDataFeatures<Record, Integer>, ObservableValue<Integer>> {
         private static final int COLUMN_WIDTH_UNIT = 60;
 
         private final IntegerProperty startIndexProperty;
@@ -184,7 +186,7 @@ public class BooksTable extends TableView<Book> {
         }
 
         @Override
-        public ObservableValue<Integer> call(CellDataFeatures<Book, Integer> cellData) {
+        public ObservableValue<Integer> call(CellDataFeatures<Record, Integer> cellData) {
             return new ObservableValueBase<>() {
                 @Override
                 public Integer getValue() {
@@ -196,14 +198,14 @@ public class BooksTable extends TableView<Book> {
     }
 
     private static final class AuthorColumn extends AbcSortableColumn
-            implements Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>> {
+            implements Callback<TableColumn.CellDataFeatures<Record, String>, ObservableValue<String>> {
         AuthorColumn() {
             super(ColumnType.AUTHOR_COLUMN);
             setCellValueFactory(this);
         }
 
         @Override
-        public ObservableValue<String> call(CellDataFeatures<Book, String> cellData) {
+        public ObservableValue<String> call(CellDataFeatures<Record, String> cellData) {
             return new ObservableValueBase<>() {
                 @Override
                 public String getValue() {
@@ -238,14 +240,14 @@ public class BooksTable extends TableView<Book> {
     }
 
     private static final class LangColumn extends Column<String>
-            implements Callback<TableColumn.CellDataFeatures<Book, String>, ObservableValue<String>> {
+            implements Callback<TableColumn.CellDataFeatures<Record, String>, ObservableValue<String>> {
         LangColumn() {
             super(ColumnType.LANG_COLUMN);
             setCellValueFactory(this);
         }
 
         @Override
-        public ObservableValue<String> call(CellDataFeatures<Book, String> cellData) {
+        public ObservableValue<String> call(CellDataFeatures<Record, String> cellData) {
             return new ObservableValueBase<String>() {
                 @Override
                 public String getValue() {
@@ -287,14 +289,14 @@ public class BooksTable extends TableView<Book> {
     }
 
     private static final class RankColumn extends Column<String>
-            implements Callback<TableColumn<Book, String>, TableCell<Book, String>> {
+            implements Callback<TableColumn<Record, String>, TableCell<Record, String>> {
         RankColumn() {
             super(ColumnType.RANK_COLUMN);
             setCellFactory(this);
         }
 
         @Override
-        public TableCell<Book, String> call(TableColumn<Book, String> param) {
+        public TableCell<Record, String> call(TableColumn<Record, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -303,8 +305,8 @@ public class BooksTable extends TableView<Book> {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        Book book = getTableView().getItems().get(getIndex());
-                        Optional.ofNullable(book.getRating())
+                        Record record = getRecordAtPosition(this);
+                        Optional.ofNullable(record.getRating())
                                 .ifPresentOrElse(rating -> {
                                     Rating graphic = buildGraphic(rating);
                                     setGraphic(graphic);
@@ -325,7 +327,7 @@ public class BooksTable extends TableView<Book> {
     }
 
     private static final class ServiceConnectionColumn extends Column<String>
-            implements Callback<TableColumn<Book, String>, TableCell<Book, String>> {
+            implements Callback<TableColumn<Record, String>, TableCell<Record, String>> {
 
         private static final double WIDTH = 60;
 
@@ -337,7 +339,7 @@ public class BooksTable extends TableView<Book> {
         }
 
         @Override
-        public TableCell<Book, String> call(TableColumn<Book, String> param) {
+        public TableCell<Record, String> call(TableColumn<Record, String> param) {
             return new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -346,8 +348,8 @@ public class BooksTable extends TableView<Book> {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        Book book = getTableView().getItems().get(getIndex());
-                        Optional.ofNullable(book.getServiceConnection())
+                        Record record = getRecordAtPosition(this);
+                        Optional.ofNullable(record.getServiceConnection())
                                 .map(ServiceConnection::getGoogleBookLink)
                                 .map(value -> StringUtils.getIfBlank(value, null))
                                 .ifPresentOrElse(
