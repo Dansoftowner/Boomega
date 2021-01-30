@@ -144,6 +144,11 @@ object DependencyLister {
             LicenseInfo("BSD 3-Clause License", "https://github.com/controlsfx/controlsfx/blob/master/license.txt")
         ),
         DependencyInfo(
+            "Caffeine",
+            "https://github.com/ben-manes/caffeine",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
             "WorkbenchFX (+ with patches)",
             "https://github.com/dlsc-software-consulting-gmbh/WorkbenchFX",
             LicenseInfo.apache20License()

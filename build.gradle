@@ -106,6 +106,8 @@ dependencies {
 
     libraries 'org.apache.httpcomponents:httpclient:4.5.13'
 
+    implementation 'com.github.ben-manes.caffeine:caffeine:2.8.8'
+
     /*** JAVA FX LIBRARIES ***/
 
     libraries 'com.jfoenix:jfoenix:9.0.9'
