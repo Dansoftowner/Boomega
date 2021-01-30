@@ -1,0 +1,20 @@
+/** MDFXNode */
+.markdown-text {
+    -fx-font-family: ARIAL;
+}
+.markdown-italic {
+    -fx-font-style: italic;
+}
+.markdown-bold {
+    -fx-font-weight: bold;
+}
+
+/* * * */
+
+.text-field:readonly {
+    -right-button-visible: false;
+}
+
+.languageSelector .text-field {
+    -right-button-visible: false;
+}

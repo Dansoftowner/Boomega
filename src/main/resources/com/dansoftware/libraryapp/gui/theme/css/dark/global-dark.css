@@ -16,30 +16,13 @@
     -mdfx-bg-color-2: #ddd;
     -mdfx-bg-color-3: #eee;
 }
-.markdown-text {
-    -fx-font-family: ARIAL;
-}
-.markdown-italic {
-    -fx-font-style: italic;
-}
-.markdown-bold {
-    -fx-font-weight: bold;
-}
 
 .button .glyph-icon {
     /*-fx-fill: black;*/
 }
 
-.menu-bar-base {
-    -fx-background-color: #1d2129;
-}
-
 .menu-bar .menu-item .glyph-icon {
     -fx-fill: white;
-}
-
-.text-field:readonly {
-    -right-button-visible: false;
 }
 
 .text-field .langSelectorControl {
@@ -52,10 +35,6 @@
 
 .selectable-label:focused {
     -fx-text-fill: white;
-}
-
-.languageSelector .text-field {
-    -right-button-visible: false;
 }
 
 .table-view .table-row-cell:filled {

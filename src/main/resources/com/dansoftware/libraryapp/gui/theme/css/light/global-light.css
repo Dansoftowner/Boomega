@@ -11,15 +11,7 @@
     -mdfx-bg-color-2: #ddd;
     -mdfx-bg-color-3: #eee;
 }
-.markdown-text {
-    -fx-font-family: ARIAL;
-}
-.markdown-italic {
-    -fx-font-style: italic;
-}
-.markdown-bold {
-    -fx-font-weight: bold;
-}
+
 .button .glyph-icon {
     -fx-fill: black;
 }
@@ -28,16 +20,8 @@
     -fx-fill: white;
 }
 
-.text-field:readonly {
-    -right-button-visible: false;
-}
-
 .text-field .langSelectorControl {
     -fx-fill: black;
-}
-
-.languageSelector .text-field {
-    -right-button-visible: false;
 }
 
 .table-view .table-row-cell:filled {

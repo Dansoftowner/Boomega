@@ -46,6 +46,7 @@ public class LightTheme extends Theme {
     @NotNull
     private List<String> getStyleSheets() {
         return List.of(
+                "/com/dansoftware/libraryapp/gui/theme/css/global.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/light/database-manager-light.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/light/first-time-dialog-light.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/light/global-light.css",

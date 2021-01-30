@@ -44,6 +44,7 @@ public class DarkTheme extends Theme {
     @NotNull
     private List<String> getStyleSheets() {
         return List.of(
+                "/com/dansoftware/libraryapp/gui/theme/css/global.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/dark/database-manager-dark.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/dark/first-time-dialog-dark.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/dark/global-dark.css",
