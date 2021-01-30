@@ -5,6 +5,8 @@ import com.dansoftware.libraryapp.db.data.ServiceConnection;
 import com.dansoftware.libraryapp.gui.util.ReadOnlyRating;
 import com.dansoftware.libraryapp.gui.util.TableViewPlaceHolder;
 import com.dansoftware.libraryapp.i18n.I18N;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
@@ -28,7 +30,9 @@ public class RecordTable extends TableView<Record> {
 
     public enum ColumnType {
         INDEX_COLUMN("record.table.column.index", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
+        TYPE_INDICATOR_COLUMN("record.table.column.typeindicator", TypeIndicatorColumn.class, true, table -> new TypeIndicatorColumn()),
         AUTHOR_COLUMN("record.table.column.author", AuthorColumn.class, true, table -> new AuthorColumn()),
+        MAGAZINE_NAME_COLUMN("record.table.column.magazinename", MagazineNameColumn.class, false, table -> new MagazineNameColumn()),
         TITLE_COLUMN("record.table.column.title", TitleColumn.class, true, table -> new TitleColumn()),
         SUB_TITLE_COLUMN("record.table.column.subtitle", SubtitleColumn.class, false, table -> new SubtitleColumn()),
         ISBN_COLUMN("record.table.column.isbn", ISBNColumn.class, true, table -> new ISBNColumn()),
@@ -197,6 +201,35 @@ public class RecordTable extends TableView<Record> {
         }
     }
 
+    private static final class TypeIndicatorColumn extends Column<String> implements Callback<TableColumn<Record, String>, TableCell<Record, String>> {
+        TypeIndicatorColumn() {
+            super(ColumnType.TYPE_INDICATOR_COLUMN, false);
+            setCellFactory(this);
+            setMinWidth(50);
+            setMaxWidth(60);
+        }
+
+        @Override
+        public TableCell<Record, String> call(TableColumn<Record, String> param) {
+            return new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                        setTooltip(null);
+                    } else {
+                        setGraphic(new MaterialDesignIconView(
+                                getRecordAtPosition(this).getRecordType() == Record.Type.BOOK ?
+                                        MaterialDesignIcon.BOOK : MaterialDesignIcon.NEWSPAPER));
+                        //TODO: TOOLTIP (BOOK/MAGAZINE)
+                    }
+                }
+            };
+        }
+    }
+
     private static final class AuthorColumn extends AbcSortableColumn
             implements Callback<TableColumn.CellDataFeatures<Record, String>, ObservableValue<String>> {
         AuthorColumn() {
@@ -215,6 +248,13 @@ public class RecordTable extends TableView<Record> {
                     return StringUtils.EMPTY;
                 }
             };
+        }
+    }
+
+    private static final class MagazineNameColumn extends AbcSortableColumn {
+        MagazineNameColumn() {
+            super(ColumnType.MAGAZINE_NAME_COLUMN);
+            setCellValueFactory(new PropertyValueFactory<>("magazineName"));
         }
     }
 
