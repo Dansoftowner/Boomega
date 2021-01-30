@@ -264,6 +264,7 @@ public class RecordAddForm extends ScrollPane {
 
     private Record buildRecordObject() {
         return new Record.Builder(recordType.get())
+                .magazineName(magazineName.get())
                 .authors(List.of(authors.get().split(",")))
                 .isbn(isbn.get())
                 .publisher(publisher.get())
