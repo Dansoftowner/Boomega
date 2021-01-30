@@ -43,9 +43,6 @@ public class RecordsView extends DockSystem<RecordTable> {
             if (dock.isShowing()) dock.setItems(this.recordTable.getSelectionModel().getSelectedItems());
         });
         dock.setDockPosition(DockPosition.RIGHT_BOTTOM);
-        dock.setStageFactory(() -> new BaseWindow() {{
-            initOwner(context.getContextWindow());
-        }});
         //TODO: ON SHOWN -> setting it's content, ON HIDDEN -> clearing it's content
         dock.show();
     }
