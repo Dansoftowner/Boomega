@@ -1,7 +1,5 @@
 package com.dansoftware.libraryapp.db;
 
-import com.dansoftware.libraryapp.db.data.Book;
-import com.dansoftware.libraryapp.db.data.Magazine;
 import com.dansoftware.libraryapp.db.data.Record;
 import org.dizitart.no2.FindOptions;
 import org.dizitart.no2.objects.ObjectFilter;
@@ -13,7 +11,9 @@ import java.util.List;
  * A Database object can communicate with a particular data source.
  *
  * <p>
- * It supports the CRUD operations with {@link Book} and {@link Magazine} objects.
+ * It supports the CRUD operations with {@link Record}s.
+ *
+ * @author Daniel Gyorffy
  */
 public interface Database {
 

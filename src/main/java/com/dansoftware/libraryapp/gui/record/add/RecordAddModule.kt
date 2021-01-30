@@ -1,12 +1,9 @@
 package com.dansoftware.libraryapp.gui.record.add
 
 import com.dansoftware.libraryapp.db.Database
-import com.dansoftware.libraryapp.db.data.Book
-import com.dansoftware.libraryapp.db.data.Magazine
 import com.dansoftware.libraryapp.db.data.Record
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.NotifiableModule
-import com.dansoftware.libraryapp.gui.record.RecordType
 import com.dansoftware.libraryapp.gui.record.RecordValues
 import com.dansoftware.libraryapp.gui.record.show.BooksViewModule
 import com.dansoftware.libraryapp.i18n.I18N

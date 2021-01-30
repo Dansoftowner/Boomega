@@ -1,7 +1,5 @@
 package com.dansoftware.libraryapp.gui.record.add;
 
-import com.dansoftware.libraryapp.db.data.Book;
-import com.dansoftware.libraryapp.db.data.Magazine;
 import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.db.data.ServiceConnection;
 import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
