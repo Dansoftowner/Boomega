@@ -34,8 +34,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BooksViewModule extends WorkbenchModule
-        implements NotifiableModule<BooksViewModule.Message> {
+public class RecordsViewModule extends WorkbenchModule
+        implements NotifiableModule<RecordsViewModule.Message> {
 
     public static final class Message {
         private final Action action;
@@ -51,7 +51,7 @@ public class BooksViewModule extends WorkbenchModule
         }
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(BooksViewModule.class);
+    private static final Logger logger = LoggerFactory.getLogger(RecordsViewModule.class);
 
     private final Preferences.Key<Integer> itemsPerPageConfigKey =
             new Preferences.Key<>("books.view.items.per.page", Integer.class, () -> 10);
@@ -84,10 +84,10 @@ public class BooksViewModule extends WorkbenchModule
 
     private ToolbarItem columnChooserItem;
 
-    public BooksViewModule(@NotNull Context context,
-                           @NotNull Preferences preferences,
-                           @NotNull Database database) {
-        super(I18N.getRecordsViewValue("record.book.view.module.name"), MaterialDesignIcon.LIBRARY_BOOKS);
+    public RecordsViewModule(@NotNull Context context,
+                             @NotNull Preferences preferences,
+                             @NotNull Database database) {
+        super(I18N.getRecordsViewValue("record.book.view.module.name"), MaterialDesignIcon.LIBRARY);
         this.context = context;
         this.preferences = preferences;
         this.database = database;
@@ -332,7 +332,7 @@ public class BooksViewModule extends WorkbenchModule
             selectedProperty().addListener((observable, oldValue, selected) -> {
                 if (selected) {
                     getTable().setSortingComparator((Comparator) collatorSupplier.get());
-                    BooksViewModule.this.abcLocale.set(locale);
+                    RecordsViewModule.this.abcLocale.set(locale);
                 }
             });
             setToggleGroup(toggleGroup);

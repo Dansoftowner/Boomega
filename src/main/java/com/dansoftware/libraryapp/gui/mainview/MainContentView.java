@@ -6,7 +6,7 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.googlebooks.GoogleBooksImportModule;
 import com.dansoftware.libraryapp.gui.record.add.RecordAddModule;
-import com.dansoftware.libraryapp.gui.record.show.BooksViewModule;
+import com.dansoftware.libraryapp.gui.record.show.RecordsViewModule;
 import com.dlsc.workbenchfx.Workbench;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +26,7 @@ public class MainContentView extends Workbench implements ContextTransformable {
     private void initModules() {
         getModules().add(new GoogleBooksImportModule(asContext, preferences));
         getModules().add(new RecordAddModule(asContext, database));
-        getModules().add(new BooksViewModule(asContext, preferences, database));
+        getModules().add(new RecordsViewModule(asContext, preferences, database));
     }
 
     @Override

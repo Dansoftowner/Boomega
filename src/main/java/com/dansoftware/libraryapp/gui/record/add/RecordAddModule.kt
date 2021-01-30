@@ -5,7 +5,7 @@ import com.dansoftware.libraryapp.db.data.Record
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.NotifiableModule
 import com.dansoftware.libraryapp.gui.record.RecordValues
-import com.dansoftware.libraryapp.gui.record.show.BooksViewModule
+import com.dansoftware.libraryapp.gui.record.show.RecordsViewModule
 import com.dansoftware.libraryapp.i18n.I18N
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
@@ -106,8 +106,8 @@ class RecordAddModule(
                 Duration.millis(5000.0)
             )
             context.notifyModule(
-                BooksViewModule::class.java,
-                BooksViewModule.Message(record, BooksViewModule.Message.Action.INSERTED)
+                RecordsViewModule::class.java,
+                RecordsViewModule.Message(record, RecordsViewModule.Message.Action.INSERTED)
             )
         } catch (e: RuntimeException) {
             context.showErrorDialog(
