@@ -12,8 +12,14 @@ import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
 import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerOverlay;
 import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -28,33 +34,49 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class GoogleBookDockContent extends VBox {
 
+    private static final Logger logger = LoggerFactory.getLogger(GoogleBookDockContent.class);
+
     private final Context context;
     private final Database database;
+    private final Cache<String, GoogleBookDetailsPane> cache;
 
     private List<Record> items;
+
+    private final StringProperty lastHandle = new SimpleStringProperty();
+    private final ObjectProperty<GoogleBookDetailsPane> lastDetailsPane = new SimpleObjectProperty<>();
 
     public GoogleBookDockContent(@NotNull Context context,
                                  @NotNull Database database,
                                  @Nullable List<Record> items) {
         this.context = context;
         this.database = database;
+        this.cache = buildCache();
         this.setItems(items);
     }
 
-    public void setItems(List<Record> items) {
-        this.items = items == null ? Collections.emptyList() : items;
-        buildBaseContent();
+    private Cache<String, GoogleBookDetailsPane> buildCache() {
+        return Caffeine.newBuilder()
+                .expireAfterWrite(1, TimeUnit.MINUTES)
+                .build();
+    }
+
+    public void setItems(@Nullable List<Record> items) {
+        if (lastHandle.get() != null && lastDetailsPane.get() != null)
+            cache.put(lastHandle.get(), lastDetailsPane.get());
+        lastHandle.set(retrieveGoogleBookHandle(items));
+        buildBaseContent(lastHandle.get(), Optional.ofNullable(items).orElseGet(Collections::emptyList));
     }
 
     private void setContent(@NotNull Node content) {
@@ -72,10 +94,9 @@ public class GoogleBookDockContent extends VBox {
         getChildren().removeIf(e -> e instanceof ProgressBar);
     }
 
-    private void buildBaseContent() {
-        String googleHandle = retrieveGoogleBookHandle(items);
+    private void buildBaseContent(@Nullable String googleHandle, @NotNull List<Record> items) {
         if (googleHandle != null) {
-            loadGoogleBookContent(googleHandle, e -> setContent(new ErrorPlaceHolder(context, e)));
+            loadGoogleBookDetailsPane(googleHandle);
         } else if (items.size() == 1) {
             setContent(new NoConnectionPlaceHolder(context, database, items.get(0)));
         } else if (items.size() > 1) {
@@ -85,28 +106,38 @@ public class GoogleBookDockContent extends VBox {
         }
     }
 
-    @Nullable
-    private String retrieveGoogleBookHandle(@NotNull List<Record> items) {
-        String googleBookHandle = null;
+    private void loadGoogleBookDetailsPane(String googleBookLink) {
+        GoogleBookDetailsPane pane = cache.getIfPresent(googleBookLink);
+        if (pane != null) {
+            lastDetailsPane.set(pane);
+            setContent(pane);
+        } else {
+            ExploitativeExecutor.INSTANCE.submit(
+                    buildVolumePullTask(
+                            googleBookLink,
+                            e -> setContent(new ErrorPlaceHolder(context, e)),
+                            volume -> {
+                                final var content = new GoogleBookDetailsPane(context, volume);
+                                lastDetailsPane.set(content);
+                                setContent(content);
+                            }
+                    )
+            );
+        }
+    }
 
+    @SuppressWarnings("ConstantConditions")
+    @Nullable
+    private String retrieveGoogleBookHandle(@Nullable List<Record> items) {
+        if (items == null)
+            return null;
         List<String> distinctHandles = items.stream()
                 .map(record -> record.getServiceConnection().getGoogleBookLink())
                 .distinct()
                 .collect(Collectors.toList());
-
         if (distinctHandles.size() == 1)
-            googleBookHandle = distinctHandles.get(0);
-        return googleBookHandle;
-    }
-
-    private void loadGoogleBookContent(String googleBookLink, Consumer<Throwable> onFailed) {
-        ExploitativeExecutor.INSTANCE.submit(
-                buildVolumePullTask(
-                        googleBookLink,
-                        onFailed,
-                        volume -> setContent(new GoogleBookDetailsPane(context, volume))
-                )
-        );
+            return distinctHandles.get(0);
+        return null;
     }
 
     private Task<Volume> buildVolumePullTask(String googleBook,
@@ -197,7 +228,7 @@ public class GoogleBookDockContent extends VBox {
         public void showGoogleBookJoiner() {
             context.showOverlay(
                     new GoogleBookJoinerOverlay(context, buildSearchParameters(record),
-                    volume -> ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume)))
+                            volume -> ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume)))
             );
         }
 
