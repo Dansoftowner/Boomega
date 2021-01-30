@@ -264,15 +264,19 @@ public class RecordAddForm extends ScrollPane {
 
     private Record buildRecordObject() {
         return new Record.Builder(recordType.get())
+                .title(title.get())
+                .subtitle(subtitle.get())
+                .publishedDate(publishedDate.get())
+                .publisher(publisher.get())
                 .magazineName(magazineName.get())
                 .authors(List.of(authors.get().split(",")))
+                .language(language.get())
                 .isbn(isbn.get())
-                .publisher(publisher.get())
-                .notes(notes.get())
-                .rating(rating.get())
                 .subject(subject.get())
-                .title(title.get())
-                .publishedDate(publishedDate.get())
+                .notes(notes.get())
+                .numberOfCopies(numberOfCopies.get())
+                .numberOfPages(numberOfPages.get())
+                .rating(rating.get())
                 .serviceConnection(new ServiceConnection(googleBookHandle.get()))
                 .build();
     }
