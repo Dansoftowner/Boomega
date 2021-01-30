@@ -41,10 +41,17 @@
     -fx-border-color: lightgray;
 }
 
-.tab-control:selected {
+.tab-control {
+    -fx-background-radius: 0px;
+    -fx-border-radius: 0px;
+}
+
+.tab-control:hover {
+    -fx-background-color: #4a4a4a;
+}
+
+.tab-control:selected, .tab-control:selected:hover {
     -fx-background-color: #252525;
-    -fx-background-radius: 5px;
-    -fx-border-radius: 5px;
 }
 
 .tab-box .button:hover, .tab-box .button:focused {
