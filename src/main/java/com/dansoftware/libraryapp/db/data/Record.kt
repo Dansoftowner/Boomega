@@ -44,6 +44,8 @@ class Record(
         null,
         null,
         null,
+        null,
+        null,
         null
     )
 
