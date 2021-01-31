@@ -2,7 +2,6 @@ package com.dansoftware.libraryapp.gui.record.show.dock.googlebook;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.data.Record;
-import com.dansoftware.libraryapp.db.data.ServiceConnection;
 import com.dansoftware.libraryapp.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.libraryapp.googlebooks.SingleGoogleBookQuery;
 import com.dansoftware.libraryapp.googlebooks.Volume;
@@ -30,6 +29,8 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -124,7 +125,7 @@ class GoogleBookDockContent extends VBox {
         if (googleHandle != null) {
             buildDetailsPane(googleHandle);
         } else if (items.size() == 1) {
-            setContent(new NoConnectionPlaceHolder(context, database, items.get(0)));
+            setContent(new NoConnectionPlaceHolder(context, database, items.get(0), this::refresh));
         } else if (items.size() > 1) {
             setContent(new MultipleSelectionPlaceHolder());
         } else {
@@ -268,11 +269,17 @@ class GoogleBookDockContent extends VBox {
         private void buildUI() {
             this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
             this.getChildren().add(
-                    new Group(new VBox(5,
-                            new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.error")),
+                    new Group(new VBox(20,
+                            buildLabel(),
                             buildDetailsButton()))
             );
             VBox.setVgrow(this, Priority.ALWAYS);
+        }
+
+        private Label buildLabel() {
+            var label = new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.error"));
+            label.setFont(Font.font("System", FontWeight.BOLD, 13));
+            return label;
         }
 
         private Button buildDetailsButton() {
@@ -290,23 +297,35 @@ class GoogleBookDockContent extends VBox {
         private final Context context;
         private final Database database;
         private final Record record;
+        private final Runnable refresh;
 
         NoConnectionPlaceHolder(@NotNull Context context,
                                 @NotNull Database database,
-                                @NotNull Record record) {
+                                @NotNull Record record,
+                                @NotNull Runnable refresh) {
             this.context = context;
             this.database = database;
             this.record = record;
+            this.refresh = refresh;
             buildUI();
         }
 
         private void buildUI() {
-            this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
-            getChildren().add(new VBox(5,
-                    new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.noconn")),
-                    buildConnectionButton())
-            );
             VBox.setVgrow(this, Priority.ALWAYS);
+            this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+            getChildren().add(buildContent());
+        }
+
+        private Node buildContent() {
+            return new Group(new VBox(20,
+                    new StackPane(buildLabel()),
+                    buildConnectionButton()));
+        }
+
+        private Label buildLabel() {
+            var label = new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.noconn"));
+            label.setFont(Font.font("System", FontWeight.BOLD, 13));
+            return label;
         }
 
         private Button buildConnectionButton() {
@@ -320,8 +339,9 @@ class GoogleBookDockContent extends VBox {
 
         public void showGoogleBookJoiner() {
             context.showOverlay(
-                    new GoogleBookJoinerOverlay(context, buildSearchParameters(record),
-                            volume -> ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume)))
+                    new GoogleBookJoinerOverlay(context, buildSearchParameters(record), volume -> {
+                        ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume));
+                    })
             );
         }
 
@@ -340,9 +360,10 @@ class GoogleBookDockContent extends VBox {
 
         private Task<Void> buildJoinActionTask(Volume volume) {
             var task = new Task<Void>() {
+                @SuppressWarnings("ConstantConditions")
                 @Override
-                protected Void call() throws Exception {
-                    record.setServiceConnection(new ServiceConnection(volume.getSelfLink()));
+                protected Void call() {
+                    record.getServiceConnection().setGoogleBookLink(volume.getSelfLink());
                     database.updateRecord(record);
                     return null;
                 }
@@ -354,6 +375,7 @@ class GoogleBookDockContent extends VBox {
             });
             task.setOnSucceeded(event -> {
                 context.stopProgress();
+                refresh.run();
                 //TODO: NOTIFICATION MESSAGE
             });
             return task;
@@ -368,8 +390,14 @@ class GoogleBookDockContent extends VBox {
 
         private void buildUI() {
             this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
-            this.getChildren().add(new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.multiple")));
+            this.getChildren().add(buildLabel());
             VBox.setVgrow(this, Priority.ALWAYS);
+        }
+
+        private Label buildLabel() {
+            var label = new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.multiple"));
+            label.setFont(Font.font("System", FontWeight.BOLD, 13));
+            return label;
         }
     }
 
@@ -381,10 +409,14 @@ class GoogleBookDockContent extends VBox {
 
         private void buildUI() {
             this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
-            this.getChildren().add(new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.noselection")));
+            this.getChildren().add(buildLabel());
             VBox.setVgrow(this, Priority.ALWAYS);
         }
 
+        private Label buildLabel() {
+            var label = new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.noselection"));
+            label.setFont(Font.font("System", FontWeight.BOLD, 13));
+            return label;
+        }
     }
-
 }
