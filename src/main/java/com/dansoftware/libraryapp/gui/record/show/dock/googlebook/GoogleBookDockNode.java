@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.googlebooks.dock;
+package com.dansoftware.libraryapp.gui.record.show.dock.googlebook;
 
 import com.dansoftware.dock.docknode.DockNode;
 import com.dansoftware.dock.docksystem.DockSystem;
@@ -31,8 +31,16 @@ public class GoogleBookDockNode extends DockNode {
     }
 
     public void setItems(@Nullable List<Record> items) {
-        if (this.getCenter() instanceof GoogleBookDockContent) {
-            ((GoogleBookDockContent) this.getCenter()).setItems(items);
-        }
+        final GoogleBookDockContent content = getContent();
+        if (content != null) content.setItems(items);
+    }
+
+    public void setOnRefreshed(@Nullable Runnable onRefreshed) {
+        final GoogleBookDockContent content = getContent();
+        if (content != null) content.setOnRefreshed(onRefreshed);
+    }
+
+    private GoogleBookDockContent getContent() {
+        return this.getCenter() instanceof GoogleBookDockContent ? (GoogleBookDockContent) this.getCenter() : null;
     }
 }

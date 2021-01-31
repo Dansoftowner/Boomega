@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.googlebooks.dock;
+package com.dansoftware.libraryapp.gui.record.show.dock.googlebook;
 
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.data.Record;
@@ -44,18 +44,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class GoogleBookDockContent extends VBox {
+class GoogleBookDockContent extends VBox {
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleBookDockContent.class);
 
+    private static final String STYLE_CLASS = "google-book-dock";
+
     private final Context context;
     private final Database database;
-    private final Cache<String, GoogleBookDetailsPane> cache;
+    private final Cache<String, DetailsPane> cache;
+
+    private final ObjectProperty<Runnable> onRefreshed = new SimpleObjectProperty<>();
+
+    private final StringProperty currentGoogleHandle = new SimpleStringProperty();
+    private final ObjectProperty<DetailsPane> currentDetailsPane = new SimpleObjectProperty<>();
+
 
     private List<Record> items;
-
-    private final StringProperty lastHandle = new SimpleStringProperty();
-    private final ObjectProperty<GoogleBookDetailsPane> lastDetailsPane = new SimpleObjectProperty<>();
 
     public GoogleBookDockContent(@NotNull Context context,
                                  @NotNull Database database,
@@ -63,20 +68,40 @@ public class GoogleBookDockContent extends VBox {
         this.context = context;
         this.database = database;
         this.cache = buildCache();
+        this.getStyleClass().add(STYLE_CLASS);
         this.setItems(items);
     }
 
-    private Cache<String, GoogleBookDetailsPane> buildCache() {
+    private Cache<String, DetailsPane> buildCache() {
         return Caffeine.newBuilder()
                 .expireAfterWrite(1, TimeUnit.MINUTES)
                 .build();
     }
 
+    public void setOnRefreshed(@Nullable Runnable onRefreshed) {
+        this.onRefreshed.set(onRefreshed);
+    }
+
     public void setItems(@Nullable List<Record> items) {
-        if (lastHandle.get() != null && lastDetailsPane.get() != null)
-            cache.put(lastHandle.get(), lastDetailsPane.get());
-        lastHandle.set(retrieveGoogleBookHandle(items));
-        buildBaseContent(lastHandle.get(), Optional.ofNullable(items).orElseGet(Collections::emptyList));
+        this.createCache();
+        this.items = items;
+        currentGoogleHandle.set(retrieveGoogleBookHandle(items));
+        buildBaseContent(currentGoogleHandle.get(), Optional.ofNullable(items).orElseGet(Collections::emptyList));
+    }
+
+    private void createCache() {
+        if (currentGoogleHandle.get() != null && currentDetailsPane.get() != null) {
+            cache.put(currentGoogleHandle.get(), currentDetailsPane.get());
+            currentGoogleHandle.set(null);
+            currentDetailsPane.set(null);
+        }
+    }
+
+    private void refresh() {
+        setItems(items);
+        if (onRefreshed.get() != null) {
+            onRefreshed.get().run();
+        }
     }
 
     private void setContent(@NotNull Node content) {
@@ -94,9 +119,10 @@ public class GoogleBookDockContent extends VBox {
         getChildren().removeIf(e -> e instanceof ProgressBar);
     }
 
-    private void buildBaseContent(@Nullable String googleHandle, @NotNull List<Record> items) {
+    private void buildBaseContent(@Nullable String googleHandle,
+                                  @NotNull List<Record> items) {
         if (googleHandle != null) {
-            loadGoogleBookDetailsPane(googleHandle);
+            buildDetailsPane(googleHandle);
         } else if (items.size() == 1) {
             setContent(new NoConnectionPlaceHolder(context, database, items.get(0)));
         } else if (items.size() > 1) {
@@ -106,10 +132,11 @@ public class GoogleBookDockContent extends VBox {
         }
     }
 
-    private void loadGoogleBookDetailsPane(String googleBookLink) {
-        GoogleBookDetailsPane pane = cache.getIfPresent(googleBookLink);
+    private void buildDetailsPane(String googleBookLink) {
+        DetailsPane pane = cache.getIfPresent(googleBookLink);
         if (pane != null) {
-            lastDetailsPane.set(pane);
+            pane.items = items;
+            currentDetailsPane.set(pane);
             setContent(pane);
         } else {
             ExploitativeExecutor.INSTANCE.submit(
@@ -117,8 +144,8 @@ public class GoogleBookDockContent extends VBox {
                             googleBookLink,
                             e -> setContent(new ErrorPlaceHolder(context, e)),
                             volume -> {
-                                final var content = new GoogleBookDetailsPane(context, volume);
-                                lastDetailsPane.set(content);
+                                final var content = new DetailsPane(context, database, volume, items, this::refresh);
+                                currentDetailsPane.set(content);
                                 setContent(content);
                             }
                     )
@@ -159,6 +186,72 @@ public class GoogleBookDockContent extends VBox {
             onFailed.accept(event.getSource().getException());
         });
         return task;
+    }
+
+    private static final class DetailsPane extends VBox {
+
+        private final Context context;
+        private final Database database;
+        private final Runnable refresh;
+
+        private List<Record> items;
+
+        DetailsPane(@NotNull Context context,
+                    @NotNull Database database,
+                    @NotNull Volume volume,
+                    @NotNull List<Record> items,
+                    @NotNull Runnable refresh) {
+            this.context = context;
+            this.database = database;
+            this.refresh = refresh;
+            this.items = items;
+            buildUI(volume);
+        }
+
+        private void buildUI(Volume volume) {
+            setVgrow(this, Priority.ALWAYS);
+            setSpacing(5.0);
+            final var mainPane = new GoogleBookDetailsPane(context, volume);
+            VBox.setVgrow(mainPane, Priority.ALWAYS);
+            getChildren().add(mainPane);
+            getChildren().add(buildRemoveButton());
+        }
+
+        private Button buildRemoveButton() {
+            //TODO: i18n value
+            final var button = new Button("Remove google book connection");
+            button.getStyleClass().add("remove-button");
+            button.prefWidthProperty().bind(this.widthProperty());
+            button.setOnAction(event -> {
+                //TODO: 'Are you sure?' dialog!
+                ExploitativeExecutor.INSTANCE.submit(buildConnectionRemoveTask());
+            });
+            return button;
+        }
+
+        private Task<Void> buildConnectionRemoveTask() {
+            var task = new Task<Void>() {
+                @SuppressWarnings("ConstantConditions")
+                @Override
+                protected Void call() {
+                    items.stream()
+                            .peek(record -> record.getServiceConnection().setGoogleBookLink(null))
+                            .forEach(database::updateRecord);
+                    return null;
+                }
+            };
+            task.setOnRunning(event -> context.showIndeterminateProgress());
+            task.setOnFailed(event -> {
+                context.stopProgress();
+                //TODO: ERROR DIALOG
+                refresh.run();
+            });
+            task.setOnSucceeded(event -> {
+                context.stopProgress();
+                refresh.run();
+            });
+            return task;
+        }
     }
 
     private static final class ErrorPlaceHolder extends StackPane {

@@ -5,8 +5,7 @@ import com.dansoftware.dock.position.DockPosition;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.googlebooks.dock.GoogleBookDockNode;
-import com.dansoftware.libraryapp.gui.window.BaseWindow;
+import com.dansoftware.libraryapp.gui.record.show.dock.googlebook.GoogleBookDockNode;
 import com.dansoftware.libraryapp.i18n.I18N;
 import javafx.collections.ListChangeListener;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +42,7 @@ public class RecordsView extends DockSystem<RecordTable> {
             if (dock.isShowing()) dock.setItems(this.recordTable.getSelectionModel().getSelectedItems());
         });
         dock.setDockPosition(DockPosition.RIGHT_BOTTOM);
+        dock.setOnRefreshed(recordTable::refresh);
         //TODO: ON SHOWN -> setting it's content, ON HIDDEN -> clearing it's content
         dock.show();
     }
