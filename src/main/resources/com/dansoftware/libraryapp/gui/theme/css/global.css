@@ -18,3 +18,7 @@
 .languageSelector .text-field {
     -right-button-visible: false;
 }
+
+.check-menu-item:focused:checked > .left-container {
+    -fx-background-color: transparent;
+}
