@@ -69,7 +69,8 @@ private class EmptyContext : Context {
         message: String?,
         duration: Duration?,
         onClicked: EventHandler<MouseEvent>?
-    ) {}
+    ) {
+    }
 
     override fun showWarningNotification(title: String?, message: String?) {}
 
@@ -82,7 +83,8 @@ private class EmptyContext : Context {
         message: String?,
         duration: Duration?,
         onClicked: EventHandler<MouseEvent>?
-    ) {}
+    ) {
+    }
 
     override fun showInformationNotification(title: String?, message: String?) {}
 
@@ -95,7 +97,8 @@ private class EmptyContext : Context {
         message: String?,
         duration: Duration?,
         onClicked: EventHandler<MouseEvent>?
-    ) {}
+    ) {
+    }
 
     override fun showModule(classRef: Class<*>) {}
 

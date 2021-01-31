@@ -98,10 +98,12 @@ class RecordAddModule(
         try {
             database.insertRecord(record)
             context.showInformationNotification(
-                I18N.getRecordAddFormValue(when(record.recordType) {
-                    Record.Type.BOOK -> "record.book.success.notification"
-                    Record.Type.MAGAZINE -> "record.magazine.success.notification"
-                }),
+                I18N.getRecordAddFormValue(
+                    when (record.recordType) {
+                        Record.Type.BOOK -> "record.book.success.notification"
+                        Record.Type.MAGAZINE -> "record.magazine.success.notification"
+                    }
+                ),
                 null,
                 Duration.millis(5000.0)
             )
@@ -111,14 +113,18 @@ class RecordAddModule(
             )
         } catch (e: RuntimeException) {
             context.showErrorDialog(
-                I18N.getRecordAddFormValue(when (record.recordType) {
-                    Record.Type.BOOK -> "record.book.error.title"
-                    Record.Type.MAGAZINE -> "record.magazine.error.title"
-                }),
-                I18N.getRecordAddFormValue(when (record.recordType) {
-                    Record.Type.BOOK -> "record.book.error.msg"
-                    Record.Type.MAGAZINE -> "record.magazine.error.msg"
-                }),
+                I18N.getRecordAddFormValue(
+                    when (record.recordType) {
+                        Record.Type.BOOK -> "record.book.error.title"
+                        Record.Type.MAGAZINE -> "record.magazine.error.title"
+                    }
+                ),
+                I18N.getRecordAddFormValue(
+                    when (record.recordType) {
+                        Record.Type.BOOK -> "record.book.error.msg"
+                        Record.Type.MAGAZINE -> "record.magazine.error.msg"
+                    }
+                ),
                 e
             )
         }

@@ -1,8 +1,6 @@
 package com.dansoftware.libraryapp.util
 
 import java.awt.Desktop
-import java.io.IOException
-import java.net.URISyntaxException
 import java.net.URL
 
 /**

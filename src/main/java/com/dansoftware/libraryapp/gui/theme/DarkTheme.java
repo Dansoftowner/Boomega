@@ -1,6 +1,5 @@
 package com.dansoftware.libraryapp.gui.theme;
 
-import com.dansoftware.dock.util.DockTool;
 import com.dansoftware.libraryapp.gui.theme.applier.AndThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.JMetroThemeApplier;
 import com.dansoftware.libraryapp.gui.theme.applier.StyleSheetThemeApplier;

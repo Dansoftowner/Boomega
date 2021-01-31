@@ -67,7 +67,12 @@ class InformationView(val context: Context) : VBox(5.0) {
         children.add(KeyValuePair("info.version", System.getProperty("libraryapp.version")))
         children.add(KeyValuePair("info.developer", "Györffy Dániel"))
         children.add(KeyValuePair("info.lang", Locale.getDefault().displayLanguage))
-        children.add(KeyValuePair("info.lang.translator", I18N.getLanguagePack().translator?.getDisplayName(Locale.getDefault())))
+        children.add(
+            KeyValuePair(
+                "info.lang.translator",
+                I18N.getLanguagePack().translator?.getDisplayName(Locale.getDefault())
+            )
+        )
     }
 
     private fun buildJavaInfo() {
@@ -108,7 +113,7 @@ class InformationView(val context: Context) : VBox(5.0) {
             MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX)
         ).also {
             it.setOnAction {
-               SystemBrowser.browse(GITHUB_REPO_URL)
+                SystemBrowser.browse(GITHUB_REPO_URL)
             }
         }
 

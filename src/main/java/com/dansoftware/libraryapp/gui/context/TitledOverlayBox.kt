@@ -14,7 +14,6 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.Separator
 import javafx.scene.layout.*
-import javafx.scene.shape.Line
 
 open class TitledOverlayBox(
     title: String,
@@ -22,7 +21,7 @@ open class TitledOverlayBox(
     content: Node,
     resizableH: Boolean,
     resizableV: Boolean,
-    vararg customTitleBarItems : Node
+    vararg customTitleBarItems: Node
 ) : StackPane(Group(ResizablePane(InnerVBox(title, graphic, content, resizableH, resizableV, customTitleBarItems)))) {
 
     constructor(title: String, graphic: Node, content: Node) :

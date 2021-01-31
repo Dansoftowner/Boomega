@@ -59,7 +59,6 @@ public class OsSynchronizedTheme extends Theme {
     }
 
 
-
     private static final class SyncFunction implements Consumer<Boolean> {
 
         private final OsSynchronizedTheme synchTheme;

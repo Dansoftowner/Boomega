@@ -2,7 +2,6 @@ package com.dansoftware.libraryapp.gui.record;
 
 import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.googlebooks.Volume;
-import com.dansoftware.libraryapp.gui.record.add.RecordAddForm;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

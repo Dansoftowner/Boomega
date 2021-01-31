@@ -4,8 +4,6 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.info.dependency.meta.DependencyInfo;
 import com.dansoftware.libraryapp.gui.info.dependency.meta.LicenseInfo;
-import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.gui.theme.Themeable;
 import com.dansoftware.libraryapp.gui.util.WebsiteHyperLink;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;

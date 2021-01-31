@@ -92,18 +92,23 @@ class Record(
         @field:BookProperty
         var subtitle: String? = null
             private set
+
         @field:BookProperty
         var isbn: String? = null
             private set
+
         @field:BookProperty
         var numberOfCopies: Int? = null
             private set
+
         @field:BookProperty
         var numberOfPages: Int? = null
             private set
+
         @field:BookProperty
         var authors: List<String>? = null
             private set
+
         @field:BookProperty
         var subject: String? = null
 

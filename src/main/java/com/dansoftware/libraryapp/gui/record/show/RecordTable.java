@@ -12,7 +12,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -83,7 +86,7 @@ public class RecordTable extends TableView<Record> {
         this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
         this.setPlaceholder(
                 new TableViewPlaceHolder(
-                    this,
+                        this,
                         () -> I18N.getRecordsViewValue("record.table.place.holder"),
                         () -> I18N.getRecordsViewValue("record.table.place.holder.nocolumn")
                 )

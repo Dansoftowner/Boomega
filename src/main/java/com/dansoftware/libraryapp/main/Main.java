@@ -8,13 +8,12 @@ import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
 import com.dansoftware.libraryapp.gui.firsttime.FirstTimeActivity;
 import com.dansoftware.libraryapp.gui.theme.Theme;
 import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity;
+import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.instance.ApplicationInstanceService;
 import com.dansoftware.libraryapp.launcher.ActivityLauncher;
 import com.dansoftware.libraryapp.launcher.LauncherMode;
-import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
 import com.dansoftware.libraryapp.update.UpdateSearcher;
-import com.dansoftware.libraryapp.util.ExploitativeExecutor;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.util.Duration;
@@ -26,7 +25,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The main class and javafx application starter.

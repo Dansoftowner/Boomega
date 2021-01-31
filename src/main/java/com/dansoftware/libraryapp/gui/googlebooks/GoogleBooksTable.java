@@ -95,7 +95,7 @@ public class GoogleBooksTable extends TableView<Volume> {
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         this.setPlaceholder(
                 new TableViewPlaceHolder(
-                    this,
+                        this,
                         () -> I18N.getGoogleBooksImportValue("google.books.table.place.holder"),
                         () -> I18N.getGoogleBooksImportValue("google.books.table.place.holder.no.col")
                 )

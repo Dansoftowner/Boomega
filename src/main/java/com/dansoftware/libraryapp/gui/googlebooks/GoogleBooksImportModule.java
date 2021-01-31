@@ -144,7 +144,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
 
     private ToolbarItem buildBrowserItem() {
         return buildToolbarItem(MaterialDesignIcon.GOOGLE_CHROME, "google.books.toolbar.website", event -> {
-             SystemBrowser.INSTANCE.browse("https://books.google.com/advanced_book_search");
+            SystemBrowser.INSTANCE.browse("https://books.google.com/advanced_book_search");
         });
     }
 

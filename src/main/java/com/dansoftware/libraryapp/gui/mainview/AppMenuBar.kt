@@ -14,9 +14,9 @@ import com.dansoftware.libraryapp.gui.theme.Theme
 import com.dansoftware.libraryapp.gui.theme.Themeable
 import com.dansoftware.libraryapp.gui.updatedialog.UpdateActivity
 import com.dansoftware.libraryapp.gui.util.*
+import com.dansoftware.libraryapp.i18n.I18N
 import com.dansoftware.libraryapp.launcher.ActivityLauncher
 import com.dansoftware.libraryapp.launcher.LauncherMode
-import com.dansoftware.libraryapp.i18n.I18N
 import com.dansoftware.libraryapp.main.ApplicationRestart
 import com.dansoftware.libraryapp.update.UpdateSearcher
 import com.dansoftware.libraryapp.util.ReflectionUtils

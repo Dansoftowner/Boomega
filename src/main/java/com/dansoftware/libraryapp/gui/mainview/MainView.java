@@ -6,8 +6,6 @@ import com.dansoftware.libraryapp.db.DatabaseMeta;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.ContextTransformable;
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker;
-import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.gui.theme.Themeable;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;

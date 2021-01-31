@@ -140,7 +140,8 @@ fun KClass<*>.loadImageResource(resource: String): Image {
     }
 }
 
-class TableViewPlaceHolder(tableView: TableView<*>, valueIfEmpty: () -> String, valueIfNoColumns: () -> String) : StackPane() {
+class TableViewPlaceHolder(tableView: TableView<*>, valueIfEmpty: () -> String, valueIfNoColumns: () -> String) :
+    StackPane() {
 
     @Suppress("JoinDeclarationAndAssignment")
     private val noColumns: BooleanBinding

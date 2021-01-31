@@ -1,7 +1,5 @@
 package com.dansoftware.libraryapp.gui.window.undecorate.control;
 
-import com.dansoftware.libraryapp.gui.theme.Theme;
-import com.dansoftware.libraryapp.gui.theme.Themeable;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;

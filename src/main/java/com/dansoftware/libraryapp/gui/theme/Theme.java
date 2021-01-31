@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A Theme can change the appearance of GUI elements.
