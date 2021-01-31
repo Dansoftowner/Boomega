@@ -1,0 +1,9 @@
+.google-book-dock .remove-button {
+    -fx-background-color: #b70202;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dddddd;
+}
+
+.google-book-dock .remove-button:hover {
+    -fx-border-color: #323232;
+}

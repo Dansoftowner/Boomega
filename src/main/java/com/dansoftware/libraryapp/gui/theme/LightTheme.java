@@ -58,7 +58,8 @@ public class LightTheme extends Theme {
                 "/com/dansoftware/libraryapp/gui/theme/css/light/update-dialog-light.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/light/google-books-module-light.css",
                 "/com/dansoftware/libraryapp/gui/theme/css/light/record-add-form-light.css",
-                "/com/dansoftware/libraryapp/gui/theme/css/light/dock-system-light.css"
+                "/com/dansoftware/libraryapp/gui/theme/css/light/dock-system-light.css",
+                "/com/dansoftware/libraryapp/gui/theme/css/light/records-view-light.css"
         );
     }
 
