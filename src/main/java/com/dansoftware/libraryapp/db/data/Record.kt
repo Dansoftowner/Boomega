@@ -29,7 +29,7 @@ class Record(
     @field:MagazineProperty var magazineName: String? = null
 ) {
     var serviceConnection: ServiceConnection? = null
-        get() = field ?: ServiceConnection()
+        get() = field ?: ServiceConnection().also { field = it }
 
     constructor() : this(
         null,
