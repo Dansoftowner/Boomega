@@ -270,8 +270,8 @@ class GoogleBookDockContent extends VBox {
             this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
             this.getChildren().add(
                     new Group(new VBox(20,
-                            buildLabel(),
-                            buildDetailsButton()))
+                            new StackPane(buildLabel()),
+                            new StackPane(buildDetailsButton())))
             );
             VBox.setVgrow(this, Priority.ALWAYS);
         }
