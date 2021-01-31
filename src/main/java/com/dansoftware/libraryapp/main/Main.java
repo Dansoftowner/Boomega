@@ -282,7 +282,7 @@ public class Main extends BaseApplication {
 
         //We wait 5 seconds for the background processes to terminate, then we shut down explicitly the application
         //noinspection ResultOfMethodCallIgnored
-        ExploitativeExecutor.INSTANCE.awaitTermination(5, TimeUnit.SECONDS);
+        //ExploitativeExecutor.INSTANCE.awaitTermination(1500, TimeUnit.MILLISECONDS);
         System.exit(0);
     }
 
