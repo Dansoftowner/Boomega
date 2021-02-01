@@ -41,7 +41,7 @@ class GoogleBooksSearchForm extends TitledPane {
     private final Form form;
 
     GoogleBooksSearchForm(@NotNull Context context, @NotNull Consumer<SearchParameters> onSearch) {
-        super(I18N.getGoogleBooksImportValue("google.books.add.form.section.title"), null);
+        super(I18N.getGoogleBooksValue("google.books.add.form.section.title"), null);
         this.context = context;
         this.formProperties = new FormProperties();
         this.form = buildForm();
@@ -56,7 +56,7 @@ class GoogleBooksSearchForm extends TitledPane {
     }
 
     private Button buildButton(Consumer<SearchParameters> onSearch) {
-        Button button = new Button(I18N.getGoogleBooksImportValue("google.books.add.form.search"));
+        Button button = new Button(I18N.getGoogleBooksValue("google.books.add.form.search"));
         button.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.SEARCH));
         button.setDefaultButton(true);
         button.prefWidthProperty().bind(this.widthProperty());
@@ -116,7 +116,7 @@ class GoogleBooksSearchForm extends TitledPane {
                                 .validate(IntegerRangeValidator.between(1, 40, "google.books.add.form.maxresults.incorrect"))
                 )
         ).title("google.books.add.form.ftitle").binding(BindingMode.CONTINUOUS)
-                .i18n(new ResourceBundleService(I18N.getGoogleBooksImportValues()));
+                .i18n(new ResourceBundleService(I18N.getGoogleBooksValues()));
     }
 
     public void clear() {
@@ -145,15 +145,15 @@ class GoogleBooksSearchForm extends TitledPane {
         private final IntegerProperty maxResults = new SimpleIntegerProperty(10);
 
         private final ObservableList<Filter> selectableFilters = FXCollections.observableArrayList(
-                new Filter(GoogleBooksQueryBuilder.PrintType.ALL, I18N.getGoogleBooksImportValues(), "google.books.add.form.filter.all"),
-                new Filter(GoogleBooksQueryBuilder.PrintType.BOOKS, I18N.getGoogleBooksImportValues(), "google.books.add.form.filter.books"),
-                new Filter(GoogleBooksQueryBuilder.PrintType.MAGAZINES, I18N.getGoogleBooksImportValues(), "google.books.add.form.filter.magazines")
+                new Filter(GoogleBooksQueryBuilder.PrintType.ALL, I18N.getGoogleBooksValues(), "google.books.add.form.filter.all"),
+                new Filter(GoogleBooksQueryBuilder.PrintType.BOOKS, I18N.getGoogleBooksValues(), "google.books.add.form.filter.books"),
+                new Filter(GoogleBooksQueryBuilder.PrintType.MAGAZINES, I18N.getGoogleBooksValues(), "google.books.add.form.filter.magazines")
         );
         private final ObjectProperty<Filter> filter = new SimpleObjectProperty<>(selectableFilters.get(0));
 
         private final ObservableList<SortType> selectableSorts = FXCollections.observableArrayList(
-                new SortType(GoogleBooksQueryBuilder.SortType.REVELANCE, I18N.getGoogleBooksImportValues(), "google.books.add.form.sort.relevance"),
-                new SortType(GoogleBooksQueryBuilder.SortType.NEWEST, I18N.getGoogleBooksImportValues(), "google.books.add.form.sort.newest")
+                new SortType(GoogleBooksQueryBuilder.SortType.REVELANCE, I18N.getGoogleBooksValues(), "google.books.add.form.sort.relevance"),
+                new SortType(GoogleBooksQueryBuilder.SortType.NEWEST, I18N.getGoogleBooksValues(), "google.books.add.form.sort.newest")
         );
         private final ObjectProperty<SortType> sort = new SimpleObjectProperty<>(selectableSorts.get(0));
 

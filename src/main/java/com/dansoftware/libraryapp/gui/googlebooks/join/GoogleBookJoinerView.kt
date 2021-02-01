@@ -26,7 +26,7 @@ class GoogleBookJoinerOverlay(
     searchParameters: SearchParameters,
     onVolumeSelected: Consumer<Volume>
 ) : TitledOverlayBox(
-    I18N.getGoogleBooksImportValue("google.books.joiner.titlebar"),
+    I18N.getGoogleBooksValue("google.books.joiner.titlebar"),
     ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
     GoogleBookJoinerView(
         context,
@@ -135,7 +135,7 @@ class GoogleBookJoinerView(
         private fun buildLeftBox(): VBox =
             VBox(3.0).also { vBox ->
                 setHgrow(vBox, Priority.ALWAYS)
-                vBox.children.add(CheckBox(I18N.getGoogleBooksImportValue("google.books.joiner.isbn")).also { checkBox ->
+                vBox.children.add(CheckBox(I18N.getGoogleBooksValue("google.books.joiner.isbn")).also { checkBox ->
                     checkBox.isSelected = true
                     this.isbnSelected = checkBox.selectedProperty().also {
                         it.addListener { _, _, yes ->
@@ -144,7 +144,7 @@ class GoogleBookJoinerView(
                     }
                 })
 
-                vBox.children.add(CheckBox(I18N.getGoogleBooksImportValue("google.books.joiner.title")).also { checkBox ->
+                vBox.children.add(CheckBox(I18N.getGoogleBooksValue("google.books.joiner.title")).also { checkBox ->
                     checkBox.isSelected = true
                     this.titleSelected = checkBox.selectedProperty().also {
                         it.addListener { _, _, yes ->
@@ -153,7 +153,7 @@ class GoogleBookJoinerView(
                     }
                 })
 
-                vBox.children.add(CheckBox(I18N.getGoogleBooksImportValue("google.books.joiner.authors")).also {
+                vBox.children.add(CheckBox(I18N.getGoogleBooksValue("google.books.joiner.authors")).also {
                     it.isSelected = true
                     this.authorsSelected = it.selectedProperty().also { checkBox ->
                         checkBox.addListener { _, _, yes ->
@@ -162,7 +162,7 @@ class GoogleBookJoinerView(
                     }
                 })
 
-                vBox.children.add(CheckBox(I18N.getGoogleBooksImportValue("google.books.joiner.publisher")).also { checkBox ->
+                vBox.children.add(CheckBox(I18N.getGoogleBooksValue("google.books.joiner.publisher")).also { checkBox ->
                     this.publisherSelected = checkBox.selectedProperty().also {
                         it.addListener { _, _, yes ->
                             searchParameters.publisher(if (yes) allParameters.publisher else null)
@@ -174,7 +174,7 @@ class GoogleBookJoinerView(
         private fun buildRightBox(): VBox =
             VBox(3.0).also { vBox ->
                 setHgrow(vBox, Priority.ALWAYS)
-                vBox.children.add(CheckBox(I18N.getGoogleBooksImportValue("google.books.joiner.language")).also { checkBox ->
+                vBox.children.add(CheckBox(I18N.getGoogleBooksValue("google.books.joiner.language")).also { checkBox ->
                     this.languageSelected = checkBox.selectedProperty().also {
                         it.addListener { _, _, yes ->
                             searchParameters.language(if (yes) allParameters.language else null)
@@ -183,7 +183,7 @@ class GoogleBookJoinerView(
                     checkBox.disableProperty().bind(this.validProperty.not())
                 })
 
-                vBox.children.add(Label(I18N.getGoogleBooksImportValue("google.books.joiner.maxresults")))
+                vBox.children.add(Label(I18N.getGoogleBooksValue("google.books.joiner.maxresults")))
                 vBox.children.add(Spinner<Int>(1, 40, 10).also { spinner ->
                     this.maxResults = spinner.valueProperty().also {
                         it.addListener { _, _, newValue ->

@@ -151,7 +151,7 @@ public abstract class LanguagePack {
     public abstract ResourceBundle getMenuBarValues();
 
     @NotNull
-    public abstract ResourceBundle getGoogleBooksImportValues();
+    public abstract ResourceBundle getGoogleBooksValues();
 
     @NotNull
     public abstract ResourceBundle getRecordAddFormValues();

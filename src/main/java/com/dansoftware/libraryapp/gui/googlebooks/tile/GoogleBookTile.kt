@@ -68,7 +68,7 @@ class GoogleBookTile(
             )
         }
 
-        private class PlaceHolder : Label(I18N.getGoogleBooksImportValue("google.books.table.thumbnail.not.available"))
+        private class PlaceHolder : Label(I18N.getGoogleBooksValue("google.books.table.thumbnail.not.available"))
     }
 
     private class Info(volume: Volume) : VBox(5.0) {
@@ -82,7 +82,7 @@ class GoogleBookTile(
 
         private fun buildMarkLabel() =
             HBox(10.0, ImageView(Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
-                Label(I18N.getGoogleBooksImportValue("google.books.tile.title")).also {
+                Label(I18N.getGoogleBooksValue("google.books.tile.title")).also {
                     it.styleClass.add("tile-title")
                 })
 

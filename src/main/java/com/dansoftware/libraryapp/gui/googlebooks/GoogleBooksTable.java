@@ -96,8 +96,8 @@ public class GoogleBooksTable extends TableView<Volume> {
         this.setPlaceholder(
                 new TableViewPlaceHolder(
                         this,
-                        () -> I18N.getGoogleBooksImportValue("google.books.table.place.holder"),
-                        () -> I18N.getGoogleBooksImportValue("google.books.table.place.holder.no.col")
+                        () -> I18N.getGoogleBooksValue("google.books.table.place.holder"),
+                        () -> I18N.getGoogleBooksValue("google.books.table.place.holder.no.col")
                 )
         );
         this.buildClickHandlingPolicy();
@@ -198,7 +198,7 @@ public class GoogleBooksTable extends TableView<Volume> {
         public Column(@NotNull ColumnType columnType, boolean i18n) {
             this.columnType = Objects.requireNonNull(columnType);
             this.setReorderable(false);
-            if (i18n) setText(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
+            if (i18n) setText(I18N.getGoogleBooksValue(columnType.getI18Nkey()));
         }
 
         public Column(@NotNull ColumnType columnType) {
@@ -307,7 +307,7 @@ public class GoogleBooksTable extends TableView<Volume> {
                     } else {
                         Volume.VolumeInfo volume = getVolumeInfo(this);
                         setGraphic(new MaterialDesignIconView(volume.isMagazine() ? MaterialDesignIcon.NEWSPAPER : MaterialDesignIcon.BOOK));
-                        setTooltip(new Tooltip(I18N.getGoogleBooksImportValue(volume.isMagazine() ? "google.books.magazine" : "google.books.book")));
+                        setTooltip(new Tooltip(I18N.getGoogleBooksValue(volume.isMagazine() ? "google.books.magazine" : "google.books.book")));
                     }
                 }
             };
@@ -355,7 +355,7 @@ public class GoogleBooksTable extends TableView<Volume> {
                                     setText(null);
                                 }, () -> {
                                     setGraphic(null);
-                                    setText(I18N.getGoogleBooksImportValue("google.books.table.thumbnail.not.available"));
+                                    setText(I18N.getGoogleBooksValue("google.books.table.thumbnail.not.available"));
                                 });
                     }
                 }
@@ -543,7 +543,7 @@ public class GoogleBooksTable extends TableView<Volume> {
                     } else {
                         Volume.VolumeInfo volume = getVolumeInfo(this);
                         Optional.ofNullable(volume.getPreviewLink())
-                                .ifPresent(link -> setGraphic(new WebsiteHyperLink(I18N.getGoogleBooksImportValue("google.books.table.browser.open"), link)));
+                                .ifPresent(link -> setGraphic(new WebsiteHyperLink(I18N.getGoogleBooksValue("google.books.table.browser.open"), link)));
                     }
                 }
             };

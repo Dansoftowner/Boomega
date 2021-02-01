@@ -87,8 +87,8 @@ public class I18N {
     }
 
     @NotNull
-    public static String getGoogleBooksImportValue(@NotNull String key, @Nullable Object... args) {
-        return getValue(getGoogleBooksImportValues(), key, args);
+    public static String getGoogleBooksValue(@NotNull String key, @Nullable Object... args) {
+        return getValue(getGoogleBooksValues(), key, args);
     }
 
     @NotNull
@@ -184,9 +184,9 @@ public class I18N {
     }
 
     @NotNull
-    public static ResourceBundle getGoogleBooksImportValues() {
+    public static ResourceBundle getGoogleBooksValues() {
         recognizeLanguagePack();
-        return languagePack.getGoogleBooksImportValues();
+        return languagePack.getGoogleBooksValues();
     }
 
     @NotNull

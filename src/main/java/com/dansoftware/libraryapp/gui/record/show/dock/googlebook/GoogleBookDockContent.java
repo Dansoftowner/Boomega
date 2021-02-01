@@ -277,14 +277,14 @@ class GoogleBookDockContent extends VBox {
         }
 
         private Label buildLabel() {
-            var label = new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.error"));
+            var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.error"));
             label.setFont(Font.font("System", FontWeight.BOLD, 13));
             return label;
         }
 
         private Button buildDetailsButton() {
             var button = new Button(
-                    I18N.getGoogleBooksImportValue("google.books.dock.placeholder.error.details"),
+                    I18N.getGoogleBooksValue("google.books.dock.placeholder.error.details"),
                     new MaterialDesignIconView(MaterialDesignIcon.DETAILS)
             );
             button.setOnAction(event -> context.showErrorDialog(StringUtils.EMPTY, StringUtils.EMPTY, (Exception) cause));
@@ -323,14 +323,14 @@ class GoogleBookDockContent extends VBox {
         }
 
         private Label buildLabel() {
-            var label = new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.noconn"));
+            var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.noconn"));
             label.setFont(Font.font("System", FontWeight.BOLD, 13));
             return label;
         }
 
         private Button buildConnectionButton() {
             var button = new Button(
-                    I18N.getGoogleBooksImportValue("google.books.dock.connection"),
+                    I18N.getGoogleBooksValue("google.books.dock.connection"),
                     new MaterialDesignIconView(MaterialDesignIcon.GOOGLE)
             );
             button.setOnAction(event -> showGoogleBookJoiner());
@@ -395,7 +395,7 @@ class GoogleBookDockContent extends VBox {
         }
 
         private Label buildLabel() {
-            var label = new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.multiple"));
+            var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.multiple"));
             label.setFont(Font.font("System", FontWeight.BOLD, 13));
             return label;
         }
@@ -414,7 +414,7 @@ class GoogleBookDockContent extends VBox {
         }
 
         private Label buildLabel() {
-            var label = new Label(I18N.getGoogleBooksImportValue("google.books.dock.placeholder.noselection"));
+            var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.noselection"));
             label.setFont(Font.font("System", FontWeight.BOLD, 13));
             return label;
         }

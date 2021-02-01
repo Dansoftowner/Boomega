@@ -62,7 +62,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
 
     public GoogleBooksImportModule(@NotNull Context context,
                                    @NotNull Preferences preferences) {
-        super(I18N.getGoogleBooksImportValue("google.books.import.module.title"), MaterialDesignIcon.GOOGLE);
+        super(I18N.getGoogleBooksValue("google.books.import.module.title"), MaterialDesignIcon.GOOGLE);
         this.context = context;
         this.preferences = preferences;
         this.buildTableConfiguration();
@@ -154,7 +154,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
 
     private ToolbarItem buildColumnChooserItem() {
         var toolbarItem = new ToolbarItem(
-                I18N.getGoogleBooksImportValue("google.books.toolbar.columns"),
+                I18N.getGoogleBooksValue("google.books.toolbar.columns"),
                 new FontAwesomeIconView(FontAwesomeIcon.COLUMNS));
         Stream.of(GoogleBooksTable.ColumnType.values())
                 .map(TableColumnMenuItem::new)
@@ -172,7 +172,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
     }
 
     private ToolbarItem buildABCChooserItem() {
-        var toolbarItem = new ToolbarItem(I18N.getGoogleBooksImportValue("google.books.abc"));
+        var toolbarItem = new ToolbarItem(I18N.getGoogleBooksValue("google.books.abc"));
         var toggleGroup = new ToggleGroup();
         ABCCollators.getAvailableCollators().forEach((locale, collatorSupplier) -> {
             toolbarItem.getItems().add(new AbcMenuItem(locale, collatorSupplier, toggleGroup));
@@ -182,7 +182,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
 
     private ToolbarItem buildToolbarItem(MaterialDesignIcon icon, String i18nTooltip, EventHandler<MouseEvent> onClick) {
         var toolbarItem = new ToolbarItem(new MaterialDesignIconView(icon), onClick);
-        toolbarItem.setTooltip(new Tooltip(I18N.getGoogleBooksImportValue(i18nTooltip)));
+        toolbarItem.setTooltip(new Tooltip(I18N.getGoogleBooksValue(i18nTooltip)));
         return toolbarItem;
     }
 
@@ -219,7 +219,7 @@ public class GoogleBooksImportModule extends WorkbenchModule {
         private final GoogleBooksTable.ColumnType columnType;
 
         TableColumnMenuItem(GoogleBooksTable.ColumnType columnType) {
-            super(I18N.getGoogleBooksImportValue(columnType.getI18Nkey()));
+            super(I18N.getGoogleBooksValue(columnType.getI18Nkey()));
             this.columnType = columnType;
             this.setOnAction(e -> {
                 if (!this.isSelected()) {

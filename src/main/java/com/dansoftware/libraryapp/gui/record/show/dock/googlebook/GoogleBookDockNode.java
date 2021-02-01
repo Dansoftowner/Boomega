@@ -21,7 +21,7 @@ public class GoogleBookDockNode extends DockNode {
                               @NotNull Context context,
                               @NotNull Database database,
                               @Nullable List<Record> items) {
-        super(dockSystem, I18N.getGoogleBooksImportValue("google.books.dock.title"),
+        super(dockSystem, I18N.getGoogleBooksValue("google.books.dock.title"),
                 new ImageView(new Image("/com/dansoftware/libraryapp/image/util/google_12px.png")));
         setContent(new GoogleBookDockContent(context, database, items));
         setStageFactory(() -> new BaseWindow() {{
