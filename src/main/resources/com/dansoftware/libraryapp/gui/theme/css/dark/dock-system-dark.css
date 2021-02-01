@@ -1,11 +1,11 @@
 /* Dock-frame */
 .border-button {
     -fx-background-color: transparent;
-    -fx-padding: 2px;
+    -fx-min-height: 20px;
 }
 
-.border-button :selected {
-    -fx-background-color: #262626;
+.border-button .label {
+    -fx-font-size: 12;
 }
 
 .border-button .root-btn {
@@ -14,22 +14,23 @@
     -fx-min-height: 20;
 }
 
-.border-button .label {
-    -fx-font-size: 12;
-}
-
 .border-button .root-btn:hover {
     -fx-background-color: #4c4c4c;
 }
 
+.border-button :selected {
+    -fx-background-color: #1c1b1b;
+}
+
 .border-edge, .border-toolbar {
-    -fx-background-color: #323232;
+    /*-fx-background-color: #323232;*/
     -fx-padding: 0;
     -fx-min-width: 20;
 }
 
 .border-edge {
     -fx-border-color: #323232;
+    -fx-min-height: 20px;
 }
 
 .border-edge :vertical {
