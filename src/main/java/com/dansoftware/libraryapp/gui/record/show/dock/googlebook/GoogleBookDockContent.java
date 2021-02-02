@@ -9,6 +9,7 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.googlebooks.GoogleBookDetailsPane;
 import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
 import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerOverlay;
+import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
 import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -22,15 +23,13 @@ import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -219,13 +218,17 @@ class GoogleBookDockContent extends VBox {
         }
 
         private Button buildRemoveButton() {
-            //TODO: i18n value
-            final var button = new Button("Remove google book connection");
+            final var button = new Button(I18N.getGoogleBooksValue("google.books.dock.remove_connection"));
             button.getStyleClass().add("remove-button");
             button.prefWidthProperty().bind(this.widthProperty());
             button.setOnAction(event -> {
-                //TODO: 'Are you sure?' dialog!
-                ExploitativeExecutor.INSTANCE.submit(buildConnectionRemoveTask());
+                context.showConfirmationDialog(
+                        I18N.getGoogleBooksValue("google.books.dock.remove.confirmation.title"),
+                        I18N.getGoogleBooksValue("google.books.dock.remove.confirmation.msg"), it -> {
+                            if (BaseFXUtils.typeEquals(it, ButtonType.YES)) {
+                                ExploitativeExecutor.INSTANCE.submit(buildConnectionRemoveTask());
+                            }
+                        });
             });
             return button;
         }
@@ -245,11 +248,18 @@ class GoogleBookDockContent extends VBox {
             task.setOnFailed(event -> {
                 context.stopProgress();
                 //TODO: ERROR DIALOG
+                logger.error("Couldn't remove Google Book connection", event.getSource().getException());
                 refresh.run();
             });
             task.setOnSucceeded(event -> {
                 context.stopProgress();
                 refresh.run();
+
+                context.showInformationNotification(
+                        I18N.getGoogleBooksValue("google.books.dock.success_unjoin.title"),
+                        null,
+                        Duration.seconds(2)
+                );
             });
             return task;
         }
@@ -349,8 +359,7 @@ class GoogleBookDockContent extends VBox {
             return new SearchParameters()
                     .printType(record.getRecordType() == Record.Type.BOOK ?
                             GoogleBooksQueryBuilder.PrintType.BOOKS :
-                            GoogleBooksQueryBuilder.PrintType.MAGAZINES
-                    )
+                            GoogleBooksQueryBuilder.PrintType.MAGAZINES)
                     .isbn(record.getIsbn())
                     .authors(String.join(",", Optional.ofNullable(record.getAuthors()).orElse(Collections.emptyList())))
                     .publisher(record.getPublisher())
@@ -371,12 +380,18 @@ class GoogleBookDockContent extends VBox {
             task.setOnRunning(event -> context.showIndeterminateProgress());
             task.setOnFailed(event -> {
                 //TODO: ERROR DIALOG
+                logger.error("Couldn't join with Google Book", event.getSource().getException());
                 context.stopProgress();
             });
             task.setOnSucceeded(event -> {
                 context.stopProgress();
                 refresh.run();
-                //TODO: NOTIFICATION MESSAGE
+
+                context.showInformationNotification(
+                        I18N.getGoogleBooksValue("google.books.dock.success_join.title"),
+                        null,
+                        Duration.seconds(2)
+                );
             });
             return task;
         }
