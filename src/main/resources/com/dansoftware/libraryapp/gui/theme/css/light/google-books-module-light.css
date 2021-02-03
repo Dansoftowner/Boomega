@@ -11,6 +11,10 @@
     -fx-padding: 2px;
 }
 
+.google-book-details-pane .description-area .markdown-normal-flow {
+    -fx-text-alignment: justify;
+}
+
 .google-book-details-pane .header-area .label {
     -fx-font-size: 17px;
 }

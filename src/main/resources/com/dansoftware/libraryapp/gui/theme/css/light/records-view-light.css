@@ -7,3 +7,8 @@
 .google-book-dock .remove-button:hover {
     -fx-border-color: #323232;
 }
+
+.google-book-dock .place-holder-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}

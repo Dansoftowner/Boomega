@@ -2,3 +2,8 @@
     -fx-background-color: #960101;
     -fx-font-weight: bold;
 }
+
+.google-book-dock .place-holder-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
