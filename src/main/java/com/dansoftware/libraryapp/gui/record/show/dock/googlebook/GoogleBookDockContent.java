@@ -9,7 +9,9 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.googlebooks.GoogleBookDetailsPane;
 import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
 import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerOverlay;
+import com.dansoftware.libraryapp.gui.record.show.RecordTable;
 import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
+import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -27,8 +29,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
@@ -105,8 +105,7 @@ class GoogleBookDockContent extends VBox {
     }
 
     private void setContent(@NotNull Node content) {
-        if (this.getChildren().isEmpty()) this.getChildren().add(content);
-        else this.getChildren().set(0, content);
+        this.getChildren().setAll(content);
     }
 
     private void showProgress() {
@@ -222,15 +221,28 @@ class GoogleBookDockContent extends VBox {
             button.getStyleClass().add("remove-button");
             button.prefWidthProperty().bind(this.widthProperty());
             button.setOnAction(event -> {
-                context.showConfirmationDialog(
-                        I18N.getGoogleBooksValue("google.books.dock.remove.confirmation.title"),
-                        I18N.getGoogleBooksValue("google.books.dock.remove.confirmation.msg"), it -> {
+
+                context.showDialog(
+                        I18N.getGoogleBooksValue("google.books.dock.remove.confirmation.title", items.size()),
+                        buildPreviewTable(items),
+                        it -> {
                             if (BaseFXUtils.typeEquals(it, ButtonType.YES)) {
                                 ExploitativeExecutor.INSTANCE.submit(buildConnectionRemoveTask());
                             }
-                        });
+                        }, I18NButtonTypes.CANCEL, I18NButtonTypes.YES);
             });
             return button;
+        }
+
+        private RecordTable buildPreviewTable(List<Record> items) {
+            var recordTable = new RecordTable(0);
+            recordTable.addColumn(RecordTable.ColumnType.INDEX_COLUMN);
+            recordTable.addColumn(RecordTable.ColumnType.TYPE_INDICATOR_COLUMN);
+            recordTable.addColumn(RecordTable.ColumnType.AUTHOR_COLUMN);
+            recordTable.addColumn(RecordTable.ColumnType.TITLE_COLUMN);
+            recordTable.getItems().setAll(items);
+            recordTable.setPrefHeight(200);
+            return recordTable;
         }
 
         private Task<Void> buildConnectionRemoveTask() {
@@ -288,7 +300,7 @@ class GoogleBookDockContent extends VBox {
 
         private Label buildLabel() {
             var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.error"));
-            label.setFont(Font.font("System", FontWeight.BOLD, 13));
+            label.getStyleClass().add("place-holder-label");
             return label;
         }
 
@@ -334,7 +346,7 @@ class GoogleBookDockContent extends VBox {
 
         private Label buildLabel() {
             var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.noconn"));
-            label.setFont(Font.font("System", FontWeight.BOLD, 13));
+            label.getStyleClass().add("place-holder-label");
             return label;
         }
 
@@ -411,7 +423,7 @@ class GoogleBookDockContent extends VBox {
 
         private Label buildLabel() {
             var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.multiple"));
-            label.setFont(Font.font("System", FontWeight.BOLD, 13));
+            label.getStyleClass().add("place-holder-label");
             return label;
         }
     }
@@ -430,7 +442,7 @@ class GoogleBookDockContent extends VBox {
 
         private Label buildLabel() {
             var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.noselection"));
-            label.setFont(Font.font("System", FontWeight.BOLD, 13));
+            label.getStyleClass().add("place-holder-label");
             return label;
         }
     }
