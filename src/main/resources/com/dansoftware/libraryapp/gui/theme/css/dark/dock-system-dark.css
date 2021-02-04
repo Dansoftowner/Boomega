@@ -51,7 +51,8 @@
     -fx-pref-height: 28px;
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #323232;
-    -fx-padding: 0 4px 0 4px;
+   /* -fx-padding: 0 4px 0 4px;*/
+    -fx-padding: 5px;
 }
 
 .dock-title-bar .label {
