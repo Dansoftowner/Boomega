@@ -1,29 +1,48 @@
 package com.dansoftware.libraryapp.gui.record.show;
 
-import com.dansoftware.dock.docksystem.DockSystem;
-import com.dansoftware.dock.position.DockPosition;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.gui.record.show.dock.googlebook.GoogleBookDockNode;
+import com.dansoftware.libraryapp.gui.record.show.dock.googlebook.GoogleBookDockContent;
 import com.dansoftware.libraryapp.i18n.I18N;
 import javafx.collections.ListChangeListener;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class RecordsView extends DockSystem<RecordTable> {
+public class RecordsView extends SplitPane {
 
     private final Context context;
     private final Database database;
     private final RecordTable recordTable;
 
+    private final SplitPane dockSplitPane;
+
     RecordsView(@NotNull Context context, @NotNull Database database) {
         this.context = context;
         this.database = database;
         this.recordTable = buildBooksTable();
-        this.setResourceBundle(I18N.getDockSystemValues());
+        this.dockSplitPane = buildDockSplitPane();
+        this.setOrientation(Orientation.HORIZONTAL);
+//        this.setResourceBundle(I18N.getDockSystemValues());
         this.buildUI();
+    }
+
+    private SplitPane buildDockSplitPane() {
+        var splitPane = new SplitPane();
+        splitPane.setOrientation(Orientation.HORIZONTAL);
+        splitPane.setPrefWidth(500);
+        splitPane.setMaxWidth(Region.USE_PREF_SIZE);
+        splitPane.getItems().add(buildGoogleBooksDock());
+        SplitPane.setResizableWithParent(splitPane, false);
+        return splitPane;
     }
 
     private RecordTable buildBooksTable() {
@@ -31,20 +50,19 @@ public class RecordsView extends DockSystem<RecordTable> {
     }
 
     private void buildUI() {
-        this.setDockedCenter(this.recordTable);
-        this.buildGoogleBooksDock();
+        this.getItems().addAll(recordTable, dockSplitPane);
     }
 
-    @SuppressWarnings("rawtypes")
-    private void buildGoogleBooksDock() {
-        var dock = new GoogleBookDockNode(this, context, database, recordTable.getSelectionModel().getSelectedItems());
+    private Node buildGoogleBooksDock() {
+        var dockContent = new GoogleBookDockContent(context, database, recordTable.getSelectionModel().getSelectedItems());
         this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
-            if (dock.isShowing()) dock.setItems(this.recordTable.getSelectionModel().getSelectedItems());
+            dockContent.setItems(this.recordTable.getSelectionModel().getSelectedItems());
         });
-        dock.setDockPosition(DockPosition.RIGHT_BOTTOM);
-        dock.setOnRefreshed(recordTable::refresh);
-        //TODO: ON SHOWN -> setting it's content, ON HIDDEN -> clearing it's content
-        dock.show();
+        return new GoogleBookDock(dockContent);
+    }
+
+    public void setDockFullyResizable() {
+        dockSplitPane.setMaxWidth(Region.USE_COMPUTED_SIZE);
     }
 
     public void scrollToTop() {
@@ -61,6 +79,45 @@ public class RecordsView extends DockSystem<RecordTable> {
 
     public RecordTable getBooksTable() {
         return recordTable;
+    }
+
+    private static abstract class TitledDock<T extends Node> extends VBox {
+
+        private final T content;
+
+        TitledDock(@NotNull Node icon,
+                   @NotNull String title,
+                   @NotNull T content) {
+            this.content = content;
+            this.buildUI(icon, title);
+        }
+
+        private void buildUI(Node icon, String title) {
+            SplitPane.setResizableWithParent(this, false);
+            VBox.setVgrow(content, Priority.ALWAYS);
+            getStyleClass().add("titled-dock");
+            getChildren().add(buildTitleBar(icon, title));
+            getChildren().add(content);
+        }
+
+        private Node buildTitleBar(Node icon, String title) {
+            var hBox = new HBox(10.0, new StackPane(icon), new Label(title));
+
+            hBox.getStyleClass().add("dock-title-bar");
+            return hBox;
+        }
+    }
+
+    private static final class GoogleBookDock extends TitledDock<GoogleBookDockContent> {
+
+        private final GoogleBookDockContent content;
+
+        GoogleBookDock(@NotNull GoogleBookDockContent content) {
+            super(new ImageView(new Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
+                    I18N.getGoogleBooksValue("google.books.dock.title"),
+                    content);
+            this.content = content;
+        }
     }
 
 }

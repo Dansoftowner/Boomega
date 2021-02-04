@@ -15,6 +15,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.*;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -284,15 +285,15 @@ public class RecordsViewModule extends WorkbenchModule
     }
 
     private void loadBooks(RecordsView content) {
-        ExploitativeExecutor.INSTANCE.submit(
-                new TableRecordsGetTask(
-                        context,
-                        content.getBooksTable(),
-                        database,
-                        0,
-                        itemsPerPage.get()
-                )
+        final var task = new TableRecordsGetTask(
+                context,
+                content.getBooksTable(),
+                database,
+                0,
+                itemsPerPage.get()
         );
+        task.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> content.setDockFullyResizable());
+        ExploitativeExecutor.INSTANCE.submit(task);
     }
 
     @SuppressWarnings("DuplicatedCode")

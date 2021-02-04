@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-class GoogleBookDockContent extends VBox {
+public class GoogleBookDockContent extends VBox {
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleBookDockContent.class);
 
@@ -58,7 +58,6 @@ class GoogleBookDockContent extends VBox {
 
     private final StringProperty currentGoogleHandle = new SimpleStringProperty();
     private final ObjectProperty<DetailsPane> currentDetailsPane = new SimpleObjectProperty<>();
-
 
     private List<Record> items;
 
