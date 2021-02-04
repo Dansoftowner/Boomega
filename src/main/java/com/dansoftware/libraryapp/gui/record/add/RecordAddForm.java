@@ -62,9 +62,12 @@ public class RecordAddForm extends ScrollPane {
 
     private static final String STYLE_CLASS = "record-add-form";
 
-    private final ObjectProperty<Record.Type> recordType = new SimpleObjectProperty<>() {{
-        addListener((observable, oldValue, newValue) -> handleTypeChange(newValue));
-    }};
+    private final ObjectProperty<Record.Type> recordType = new SimpleObjectProperty<>() {
+        @Override
+        protected void invalidated() {
+            handleTypeChange(get());
+        }
+    };
 
     private final ObjectProperty<Consumer<Record>> onRecordAdded =
             new SimpleObjectProperty<>();

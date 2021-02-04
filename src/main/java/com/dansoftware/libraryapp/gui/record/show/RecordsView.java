@@ -31,7 +31,6 @@ public class RecordsView extends SplitPane {
         this.recordTable = buildBooksTable();
         this.dockSplitPane = buildDockSplitPane();
         this.setOrientation(Orientation.HORIZONTAL);
-//        this.setResourceBundle(I18N.getDockSystemValues());
         this.buildUI();
     }
 
@@ -39,7 +38,7 @@ public class RecordsView extends SplitPane {
         var splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.HORIZONTAL);
         splitPane.setPrefWidth(500);
-        splitPane.setMaxWidth(Region.USE_PREF_SIZE);
+        splitPane.setMaxWidth(500);
         splitPane.getItems().add(buildGoogleBooksDock());
         SplitPane.setResizableWithParent(splitPane, false);
         return splitPane;

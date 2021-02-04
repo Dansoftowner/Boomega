@@ -113,7 +113,9 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                 HBox(5.0).also { hBox ->
                     when {
                         volumeInfo.isMagazine -> {
-                            hBox.children.add(MaterialDesignIconView(MaterialDesignIcon.NEWSPAPER).apply { glyphSize = 25 })
+                            hBox.children.add(MaterialDesignIconView(MaterialDesignIcon.NEWSPAPER).apply {
+                                glyphSize = 25
+                            })
                             hBox.children.add(Label(I18N.getGoogleBooksValue("google.books.magazine")))
                         }
                         else -> {
@@ -217,7 +219,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                     volume.volumeInfo?.industryIdentifiers?.map { it.toString() }?.forEach {
                         vBox.children.add(
                             HBox(2.0,
-                                Label("${ 8226.toChar() }"),
+                                Label("${8226.toChar()}"),
                                 HighlightableLabel(it).apply {
                                     HBox.setHgrow(this, Priority.ALWAYS)
                                 }

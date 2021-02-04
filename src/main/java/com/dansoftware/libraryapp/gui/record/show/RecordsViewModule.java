@@ -38,9 +38,26 @@ import java.util.stream.Stream;
 public class RecordsViewModule extends WorkbenchModule
         implements NotifiableModule<RecordsViewModule.Message> {
 
+    private static final Logger logger = LoggerFactory.getLogger(RecordsViewModule.class);
+
+    private static final Preferences.Key<Integer> itemsPerPageConfigKey =
+            new Preferences.Key<>("books.view.items.per.page", Integer.class, () -> 10);
+
+    private static final Preferences.Key<TableColumnsInfo> colConfigKey =
+            new Preferences.Key<>("books.view.table.columns", TableColumnsInfo.class, TableColumnsInfo::byDefault);
+
+    private static final Preferences.Key<Locale> abcConfigKey =
+            new Preferences.Key<>(
+                    "books.view.module.table.abcsort",
+                    Locale.class,
+                    Locale::getDefault
+            );
+
     public static final class Message {
+
         private final Action action;
         private final Record record;
+
 
         public Message(Record record, @NotNull Action action) {
             this.record = record;
@@ -51,21 +68,6 @@ public class RecordsViewModule extends WorkbenchModule
             DELETED, INSERTED, UPDATED
         }
     }
-
-    private static final Logger logger = LoggerFactory.getLogger(RecordsViewModule.class);
-
-    private final Preferences.Key<Integer> itemsPerPageConfigKey =
-            new Preferences.Key<>("books.view.items.per.page", Integer.class, () -> 10);
-
-    private final Preferences.Key<TableColumnsInfo> colConfigKey =
-            new Preferences.Key<>("books.view.table.columns", TableColumnsInfo.class, TableColumnsInfo::byDefault);
-
-    private final Preferences.Key<Locale> abcConfigKey =
-            new Preferences.Key<>(
-                    "google.books.module.table.abcsort",
-                    Locale.class,
-                    Locale::getDefault
-            );
 
     private final Context context;
     private final Preferences preferences;
@@ -158,8 +160,8 @@ public class RecordsViewModule extends WorkbenchModule
 
     private RecordsView buildContent() {
         RecordsView recordsView = new RecordsView(context, database);
-        loadBooks(recordsView);
         readColumnConfigurations(recordsView.getBooksTable());
+        loadBooks(recordsView);
         return recordsView;
     }
 
