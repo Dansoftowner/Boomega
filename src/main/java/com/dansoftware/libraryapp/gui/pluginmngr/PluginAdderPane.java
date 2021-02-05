@@ -6,6 +6,8 @@ import com.dansoftware.libraryapp.gui.util.FileDraggingArea;
 import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.main.ApplicationRestart;
 import com.dansoftware.libraryapp.plugin.PluginDirectory;
+import com.restart4j.RestartException;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -111,7 +113,7 @@ public final class PluginAdderPane extends StackPane {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 try {
                     new ApplicationRestart().restartApp();
-                } catch (ApplicationRestart.RestartException restartException) {
+                } catch (RestartException restartException) {
                     logger.error("Couldn't restart the application", restartException);
                     context.showErrorDialog("Error", "Error", restartException);
                 }
