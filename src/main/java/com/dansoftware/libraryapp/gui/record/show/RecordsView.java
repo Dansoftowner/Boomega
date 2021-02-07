@@ -3,8 +3,12 @@ package com.dansoftware.libraryapp.gui.record.show;
 import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.gui.context.Context;
+import com.dansoftware.libraryapp.gui.record.show.dock.editor.RecordEditor;
 import com.dansoftware.libraryapp.gui.record.show.dock.googlebook.GoogleBookDockContent;
 import com.dansoftware.libraryapp.i18n.I18N;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -36,9 +40,10 @@ public class RecordsView extends SplitPane {
 
     private SplitPane buildDockSplitPane() {
         var splitPane = new SplitPane();
-        splitPane.setOrientation(Orientation.HORIZONTAL);
+        splitPane.setOrientation(Orientation.VERTICAL);
         splitPane.setPrefWidth(500);
         splitPane.setMaxWidth(500);
+        splitPane.getItems().add(buildBookEditorDock());
         splitPane.getItems().add(buildGoogleBooksDock());
         SplitPane.setResizableWithParent(splitPane, false);
         return splitPane;
@@ -50,6 +55,14 @@ public class RecordsView extends SplitPane {
 
     private void buildUI() {
         this.getItems().addAll(recordTable, dockSplitPane);
+    }
+
+    private Node buildBookEditorDock() {
+        var dockContent = new RecordEditor(context, database, this.recordTable.getSelectionModel().getSelectedItems());
+        this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
+            dockContent.setItems(this.recordTable.getSelectionModel().getSelectedItems());
+        });
+        return new RecordEditorDock(dockContent);
     }
 
     private Node buildGoogleBooksDock() {
@@ -116,6 +129,13 @@ public class RecordsView extends SplitPane {
                     I18N.getGoogleBooksValue("google.books.dock.title"),
                     content);
             this.content = content;
+        }
+    }
+
+    private static final class RecordEditorDock extends TitledDock<RecordEditor> {
+
+        RecordEditorDock(@NotNull RecordEditor content) {//TODO: i18n title
+            super(new FontAwesomeIconView(FontAwesomeIcon.EDIT), "Book editor", content);
         }
     }
 
