@@ -8,7 +8,6 @@ import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.googlebooks.SearchParameters;
 import com.dansoftware.libraryapp.gui.googlebooks.join.GoogleBookJoinerOverlay;
 import com.dansoftware.libraryapp.gui.googlebooks.tile.GoogleBookTile;
-import com.dansoftware.libraryapp.gui.record.RecordType;
 import com.dansoftware.libraryapp.gui.record.RecordValues;
 import com.dansoftware.libraryapp.gui.util.LanguageSelections;
 import com.dansoftware.libraryapp.i18n.I18N;
@@ -48,7 +47,7 @@ import java.util.function.Consumer;
  * A {@link RecordAddForm} provides a UI for typing Book/Magazine data.
  *
  * <p>
- * It has a {@link RecordType} property that represents what type of database record
+ * It has a {@link Record.Type} property that represents what type of database record
  * typed.
  *
  * <p>
