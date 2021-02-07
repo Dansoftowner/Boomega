@@ -9,6 +9,7 @@ import com.dansoftware.libraryapp.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker
 import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
 import com.dansoftware.libraryapp.gui.info.InformationActivity
+import com.dansoftware.libraryapp.gui.info.contact.ContactActivity
 import com.dansoftware.libraryapp.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.libraryapp.gui.theme.Theme
 import com.dansoftware.libraryapp.gui.theme.Themeable
@@ -363,12 +364,17 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
 
         init {
             this.menuItem(updateSearcherMenuItem())
+                .menuItem(contactMenuItem())
                 .menuItem(infoMenuItem())
         }
 
         private fun updateSearcherMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.help.update"))
             .action { UpdateActivity(context, UpdateSearcher.defaultInstance().search()).show(true) }
             .graphic(MaterialDesignIcon.UPDATE)
+
+        private fun contactMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.help.contact"))
+            .action { ContactActivity(context).show() }
+            .graphic(MaterialDesignIcon.CONTACT_MAIL)
 
         private fun infoMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.help.about"))
             .action { InformationActivity(context).show() }
