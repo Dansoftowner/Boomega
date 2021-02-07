@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.gui.window
 
 import com.dansoftware.libraryapp.gui.context.ContextTransformable
+import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
 import com.dansoftware.libraryapp.gui.theme.Theme
 import com.dansoftware.libraryapp.gui.theme.Themeable
 import com.dansoftware.libraryapp.gui.util.loadImageResource
@@ -22,20 +23,6 @@ import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 import org.apache.commons.lang3.StringUtils
-
-/**
- * Represents the key-combination that is used for
- * restarting the application
- */
-private val restartKeyCombination = KeyCodeCombination(
-    KeyCode.R,
-    KeyCombination.ModifierValue.DOWN,
-    KeyCombination.ModifierValue.DOWN,
-    KeyCombination.ModifierValue.ANY,
-    KeyCombination.ModifierValue.ANY,
-    KeyCombination.ModifierValue.ANY
-)
-
 
 /**
  * A [BaseWindow] is a [Stage] implementation that
@@ -184,7 +171,7 @@ abstract class BaseWindow<C> : Stage, Themeable
         private var dialogShowing: Boolean = false
 
         override fun handle(keyEvent: KeyEvent) {
-            if (dialogShowing.not() && restartKeyCombination.match(keyEvent)) {
+            if (dialogShowing.not() && DefaultKeyBindings.RESTART_APPLICATION.match(keyEvent)) {
                 dialogShowing = true
                 this@BaseWindow.content.context.showConfirmationDialog(
                     I18N.getGeneralValue("app.restart.dialog.title"),
