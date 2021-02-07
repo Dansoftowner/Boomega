@@ -7,7 +7,7 @@ import com.dansoftware.libraryapp.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.libraryapp.gui.dbcreator.DatabaseOpener
 import com.dansoftware.libraryapp.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.libraryapp.gui.entry.DatabaseTracker
-import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
+import com.dansoftware.libraryapp.appdata.keybindings.DefaultKeyBindings
 import com.dansoftware.libraryapp.gui.info.InformationActivity
 import com.dansoftware.libraryapp.gui.info.contact.ContactActivity
 import com.dansoftware.libraryapp.gui.pluginmngr.PluginManagerActivity
@@ -101,7 +101,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
          */
         private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getMenuBarValue("menubar.menu.file.new"))
             .action { startActivityLauncher { RuntimeBasicActivityLauncher(preferences, databaseTracker) } }
-            .keyCombination(DefaultKeyBindings.NEW_ENTRY)
+            .keyCombination(DefaultKeyBindings.newEntryProperty)
             .graphic(MaterialDesignIcon.DATABASE)
 
         /**
@@ -120,7 +120,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                     }
                 }
             }
-            .keyCombination(DefaultKeyBindings.OPEN_DATABASE)
+            .keyCombination(DefaultKeyBindings.openDatabaseProperty)
             .graphic(MaterialDesignIcon.FILE)
 
         private fun databaseCreatorMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.dbcreate"))
@@ -129,12 +129,12 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                     startActivityLauncher { RuntimeOpenActivityLauncher(preferences, databaseTracker, db) }
                 }
             }
-            .keyCombination(DefaultKeyBindings.CREATE_DATABASE)
+            .keyCombination(DefaultKeyBindings.createDatabaseProperty)
             .graphic(MaterialDesignIcon.DATABASE_PLUS)
 
         private fun databaseManagerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.dbmanager"))
             .action { DatabaseManagerActivity().show(databaseTracker, context.contextWindow) }
-            .keyCombination(DefaultKeyBindings.OPEN_DATABASE_MANAGER)
+            .keyCombination(DefaultKeyBindings.openDatabaseManagerProperty)
             .graphic(MaterialDesignIcon.DATABASE)
 
         /**
@@ -183,8 +183,8 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             .graphic(MaterialDesignIcon.CLOSE)
 
         private fun restartMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.restart"))
-            .action { context.contextScene?.onKeyPressed?.handle(DefaultKeyBindings.RESTART_APPLICATION.asKeyEvent()) }
-            .keyCombination(DefaultKeyBindings.RESTART_APPLICATION)
+            .action { context.contextScene?.onKeyPressed?.handle(DefaultKeyBindings.restartApplication.asKeyEvent()) }
+            .keyCombination(DefaultKeyBindings.restartApplicationProperty)
             .graphic(MaterialDesignIcon.UPDATE)
 
         private fun quitMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.quit"))
@@ -356,7 +356,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         private fun fullScreenMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.window.fullscreen"))
             .also { context.contextWindow }
             .action { context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() } }
-            .keyCombination(DefaultKeyBindings.FULL_SCREEN)
+            .keyCombination(DefaultKeyBindings.fullScreenProperty)
             .graphic(MaterialDesignIcon.FULLSCREEN)
     }
 

@@ -1,5 +1,7 @@
 package com.dansoftware.libraryapp.appdata;
 
+import com.dansoftware.libraryapp.appdata.keybindings.DefaultKeyBindings;
+import com.dansoftware.libraryapp.appdata.keybindings.DefaultKeyBindingsAdapter;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.appdata.logindata.LoginDataAdapter;
 import com.dansoftware.libraryapp.appdata.theme.ThemeAdapter;
@@ -75,6 +77,7 @@ public class Preferences {
         return new GsonBuilder()
                 .registerTypeAdapter(Theme.class, new ThemeAdapter())
                 .registerTypeAdapter(LoginData.class, new LoginDataAdapter())
+                .registerTypeAdapter(DefaultKeyBindings.class, new DefaultKeyBindingsAdapter())
                 .create();
     }
 

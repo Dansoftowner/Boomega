@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.main;
 
 import com.dansoftware.libraryapp.appdata.Preferences;
+import com.dansoftware.libraryapp.appdata.keybindings.DefaultKeyBindings;
 import com.dansoftware.libraryapp.appdata.logindata.LoginData;
 import com.dansoftware.libraryapp.exception.UncaughtExceptionHandler;
 import com.dansoftware.libraryapp.gui.context.Context;
@@ -78,6 +79,7 @@ public class Main extends BaseApplication {
 
         if (!showFirstTimeActivity(preferences))
             applyBaseConfigurations(preferences);
+        loadDefaultKeyBindings(preferences);
 
         logger.debug("Theme is: {}", Theme.getDefault());
         logger.debug("Locale is: {}", Locale.getDefault());
@@ -228,6 +230,16 @@ public class Main extends BaseApplication {
         Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
         notifyPreloader("preloader.theme");
         Theme.setDefault(preferences.get(Preferences.Key.THEME));
+    }
+
+    /**
+     * Reads the key bindings configurations
+     *
+     * @param preferences the preferences object
+     */
+    @Init
+    private void loadDefaultKeyBindings(@NotNull Preferences preferences) {
+        DefaultKeyBindings.loadFrom(preferences);
     }
 
     /**

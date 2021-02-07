@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.login
 
 import com.dansoftware.libraryapp.appdata.Preferences
-import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
+import com.dansoftware.libraryapp.appdata.keybindings.DefaultKeyBindings
 import com.dansoftware.libraryapp.gui.window.BaseWindow
 import javafx.event.EventHandler
 import javafx.stage.WindowEvent
@@ -24,7 +24,7 @@ private class LoginWindow(private val root: LoginView, private val preferences: 
     init {
         Objects.requireNonNull(preferences)
         Objects.requireNonNull(root, "LoginView shouldn't be null")
-        this.setFullScreenKeyCombination(DefaultKeyBindings.FULL_SCREEN)
+        this.setFullScreenKeyCombination(DefaultKeyBindings.fullScreen)
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this)
         this.exitDialog = true
         this.isMaximized = true

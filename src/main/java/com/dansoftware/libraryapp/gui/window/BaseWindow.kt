@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.window
 
 import com.dansoftware.libraryapp.gui.context.ContextTransformable
-import com.dansoftware.libraryapp.gui.entry.DefaultKeyBindings
+import com.dansoftware.libraryapp.appdata.keybindings.DefaultKeyBindings
 import com.dansoftware.libraryapp.gui.theme.Theme
 import com.dansoftware.libraryapp.gui.theme.Themeable
 import com.dansoftware.libraryapp.gui.util.loadImageResource
@@ -16,8 +16,6 @@ import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
-import javafx.scene.input.KeyCode
-import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
@@ -171,7 +169,7 @@ abstract class BaseWindow<C> : Stage, Themeable
         private var dialogShowing: Boolean = false
 
         override fun handle(keyEvent: KeyEvent) {
-            if (dialogShowing.not() && DefaultKeyBindings.RESTART_APPLICATION.match(keyEvent)) {
+            if (dialogShowing.not() && DefaultKeyBindings.restartApplication.match(keyEvent)) {
                 dialogShowing = true
                 this@BaseWindow.content.context.showConfirmationDialog(
                     I18N.getGeneralValue("app.restart.dialog.title"),
