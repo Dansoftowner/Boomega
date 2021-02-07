@@ -13,6 +13,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
+import javafx.beans.property.ObjectProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
@@ -94,6 +95,11 @@ fun MenuItem.action(onAction: EventHandler<ActionEvent>): MenuItem = this.also {
  * Sets the key combination of the [MenuItem] and then returns the object itself
  */
 fun MenuItem.keyCombination(combination: KeyCombination): MenuItem = this.also { it.accelerator = combination }
+
+/**
+ * Binds the key combination property of the [MenuItem] to the given property and then returns the object itself
+ */
+fun <T : KeyCombination> MenuItem.keyCombination(combination: ObjectProperty<T>) = this.apply { acceleratorProperty().bind(combination) }
 
 /**
  * Sets the icon of the [MenuItem] and then returns the object itself
