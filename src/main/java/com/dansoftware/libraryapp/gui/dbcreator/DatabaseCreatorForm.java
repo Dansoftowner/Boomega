@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static com.dansoftware.libraryapp.i18n.I18N.getDatabaseCreatorViewValues;
+import static com.dansoftware.libraryapp.i18n.I18N.getValues;
 
 /**
  * A {@link DatabaseCreatorForm} is gui-form that lets the user to create
@@ -97,7 +97,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     }
 
     private void loadGui() {
-        var fxmlLoader = new ImprovedFXMLLoader(this, getClass().getResource("Form.fxml"), getDatabaseCreatorViewValues());
+        var fxmlLoader = new ImprovedFXMLLoader(this, getClass().getResource("Form.fxml"), getValues());
         this.getChildren().add(fxmlLoader.load());
     }
 
@@ -154,7 +154,7 @@ public class DatabaseCreatorForm extends StackPane implements Initializable {
     }
 
     private String getAlertMsg(String key, Object... args) {
-        return I18N.getDatabaseCreatorValue(key, args);
+        return I18N.getValue(key, args);
     }
 
     @FXML

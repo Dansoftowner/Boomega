@@ -12,7 +12,7 @@ private class NoBinaryAvailablePlaceHolder : StackPane() {
     }
 
     private fun buildUI() {
-        children.add(CenterLabel(I18N.getUpdateDialogValue("segment.download.no.binary.available")))
+        children.add(CenterLabel(I18N.getValue("segment.download.no.binary.available")))
     }
 
     private class CenterLabel(text: String) : Label(text) {

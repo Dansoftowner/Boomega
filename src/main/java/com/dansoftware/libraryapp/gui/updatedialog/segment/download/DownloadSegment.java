@@ -20,8 +20,8 @@ public class DownloadSegment extends TitledSegment {
     private final UpdateInformation updateInformation;
 
     public DownloadSegment(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
-        super(I18N.getUpdateDialogValues().getString("segment.download.name"),
-                I18N.getUpdateDialogValues().getString("segment.download.title"));
+        super(I18N.getValues().getString("segment.download.name"),
+                I18N.getValues().getString("segment.download.title"));
         this.context = context;
         this.updateInformation = updateInformation;
     }
@@ -32,6 +32,6 @@ public class DownloadSegment extends TitledSegment {
         return new ImprovedFXMLLoader(
                 new DownloadSegmentController(context, updateInformation),
                 getClass().getResource("DownloadSegment.fxml"),
-                I18N.getUpdateDialogValues()).load();
+                I18N.getValues()).load();
     }
 }

@@ -46,7 +46,7 @@ public class ConfigurationImportView extends Workbench implements ContextTransfo
         return new ImprovedFXMLLoader(
                 controller,
                 getClass().getResource("ConfigurationImport.fxml"),
-                I18N.getFirstTimeDialogValues()
+                I18N.getValues()
         ).load();
     }
 

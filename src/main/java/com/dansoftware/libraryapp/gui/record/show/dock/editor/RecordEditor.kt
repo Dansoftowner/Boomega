@@ -154,11 +154,11 @@ class RecordEditor(
                 hBox.children.add(MaterialDesignIconView(MaterialDesignIcon.NEWSPAPER).apply {
                     glyphSize = 25
                 })
-                hBox.children.add(Label(I18N.getGoogleBooksValue("google.books.magazine")))
+                hBox.children.add(Label(I18N.getValue("google.books.magazine")))
             }
             else -> {
                 hBox.children.add(MaterialDesignIconView(MaterialDesignIcon.BOOK).apply { glyphSize = 25 })
-                hBox.children.add(Label(I18N.getGoogleBooksValue("google.books.book")))
+                hBox.children.add(Label(I18N.getValue("google.books.book")))
             }
         }
     }
@@ -215,7 +215,7 @@ class RecordEditor(
                 .required(false)
                 .multiline(true)
         )
-    ).i18n(ResourceBundleService(I18N.getRecordAddFormValues()))
+    ).i18n(ResourceBundleService(I18N.getValues()))
 
     private fun buildMagazineForm() = Form.of(
         Group.of(
@@ -252,12 +252,12 @@ class RecordEditor(
                 .required(false)
                 .multiline(true)
         )
-    ).i18n( ResourceBundleService(I18N.getRecordAddFormValues()))
+    ).i18n( ResourceBundleService(I18N.getValues()))
 
     private fun buildNewRatingControl(): Node =
         HBox(
             5.0,
-            StackPane(Label(I18N.getRecordAddFormValue("record.add.form.rating"))),
+            StackPane(Label(I18N.getValue("record.add.form.rating"))),
             StackPane(Rating(5).also {
                 StackPane.setAlignment(it, Pos.CENTER_LEFT)
                 it.rating = this.rating.get().toDouble()

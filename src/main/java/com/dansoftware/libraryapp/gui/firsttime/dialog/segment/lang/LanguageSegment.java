@@ -18,7 +18,7 @@ public class LanguageSegment extends FixedContentTitledSegment {
     private final Preferences preferences;
 
     public LanguageSegment(@NotNull Preferences preferences) {
-        super(I18N.getFirstTimeDialogValues().getString("segment.lang.name"), I18N.getFirstTimeDialogValues().getString("segment.lang.title"));
+        super(I18N.getValues().getString("segment.lang.name"), I18N.getValues().getString("segment.lang.title"));
         this.preferences = preferences;
     }
 
@@ -27,6 +27,6 @@ public class LanguageSegment extends FixedContentTitledSegment {
         return new ImprovedFXMLLoader(
                 new LanguageSegmentController(this.preferences),
                 getClass().getResource("LanguageSegment.fxml"),
-                I18N.getFirstTimeDialogValues()).load();
+                I18N.getValues()).load();
     }
 }

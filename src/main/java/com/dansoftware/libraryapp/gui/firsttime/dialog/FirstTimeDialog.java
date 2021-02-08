@@ -23,7 +23,7 @@ public class FirstTimeDialog extends SegmentDialog implements ContextTransformab
     private static final String STYLE_CLASS = "firstTimeDialog";
 
     public FirstTimeDialog(@NotNull Preferences preferences) {
-        super(I18N.getFirstTimeDialogValues(), new DialogSegmentSequence(preferences));
+        super(I18N.getValues(), new DialogSegmentSequence(preferences));
         setCustomButtons(Collections.singletonList(new SkipButton()));
         getStyleClass().add(JMetroStyleClass.BACKGROUND);
         getStyleClass().add(STYLE_CLASS);
@@ -36,7 +36,7 @@ public class FirstTimeDialog extends SegmentDialog implements ContextTransformab
 
     private class SkipButton extends Button implements EventHandler<ActionEvent> {
         SkipButton() {
-            super(I18N.getFirstTimeDialogValues().getString("segment.dialog.button.skip"));
+            super(I18N.getValues().getString("segment.dialog.button.skip"));
             setOnAction(this);
         }
 

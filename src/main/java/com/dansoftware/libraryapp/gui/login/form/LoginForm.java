@@ -27,7 +27,7 @@ public class LoginForm extends Group {
                      @NotNull DatabaseTracker databaseTracker,
                      @NotNull DatabaseLoginListener databaseLoginListener) {
         this.fxmlController = new FrameFormController(context, preferences, loginData, databaseTracker, databaseLoginListener);
-        var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("FrameForm.fxml"), I18N.getLoginViewValues());
+        var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("FrameForm.fxml"), I18N.getValues());
         this.getChildren().add(fxmlLoader.load());
     }
 

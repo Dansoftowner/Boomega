@@ -8,7 +8,6 @@ import com.dansoftware.libraryapp.gui.record.show.dock.googlebook.GoogleBookDock
 import com.dansoftware.libraryapp.i18n.I18N;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -126,7 +125,7 @@ public class RecordsView extends SplitPane {
 
         GoogleBookDock(@NotNull GoogleBookDockContent content) {
             super(new ImageView(new Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
-                    I18N.getGoogleBooksValue("google.books.dock.title"),
+                    I18N.getValue("google.books.dock.title"),
                     content);
             this.content = content;
         }

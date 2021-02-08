@@ -17,7 +17,7 @@ public class ThemeSegment extends FixedContentTitledSegment {
     private final Preferences preferences;
 
     public ThemeSegment(@NotNull Preferences preferences) {
-        super(I18N.getFirstTimeDialogValues().getString("segment.theme.name"), I18N.getFirstTimeDialogValues().getString("segment.theme.title"));
+        super(I18N.getValues().getString("segment.theme.name"), I18N.getValues().getString("segment.theme.title"));
         this.preferences = preferences;
     }
 
@@ -26,6 +26,6 @@ public class ThemeSegment extends FixedContentTitledSegment {
         return new ImprovedFXMLLoader(
                 new ThemeSegmentController(preferences),
                 getClass().getResource("ThemeSegment.fxml"),
-                I18N.getFirstTimeDialogValues()).load();
+                I18N.getValues()).load();
     }
 }

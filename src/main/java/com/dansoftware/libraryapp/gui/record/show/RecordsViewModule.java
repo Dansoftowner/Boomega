@@ -5,7 +5,6 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.NotifiableModule;
-import com.dansoftware.libraryapp.i18n.ABCCollators;
 import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.util.ExploitativeExecutor;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
@@ -90,7 +89,7 @@ public class RecordsViewModule extends WorkbenchModule
     public RecordsViewModule(@NotNull Context context,
                              @NotNull Preferences preferences,
                              @NotNull Database database) {
-        super(I18N.getRecordsViewValue("record.book.view.module.name"), MaterialDesignIcon.LIBRARY);
+        super(I18N.getValue("record.book.view.module.name"), MaterialDesignIcon.LIBRARY);
         this.context = context;
         this.preferences = preferences;
         this.database = database;
@@ -181,7 +180,7 @@ public class RecordsViewModule extends WorkbenchModule
     private ToolbarItem buildCountItem() {
         var toolbarItem = new ToolbarItem();
         toolbarItem.textProperty().bind(
-                new SimpleStringProperty(I18N.getRecordsViewValue("record.book.count"))
+                new SimpleStringProperty(I18N.getValue("record.book.count"))
                         .concat(StringUtils.SPACE)
                         .concat(totalItems)
         );
@@ -197,7 +196,7 @@ public class RecordsViewModule extends WorkbenchModule
                         new Group(
                                 new HBox(2.5,
                                         new StackPane(
-                                                new Label(I18N.getRecordsViewValue("record.item.per.page"))
+                                                new Label(I18N.getValue("record.item.per.page"))
                                         ),
                                         spinner
                                 )
@@ -238,7 +237,7 @@ public class RecordsViewModule extends WorkbenchModule
 
     private ToolbarItem buildColumnChooserItem() {
         var toolbarItem = new ToolbarItem(
-                I18N.getRecordsViewValue("record.table.preferred.columns"),
+                I18N.getValue("record.table.preferred.columns"),
                 new FontAwesomeIconView(FontAwesomeIcon.COLUMNS));
         Stream.of(RecordTable.ColumnType.values())
                 .map(TableColumnMenuItem::new)
@@ -256,9 +255,9 @@ public class RecordsViewModule extends WorkbenchModule
     }
 
     private ToolbarItem buildABCChooserItem() {
-        var toolbarItem = new ToolbarItem(I18N.getRecordsViewValue("record.table.abc"));
+        var toolbarItem = new ToolbarItem(I18N.getValue("record.table.abc"));
         var toggleGroup = new ToggleGroup();
-        ABCCollators.getAvailableCollators().forEach((locale, collatorSupplier) -> {
+        I18N.getAvailableCollators().forEach((locale, collatorSupplier) -> {
             toolbarItem.getItems().add(new AbcMenuItem(locale, collatorSupplier, toggleGroup));
         });
         return toolbarItem;
@@ -270,7 +269,7 @@ public class RecordsViewModule extends WorkbenchModule
 
     private ToolbarItem buildToolbarItem(MaterialDesignIcon icon, String i18nTooltip, EventHandler<MouseEvent> onClick) {
         var toolbarItem = new ToolbarItem(new MaterialDesignIconView(icon), onClick);
-        toolbarItem.setTooltip(new Tooltip(I18N.getRecordsViewValue(i18nTooltip)));
+        toolbarItem.setTooltip(new Tooltip(I18N.getValue(i18nTooltip)));
         return toolbarItem;
     }
 
@@ -304,7 +303,7 @@ public class RecordsViewModule extends WorkbenchModule
         private final RecordTable.ColumnType columnType;
 
         TableColumnMenuItem(RecordTable.ColumnType columnType) {
-            super(I18N.getRecordsViewValue(columnType.getI18Nkey()));
+            super(I18N.getValue(columnType.getI18Nkey()));
             this.columnType = columnType;
             this.setOnAction(e -> {
                 if (!this.isSelected()) {

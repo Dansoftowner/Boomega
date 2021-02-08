@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
-import static com.dansoftware.libraryapp.i18n.I18N.getLoginViewValue;
+import static com.dansoftware.libraryapp.i18n.I18N.getValue;
 
 /**
  * A NitriteDatabase is a {@link Database} that basically wraps the
@@ -123,22 +123,22 @@ public class NitriteDatabase implements Database {
                 String title;
                 String message;
                 if (credentials.isAnonymous()) {
-                    title = getLoginViewValue("login.auth.failed.emptycredentials.title");
-                    message = getLoginViewValue("login.auth.failed.emptycredentials.msg");
+                    title = getValue("login.auth.failed.emptycredentials.title");
+                    message = getValue("login.auth.failed.emptycredentials.msg");
                 } else {
-                    title = getLoginViewValue("login.auth.failed.security.title");
-                    message = getLoginViewValue("login.auth.failed.security.msg");
+                    title = getValue("login.auth.failed.security.title");
+                    message = getValue("login.auth.failed.security.msg");
                 }
                 failListener.onFail(title, message);
             } catch (NitriteIOException e) {
                 String title;
                 String message;
                 if (e.getErrorMessage().getErrorCode().equals("NO2.2012")) {
-                    title = getLoginViewValue("login.auth.failed.io.exists.title");
-                    message = getLoginViewValue("login.auth.failed.io.exists.msg", databaseMeta.getFile());
+                    title = getValue("login.auth.failed.io.exists.title");
+                    message = getValue("login.auth.failed.io.exists.msg", databaseMeta.getFile());
                 } else {
-                    title = getLoginViewValue("login.auth.failed.io.title");
-                    message = getLoginViewValue("login.auth.failed.io.msg");
+                    title = getValue("login.auth.failed.io.title");
+                    message = getValue("login.auth.failed.io.msg");
                 }
                 failListener.onFail(title, message, e);
             }

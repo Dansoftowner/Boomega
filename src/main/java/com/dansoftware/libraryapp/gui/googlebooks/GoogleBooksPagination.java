@@ -147,7 +147,7 @@ public class GoogleBooksPagination extends VBox {
 
         private Button buildPrevBtn() {
             var btn = new Button(null, new MaterialDesignIconView(MaterialDesignIcon.STEP_BACKWARD));
-            btn.setTooltip(new Tooltip(I18N.getGoogleBooksValue("google.books.pagination.prev")));
+            btn.setTooltip(new Tooltip(I18N.getValue("google.books.pagination.prev")));
             btn.disableProperty().bind(pageIndex.isEqualTo(0));
             btn.setOnAction(e -> {
                 pageIndex.set(pageIndex.get() - 1);
@@ -161,7 +161,7 @@ public class GoogleBooksPagination extends VBox {
 
         private Button buildNextBtn() {
             var btn = new Button(null, new MaterialDesignIconView(MaterialDesignIcon.STEP_FORWARD));
-            btn.setTooltip(new Tooltip(I18N.getGoogleBooksValue("google.books.pagination.next")));
+            btn.setTooltip(new Tooltip(I18N.getValue("google.books.pagination.next")));
             btn.disableProperty().bind(pageIndex.add(1).isEqualTo(pageCount));
             btn.setOnAction(e -> {
                 pageIndex.set(pageIndex.get() + 1);
@@ -176,7 +176,7 @@ public class GoogleBooksPagination extends VBox {
         private Node buildTotalItemsLabel() {
             Label label = new Label();
             label.textProperty().bind(
-                    new SimpleStringProperty(I18N.getGoogleBooksValue("google.books.pagination.totalitems"))
+                    new SimpleStringProperty(I18N.getValue("google.books.pagination.totalitems"))
                             .concat(" : ").concat(totalItems.asString())
             );
             var wrapped = new StackPane(label);

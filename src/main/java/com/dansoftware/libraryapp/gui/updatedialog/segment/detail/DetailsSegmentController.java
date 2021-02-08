@@ -60,11 +60,11 @@ public class DetailsSegmentController implements Initializable {
      */
     private final class PreviewErrorPlaceHolder extends StackPane {
         PreviewErrorPlaceHolder(@NotNull Throwable cause) {
-            var label = new Label(I18N.getGeneralValue("update.view.details.preview.failed"));
-            var detailBtn = new Button(I18N.getGeneralValue("update.view.details.preview.failed.more"));
+            var label = new Label(I18N.getValue("update.view.details.preview.failed"));
+            var detailBtn = new Button(I18N.getValue("update.view.details.preview.failed.more"));
             detailBtn.setOnAction(event -> {
                 DetailsSegmentController.this.context
-                        .showErrorDialog(I18N.getGeneralValue("update.view.details.preview.failed"),
+                        .showErrorDialog(I18N.getValue("update.view.details.preview.failed"),
                                 null, (Exception) cause, buttonType -> {
                                 });
             });

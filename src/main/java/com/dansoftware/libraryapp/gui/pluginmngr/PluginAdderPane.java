@@ -7,7 +7,6 @@ import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.main.ApplicationRestart;
 import com.dansoftware.libraryapp.plugin.PluginDirectory;
 import com.restart4j.RestartException;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -51,7 +50,7 @@ public final class PluginAdderPane extends StackPane {
         this.pluginList = pluginList;
         getStyleClass().add(STYLE_CLASS);
         getChildren().add(buildDraggingArea());
-        Label label = new Label(I18N.getPluginManagerValue("plugin.module.adder.dragging.comment"));
+        Label label = new Label(I18N.getValue("plugin.module.adder.dragging.comment"));
         label.setDisable(true);
         label.getStyleClass().add(LABEL_STYLE_CLASS);
         getChildren().add(label);
@@ -70,8 +69,8 @@ public final class PluginAdderPane extends StackPane {
     private void registerPlugin(@NotNull List<File> files) {
         logger.debug("Registration request {}", files);
         context.showConfirmationDialog(
-                I18N.getPluginManagerValue("plugin.add.warning.title"),
-                I18N.getPluginManagerValue("plugin.add.warning.msg"),
+                I18N.getValue("plugin.add.warning.title"),
+                I18N.getValue("plugin.add.warning.msg"),
                 buttonType -> {
                     if (BaseFXUtils.typeEquals(buttonType, ButtonType.YES)) {
 
@@ -82,14 +81,14 @@ public final class PluginAdderPane extends StackPane {
                                 pluginList.add(file);
                                 restartNeeded = true;
                                 context.showInformationDialog(
-                                        I18N.getPluginManagerValue("plugin.add.success.title"),
-                                        I18N.getPluginManagerValue("plugin.add.success.msg"), r -> {
+                                        I18N.getValue("plugin.add.success.title"),
+                                        I18N.getValue("plugin.add.success.msg"), r -> {
                                         });
                             } catch (IOException e) {
                                 logger.error("Couldn't add plugin", e);
                                 context.showErrorDialog(
-                                        I18N.getPluginManagerValue("plugin.add.failed.title", file.getName()),
-                                        I18N.getPluginManagerValue("plugin.add.failed.msg"), e, r -> {
+                                        I18N.getValue("plugin.add.failed.title", file.getName()),
+                                        I18N.getValue("plugin.add.failed.msg"), e, r -> {
                                         });
                             }
                         }
@@ -105,7 +104,7 @@ public final class PluginAdderPane extends StackPane {
     }
 
     private Node buildRestartWarningLabel() {
-        var restartLabel = new Hyperlink(I18N.getPluginManagerValue("plugin.add.restart.label"));
+        var restartLabel = new Hyperlink(I18N.getValue("plugin.add.restart.label"));
         restartLabel.getStyleClass().add(WARNING_LABEL_STYLE_CLASS);
         StackPane.setAlignment(restartLabel, Pos.BOTTOM_CENTER);
         StackPane.setMargin(restartLabel, new Insets(0, 0, 10, 0));

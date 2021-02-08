@@ -6,6 +6,7 @@ import com.dansoftware.libraryapp.gui.updatedialog.segment.download.DownloadSegm
 import com.dansoftware.libraryapp.gui.updatedialog.segment.notification.NotificationSegment;
 import com.dansoftware.libraryapp.i18n.I18N;
 import com.dansoftware.libraryapp.update.UpdateInformation;
+import com.dansoftware.libraryapp.util.InMemoryResourceBundle;
 import com.dansoftware.sgmdialog.Segment;
 import com.dansoftware.sgmdialog.SegmentDialog;
 import com.dansoftware.sgmdialog.SegmentSequence;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
 /**
@@ -40,7 +42,7 @@ public class UpdateDialog extends SegmentDialog {
     private final HidePolicy hidePolicy;
 
     public UpdateDialog(@NotNull Context context, @NotNull UpdateInformation information, @NotNull HidePolicy hidePolicy) {
-        super(I18N.getUpdateDialogValues(), new SegmentSequenceImpl(context, information));
+        super(buildSegmentDialogValues(), new SegmentSequenceImpl(context, information));
         this.context = context;
         this.information = information;
         this.hidePolicy = hidePolicy;
@@ -48,6 +50,15 @@ public class UpdateDialog extends SegmentDialog {
         this.getStyleClass().add(STYLE_CLASS);
         this.setCustomButtons(Collections.singletonList(new LaterButton()));
         getSegmentSequence().focusedSegmentProperty().addListener(new LaterButtonHiderAction());
+    }
+
+    private static ResourceBundle buildSegmentDialogValues() {
+        return new InMemoryResourceBundle.Builder()
+                .put("segment.dialog.button.next", I18N.getValue("update.dialog.button.next"))
+                .put("segment.dialog.button.finish", I18N.getValue("update.dialog.button.finish"))
+                .put("segment.dialog.button.prev", I18N.getValue("update.dialog.button.prev"))
+                .put("segment.dialog.button.skip", I18N.getValue("update.dialog.button.skip"))
+                .build();
     }
 
     private final class LaterButtonHiderAction implements ChangeListener<Segment> {
@@ -61,7 +72,7 @@ public class UpdateDialog extends SegmentDialog {
 
     private final class LaterButton extends Button implements EventHandler<ActionEvent> {
         LaterButton() {
-            super(I18N.getUpdateDialogValues().getString("segment.dialog.button.later"));
+            super(I18N.getValues().getString("segment.dialog.button.later"));
             setOnAction(this);
             HBox.setMargin(this, new Insets(0, 10, 0, 0));
         }

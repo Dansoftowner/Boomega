@@ -115,7 +115,7 @@ public class DownloaderTask extends Task<File> {
             //creating the input-, and output-stream
             try (var input = new BufferedInputStream(connection.getInputStream());
                  var output = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-                updateMessage(I18N.getProgressMessage("update.page.download.happening"));
+                updateMessage(I18N.getValue("update.page.download.happening"));
 
                 //getting the size of the downloadable content
                 long contentSize = connection.getContentLengthLong();
@@ -148,10 +148,10 @@ public class DownloaderTask extends Task<File> {
                     // by the thread-locker object's wait() method
                     if (this.paused) {
                         Platform.runLater(() -> pausedProperty.set(true));
-                        updateMessage(I18N.getProgressMessage("update.page.download.paused"));
+                        updateMessage(I18N.getValue("update.page.download.paused"));
                         lock.wait();
                         Platform.runLater(() -> pausedProperty.set(false));
-                        updateMessage(I18N.getProgressMessage("update.page.download.happening"));
+                        updateMessage(I18N.getValue("update.page.download.happening"));
                     }
                 }
 

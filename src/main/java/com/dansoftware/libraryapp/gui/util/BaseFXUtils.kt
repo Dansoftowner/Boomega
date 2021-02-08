@@ -257,7 +257,7 @@ object I18NButtonTypes {
     val RETRY = createButtonType("Dialog.retry.button", ButtonBar.ButtonData.YES)
 
     private fun createButtonType(key: String, buttonData: ButtonBar.ButtonData) =
-        ButtonType(I18N.getButtonTypeValues().getString(key), buttonData)
+        ButtonType(I18N.getValues().getString(key), buttonData)
 }
 
 class ExceptionDisplayPane(exception: Exception?) : TitledPane() {

@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 
 class ContactOverlay() : TitledOverlayBox(
-    I18N.getInfoViewValues().getString("contact.view.title"),
+    I18N.getValues().getString("contact.view.title"),
     MaterialDesignIconView(MaterialDesignIcon.CONTACT_MAIL),
     ContactView(),
     false,

@@ -216,13 +216,13 @@ public class GoogleBookDockContent extends VBox {
         }
 
         private Button buildRemoveButton() {
-            final var button = new Button(I18N.getGoogleBooksValue("google.books.dock.remove_connection"));
+            final var button = new Button(I18N.getValue("google.books.dock.remove_connection"));
             button.getStyleClass().add("remove-button");
             button.prefWidthProperty().bind(this.widthProperty());
             button.setOnAction(event -> {
 
                 context.showDialog(
-                        I18N.getGoogleBooksValue("google.books.dock.remove.confirmation.title", items.size()),
+                        I18N.getValue("google.books.dock.remove.confirmation.title", items.size()),
                         buildPreviewTable(items),
                         it -> {
                             if (BaseFXUtils.typeEquals(it, ButtonType.YES)) {
@@ -267,7 +267,7 @@ public class GoogleBookDockContent extends VBox {
                 refresh.run();
 
                 context.showInformationNotification(
-                        I18N.getGoogleBooksValue("google.books.dock.success_unjoin.title"),
+                        I18N.getValue("google.books.dock.success_unjoin.title"),
                         null,
                         Duration.seconds(2)
                 );
@@ -298,14 +298,14 @@ public class GoogleBookDockContent extends VBox {
         }
 
         private Label buildLabel() {
-            var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.error"));
+            var label = new Label(I18N.getValue("google.books.dock.placeholder.error"));
             label.getStyleClass().add("place-holder-label");
             return label;
         }
 
         private Button buildDetailsButton() {
             var button = new Button(
-                    I18N.getGoogleBooksValue("google.books.dock.placeholder.error.details"),
+                    I18N.getValue("google.books.dock.placeholder.error.details"),
                     new MaterialDesignIconView(MaterialDesignIcon.DETAILS)
             );
             button.setOnAction(event -> context.showErrorDialog(StringUtils.EMPTY, StringUtils.EMPTY, (Exception) cause));
@@ -344,14 +344,14 @@ public class GoogleBookDockContent extends VBox {
         }
 
         private Label buildLabel() {
-            var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.noconn"));
+            var label = new Label(I18N.getValue("google.books.dock.placeholder.noconn"));
             label.getStyleClass().add("place-holder-label");
             return label;
         }
 
         private Button buildConnectionButton() {
             var button = new Button(
-                    I18N.getGoogleBooksValue("google.books.dock.connection"),
+                    I18N.getValue("google.books.dock.connection"),
                     new MaterialDesignIconView(MaterialDesignIcon.GOOGLE)
             );
             button.setOnAction(event -> showGoogleBookJoiner());
@@ -399,7 +399,7 @@ public class GoogleBookDockContent extends VBox {
                 refresh.run();
 
                 context.showInformationNotification(
-                        I18N.getGoogleBooksValue("google.books.dock.success_join.title"),
+                        I18N.getValue("google.books.dock.success_join.title"),
                         null,
                         Duration.seconds(2)
                 );
@@ -421,7 +421,7 @@ public class GoogleBookDockContent extends VBox {
         }
 
         private Label buildLabel() {
-            var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.multiple"));
+            var label = new Label(I18N.getValue("google.books.dock.placeholder.multiple"));
             label.getStyleClass().add("place-holder-label");
             return label;
         }
@@ -440,7 +440,7 @@ public class GoogleBookDockContent extends VBox {
         }
 
         private Label buildLabel() {
-            var label = new Label(I18N.getGoogleBooksValue("google.books.dock.placeholder.noselection"));
+            var label = new Label(I18N.getValue("google.books.dock.placeholder.noselection"));
             label.getStyleClass().add("place-holder-label");
             return label;
         }

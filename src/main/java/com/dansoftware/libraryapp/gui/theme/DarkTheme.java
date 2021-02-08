@@ -23,7 +23,7 @@ import java.util.List;
 public class DarkTheme extends Theme {
 
     private static final ThemeMeta<DarkTheme> THEME_META =
-            new ThemeMeta<>(DarkTheme.class, () -> I18N.getGeneralValue("theme.dark"), InternalThemeDesigner.INSTANCE);
+            new ThemeMeta<>(DarkTheme.class, () -> I18N.getValue("theme.dark"), InternalThemeDesigner.INSTANCE);
 
     static {
         registerTheme(THEME_META);

@@ -47,7 +47,7 @@ public class PluginTable extends TableView<File> {
     private static final class NameColumn extends TableColumn<File, String>
             implements Callback<TableColumn<File, String>, TableCell<File, String>> {
         NameColumn() {
-            super(I18N.getPluginManagerValues().getString("plugin.module.list.column.name"));
+            super(I18N.getValues().getString("plugin.module.list.column.name"));
             setCellFactory(this);
         }
 
@@ -73,7 +73,7 @@ public class PluginTable extends TableView<File> {
     private static final class SizeColumn extends TableColumn<File, String>
             implements Callback<TableColumn<File, String>, TableCell<File, String>> {
         SizeColumn() {
-            super(I18N.getPluginManagerValue("plugin.module.list.column.size"));
+            super(I18N.getValue("plugin.module.list.column.size"));
             setCellFactory(this);
         }
 
@@ -98,7 +98,7 @@ public class PluginTable extends TableView<File> {
     private final class DeleteColumn extends TableColumn<File, String>
             implements Callback<TableColumn<File, String>, TableCell<File, String>> {
         DeleteColumn() {
-            super(I18N.getPluginManagerValues().getString("plugin.module.list.column.delete"));
+            super(I18N.getValues().getString("plugin.module.list.column.delete"));
             setCellFactory(this);
         }
 
@@ -135,7 +135,7 @@ public class PluginTable extends TableView<File> {
 
         public void show(@NotNull ObservableList<File> itemsToRemove) {
             PluginTable.this.context.showDialog(
-                    I18N.getPluginManagerValue("plugin.delete.title", itemsToRemove.size()),
+                    I18N.getValue("plugin.delete.title", itemsToRemove.size()),
                     new ListView<>(itemsToRemove.stream()
                             .map(File::getName)
                             .collect(Collectors.toCollection(FXCollections::observableArrayList))),
@@ -146,8 +146,8 @@ public class PluginTable extends TableView<File> {
                             } catch (FileIOException e) {
                                 logger.error("Couldn't delete plugin file", e);
                                 context.showErrorDialog(
-                                        I18N.getPluginManagerValue("plugin.delete.failed.title"),
-                                        I18N.getPluginManagerValue("plugin.delete.failed.msg", e.getFile()), e
+                                        I18N.getValue("plugin.delete.failed.title"),
+                                        I18N.getValue("plugin.delete.failed.msg", e.getFile()), e
                                 );
                             }
                         }

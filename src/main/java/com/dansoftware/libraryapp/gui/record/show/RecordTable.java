@@ -87,8 +87,8 @@ public class RecordTable extends TableView<Record> {
         this.setPlaceholder(
                 new TableViewPlaceHolder(
                         this,
-                        () -> I18N.getRecordsViewValue("record.table.place.holder"),
-                        () -> I18N.getRecordsViewValue("record.table.place.holder.nocolumn")
+                        () -> I18N.getValue("record.table.place.holder"),
+                        () -> I18N.getValue("record.table.place.holder.nocolumn")
                 )
         );
     }
@@ -154,7 +154,7 @@ public class RecordTable extends TableView<Record> {
         Column(@NotNull ColumnType columnType, boolean i18n) {
             this.columnType = Objects.requireNonNull(columnType);
             this.setReorderable(false);
-            if (i18n) setText(I18N.getRecordsViewValue(columnType.getI18Nkey()));
+            if (i18n) setText(I18N.getValue(columnType.getI18Nkey()));
         }
 
         public Column(@NotNull ColumnType columnType) {

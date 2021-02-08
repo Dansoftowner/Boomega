@@ -27,7 +27,7 @@ import java.util.function.Consumer
 class RecordAddModule(
     private val context: Context,
     private val database: Database
-) : WorkbenchModule(I18N.getRecordAddFormValue("record.add.module.title"), MaterialDesignIcon.PLUS_BOX),
+) : WorkbenchModule(I18N.getValue("record.add.module.title"), MaterialDesignIcon.PLUS_BOX),
     NotifiableModule<RecordValues?> {
 
     private val content: ObjectProperty<RecordAddForm> = SimpleObjectProperty()
@@ -49,7 +49,7 @@ class RecordAddModule(
                     .addListener { _, _, newSelected -> toolbarItem.text = (newSelected as MenuItem?)?.text }
 
                 fun createItem(i18n: String, recordType: Record.Type) =
-                    toolbarItem.items.add(RadioMenuItem(I18N.getRecordAddFormValue(i18n)).also {
+                    toolbarItem.items.add(RadioMenuItem(I18N.getValue(i18n)).also {
                         it.toggleGroup = toggleGroup
                         it.userData = recordType
                         it.setOnAction { content.get().recordTypeProperty().set(recordType) }
@@ -98,7 +98,7 @@ class RecordAddModule(
         try {
             database.insertRecord(record)
             context.showInformationNotification(
-                I18N.getRecordAddFormValue(
+                I18N.getValue(
                     when (record.recordType) {
                         Record.Type.BOOK -> "record.book.success.notification"
                         Record.Type.MAGAZINE -> "record.magazine.success.notification"
@@ -113,13 +113,13 @@ class RecordAddModule(
             )
         } catch (e: RuntimeException) {
             context.showErrorDialog(
-                I18N.getRecordAddFormValue(
+                I18N.getValue(
                     when (record.recordType) {
                         Record.Type.BOOK -> "record.book.error.title"
                         Record.Type.MAGAZINE -> "record.magazine.error.title"
                     }
                 ),
-                I18N.getRecordAddFormValue(
+                I18N.getValue(
                     when (record.recordType) {
                         Record.Type.BOOK -> "record.book.error.msg"
                         Record.Type.MAGAZINE -> "record.magazine.error.msg"

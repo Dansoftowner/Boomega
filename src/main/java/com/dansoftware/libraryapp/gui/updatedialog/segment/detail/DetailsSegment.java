@@ -20,7 +20,7 @@ public class DetailsSegment extends FixedContentSegment {
     private final UpdateInformation updateInformation;
 
     public DetailsSegment(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
-        super(I18N.getUpdateDialogValues().getString("segment.details.name"));
+        super(I18N.getValues().getString("segment.details.name"));
         this.context = context;
         this.updateInformation = updateInformation;
     }
@@ -30,6 +30,6 @@ public class DetailsSegment extends FixedContentSegment {
         return new ImprovedFXMLLoader(
                 new DetailsSegmentController(context, updateInformation),
                 getClass().getResource("DetailsSegment.fxml"),
-                I18N.getUpdateDialogValues()).load();
+                I18N.getValues()).load();
     }
 }

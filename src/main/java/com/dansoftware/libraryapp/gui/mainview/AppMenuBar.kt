@@ -78,7 +78,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         val databaseMeta: DatabaseMeta,
         val preferences: Preferences,
         val databaseTracker: DatabaseTracker
-    ) : Menu(I18N.getMenuBarValue("menubar.menu.file")) {
+    ) : Menu(I18N.getValue("menubar.menu.file")) {
 
         init {
             this.menuItem(newEntryMenuItem())
@@ -99,7 +99,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         /**
          * Menu item that allows the user to show a new entry point (LoginActivity)
          */
-        private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getMenuBarValue("menubar.menu.file.new"))
+        private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getValue("menubar.menu.file.new"))
             .action { startActivityLauncher { RuntimeBasicActivityLauncher(preferences, databaseTracker) } }
             .keyCombination(DefaultKeyBindings.newEntryProperty)
             .graphic(MaterialDesignIcon.DATABASE)
@@ -107,7 +107,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         /**
          * Menu item that allows the user to open a database file from the file system
          */
-        private fun openMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.open"))
+        private fun openMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.open"))
             .action {
                 DatabaseOpener().showOpenDialog(context.contextWindow)?.also {
                     startActivityLauncher {
@@ -123,7 +123,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             .keyCombination(DefaultKeyBindings.openDatabaseProperty)
             .graphic(MaterialDesignIcon.FILE)
 
-        private fun databaseCreatorMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.dbcreate"))
+        private fun databaseCreatorMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbcreate"))
             .action {
                 DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent { db ->
                     startActivityLauncher { RuntimeOpenActivityLauncher(preferences, databaseTracker, db) }
@@ -132,7 +132,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             .keyCombination(DefaultKeyBindings.createDatabaseProperty)
             .graphic(MaterialDesignIcon.DATABASE_PLUS)
 
-        private fun databaseManagerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.dbmanager"))
+        private fun databaseManagerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbmanager"))
             .action { DatabaseManagerActivity().show(databaseTracker, context.contextWindow) }
             .keyCombination(DefaultKeyBindings.openDatabaseManagerProperty)
             .graphic(MaterialDesignIcon.DATABASE)
@@ -141,7 +141,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
          * Menu that allows the user to access the recent databases
          */
         private fun recentDatabasesMenuItem(): MenuItem =
-            object : Menu(I18N.getMenuBarValue("menubar.menu.file.recent")) {
+            object : Menu(I18N.getValue("menubar.menu.file.recent")) {
                 private val it = this
                 private val menuItemFactory: (DatabaseMeta) -> MenuItem = { db ->
                     MenuItem(db.toString()).also { menuItem ->
@@ -170,24 +170,24 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                 }
             }
 
-        private fun pluginManagerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.pluginmanager"))
+        private fun pluginManagerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.pluginmanager"))
             .action { PluginManagerActivity().show(context.contextWindow) }
             .graphic(MaterialDesignIcon.POWER_PLUG)
 
-        private fun revealInExplorerMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.reveal"))
+        private fun revealInExplorerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.reveal"))
             .action { databaseMeta.file.revealInExplorer() }
             .graphic(MaterialDesignIcon.FOLDER)
 
-        private fun closeWindowMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.closewindow"))
+        private fun closeWindowMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.closewindow"))
             .action { context.close() }
             .graphic(MaterialDesignIcon.CLOSE)
 
-        private fun restartMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.restart"))
+        private fun restartMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.restart"))
             .action { context.contextScene?.onKeyPressed?.handle(DefaultKeyBindings.restartApplication.asKeyEvent()) }
             .keyCombination(DefaultKeyBindings.restartApplicationProperty)
             .graphic(MaterialDesignIcon.UPDATE)
 
-        private fun quitMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.file.quit"))
+        private fun quitMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.quit"))
             .action { Platform.exit() }
             .graphic(MaterialDesignIcon.CLOSE_BOX)
 
@@ -207,7 +207,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         }
     }
 
-    private class ModuleMenu(val contentView: MainContentView) : Menu(I18N.getMenuBarValue("menubar.menu.modules")) {
+    private class ModuleMenu(val contentView: MainContentView) : Menu(I18N.getValue("menubar.menu.modules")) {
         init {
             contentView.modules.forEach {
                 this.menuItem(MenuItem(it.name, it.icon).action { _ -> contentView.openModule(it) })
@@ -219,7 +219,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
      * The Preferences/Settings menu
      */
     private class PreferencesMenu(val context: Context, val preferences: Preferences) :
-        Menu(I18N.getMenuBarValue("menubar.menu.preferences")) {
+        Menu(I18N.getValue("menubar.menu.preferences")) {
         init {
             this.menuItem(settingsMenu())
                 .separator()
@@ -227,11 +227,11 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                 .menuItem(langMenu())
         }
 
-        private fun settingsMenu() = MenuItem(I18N.getMenuBarValue("menubar.menu.preferences.settings"))
+        private fun settingsMenu() = MenuItem(I18N.getValue("menubar.menu.preferences.settings"))
             .action { }
             .graphic(MaterialDesignIcon.SETTINGS)
 
-        private fun themeMenu() = object : Menu(I18N.getMenuBarValue("menubar.menu.preferences.theme")) {
+        private fun themeMenu() = object : Menu(I18N.getValue("menubar.menu.preferences.theme")) {
 
             private val themeChangeListener = Themeable { _, newTheme ->
                 items.forEach { if (it is RadioMenuItem) it.isSelected = newTheme.javaClass == it.userData }
@@ -266,7 +266,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             }
         }
 
-        private fun langMenu() = Menu(I18N.getMenuBarValue("menubar.menu.preferences.lang"))
+        private fun langMenu() = Menu(I18N.getValue("menubar.menu.preferences.lang"))
             .also { menu ->
                 val toggleGroup = ToggleGroup()
                 I18N.getAvailableLocales().forEach { locale ->
@@ -276,8 +276,8 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                         it.setOnAction {
                             preferences.editor().put(Preferences.Key.LOCALE, locale)
                             context.showConfirmationDialog(
-                                I18N.getGeneralValue("app.lang.restart.title"),
-                                I18N.getGeneralValue("app.lang.restart.msg")
+                                I18N.getValue("app.lang.restart.title"),
+                                I18N.getValue("app.lang.restart.msg")
                             ) { btn ->
                                 when {
                                     btn.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
@@ -294,7 +294,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
     /**
      * The 'Window' menu
      */
-    private class WindowMenu(val context: Context) : Menu(I18N.getMenuBarValue("menubar.menu.window")) {
+    private class WindowMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.window")) {
 
         private val windowsChangeOperator = object {
             fun onWindowsAdded(windows: List<Window>) {
@@ -353,14 +353,14 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             WeakWindowsChangeListener(WeakReference(windowListChangeListener))
         }
 
-        private fun fullScreenMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.window.fullscreen"))
+        private fun fullScreenMenuItem() = MenuItem(I18N.getValue("menubar.menu.window.fullscreen"))
             .also { context.contextWindow }
             .action { context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() } }
             .keyCombination(DefaultKeyBindings.fullScreenProperty)
             .graphic(MaterialDesignIcon.FULLSCREEN)
     }
 
-    private class HelpMenu(val context: Context) : Menu(I18N.getMenuBarValue("menubar.menu.help")) {
+    private class HelpMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.help")) {
 
         init {
             this.menuItem(updateSearcherMenuItem())
@@ -368,15 +368,15 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                 .menuItem(infoMenuItem())
         }
 
-        private fun updateSearcherMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.help.update"))
+        private fun updateSearcherMenuItem() = MenuItem(I18N.getValue("menubar.menu.help.update"))
             .action { UpdateActivity(context, UpdateSearcher.defaultInstance().search()).show(true) }
             .graphic(MaterialDesignIcon.UPDATE)
 
-        private fun contactMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.help.contact"))
+        private fun contactMenuItem() = MenuItem(I18N.getValue("menubar.menu.help.contact"))
             .action { ContactActivity(context).show() }
             .graphic(MaterialDesignIcon.CONTACT_MAIL)
 
-        private fun infoMenuItem() = MenuItem(I18N.getMenuBarValue("menubar.menu.help.about"))
+        private fun infoMenuItem() = MenuItem(I18N.getValue("menubar.menu.help.about"))
             .action { InformationActivity(context).show() }
             .graphic(MaterialDesignIcon.INFORMATION)
     }

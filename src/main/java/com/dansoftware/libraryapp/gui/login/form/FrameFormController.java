@@ -120,7 +120,7 @@ public class FrameFormController
         if (internalForm == null) {
             var fxmlController = new InternalFormController(context, preferences, databaseTracker, loginData, databaseLoginListener,
                     () -> databaseChooser.getSelectionModel().getSelectedItem());
-            var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getLoginViewValues());
+            var fxmlLoader = new ImprovedFXMLLoader(fxmlController, getClass().getResource("InternalForm.fxml"), I18N.getValues());
             internalForm = fxmlLoader.load();
         }
 
@@ -219,12 +219,12 @@ public class FrameFormController
                     var indicator = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
                     indicator.getStyleClass().add(NOT_EXISTS_CLASS);
                     setGraphic(indicator);
-                    setTooltip(new Tooltip(I18N.getGeneralValue("file.not.exists")));
+                    setTooltip(new Tooltip(I18N.getValue("file.not.exists")));
                 } else if (databaseTracker.isDatabaseUsed(item)) {
                     var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
                     indicator.getStyleClass().add(USED_CLASS);
                     setGraphic(indicator);
-                    setTooltip(new Tooltip(I18N.getGeneralValue("database.currently.used")));
+                    setTooltip(new Tooltip(I18N.getValue("database.currently.used")));
                 } else {
                     setGraphic(null);
                     setTooltip(null);
@@ -238,7 +238,7 @@ public class FrameFormController
         protected void updateItem(DatabaseMeta item, boolean empty) {
             super.updateItem(item, empty);
             if (item == null) {
-                setText(I18N.getLoginViewValue("login.source.combo.promt"));
+                setText(I18N.getValue("login.source.combo.promt"));
             }
         }
     }

@@ -167,7 +167,7 @@ public class RecordAddForm extends ScrollPane {
         rating.ratingProperty().addListener((o, old, newRating) -> this.rating.set(newRating.intValue()));
         var hBox = new HBox(
                 5,
-                new StackPane(new Label(I18N.getRecordAddFormValue("record.add.form.rating"))),
+                new StackPane(new Label(I18N.getValue("record.add.form.rating"))),
                 new StackPane(rating) {{
                     HBox.setHgrow(this, Priority.ALWAYS);
                 }}
@@ -184,7 +184,7 @@ public class RecordAddForm extends ScrollPane {
     }
 
     private Button buildGoogleBookButton(VBox vBox) {
-        var button = new Button(I18N.getRecordAddFormValue("record.add.form.gjoin"),
+        var button = new Button(I18N.getValue("record.add.form.gjoin"),
                 new MaterialDesignIconView(MaterialDesignIcon.GOOGLE));
         button.setOnAction(event ->
                 context.showOverlay(new GoogleBookJoinerOverlay(
@@ -207,7 +207,7 @@ public class RecordAddForm extends ScrollPane {
 
     private Node buildCommitButton(VBox vBox) {
         var button = new Button(
-                I18N.getRecordAddFormValue("record.add.form.commit"),
+                I18N.getValue("record.add.form.commit"),
                 new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE));
         button.setDefaultButton(true);
         button.disableProperty().bind(currentForm.get().validProperty().not());
@@ -344,7 +344,7 @@ public class RecordAddForm extends ScrollPane {
                                 .multiline(true)
 
                 )
-        ).i18n(new ResourceBundleService(I18N.getRecordAddFormValues()))
+        ).i18n(new ResourceBundleService(I18N.getValues()))
                 .binding(BindingMode.CONTINUOUS);
     }
 
@@ -384,7 +384,7 @@ public class RecordAddForm extends ScrollPane {
                                 .required(false)
                                 .multiline(true)
                 )
-        ).i18n(new ResourceBundleService(I18N.getRecordAddFormValues()))
+        ).i18n(new ResourceBundleService(I18N.getValues()))
                 .binding(BindingMode.CONTINUOUS);
     }
 

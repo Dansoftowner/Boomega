@@ -23,7 +23,7 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
     private final Context asContext;
 
     public DatabaseCreatorView(@NotNull DatabaseTracker databaseTracker) {
-        super(I18N.getGeneralValue("database.creator.title"),
+        super(I18N.getValue("database.creator.title"),
                 new MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS));
         this.asContext = Context.from(this);
         super.setContent(this.form = new DatabaseCreatorForm(asContext, databaseTracker));

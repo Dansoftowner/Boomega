@@ -3,6 +3,7 @@ package com.dansoftware.libraryapp.i18n;
 import java.text.Collator;
 import java.text.ParseException;
 import java.text.RuleBasedCollator;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -15,11 +16,14 @@ public class HungarianLanguagePack extends InternalLanguagePack {
     private static final Locale LOCALE = new Locale("hu", "HU");
 
     static {
-        registerLanguagePack(LOCALE, HungarianLanguagePack.class);
-        ABCCollators.registerCollator(LOCALE, HungarianLanguagePack::getABCComparator);
+        registerLanguagePack(LOCALE, new HungarianLanguagePack());
     }
 
-    private static Collator getABCComparator() {
+    public HungarianLanguagePack() {
+        super(LOCALE);
+    }
+
+    private Collator buildAbcCollator() {
         try {
             return new RuleBasedCollator(
                     " < a,A < á,Á < b,B < c,C < cs,Cs,CS < d,D < dz,Dz,DZ < dzs,Dzs,DZS" +
@@ -28,12 +32,13 @@ public class HungarianLanguagePack extends InternalLanguagePack {
                             " < ö,Ö < ő,Ő < p,P < q,Q < r,R < s,S < sz,Sz,SZ < t,T" +
                             " < ty,Ty,TY < u,U < ú,Ú < ü,Ü < ű,Ű < v,V < w,W < x,X < y,Y < z,Z < zs,Zs,ZS");
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 
-    public HungarianLanguagePack() {
-        super(LOCALE);
+    @Override
+    protected Collator getABCCollator() {
+        return buildAbcCollator();
     }
 
     @Override

@@ -35,7 +35,7 @@ import java.util.function.Consumer
  */
 class GoogleBookDetailsOverlay(context: Context, volume: Volume) :
     TitledOverlayBox(
-        I18N.getGoogleBooksValue("google.books.detail.title"),
+        I18N.getValue("google.books.detail.title"),
         ImageView("/com/dansoftware/libraryapp/image/util/google_12px.png"),
         GoogleBookDetailsPane(context, volume)
     )
@@ -116,42 +116,42 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                             hBox.children.add(MaterialDesignIconView(MaterialDesignIcon.NEWSPAPER).apply {
                                 glyphSize = 25
                             })
-                            hBox.children.add(Label(I18N.getGoogleBooksValue("google.books.magazine")))
+                            hBox.children.add(Label(I18N.getValue("google.books.magazine")))
                         }
                         else -> {
                             hBox.children.add(MaterialDesignIconView(MaterialDesignIcon.BOOK).apply { glyphSize = 25 })
-                            hBox.children.add(Label(I18N.getGoogleBooksValue("google.books.book")))
+                            hBox.children.add(Label(I18N.getValue("google.books.book")))
                         }
                     }
                 }
 
             private fun buildTitleLabel(volumeInfo: Volume.VolumeInfo): Node =
                 PropertyValuePair(
-                    I18N.getGoogleBooksValue("google.books.table.column.title"),
+                    I18N.getValue("google.books.table.column.title"),
                     volumeInfo.title
                 )
 
             private fun buildSubtitleLabel(volumeInfo: Volume.VolumeInfo): Node =
                 PropertyValuePair(
-                    I18N.getGoogleBooksValue("google.books.table.column.subtitle"),
+                    I18N.getValue("google.books.table.column.subtitle"),
                     volumeInfo.subtitle
                 )
 
             private fun buildAuthorLabel(volumeInfo: Volume.VolumeInfo): Node =
                 PropertyValuePair(
-                    I18N.getGoogleBooksValue("google.books.table.column.author"),
+                    I18N.getValue("google.books.table.column.author"),
                     volumeInfo.authors?.joinToString(", ")
                 )
 
             private fun buildPublisherLabel(volumeInfo: Volume.VolumeInfo): Node =
                 PropertyValuePair(
-                    I18N.getGoogleBooksValue("google.books.table.column.publisher"),
+                    I18N.getValue("google.books.table.column.publisher"),
                     volumeInfo.publisher
                 )
 
             private fun buildDateLabel(volumeInfo: Volume.VolumeInfo): Node =
                 PropertyValuePair(
-                    I18N.getGoogleBooksValue("google.books.table.column.date"),
+                    I18N.getValue("google.books.table.column.date"),
                     volumeInfo.publishedDate
                 )
         }
@@ -160,7 +160,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
          * Used as a place holder if the thumbnail is not available
          */
         private class ThumbnailPlaceHolder :
-            StackPane(Label(I18N.getGoogleBooksValue("google.books.table.thumbnail.not.available")))
+            StackPane(Label(I18N.getValue("google.books.table.thumbnail.not.available")))
     }
 
     /**
@@ -175,12 +175,12 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                 (toggle.userData as Consumer<ScrollPane>).accept(scrollArea)
             }
 
-            hBox.children.add(RadioToggleButton(I18N.getGoogleBooksValue("google.books.details.info")).also { toggle ->
+            hBox.children.add(RadioToggleButton(I18N.getValue("google.books.details.info")).also { toggle ->
                 toggle.toggleGroup = tgglGroup
                 toggle.userData = Consumer<ScrollPane> { it.content = InfoPane(context, volume) }
                 toggle.isSelected = true
             })
-            hBox.children.add(RadioToggleButton(I18N.getGoogleBooksValue("google.books.details.sale")).also { toggle ->
+            hBox.children.add(RadioToggleButton(I18N.getValue("google.books.details.sale")).also { toggle ->
                 toggle.toggleGroup = tgglGroup
                 toggle.userData = Consumer<ScrollPane> { it.content = SaleInfoPane(volume) }
             })
@@ -214,7 +214,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
 
         private fun buildISBNLabel(volume: Volume): Node =
             HBox(5.0,
-                PropertyNameLabel(I18N.getGoogleBooksValue("google.books.table.column.isbn").plus(":")),
+                PropertyNameLabel(I18N.getValue("google.books.table.column.isbn").plus(":")),
                 VBox(2.0).also { vBox ->
                     volume.volumeInfo?.industryIdentifiers?.map { it.toString() }?.forEach {
                         vBox.children.add(
@@ -231,14 +231,14 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
 
         private fun buildLangLabel(volume: Volume): Node =
             PropertyValuePair(
-                I18N.getGoogleBooksValue("google.books.table.column.lang"),
+                I18N.getValue("google.books.table.column.lang"),
                 Locale.forLanguageTag(volume.volumeInfo?.language).displayLanguage
             )
 
         private fun buildDescriptionArea(volume: Volume): Node =
             VBox(
                 5.0,
-                PropertyNameLabel(I18N.getGoogleBooksValue("google.books.table.column.desc").plus(":"))
+                PropertyNameLabel(I18N.getValue("google.books.table.column.desc").plus(":"))
             ).also { hBox ->
                 ExploitativeExecutor.submit(object : Task<String>() {
                     override fun call(): String? = volume.volumeInfo?.description?.let { HTML2Md.convert(it) }
@@ -259,7 +259,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
         private fun buildCategoriesIndicator(volume: Volume): Node =
             HBox(
                 5.0,
-                PropertyNameLabel(I18N.getGoogleBooksValue("google.books.categories").plus(":")),
+                PropertyNameLabel(I18N.getValue("google.books.categories").plus(":")),
                 volume.volumeInfo?.categories?.let { categories ->
                     VBox(2.0).also { listView ->
                         categories.forEach {
@@ -279,7 +279,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
         private fun buildRatingsIndicator(volume: Volume): Node =
             HBox(
                 5.0,
-                PropertyNameLabel(I18N.getGoogleBooksValue("google.books.table.column.rank").plus(":"))
+                PropertyNameLabel(I18N.getValue("google.books.table.column.rank").plus(":"))
             ).also {
                 volume.volumeInfo?.averageRating?.let { rating ->
                     it.children.add(ReadOnlyRating(5, rating.toInt()))
@@ -291,12 +291,12 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
 
         private fun buildPreviewHyperLink(volume: Volume): Node =
             StackPane(WebsiteHyperLink(
-                I18N.getGoogleBooksValue("google.books.details.preview"),
+                I18N.getValue("google.books.details.preview"),
                 volume.volumeInfo?.previewLink
             ).apply {
                 contextMenu = ContextMenu().also { menu ->
                     menu.items.add(
-                        MenuItem(I18N.getGoogleBooksValue("google.books.preview.open.embedded"))
+                        MenuItem(I18N.getValue("google.books.preview.open.embedded"))
                             .action { GoogleBookPreviewActivity(volume, context.contextWindow).show() }
                     )
                 }
@@ -324,8 +324,8 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
 
         private fun buildEBookIndicator(volume: Volume): Node =
             PropertyValuePair(
-                I18N.getGoogleBooksValue("google.books.details.sale.isebook"),
-                I18N.getButtonTypeValues().getString(
+                I18N.getValue("google.books.details.sale.isebook"),
+                I18N.getValues().getString(
                     when (volume.saleInfo?.isEbook) {
                         true -> "Dialog.yes.button"
                         else -> "Dialog.no.button"
@@ -335,19 +335,19 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
 
         private fun buildCountryIndicator(volume: Volume): Node =
             PropertyValuePair(
-                I18N.getGoogleBooksValue("google.books.details.sale.country"),
+                I18N.getValue("google.books.details.sale.country"),
                 volume.saleInfo?.country
             )
 
         private fun buildListPriceLabel(volume: Volume): Node =
             PropertyValuePair(
-                I18N.getGoogleBooksValue("google.books.details.sale.listprice"),
+                I18N.getValue("google.books.details.sale.listprice"),
                 volume.saleInfo?.listPrice.toString()
             )
 
         private fun buildRetailPriceLabel(volume: Volume): Node =
             PropertyValuePair(
-                I18N.getGoogleBooksValue("google.books.details.sale.retailprice"),
+                I18N.getValue("google.books.details.sale.retailprice"),
                 volume.saleInfo?.retailPrice.toString()
             )
 
@@ -358,7 +358,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                         5.0,
                         MaterialDesignIconView(MaterialDesignIcon.GOOGLE_PLAY),
                         WebsiteHyperLink(
-                            I18N.getGoogleBooksValue("google.books.details.sale.buylink"),
+                            I18N.getValue("google.books.details.sale.buylink"),
                             volume.saleInfo?.buyLink
                         )
                     )
@@ -366,7 +366,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
             )
 
         private fun buildNotSaleablePlaceHolder(): Node =
-            Label(I18N.getGoogleBooksValue("google.books.details.notforsale")).apply {
+            Label(I18N.getValue("google.books.details.notforsale")).apply {
                 styleClass.add("not-for-sale-place-holder")
             }
     }

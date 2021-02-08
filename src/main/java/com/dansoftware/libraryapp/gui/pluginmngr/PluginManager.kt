@@ -21,7 +21,7 @@ import java.io.File
  */
 class PluginManager(pluginFiles: List<File>) :
     SimpleHeaderView<StackPane>(
-        I18N.getPluginManagerValue("plugin.manager"),
+        I18N.getValue("plugin.manager"),
         FontAwesomeIconView(FontAwesomeIcon.PLUG)
     ),
     ContextTransformable {
@@ -38,7 +38,7 @@ class PluginManager(pluginFiles: List<File>) :
         //Add item
         toolbarControlsRight.add(
             ToolbarItem(
-                I18N.getPluginManagerValue("plugin.module.adder"),
+                I18N.getValue("plugin.module.adder"),
                 MaterialDesignIconView(MaterialDesignIcon.PLUS)
             ).also {
                 it.setOnClick { _ ->
@@ -46,12 +46,12 @@ class PluginManager(pluginFiles: List<File>) :
                         is PluginAdderPane -> {
                             this.content = StackPane(PluginTable(asContext, pluginList))
                             it.graphic = MaterialDesignIconView(MaterialDesignIcon.PLUS)
-                            it.text = I18N.getPluginManagerValue("plugin.module.adder")
+                            it.text = I18N.getValue("plugin.module.adder")
                         }
                         else -> {
                             this.content = PluginAdderPane(asContext, pluginList)
                             it.graphic = MaterialDesignIconView(MaterialDesignIcon.VIEW_LIST)
-                            it.text = I18N.getPluginManagerValue("plugin.module.list")
+                            it.text = I18N.getValue("plugin.module.list")
                         }
                     }
                 }

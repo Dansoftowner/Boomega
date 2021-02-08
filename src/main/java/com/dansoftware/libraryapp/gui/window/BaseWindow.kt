@@ -56,7 +56,7 @@ abstract class BaseWindow<C> : Stage, Themeable
      * @param i18n the resource bundle key for the title
      */
     private constructor(i18n: String) : this() {
-        title = I18N.getWindowTitles().getString(i18n)
+        title = I18N.getValues().getString(i18n)
     }
 
     /**
@@ -71,7 +71,7 @@ abstract class BaseWindow<C> : Stage, Themeable
     }
 
     protected constructor(i18n: String, separator: String, additionalTitleValue: String, content: C) {
-        this.title = "${I18N.getWindowTitles().getString(i18n)} $separator $additionalTitleValue"
+        this.title = "${I18N.getValues().getString(i18n)} $separator $additionalTitleValue"
         this.content = content
         this.scene = Scene(content)
     }
@@ -114,7 +114,7 @@ abstract class BaseWindow<C> : Stage, Themeable
     }
 
     private fun buildFullScreenExitHint() {
-        fullScreenExitHint = I18N.getGeneralValue("window.fullscreen.hint")
+        fullScreenExitHint = I18N.getValue("window.fullscreen.hint")
     }
 
     /**
@@ -135,7 +135,7 @@ abstract class BaseWindow<C> : Stage, Themeable
         SimpleStringProperty() {
 
         init {
-            val baseTitle = SimpleStringProperty(I18N.getWindowTitles().getString(i18n))
+            val baseTitle = SimpleStringProperty(I18N.getValues().getString(i18n))
             val separatorAndChangingObservable = buildSeparatorAndChangingObservable(separator, changingString)
             this.bind(baseTitle.concat(separatorAndChangingObservable))
         }
@@ -172,8 +172,8 @@ abstract class BaseWindow<C> : Stage, Themeable
             if (dialogShowing.not() && DefaultKeyBindings.restartApplication.match(keyEvent)) {
                 dialogShowing = true
                 this@BaseWindow.content.context.showConfirmationDialog(
-                    I18N.getGeneralValue("app.restart.dialog.title"),
-                    I18N.getGeneralValue("app.restart.dialog.msg")
+                    I18N.getValue("app.restart.dialog.title"),
+                    I18N.getValue("app.restart.dialog.msg")
                 ) {
                     when {
                         it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
@@ -196,8 +196,8 @@ abstract class BaseWindow<C> : Stage, Themeable
                         if (this@BaseWindow.isIconified)
                             this@BaseWindow.isIconified = false
                         val buttonType = this@BaseWindow.content.context.showConfirmationDialogAndWait(
-                            I18N.getGeneralValue("window.close.dialog.title"),
-                            I18N.getGeneralValue("window.close.dialog.msg")
+                            I18N.getValue("window.close.dialog.title"),
+                            I18N.getValue("window.close.dialog.msg")
                         )
                         dialogShowing = false
                         if (buttonType.typeEquals(ButtonType.NO)) {

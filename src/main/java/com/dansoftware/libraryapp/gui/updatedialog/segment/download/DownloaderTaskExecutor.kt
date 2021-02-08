@@ -145,8 +145,8 @@ class DownloaderTaskExecutor(
             logger.error("DownloaderTask failed with an exception: {}", cause)
 
             context.showErrorDialog(
-                I18N.getUpdateDialogValue("update.view.download.failed.title"),
-                I18N.getUpdateDialogValue("update.view.download.failed.msg"),
+                I18N.getValue("update.view.download.failed.title"),
+                I18N.getValue("update.view.download.failed.msg"),
                 cause as Exception
             ) { context.stopProgress() }
             clearProgress()

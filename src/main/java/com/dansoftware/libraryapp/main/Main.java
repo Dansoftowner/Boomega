@@ -126,7 +126,7 @@ public class Main extends BaseApplication {
         queue.pushItem((context, launchedDatabase) -> {
             if (launchedDatabase != null) {
                 context.showInformationNotification(
-                        I18N.getProgressMessage("database.file.launched", launchedDatabase.getName()), null
+                        I18N.getValue("database.file.launched", launchedDatabase.getName()), null
                 );
             }
         });
@@ -146,7 +146,7 @@ public class Main extends BaseApplication {
         if (readPluginsCount > 0)
             queue.pushItem((context, databaseMeta) -> {
                 context.showInformationNotification(
-                        I18N.getNotificationMessage("plugins.read.count.title", readPluginsCount),
+                        I18N.getValue("plugins.read.count.title", readPluginsCount),
                         null,
                         Duration.minutes(1)
                 );
@@ -175,10 +175,10 @@ public class Main extends BaseApplication {
             logger.error("Couldn't read configurations ", e);
             queue.pushItem((context, databaseMeta) -> {
                 context.showErrorNotification(
-                        I18N.getNotificationMessage("preferences.read.failed.title"), null, event -> {
+                        I18N.getValue("preferences.read.failed.title"), null, event -> {
                             context.showErrorDialog(
-                                    I18N.getNotificationMessage("preferences.read.failed.title"),
-                                    I18N.getNotificationMessage("preferences.read.failed.msg"), e);
+                                    I18N.getValue("preferences.read.failed.title"),
+                                    I18N.getValue("preferences.read.failed.msg"), e);
                         });
             });
         }

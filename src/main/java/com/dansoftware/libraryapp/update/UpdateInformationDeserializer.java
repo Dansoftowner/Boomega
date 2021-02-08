@@ -146,7 +146,7 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
             //trying to localize the name...
             String localizedName;
             try {
-                localizedName = I18N.getGeneralValue(localeKey);
+                localizedName = I18N.getValue(localeKey);
             } catch (MissingResourceException e) {
                 localizedName = simpleName;
             }

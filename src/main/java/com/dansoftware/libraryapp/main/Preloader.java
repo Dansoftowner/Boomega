@@ -119,9 +119,9 @@ public class Preloader extends javafx.application.Preloader {
         public MessageNotification(boolean i18n, @NotNull String value, Object... args) {
             if (i18n) {
                 if (ArrayUtils.isEmpty(args))
-                    message = I18N.getProgressMessage(value);
+                    message = I18N.getValue(value);
                 else
-                    message = I18N.getProgressMessage(value, args);
+                    message = I18N.getValue(value, args);
             } else {
                 if (ArrayUtils.isEmpty(args))
                     message = value;

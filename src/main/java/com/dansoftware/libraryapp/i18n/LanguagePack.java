@@ -1,13 +1,14 @@
 package com.dansoftware.libraryapp.i18n;
 
 import com.dansoftware.libraryapp.plugin.PluginClassLoader;
-import com.dansoftware.libraryapp.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.Collator;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * A {@link LanguagePack} provides {@link ResourceBundle}s for a particular {@link Locale}.
@@ -18,26 +19,26 @@ public abstract class LanguagePack {
 
     private static final Logger logger = LoggerFactory.getLogger(LanguagePack.class);
 
-    private static final Map<Locale, List<Class<? extends LanguagePack>>> languagePacksForLocales =
+    private static final Map<Locale, List<LanguagePack>> languagePacksForLocales =
             Collections.synchronizedMap(new HashMap<>());
 
     /**
      * Registers a {@link LanguagePack} to {@link Locale}.
      *
-     * @param locale            the locale; shouldn't be null
-     * @param languagePackClass the language pack; shouldn't be null
+     * @param locale       the locale; shouldn't be null
+     * @param languagePack the language pack; shouldn't be null
      * @throws NullPointerException if one of the arguments is null
      */
-    protected static void registerLanguagePack(@NotNull Locale locale,
-                                               @NotNull Class<? extends LanguagePack> languagePackClass) {
+    public static void registerLanguagePack(@NotNull Locale locale,
+                                            @NotNull LanguagePack languagePack) {
         Objects.requireNonNull(locale);
-        Objects.requireNonNull(languagePackClass);
-        List<Class<? extends LanguagePack>> classes = languagePacksForLocales.get(locale);
-        if (classes != null)
-            classes.add(languagePackClass);
+        Objects.requireNonNull(languagePack);
+        List<LanguagePack> packs = languagePacksForLocales.get(locale);
+        if (packs != null)
+            packs.add(languagePack);
         else
-            languagePacksForLocales.put(locale, new LinkedList<>(Collections.singletonList(languagePackClass)));
-        logger.debug("Registered locale: {} with languagePack: {}", locale, languagePackClass);
+            languagePacksForLocales.put(locale, new LinkedList<>(Collections.singletonList(languagePack)));
+        logger.debug("Registered language pack with locale: {}", locale);
     }
 
     /**
@@ -49,24 +50,39 @@ public abstract class LanguagePack {
      * if the given locale isn't supported, then it will return an empty list
      */
     @NotNull
-    protected static List<Class<? extends LanguagePack>> getLanguagePacksForLocale(@Nullable Locale locale) {
-        List<Class<? extends LanguagePack>> packs = languagePacksForLocales.get(locale);
-        return packs == null ? Collections.emptyList() : Collections.unmodifiableList(packs);
+    public static List<LanguagePack> getLanguagePacksForLocale(@Nullable Locale locale) {
+        return Optional.ofNullable(languagePacksForLocales.get(locale))
+                .map(Collections::unmodifiableList)
+                .orElseGet(Collections::emptyList);
+    }
+
+    @NotNull
+    protected static Optional<LanguagePack> getLanguagePackForLocale(@Nullable Locale locale) {
+        return getLanguagePacksForLocale(locale).stream().findFirst();
     }
 
     /**
-     * Searches for a {@link LanguagePack} implementation for the given {@link Locale}
-     * and instantiates it if possible.
+     * Finds a {@link Collator} for the given locale
      *
      * @param locale the locale
-     * @return the result wrapped in an {@link Optional}
+     * @return the Collator object
      */
-    public static Optional<LanguagePack> instantiateLanguagePack(@Nullable Locale locale) {
-        return getLanguagePacksForLocale(locale).stream()
-                .map(ReflectionUtils::tryConstructObject)
-                .filter(Objects::nonNull)
-                .map(languagePack -> (LanguagePack) languagePack)
-                .findFirst();
+    protected static Collator getCollator(@NotNull Locale locale) {
+        return Optional.ofNullable(languagePacksForLocales.get(locale))
+                .flatMap(it -> it.stream().findFirst())
+                .map(LanguagePack::getABCCollator)
+                .orElseGet(() -> Collator.getInstance(locale));
+    }
+
+    protected static Map<Locale, Supplier<Collator>> getAvailableCollators() {
+        var map = new HashMap<Locale, Supplier<Collator>>();
+        languagePacksForLocales.forEach((locale, languagePacks) ->
+                languagePacks.stream()
+                        .map(languagePack -> (Supplier<Collator>) languagePack::getABCCollator)
+                        .findFirst()
+                        .ifPresent(collatorSupplier -> map.put(locale, collatorSupplier))
+        );
+        return map;
     }
 
     /**
@@ -99,9 +115,7 @@ public abstract class LanguagePack {
         return languageTranslator;
     }
 
-    protected ResourceBundle getBundle(String path) {
-        return ResourceBundle.getBundle(path, locale, PluginClassLoader.getInstance());
-    }
+    protected abstract Collator getABCCollator();
 
     /**
      * Returns {@code true} if the language represented by this pack is a <i>RIGHT TO LEFT</i>
@@ -112,53 +126,9 @@ public abstract class LanguagePack {
     protected abstract boolean isRTL();
 
     @NotNull
-    public abstract ResourceBundle getButtonTypeValues();
+    public abstract ResourceBundle getValues();
 
-    @NotNull
-    protected abstract ResourceBundle getWindowTitles();
-
-    @NotNull
-    protected abstract ResourceBundle getFirstTimeDialogValues();
-
-    @NotNull
-    protected abstract ResourceBundle getProgressMessages();
-
-    @NotNull
-    protected abstract ResourceBundle getGenerals();
-
-    @NotNull
-    protected abstract ResourceBundle getUpdateDialogValues();
-
-    @NotNull
-    protected abstract ResourceBundle getLoginViewValues();
-
-    @NotNull
-    protected abstract ResourceBundle getInfoViewValues();
-
-    @NotNull
-    protected abstract ResourceBundle getDatabaseCreatorValues();
-
-    @NotNull
-    public abstract ResourceBundle getPluginManagerValues();
-
-    @NotNull
-    public abstract ResourceBundle getDatabaseManagerValues();
-
-    @NotNull
-    public abstract ResourceBundle getNotificationMessages();
-
-    @NotNull
-    public abstract ResourceBundle getMenuBarValues();
-
-    @NotNull
-    public abstract ResourceBundle getGoogleBooksValues();
-
-    @NotNull
-    public abstract ResourceBundle getRecordAddFormValues();
-
-    @NotNull
-    public abstract ResourceBundle getRecordsViewValues();
-
-    @NotNull
-    public abstract ResourceBundle getDockSystemValues();
+    protected ResourceBundle getBundle(String path) {
+        return ResourceBundle.getBundle(path, locale, PluginClassLoader.getInstance());
+    }
 }

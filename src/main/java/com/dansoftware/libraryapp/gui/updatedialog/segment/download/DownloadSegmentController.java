@@ -117,8 +117,8 @@ public class DownloadSegmentController implements Initializable {
         //changing the tooltip on the download/pause button
         downloadPauseBtn.setTooltip(new Tooltip(
                 downloaderTaskExecutor.isPaused() ?
-                        I18N.getUpdateDialogValues().getString("update.view.download.resume") :
-                        I18N.getUpdateDialogValues().getString("update.view.download.pause")
+                        I18N.getValues().getString("update.view.download.resume") :
+                        I18N.getValues().getString("update.view.download.pause")
         ));
     }
 
@@ -150,8 +150,8 @@ public class DownloadSegmentController implements Initializable {
             }
         } catch (IOException e) {
             context.showErrorDialog(
-                    I18N.getUpdateDialogValue("update.view.downloaded.run.failed.title", result.getName()),
-                    I18N.getUpdateDialogValue("update.view.downloaded.run.failed.msg"), e, buttonType -> {
+                    I18N.getValue("update.view.downloaded.run.failed.title", result.getName()),
+                    I18N.getValue("update.view.downloaded.run.failed.msg"), e, buttonType -> {
                     });
         }
     }

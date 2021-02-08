@@ -31,7 +31,7 @@ private class GoogleBooksImportView(val context: Context) : GoogleBooksSearchVie
             btn.prefWidthProperty().bind(this.widthProperty())
             btn.disableProperty().bind(table.selectionModel.selectedItemProperty().isNull)
             btn.textProperty().bind(
-                SimpleStringProperty(I18N.getGoogleBooksValue("google.books.import.button"))
+                SimpleStringProperty(I18N.getValue("google.books.import.button"))
                     .concat(SimpleStringProperty(StringUtils.EMPTY).also { titleProp ->
                         table.selectionModel.selectedItemProperty().addListener { _, _, newItem ->
                             when {

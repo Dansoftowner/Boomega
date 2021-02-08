@@ -24,7 +24,7 @@ import java.util.List;
 public class LightTheme extends Theme {
 
     private static final ThemeMeta<LightTheme> THEME_META =
-            new ThemeMeta<>(LightTheme.class, () -> I18N.getGeneralValue("theme.light"), InternalThemeDesigner.INSTANCE);
+            new ThemeMeta<>(LightTheme.class, () -> I18N.getValue("theme.light"), InternalThemeDesigner.INSTANCE);
 
     static {
         registerTheme(THEME_META);

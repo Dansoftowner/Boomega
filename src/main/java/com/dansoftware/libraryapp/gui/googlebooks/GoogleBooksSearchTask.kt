@@ -167,8 +167,8 @@ class GoogleBooksPaginationSearchTask(
         context.stopProgress()
         logger.error("Search problem ", cause)
         context.showErrorDialog(
-            I18N.getGoogleBooksValue("google.books.search.failed.title"),
-            I18N.getGoogleBooksValue("google.books.search.failed.msg"),
+            I18N.getValue("google.books.search.failed.title"),
+            I18N.getValue("google.books.search.failed.msg"),
             cause as Exception
         ) {
             when (it) {

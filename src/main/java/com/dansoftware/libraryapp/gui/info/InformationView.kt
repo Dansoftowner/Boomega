@@ -24,7 +24,7 @@ import java.util.*
 
 class InformationViewOverlay(context: Context) :
     TitledOverlayBox(
-        I18N.getInfoViewValues().getString("info.view.title"),
+        I18N.getValues().getString("info.view.title"),
         MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
         InformationView(context),
         resizableH = true,
@@ -32,7 +32,7 @@ class InformationViewOverlay(context: Context) :
         Button().also {
             it.contentDisplay = ContentDisplay.GRAPHIC_ONLY
             it.graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)
-            it.tooltip = Tooltip(I18N.getInfoViewValues().getString("info.copy"))
+            it.tooltip = Tooltip(I18N.getValues().getString("info.copy"))
             it.setOnAction {
                 ClipboardContent().also { clipboardContent ->
                     clipboardContent.putString(getApplicationInfoCopy())
@@ -80,7 +80,7 @@ class InformationView(val context: Context) : VBox(5.0) {
         children.add(KeyValuePair("java.vm", System.getProperty("java.vm.name").let { vmName ->
             System.getProperty("java.vm.vendor").let {
                 if (StringUtils.isBlank(it).not()) {
-                    "$vmName ${I18N.getInfoViewValues().getString("java.vm.by")} $it"
+                    "$vmName ${I18N.getValues().getString("java.vm.by")} $it"
                 } else null
             } ?: vmName
         }))
@@ -99,7 +99,7 @@ class InformationView(val context: Context) : VBox(5.0) {
 
     private fun buildDependencyButton() =
         Button(
-            I18N.getInfoViewValues().getString("info.show.dependencies"),
+            I18N.getValues().getString("info.show.dependencies"),
             MaterialDesignIconView(MaterialDesignIcon.CODE_BRACES)
         ).also {
             it.setOnAction {
@@ -109,7 +109,7 @@ class InformationView(val context: Context) : VBox(5.0) {
 
     private fun buildGithubButton() =
         Button(
-            I18N.getInfoViewValues().getString("info.show.github"),
+            I18N.getValues().getString("info.show.github"),
             MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX)
         ).also {
             it.setOnAction {
@@ -125,7 +125,7 @@ class InformationView(val context: Context) : VBox(5.0) {
         })
 
         init {
-            children.add(Label(I18N.getInfoViewValues().getString(i18n)))
+            children.add(Label(I18N.getValues().getString(i18n)))
             children.add(Label(":").also {
                 it.padding = Insets(0.0, 5.0, 0.0, 0.0)
             })

@@ -43,7 +43,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements C
                      @NotNull Preferences preferences,
                      @NotNull LoginData loginData,
                      @NotNull DatabaseTracker tracker) {
-        super(I18N.getGeneralValue("database.auth"), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
+        super(I18N.getValue("database.auth"), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
         this.loginActivity = loginActivity;
         this.asContext = Context.from(this);
         this.createdDatabase = new SimpleObjectProperty<>();

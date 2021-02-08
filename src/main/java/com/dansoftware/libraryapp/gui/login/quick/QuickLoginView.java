@@ -26,11 +26,11 @@ public class QuickLoginView extends SimpleHeaderView<Region> implements ContextT
     private VBox loadContent(@NotNull DatabaseMeta databaseMeta, @NotNull DatabaseLoginListener loginListener) {
         return new ImprovedFXMLLoader(
                 new QuickFormController(asContext, databaseMeta, loginListener),
-                getClass().getResource("Form.fxml"), I18N.getLoginViewValues()).load();
+                getClass().getResource("Form.fxml"), I18N.getValues()).load();
     }
 
     private static String buildTitle(@NotNull DatabaseMeta databaseMeta) {
-        return String.format("%s - %s", I18N.getLoginViewValue("login.quick.title"), databaseMeta);
+        return String.format("%s - %s", I18N.getValue("login.quick.title"), databaseMeta);
     }
 
     @Override
