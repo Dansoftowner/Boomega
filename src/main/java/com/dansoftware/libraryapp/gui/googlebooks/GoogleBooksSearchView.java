@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.gui.googlebooks;
 
 import com.dansoftware.libraryapp.gui.context.Context;
-import com.dansoftware.libraryapp.util.ExploitativeExecutor;
+import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;

@@ -6,7 +6,7 @@ import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.context.NotifiableModule;
 import com.dansoftware.libraryapp.i18n.I18N;
-import com.dansoftware.libraryapp.util.ExploitativeExecutor;
+import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;

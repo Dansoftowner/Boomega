@@ -13,7 +13,7 @@ import com.dansoftware.libraryapp.gui.record.show.RecordTable;
 import com.dansoftware.libraryapp.gui.util.BaseFXUtils;
 import com.dansoftware.libraryapp.gui.util.I18NButtonTypes;
 import com.dansoftware.libraryapp.i18n.I18N;
-import com.dansoftware.libraryapp.util.ExploitativeExecutor;
+import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;

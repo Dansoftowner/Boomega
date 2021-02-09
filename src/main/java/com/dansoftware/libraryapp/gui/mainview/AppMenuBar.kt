@@ -21,7 +21,7 @@ import com.dansoftware.libraryapp.launcher.LauncherMode
 import com.dansoftware.libraryapp.main.ApplicationRestart
 import com.dansoftware.libraryapp.update.UpdateSearcher
 import com.dansoftware.libraryapp.util.ReflectionUtils
-import com.dansoftware.libraryapp.util.SingleThreadExecutor
+import com.dansoftware.libraryapp.util.concurrent.SingleThreadExecutor
 import com.dansoftware.libraryapp.util.revealInExplorer
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform

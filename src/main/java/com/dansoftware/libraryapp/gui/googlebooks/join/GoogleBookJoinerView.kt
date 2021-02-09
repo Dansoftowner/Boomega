@@ -5,7 +5,7 @@ import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.context.TitledOverlayBox
 import com.dansoftware.libraryapp.gui.googlebooks.*
 import com.dansoftware.libraryapp.i18n.I18N
-import com.dansoftware.libraryapp.util.ExploitativeExecutor
+import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.ObjectProperty

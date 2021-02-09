@@ -7,7 +7,7 @@ import com.dansoftware.libraryapp.gui.googlebooks.preview.GoogleBookPreviewActiv
 import com.dansoftware.libraryapp.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.libraryapp.gui.util.*
 import com.dansoftware.libraryapp.i18n.I18N
-import com.dansoftware.libraryapp.util.ExploitativeExecutor
+import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor
 import com.pnikosis.html2markdown.HTML2Md
 import com.sandec.mdfx.MDFXNode
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
