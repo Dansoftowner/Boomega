@@ -4,7 +4,7 @@ import com.beranabyte.ui.customdecoration.CustomDecorationParameters
 import com.beranabyte.ui.customdecoration.CustomDecorationWindowProc
 import com.dansoftware.libraryapp.gui.util.WindowUtils
 import com.dansoftware.libraryapp.gui.window.undecorate.control.TitledPane
-import com.dansoftware.libraryapp.util.OsInfo
+import com.dansoftware.libraryapp.util.os.OsInfo
 import javafx.geometry.Insets
 import javafx.scene.Parent
 import javafx.scene.Scene

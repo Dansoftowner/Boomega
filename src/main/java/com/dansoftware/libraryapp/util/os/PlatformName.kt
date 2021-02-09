@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.util
+package com.dansoftware.libraryapp.util.os
 
 class PlatformName {
     private val platformName: String = when {

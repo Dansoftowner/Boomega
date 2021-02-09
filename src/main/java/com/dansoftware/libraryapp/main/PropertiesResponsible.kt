@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.main
 
-import com.dansoftware.libraryapp.util.OsInfo
+import com.dansoftware.libraryapp.util.os.OsInfo
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils

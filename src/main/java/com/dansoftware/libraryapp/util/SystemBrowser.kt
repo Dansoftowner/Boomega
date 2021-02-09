@@ -1,6 +1,7 @@
 package com.dansoftware.libraryapp.util
 
 import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor
+import com.dansoftware.libraryapp.util.os.OsInfo
 import java.awt.Desktop
 import java.net.URL
 

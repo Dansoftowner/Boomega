@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.util
+package com.dansoftware.libraryapp.util.os
 
 import oshi.PlatformEnum
 import oshi.SystemInfo
@@ -19,10 +19,10 @@ object OsInfo {
         val operatingSystem = SystemInfo().operatingSystem
         val osVersionInfo = operatingSystem.versionInfo
 
-        this.platformType = SystemInfo.getCurrentPlatformEnum()
-        this.version = osVersionInfo.version
-        this.buildNumber = osVersionInfo.buildNumber
-        this.name = operatingSystem.family
+        platformType = SystemInfo.getCurrentPlatformEnum()
+        version = osVersionInfo.version
+        buildNumber = osVersionInfo.buildNumber
+        name = operatingSystem.family
     }
 
     @JvmStatic
@@ -60,16 +60,16 @@ object OsInfo {
 
     @JvmStatic
     fun hasTypeAndVersion(platformType: PlatformEnum, versionStarts: String): Boolean =
-        hasType(platformType) && this.version.startsWith(versionStarts)
+        hasType(platformType) && version.startsWith(versionStarts)
 
     @JvmStatic
     fun hasTypeAndVersionOrHigher(platformType: PlatformEnum, version: String): Boolean =
         hasType(platformType) && hasVersionOrHigher(version)
 
     @JvmStatic
-    fun hasType(platformType: PlatformEnum): Boolean = this.platformType == platformType
+    fun hasType(platformType: PlatformEnum): Boolean = OsInfo.platformType == platformType
 
     @JvmStatic
     fun hasVersionOrHigher(version: String) =
-        this.version.replace(".", "").toInt() >= version.replace(".", "").toInt()
+        OsInfo.version.replace(".", "").toInt() >= version.replace(".", "").toInt()
 }

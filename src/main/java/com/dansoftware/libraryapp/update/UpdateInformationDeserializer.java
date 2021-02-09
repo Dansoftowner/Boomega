@@ -1,7 +1,7 @@
 package com.dansoftware.libraryapp.update;
 
 import com.dansoftware.libraryapp.i18n.I18N;
-import com.dansoftware.libraryapp.util.PlatformName;
+import com.dansoftware.libraryapp.util.os.PlatformName;
 import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 

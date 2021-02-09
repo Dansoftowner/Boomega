@@ -1,6 +1,6 @@
 package com.dansoftware.libraryapp.gui.info
 
-import com.dansoftware.libraryapp.util.OsInfo
+import com.dansoftware.libraryapp.util.os.OsInfo
 
 /**
  * Returns the string that contains the valuable information about the application
