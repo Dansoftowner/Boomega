@@ -200,7 +200,16 @@ class RadioToggleButton(text: String? = null) : RadioButton(text) {
     }
 }
 
-open class ImagePlaceHolder(size: Double) : Text("\uF2E9") {
+open class FixedFontMaterialDesignIconView(icon: MaterialDesignIcon, size: Double) : MaterialDesignIconView(icon) {
+    init {
+        Font.font("Material Design Icons", size).let {
+            this.fontProperty().addListener { _, _, _ -> this.font = it }
+            this.font = it
+        }
+    }
+}
+
+open class ImagePlaceHolder(size: Double) : FixedFontMaterialDesignIconView(MaterialDesignIcon.IMAGE, size) {
     init {
         this.font = Font.font("Material Design Icons", size)
         this.styleClass.add("glyph-icon")
