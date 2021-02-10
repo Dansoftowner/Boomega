@@ -4,30 +4,31 @@ import com.dansoftware.libraryapp.db.Database
 import com.dansoftware.libraryapp.db.data.Record
 import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.gui.record.RecordValues
+import com.dansoftware.libraryapp.gui.util.FixedFontMaterialDesignIconView
 import com.dansoftware.libraryapp.gui.util.applyOnTextField
+import com.dansoftware.libraryapp.gui.util.formsfx.SimpleRatingControl
 import com.dansoftware.libraryapp.i18n.I18N
-import com.dlsc.formsfx.model.structure.Field
-import com.dlsc.formsfx.model.structure.Form
-import com.dlsc.formsfx.model.structure.Group
+import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor
+import com.dlsc.formsfx.model.structure.*
 import com.dlsc.formsfx.model.util.ResourceBundleService
 import com.dlsc.formsfx.view.controls.SimpleTextControl
 import com.dlsc.formsfx.view.renderer.FormRenderer
-import com.dlsc.formsfx.view.util.ColSpan
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
+import javafx.concurrent.Task
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Node
-import javafx.scene.control.Label
-import javafx.scene.control.ScrollPane
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
-import org.controlsfx.control.Rating
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class RecordEditor(
     private val context: Context,
@@ -37,7 +38,7 @@ class RecordEditor(
 
     private val scrollPane: ScrollPane
 
-    private val recordType: ObjectProperty<Record.Type> = object : SimpleObjectProperty<Record.Type>() {
+    private val recordType: ObjectProperty<Record.Type?> = object : SimpleObjectProperty<Record.Type?>() {
         override fun invalidated() {
             handleTypeChange(get())
         }
@@ -63,18 +64,33 @@ class RecordEditor(
     private val notes: StringProperty = SimpleStringProperty("")
     private val numberOfCopies: IntegerProperty = SimpleIntegerProperty(1)
     private val numberOfPages: IntegerProperty = SimpleIntegerProperty()
-    private val rating: IntegerProperty = SimpleIntegerProperty(5)
+    private val rating: IntegerProperty = SimpleIntegerProperty()
+
+    private val multipleItems: BooleanProperty = SimpleBooleanProperty(false)
 
     var items: List<Record> = emptyList()
-    set(value) {
-        field = value
-        recordValues.set(buildRecordValues(value))
-    }
+        set(value) {
+            field = value
+            multipleItems.set(value.size > 1)
+            recordType.set(value.map(Record::recordType).distinct().singleOrNull())
+            recordValues.set(buildRecordValues(value))
+        }
 
     init {
+        this.styleClass.add("record-editor")
         this.scrollPane = buildScrollPane()
         this.buildBaseUI()
         this.items = items
+    }
+
+    private fun showProgress() {
+        ProgressBar(ProgressIndicator.INDETERMINATE_PROGRESS).let {
+            children.add(0, it)
+        }
+    }
+
+    private fun stopProgress() {
+        children.removeIf { it is ProgressBar }
     }
 
     private fun setContent(content: Node) {
@@ -105,21 +121,19 @@ class RecordEditor(
 
     private fun buildScrollPane() = ScrollPane().apply {
         this.isFitToWidth = true
-        VBox.setVgrow(this, Priority.ALWAYS)
+        setVgrow(this, Priority.ALWAYS)
     }
 
 
     private fun buildBaseUI() {
         this.children.add(scrollPane)
+        this.children.add(buildBottom())
     }
 
-    private fun buildBottom() {
-
-    }
+    private fun buildBottom() = ControlBottom()
 
     private fun handleNewRecord(recordValues: RecordValues?) {
         recordValues?.also {
-            recordType.set(it.recordType)
             title.value = it.title
             subtitle.value = it.subtitle
             publisher.value = it.publisher
@@ -132,38 +146,60 @@ class RecordEditor(
             numberOfPages.value = it.numberOfPages
             rating.value = it.rating
             publishedDate.value = it.publishedDate
-            currentForm.get().persist()
+            currentForm.get()?.persist()
         } ?: clearForm()
     }
 
-    private fun handleTypeChange(recordType: Record.Type) {
-        currentForm.set(when(recordType) {
-            Record.Type.BOOK -> buildBookForm()
-            Record.Type.MAGAZINE -> buildMagazineForm()
-        })
+    private fun handleTypeChange(recordType: Record.Type?) {
+        logger.debug("changed record type: $recordType")
+        currentForm.set(
+            when (recordType) {
+                Record.Type.BOOK -> buildBookForm()
+                Record.Type.MAGAZINE -> buildMagazineForm()
+                else -> null
+            }
+        )
         buildFormUI()
     }
 
     private fun buildFormUI() {
-        setContent(VBox(5.0, buildTypeIndicator(), renderForm(), buildNewRatingControl()))
+        setContent(renderForm()?.let {
+            VBox(
+                buildTypeIndicator(),
+                Separator().apply { setMargin(this, Insets(10.0, 20.0, 0.0, 20.0)) },
+                it
+            )
+        } ?: MultipleSelectionPlaceHolder())
     }
 
     private fun buildTypeIndicator() = HBox(5.0).also { hBox ->
-        when(recordType.get()) {
-            Record.Type.MAGAZINE -> {
-                hBox.children.add(MaterialDesignIconView(MaterialDesignIcon.NEWSPAPER).apply {
-                    glyphSize = 25
-                })
-                hBox.children.add(Label(I18N.getValue("google.books.magazine")))
-            }
-            else -> {
-                hBox.children.add(MaterialDesignIconView(MaterialDesignIcon.BOOK).apply { glyphSize = 25 })
-                hBox.children.add(Label(I18N.getValue("google.books.book")))
-            }
+        hBox.children.apply {
+            add(
+                FixedFontMaterialDesignIconView(
+                    when (recordType.get()) {
+                        Record.Type.MAGAZINE -> MaterialDesignIcon.NEWSPAPER
+                        else -> MaterialDesignIcon.BOOK
+                    }, 25.0
+                )
+            )
+            add(
+                Label(
+                    I18N.getValue(
+                        when (recordType.get()) {
+                            Record.Type.MAGAZINE -> "google.books.magazine"
+                            else -> "google.books.book"
+                        }
+                    )
+                ).apply { styleClass.add("medium-font") }
+                    .let { StackPane(it.apply { StackPane.setAlignment(this, Pos.CENTER_LEFT) }) }
+            )
         }
+        VBox.setMargin(hBox, Insets(20.0, 0.0, 0.0, 20.0))
     }
 
-    private fun renderForm() = FormRenderer(currentForm.get()).apply(::addAutoCompletionToLangField)
+    private fun renderForm() = currentForm.get()?.let {
+        FormRenderer(it).apply(::addAutoCompletionToLangField)
+    }
 
     private fun buildBookForm() = Form.of(
         Group.of(
@@ -174,7 +210,8 @@ class RecordEditor(
             Field.ofStringType(title)
                 .label("record.add.form.title")
                 .placeholder("record.add.form.title.prompt")
-                .required("record.title.required"),
+                .required("record.title.required")
+                .apply { multipleItems.addListener { _, _, it -> this.requiredProperty().set(it.not()) } },
             Field.ofStringType(subtitle)
                 .label("record.add.form.subtitle")
                 .placeholder("record.add.form.subtitle.prompt")
@@ -213,7 +250,10 @@ class RecordEditor(
                 .label("record.add.form.notes")
                 .placeholder("record.add.form.notes.prompt")
                 .required(false)
-                .multiline(true)
+                .multiline(true),
+            Field.ofIntegerType(rating)
+                .label("record.add.form.rating")
+                .render(SimpleRatingControl(5))
         )
     ).i18n(ResourceBundleService(I18N.getValues()))
 
@@ -223,52 +263,45 @@ class RecordEditor(
                 .label("record.add.form.magazinename")
                 .placeholder("record.add.form.magazinename.prompt")
                 .required("record.magazinename.required")
-                .span(ColSpan.HALF),
+                .apply { multipleItems.addListener { _, _, it -> this.requiredProperty().set(it.not()) } },
             Field.ofStringType(title)
                 .label("record.add.form.title")
                 .placeholder("record.add.form.title.prompt")
                 .required("record.title.required")
-                .span(ColSpan.HALF),
+                .apply { multipleItems.addListener { _, _, it -> this.requiredProperty().set(it.not()) } },
             Field.ofStringType(publisher)
                 .label("record.add.form.publisher")
                 .placeholder("record.add.form.publisher.prompt")
-                .required(false)
-                .span(ColSpan.HALF),
+                .required(false),
             Field.ofDate(publishedDate)
                 .label("record.add.form.date")
                 .placeholder("record.add.form.date.prompt")
                 .required(false)
-                .format("record.date.error")
-                .span(ColSpan.HALF),
+                .format("record.date.error"),
             Field.ofStringType(language)
                 .styleClass("languageSelector")
                 .label("record.add.form.lang")
                 .placeholder("record.add.form.lang.prompt")
-                .required(false)
-                .span(ColSpan.HALF),
+                .required(false),
             Field.ofStringType(notes)
                 .label("record.add.form.notes")
                 .placeholder("record.add.form.notes.prompt")
                 .required(false)
-                .multiline(true)
+                .multiline(true),
+            Field.ofIntegerType(rating)
+                .label("record.add.form.rating")
+                .render(SimpleRatingControl(5))
         )
-    ).i18n( ResourceBundleService(I18N.getValues()))
-
-    private fun buildNewRatingControl(): Node =
-        HBox(
-            5.0,
-            StackPane(Label(I18N.getValue("record.add.form.rating"))),
-            StackPane(Rating(5).also {
-                StackPane.setAlignment(it, Pos.CENTER_LEFT)
-                it.rating = this.rating.get().toDouble()
-                it.ratingProperty().addListener { _, _, newRating: Number -> this.rating.set(newRating.toInt()) }
-            }).apply { HBox.setHgrow(this, Priority.ALWAYS) }
-        ).apply { setMargin(this, Insets(0.0, 0.0, 0.0, 40.0)) }
+    ).i18n(ResourceBundleService(I18N.getValues()))
 
     private fun addAutoCompletionToLangField(src: FormRenderer) {
-        val control = src.lookup(".languageSelector") as SimpleTextControl
-        val textField = control.lookup(".text-field") as TextField
-        applyOnTextField(context, textField)
+        src.lookup(".languageSelector").let {
+            it as SimpleTextControl
+        }.let {
+            it.lookup(".text-field") as TextField
+        }.also {
+            applyOnTextField(context, it)
+        }
     }
 
     private fun clearForm() {
@@ -287,11 +320,106 @@ class RecordEditor(
         rating.value = null
     }
 
+    private inner class ControlBottom() : VBox(5.0) {
+        init {
+            this.children.apply {
+                add(buildSaveChangesButton())
+                add(buildRemoveButton())
+            }
+        }
+
+        private fun buildSaveChangesButton() = Button(I18N.getValue("save.changes")).apply {
+            graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE)
+            prefWidthProperty().bind(this@RecordEditor.widthProperty())
+            setOnAction {
+                //TODO: preview dialog about what items will be changed
+                ExploitativeExecutor.submit(buildSaveAction())
+            }
+        }
+
+        private fun buildRemoveButton() = Button(I18N.getValue("record.remove")).apply {
+            graphic = MaterialDesignIconView(MaterialDesignIcon.DELETE)
+            styleClass.add("remove-button")
+            prefWidthProperty().bind(this@RecordEditor.widthProperty())
+            setOnAction {
+                //TODO: showing what items will be removed 'Are you sure'
+                ExploitativeExecutor.submit(buildRemoveAction())
+            }
+        }
+
+        private fun buildRemoveAction() = object : Task<Unit>() {
+            init {
+                setOnRunning { showProgress() }
+                setOnSucceeded {
+                    stopProgress()
+                    currentForm.get()?.persist()
+                    //TODO: showing success notification
+                    //TODO: update editor and table
+                }
+                setOnFailed {
+                    stopProgress()
+                    //TODO: ALERT DIALOG
+                }
+            }
+
+            override fun call() {
+                items.forEach(database::removeRecord)
+            }
+        }
+
+        private fun buildSaveAction() = object : Task<Unit>() {
+            init {
+                setOnRunning { showProgress() }
+                setOnSucceeded {
+                    stopProgress()
+                    currentForm.get()?.persist()
+                    //TODO: showing success notification
+                }
+                setOnFailed {
+                    stopProgress()
+                    //TODO: ALERT DIALOG
+                }
+            }
+
+            override fun call() {
+                items.forEach {
+                    this@RecordEditor.apply {
+                        title.get()?.run { it.title = this }
+                        subtitle.get()?.run { it.subtitle = this }
+                        publishedDate.get()
+                            ?.run { it.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-mm")) }
+                        publisher.get()?.run { it.publisher = this }
+                        magazineName.get()?.run { it.magazineName = this }
+                        authors.get()?.run { it.authors = this.split(",") }
+                        language.get()?.run { it.language = this }
+                        isbn.get()?.run { it.isbn = this }
+                        subject.get()?.run { it.subject = this }
+                        notes.get()?.run { it.notes = this }
+                        numberOfCopies.value?.run { it.numberOfCopies = this }
+                        numberOfPages.value?.run { it.numberOfPages = this }
+                        rating.value?.run { it.rating = this }
+                    }
+                    database.updateRecord(it)
+                }
+            }
+
+        }
+
+    }
+
+    private class MultipleRecordTypePlaceHolder : StackPane() {
+
+    }
+
     private class MultipleSelectionPlaceHolder : StackPane() {
 
     }
 
     private class EmptyPlaceHolder : StackPane() {
 
+    }
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(RecordEditor::class.java)
     }
 }
