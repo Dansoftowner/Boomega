@@ -210,6 +210,7 @@ public class GoogleBookDockContent extends VBox {
             setVgrow(this, Priority.ALWAYS);
             setSpacing(5.0);
             final var mainPane = new GoogleBookDetailsPane(context, volume);
+            mainPane.setMinHeight(0);
             VBox.setVgrow(mainPane, Priority.ALWAYS);
             getChildren().add(mainPane);
             getChildren().add(buildRemoveButton());
