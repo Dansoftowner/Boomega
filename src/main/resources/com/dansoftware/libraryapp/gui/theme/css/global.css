@@ -1,3 +1,7 @@
+.medium-font {
+    -fx-font-size: 16px;
+}
+
 /** MDFXNode */
 .markdown-text {
     -fx-font-family: ARIAL;

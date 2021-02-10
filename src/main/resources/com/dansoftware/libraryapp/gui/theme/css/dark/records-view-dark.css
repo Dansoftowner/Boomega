@@ -1,4 +1,4 @@
-.google-book-dock .remove-button {
+.google-book-dock .remove-button, .record-editor .remove-button {
     -fx-background-color: #960101;
     -fx-font-weight: bold;
 }
@@ -6,4 +6,9 @@
 .google-book-dock .place-holder-label {
     -fx-font-weight: bold;
     -fx-font-size: 15px;
+}
+
+.record-editor .formsfx-group {
+    -fx-padding: 0;
+    -fx-border-color: transparent;
 }

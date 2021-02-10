@@ -1,14 +1,23 @@
-.google-book-dock .remove-button {
+.google-book-dock .remove-button, .record-editor .remove-button {
     -fx-background-color: #b70202;
     -fx-font-weight: bold;
     -fx-text-fill: #dddddd;
 }
 
-.google-book-dock .remove-button:hover {
+.google-book-dock .remove-button .glyph-icon, .record-editor .remove-button .glyph-icon {
+    -fx-background-color: #f3f3f3;
+}
+
+.google-book-dock .remove-button:hover, .record-editor .remove-button:hover {
     -fx-border-color: #323232;
 }
 
 .google-book-dock .place-holder-label {
     -fx-font-weight: bold;
     -fx-font-size: 15px;
+}
+
+.record-editor .formsfx-group {
+    -fx-padding: 0;
+    -fx-border-color: transparent;
 }
