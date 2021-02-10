@@ -66,6 +66,7 @@ public class RecordsView extends SplitPane {
 
     private Node buildGoogleBooksDock() {
         var dockContent = new GoogleBookDockContent(context, database, recordTable.getSelectionModel().getSelectedItems());
+        dockContent.setOnRefreshed(recordTable::refresh);
         this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
             dockContent.setItems(this.recordTable.getSelectionModel().getSelectedItems());
         });
