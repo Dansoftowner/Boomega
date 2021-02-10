@@ -354,7 +354,8 @@ public class RecordTable extends TableView<Record> {
                                     Rating graphic = buildGraphic(rating);
                                     setGraphic(graphic);
                                     setText(null);
-                                    RankColumn.this.minWidthProperty().bind(graphic.widthProperty());
+                                    RankColumn.this.minWidthProperty().bind(graphic.widthProperty().add(25));
+                                    RankColumn.this.maxWidthProperty().bind(graphic.widthProperty().add(25));
                                 }, () -> {
                                     setGraphic(null);
                                     setText("-");
