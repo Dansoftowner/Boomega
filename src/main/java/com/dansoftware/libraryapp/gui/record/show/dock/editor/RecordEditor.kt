@@ -66,12 +66,15 @@ class RecordEditor(
     private val numberOfPages: IntegerProperty = SimpleIntegerProperty()
     private val rating: IntegerProperty = SimpleIntegerProperty()
 
-    private val multipleItems: BooleanProperty = SimpleBooleanProperty(false)
+    private val itemsCount: IntegerProperty = SimpleIntegerProperty(0)
+    private val multipleItems: BooleanProperty = SimpleBooleanProperty().apply {
+        bind(itemsCount.greaterThan(1))
+    }
 
     var items: List<Record> = emptyList()
         set(value) {
             field = value
-            multipleItems.set(value.size > 1)
+            itemsCount.set(items.size)
             recordType.set(value.map(Record::recordType).distinct().singleOrNull())
             recordValues.set(buildRecordValues(value))
         }
@@ -103,7 +106,7 @@ class RecordEditor(
                 RecordValues().apply {
                     title(items.map(Record::title).distinct().singleOrNull())
                     subtitle(items.map(Record::subtitle).distinct().singleOrNull())
-                    date(items.map(Record::publishedDate).distinct().singleOrNull()?.let { LocalDate.parse(it) })
+                    date(items.map(Record::publishedDate).distinct().singleOrNull()?.let(LocalDate::parse))
                     publisher(items.map(Record::publisher).distinct().singleOrNull())
                     magazineName(items.map(Record::magazineName).distinct().singleOrNull())
                     authors(items.map(Record::authors).singleOrNull()?.joinToString(", "))
@@ -127,7 +130,12 @@ class RecordEditor(
 
     private fun buildBaseUI() {
         this.children.add(scrollPane)
-        this.children.add(buildBottom())
+        buildBottom().also {
+            itemsCount.addListener { _, _, newCount ->
+                if (newCount == 0) children.remove(it)
+                else children.add(it)
+            }
+        }
     }
 
     private fun buildBottom() = ControlBottom()
