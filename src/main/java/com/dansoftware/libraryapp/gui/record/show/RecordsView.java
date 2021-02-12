@@ -136,8 +136,8 @@ public class RecordsView extends SplitPane {
 
     private static final class RecordEditorDock extends TitledDock<RecordEditor> {
 
-        RecordEditorDock(@NotNull RecordEditor content) {//TODO: i18n title
-            super(new FontAwesomeIconView(FontAwesomeIcon.EDIT), "Book editor", content);
+        RecordEditorDock(@NotNull RecordEditor content) {
+            super(new FontAwesomeIconView(FontAwesomeIcon.EDIT), I18N.getValue("record.editor.dock.title"), content);
         }
     }
 
