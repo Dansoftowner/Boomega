@@ -3,9 +3,11 @@
     -fx-font-weight: bold;
 }
 
-.google-book-dock .place-holder-label {
+.google-book-dock .place-holder-label, .record-editor .place-holder-label {
     -fx-font-weight: bold;
     -fx-font-size: 15px;
+    -fx-text-alignment: justify;
+    -fx-wrap-text: true;
 }
 
 .record-editor .formsfx-group {
