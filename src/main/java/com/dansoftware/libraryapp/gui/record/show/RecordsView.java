@@ -57,11 +57,13 @@ public class RecordsView extends SplitPane {
     }
 
     private Node buildBookEditorDock() {
-        var dockContent = new RecordEditor(context, database, this.recordTable.getSelectionModel().getSelectedItems());
+        var recordEditor = new RecordEditor(context, database, this.recordTable.getSelectionModel().getSelectedItems());
+        recordEditor.setOnItemsDeleted(items -> recordTable.getItems().removeAll(items));
+        recordEditor.setOnItemsModified(items -> recordTable.refresh());
         this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
-            dockContent.setItems(this.recordTable.getSelectionModel().getSelectedItems());
+            recordEditor.setItems(this.recordTable.getSelectionModel().getSelectedItems());
         });
-        return new RecordEditorDock(dockContent);
+        return new RecordEditorDock(recordEditor);
     }
 
     private Node buildGoogleBooksDock() {

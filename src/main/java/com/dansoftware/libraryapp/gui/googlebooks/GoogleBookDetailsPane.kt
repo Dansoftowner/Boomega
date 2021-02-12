@@ -241,7 +241,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                 PropertyNameLabel(I18N.getValue("google.books.table.column.desc").plus(":"))
             ).also { hBox ->
                 ExploitativeExecutor.submit(object : Task<String>() {
-                    override fun call(): String? = volume.volumeInfo?.description?.let { HTML2Md.convert(it) }
+                    override fun call(): String? = volume.volumeInfo?.description?.let(HTML2Md::convert)
                 }.apply {
                     this.setOnSucceeded {
                         hBox.children.add(

@@ -12,6 +12,7 @@ import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.structure.Group
+import com.dlsc.formsfx.model.util.BindingMode
 import com.dlsc.formsfx.model.util.ResourceBundleService
 import com.dlsc.formsfx.view.controls.SimpleTextControl
 import com.dlsc.formsfx.view.renderer.FormRenderer
@@ -27,8 +28,12 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
+import org.apache.commons.lang3.StringUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.function.Consumer
 
 class RecordEditorForm(
     private val context: Context,
@@ -43,11 +48,14 @@ class RecordEditorForm(
 
     private var items: List<Record> = emptyList()
 
-    private val currentForm: ObjectProperty<Form> = SimpleObjectProperty()
+    private val currentForm: ObjectProperty<Form> = SimpleObjectProperty<Form>()
 
     private val recordType: ObjectProperty<Record.Type> = object : SimpleObjectProperty<Record.Type>() {
         override fun invalidated() = buildForm(get())
     }
+
+    val onItemsModified: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
+    val onItemsDeleted: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
 
     private val title: StringProperty = SimpleStringProperty("")
     private val subtitle: StringProperty = SimpleStringProperty("")
@@ -82,6 +90,7 @@ class RecordEditorForm(
     fun setItems(recordType: Record.Type, items: List<Record>) {
         this.recordType.set(recordType)
         this.items = items
+
         this.setValues(buildRecordValues(items))
         this.itemsCount.set(items.size)
     }
@@ -103,7 +112,6 @@ class RecordEditorForm(
     }
 
     private fun buildForm(recordType: Record.Type) {
-        RecordEditor.logger.debug("changed record type: $recordType")
         currentForm.set(
             when (recordType) {
                 Record.Type.BOOK -> buildBookForm()
@@ -162,14 +170,14 @@ class RecordEditorForm(
                     date(items.map(Record::publishedDate).distinct().singleOrNull()?.let(LocalDate::parse))
                     publisher(items.map(Record::publisher).distinct().singleOrNull())
                     magazineName(items.map(Record::magazineName).distinct().singleOrNull())
-                    authors(items.map(Record::authors).singleOrNull()?.joinToString(", "))
-                    language(items.map(Record::language).singleOrNull())
-                    isbn(items.map(Record::isbn).singleOrNull())
-                    subject(items.map(Record::subject).singleOrNull())
-                    notes(items.map(Record::notes).singleOrNull())
-                    numberOfCopies(items.map(Record::numberOfCopies).singleOrNull())
-                    numberOfPages(items.map(Record::numberOfPages).singleOrNull())
-                    rating(items.map(Record::rating).singleOrNull())
+                    authors(items.map(Record::authors).distinct().singleOrNull()?.joinToString(", "))
+                    language(items.map(Record::language).distinct().singleOrNull())
+                    isbn(items.map(Record::isbn).distinct().singleOrNull())
+                    subject(items.map(Record::subject).distinct().singleOrNull())
+                    notes(items.map(Record::notes).distinct().singleOrNull())
+                    numberOfCopies(items.map(Record::numberOfCopies).distinct().singleOrNull())
+                    numberOfPages(items.map(Record::numberOfPages).distinct().singleOrNull())
+                    rating(items.map(Record::rating).distinct().singleOrNull())
                 }
             }
             else -> null
@@ -186,6 +194,7 @@ class RecordEditorForm(
             isbn.value = it.isbn
             subject.value = it.subject
             notes.value = it.notes
+            numberOfCopies.value = it.numberOfCopies
             numberOfPages.value = it.numberOfPages
             rating.value = it.rating
             publishedDate.value = it.publishedDate
@@ -324,8 +333,10 @@ class RecordEditorForm(
         private fun buildSaveChangesButton() = Button(I18N.getValue("save.changes")).apply {
             graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE)
             prefWidthProperty().bind(this@RecordEditorForm.widthProperty())
+            disableProperty().bind(currentForm.get().changedProperty().not())
             setOnAction {
                 //TODO: preview dialog about what items will be changed
+                currentForm.get()?.persist()
                 ExploitativeExecutor.submit(buildSaveAction())
             }
         }
@@ -346,8 +357,8 @@ class RecordEditorForm(
                 setOnSucceeded {
                     stopProgress()
                     currentForm.get()?.persist()
+                    onItemsDeleted.get()?.accept(items)
                     //TODO: showing success notification
-                    //TODO: update editor and table
                 }
                 setOnFailed {
                     stopProgress()
@@ -365,38 +376,51 @@ class RecordEditorForm(
                 setOnRunning { showProgress() }
                 setOnSucceeded {
                     stopProgress()
-                    currentForm.get()?.persist()
+                    onItemsModified.get()?.accept(items)
                     //TODO: showing success notification
                 }
                 setOnFailed {
                     stopProgress()
+                    logger.error("Something went wrong", it.source.exception)
                     //TODO: ALERT DIALOG
                 }
             }
 
+            @Suppress("DuplicatedCode")
             override fun call() {
-                items.forEach {
+                items.forEach { record ->
                     this@RecordEditorForm.apply {
-                        title.get()?.run { it.title = this }
-                        subtitle.get()?.run { it.subtitle = this }
+                        StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
+                        StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
+                        StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
+                        StringUtils.getIfBlank(magazineName.get(), null)?.run { record.magazineName = this }
+                        StringUtils.getIfBlank(authors.get(), null)?.run { record.authors = this.split(",") }
+                        StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
+                        StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
+                        StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
+                        StringUtils.getIfBlank(notes.get(), null)?.run { record.notes = this }
+                        numberOfCopies.value?.run { record.numberOfCopies = this }
+                        numberOfPages.value?.run { record.numberOfPages = this }
+                        rating.value?.run { record.rating = this }
                         publishedDate.get()
-                            ?.run { it.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-mm")) }
-                        publisher.get()?.run { it.publisher = this }
-                        magazineName.get()?.run { it.magazineName = this }
-                        authors.get()?.run { it.authors = this.split(",") }
-                        language.get()?.run { it.language = this }
-                        isbn.get()?.run { it.isbn = this }
-                        subject.get()?.run { it.subject = this }
-                        notes.get()?.run { it.notes = this }
-                        numberOfCopies.value?.run { it.numberOfCopies = this }
-                        numberOfPages.value?.run { it.numberOfPages = this }
-                        rating.value?.run { it.rating = this }
+                            ?.run {
+                                try {
+                                    record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-mm"))
+                                } catch (e : RuntimeException) {
+                                    logger.error("Couldn't parse date ", e)
+                                }
+                            }
                     }
-                    database.updateRecord(it)
                 }
+                logger.debug("Updating ({}) records in database...", items.size)
+                items.forEach(database::updateRecord)
             }
 
         }
 
+    }
+    
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(RecordEditorForm::class.java)
     }
 }
