@@ -22,6 +22,8 @@ import java.util.List;
 
 public class RecordsView extends SplitPane {
 
+    private static final String STYLE_CLASS = "records-view";
+
     private final Context context;
     private final Database database;
     private final RecordTable recordTable;
@@ -33,6 +35,7 @@ public class RecordsView extends SplitPane {
         this.database = database;
         this.recordTable = buildBooksTable();
         this.dockSplitPane = buildDockSplitPane();
+        this.getStyleClass().add(STYLE_CLASS);
         this.setOrientation(Orientation.HORIZONTAL);
         this.buildUI();
     }

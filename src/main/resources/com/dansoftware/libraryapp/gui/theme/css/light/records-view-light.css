@@ -23,3 +23,9 @@
     -fx-padding: 0;
     -fx-border-color: transparent;
 }
+
+.records-view .split-pane:vertical > .split-pane-divider,
+.records-view.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: #acacac;
+    -fx-padding: 0 1 0 0;
+}
