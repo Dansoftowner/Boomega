@@ -5,7 +5,7 @@
 }
 
 .google-book-dock .remove-button .glyph-icon, .record-editor .remove-button .glyph-icon {
-    -fx-background-color: #f3f3f3;
+    -fx-fill: #f3f3f3;
 }
 
 .google-book-dock .remove-button:hover, .record-editor .remove-button:hover {
