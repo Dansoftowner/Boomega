@@ -4,7 +4,7 @@ import com.dansoftware.libraryapp.db.Database;
 import com.dansoftware.libraryapp.db.data.Record;
 import com.dansoftware.libraryapp.gui.context.Context;
 import com.dansoftware.libraryapp.gui.record.show.dock.editor.RecordEditor;
-import com.dansoftware.libraryapp.gui.record.show.dock.googlebook.GoogleBookDockContent;
+import com.dansoftware.libraryapp.gui.record.show.dock.googlebook.GoogleBookConnectionView;
 import com.dansoftware.libraryapp.i18n.I18N;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -70,7 +70,7 @@ public class RecordsView extends SplitPane {
     }
 
     private Node buildGoogleBooksDock() {
-        var dockContent = new GoogleBookDockContent(context, database, recordTable.getSelectionModel().getSelectedItems());
+        var dockContent = new GoogleBookConnectionView(context, database, recordTable.getSelectionModel().getSelectedItems());
         dockContent.setOnRefreshed(recordTable::refresh);
         this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
             dockContent.setItems(this.recordTable.getSelectionModel().getSelectedItems());
@@ -125,11 +125,11 @@ public class RecordsView extends SplitPane {
         }
     }
 
-    private static final class GoogleBookDock extends TitledDock<GoogleBookDockContent> {
+    private static final class GoogleBookDock extends TitledDock<GoogleBookConnectionView> {
 
-        private final GoogleBookDockContent content;
+        private final GoogleBookConnectionView content;
 
-        GoogleBookDock(@NotNull GoogleBookDockContent content) {
+        GoogleBookDock(@NotNull GoogleBookConnectionView content) {
             super(new ImageView(new Image("/com/dansoftware/libraryapp/image/util/google_12px.png")),
                     I18N.getValue("google.books.dock.title"),
                     content);

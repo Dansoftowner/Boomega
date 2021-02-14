@@ -44,9 +44,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class GoogleBookDockContent extends VBox {
+/**
+ * A {@link GoogleBookConnectionView} is a panel that shows the connection between
+ * a Google Book volume and a {@link Record}. It allows to remove, modify and create
+ * connection.
+ *
+ * @author Daniel Gyorffy
+ */
+public class GoogleBookConnectionView extends VBox {
 
-    private static final Logger logger = LoggerFactory.getLogger(GoogleBookDockContent.class);
+    private static final Logger logger = LoggerFactory.getLogger(GoogleBookConnectionView.class);
 
     private static final String STYLE_CLASS = "google-book-dock";
 
@@ -61,9 +68,9 @@ public class GoogleBookDockContent extends VBox {
 
     private List<Record> items;
 
-    public GoogleBookDockContent(@NotNull Context context,
-                                 @NotNull Database database,
-                                 @Nullable List<Record> items) {
+    public GoogleBookConnectionView(@NotNull Context context,
+                                    @NotNull Database database,
+                                    @Nullable List<Record> items) {
         this.context = context;
         this.database = database;
         this.cache = buildCache();
