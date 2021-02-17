@@ -55,11 +55,16 @@ public class RecordsViewModule extends WorkbenchModule
     public static final class Message {
 
         private final Action action;
-        private final Record record;
+        private final List<Record> records;
 
 
         public Message(Record record, @NotNull Action action) {
-            this.record = record;
+            this.records = Collections.singletonList(record);
+            this.action = action;
+        }
+
+        public Message(@NotNull List<Record> records, @NotNull Action action) {
+            this.records = records;
             this.action = action;
         }
 
@@ -117,11 +122,12 @@ public class RecordsViewModule extends WorkbenchModule
         if (content.get() != null) {
             switch (data.action) {
                 case DELETED:
-                    getTable().getItems().remove(data.record);
+                    totalItems.set(totalItems.get() - data.records.size());
+                    getTable().getItems().removeAll(data.records);
                     break;
                 case INSERTED:
                     if (itemsPerPage.get() > getTable().getItems().size()) {
-                        getTable().getItems().add(data.record);
+                        getTable().getItems().addAll(data.records);
                         totalItems.set(totalItems.get() + 1);
                     }
                     break;
