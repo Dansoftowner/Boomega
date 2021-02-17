@@ -85,7 +85,6 @@ public class RecordAddForm extends ScrollPane {
     private final StringProperty subject = new SimpleStringProperty("");
     private final StringProperty notes = new SimpleStringProperty("");
     private final IntegerProperty numberOfCopies = new SimpleIntegerProperty(1);
-    private final IntegerProperty numberOfPages = new SimpleIntegerProperty();
     private final IntegerProperty rating = new SimpleIntegerProperty(5);
     private final StringProperty googleBookHandle = new SimpleStringProperty();
 
@@ -146,7 +145,6 @@ public class RecordAddForm extends ScrollPane {
             this.isbn.setValue(values.getIsbn());
             this.subject.setValue(values.getSubject());
             this.notes.setValue(values.getNotes());
-            this.numberOfPages.setValue(values.getNumberOfPages());
             this.rating.setValue(values.getRating());
             this.removeGoogleBookConnection();
             this.createGoogleBookConnection(values.getVolumeObject());
@@ -237,7 +235,6 @@ public class RecordAddForm extends ScrollPane {
         subject.set("");
         notes.set("");
         numberOfCopies.setValue(null);
-        numberOfPages.setValue(null);
         rating.setValue(null);
         googleBookHandle.set(null);
         removeGoogleBookConnection();
@@ -276,7 +273,6 @@ public class RecordAddForm extends ScrollPane {
                 .subject(subject.get())
                 .notes(notes.get())
                 .numberOfCopies(numberOfCopies.get())
-                .numberOfPages(numberOfPages.get())
                 .rating(rating.get())
                 .serviceConnection(new ServiceConnection(googleBookHandle.get()))
                 .build();
@@ -331,11 +327,6 @@ public class RecordAddForm extends ScrollPane {
                                 .label("record.add.form.nofcopies")
                                 .required(false)
                                 .placeholder("record.add.form.nofcopies.prompt")
-                                .span(ColSpan.HALF),
-                        Field.ofIntegerType(numberOfPages)
-                                .label("record.add.form.nofpages")
-                                .placeholder("record.add.form.nofpages.prompt")
-                                .required(false)
                                 .span(ColSpan.HALF),
                         Field.ofStringType(notes)
                                 .label("record.add.form.notes")
@@ -486,14 +477,6 @@ public class RecordAddForm extends ScrollPane {
 
     public IntegerProperty numberOfCopiesProperty() {
         return numberOfCopies;
-    }
-
-    public int getNumberOfPages() {
-        return numberOfPages.get();
-    }
-
-    public IntegerProperty numberOfPagesProperty() {
-        return numberOfPages;
     }
 
     public int getRating() {

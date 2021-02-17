@@ -21,7 +21,6 @@ class Record(
     @field:BookProperty var subtitle: String? = null,
     @field:BookProperty var isbn: String? = null,
     @field:BookProperty var numberOfCopies: Int? = null,
-    @field:BookProperty var numberOfPages: Int? = null,
     @field:BookProperty var authors: List<String>?,
     @field:BookProperty var subject: String? = null,
 
@@ -34,7 +33,6 @@ class Record(
     constructor() : this(
         null,
         Type.BOOK,
-        null,
         null,
         null,
         null,
@@ -61,7 +59,6 @@ class Record(
         builder.subtitle,
         builder.isbn,
         builder.numberOfCopies,
-        builder.numberOfPages,
         builder.authors,
         builder.subject,
         builder.magazineName
@@ -102,10 +99,6 @@ class Record(
             private set
 
         @field:BookProperty
-        var numberOfPages: Int? = null
-            private set
-
-        @field:BookProperty
         var authors: List<String>? = null
             private set
 
@@ -133,7 +126,6 @@ class Record(
         fun subtitle(subtitle: String?) = apply { this.subtitle = subtitle }
         fun isbn(isbn: String?) = apply { this.isbn = isbn }
         fun numberOfCopies(numberOfCopies: Int?) = apply { this.numberOfCopies = numberOfCopies }
-        fun numberOfPages(numberOfPages: Int?) = apply { this.numberOfPages = numberOfPages }
         fun authors(authors: List<String>?) = apply { this.authors = authors }
         fun subject(subject: String?) = apply { this.subject = subject }
 

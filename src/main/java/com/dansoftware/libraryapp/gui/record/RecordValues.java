@@ -23,7 +23,6 @@ public class RecordValues {
     private String subject = StringUtils.EMPTY;
     private String notes = StringUtils.EMPTY;
     private Integer numberOfCopies;
-    private Integer numberOfPages;
     private Integer rating;
 
     private Volume volumeObject;
@@ -88,11 +87,6 @@ public class RecordValues {
         return this;
     }
 
-    public RecordValues numberOfPages(Integer numberOfPages) {
-        this.numberOfPages = numberOfPages;
-        return this;
-    }
-
     public RecordValues rating(Integer rating) {
         this.rating = rating;
         return this;
@@ -149,10 +143,6 @@ public class RecordValues {
 
     public Integer getNumberOfCopies() {
         return numberOfCopies;
-    }
-
-    public Integer getNumberOfPages() {
-        return numberOfPages;
     }
 
     public Integer getRating() {

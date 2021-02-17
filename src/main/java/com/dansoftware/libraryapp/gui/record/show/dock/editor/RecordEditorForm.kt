@@ -70,7 +70,6 @@ class RecordEditorForm(
     private val subject: StringProperty = SimpleStringProperty("")
     private val notes: StringProperty = SimpleStringProperty("")
     private val numberOfCopies: IntegerProperty = SimpleIntegerProperty(1)
-    private val numberOfPages: IntegerProperty = SimpleIntegerProperty()
     private val rating: IntegerProperty = SimpleIntegerProperty()
 
     private val scrollPane: ScrollPane
@@ -179,7 +178,6 @@ class RecordEditorForm(
                     subject(items.map(Record::subject).distinct().singleOrNull())
                     notes(items.map(Record::notes).distinct().singleOrNull())
                     numberOfCopies(items.map(Record::numberOfCopies).distinct().singleOrNull())
-                    numberOfPages(items.map(Record::numberOfPages).distinct().singleOrNull())
                     rating(items.map(Record::rating).distinct().singleOrNull())
                 }
             }
@@ -198,7 +196,6 @@ class RecordEditorForm(
             subject.value = it.subject
             notes.value = it.notes
             numberOfCopies.value = it.numberOfCopies
-            numberOfPages.value = it.numberOfPages
             rating.value = it.rating
             publishedDate.value = it.publishedDate
             currentForm.get()?.persist()
@@ -217,7 +214,6 @@ class RecordEditorForm(
         subject.set("")
         notes.set("")
         numberOfCopies.value = null
-        numberOfPages.value = null
         rating.value = null
     }
 
@@ -272,10 +268,6 @@ class RecordEditorForm(
                 .label("record.add.form.nofcopies")
                 .required(false)
                 .placeholder("record.add.form.nofcopies.prompt"),
-            Field.ofIntegerType(numberOfPages)
-                .label("record.add.form.nofpages")
-                .placeholder("record.add.form.nofpages.prompt")
-                .required(false),
             Field.ofStringType(notes)
                 .label("record.add.form.notes")
                 .placeholder("record.add.form.notes.prompt")
@@ -403,7 +395,6 @@ class RecordEditorForm(
                         StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
                         StringUtils.getIfBlank(notes.get(), null)?.run { record.notes = this }
                         numberOfCopies.value?.run { record.numberOfCopies = this }
-                        numberOfPages.value?.run { record.numberOfPages = this }
                         rating.value?.run { record.rating = this }
                         publishedDate.get()
                             ?.run {
