@@ -57,6 +57,8 @@ class RecordEditorForm(
     val onItemsModified: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
     val onItemsDeleted: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
 
+    private val changed: BooleanProperty = SimpleBooleanProperty(false)
+
     private val title: StringProperty = SimpleStringProperty("")
     private val subtitle: StringProperty = SimpleStringProperty("")
     private val publishedDate: ObjectProperty<LocalDate> = SimpleObjectProperty()
@@ -93,6 +95,7 @@ class RecordEditorForm(
 
         this.setValues(buildRecordValues(items))
         this.itemsCount.set(items.size)
+        this.changed.bind(currentForm.get().changedProperty().or(rating.isNotEqualTo(rating.get())))
     }
 
     private fun buildScrollPane() = ScrollPane().also {
@@ -280,7 +283,7 @@ class RecordEditorForm(
                 .multiline(true),
             Field.ofIntegerType(rating)
                 .label("record.add.form.rating")
-                .render(SimpleRatingControl(5))
+                .render(SimpleRatingControl(5, rating))
         )
     ).i18n(ResourceBundleService(I18N.getValues()))
 
@@ -317,7 +320,7 @@ class RecordEditorForm(
                 .multiline(true),
             Field.ofIntegerType(rating)
                 .label("record.add.form.rating")
-                .render(SimpleRatingControl(5))
+                .render(SimpleRatingControl(5, rating))
         )
     ).i18n(ResourceBundleService(I18N.getValues()))
 
@@ -333,7 +336,7 @@ class RecordEditorForm(
         private fun buildSaveChangesButton() = Button(I18N.getValue("save.changes")).apply {
             graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE)
             prefWidthProperty().bind(this@RecordEditorForm.widthProperty())
-            disableProperty().bind(currentForm.get().changedProperty().not())
+            disableProperty().bind(this@RecordEditorForm.changed.not())
             setOnAction {
                 //TODO: preview dialog about what items will be changed
                 currentForm.get()?.persist()

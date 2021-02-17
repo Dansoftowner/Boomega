@@ -2,6 +2,7 @@ package com.dansoftware.libraryapp.gui.util.formsfx;
 
 import com.dlsc.formsfx.model.structure.IntegerField;
 import com.dlsc.formsfx.view.controls.SimpleControl;
+import javafx.beans.property.IntegerProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -11,14 +12,16 @@ public class SimpleRatingControl extends SimpleControl<IntegerField> {
 
     private static final String STYLE_CLASS = "simple-rating-control";
 
+    private final IntegerProperty origin;
     private final int max;
 
     private Label fieldLabel;
     private StackPane ratingPane;
     private Rating rating;
 
-    public SimpleRatingControl(int max) {
+    public SimpleRatingControl(int max, IntegerProperty origin) {
         this.max = max;
+        this.origin = origin;
     }
 
     @Override
@@ -58,10 +61,10 @@ public class SimpleRatingControl extends SimpleControl<IntegerField> {
 
         field.errorMessagesProperty().addListener((observable, oldValue, newValue) -> toggleTooltip(rating));
         field.tooltipProperty().addListener((observable, oldValue, newValue) -> toggleTooltip(rating));
+        field.valueProperty().bindBidirectional(rating.ratingProperty());
 
         rating.focusedProperty().addListener((observable, oldValue, newValue) -> toggleTooltip(rating));
-        rating.ratingProperty().addListener((observable, oldValue, newValue) -> field.valueProperty().set(newValue.intValue()));
-        field.valueProperty().addListener((observable, oldValue, newValue) -> rating.ratingProperty().set(newValue.intValue()));
+        rating.ratingProperty().addListener((observable, oldValue, newValue) -> origin.set(newValue.intValue()));
     }
 
     @Override
