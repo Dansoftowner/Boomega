@@ -11,7 +11,10 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -25,16 +28,20 @@ import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class RecordsView extends SplitPane {
 
     private static final String STYLE_CLASS = "records-view";
+
+    private final ObjectProperty<Consumer<List<Record>>> onItemsDeleted = new SimpleObjectProperty<>();
 
     private final Context context;
     private final Database database;
     private final RecordTable recordTable;
 
     private final SplitPane dockSplitPane;
+
 
     RecordsView(@NotNull Context context, @NotNull Database database) {
         this.context = context;
@@ -67,7 +74,12 @@ public class RecordsView extends SplitPane {
 
     private Node buildBookEditorDock(SplitPane dockSplitPane) {
         var recordEditor = new RecordEditor(context, database, this.recordTable.getSelectionModel().getSelectedItems());
-        recordEditor.setOnItemsDeleted(items -> recordTable.getItems().removeAll(items));
+        recordEditor.setOnItemsDeleted(items -> {
+            this.recordTable.getItems().removeAll(items);
+            if (onItemsDeleted.get() != null) {
+                onItemsDeleted.get().accept(items);
+            }
+        });
         recordEditor.setOnItemsModified(items -> recordTable.refresh());
         this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
             recordEditor.setItems(this.recordTable.getSelectionModel().getSelectedItems());
@@ -94,6 +106,10 @@ public class RecordsView extends SplitPane {
 
     public void setItems(@NotNull List<Record> items) {
         this.recordTable.getItems().setAll(items);
+    }
+
+    public void setOnItemsDeleted(Consumer<List<Record>> onItemsDeleted) {
+        this.onItemsDeleted.set(onItemsDeleted);
     }
 
     public void setStartIndex(int startIndex) {

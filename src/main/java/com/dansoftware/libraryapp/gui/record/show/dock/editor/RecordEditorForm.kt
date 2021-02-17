@@ -360,7 +360,7 @@ class RecordEditorForm(
                 setOnSucceeded {
                     stopProgress()
                     currentForm.get()?.persist()
-                    onItemsDeleted.get()?.accept(items)
+                    onItemsDeleted.get()?.accept(ArrayList(items))
                     //TODO: showing success notification
                 }
                 setOnFailed {

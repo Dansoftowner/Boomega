@@ -165,6 +165,7 @@ public class RecordsViewModule extends WorkbenchModule
 
     private RecordsView buildContent() {
         RecordsView recordsView = new RecordsView(context, database);
+        recordsView.setOnItemsDeleted(records -> this.totalItems.set(totalItems.get() - records.size()));
         readColumnConfigurations(recordsView.getBooksTable());
         loadBooks(recordsView);
         return recordsView;
