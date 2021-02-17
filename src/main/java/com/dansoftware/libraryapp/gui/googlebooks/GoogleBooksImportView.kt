@@ -64,7 +64,6 @@ private class GoogleBooksImportView(val context: Context) : GoogleBooksSearchVie
                     notes(volume.volumeInfo?.description)
                     publisher(volume.volumeInfo?.publisher)
                     googleVolumeObject(volume)
-                    rating(volume.volumeInfo?.averageRating?.toInt() ?: 5)
                 }
             })
     }

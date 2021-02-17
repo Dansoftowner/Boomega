@@ -85,7 +85,7 @@ public class RecordAddForm extends ScrollPane {
     private final StringProperty subject = new SimpleStringProperty("");
     private final StringProperty notes = new SimpleStringProperty("");
     private final IntegerProperty numberOfCopies = new SimpleIntegerProperty(1);
-    private final IntegerProperty rating = new SimpleIntegerProperty(5);
+    private final IntegerProperty rating = new SimpleIntegerProperty(0);
     private final StringProperty googleBookHandle = new SimpleStringProperty();
 
     private final VBox contentVBox;
