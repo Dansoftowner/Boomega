@@ -43,6 +43,11 @@ object PropertiesResponsible {
     private const val LIBRARY_APP_FILE_EXTENSION_VALUE = "bmdb"
 
     /**
+     * The name of the default Boomega documents folder
+     */
+    private const val BOOMEGA_DOCUMENTS_FOLDER = "BoomegaDocuments"
+
+    /**
      * The log-file's path without the extension
      */
     private val LOG_FILE_PATH_VALUE = FileUtils.getFile(FileUtils.getTempDirectory(), "libraryapp").toString()
@@ -89,7 +94,7 @@ object PropertiesResponsible {
     }
 
     private fun getDefaultDirectoryFilePath() =
-        File(FileSystemView.getFileSystemView().defaultDirectory, "LibraryAppDocuments").absolutePath
+        File(FileSystemView.getFileSystemView().defaultDirectory, BOOMEGA_DOCUMENTS_FOLDER).absolutePath
 
     /**
      * Returns the config file's path
