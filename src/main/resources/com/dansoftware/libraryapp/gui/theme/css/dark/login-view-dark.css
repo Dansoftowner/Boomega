@@ -1,3 +1,7 @@
+@font-face {
+    src: url('/com/dansoftware/libraryapp/font/JetBrainsMono-Bold.ttf');
+}
+
 .login-form {
     -fx-background-image: url("/com/dansoftware/libraryapp/image/backgrounds/background-dark.jpg");
     -fx-background-size: stretch;
@@ -24,6 +28,12 @@
     -fx-background-radius: 0 0 10 10;
 }
 
+.login-box .header * {
+    -fx-text-fill: #d6d5d5;
+    -fx-font-family: "JetBrains Mono Bold";
+    -fx-font-size: 35px;
+}
+
 .login-box .header .logo {
-    -fx-image: url("/com/dansoftware/libraryapp/image/login/form-header_dark.png");
+    -fx-image: url("/com/dansoftware/libraryapp/image/logo/bookshelf_64px.png");
 }
