@@ -113,7 +113,7 @@ object PropertiesResponsible {
             }
             File(
                 File(rootDir),
-                listOf("Dansoftware", "libraryapp2020", "plugin").joinToString(File.separator)
+                listOf("Dansoftware", "boomega", "plugin").joinToString(File.separator)
             ).absolutePath
         }
         OsInfo.isLinux() ->
