@@ -40,7 +40,7 @@ object PropertiesResponsible {
     /**
      * the libraryapp database file-extension
      */
-    private const val LIBRARY_APP_FILE_EXTENSION_VALUE = "lbadb"
+    private const val LIBRARY_APP_FILE_EXTENSION_VALUE = "bmdb"
 
     /**
      * The log-file's path without the extension
