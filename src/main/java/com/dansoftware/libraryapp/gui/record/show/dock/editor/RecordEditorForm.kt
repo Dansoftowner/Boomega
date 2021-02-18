@@ -231,13 +231,10 @@ class RecordEditorForm(
         Group.of(
             Field.ofStringType(authors)
                 .label("record.add.form.authors")
-                .placeholder("record.add.form.authors.prompt")
-                .required(false),
+                .placeholder("record.add.form.authors.prompt"),
             Field.ofStringType(title)
                 .label("record.add.form.title")
-                .placeholder("record.add.form.title.prompt")
-                .required("record.title.required")
-                .apply { multipleItems.addListener { _, _, it -> this.requiredProperty().set(it.not()) } },
+                .placeholder("record.add.form.title.prompt"),
             Field.ofStringType(subtitle)
                 .label("record.add.form.subtitle")
                 .placeholder("record.add.form.subtitle.prompt")
@@ -283,14 +280,10 @@ class RecordEditorForm(
         Group.of(
             Field.ofStringType(magazineName)
                 .label("record.add.form.magazinename")
-                .placeholder("record.add.form.magazinename.prompt")
-                .required("record.magazinename.required")
-                .apply { multipleItems.addListener { _, _, it -> this.requiredProperty().set(it.not()) } },
+                .placeholder("record.add.form.magazinename.prompt"),
             Field.ofStringType(title)
                 .label("record.add.form.title")
-                .placeholder("record.add.form.title.prompt")
-                .required("record.title.required")
-                .apply { multipleItems.addListener { _, _, it -> this.requiredProperty().set(it.not()) } },
+                .placeholder("record.add.form.title.prompt"),
             Field.ofStringType(publisher)
                 .label("record.add.form.publisher")
                 .placeholder("record.add.form.publisher.prompt")
