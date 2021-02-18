@@ -100,7 +100,7 @@ object PropertiesResponsible {
      * Returns the config file's path
      */
     private fun getConfigFilePath() =
-        listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "config.conf").joinToString(File.separator)
+        listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "bmcfg").joinToString(File.separator)
 
     /**
      * Returns the plugin directory's path
