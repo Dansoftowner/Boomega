@@ -16,13 +16,23 @@ object PropertiesResponsible {
 
     /* ****** Keys ****** */
 
-    private const val BOOMEGA_VERSION = "libraryapp.version"
-    private const val BOOMEGA_FILE_EXTENSION = "libraryapp.file.extension"
+    private const val BOOMEGA_VERSION = "boomega.version"
+    private const val BOOMEGA_VERSION_DEPRECATED = "libraryapp.version"
+
+    private const val BOOMEGA_FILE_EXTENSION = "boomega.file.extension"
+    private const val BOOMEGA_FILE_EXTENSION_DEPRECATED = "libraryapp.file.extension"
+
     private const val LOG_FILE_PATH = "log.file.path"
     private const val LOG_FILE_FULL_PATH = "log.file.path.full"
-    private const val PLUGIN_DIRECTORY_PATH = "libraryapp.plugin.dir"
-    private const val CONFIG_FILE_PATH = "libraryapp.config.file.path"
-    private const val DEFAULT_DIRECTORY_PATH = "libraryapp.dir.default.path"
+
+    private const val PLUGIN_DIRECTORY_PATH = "boomega.plugin.dir"
+    private const val PLUGIN_DIRECTORY_PATH_DEPRECATED = "libraryapp.plugin.dir"
+
+    private const val CONFIG_FILE_PATH = "boomega.config.file.path"
+    private const val CONFIG_FILE_PATH_DEPRECATED = "libraryapp.config.file.path"
+
+    private const val DEFAULT_DIRECTORY_PATH = "boomega.dir.default.path"
+    private const val DEFAULT_DIRECTORY_PATH_DEPRECATED = "libraryapp.dir.default.path"
 
     /* **** VALUES **** */
 
@@ -79,11 +89,26 @@ object PropertiesResponsible {
      * Puts the libraryapp-specific values into the system properties
      */
     private fun putAppSpecificProperties() {
-        System.setProperty(BOOMEGA_VERSION, BOOMEGA_VERSION_VALUE)
-        System.setProperty(BOOMEGA_FILE_EXTENSION, BOOMEGA_FILE_EXTENSION_VALUE)
-        System.setProperty(PLUGIN_DIRECTORY_PATH, getPluginDirPath())
-        System.setProperty(CONFIG_FILE_PATH, getConfigFilePath())
-        System.setProperty(DEFAULT_DIRECTORY_PATH, getDefaultDirectoryFilePath());
+        BOOMEGA_VERSION_VALUE.let {
+            System.setProperty(BOOMEGA_VERSION, it)
+            System.setProperty(BOOMEGA_VERSION_DEPRECATED, it)
+        }
+        BOOMEGA_FILE_EXTENSION_VALUE.let {
+            System.setProperty(BOOMEGA_FILE_EXTENSION, it)
+            System.setProperty(BOOMEGA_FILE_EXTENSION_DEPRECATED, it)
+        }
+        getPluginDirPath().let {
+            System.setProperty(PLUGIN_DIRECTORY_PATH, it)
+            System.setProperty(PLUGIN_DIRECTORY_PATH_DEPRECATED, it)
+        }
+        getConfigFilePath().let {
+            System.setProperty(CONFIG_FILE_PATH, it)
+            System.setProperty(CONFIG_FILE_PATH_DEPRECATED, it)
+        }
+        getDefaultDirectoryFilePath().let {
+            System.setProperty(DEFAULT_DIRECTORY_PATH, it)
+            System.setProperty(DEFAULT_DIRECTORY_PATH_DEPRECATED, it)
+        }
     }
 
     private fun getDefaultDirectoryFilePath() =
