@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.record.show.dock.editor
+package com.dansoftware.libraryapp.gui.record.edit
 
 import com.dansoftware.libraryapp.db.Database
 import com.dansoftware.libraryapp.db.data.Record
@@ -6,7 +6,6 @@ import com.dansoftware.libraryapp.gui.context.Context
 import com.dansoftware.libraryapp.i18n.I18N
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
-import javafx.scene.text.TextAlignment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.function.Consumer

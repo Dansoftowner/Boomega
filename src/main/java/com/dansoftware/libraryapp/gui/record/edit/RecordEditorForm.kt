@@ -1,4 +1,4 @@
-package com.dansoftware.libraryapp.gui.record.show.dock.editor
+package com.dansoftware.libraryapp.gui.record.edit
 
 import com.dansoftware.libraryapp.db.Database
 import com.dansoftware.libraryapp.db.data.Record
@@ -12,7 +12,6 @@ import com.dansoftware.libraryapp.util.concurrent.ExploitativeExecutor
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.structure.Group
-import com.dlsc.formsfx.model.util.BindingMode
 import com.dlsc.formsfx.model.util.ResourceBundleService
 import com.dlsc.formsfx.view.controls.SimpleTextControl
 import com.dlsc.formsfx.view.renderer.FormRenderer
