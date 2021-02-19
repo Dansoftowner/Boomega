@@ -1,3 +1,7 @@
+@font-face {
+    src: url('/com/dansoftware/libraryapp/font/JetBrainsMono-Bold.ttf');
+}
+
 .medium-font {
     -fx-font-size: 16px;
 }

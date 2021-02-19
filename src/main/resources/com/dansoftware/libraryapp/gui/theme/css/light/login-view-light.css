@@ -1,7 +1,3 @@
-@font-face {
-    src: url('/com/dansoftware/libraryapp/font/JetBrainsMono-Bold.ttf');
-}
-
 .login-form {
     -fx-background-image: url("/com/dansoftware/libraryapp/image/backgrounds/background-light.jpg");
     -fx-background-size: stretch;
