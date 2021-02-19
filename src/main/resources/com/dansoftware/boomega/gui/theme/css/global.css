@@ -1,0 +1,32 @@
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-Bold.ttf');
+}
+
+.medium-font {
+    -fx-font-size: 16px;
+}
+
+/** MDFXNode */
+.markdown-text {
+    -fx-font-family: ARIAL;
+}
+.markdown-italic {
+    -fx-font-style: italic;
+}
+.markdown-bold {
+    -fx-font-weight: bold;
+}
+
+/* * * */
+
+.text-field:readonly {
+    -right-button-visible: false;
+}
+
+.languageSelector .text-field {
+    -right-button-visible: false;
+}
+
+.check-menu-item:focused:checked > .left-container {
+    -fx-background-color: transparent;
+}

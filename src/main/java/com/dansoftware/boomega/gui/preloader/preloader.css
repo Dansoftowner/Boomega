@@ -1,0 +1,46 @@
+@import url("/com/dansoftware/boomega/gui/theme/css/global.css");
+
+.root {
+    -fx-background-image: url(/com/dansoftware/boomega/image/backgrounds/preloader-background.jpg);
+    -fx-border-color: #1f1f1f;
+    -fx-pref-width: 739px;
+    -fx-pref-height: 453px;
+}
+
+.mainPane {
+    -fx-pref-width: 448px;
+    -fx-pref-height: 739px;
+}
+
+.app-name-label {
+    -fx-font-family: "JetBrains Mono Bold";
+    -fx-font-size: 40px;
+    -fx-text-fill: #cbcbcb;
+}
+
+.centerLogo {
+    -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_256.png");
+    -fx-padding: 0 10 0 0;
+}
+
+.companyLabel {
+    -fx-font-size: 15px;
+    -fx-text-fill: #dedede;
+    -fx-padding: 5;
+}
+
+.messageLabel {
+    -fx-text-alignment: left;
+    -fx-font-size: 20px;
+    -fx-text-fill: #dedede;
+}
+
+.jfx-progress-bar {
+    -fx-background-color: transparent;
+    -fx-pref-height: 8px;
+}
+
+.jfx-progress-bar .bar {
+    -fx-background-radius: 0;
+    -fx-background-color: #a87d24;
+}

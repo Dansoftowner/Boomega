@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox fx:id="root" prefWidth="320.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.dansoftware.boomega.gui.updatedialog.segment.download.DownloadSegmentController">
+    <children>
+        <Label text="%update.view.download.select.format">
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
+        </Label>
+        <ScrollPane>
+            <content>
+                <VBox fx:id="radioBtnVBox" spacing="10.0"/>
+            </content>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </ScrollPane>
+        <Separator prefWidth="200.0"/>
+        <HBox spacing="5.0">
+            <children>
+                <TextField fx:id="downloadPathField" editable="false" promptText="%update.view.download.path.prompt"
+                           HBox.hgrow="ALWAYS"/>
+                <Button fx:id="downloadPathChooserBtn" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false"
+                        onAction="#openDirChooser" text="Button"/>
+            </children>
+        </HBox>
+        <HBox spacing="5">
+            <Button fx:id="downloadBtn" disable="true" mnemonicParsing="false" onAction="#downloadSelected"
+                    prefWidth="${root.width}" text="%update.view.download.binary"/>
+            <Button fx:id="downloadPauseBtn" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false"
+                    onAction="#pauseDownload" text="Button">
+                <tooltip>
+                    <Tooltip text="%update.view.download.pause"/>
+                </tooltip>
+            </Button>
+            <Button fx:id="downloadKillBtn" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false"
+                    onAction="#killDownload" text="Button">
+                <tooltip>
+                    <Tooltip text="%update.view.download.kill"/>
+                </tooltip>
+            </Button>
+        </HBox>
+        <ProgressBar fx:id="progressBar" prefWidth="${root.width}" progress="0.0"/>
+    </children>
+    <Button fx:id="fileOpenerBtn" defaultButton="true" disable="true" mnemonicParsing="false"
+            onAction="#runDownloaded" prefWidth="${root.width}" text="%update.view.download.finished.run"/>
+    <Button fx:id="runnerBtn" disable="true" mnemonicParsing="false" onAction="#openDownloaded"
+            prefWidth="${root.width}" text="%update.view.download.finished.open"/>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</VBox>

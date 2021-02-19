@@ -1,0 +1,26 @@
+.login-form {
+    -fx-background-image: url("/com/dansoftware/boomega/image/backgrounds/background-light.jpg");
+    -fx-background-size: stretch;
+}
+
+.login-box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.login-box .source-adder {
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.login-box .header * {
+    -fx-text-fill: #797979;
+    -fx-font-family: "JetBrains Mono Bold";
+    -fx-font-size: 35px;
+}
+
+.login-box .header .logo {
+    -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_64px.png");
+}
