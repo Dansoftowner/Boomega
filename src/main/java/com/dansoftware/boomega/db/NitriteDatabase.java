@@ -39,7 +39,7 @@ public class NitriteDatabase implements Database {
         Objects.requireNonNull(credentials, "The Credentials must not be null!");
         this.nitriteClient = init(databaseMeta, credentials);
         this.databaseMeta = databaseMeta;
-        this.recordRepository = nitriteClient.getRepository(Record.class);
+        this.recordRepository = nitriteClient.getRepository("BoomegaRecords", Record.class);
     }
 
     private Nitrite init(@NotNull DatabaseMeta databaseMeta,
