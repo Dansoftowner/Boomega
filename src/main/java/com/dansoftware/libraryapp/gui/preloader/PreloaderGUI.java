@@ -1,10 +1,13 @@
 package com.dansoftware.libraryapp.gui.preloader;
 
+import com.dansoftware.libraryapp.i18n.I18N;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
@@ -31,14 +34,13 @@ public class PreloaderGUI extends VBox {
     private static final String LOGO_STYLE_CLASS = "centerLogo";
     private static final String COMPANY_LABEL_STYLE_CLASS = "companyLabel";
     private static final String LABEL_STYLE_CLASS = "messageLabel";
-    /*private static final double PREF_WIDTH = 739.0;
-    private static final double PREF_HEIGHT = 453.0;*/
+    private static final String APP_NAME_LABEL_STYLE_CLASS = "app-name-label";
 
     private final StackPane mainPane;
-    private final ImageView center;
+    private final Node center;
 
     private PreloaderGUI(@NotNull Builder builder) {
-        this.center = buildCenterLogo();
+        this.center = buildCenter();
         this.mainPane = buildMainPane(center, buildCompanyLabel());
         StringProperty messageProperty = builder.getStringProperty()
                 .orElseGet(SimpleStringProperty::new);
@@ -57,17 +59,30 @@ public class PreloaderGUI extends VBox {
         return label;
     }
 
+    private Node buildCenter() {
+        return new Group(
+                new VBox(0,
+                        new StackPane(buildCenterLogo()),
+                        new StackPane(buildAppNameLabel())
+                )
+        );
+    }
+
+    private Label buildAppNameLabel() {
+        var label = new Label(I18N.getValue("app.name"));
+        label.getStyleClass().add(APP_NAME_LABEL_STYLE_CLASS);
+        return label;
+    }
+
     private ImageView buildCenterLogo() {
         var center = new ImageView();
         center.getStyleClass().add(LOGO_STYLE_CLASS);
-        center.setFitWidth(714);
-        center.setFitHeight(232);
         center.setPickOnBounds(true);
         center.setPreserveRatio(true);
         return center;
     }
 
-    private StackPane buildMainPane(@NotNull ImageView center,
+    private StackPane buildMainPane(@NotNull Node center,
                                     @NotNull Label companyLabel) {
         var mainPane = new StackPane();
         mainPane.getStyleClass().add(MAIN_PANE_STYLE_CLASS);
