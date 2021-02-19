@@ -1,10 +1,10 @@
 * {
     -fx-light-text-color: rgba(255, 255, 255, 0.7);
-    -primary-color: #343333;
+    -primary-color: #333436;
     -primary-variant-color: #282828;
     -secondary-color: #02ABF5;
     -secondary-variant-color: #005fa3;
-    -background-color: #252525;
+    -background-color: #282828;
     -surface-color: #2b2b2b;
     -error-color: #B00020;
     -on-primary-color: -fx-light-text-color;
@@ -51,7 +51,7 @@
 }
 
 .tab-control:selected, .tab-control:selected:hover {
-    -fx-background-color: #252525;
+    -fx-background-color: #282828;
 }
 
 .tab-box .button:hover, .tab-box .button:focused {
