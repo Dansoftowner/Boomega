@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 
 public class PreloaderTest extends Application {
     public static void main(String[] args) {
+        PropertiesResponsible.setupSystemProperties();
         LauncherImpl.launchApplication(PreloaderTest.class, Preloader.class, args);
     }
 
