@@ -22,6 +22,8 @@ import com.dlsc.formsfx.view.util.ColSpan;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -39,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.ref.WeakReference;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Consumer;
@@ -121,6 +124,7 @@ public class RecordAddForm extends ScrollPane {
                 renderForm(),
                 buildNewRatingControl(),
                 buildGoogleBookJoiner(),
+                buildNotesControl(),
                 buildCommitButton(contentVBox)
         );
     }
@@ -179,6 +183,23 @@ public class RecordAddForm extends ScrollPane {
         vBox.getChildren().add(buildGoogleBookButton(vBox));
         this.googleBookTileBox = vBox;
         return vBox;
+    }
+
+    private Node buildNotesControl() {
+        var notesEditor = new NotesEditor();
+        notesEditor.setHtmlText(notes.get());
+        notesEditor.setPrefHeight(200);
+        notesEditor.setOnMouseExited(e -> notes.set(notesEditor.getHtmlText()));
+        var weakNotesEditorRef = new WeakReference<>(notesEditor);
+        notes.addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends String> o, String ov, String newValue) {
+                NotesEditor editor = weakNotesEditorRef.get();
+                if (editor != null) editor.setHtmlText(newValue); else o.removeListener(this);
+            }
+        });
+        VBox.setMargin(notesEditor, new Insets(10, 40, 10, 40));
+        return notesEditor;
     }
 
     private Button buildGoogleBookButton(VBox vBox) {
@@ -327,12 +348,7 @@ public class RecordAddForm extends ScrollPane {
                                 .label("record.add.form.nofcopies")
                                 .required(false)
                                 .placeholder("record.add.form.nofcopies.prompt")
-                                .span(ColSpan.HALF),
-                        Field.ofStringType(notes)
-                                .label("record.add.form.notes")
-                                .placeholder("record.add.form.notes.prompt")
-                                .required(false)
-                                .multiline(true)
+                                .span(ColSpan.HALF)
 
                 )
         ).i18n(new ResourceBundleService(I18N.getValues()))
@@ -368,12 +384,7 @@ public class RecordAddForm extends ScrollPane {
                                 .label("record.add.form.lang")
                                 .placeholder("record.add.form.lang.prompt")
                                 .required(false)
-                                .span(ColSpan.HALF),
-                        Field.ofStringType(notes)
-                                .label("record.add.form.notes")
-                                .placeholder("record.add.form.notes.prompt")
-                                .required(false)
-                                .multiline(true)
+                                .span(ColSpan.HALF)
                 )
         ).i18n(new ResourceBundleService(I18N.getValues()))
                 .binding(BindingMode.CONTINUOUS);
