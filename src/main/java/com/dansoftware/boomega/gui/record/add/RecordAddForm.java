@@ -24,6 +24,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -31,6 +32,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -58,7 +61,7 @@ import java.util.function.Consumer;
  *
  * @author Daniel Gyorffy
  */
-public class RecordAddForm extends ScrollPane {
+public class RecordAddForm extends VBox {
 
     private static final Logger logger = LoggerFactory.getLogger(RecordAddForm.class);
 
@@ -86,27 +89,54 @@ public class RecordAddForm extends ScrollPane {
     private final StringProperty language = new SimpleStringProperty("");
     private final StringProperty isbn = new SimpleStringProperty("");
     private final StringProperty subject = new SimpleStringProperty("");
-    private final StringProperty notes = new SimpleStringProperty("");
     private final IntegerProperty numberOfCopies = new SimpleIntegerProperty(1);
     private final IntegerProperty rating = new SimpleIntegerProperty(0);
     private final StringProperty googleBookHandle = new SimpleStringProperty();
 
     private final VBox contentVBox;
     private final Context context;
+    private final NotesEditor notesEditor;
 
     private VBox googleBookTileBox;
 
     public RecordAddForm(@NotNull Context context, @NotNull Record.Type initialType) {
         this.context = context;
         this.contentVBox = new VBox();
+        this.notesEditor = buildNotesControl();
         this.recordType.set(initialType);
         this.getStyleClass().add(STYLE_CLASS);
         this.buildBaseUI();
     }
 
     private void buildBaseUI() {
-        this.setContent(contentVBox);
-        this.setFitToWidth(true);
+        this.getChildren().add(buildScrollPane());
+        this.getChildren().add(buildCommitButton());
+    }
+
+    private ScrollPane buildScrollPane() {
+        var scrollPane = new ScrollPane();
+        scrollPane.setContent(contentVBox);
+        scrollPane.setFitToWidth(true);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        return scrollPane;
+    }
+
+    private Node buildCommitButton() {
+        var button = new Button(
+                I18N.getValue("record.add.form.commit"),
+                new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE));
+        button.getStyleClass().add("record-add-button");
+        button.setDefaultButton(true);
+        button.disableProperty().bind(currentForm.get().validProperty().not());
+        //setting the mouse event handler instead of action event handler because of "html editor->enter bug"
+        button.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                commitRecord();
+            }
+        });
+        button.prefWidthProperty().bind(this.widthProperty());
+        button.addEventFilter(KeyEvent.KEY_TYPED, Event::consume);
+        return button;
     }
 
     private void handleTypeChange(@NotNull Record.Type recordType) {
@@ -124,8 +154,7 @@ public class RecordAddForm extends ScrollPane {
                 renderForm(),
                 buildNewRatingControl(),
                 buildGoogleBookJoiner(),
-                buildNotesControl(),
-                buildCommitButton(contentVBox)
+                notesEditor
         );
     }
 
@@ -148,7 +177,7 @@ public class RecordAddForm extends ScrollPane {
             this.language.setValue(values.getLanguage());
             this.isbn.setValue(values.getIsbn());
             this.subject.setValue(values.getSubject());
-            this.notes.setValue(values.getNotes());
+            this.notesEditor.setHtmlText(values.getNotes());
             this.rating.setValue(values.getRating());
             this.removeGoogleBookConnection();
             this.createGoogleBookConnection(values.getVolumeObject());
@@ -185,19 +214,9 @@ public class RecordAddForm extends ScrollPane {
         return vBox;
     }
 
-    private Node buildNotesControl() {
+    private NotesEditor buildNotesControl() {
         var notesEditor = new NotesEditor();
-        notesEditor.setHtmlText(notes.get());
         notesEditor.setPrefHeight(200);
-        notesEditor.setOnMouseExited(e -> notes.set(notesEditor.getHtmlText()));
-        var weakNotesEditorRef = new WeakReference<>(notesEditor);
-        notes.addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends String> o, String ov, String newValue) {
-                NotesEditor editor = weakNotesEditorRef.get();
-                if (editor != null) editor.setHtmlText(newValue); else o.removeListener(this);
-            }
-        });
         VBox.setMargin(notesEditor, new Insets(10, 40, 10, 40));
         return notesEditor;
     }
@@ -224,18 +243,6 @@ public class RecordAddForm extends ScrollPane {
         return button;
     }
 
-    private Node buildCommitButton(VBox vBox) {
-        var button = new Button(
-                I18N.getValue("record.add.form.commit"),
-                new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE));
-        button.setDefaultButton(true);
-        button.disableProperty().bind(currentForm.get().validProperty().not());
-        button.setOnAction(event -> commitRecord());
-        button.prefWidthProperty().bind(vBox.widthProperty());
-        VBox.setMargin(button, new Insets(10, 40, 10, 40));
-        return button;
-    }
-
     private void commitRecord() {
         Consumer<Record> addAction = onRecordAdded.get();
         if (addAction != null) {
@@ -254,7 +261,7 @@ public class RecordAddForm extends ScrollPane {
         language.set("");
         isbn.set("");
         subject.set("");
-        notes.set("");
+        notesEditor.setHtmlText("");
         numberOfCopies.setValue(null);
         rating.setValue(null);
         googleBookHandle.set(null);
@@ -292,7 +299,7 @@ public class RecordAddForm extends ScrollPane {
                 .language(language.get())
                 .isbn(isbn.get())
                 .subject(subject.get())
-                .notes(notes.get())
+                .notes(notesEditor.getHtmlText())
                 .numberOfCopies(numberOfCopies.get())
                 .rating(rating.get())
                 .serviceConnection(new ServiceConnection(googleBookHandle.get()))
@@ -475,11 +482,7 @@ public class RecordAddForm extends ScrollPane {
     }
 
     public String getNotes() {
-        return notes.get();
-    }
-
-    public StringProperty notesProperty() {
-        return notes;
+        return notesEditor.getHtmlText();
     }
 
     public int getNumberOfCopies() {
