@@ -3,7 +3,7 @@ package com.dansoftware.boomega.gui.mainview
 import com.dansoftware.boomega.gui.window.BaseWindow
 
 private class MainWindow(view: MainView) :
-    BaseWindow<MainView>("app.name", "-", view.openedDatabase.toString(), view) {
+    BaseWindow<MainView>(System.getProperty("app.name"), "-", view.openedDatabase.toString(), view) {
     init {
         this.isMaximized = true
         this.exitDialog = true

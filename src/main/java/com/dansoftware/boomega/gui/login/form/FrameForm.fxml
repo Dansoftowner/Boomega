@@ -21,7 +21,7 @@
                             <ImageView pickOnBounds="true" preserveRatio="true" styleClass="logo" />
                         <StackPane>
                            <children>
-                              <Label text="%app.name" />
+                              <Label text="Boomega" />
                            </children>
                         </StackPane>
                      </children>

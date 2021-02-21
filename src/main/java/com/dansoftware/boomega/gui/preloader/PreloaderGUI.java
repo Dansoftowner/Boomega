@@ -69,7 +69,7 @@ public class PreloaderGUI extends VBox {
     }
 
     private Label buildAppNameLabel() {
-        var label = new Label(I18N.getValue("app.name"));
+        var label = new Label(System.getProperty("app.name"));
         label.getStyleClass().add(APP_NAME_LABEL_STYLE_CLASS);
         return label;
     }

@@ -2,11 +2,12 @@ package com.dansoftware.boomega.gui.login.quick
 
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.window.BaseWindow
+import com.dansoftware.boomega.i18n.I18N
 import javafx.stage.Modality
 import javafx.stage.Window
 
 class QuickLoginWindow(content: QuickLoginView, db: DatabaseMeta, owner: Window? = null) :
-    BaseWindow<QuickLoginView>("window.login.quick.title", "-", db.toString(), content) {
+    BaseWindow<QuickLoginView>(I18N.getValue("window.login.quick.title"), "-", db.toString(), content) {
 
     init {
         this.centerOnScreen()

@@ -70,8 +70,8 @@ abstract class BaseWindow<C> : Stage, Themeable
         this.scene = Scene(content)
     }
 
-    protected constructor(i18n: String, separator: String, additionalTitleValue: String, content: C) {
-        this.title = "${I18N.getValues().getString(i18n)} $separator $additionalTitleValue"
+    protected constructor(baseTitle: String, separator: String, additionalTitleValue: String, content: C) {
+        this.title = "$baseTitle $separator $additionalTitleValue"
         this.content = content
         this.scene = Scene(content)
     }

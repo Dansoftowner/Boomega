@@ -16,6 +16,8 @@ object PropertiesResponsible {
 
     /* ****** Keys ****** */
 
+    private const val APP_NAME = "app.name"
+
     private const val BOOMEGA_VERSION = "boomega.version"
     private const val BOOMEGA_VERSION_DEPRECATED = "libraryapp.version"
 
@@ -35,6 +37,8 @@ object PropertiesResponsible {
     private const val DEFAULT_DIRECTORY_PATH_DEPRECATED = "libraryapp.dir.default.path"
 
     /* **** VALUES **** */
+
+    private const val APP_NAME_VALUE = "Boomega"
 
     /**
      * the app's version
@@ -89,6 +93,7 @@ object PropertiesResponsible {
      * Puts the libraryapp-specific values into the system properties
      */
     private fun putAppSpecificProperties() {
+        System.setProperty(APP_NAME, APP_NAME_VALUE)
         BOOMEGA_VERSION_VALUE.let {
             System.setProperty(BOOMEGA_VERSION, it)
             System.setProperty(BOOMEGA_VERSION_DEPRECATED, it)
