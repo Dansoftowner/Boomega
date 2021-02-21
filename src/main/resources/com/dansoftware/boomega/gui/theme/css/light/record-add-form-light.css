@@ -9,3 +9,13 @@
 
 .record-add-form .text-area {
 }
+
+.notes-title-bar {
+    -fx-border-color: #8a8a8a #8a8a8a transparent #8a8a8a;
+    -fx-background-color: #d9d9d9;
+}
+
+.record-add-button {
+    -fx-pref-height: 40px;
+    -fx-font-weight: bold;
+}
