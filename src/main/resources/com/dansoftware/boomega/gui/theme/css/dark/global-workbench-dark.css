@@ -36,9 +36,8 @@
 
 .tile-box {
     -fx-border-radius: 0;
-    -fx-background-radius: 0;
+    -fx-background-radius: 0 5 0 5;
     -fx-border-width: 0.2;
-    -fx-border-color: lightgray;
 }
 
 .tab-control {

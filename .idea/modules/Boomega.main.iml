@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.system.module.type="sourceSet" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../build/classes/java/main" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../external-libraries/BeranaUI.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../external-libraries/fxpdf-0.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../external-libraries/jHTML2Md.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Gradle: org.dizitart:nitrite:3.4.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:4.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.4.10" level="project" />
+    <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.oshi:oshi-core:5.3.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.30" level="project" />
+    <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:19.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.reflections:reflections:0.9.12" level="project" />
+    <orderEntry type="library" name="Gradle: commons-io:commons-io:2.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.10" level="project" />
+    <orderEntry type="library" name="Gradle: commons-collections:commons-collections:3.2.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Dansoftowner:jFileGoodies:1.2.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Dansoftowner:jSystemThemeDetector:2.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Dansoftowner:Restart4j:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.13.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpclient:4.5.13" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.ben-manes.caffeine:caffeine:2.8.8" level="project" />
+    <orderEntry type="library" name="Gradle: it.sauronsoftware:junique:1.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: com.jfoenix:jfoenix:9.0.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.jfxtras:jmetro:11.6.14" level="project" />
+    <orderEntry type="library" name="Gradle: org.controlsfx:controlsfx:11.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.dlsc.formsfx:formsfx-core:11.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: net.kurobako:gesturefx:0.6.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Dansoftowner:workbenchfx-fork:11.1.7" level="project" />
+    <orderEntry type="library" name="Gradle: de.jensd:fontawesomefx-commons:11.0" level="project" />
+    <orderEntry type="library" name="Gradle: de.jensd:fontawesomefx-fontawesome:4.7.0-11" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.typhon0:AnimateFX:1.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.sandec:mdfx:0.1.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Dansoftowner:FXTaskbarProgressBar:v11.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Dansoftowner:SegmentDialogFX:2.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Dansoftowner:DockSystemFX:v1.1" level="project" />
+    <orderEntry type="library" name="Gradle: uk.co.jemos.podam:podam:7.2.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: com.h2database:h2-mvstore:1.4.200" level="project" />
+    <orderEntry type="library" name="Gradle: org.objenesis:objenesis:2.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.10.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.10.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jasypt:jasypt:1.9.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:2.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.4.10" level="project" />
+    <orderEntry type="library" name="Gradle: net.java.dev.jna:jna-platform:5.6.0" level="project" />
+    <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:5.6.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.javassist:javassist:3.26.0-GA" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpcore:4.4.13" level="project" />
+    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:3.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Dansoftowner.workbenchfx-fork:workbenchfx-core:11.1.7" level="project" />
+    <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark-ext-tables:0.34.10" level="project" />
+    <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark-ext-attributes:0.34.10" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.goxr3plus:FX-BorderlessScene:4.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: javax.annotation:javax.annotation-api:1.3.2" level="project" />
+    <orderEntry type="library" name="Gradle: javax.validation:validation-api:1.1.0.Final" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.10.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark-formatter:0.34.10" level="project" />
+    <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark:0.34.10" level="project" />
+    <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark-util:0.34.10" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: de.jangassen:jfa:1.1.9" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.nativelibs4java:bridj:0.7.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.android.tools:dx:1.7" level="project" />
+  </component>
+</module>
