@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.record.show.dock.googlebook;
+package com.dansoftware.boomega.gui.record.googlebook;
 
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.data.Record;
