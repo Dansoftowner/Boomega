@@ -3,9 +3,11 @@ package com.dansoftware.boomega.gui.record.show;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.record.edit.NotesEditor;
 import com.dansoftware.boomega.gui.record.edit.RecordEditor;
 import com.dansoftware.boomega.gui.record.googlebook.GoogleBookConnectionView;
 import com.dansoftware.boomega.gui.record.show.dock.GoogleBookConnectionDock;
+import com.dansoftware.boomega.gui.record.show.dock.NotesEditorDock;
 import com.dansoftware.boomega.gui.record.show.dock.RecordEditorDock;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -32,7 +34,6 @@ public class RecordsView extends SplitPane {
     private final SplitPane leftSplitPane;
     private final SplitPane rightSplitPane;
 
-
     RecordsView(@NotNull Context context, @NotNull Database database) {
         this.context = context;
         this.database = database;
@@ -47,6 +48,7 @@ public class RecordsView extends SplitPane {
     private SplitPane buildLeftSplitPane() {
         SplitPane splitPane = buildDockSplitPane();
         splitPane.getItems().add(recordTable);
+        splitPane.getItems().add(buildNotesEditorDock(splitPane));
         SplitPane.setResizableWithParent(splitPane, true);
         return splitPane;
     }
@@ -73,6 +75,15 @@ public class RecordsView extends SplitPane {
 
     private void buildUI() {
         this.getItems().addAll(leftSplitPane, rightSplitPane);
+    }
+
+    private Node buildNotesEditorDock(SplitPane parent) {
+        var notesEditor = new NotesEditor(context, database, recordTable.getSelectionModel().getSelectedItems());
+        this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
+            notesEditor.setItems(this.recordTable.getSelectionModel().getSelectedItems());
+        });
+
+        return new NotesEditorDock(parent, notesEditor);
     }
 
     private Node buildBookEditorDock(SplitPane dockSplitPane) {

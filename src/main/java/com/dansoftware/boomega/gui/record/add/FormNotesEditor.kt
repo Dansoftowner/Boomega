@@ -10,7 +10,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.web.HTMLEditor
 
-private class NotesEditor : BorderPane() {
+private class FormNotesEditor : BorderPane() {
 
     companion object {
         const val PREFERRED_RESIZE_SPEED = 2.0

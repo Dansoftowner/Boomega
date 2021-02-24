@@ -22,8 +22,6 @@ import com.dlsc.formsfx.view.util.ColSpan;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -44,7 +42,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.ref.WeakReference;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Consumer;
@@ -95,7 +92,7 @@ public class RecordAddForm extends VBox {
 
     private final VBox contentVBox;
     private final Context context;
-    private final NotesEditor notesEditor;
+    private final FormNotesEditor notesEditor;
 
     private VBox googleBookTileBox;
 
@@ -214,8 +211,8 @@ public class RecordAddForm extends VBox {
         return vBox;
     }
 
-    private NotesEditor buildNotesControl() {
-        var notesEditor = new NotesEditor();
+    private FormNotesEditor buildNotesControl() {
+        var notesEditor = new FormNotesEditor();
         notesEditor.setPrefHeight(200);
         VBox.setMargin(notesEditor, new Insets(10, 40, 10, 40));
         return notesEditor;

@@ -67,7 +67,6 @@ class RecordEditorForm(
     private val language: StringProperty = SimpleStringProperty("")
     private val isbn: StringProperty = SimpleStringProperty("")
     private val subject: StringProperty = SimpleStringProperty("")
-    private val notes: StringProperty = SimpleStringProperty("")
     private val numberOfCopies: IntegerProperty = SimpleIntegerProperty(1)
     private val rating: IntegerProperty = SimpleIntegerProperty()
 
@@ -193,7 +192,6 @@ class RecordEditorForm(
             language.value = it.language
             isbn.value = it.isbn
             subject.value = it.subject
-            notes.value = it.notes
             numberOfCopies.value = it.numberOfCopies
             rating.value = it.rating
             publishedDate.value = it.publishedDate
@@ -211,7 +209,6 @@ class RecordEditorForm(
         language.set("")
         isbn.set("")
         subject.set("")
-        notes.set("")
         numberOfCopies.value = null
         rating.value = null
     }
@@ -264,11 +261,6 @@ class RecordEditorForm(
                 .label("record.add.form.nofcopies")
                 .required(false)
                 .placeholder("record.add.form.nofcopies.prompt"),
-            Field.ofStringType(notes)
-                .label("record.add.form.notes")
-                .placeholder("record.add.form.notes.prompt")
-                .required(false)
-                .multiline(true),
             Field.ofIntegerType(rating)
                 .label("record.add.form.rating")
                 .render(SimpleRatingControl(5, rating))
@@ -297,11 +289,6 @@ class RecordEditorForm(
                 .label("record.add.form.lang")
                 .placeholder("record.add.form.lang.prompt")
                 .required(false),
-            Field.ofStringType(notes)
-                .label("record.add.form.notes")
-                .placeholder("record.add.form.notes.prompt")
-                .required(false)
-                .multiline(true),
             Field.ofIntegerType(rating)
                 .label("record.add.form.rating")
                 .render(SimpleRatingControl(5, rating))
@@ -385,7 +372,6 @@ class RecordEditorForm(
                         StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
                         StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
                         StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
-                        StringUtils.getIfBlank(notes.get(), null)?.run { record.notes = this }
                         numberOfCopies.value?.run { record.numberOfCopies = this }
                         rating.value?.run { record.rating = this }
                         publishedDate.get()
