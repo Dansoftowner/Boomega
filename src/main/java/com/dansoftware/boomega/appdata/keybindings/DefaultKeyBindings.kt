@@ -20,7 +20,10 @@ object DefaultKeyBindings {
         SimpleObjectProperty(KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN))
     val openDatabaseManagerProperty =
         SimpleObjectProperty(KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN))
-    val fullScreenProperty = SimpleObjectProperty(KeyCodeCombination(KeyCode.F11))
+    val fullScreenProperty =
+        SimpleObjectProperty(KeyCodeCombination(KeyCode.F11))
+    val saveChangesProperty =
+        SimpleObjectProperty(KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN))
 
     var newEntry: KeyCodeCombination
         get() = newEntryProperty.get()
@@ -45,6 +48,10 @@ object DefaultKeyBindings {
     var fullScreen: KeyCodeCombination
         get() = fullScreenProperty.get()
         set(value) = fullScreenProperty.set(value)
+
+    var saveChanges: KeyCodeCombination
+        get() = saveChangesProperty.get()
+        set(value) = saveChangesProperty.set(value)
 
     @JvmStatic
     fun loadFrom(preferences: Preferences) {
