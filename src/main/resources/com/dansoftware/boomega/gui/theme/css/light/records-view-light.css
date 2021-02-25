@@ -19,9 +19,18 @@
     -fx-wrap-text: true;
 }
 
-.record-editor .formsfx-group {
+.record-base-editor .formsfx-group {
     -fx-padding: 0;
     -fx-border-color: transparent;
+}
+
+.records-view .tab-pane {
+    -fx-tab-min-height: 2.2em;
+    -fx-tab-max-height: 2.2em;
+}
+
+.records-view .tab-pane > .tab-header-area {
+    -fx-padding: 0;
 }
 
 .records-view .split-pane:vertical > .split-pane-divider,
