@@ -3,11 +3,9 @@ package com.dansoftware.boomega.gui.record.show;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.record.edit.NotesEditor;
 import com.dansoftware.boomega.gui.record.edit.RecordEditor;
 import com.dansoftware.boomega.gui.record.googlebook.GoogleBookConnectionView;
 import com.dansoftware.boomega.gui.record.show.dock.GoogleBookConnectionDock;
-import com.dansoftware.boomega.gui.record.show.dock.NotesEditorDock;
 import com.dansoftware.boomega.gui.record.show.dock.RecordEditorDock;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,11 +15,15 @@ import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 public class RecordsView extends SplitPane {
+
+    private static final Logger logger = LoggerFactory.getLogger(RecordsView.class);
 
     private static final String STYLE_CLASS = "records-view";
 
@@ -48,14 +50,13 @@ public class RecordsView extends SplitPane {
     private SplitPane buildLeftSplitPane() {
         SplitPane splitPane = buildDockSplitPane();
         splitPane.getItems().add(recordTable);
-        splitPane.getItems().add(buildNotesEditorDock(splitPane));
+        splitPane.getItems().add(buildBookEditorDock(splitPane));
         SplitPane.setResizableWithParent(splitPane, true);
         return splitPane;
     }
 
     private SplitPane buildRightSplitPane() {
         SplitPane splitPane = buildDockSplitPane();
-        splitPane.getItems().add(buildBookEditorDock(splitPane));
         splitPane.getItems().add(buildGoogleBooksDock(splitPane));
         splitPane.setPrefWidth(500);
         splitPane.setMaxWidth(500);
@@ -77,23 +78,8 @@ public class RecordsView extends SplitPane {
         this.getItems().addAll(leftSplitPane, rightSplitPane);
     }
 
-    private Node buildNotesEditorDock(SplitPane parent) {
-        var notesEditor = new NotesEditor(context, database, recordTable.getSelectionModel().getSelectedItems());
-        this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
-            notesEditor.setItems(this.recordTable.getSelectionModel().getSelectedItems());
-        });
-
-        return new NotesEditorDock(parent, notesEditor);
-    }
-
     private Node buildBookEditorDock(SplitPane dockSplitPane) {
         var recordEditor = new RecordEditor(context, database, this.recordTable.getSelectionModel().getSelectedItems());
-        recordEditor.setOnItemsDeleted(items -> {
-            this.recordTable.getItems().removeAll(items);
-            if (onItemsDeleted.get() != null) {
-                onItemsDeleted.get().accept(items);
-            }
-        });
         recordEditor.setOnItemsModified(items -> recordTable.refresh());
         this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
             recordEditor.setItems(this.recordTable.getSelectionModel().getSelectedItems());

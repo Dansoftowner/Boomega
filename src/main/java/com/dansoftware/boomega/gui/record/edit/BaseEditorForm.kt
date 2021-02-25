@@ -34,16 +34,12 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.function.Consumer
 
-class RecordEditorForm(
+class BaseEditorForm(
     private val context: Context,
     private val database: Database,
 ) : VBox(5.0) {
 
     private val itemsCount: IntegerProperty = SimpleIntegerProperty()
-
-    private val multipleItems: BooleanProperty = SimpleBooleanProperty().apply {
-        bind(itemsCount.greaterThan(1))
-    }
 
     private var items: List<Record> = emptyList()
 
@@ -54,7 +50,6 @@ class RecordEditorForm(
     }
 
     val onItemsModified: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
-    val onItemsDeleted: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
 
     private val changed: BooleanProperty = SimpleBooleanProperty(false)
 
@@ -80,7 +75,9 @@ class RecordEditorForm(
 
     private var bottom: Node
         get() = children[1]
-        set(value) = children.setAll(scrollPane, value).let { Unit }
+        set(value) {
+            children.setAll(scrollPane, value)
+        }
 
     init {
         this.scrollPane = buildScrollPane()
@@ -92,7 +89,10 @@ class RecordEditorForm(
 
         this.setValues(buildRecordValues(items))
         this.itemsCount.set(items.size)
-        this.changed.bind(currentForm.get().changedProperty().or(rating.isNotEqualTo(rating.get())))
+        this.currentForm.get()
+            .changedProperty()
+            .or(rating.isNotEqualTo(rating.get()))
+            .let(this.changed::bind)
     }
 
     private fun buildScrollPane() = ScrollPane().also {
@@ -123,42 +123,13 @@ class RecordEditorForm(
 
     private fun buildFormUI() {
         renderForm()?.let {
-            content = VBox(
-                buildTypeIndicator(),
-                Separator().apply { setMargin(this, Insets(10.0, 20.0, 0.0, 20.0)) },
-                it
-            )
+            content = it
             bottom = ControlBottom()
         }
     }
 
     private fun renderForm() = currentForm.get()?.let {
         FormRenderer(it).apply(::addAutoCompletionToLangField)
-    }
-
-    private fun buildTypeIndicator() = HBox(5.0).also { hBox ->
-        hBox.children.apply {
-            add(
-                FixedFontMaterialDesignIconView(
-                    when (recordType.get()) {
-                        Record.Type.MAGAZINE -> MaterialDesignIcon.NEWSPAPER
-                        else -> MaterialDesignIcon.BOOK
-                    }, 25.0
-                )
-            )
-            add(
-                Label(
-                    I18N.getValue(
-                        when (recordType.get()) {
-                            Record.Type.MAGAZINE -> "google.books.magazine"
-                            else -> "google.books.book"
-                        }
-                    )
-                ).apply { styleClass.add("medium-font") }
-                    .let { StackPane(it.apply { StackPane.setAlignment(this, Pos.CENTER_LEFT) }) }
-            )
-        }
-        VBox.setMargin(hBox, Insets(20.0, 0.0, 0.0, 20.0))
     }
 
     private fun buildRecordValues(items: List<Record>): RecordValues? =
@@ -300,48 +271,17 @@ class RecordEditorForm(
         init {
             this.children.apply {
                 add(buildSaveChangesButton())
-                add(buildRemoveButton())
             }
         }
 
         private fun buildSaveChangesButton() = Button(I18N.getValue("save.changes")).apply {
             graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE)
-            prefWidthProperty().bind(this@RecordEditorForm.widthProperty())
-            disableProperty().bind(this@RecordEditorForm.changed.not())
+            prefWidthProperty().bind(this@BaseEditorForm.widthProperty())
+            disableProperty().bind(this@BaseEditorForm.changed.not())
             setOnAction {
                 //TODO: preview dialog about what items will be changed
                 currentForm.get()?.persist()
                 ExploitativeExecutor.submit(buildSaveAction())
-            }
-        }
-
-        private fun buildRemoveButton() = Button(I18N.getValue("record.remove")).apply {
-            graphic = MaterialDesignIconView(MaterialDesignIcon.DELETE)
-            styleClass.add("remove-button")
-            prefWidthProperty().bind(this@RecordEditorForm.widthProperty())
-            setOnAction {
-                //TODO: showing what items will be removed 'Are you sure'
-                ExploitativeExecutor.submit(buildRemoveAction())
-            }
-        }
-
-        private fun buildRemoveAction() = object : Task<Unit>() {
-            init {
-                setOnRunning { showProgress() }
-                setOnSucceeded {
-                    stopProgress()
-                    currentForm.get()?.persist()
-                    onItemsDeleted.get()?.accept(ArrayList(items))
-                    //TODO: showing success notification
-                }
-                setOnFailed {
-                    stopProgress()
-                    //TODO: ALERT DIALOG
-                }
-            }
-
-            override fun call() {
-                items.forEach(database::removeRecord)
             }
         }
 
@@ -363,7 +303,7 @@ class RecordEditorForm(
             @Suppress("DuplicatedCode")
             override fun call() {
                 items.forEach { record ->
-                    this@RecordEditorForm.apply {
+                    this@BaseEditorForm.apply {
                         StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
                         StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
                         StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
@@ -393,6 +333,6 @@ class RecordEditorForm(
     }
     
     companion object {
-        private val logger: Logger = LoggerFactory.getLogger(RecordEditorForm::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(BaseEditorForm::class.java)
     }
 }

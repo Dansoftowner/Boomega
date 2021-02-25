@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.record.show.dock;
 
+import com.dansoftware.boomega.gui.record.edit.BaseEditor;
 import com.dansoftware.boomega.gui.record.edit.RecordEditor;
 import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
