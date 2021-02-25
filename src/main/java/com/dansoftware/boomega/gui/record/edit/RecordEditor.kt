@@ -3,6 +3,7 @@ package com.dansoftware.boomega.gui.record.edit
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.i18n.I18N
 import javafx.scene.Node
 import javafx.scene.control.Tab
 import javafx.scene.control.TabPane
@@ -18,7 +19,7 @@ class RecordEditor(
     private val baseEditor: BaseEditor = BaseEditor(context, database, items)
     private val notesEditor: NotesEditor = NotesEditor(context, database, items)
 
-    private val baseEditorTab: Tab = TabImpl("Fields", baseEditor).apply {
+    private val baseEditorTab: Tab = TabImpl("record.editor.tab.fields", baseEditor).apply {
         selectedProperty().addListener { _, _, selected ->
             when {
                 selected -> baseEditor.items = this@RecordEditor.items
@@ -26,7 +27,7 @@ class RecordEditor(
         }
     }
 
-    private val notesEditorTab: Tab = TabImpl("Notes", notesEditor).apply {
+    private val notesEditorTab: Tab = TabImpl("record.editor.tab.notes", notesEditor).apply {
         selectedProperty().addListener { _, _, selected ->
             when {
                 selected -> notesEditor.items = this@RecordEditor.items
@@ -65,7 +66,7 @@ class RecordEditor(
         }
     }
 
-    private class TabImpl(i18n: String, content: Node) : Tab(i18n, content) {
+    private class TabImpl(i18n: String, content: Node) : Tab(i18n.let(I18N::getValue), content) {
         init {
             this.isClosable = false
         }
