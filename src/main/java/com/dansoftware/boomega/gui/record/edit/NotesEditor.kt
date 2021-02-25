@@ -112,11 +112,11 @@ class NotesEditor(
     }
 
     private class NoSelectionPlaceHolder : StackPane() {
-
+        //TODO: no selection place holder
     }
 
     private class MultipleSelectionPlaceHolder : StackPane() {
-
+        //TODO: multiple selection place holder
     }
 
     companion object {
