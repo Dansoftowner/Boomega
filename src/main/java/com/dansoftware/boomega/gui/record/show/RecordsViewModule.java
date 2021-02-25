@@ -13,7 +13,10 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -174,6 +177,8 @@ public class RecordsViewModule extends WorkbenchModule
     private void buildToolbar() {
         this.getToolbarControlsRight().add(buildItemsPerPageItem());
         this.getToolbarControlsRight().add(buildSeparator());
+        this.getToolbarControlsRight().add(buildDeleteItem());
+        this.getToolbarControlsRight().add(buildSeparator());
         this.getToolbarControlsRight().add(buildCountItem());
         this.getToolbarControlsRight().add(buildSeparator());
         this.getToolbarControlsRight().add(buildRefreshItem());
@@ -192,6 +197,50 @@ public class RecordsViewModule extends WorkbenchModule
                         .concat(totalItems)
         );
         return toolbarItem;
+    }
+
+    private ToolbarItem buildDeleteItem() {
+        var item = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.DELETE));
+        //TODO: item.setTooltip();
+        content.addListener((observable, oldValue, newContent) -> {
+            if (newContent == null) {
+                item.disableProperty().unbind();
+                item.setOnAction(null);
+            } else {
+                final ObservableList<Record> selectedItems = newContent.getBooksTable().getSelectionModel().getSelectedItems();
+                item.disableProperty().bind(Bindings.isEmpty(selectedItems));
+                item.setOnClick(event -> {
+                    //TODO: showing confirmation dialog
+                    ExploitativeExecutor.INSTANCE
+                            .submit(buildRemoveAction(newContent.getBooksTable(), new ArrayList<>(selectedItems)));
+                });
+            }
+        });
+        return item;
+    }
+
+    private Task<Void> buildRemoveAction(RecordTable table, List<Record> items) {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                items.forEach(database::removeRecord);
+                return null;
+            }
+        };
+        task.setOnRunning(event -> context.showIndeterminateProgress());
+        task.setOnSucceeded(event -> {
+            context.stopProgress();
+            table.getItems().removeAll(items);
+        });
+        task.setOnFailed(event -> {
+            context.stopProgress();
+            //TODO: error dialog
+        });
+
+
+
+
+        return task;
     }
 
     private ToolbarItem buildItemsPerPageItem() {
