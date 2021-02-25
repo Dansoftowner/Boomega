@@ -3,76 +3,71 @@ package com.dansoftware.boomega.gui.record.edit
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.i18n.I18N
-import javafx.scene.control.Label
-import javafx.scene.layout.StackPane
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import javafx.scene.Node
+import javafx.scene.control.Tab
+import javafx.scene.control.TabPane
+import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.function.Consumer
 
 class RecordEditor(
     context: Context,
     database: Database,
     items: List<Record>
-) : StackPane() {
+) : TabPane() {
 
-    private val recordEditorForm = RecordEditorForm(context, database)
+    private val baseEditor: BaseEditor = BaseEditor(context, database, items)
+    private val notesEditor: NotesEditor = NotesEditor(context, database, items)
 
-    var onItemsModified: Consumer<List<Record>>
-        get() = recordEditorForm.onItemsModified.get()
+    private val baseEditorTab: Tab = TabImpl("Fields", baseEditor).apply {
+        selectedProperty().addListener { _, _, selected ->
+            when {
+                selected -> baseEditor.items = this@RecordEditor.items
+            }
+        }
+    }
+
+    private val notesEditorTab: Tab = TabImpl("Notes", notesEditor).apply {
+        selectedProperty().addListener { _, _, selected ->
+            when {
+                selected -> notesEditor.items = this@RecordEditor.items
+            }
+        }
+    }
+
+    var items: List<Record> = emptyList()
         set(value) {
-            recordEditorForm.onItemsModified.set(value)
+            field = value
+            value.let {
+                baseEditor.takeIf { baseEditorTab.isSelected }?.items = it
+                notesEditor.takeIf { notesEditorTab.isSelected }?.items = it
+            }
         }
 
-    var onItemsDeleted: Consumer<List<Record>>
-        get() = recordEditorForm.onItemsDeleted.get()
+    var onItemsModified: Consumer<List<Record>>
+        get() = baseEditor.onItemsModified
         set(value) {
-            recordEditorForm.onItemsDeleted.set(value)
+            baseEditor.onItemsModified = value
         }
 
     init {
+        this.items = items
+        this.styleClass.add(JMetroStyleClass.UNDERLINE_TAB_PANE)
         this.styleClass.add("record-editor")
-        this.setItems(items)
+        buildUI()
     }
 
-    fun setItems(items: List<Record>) {
-        buildBaseUI(items, this.getPreferredType(items)?.also {
-            this.recordEditorForm.setItems(it, items)
-        })
-    }
 
-    private fun getPreferredType(items: List<Record>) = items.map(Record::recordType).distinct().singleOrNull()
-
-    private fun buildBaseUI(items: List<Record>, type: Record.Type?) {
-        when {
-            items.isEmpty() -> children.setAll(EmptyPlaceHolder())
-            type == null -> children.setAll(MultipleRecordTypePlaceHolder())
-            else -> children.setAll(recordEditorForm)
+    private fun buildUI() {
+        this.tabs.apply {
+            //TODO: i18n titles
+            baseEditorTab.let(this::add)
+            notesEditorTab.let(this::add)
         }
     }
 
-
-    private class MultipleRecordTypePlaceHolder : StackPane() {
+    private class TabImpl(i18n: String, content: Node) : Tab(i18n, content) {
         init {
-            buildLabel().let(children::add)
+            this.isClosable = false
         }
-
-        private fun buildLabel() = Label(I18N.getValue("record.editor.placeholder.multiple_types")).apply {
-            styleClass.add("place-holder-label")
-        }
-    }
-
-    private class EmptyPlaceHolder : StackPane() {
-        init {
-            buildLabel().let(children::add)
-        }
-
-        private fun buildLabel() = Label(I18N.getValue("google.books.dock.placeholder.noselection")).apply {
-            styleClass.add("place-holder-label")
-        }
-    }
-
-    companion object {
-        val logger: Logger = LoggerFactory.getLogger(RecordEditor::class.java)
     }
 }
