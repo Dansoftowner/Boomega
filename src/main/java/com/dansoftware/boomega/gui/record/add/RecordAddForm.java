@@ -1,7 +1,6 @@
 package com.dansoftware.boomega.gui.record.add;
 
 import com.dansoftware.boomega.db.data.Record;
-import com.dansoftware.boomega.db.data.ServiceConnection;
 import com.dansoftware.boomega.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.boomega.googlebooks.Volume;
 import com.dansoftware.boomega.gui.context.Context;
@@ -22,16 +21,12 @@ import com.dlsc.formsfx.view.util.ColSpan;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.*;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -43,23 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.function.Consumer;
 
-/**
- * A {@link RecordAddForm} provides a UI for typing Book/Magazine data.
- *
- * <p>
- * It has a {@link Record.Type} property that represents what type of database record
- * typed.
- *
- * <p>
- * The {@link #setOnRecordAdded(Consumer)} method can be used for listening to commits
- *
- * @author Daniel Gyorffy
- */
 public class RecordAddForm extends VBox {
-
     private static final Logger logger = LoggerFactory.getLogger(RecordAddForm.class);
 
     private static final String STYLE_CLASS = "record-add-form";
@@ -70,9 +50,6 @@ public class RecordAddForm extends VBox {
             handleTypeChange(get());
         }
     };
-
-    private final ObjectProperty<Consumer<Record>> onRecordAdded =
-            new SimpleObjectProperty<>();
 
     private final ObjectProperty<Form> currentForm =
             new SimpleObjectProperty<>();
@@ -90,50 +67,13 @@ public class RecordAddForm extends VBox {
     private final IntegerProperty rating = new SimpleIntegerProperty(0);
     private final StringProperty googleBookHandle = new SimpleStringProperty();
 
-    private final VBox contentVBox;
     private final Context context;
-    private final FormNotesEditor notesEditor;
-
     private VBox googleBookTileBox;
 
     public RecordAddForm(@NotNull Context context, @NotNull Record.Type initialType) {
         this.context = context;
-        this.contentVBox = new VBox();
-        this.notesEditor = buildNotesControl();
         this.recordType.set(initialType);
         this.getStyleClass().add(STYLE_CLASS);
-        this.buildBaseUI();
-    }
-
-    private void buildBaseUI() {
-        this.getChildren().add(buildScrollPane());
-        this.getChildren().add(buildCommitButton());
-    }
-
-    private ScrollPane buildScrollPane() {
-        var scrollPane = new ScrollPane();
-        scrollPane.setContent(contentVBox);
-        scrollPane.setFitToWidth(true);
-        VBox.setVgrow(scrollPane, Priority.ALWAYS);
-        return scrollPane;
-    }
-
-    private Node buildCommitButton() {
-        var button = new Button(
-                I18N.getValue("record.add.form.commit"),
-                new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE));
-        button.getStyleClass().add("record-add-button");
-        button.setDefaultButton(true);
-        button.disableProperty().bind(currentForm.get().validProperty().not());
-        //setting the mouse event handler instead of action event handler because of "html editor->enter bug"
-        button.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                commitRecord();
-            }
-        });
-        button.prefWidthProperty().bind(this.widthProperty());
-        button.addEventFilter(KeyEvent.KEY_TYPED, Event::consume);
-        return button;
     }
 
     private void handleTypeChange(@NotNull Record.Type recordType) {
@@ -147,11 +87,10 @@ public class RecordAddForm extends VBox {
     }
 
     private void buildFormUI() {
-        contentVBox.getChildren().setAll(
+        this.getChildren().setAll(
                 renderForm(),
                 buildNewRatingControl(),
-                buildGoogleBookJoiner(),
-                notesEditor
+                buildGoogleBookJoiner()
         );
     }
 
@@ -159,6 +98,10 @@ public class RecordAddForm extends VBox {
         var formRenderer = new FormRenderer(currentForm.get());
         addAutoCompletionToLangField(formRenderer);
         return formRenderer;
+    }
+
+    public BooleanProperty validProperty() {
+        return this.currentForm.get().validProperty();
     }
 
     public void setValues(@Nullable RecordValues values) {
@@ -174,7 +117,6 @@ public class RecordAddForm extends VBox {
             this.language.setValue(values.getLanguage());
             this.isbn.setValue(values.getIsbn());
             this.subject.setValue(values.getSubject());
-            this.notesEditor.setHtmlText(values.getNotes());
             this.rating.setValue(values.getRating());
             this.removeGoogleBookConnection();
             this.createGoogleBookConnection(values.getVolumeObject());
@@ -240,15 +182,7 @@ public class RecordAddForm extends VBox {
         return button;
     }
 
-    private void commitRecord() {
-        Consumer<Record> addAction = onRecordAdded.get();
-        if (addAction != null) {
-            addAction.accept(buildRecordObject());
-            clearForm();
-        }
-    }
-
-    private void clearForm() {
+    void clearForm() {
         title.set("");
         subtitle.set("");
         publishedDate.set(null);
@@ -258,7 +192,6 @@ public class RecordAddForm extends VBox {
         language.set("");
         isbn.set("");
         subject.set("");
-        notesEditor.setHtmlText("");
         numberOfCopies.setValue(null);
         rating.setValue(null);
         googleBookHandle.set(null);
@@ -283,24 +216,6 @@ public class RecordAddForm extends VBox {
     private void removeGoogleBookConnection() {
         googleBookHandle.set(null);
         googleBookTileBox.getChildren().removeIf(e -> e instanceof GoogleBookTile);
-    }
-
-    private Record buildRecordObject() {
-        return new Record.Builder(recordType.get())
-                .title(title.get())
-                .subtitle(subtitle.get())
-                .publishedDate(publishedDate.get())
-                .publisher(publisher.get())
-                .magazineName(magazineName.get())
-                .authors(List.of(authors.get().split(",")))
-                .language(language.get())
-                .isbn(isbn.get())
-                .subject(subject.get())
-                .notes(notesEditor.getHtmlText())
-                .numberOfCopies(numberOfCopies.get())
-                .rating(rating.get())
-                .serviceConnection(new ServiceConnection(googleBookHandle.get()))
-                .build();
     }
 
     private Form buildBookForm() {
@@ -394,18 +309,6 @@ public class RecordAddForm extends VBox {
                 .binding(BindingMode.CONTINUOUS);
     }
 
-    public Consumer<Record> getOnRecordAdded() {
-        return onRecordAdded.get();
-    }
-
-    public ObjectProperty<Consumer<Record>> onRecordAddedProperty() {
-        return onRecordAdded;
-    }
-
-    public void setOnRecordAdded(Consumer<Record> onRecordAdded) {
-        this.onRecordAdded.set(onRecordAdded);
-    }
-
     public String getTitle() {
         return title.get();
     }
@@ -476,10 +379,6 @@ public class RecordAddForm extends VBox {
 
     public StringProperty subjectProperty() {
         return subject;
-    }
-
-    public String getNotes() {
-        return notesEditor.getHtmlText();
     }
 
     public int getNumberOfCopies() {
