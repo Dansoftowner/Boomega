@@ -8,17 +8,17 @@ package com.dansoftware.boomega.db.data
  */
 class ServiceConnection {
 
-    private val infoMap: MutableMap<String, Any> = HashMap()
+    private val infoMap: MutableMap<String, Any?> = HashMap()
 
     @Deprecated("Use the new googleBookHandle instead")
-    var googleBookLink: String
+    var googleBookLink: String?
         get() = this.googleBookHandle
         set(value) {
             this.googleBookHandle = value
         }
 
-    var googleBookHandle: String
-        get() = infoMap[GOOGLE_BOOK_HANDLE].toString()
+    var googleBookHandle: String?
+        get() = infoMap[GOOGLE_BOOK_HANDLE]?.toString()
         set(value) {
             infoMap[GOOGLE_BOOK_HANDLE] = value
         }
@@ -38,7 +38,7 @@ class ServiceConnection {
 
     fun getString(key: String) = this[key].toString()
 
-    fun put(key: String, value: Any) = infoMap.put(key, value)
+    fun put(key: String, value: Any?) = infoMap.put(key, value).let { this }
 
     fun remove(key: String) = infoMap.remove(key)
 
