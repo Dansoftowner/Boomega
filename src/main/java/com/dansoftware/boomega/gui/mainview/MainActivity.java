@@ -30,13 +30,21 @@ public class MainActivity implements ContextTransformable {
         this.preferences = Objects.requireNonNull(preferences);
         this.databaseTracker = Objects.requireNonNull(databaseTracker);
         this.showing = new SimpleBooleanProperty();
-        this.mainView = new MainView(this, database, preferences, databaseTracker);
+        this.mainView = new MainView(preferences, database);
         instances.add(new WeakReference<>(this));
         databaseTracker.usingDatabase(database.getMeta());
     }
 
     public boolean show() {
-        final MainWindow mainWindow = new MainWindow(mainView);
+        final MainWindow mainWindow = new MainWindow(
+                mainView,
+                new AppMenuBar(
+                        mainView.getContext(),
+                        mainView,
+                        preferences,
+                        databaseTracker
+                )
+        );
         mainWindow.show();
         mainWindow.addEventHandler(
                 WindowEvent.WINDOW_HIDDEN,

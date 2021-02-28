@@ -51,7 +51,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         initDisablePolicy(mainView)
         this.menus.addAll(
             FileMenu(context, mainView.openedDatabase, preferences, tracker),
-            ModuleMenu(mainView.contentView),
+            ModuleMenu(mainView),
             PreferencesMenu(context, preferences),
             WindowMenu(context),
             HelpMenu(context)
@@ -59,7 +59,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
     }
 
     private fun initDisablePolicy(mainView: MainView) {
-        mainView.contentView.let {
+        mainView.let {
             this.overlayNotShowing =
                 Bindings.isEmpty(it.blockingOverlaysShown).and(Bindings.isEmpty(it.nonBlockingOverlaysShown))
                     .also { observable ->
@@ -207,10 +207,10 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         }
     }
 
-    private class ModuleMenu(val contentView: MainContentView) : Menu(I18N.getValue("menubar.menu.modules")) {
+    private class ModuleMenu(val view: MainView) : Menu(I18N.getValue("menubar.menu.modules")) {
         init {
-            contentView.modules.forEach {
-                this.menuItem(MenuItem(it.name, it.icon).action { _ -> contentView.openModule(it) })
+            view.modules.forEach {
+                this.menuItem(MenuItem(it.name, it.icon).action { _ -> view.openModule(it) })
             }
         }
     }

@@ -5,53 +5,78 @@ import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
-import com.dansoftware.boomega.gui.entry.DatabaseTracker;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+import com.dansoftware.boomega.gui.googlebooks.GoogleBooksImportModule;
+import com.dansoftware.boomega.gui.record.add.RecordAddModule;
+import com.dansoftware.boomega.gui.record.show.RecordsViewModule;
+import com.dlsc.workbenchfx.Workbench;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+public class MainView extends Workbench implements ContextTransformable {
 
-public class MainView extends BorderPane implements ContextTransformable {
-
-    @SuppressWarnings({"unused", "FieldCanBeLocal"})
-    private final MainActivity activity;
+    private final Context asContext;
+    private final Preferences preferences;
     private final Database database;
 
-    private final MenuBarBase menuBar;
-    private final MainContentView contentView;
-
-    MainView(@NotNull MainActivity activity,
-             @NotNull Database database,
-             @NotNull Preferences preferences,
-             @NotNull DatabaseTracker tracker) {
-        this.activity = Objects.requireNonNull(activity);
-        this.contentView = new MainContentView(preferences, database);
+    MainView(@NotNull Preferences preferences, @NotNull Database database) {
+        this.asContext = Context.from(this);
+        this.preferences = preferences;
         this.database = database;
-        this.menuBar = new MenuBarBase(new AppMenuBar(contentView.getContext(), this, preferences, tracker));
-        this.setTop(menuBar);
-        this.setCenter(contentView);
-    }
-
-    public MainContentView getContentView() {
-        return this.contentView;
-    }
-
-    @Override
-    public @NotNull Context getContext() {
-        return contentView.getContext();
+        initModules();
+        initUiModifications();
     }
 
     public DatabaseMeta getOpenedDatabase() {
         return database.getMeta();
     }
 
-    private static final class MenuBarBase extends StackPane {
-        private static final String STYLE_CLASS = "menu-bar-base";
+    private void initUiModifications() {
+        this.sceneProperty().addListener(new ChangeListener<Scene>() {
+            @Override
+            public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene scene) {
+                if (scene != null) {
+                    scene.windowProperty().addListener(new ChangeListener<Window>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Window> observable, Window oldValue, Window window) {
+                            if (window != null) {
+                                window.showingProperty().addListener(new ChangeListener<Boolean>() {
+                                    @Override
+                                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean windowShown) {
+                                        if (windowShown) {
+                                            modifyAddButton();
+                                            observable.removeListener(this);
+                                        }
+                                    }
+                                });
+                                observable.removeListener(this);
+                            }
+                        }
+                    });
+                    observable.removeListener(this);
+                }
+            }
+        });
+    }
 
-        MenuBarBase(@NotNull javafx.scene.control.MenuBar menuBar) {
-            getChildren().add(menuBar);
-            getStyleClass().add(STYLE_CLASS);
-        }
+    private void modifyAddButton() {
+        final Button addButton = (Button) MainView.this.lookup("#add-button");
+        addButton.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.HOME));
+    }
+
+    private void initModules() {
+        getModules().add(new GoogleBooksImportModule(asContext, preferences));
+        getModules().add(new RecordAddModule(asContext, database));
+        getModules().add(new RecordsViewModule(asContext, preferences, database));
+    }
+
+    @Override
+    public @NotNull Context getContext() {
+        return asContext;
     }
 }
