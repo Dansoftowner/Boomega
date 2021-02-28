@@ -1,13 +1,15 @@
 package com.dansoftware.boomega.gui.window
 
-import com.dansoftware.boomega.gui.context.ContextTransformable
 import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
+import com.dansoftware.boomega.gui.context.ContextTransformable
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.util.loadImageResource
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.main.ApplicationRestart
+import com.dansoftware.boomega.util.os.OsInfo
+import de.jangassen.MenuToolkit
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableStringValue
@@ -16,11 +18,15 @@ import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
+import javafx.scene.control.MenuBar
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
+import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 import org.apache.commons.lang3.StringUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * A [BaseWindow] is a [Stage] implementation that
@@ -70,10 +76,26 @@ abstract class BaseWindow<C> : Stage, Themeable
         this.scene = Scene(content)
     }
 
-    protected constructor(baseTitle: String, separator: String, additionalTitleValue: String, content: C) {
+
+    protected constructor(
+        baseTitle: String,
+        separator: String,
+        additionalTitleValue: String,
+        content: C
+    ) {
         this.title = "$baseTitle $separator $additionalTitleValue"
         this.content = content
         this.scene = Scene(content)
+    }
+
+    protected constructor(
+        title: String,
+        menuBar: MenuBar,
+        content: C
+    ) {
+        this.title = title
+        this.content = content
+        this.scene = Scene(buildMenuBarContent(content, menuBar))
     }
 
     protected constructor(i18n: String, separator: String, changingString: ObservableStringValue, content: C) {
@@ -88,6 +110,18 @@ abstract class BaseWindow<C> : Stage, Themeable
             newTheme.apply(it)
         }
     }
+
+    private fun buildMenuBarContent(content: C, menuBar: MenuBar): Parent =
+        when {
+            OsInfo.isMac() -> content.also {
+                logger.debug("MacOS detected: building native menu bar...")
+                MenuToolkit.toolkit().setMenuBar(this, menuBar)
+            }
+            else -> {
+                logger.debug("MacOS is not detected: building JavaFX based menu-bar...")
+                BorderPane(content).apply { top = menuBar }
+            }
+        }
 
     private fun setupIconPack() {
         this.icons.addAll(
@@ -211,12 +245,12 @@ abstract class BaseWindow<C> : Stage, Themeable
     }
 
     /**
-     * For defining the resource-locations for window-icons
-     *
      * The icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [ www.flaticon.com](https://www.flaticon.com/)
      * [Go to website](https://www.flaticon.com/free-icon/bookshelf_3100669?term=library&page=1&position=12)
      */
     private companion object Icon {
+        private val logger: Logger = LoggerFactory.getLogger(BaseWindow::class.java)
+
         /**
          * The 16px libraryapp icon's path.
          */
