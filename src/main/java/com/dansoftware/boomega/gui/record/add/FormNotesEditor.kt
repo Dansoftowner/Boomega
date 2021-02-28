@@ -19,7 +19,7 @@ private class FormNotesEditor : BorderPane() {
 
     private val htmlEditor: HTMLEditor = HTMLEditor()
 
-    var htmlText: String
+    var htmlText: String?
         get() = htmlEditor.htmlText
         set(value) {
             htmlEditor.htmlText = value

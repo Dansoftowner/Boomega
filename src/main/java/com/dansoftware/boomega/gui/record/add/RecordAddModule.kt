@@ -30,7 +30,7 @@ class RecordAddModule(
 ) : WorkbenchModule(I18N.getValue("record.add.module.title"), MaterialDesignIcon.PLUS_BOX),
     NotifiableModule<RecordValues?> {
 
-    private val content: ObjectProperty<RecordAddForm> = SimpleObjectProperty()
+    private val content: ObjectProperty<RecordAddView> = SimpleObjectProperty()
     private lateinit var typeChooserItem: ToolbarItem
 
     init {
@@ -52,9 +52,9 @@ class RecordAddModule(
                     toolbarItem.items.add(RadioMenuItem(I18N.getValue(i18n)).also {
                         it.toggleGroup = toggleGroup
                         it.userData = recordType
-                        it.setOnAction { content.get().recordTypeProperty().set(recordType) }
-                        content.addListener { _, _, newForm: RecordAddForm? ->
-                            it.isSelected = recordType == newForm?.recordTypeProperty()?.get()
+                        it.setOnAction { content.get().recordType = recordType }
+                        content.addListener { _, _, newForm: RecordAddView? ->
+                            it.isSelected = recordType == newForm?.recordType
                         }
                     })
 
@@ -86,8 +86,8 @@ class RecordAddModule(
 
     override fun destroy(): Boolean = content.set(null).let { true }
 
-    private fun buildForm(): RecordAddForm =
-        RecordAddForm(
+    private fun buildForm(): RecordAddView =
+        RecordAddView(
             context,
             Record.Type.BOOK
         ).also {
