@@ -46,6 +46,7 @@ public class DependencyTable extends TableView<DependencyInfo>
         NameColumn() {
             setText("Software");
             setCellFactory(this);
+            setSortable(false);
             setMinWidth(300);
         }
 
@@ -83,6 +84,7 @@ public class DependencyTable extends TableView<DependencyInfo>
         LicenseColumn() {
             setText("License");
             setCellFactory(this);
+            setSortable(false);
             setMinWidth(300);
         }
 
