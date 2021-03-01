@@ -123,7 +123,8 @@ public class RecordAddView extends VBox {
 
     private FormNotesEditor buildNotesControl() {
         var notesEditor = new FormNotesEditor();
-        notesEditor.setPrefHeight(200);
+        notesEditor.setPrefWidth(700);
+        notesEditor.setMaxWidth(USE_PREF_SIZE);
         VBox.setMargin(notesEditor, new Insets(10, 40, 10, 40));
         return notesEditor;
     }
