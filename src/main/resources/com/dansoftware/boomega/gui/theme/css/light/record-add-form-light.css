@@ -11,11 +11,20 @@
 }
 
 .notes-title-bar {
-    -fx-border-color: #8a8a8a #8a8a8a transparent #8a8a8a;
     -fx-background-color: #d9d9d9;
 }
 
 .record-add-button {
     -fx-pref-height: 40px;
     -fx-font-weight: bold;
+}
+
+.record-add-view .split-pane:vertical > .split-pane-divider,
+.record-add-view .split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: #acacac;
+    -fx-padding: 0 1 0 0;
+}
+
+.record-add-view .html-editor {
+    -fx-box-border: transparent;
 }
