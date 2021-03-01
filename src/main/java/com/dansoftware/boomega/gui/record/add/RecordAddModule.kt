@@ -57,10 +57,14 @@ class RecordAddModule(
             typeChooserItem = toolbarItem
             ToggleGroup().also { toggleGroup ->
                 toggleGroup.selectedToggleProperty()
-                    .addListener { _, _, newSelected -> toolbarItem.text = (newSelected as MenuItem?)?.text }
+                    .addListener { _, _, newSelected ->
+                        toolbarItem.graphic = (newSelected as MenuItem?)?.graphic
+                        toolbarItem.text = (newSelected as MenuItem?)?.text
+                    }
 
-                fun createItem(i18n: String, recordType: Record.Type) =
+                fun createItem(i18n: String, recordType: Record.Type, icon: MaterialDesignIcon) =
                     toolbarItem.items.add(RadioMenuItem(I18N.getValue(i18n)).also {
+                        it.graphic = MaterialDesignIconView(icon)
                         it.toggleGroup = toggleGroup
                         it.userData = recordType
                         it.setOnAction { content.get().recordType = recordType }
@@ -72,11 +76,13 @@ class RecordAddModule(
 
                 createItem(
                     "record.add.rectype.book",
-                    Record.Type.BOOK
+                    Record.Type.BOOK,
+                    MaterialDesignIcon.BOOK
                 )
                 createItem(
                     "record.add.rectype.magazine",
-                    Record.Type.MAGAZINE
+                    Record.Type.MAGAZINE,
+                    MaterialDesignIcon.NEWSPAPER
                 )
             }
         }
