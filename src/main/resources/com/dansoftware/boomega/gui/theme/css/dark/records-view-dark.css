@@ -33,3 +33,7 @@
     -fx-background-color: #585858;
     -fx-padding: 0 1 0 0;
 }
+
+.records-view .table-view {
+    -fx-border-width: 0;
+}
