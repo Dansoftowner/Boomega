@@ -20,6 +20,7 @@ import com.dlsc.formsfx.view.renderer.FormRenderer;
 import com.dlsc.formsfx.view.util.ColSpan;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -100,8 +101,16 @@ public class RecordAddForm extends VBox {
         return formRenderer;
     }
 
-    public BooleanProperty validProperty() {
-        return this.currentForm.get().validProperty();
+    public BooleanBinding validProperty() {
+        return title.isNotEmpty()
+                .or(subtitle.isNotEmpty())
+                .or(publisher.isNotEmpty())
+                .or(magazineName.isNotEmpty())
+                .or(authors.isNotEmpty())
+                .or(language.isNotEmpty())
+                .or(isbn.isNotEmpty())
+                .or(subject.isNotEmpty())
+                .or(publishedDate.isNotNull());
     }
 
     public void setValues(@Nullable RecordValues values) {
@@ -229,7 +238,6 @@ public class RecordAddForm extends VBox {
                         Field.ofStringType(title)
                                 .label("record.add.form.title")
                                 .placeholder("record.add.form.title.prompt")
-                                .required("record.title.required")
                                 .span(ColSpan.HALF),
                         Field.ofStringType(subtitle)
                                 .label("record.add.form.subtitle")
@@ -280,7 +288,6 @@ public class RecordAddForm extends VBox {
                         Field.ofStringType(magazineName)
                                 .label("record.add.form.magazinename")
                                 .placeholder("record.add.form.magazinename.prompt")
-                                .required("record.magazinename.required")
                                 .span(ColSpan.HALF),
                         Field.ofStringType(title)
                                 .label("record.add.form.title")
