@@ -10,6 +10,7 @@ import com.dansoftware.boomega.i18n.I18N
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
@@ -39,7 +40,17 @@ class RecordAddModule(
 
     private fun buildToolbar() {
         toolbarControlsLeft.add(buildRecordTypeChooserItem())
+        toolbarControlsRight.add(buildClearItem())
     }
+
+    private fun buildClearItem(): ToolbarItem =
+        ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.DELETE)).apply {
+            //TODO: tooltip
+            setOnClick {
+                //TODO: confirmation dialog before clearing
+                content.get().clearForm()
+            }
+        }
 
     private fun buildRecordTypeChooserItem(): ToolbarItem =
         ToolbarItem().also { toolbarItem ->

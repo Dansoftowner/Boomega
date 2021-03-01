@@ -136,7 +136,7 @@ public class RecordAddView extends VBox {
         }
     }
 
-    private void clearForm() {
+    public void clearForm() {
         form.clearForm();
         notesEditor.setHtmlText("");
     }
