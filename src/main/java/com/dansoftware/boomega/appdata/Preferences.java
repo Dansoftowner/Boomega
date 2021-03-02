@@ -95,13 +95,18 @@ public class Preferences {
 
     // ------> Methods for reading data
     public <T> T get(@NotNull Key<T> key) {
-        JsonElement jsonElement = this.jsonStorage.get(key.jsonKey);
-        if (Objects.isNull(jsonElement)) {
+        try {
+            JsonElement jsonElement = this.jsonStorage.get(key.jsonKey);
+            if (Objects.isNull(jsonElement)) {
+                return key.defaultValue.get();
+            }
+
+            T value = gson.fromJson(jsonElement, key.type);
+            return Objects.isNull(value) ? key.defaultValue.get() : value;
+        } catch (RuntimeException e) {
+            logger.error("Couldn't parse value for '{}'", key.jsonKey, e);
             return key.defaultValue.get();
         }
-
-        T value = gson.fromJson(jsonElement, key.type);
-        return Objects.isNull(value) ? key.defaultValue.get() : value;
     }
 
     @SuppressWarnings("unused")
