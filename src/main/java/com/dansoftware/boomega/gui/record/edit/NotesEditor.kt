@@ -4,6 +4,7 @@ import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
@@ -112,11 +113,23 @@ class NotesEditor(
     }
 
     private class NoSelectionPlaceHolder : StackPane() {
-        //TODO: no selection place holder
+        init {
+            buildLabel().let(children::add)
+        }
+
+        private fun buildLabel() = Label(I18N.getValue("google.books.dock.placeholder.noselection")).apply {
+            styleClass.add("place-holder-label")
+        }
     }
 
     private class MultipleSelectionPlaceHolder : StackPane() {
-        //TODO: multiple selection place holder
+        init {
+            buildLabel().let(children::add)
+        }
+
+        private fun buildLabel() = Label(I18N.getValue("google.books.dock.placeholder.multiple")).apply {
+            styleClass.add("place-holder-label")
+        }
     }
 
     companion object {
