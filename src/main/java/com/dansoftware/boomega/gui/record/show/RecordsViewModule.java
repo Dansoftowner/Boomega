@@ -55,6 +55,9 @@ public class RecordsViewModule extends WorkbenchModule
                     Locale::getDefault
             );
 
+    private static final Preferences.Key<RecordsView.DockInfo> docksConfigKey =
+            new Preferences.Key<>("books.view.dock.info", RecordsView.DockInfo.class, RecordsView.DockInfo::defaultInfo);
+
     public static final class Message {
 
         private final Action action;
@@ -101,7 +104,7 @@ public class RecordsViewModule extends WorkbenchModule
         this.context = context;
         this.preferences = preferences;
         this.database = database;
-        this.readConfig();
+        this.readBaseConfig();
         this.countTotalItems();
         this.buildToolbar();
     }
@@ -145,7 +148,7 @@ public class RecordsViewModule extends WorkbenchModule
         ExploitativeExecutor.INSTANCE.submit(() -> totalItems.set(database.getTotalRecordCount()));
     }
 
-    private void readConfig() {
+    private void readBaseConfig() {
         itemsPerPage.set(preferences.get(itemsPerPageConfigKey));
         abcLocale.set(preferences.get(abcConfigKey));
     }
@@ -163,7 +166,8 @@ public class RecordsViewModule extends WorkbenchModule
         preferences.editor()
                 .put(itemsPerPageConfigKey, itemsPerPage.get())
                 .put(colConfigKey, new TableColumnsInfo(getTable().getShowingColumns()))
-                .put(abcConfigKey, abcLocale.get());
+                .put(abcConfigKey, abcLocale.get())
+                .put(docksConfigKey, content.get().getDockInfo());
     }
 
     private RecordsView buildContent() {
@@ -171,6 +175,7 @@ public class RecordsViewModule extends WorkbenchModule
         recordsView.setOnItemsDeleted(records -> this.totalItems.set(totalItems.get() - records.size()));
         readColumnConfigurations(recordsView.getBooksTable());
         loadBooks(recordsView);
+        readDockConfigurations(recordsView);
         return recordsView;
     }
 
@@ -351,6 +356,10 @@ public class RecordsViewModule extends WorkbenchModule
         );
         task.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> content.setDockFullyResizable());
         ExploitativeExecutor.INSTANCE.submit(task);
+    }
+
+    private void readDockConfigurations(RecordsView content) {
+        content.setDockInfo(preferences.get(docksConfigKey));
     }
 
     @SuppressWarnings("DuplicatedCode")

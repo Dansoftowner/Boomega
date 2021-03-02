@@ -10,9 +10,11 @@ import com.dansoftware.boomega.gui.record.show.dock.RecordEditorDock;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -36,6 +38,8 @@ public class RecordsView extends SplitPane {
     private final SplitPane leftSplitPane;
     private final SplitPane rightSplitPane;
 
+    private Dock[] docks;
+
     RecordsView(@NotNull Context context, @NotNull Database database) {
         this.context = context;
         this.database = database;
@@ -49,15 +53,12 @@ public class RecordsView extends SplitPane {
 
     private SplitPane buildLeftSplitPane() {
         SplitPane splitPane = buildDockSplitPane();
-        splitPane.getItems().add(recordTable);
-        splitPane.getItems().add(buildBookEditorDock(splitPane));
         SplitPane.setResizableWithParent(splitPane, true);
         return splitPane;
     }
 
     private SplitPane buildRightSplitPane() {
         SplitPane splitPane = buildDockSplitPane();
-        splitPane.getItems().add(buildGoogleBooksDock(splitPane));
         splitPane.setPrefWidth(500);
         splitPane.setMaxWidth(500);
         SplitPane.setResizableWithParent(splitPane, false);
@@ -78,22 +79,31 @@ public class RecordsView extends SplitPane {
         this.getItems().addAll(leftSplitPane, rightSplitPane);
     }
 
-    private Node buildBookEditorDock(SplitPane dockSplitPane) {
-        var recordEditor = new RecordEditor(context, database, this.recordTable.getSelectionModel().getSelectedItems());
-        recordEditor.setOnItemsModified(items -> recordTable.refresh());
-        this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
-            recordEditor.setItems(this.recordTable.getSelectionModel().getSelectedItems());
-        });
-        return new RecordEditorDock(dockSplitPane, recordEditor);
+    public void setDockInfo(DockInfo dockInfo) {
+        setDocks(dockInfo.docks);
+        setRecordTablePos(dockInfo.recordTablePos);
     }
 
-    private Node buildGoogleBooksDock(SplitPane dockSplitPane) {
-        var dockContent = new GoogleBookConnectionView(context, database, recordTable.getSelectionModel().getSelectedItems());
-        dockContent.setOnRefreshed(recordTable::refresh);
-        this.recordTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change -> {
-            dockContent.setItems(this.recordTable.getSelectionModel().getSelectedItems());
-        });
-        return new GoogleBookConnectionDock(dockSplitPane, dockContent);
+    public DockInfo getDockInfo() {
+        return new DockInfo(docks, getRecordTablePos());
+    }
+
+    public int getRecordTablePos() {
+        return leftSplitPane.getItems().indexOf(recordTable);
+    }
+
+    public void setRecordTablePos(int pos) {
+        leftSplitPane.getItems().add(pos, recordTable);
+    }
+
+    public void setDocks(Dock[] docks) {
+        this.docks = docks;
+        for (Dock dock : docks)
+            dock.align(context, database, recordTable, leftSplitPane, rightSplitPane);
+    }
+
+    public Dock[] getDocks() {
+        return this.docks;
     }
 
     public void setDockFullyResizable() {
@@ -120,4 +130,59 @@ public class RecordsView extends SplitPane {
         return recordTable;
     }
 
+    public static class DockInfo {
+        private Dock[] docks;
+        private int recordTablePos;
+
+        public DockInfo(Dock[] docks, int recordTablePos) {
+            this.docks = docks;
+            this.recordTablePos = recordTablePos;
+        }
+
+        public static DockInfo defaultInfo() {
+            return new DockInfo(Dock.values(), 0);
+        }
+    }
+
+    public enum Dock {
+
+        GOOGLE_BOOK_CONNECTION() {
+            @Override
+            protected void align(Context context,
+                                 Database database,
+                                 TableView<Record> table,
+                                 SplitPane leftSplitPane,
+                                 SplitPane rightSplitPane) {
+
+                var dockContent = new GoogleBookConnectionView(context, database, table.getSelectionModel().getSelectedItems());
+                dockContent.setOnRefreshed(table::refresh);
+                table.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change ->
+                        dockContent.setItems(table.getSelectionModel().getSelectedItems()));
+                rightSplitPane.getItems().add(new GoogleBookConnectionDock(rightSplitPane, dockContent));
+            }
+        },
+
+        RECORD_EDITOR() {
+            @Override
+            protected void align(Context context,
+                                 Database database,
+                                 TableView<Record> table,
+                                 SplitPane leftSplitPane,
+                                 SplitPane rightSplitPane) {
+
+                var recordEditor = new RecordEditor(context, database, table.getSelectionModel().getSelectedItems());
+                recordEditor.setOnItemsModified(items -> table.refresh());
+                table.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change ->
+                        recordEditor.setItems(table.getSelectionModel().getSelectedItems()));
+                leftSplitPane.getItems().add(new RecordEditorDock(leftSplitPane, recordEditor));
+            }
+        };
+
+        protected abstract void align(
+                Context context,
+                Database database,
+                TableView<Record> table,
+                SplitPane leftSplitPane,
+                SplitPane rightSplitPane);
+    }
 }
