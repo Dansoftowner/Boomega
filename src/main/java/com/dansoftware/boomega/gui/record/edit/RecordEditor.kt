@@ -60,7 +60,6 @@ class RecordEditor(
 
     private fun buildUI() {
         this.tabs.apply {
-            //TODO: i18n titles
             baseEditorTab.let(this::add)
             notesEditorTab.let(this::add)
         }
