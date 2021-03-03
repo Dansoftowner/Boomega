@@ -15,6 +15,8 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -44,17 +46,10 @@ public class RecordsViewModule extends WorkbenchModule
 
     private static final Preferences.Key<Integer> itemsPerPageConfigKey =
             new Preferences.Key<>("books.view.items.per.page", Integer.class, () -> 10);
-
     private static final Preferences.Key<TableColumnsInfo> colConfigKey =
             new Preferences.Key<>("books.view.table.columns", TableColumnsInfo.class, TableColumnsInfo::byDefault);
-
     private static final Preferences.Key<Locale> abcConfigKey =
-            new Preferences.Key<>(
-                    "books.view.module.table.abcsort",
-                    Locale.class,
-                    Locale::getDefault
-            );
-
+            new Preferences.Key<>("books.view.module.table.abcsort", Locale.class, Locale::getDefault);
     private static final Preferences.Key<RecordsView.DockInfo> docksConfigKey =
             new Preferences.Key<>("books.view.dock.info", RecordsView.DockInfo.class, RecordsView.DockInfo::defaultInfo);
 
@@ -65,8 +60,7 @@ public class RecordsViewModule extends WorkbenchModule
 
 
         public Message(Record record, @NotNull Action action) {
-            this.records = Collections.singletonList(record);
-            this.action = action;
+            this(Collections.singletonList(record), action);
         }
 
         public Message(@NotNull List<Record> records, @NotNull Action action) {
@@ -192,6 +186,7 @@ public class RecordsViewModule extends WorkbenchModule
         this.getToolbarControlsLeft().add(columnChooserItem = buildColumnChooserItem());
         this.getToolbarControlsLeft().add(buildColumnResetItem());
         this.getToolbarControlsLeft().add(buildABCChooserItem());
+        this.getToolbarControlsLeft().add(buildDockSelectionItem());
     }
 
     private ToolbarItem buildCountItem() {
@@ -241,10 +236,6 @@ public class RecordsViewModule extends WorkbenchModule
             context.stopProgress();
             //TODO: error dialog
         });
-
-
-
-
         return task;
     }
 
@@ -324,6 +315,13 @@ public class RecordsViewModule extends WorkbenchModule
         return toolbarItem;
     }
 
+    private ToolbarItem buildDockSelectionItem() {
+        var toolbarItem = new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.DIVISION));
+        //TODO: Tooltip
+        toolbarItem.getItems().addAll(Stream.of(RecordsView.Dock.values()).map(DockMenuItem::new).collect(Collectors.toList()));
+        return toolbarItem;
+    }
+
     private ToolbarItem buildSeparator() {
         return new ToolbarItem(new Separator(Orientation.VERTICAL));
     }
@@ -360,6 +358,47 @@ public class RecordsViewModule extends WorkbenchModule
 
     private void readDockConfigurations(RecordsView content) {
         content.setDockInfo(preferences.get(docksConfigKey));
+    }
+
+    private final class DockMenuItem extends CheckMenuItem {
+
+        private final RecordsView.Dock dock;
+
+        DockMenuItem(RecordsView.Dock dock) {
+            super(I18N.getValue(dock.getI18nKey()));
+            this.dock = dock;
+            this.setGraphic(dock.getGraphic());
+            this.initContentListener();
+            this.setBehaviourPolicy();
+        }
+
+        private void initContentListener() {
+            content.addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends RecordsView> observable, RecordsView oldValue, RecordsView recordsView) {
+                    if (recordsView != null) {
+                        DockMenuItem.this.setSelected(recordsView.getDocks().contains(DockMenuItem.this.dock));
+                        observable.removeListener(this);
+                    }
+                }
+            });
+        }
+
+        private void setBehaviourPolicy() {
+            this.setOnAction(e -> {
+                if (!this.isSelected()) {
+                    getContent().getDocks()
+                            .setAll(getContent()
+                                    .getDocks()
+                                    .stream()
+                                    .filter(dck -> dck != this.dock)
+                                    .collect(Collectors.toList())
+                            );
+                } else {
+                    getContent().getDocks().add(this.dock);
+                }
+            });
+        }
     }
 
     @SuppressWarnings("DuplicatedCode")
