@@ -18,7 +18,7 @@ import java.util.*
  * configurations.
  */
 private class LoginWindow(private val root: LoginView, private val preferences: Preferences) :
-    BaseWindow<LoginView>("window.login.title", " - ", root.titleProperty(), root),
+    BaseWindow("window.login.title", " - ", root.titleProperty(), root, { root.context }),
     EventHandler<WindowEvent> {
 
     init {

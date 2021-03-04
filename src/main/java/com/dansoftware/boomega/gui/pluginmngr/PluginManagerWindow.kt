@@ -10,7 +10,7 @@ import javafx.stage.Window
  * @author Daniel Gyorffy
  */
 internal class PluginManagerWindow(owner: Window?, view: PluginManager) :
-    BaseWindow<PluginManager>("window.pluginmanager.title", view) {
+    BaseWindow("window.pluginmanager.title", view, { view.context }) {
 
     init {
         initOwner(owner)

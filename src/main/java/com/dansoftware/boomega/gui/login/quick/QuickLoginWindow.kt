@@ -7,7 +7,7 @@ import javafx.stage.Modality
 import javafx.stage.Window
 
 class QuickLoginWindow(content: QuickLoginView, db: DatabaseMeta, owner: Window? = null) :
-    BaseWindow<QuickLoginView>(I18N.getValue("window.login.quick.title"), "-", db.toString(), content) {
+    BaseWindow(I18N.getValue("window.login.quick.title"), "-", db.toString(), content, { content.context }) {
 
     init {
         this.centerOnScreen()

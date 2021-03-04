@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.window
 
 import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
-import com.dansoftware.boomega.gui.context.ContextTransformable
+import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.util.loadImageResource
@@ -37,10 +37,9 @@ import org.slf4j.LoggerFactory
  * @param C the type of the content that is shown in the Window's scene
  * @author Daniel Gyorffy
  */
-abstract class BaseWindow<C> : Stage, Themeable
-        where C : Parent, C : ContextTransformable {
+abstract class BaseWindow : Stage, Themeable {
 
-    private lateinit var content: C
+    lateinit var getContext: () -> Context?
     protected var exitDialog: Boolean = false
 
     init {
@@ -71,9 +70,9 @@ abstract class BaseWindow<C> : Stage, Themeable
      * @param i18n the resource bundle key for the title
      * @param content the graphic content
      */
-    protected constructor(i18n: String, content: C) : this(i18n) {
-        this.content = content
+    protected constructor(i18n: String, content: Parent, getContext: () -> Context?) : this(i18n) {
         this.scene = Scene(content)
+        this.getContext = getContext
     }
 
 
@@ -81,27 +80,35 @@ abstract class BaseWindow<C> : Stage, Themeable
         baseTitle: String,
         separator: String,
         additionalTitleValue: String,
-        content: C
+        content: Parent,
+        getContext: () -> Context?
     ) {
         this.title = "$baseTitle $separator $additionalTitleValue"
-        this.content = content
         this.scene = Scene(content)
+        this.getContext = getContext
     }
 
     protected constructor(
         title: String,
         menuBar: MenuBar,
-        content: C
+        content: Parent,
+        getContext: () -> Context?
     ) {
         this.title = title
-        this.content = content
         this.scene = Scene(buildMenuBarContent(content, menuBar))
+        this.getContext = getContext
     }
 
-    protected constructor(i18n: String, separator: String, changingString: ObservableStringValue, content: C) {
-        this.content = content
+    protected constructor(
+        i18n: String,
+        separator: String,
+        changingString: ObservableStringValue,
+        content: Parent,
+        getContext: () -> Context?
+    ) {
         this.scene = Scene(content)
         this.titleProperty().bind(TitleProperty(i18n, separator, changingString))
+        this.getContext = getContext
     }
 
     override fun handleThemeApply(oldTheme: Theme, newTheme: Theme) {
@@ -111,7 +118,7 @@ abstract class BaseWindow<C> : Stage, Themeable
         }
     }
 
-    private fun buildMenuBarContent(content: C, menuBar: MenuBar): Parent =
+    private fun buildMenuBarContent(content: Parent, menuBar: MenuBar): Parent =
         when {
             OsInfo.isMac() -> content.also {
                 logger.debug("MacOS detected: building native menu bar...")
@@ -205,7 +212,7 @@ abstract class BaseWindow<C> : Stage, Themeable
         override fun handle(keyEvent: KeyEvent) {
             if (dialogShowing.not() && DefaultKeyBindings.restartApplication.match(keyEvent)) {
                 dialogShowing = true
-                this@BaseWindow.content.context.showConfirmationDialog(
+                this@BaseWindow.getContext()?.showConfirmationDialog(
                     I18N.getValue("app.restart.dialog.title"),
                     I18N.getValue("app.restart.dialog.msg")
                 ) {
@@ -223,22 +230,24 @@ abstract class BaseWindow<C> : Stage, Themeable
         private var dialogShowing: Boolean = false
 
         override fun handle(event: WindowEvent) {
-            if (this@BaseWindow.exitDialog) {
-                when {
-                    dialogShowing.not() -> {
-                        dialogShowing = true
-                        if (this@BaseWindow.isIconified)
-                            this@BaseWindow.isIconified = false
-                        val buttonType = this@BaseWindow.content.context.showConfirmationDialogAndWait(
-                            I18N.getValue("window.close.dialog.title"),
-                            I18N.getValue("window.close.dialog.msg")
-                        )
-                        dialogShowing = false
-                        if (buttonType.typeEquals(ButtonType.NO)) {
-                            event.consume()
+            this@BaseWindow.getContext()?.also { context ->
+                if (this@BaseWindow.exitDialog) {
+                    when {
+                        dialogShowing.not() -> {
+                            dialogShowing = true
+                            if (this@BaseWindow.isIconified)
+                                this@BaseWindow.isIconified = false
+                            val buttonType = context.showConfirmationDialogAndWait(
+                                I18N.getValue("window.close.dialog.title"),
+                                I18N.getValue("window.close.dialog.msg")
+                            )
+                            dialogShowing = false
+                            if (buttonType.typeEquals(ButtonType.NO)) {
+                                event.consume()
+                            }
                         }
+                        else -> event.consume()
                     }
-                    else -> event.consume()
                 }
             }
         }

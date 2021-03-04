@@ -3,7 +3,7 @@ package com.dansoftware.boomega.gui.mainview
 import com.dansoftware.boomega.gui.window.BaseWindow
 
 private class MainWindow(view: MainView, menuBar: AppMenuBar) :
-    BaseWindow<MainView>("${System.getProperty("app.name")} - ${view.openedDatabase}", menuBar, view) {
+    BaseWindow("${System.getProperty("app.name")} - ${view.openedDatabase}", menuBar, view, { view.context }) {
     init {
         this.isMaximized = true
         this.exitDialog = true

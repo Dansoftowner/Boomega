@@ -12,7 +12,7 @@ import javafx.stage.WindowEvent
  * @author Daniel Gyorffy
  */
 class GoogleBookPreviewWindow(owner: Window?, content: GoogleBookPreview) :
-    BaseWindow<GoogleBookPreview>("window.google.book.preview.title", content) {
+    BaseWindow("window.google.book.preview.title", content, { content.context }) {
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)

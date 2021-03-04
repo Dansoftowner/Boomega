@@ -9,7 +9,7 @@ import javafx.stage.Window
  * used to display [DatabaseCreatorView] gui-objects.
  */
 class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) :
-    BaseWindow<DatabaseCreatorView>("window.dbcreator.title", view) {
+    BaseWindow("window.dbcreator.title", view, { view.context }) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         initOwner(owner)

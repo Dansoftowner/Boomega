@@ -9,7 +9,7 @@ import javafx.stage.Modality
  * @author Daniel Gyorffy
  */
 class ConfigurationImportWindow(view: ConfigurationImportView) :
-    BaseWindow<ConfigurationImportView>("window.config.import.title", view) {
+    BaseWindow("window.config.import.title", view, { view.context }) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         isAlwaysOnTop = true
