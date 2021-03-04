@@ -11,6 +11,7 @@ import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.info.contact.ContactActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
+import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
@@ -228,7 +229,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         }
 
         private fun settingsMenu() = MenuItem(I18N.getValue("menubar.menu.preferences.settings"))
-            .action { }
+            .action { PreferencesActivity(preferences).show(context.contextWindow) }
             .graphic(MaterialDesignIcon.SETTINGS)
 
         private fun themeMenu() = object : Menu(I18N.getValue("menubar.menu.preferences.theme")) {

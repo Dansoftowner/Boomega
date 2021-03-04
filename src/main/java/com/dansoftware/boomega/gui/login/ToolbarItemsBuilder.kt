@@ -1,8 +1,10 @@
 package com.dansoftware.boomega.gui.login
 
+import com.dansoftware.boomega.appdata.Preferences
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
+import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.update.UpdateSearcher
@@ -21,7 +23,10 @@ import javafx.scene.Node
  *
  * @author Daniel Gyorffy
  */
-private class ToolbarItemsBuilder(val context: Context) {
+private class ToolbarItemsBuilder(
+    private val context: Context,
+    private val preferences: Preferences
+) {
 
     fun build(): Array<ToolbarItem> {
         return arrayOf(menuToolbarItem(), infoToolbarItem())
@@ -47,10 +52,9 @@ private class ToolbarItemsBuilder(val context: Context) {
             PluginManagerActivity().show(context.contextWindow)
         },
         MenuItem(I18N.getValue("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)) {
-            // TODO: Showing settings window
+            PreferencesActivity(preferences).show(context.contextWindow)
         }
     )
-
 
     private class MenuItem(text: String, graphic: Node, onAction: EventHandler<ActionEvent>) :
         javafx.scene.control.MenuItem(text, graphic) {

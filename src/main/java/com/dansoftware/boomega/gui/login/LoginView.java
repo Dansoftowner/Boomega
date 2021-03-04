@@ -35,6 +35,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements C
     private final LoginActivity loginActivity;
 
     private final Context asContext;
+    private final Preferences preferences;
     private final LoginForm loginForm;
     private final ObjectProperty<Database> createdDatabase;
 
@@ -45,6 +46,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements C
                      @NotNull DatabaseTracker tracker) {
         super(I18N.getValue("database.auth"), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
         this.loginActivity = loginActivity;
+        this.preferences = preferences;
         this.asContext = Context.from(this);
         this.createdDatabase = new SimpleObjectProperty<>();
         this.loginForm = new LoginForm(asContext, preferences, loginData, tracker, databaseLoginListener);
@@ -53,7 +55,7 @@ public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements C
     }
 
     private void createToolbarControls() {
-        this.getToolbarControlsRight().addAll(new ToolbarItemsBuilder(asContext).build());
+        this.getToolbarControlsRight().addAll(new ToolbarItemsBuilder(asContext, preferences).build());
     }
 
     public LoginData getLoginData() {
