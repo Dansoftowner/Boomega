@@ -1,0 +1,9 @@
+.preferences-view .entry-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.preferences-view .entry-description {
+    -fx-font-size: 10pt;
+    -fx-opacity: 0.75;
+}

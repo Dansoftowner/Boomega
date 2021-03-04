@@ -1,0 +1,13 @@
+.preferences-view > .tab-header-area .tab-header-background {
+    -fx-border-color: #2E2E2E;
+}
+
+.preferences-view .entry-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.preferences-view .entry-description {
+    -fx-font-size: 10pt;
+    -fx-opacity: 0.75;
+}

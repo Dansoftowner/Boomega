@@ -12,6 +12,10 @@
     -mdfx-bg-color-3: #eee;
 }
 
+.tab-pane .glyph-icon {
+    /*-fx-fill: #e0e0e0;*/
+}
+
 .button .glyph-icon {
     -fx-fill: black;
 }
