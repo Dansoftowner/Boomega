@@ -8,11 +8,11 @@ import javafx.concurrent.Task
 /**
  * Task for loading books from the database
  */
-open class RecordsGetTask(private val database: Database, private val offSet: Int, private val size: Int) :
+open class RecordsGetTask(private val database: Database) :
     Task<List<Record>>() {
 
     override fun call(): List<Record> {
-        return database.getRecords(offSet, size)
+        return database.records
     }
 }
 
@@ -24,9 +24,7 @@ class TableRecordsGetTask(
     context: Context,
     tableView: RecordTable,
     database: Database,
-    offSet: Int,
-    size: Int
-) : RecordsGetTask(database, offSet, size) {
+) : RecordsGetTask(database) {
     init {
         setOnRunning { context.showIndeterminateProgress() }
         setOnFailed {
@@ -35,10 +33,7 @@ class TableRecordsGetTask(
         }
         setOnSucceeded {
             context.stopProgress()
-            when (offSet) {
-                0 -> tableView.items.setAll(this.value)
-                else -> tableView.items.addAll(offSet, this.value)
-            }
+            tableView.items.setAll(this.value)
             tableView.refresh()
         }
     }

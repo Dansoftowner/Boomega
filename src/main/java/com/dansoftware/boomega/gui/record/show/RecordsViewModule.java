@@ -44,8 +44,6 @@ public class RecordsViewModule extends WorkbenchModule
 
     private static final Logger logger = LoggerFactory.getLogger(RecordsViewModule.class);
 
-    private static final Preferences.Key<Integer> itemsPerPageConfigKey =
-            new Preferences.Key<>("books.view.items.per.page", Integer.class, () -> 10);
     private static final Preferences.Key<TableColumnsInfo> colConfigKey =
             new Preferences.Key<>("books.view.table.columns", TableColumnsInfo.class, TableColumnsInfo::byDefault);
     private static final Preferences.Key<Locale> abcConfigKey =
@@ -57,7 +55,6 @@ public class RecordsViewModule extends WorkbenchModule
 
         private final Action action;
         private final List<Record> records;
-
 
         public Message(Record record, @NotNull Action action) {
             this(Collections.singletonList(record), action);
@@ -79,9 +76,6 @@ public class RecordsViewModule extends WorkbenchModule
 
     private final ObjectProperty<RecordsView> content =
             new SimpleObjectProperty<>();
-
-    private final IntegerProperty itemsPerPage =
-            new SimpleIntegerProperty();
 
     private final IntegerProperty totalItems =
             new SimpleIntegerProperty();
@@ -126,10 +120,8 @@ public class RecordsViewModule extends WorkbenchModule
                     getTable().getItems().removeAll(data.records);
                     break;
                 case INSERTED:
-                    if (itemsPerPage.get() > getTable().getItems().size()) {
-                        getTable().getItems().addAll(data.records);
-                        totalItems.set(totalItems.get() + 1);
-                    }
+                    getTable().getItems().addAll(data.records);
+                    totalItems.set(totalItems.get() + data.records.size());
                     break;
                 case UPDATED:
                     break;
@@ -143,7 +135,6 @@ public class RecordsViewModule extends WorkbenchModule
     }
 
     private void readBaseConfig() {
-        itemsPerPage.set(preferences.get(itemsPerPageConfigKey));
         abcLocale.set(preferences.get(abcConfigKey));
     }
 
@@ -158,7 +149,6 @@ public class RecordsViewModule extends WorkbenchModule
 
     private void writeConfig() {
         preferences.editor()
-                .put(itemsPerPageConfigKey, itemsPerPage.get())
                 .put(colConfigKey, new TableColumnsInfo(getTable().getShowingColumns()))
                 .put(abcConfigKey, abcLocale.get())
                 .put(docksConfigKey, content.get().getDockInfo());
@@ -174,8 +164,6 @@ public class RecordsViewModule extends WorkbenchModule
     }
 
     private void buildToolbar() {
-        this.getToolbarControlsRight().add(buildItemsPerPageItem());
-        this.getToolbarControlsRight().add(buildSeparator());
         this.getToolbarControlsRight().add(buildDeleteItem());
         this.getToolbarControlsRight().add(buildSeparator());
         this.getToolbarControlsRight().add(buildCountItem());
@@ -237,46 +225,6 @@ public class RecordsViewModule extends WorkbenchModule
             //TODO: error dialog
         });
         return task;
-    }
-
-    private ToolbarItem buildItemsPerPageItem() {
-        Spinner<Integer> spinner = new Spinner<>(1, Integer.MAX_VALUE, itemsPerPage.get());
-        this.itemsPerPage.bind(spinner.valueProperty());
-        this.buildItemsPerPagePolicy();
-        return new ToolbarItem(
-                new StackPane(
-                        new Group(
-                                new HBox(2.5,
-                                        new StackPane(
-                                                new Label(I18N.getValue("record.item.per.page"))
-                                        ),
-                                        spinner
-                                )
-                        )
-                )
-        );
-    }
-
-    private void buildItemsPerPagePolicy() {
-        this.itemsPerPage.addListener((observable, oldValue, newValue) -> {
-            if (content.get() != null) {
-                int oldValueInt = oldValue.intValue();
-                int newValueInt = newValue.intValue();
-                logger.debug("Old value: {}, new value: {}", oldValueInt, newValueInt);
-                if (oldValueInt < newValueInt) {
-                    ExploitativeExecutor.INSTANCE.submit(
-                            new TableRecordsGetTask(context, getTable(), database, oldValueInt, newValueInt - oldValueInt)
-                    );
-                } else {
-                    try {
-                        getTable().getItems().remove(newValueInt, oldValueInt);
-                        getTable().refresh();
-                    } catch (IndexOutOfBoundsException e) {
-                        logger.error("{}", e.getClass());
-                    }
-                }
-            }
-        });
     }
 
     private ToolbarItem buildRefreshItem() {
@@ -348,9 +296,7 @@ public class RecordsViewModule extends WorkbenchModule
         final var task = new TableRecordsGetTask(
                 context,
                 content.getBooksTable(),
-                database,
-                0,
-                itemsPerPage.get()
+                database
         );
         task.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> content.setDockFullyResizable());
         ExploitativeExecutor.INSTANCE.submit(task);
