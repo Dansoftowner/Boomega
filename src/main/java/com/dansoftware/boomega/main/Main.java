@@ -9,6 +9,7 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity;
+import com.dansoftware.boomega.gui.window.BaseWindow;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.instance.ApplicationInstanceService;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
@@ -79,7 +80,7 @@ public class Main extends BaseApplication {
 
         if (!showFirstTimeActivity(preferences))
             applyBaseConfigurations(preferences);
-        loadDefaultKeyBindings(preferences);
+        applyAdditionalConfigurations(preferences);
 
         logger.debug("Theme is: {}", Theme.getDefault());
         logger.debug("Locale is: {}", Locale.getDefault());
@@ -233,11 +234,32 @@ public class Main extends BaseApplication {
     }
 
     /**
-     * Reads the key bindings configurations
+     * Applies some configurations from the particular {@link Preferences} object.
      *
      * @param preferences the preferences object
      */
     @Init
+    private void applyAdditionalConfigurations(@NotNull Preferences preferences) {
+        applyWindowsOpacity(preferences);
+        loadDefaultKeyBindings(preferences);
+    }
+
+    /**
+     * Sets the global window opacity saved in the preferences.
+     *
+     * @param preferences the preferences object
+     */
+    private void applyWindowsOpacity(@NotNull Preferences preferences) {
+        final double opacity = preferences.get(BaseWindow.GLOBAL_OPACITY_CONFIG_KEY);
+        logger.debug("Global window opacity read: {}", opacity);
+        BaseWindow.globalOpacity.set(opacity);
+    }
+
+    /**
+     * Reads the key bindings configurations
+     *
+     * @param preferences the preferences object
+     */
     private void loadDefaultKeyBindings(@NotNull Preferences preferences) {
         DefaultKeyBindings.loadFrom(preferences);
     }

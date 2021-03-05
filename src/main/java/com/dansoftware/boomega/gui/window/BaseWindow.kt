@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.window
 
+import com.dansoftware.boomega.appdata.Preferences
 import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.theme.Theme
@@ -10,7 +11,7 @@ import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.main.ApplicationRestart
 import com.dansoftware.boomega.util.os.OsInfo
 import de.jangassen.MenuToolkit
-import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.*
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableStringValue
 import javafx.beans.value.ObservableValue
@@ -48,6 +49,7 @@ abstract class BaseWindow : Stage, Themeable {
         buildExitDialogEvent()
         buildFullScreenExitHint()
         addEventHandler(WindowEvent.WINDOW_SHOWING) { Theme.registerThemeable(this) }
+        opacityProperty().bind(globalOpacity)
     }
 
     /**
@@ -257,8 +259,13 @@ abstract class BaseWindow : Stage, Themeable {
      * The icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [ www.flaticon.com](https://www.flaticon.com/)
      * [Go to website](https://www.flaticon.com/free-icon/bookshelf_3100669?term=library&page=1&position=12)
      */
-    private companion object Icon {
+    companion object {
         private val logger: Logger = LoggerFactory.getLogger(BaseWindow::class.java)
+
+        @JvmField
+        val GLOBAL_OPACITY_CONFIG_KEY = Preferences.Key("basewindow.global.opacity", Double::class.java) { 1.0 }
+        @JvmField
+        val globalOpacity: DoubleProperty = SimpleDoubleProperty(1.0)
 
         /**
          * The 16px libraryapp icon's path.
