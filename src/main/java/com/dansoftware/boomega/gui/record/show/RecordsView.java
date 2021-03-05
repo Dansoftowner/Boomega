@@ -9,6 +9,8 @@ import com.dansoftware.boomega.gui.record.show.dock.GoogleBookConnectionDock;
 import com.dansoftware.boomega.gui.record.show.dock.RecordEditorDock;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -192,7 +194,7 @@ public class RecordsView extends SplitPane {
 
             @Override
             protected Node getGraphic() {
-                return new ImageView(new Image("/com/dansoftware/boomega/image/util/google_12px.png"));
+                return new MaterialDesignIconView(MaterialDesignIcon.GOOGLE);
             }
         },
 
