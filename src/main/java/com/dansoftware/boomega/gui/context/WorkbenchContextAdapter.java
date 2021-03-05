@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.context;
 
 import com.dansoftware.boomega.gui.util.BaseFXUtils;
-import com.dansoftware.boomega.gui.util.ExceptionDisplayPane;
+import com.dansoftware.boomega.gui.control.ExceptionDisplayPane;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
 import com.dansoftware.boomega.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;

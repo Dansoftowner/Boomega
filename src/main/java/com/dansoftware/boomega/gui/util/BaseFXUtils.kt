@@ -8,19 +8,14 @@
 package com.dansoftware.boomega.gui.util
 
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.adapter.ThrowableString
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
-import javafx.beans.binding.Bindings
-import javafx.beans.binding.BooleanBinding
 import javafx.beans.property.ObjectProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
-import javafx.scene.Cursor
-import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -28,13 +23,7 @@ import javafx.scene.image.Image
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
-import javafx.scene.input.MouseEvent
-import javafx.scene.layout.StackPane
-import javafx.scene.layout.VBox
-import javafx.scene.text.Font
 import javafx.stage.Window
-import org.apache.commons.lang3.StringUtils
-import org.controlsfx.control.Rating
 import java.io.BufferedInputStream
 import java.util.function.Consumer
 import kotlin.reflect.KClass
@@ -145,89 +134,6 @@ fun KClass<*>.loadImageResource(resource: String): Image {
     }
 }
 
-class TableViewPlaceHolder(tableView: TableView<*>, valueIfEmpty: () -> String, valueIfNoColumns: () -> String) :
-    StackPane() {
-
-    @Suppress("JoinDeclarationAndAssignment")
-    private val noColumns: BooleanBinding
-
-    init {
-        this.noColumns = Bindings.isEmpty(tableView.columns)
-        this.buildUI(valueIfEmpty, valueIfNoColumns)
-    }
-
-    private fun buildUI(valueIfEmpty: () -> String, valueIfNoColumns: () -> String) {
-        children.add(Group(VBox(
-            // TODO: GRAPHIC,
-            Label().also {
-                noColumns.addListener { _, _, noColumns: Boolean ->
-                    it.text = when {
-                        noColumns -> valueIfNoColumns()
-                        else -> valueIfEmpty()
-                    }
-                }
-            }
-        )))
-    }
-}
-
-class ReadOnlyRating(max: Int, value: Int) : Rating(max, value) {
-    init {
-        this.addEventFilter(MouseEvent.MOUSE_CLICKED) { it.consume() }
-    }
-}
-
-class HighlightableLabel(text: String? = null) : TextField(text) {
-    init {
-        this.styleClass.clear()
-        this.styleClass.add("selectable-label")
-        this.cursor = Cursor.TEXT
-        this.style = "-fx-background-color: transparent;-fx-padding: 0;"
-        this.prefColumnCount = 15
-        this.styleClass.add("label")
-        this.isEditable = false
-    }
-}
-
-/**
- * The [RadioToggleButton] is a [RadioButton] styled as a [ToggleButton]
- */
-class RadioToggleButton(text: String? = null) : RadioButton(text) {
-    init {
-        styleClass.remove("radio-button")
-        styleClass.add("toggle-button")
-    }
-}
-
-open class FixedFontMaterialDesignIconView(icon: MaterialDesignIcon, size: Double) : MaterialDesignIconView(icon) {
-    init {
-        Font.font("Material Design Icons", size).let {
-            this.fontProperty().addListener { _, _, _ -> this.font = it }
-            this.font = it
-        }
-    }
-}
-
-open class ImagePlaceHolder(size: Double) : FixedFontMaterialDesignIconView(MaterialDesignIcon.IMAGE, size) {
-    init {
-        this.font = Font.font("Material Design Icons", size)
-        this.styleClass.add("glyph-icon")
-    }
-}
-
-/**
- * A SpaceValidator can be used for [TextInputControl] objects (for example: [javafx.scene.control.TextField])
- * to avoid whitespaces.
- */
-class SpaceValidator : TextFormatter<TextFormatter.Change?>({ change: Change ->
-    val text = change.text
-    when {
-        StringUtils.isEmpty(text) -> change.text = text.replace("\\s+".toRegex(), StringUtils.EMPTY)
-    }
-
-    change
-})
-
 /**
  * Provides internationalized [ButtonType] constants for the app.
  *
@@ -268,10 +174,3 @@ object I18NButtonTypes {
         ButtonType(I18N.getValues().getString(key), buttonData)
 }
 
-class ExceptionDisplayPane(exception: Exception?) : TitledPane() {
-    init {
-        content = TextArea(ThrowableString(exception).toString())
-        isAnimated = true
-        isExpanded = false
-    }
-}

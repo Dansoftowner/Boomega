@@ -3,7 +3,7 @@ package com.dansoftware.boomega.gui.googlebooks.tile
 import com.dansoftware.boomega.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.googlebooks.GoogleBookDetailsOverlay
-import com.dansoftware.boomega.gui.util.HighlightableLabel
+import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView

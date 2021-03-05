@@ -3,10 +3,9 @@ package com.dansoftware.boomega.gui.record.edit
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl
 import com.dansoftware.boomega.gui.record.RecordValues
-import com.dansoftware.boomega.gui.util.FixedFontMaterialDesignIconView
-import com.dansoftware.boomega.gui.util.applyOnTextField
-import com.dansoftware.boomega.gui.util.formsfx.SimpleRatingControl
+import com.dansoftware.boomega.gui.control.formsfx.SimpleRatingControl
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
 import com.dlsc.formsfx.model.structure.Field
@@ -19,13 +18,9 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
 import javafx.concurrent.Task
-import javafx.geometry.Insets
-import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.*
-import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
-import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
@@ -190,7 +185,7 @@ class BaseEditorForm(
         }.let {
             it.lookup(".text-field") as TextField
         }.also {
-            applyOnTextField(context, it)
+            TextFieldLanguageSelectorControl.applyOnTextField(context, it)
         }
     }
 

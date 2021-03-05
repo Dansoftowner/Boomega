@@ -3,7 +3,7 @@ package com.dansoftware.boomega.gui.info
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.context.TitledOverlayBox
 import com.dansoftware.boomega.gui.info.dependency.DependencyViewerActivity
-import com.dansoftware.boomega.gui.util.HighlightableLabel
+import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.SystemBrowser
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon

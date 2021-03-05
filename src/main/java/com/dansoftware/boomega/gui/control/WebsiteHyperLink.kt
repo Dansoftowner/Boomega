@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.util
+package com.dansoftware.boomega.gui.control
 
 import com.dansoftware.boomega.util.SystemBrowser
 import javafx.beans.property.SimpleStringProperty

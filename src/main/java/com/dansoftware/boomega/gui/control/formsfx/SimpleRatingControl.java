@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.util.formsfx;
+package com.dansoftware.boomega.gui.control.formsfx;
 
 import com.dlsc.formsfx.model.structure.IntegerField;
 import com.dlsc.formsfx.view.controls.SimpleControl;

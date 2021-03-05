@@ -2,8 +2,8 @@ package com.dansoftware.boomega.gui.record.show;
 
 import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.db.data.ServiceConnection;
-import com.dansoftware.boomega.gui.util.ReadOnlyRating;
-import com.dansoftware.boomega.gui.util.TableViewPlaceHolder;
+import com.dansoftware.boomega.gui.control.ReadOnlyRating;
+import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;
 import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;

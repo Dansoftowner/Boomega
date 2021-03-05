@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.info.contact
 
 import com.dansoftware.boomega.gui.context.TitledOverlayBox
-import com.dansoftware.boomega.gui.util.HighlightableLabel
+import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView

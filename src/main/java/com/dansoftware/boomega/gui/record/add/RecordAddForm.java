@@ -4,11 +4,11 @@ import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.boomega.googlebooks.Volume;
 import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl;
 import com.dansoftware.boomega.gui.googlebooks.SearchParameters;
 import com.dansoftware.boomega.gui.googlebooks.join.GoogleBookJoinerOverlay;
 import com.dansoftware.boomega.gui.googlebooks.tile.GoogleBookTile;
 import com.dansoftware.boomega.gui.record.RecordValues;
-import com.dansoftware.boomega.gui.util.LanguageSelections;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
@@ -136,7 +136,7 @@ public class RecordAddForm extends VBox {
     private void addAutoCompletionToLangField(FormRenderer src) {
         SimpleTextControl control = (SimpleTextControl) src.lookup(".languageSelector");
         TextField textField = (TextField) control.lookup(".text-field");
-        LanguageSelections.applyOnTextField(context, textField);
+        TextFieldLanguageSelectorControl.applyOnTextField(context, textField);
     }
 
     private Node buildNewRatingControl() {

@@ -3,6 +3,10 @@ package com.dansoftware.boomega.gui.googlebooks
 import com.dansoftware.boomega.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.context.TitledOverlayBox
+import com.dansoftware.boomega.gui.control.HighlightableLabel
+import com.dansoftware.boomega.gui.control.RadioToggleButton
+import com.dansoftware.boomega.gui.control.ReadOnlyRating
+import com.dansoftware.boomega.gui.control.WebsiteHyperLink
 import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewActivity
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.*
@@ -290,7 +294,8 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
             }
 
         private fun buildPreviewHyperLink(volume: Volume): Node =
-            StackPane(WebsiteHyperLink(
+            StackPane(
+                WebsiteHyperLink(
                 I18N.getValue("google.books.details.preview"),
                 volume.volumeInfo?.previewLink
             ).apply {

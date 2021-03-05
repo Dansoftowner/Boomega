@@ -1,6 +1,10 @@
 package com.dansoftware.boomega.gui.googlebooks;
 
 import com.dansoftware.boomega.googlebooks.Volume;
+import com.dansoftware.boomega.gui.control.ImagePlaceHolder;
+import com.dansoftware.boomega.gui.control.ReadOnlyRating;
+import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;
+import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import com.dansoftware.boomega.gui.util.*;
 import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;

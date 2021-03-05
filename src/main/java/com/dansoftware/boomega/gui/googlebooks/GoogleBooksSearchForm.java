@@ -2,7 +2,7 @@ package com.dansoftware.boomega.gui.googlebooks;
 
 import com.dansoftware.boomega.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.util.LanguageSelections;
+import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
@@ -69,7 +69,7 @@ class GoogleBooksSearchForm extends TitledPane {
     private void addAutoCompletionToLangField(FormRenderer src) {
         SimpleTextControl control = (SimpleTextControl) src.lookup(".languageSelector");
         TextField textField = (TextField) control.lookup(".text-field");
-        LanguageSelections.applyOnTextField(context, textField);
+        TextFieldLanguageSelectorControl.applyOnTextField(context, textField);
     }
 
     private Form buildForm() {

@@ -1,6 +1,6 @@
 @file:JvmName("LanguageSelections")
 
-package com.dansoftware.boomega.gui.util
+package com.dansoftware.boomega.gui.control
 
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.util.surrounding
@@ -27,18 +27,6 @@ import java.util.function.Consumer
 import kotlin.collections.HashSet
 
 /**
- * Adds a [TextFieldLanguageSelectorControl] to a [TextField]
- */
-fun applyOnTextField(context: Context, textField: TextField) {
-    textField.skinProperty().addListener(object : ChangeListener<Skin<*>> {
-        override fun changed(observable: ObservableValue<out Skin<*>>, oldValue: Skin<*>?, newSkin: Skin<*>?) {
-            newSkin?.let { it as TextFieldSkin }?.children?.add(TextFieldLanguageSelectorControl(context, textField))
-            observable.removeListener(this)
-        }
-    })
-}
-
-/**
  * Control for [TextField] that allows selecting languages.
  *
  * @author Daniel Gyorffy
@@ -63,6 +51,21 @@ class TextFieldLanguageSelectorControl(context: Context, textField: TextField) :
             }
             icon.styleClass.add("langSelectorControl")
         }
+
+    companion object {
+        /**
+         * Adds a [TextFieldLanguageSelectorControl] to a [TextField]
+         */
+        @JvmStatic
+        fun applyOnTextField(context: Context, textField: TextField) {
+            textField.skinProperty().addListener(object : ChangeListener<Skin<*>> {
+                override fun changed(observable: ObservableValue<out Skin<*>>, oldValue: Skin<*>?, newSkin: Skin<*>?) {
+                    newSkin?.let { it as TextFieldSkin }?.children?.add(TextFieldLanguageSelectorControl(context, textField))
+                    observable.removeListener(this)
+                }
+            })
+        }
+    }
 }
 
 /**

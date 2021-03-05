@@ -4,7 +4,7 @@ import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
 import com.dansoftware.boomega.gui.info.dependency.meta.DependencyInfo;
 import com.dansoftware.boomega.gui.info.dependency.meta.LicenseInfo;
-import com.dansoftware.boomega.gui.util.WebsiteHyperLink;
+import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
