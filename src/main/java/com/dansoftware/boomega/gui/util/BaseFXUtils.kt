@@ -16,6 +16,7 @@ import javafx.beans.property.ObjectProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
+import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
@@ -30,6 +31,9 @@ import javafx.stage.Window
 import java.io.BufferedInputStream
 import java.util.function.Consumer
 import kotlin.reflect.KClass
+
+fun <T> ObservableList<T>.copy(): ObservableList<T> =
+    FXCollections.observableArrayList(java.util.List.copyOf(this))
 
 fun runOnUiThread(action: Runnable) {
     when {
