@@ -16,3 +16,7 @@ fun <I, T : Collection<I>> T.ifNotEmpty(block: (T) -> Unit): T {
 fun String.surrounding(prefixSuffix: String) = this.surrounding(prefixSuffix, prefixSuffix)
 
 fun String.surrounding(prefix: String, suffix: String) = (prefix + this + suffix)
+
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+fun String.equalsIgnoreCase(other: String): Boolean =
+    (this as java.lang.String).equalsIgnoreCase(other)
