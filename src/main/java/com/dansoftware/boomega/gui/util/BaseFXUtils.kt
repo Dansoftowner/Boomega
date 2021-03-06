@@ -11,10 +11,12 @@ import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.equalsIgnoreCase
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.application.Platform
 import javafx.beans.property.ObjectProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
+import javafx.collections.ObservableList
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Node
@@ -28,6 +30,21 @@ import javafx.stage.Window
 import java.io.BufferedInputStream
 import java.util.function.Consumer
 import kotlin.reflect.KClass
+
+fun runOnUiThread(action: Runnable) {
+    when {
+        Platform.isFxApplicationThread() -> action.run()
+        else -> Platform.runLater(action)
+    }
+}
+
+fun <T> ComboBox<T>.refresh() {
+    val items: ObservableList<T> = this.items
+    val selected: T = this.selectionModel.selectedItem
+    this.items = null
+    this.items = items
+    this.selectionModel.select(selected)
+}
 
 fun findSelectedRadioItem(items: List<MenuItem>): MenuItem? =
     items.filterIsInstance<RadioMenuItem>()
