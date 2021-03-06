@@ -1,0 +1,41 @@
+package com.dansoftware.boomega.gui.control
+
+import com.dansoftware.boomega.gui.util.asKeyCombination
+import com.dansoftware.boomega.gui.util.isOnlyCode
+import com.dansoftware.boomega.gui.util.isUndefined
+import com.dansoftware.boomega.util.equalsIgnoreCase
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
+import javafx.event.Event
+import javafx.scene.control.TextField
+import javafx.scene.input.KeyCombination
+import javafx.scene.input.KeyEvent
+import org.apache.commons.lang3.StringUtils
+
+class KeyBindDetectionField(initial: KeyCombination) : TextField() {
+
+    private val keyCombination: ObjectProperty<KeyCombination> = object : SimpleObjectProperty<KeyCombination>() {
+        override fun invalidated() {
+            super.invalidated()
+            this@KeyBindDetectionField.text = StringUtils.getIfEmpty(get().displayText, null)
+        }
+    }
+
+    init {
+        this.isEditable = false
+        this.keyCombination.set(initial)
+        this.setOnKeyTyped(KeyEvent::consume)
+        this.setOnKeyPressed { event ->
+            event.consume()
+            when {
+                event.isUndefined().not() && event.isOnlyCode().not() -> {
+                    event.asKeyCombination()?.let {
+                        keyCombination.set(it)
+                    }
+                }
+            }
+        }
+    }
+
+    fun keyCombinationProperty() = keyCombination
+}
