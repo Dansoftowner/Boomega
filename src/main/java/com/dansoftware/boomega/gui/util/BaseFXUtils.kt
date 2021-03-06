@@ -8,6 +8,7 @@
 package com.dansoftware.boomega.gui.util
 
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.util.equalsIgnoreCase
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
@@ -119,6 +120,37 @@ fun KeyCodeCombination.asKeyEvent(): KeyEvent =
         this.alt == KeyCombination.ModifierValue.DOWN,
         this.meta == KeyCombination.ModifierValue.DOWN
     )
+
+fun KeyEvent.asKeyCombination(): KeyCombination? =
+    mutableListOf<KeyCombination.Modifier>().also { modifiers ->
+        this.isControlDown.takeIf { it }?.let { modifiers.add(KeyCombination.CONTROL_DOWN) }
+        this.isAltDown.takeIf { it }?.let { modifiers.add(KeyCombination.ALT_DOWN) }
+        this.isShiftDown.takeIf { it }?.let { modifiers.add(KeyCombination.SHIFT_DOWN) }
+        this.isMetaDown.takeIf { it }?.let { modifiers.add(KeyCombination.META_DOWN) }
+        this.isShortcutDown.takeIf { it }?.let { modifiers.add(KeyCombination.SHORTCUT_DOWN) }
+    }.let {
+        this.code?.let { _ ->
+            try {
+                KeyCodeCombination(this.code, *it.toTypedArray())
+            } catch(e: RuntimeException) {
+                null
+            }
+        }
+    }
+
+fun KeyEvent.isOnlyCode(): Boolean {
+    var count: Int = 0
+    this.isControlDown.takeIf { it }?.let { count++ }
+    this.isAltDown.takeIf { it }?.let { count++ }
+    this.isShiftDown.takeIf { it }?.let { count++ }
+    this.isMetaDown.takeIf { it }?.let { count++ }
+    this.isShortcutDown.takeIf { it }?.let { count++ }
+    return count == 0
+}
+
+fun KeyEvent.isUndefined(): Boolean =
+    this.code.name.equalsIgnoreCase("undefined")
+
 
 /**
  * Determines that a ButtonType's button data is the same.
