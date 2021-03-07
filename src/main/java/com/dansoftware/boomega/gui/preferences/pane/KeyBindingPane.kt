@@ -14,29 +14,31 @@ class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
     override val title: String = I18N.getValue("preferences.tab.keybindings")
     override val graphic: Node = MaterialDesignIconView(MaterialDesignIcon.KEYBOARD)
 
-    init {
-        initEntries()
-    }
+    override fun buildContent(): Content = object : Content() {
+        init {
+            initEntries()
+        }
 
-    private fun initEntries() {
-        KeyBindings.allKeyBindings().forEach {
-            addKeyDetectionField(
-                it.i18nTitle,
-                it.i18nDescription,
-                it
+        private fun initEntries() {
+            KeyBindings.allKeyBindings().forEach {
+                addKeyDetectionField(
+                    it.i18nTitle,
+                    it.i18nDescription,
+                    it
+                )
+            }
+        }
+
+        private fun addKeyDetectionField(title: String, description: String, keyBinding: KeyBinding) {
+            addEntry(
+                I18N.getValue(title),
+                I18N.getValue(description),
+                KeyBindDetectionField(keyBinding.keyCombination).apply {
+                    this.keyCombinationProperty().addListener { _, _, _ -> KeyBindings.writeTo(preferences) }
+                    this.keyCombinationProperty().bindBidirectional(keyBinding.keyCombinationProperty)
+                    keyBinding.keyCombinationProperty.bindBidirectional(this.keyCombinationProperty())
+                }
             )
         }
-    }
-
-    private fun addKeyDetectionField(title: String, description: String, keyBinding: KeyBinding) {
-        addEntry(
-            I18N.getValue(title),
-            I18N.getValue(description),
-            KeyBindDetectionField(keyBinding.keyCombination).apply {
-                this.keyCombinationProperty().addListener { _, _, _ -> KeyBindings.writeTo(preferences) }
-                this.keyCombinationProperty().bindBidirectional(keyBinding.keyCombinationProperty)
-                keyBinding.keyCombinationProperty.bindBidirectional(this.keyCombinationProperty())
-            }
-        )
     }
 }

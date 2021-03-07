@@ -5,6 +5,8 @@ import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.preferences.pane.*
 import com.dlsc.workbenchfx.Workbench
 import com.dlsc.workbenchfx.model.WorkbenchModule
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.Tab
@@ -42,10 +44,21 @@ class PreferencesView(private val preferences: Preferences) : Workbench() {
         tabPane.tabs.add(Tab(prefPane.title).apply {
             isClosable = false
             graphic = prefPane.graphic
-            content = ScrollPane(prefPane).apply {
-                isFitToHeight = true
-                isFitToWidth = true
-            }
+            selectedProperty().addListener(object : ChangeListener<Boolean> {
+                override fun changed(
+                    observable: ObservableValue<out Boolean>,
+                    oldValue: Boolean,
+                    isSelected: Boolean
+                ) {
+                    if (isSelected) {
+                        this@apply.content = ScrollPane(prefPane.getContent()).apply {
+                            isFitToHeight = true
+                            isFitToWidth = true
+                        }
+                        observable.removeListener(this)
+                    }
+                }
+            })
         })
     }
 }

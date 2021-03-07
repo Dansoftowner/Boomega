@@ -19,73 +19,75 @@ class AppearancePane(preferences: Preferences) : PreferencesPane(preferences) {
     override val title = I18N.getValue("preferences.tab.appearance")
     override val graphic: Node = MaterialDesignIconView(MaterialDesignIcon.FORMAT_PAINT)
 
-    init {
-        initEntries()
-    }
-
-    private fun initEntries() {
-        buildThemeSelect()
-        buildWindowOpacitySlider()
-    }
-
-    private fun buildWindowOpacitySlider() {
-        Slider(20.0, 100.0, BaseWindow.globalOpacity.value * 100).apply {
-            valueProperty().addListener { _, _, value ->
-                value.toDouble().div(100)
-                    .let(BaseWindow.globalOpacity::set)
-            }
-            valueChangingProperty().addListener { _, _, changing ->
-                changing.takeIf { it.not() }?.let {
-                    logger.debug("Global opacity saved to configurations")
-                    preferences.editor().put(BaseWindow.GLOBAL_OPACITY_CONFIG_KEY, value.div(100))
-                }
-            }
-        }.also {
-            addEntry(
-                I18N.getValue("preferences.appearance.window_opacity"),
-                I18N.getValue("preferences.appearance.window_opacity.desc"),
-                it
-            )
+    override fun buildContent(): Content = object : Content() {
+        init {
+            initEntries()
         }
-    }
 
-    private fun buildThemeSelect() {
-        ChoiceBox<ThemeMeta<*>>().apply {
+        private fun initEntries() {
+            buildThemeSelect()
+            buildWindowOpacitySlider()
+        }
 
-            this.converter = object : StringConverter<ThemeMeta<*>?>() {
-                override fun toString(themeMeta: ThemeMeta<*>?): String {
-                    return themeMeta?.displayNameSupplier?.get() ?: ""
+        private fun buildWindowOpacitySlider() {
+            Slider(20.0, 100.0, BaseWindow.globalOpacity.value * 100).apply {
+                valueProperty().addListener { _, _, value ->
+                    value.toDouble().div(100)
+                        .let(BaseWindow.globalOpacity::set)
+                }
+                valueChangingProperty().addListener { _, _, changing ->
+                    changing.takeIf { it.not() }?.let {
+                        logger.debug("Global opacity saved to configurations")
+                        preferences.editor().put(BaseWindow.GLOBAL_OPACITY_CONFIG_KEY, value.div(100))
+                    }
+                }
+            }.also {
+                addEntry(
+                    I18N.getValue("preferences.appearance.window_opacity"),
+                    I18N.getValue("preferences.appearance.window_opacity.desc"),
+                    it
+                )
+            }
+        }
+
+        private fun buildThemeSelect() {
+            ChoiceBox<ThemeMeta<*>>().apply {
+
+                this.converter = object : StringConverter<ThemeMeta<*>?>() {
+                    override fun toString(themeMeta: ThemeMeta<*>?): String {
+                        return themeMeta?.displayNameSupplier?.get() ?: ""
+                    }
+
+                    override fun fromString(string: String?): ThemeMeta<*>? {
+                        //TODO("Not yet implemented")
+                        return null
+                    }
                 }
 
-                override fun fromString(string: String?): ThemeMeta<*>? {
-                    //TODO("Not yet implemented")
-                    return null
+                Theme.getAvailableThemesData().forEach {
+                    if (Theme.getDefault().javaClass == it.themeClass)
+                        selectionModel.select(it)
+                    items.add(it)
                 }
-            }
 
-            Theme.getAvailableThemesData().forEach {
-                if (Theme.getDefault().javaClass == it.themeClass)
-                    selectionModel.select(it)
-                items.add(it)
-            }
-
-            selectionModel.selectedItemProperty().addListener { _, _, it ->
-                try {
-                    val themeObject = ReflectionUtils.constructObject(it.themeClass)
-                    logger.debug("The theme object: {}", themeObject)
-                    Theme.setDefault(themeObject)
-                    preferences.editor().put(Preferences.Key.THEME, themeObject)
-                } catch (e: Exception) {
-                    logger.error("Couldn't set the theme", e)
-                    // TODO: error dialog
+                selectionModel.selectedItemProperty().addListener { _, _, it ->
+                    try {
+                        val themeObject = ReflectionUtils.constructObject(it.themeClass)
+                        logger.debug("The theme object: {}", themeObject)
+                        Theme.setDefault(themeObject)
+                        preferences.editor().put(Preferences.Key.THEME, themeObject)
+                    } catch (e: Exception) {
+                        logger.error("Couldn't set the theme", e)
+                        // TODO: error dialog
+                    }
                 }
+            }.let {
+                addEntry(
+                    I18N.getValue("preferences.appearance.theme"),
+                    I18N.getValue("preferences.appearance.theme.desc"),
+                    it
+                )
             }
-        }.let {
-            addEntry(
-                I18N.getValue("preferences.appearance.theme"),
-                I18N.getValue("preferences.appearance.theme.desc"),
-                it
-            )
         }
     }
 
