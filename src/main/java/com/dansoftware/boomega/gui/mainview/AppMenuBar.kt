@@ -7,7 +7,7 @@ import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.info.contact.ContactActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
@@ -31,6 +31,7 @@ import javafx.beans.binding.BooleanBinding
 import javafx.collections.ListChangeListener
 import javafx.concurrent.Task
 import javafx.scene.control.*
+import javafx.scene.input.KeyCodeCombination
 import javafx.stage.Stage
 import javafx.stage.Window
 import org.slf4j.Logger
@@ -102,7 +103,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
          */
         private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getValue("menubar.menu.file.new"))
             .action { startActivityLauncher { RuntimeBasicActivityLauncher(preferences, databaseTracker) } }
-            .keyCombination(DefaultKeyBindings.newEntryProperty)
+            .keyCombination(KeyBindings.newEntryKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.DATABASE)
 
         /**
@@ -121,7 +122,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                     }
                 }
             }
-            .keyCombination(DefaultKeyBindings.openDatabaseProperty)
+            .keyCombination(KeyBindings.openDatabaseKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.FILE)
 
         private fun databaseCreatorMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbcreate"))
@@ -130,12 +131,12 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                     startActivityLauncher { RuntimeOpenActivityLauncher(preferences, databaseTracker, db) }
                 }
             }
-            .keyCombination(DefaultKeyBindings.createDatabaseProperty)
+            .keyCombination(KeyBindings.createDatabaseKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.DATABASE_PLUS)
 
         private fun databaseManagerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbmanager"))
             .action { DatabaseManagerActivity().show(databaseTracker, context.contextWindow) }
-            .keyCombination(DefaultKeyBindings.openDatabaseManagerProperty)
+            .keyCombination(KeyBindings.openDatabaseKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.DATABASE)
 
         /**
@@ -184,8 +185,16 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             .graphic(MaterialDesignIcon.CLOSE)
 
         private fun restartMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.restart"))
-            .action { context.contextScene?.onKeyPressed?.handle(DefaultKeyBindings.restartApplication.asKeyEvent()) }
-            .keyCombination(DefaultKeyBindings.restartApplicationProperty)
+            .action {
+                context.contextScene
+                    ?.onKeyPressed
+                    ?.handle(
+                        KeyBindings.restartApplicationKeyBinding
+                        .keyCombination.let { it as KeyCodeCombination }
+                        .asKeyEvent()
+                    )
+            }
+            .keyCombination(KeyBindings.restartApplicationKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.UPDATE)
 
         private fun quitMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.quit"))
@@ -357,7 +366,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         private fun fullScreenMenuItem() = MenuItem(I18N.getValue("menubar.menu.window.fullscreen"))
             .also { context.contextWindow }
             .action { context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() } }
-            .keyCombination(DefaultKeyBindings.fullScreenProperty)
+            .keyCombination(KeyBindings.fullScreenKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.FULLSCREEN)
     }
 

@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.main;
 
 import com.dansoftware.boomega.appdata.Preferences;
-import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings;
+import com.dansoftware.boomega.gui.keybinding.KeyBindings;
 import com.dansoftware.boomega.appdata.logindata.LoginData;
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler;
 import com.dansoftware.boomega.gui.context.Context;
@@ -261,7 +261,7 @@ public class Main extends BaseApplication {
      * @param preferences the preferences object
      */
     private void loadDefaultKeyBindings(@NotNull Preferences preferences) {
-        DefaultKeyBindings.loadFrom(preferences);
+        KeyBindings.loadFrom(preferences);
     }
 
     /**

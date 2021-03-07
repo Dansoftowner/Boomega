@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.appdata;
 
-import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings;
-import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindingsAdapter;
+import com.dansoftware.boomega.gui.keybinding.KeyBindings;
+import com.dansoftware.boomega.appdata.keybinding.KeyBindingsAdapter;
 import com.dansoftware.boomega.appdata.logindata.LoginData;
 import com.dansoftware.boomega.appdata.logindata.LoginDataAdapter;
 import com.dansoftware.boomega.appdata.theme.ThemeAdapter;
@@ -77,7 +77,7 @@ public class Preferences {
         return new GsonBuilder()
                 .registerTypeAdapter(Theme.class, new ThemeAdapter())
                 .registerTypeAdapter(LoginData.class, new LoginDataAdapter())
-                .registerTypeAdapter(DefaultKeyBindings.class, new DefaultKeyBindingsAdapter())
+                .registerTypeAdapter(KeyBindings.class, new KeyBindingsAdapter())
                 .create();
     }
 

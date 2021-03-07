@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.record.edit
 
-import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
@@ -12,7 +12,6 @@ import javafx.concurrent.Task
 import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.scene.control.*
-import javafx.scene.input.KeyCombination
 import javafx.scene.layout.StackPane
 import javafx.scene.web.HTMLEditor
 import org.slf4j.Logger
@@ -46,7 +45,7 @@ class NotesEditor(
     }
 
     private fun initKeyPressedPolicy() {
-        DefaultKeyBindings.saveChanges.also { keyCombi ->
+        KeyBindings.saveChangesKeyBinding.keyCombination.also { keyCombi ->
             this.setOnKeyPressed { event ->
                 if (keyCombi.match(event)) {
                     saveChanges()

@@ -16,7 +16,6 @@ class KeyBindDetectionField(initial: KeyCombination) : TextField() {
 
     private val keyCombination: ObjectProperty<KeyCombination> = object : SimpleObjectProperty<KeyCombination>() {
         override fun invalidated() {
-            super.invalidated()
             this@KeyBindDetectionField.text = StringUtils.getIfEmpty(get().displayText, null)
         }
     }
@@ -24,6 +23,7 @@ class KeyBindDetectionField(initial: KeyCombination) : TextField() {
     init {
         this.isEditable = false
         this.keyCombination.set(initial)
+        this.setOnContextMenuRequested(Event::consume)
         this.setOnKeyTyped(KeyEvent::consume)
         this.setOnKeyPressed { event ->
             event.consume()

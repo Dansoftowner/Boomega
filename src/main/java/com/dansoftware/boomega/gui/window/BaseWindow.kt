@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.window
 
 import com.dansoftware.boomega.appdata.Preferences
-import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
@@ -212,7 +212,7 @@ abstract class BaseWindow : Stage, Themeable {
         private var dialogShowing: Boolean = false
 
         override fun handle(keyEvent: KeyEvent) {
-            if (dialogShowing.not() && DefaultKeyBindings.restartApplication.match(keyEvent)) {
+            if (dialogShowing.not() && KeyBindings.restartApplicationKeyBinding.match(keyEvent)) {
                 dialogShowing = true
                 this@BaseWindow.getContext()?.showConfirmationDialog(
                     I18N.getValue("app.restart.dialog.title"),

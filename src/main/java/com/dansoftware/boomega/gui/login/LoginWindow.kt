@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.appdata.Preferences
-import com.dansoftware.boomega.appdata.keybindings.DefaultKeyBindings
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.window.BaseWindow
 import javafx.event.EventHandler
 import javafx.stage.WindowEvent
@@ -24,7 +24,7 @@ private class LoginWindow(private val root: LoginView, private val preferences: 
     init {
         Objects.requireNonNull(preferences)
         Objects.requireNonNull(root, "LoginView shouldn't be null")
-        this.setFullScreenKeyCombination(DefaultKeyBindings.fullScreen)
+        this.setFullScreenKeyCombination(KeyBindings.fullScreenKeyBinding.keyCombination)
         this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this)
         this.exitDialog = true
         this.isMaximized = true
