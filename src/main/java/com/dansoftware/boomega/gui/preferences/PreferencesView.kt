@@ -2,11 +2,7 @@ package com.dansoftware.boomega.gui.preferences
 
 import com.dansoftware.boomega.appdata.Preferences
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.preferences.pane.AppearancePane
-import com.dansoftware.boomega.gui.preferences.pane.LanguagePane
-import com.dansoftware.boomega.gui.preferences.pane.PreferencesPane
-import com.dansoftware.boomega.gui.preferences.pane.UpdatePane
-import com.dlsc.workbenchfx.SimpleHeaderView
+import com.dansoftware.boomega.gui.preferences.pane.*
 import com.dlsc.workbenchfx.Workbench
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import javafx.scene.Node
@@ -14,7 +10,6 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.control.Tab
 import javafx.scene.control.TabPane
 import javafx.scene.image.Image
-import jfxtras.styles.jmetro.JMetroStyleClass
 
 class PreferencesView(private val preferences: Preferences) : Workbench() {
 
@@ -35,8 +30,9 @@ class PreferencesView(private val preferences: Preferences) : Workbench() {
     }
 
     private fun initPanes() {
-        listOf<PreferencesPane>(
+        listOf(
             AppearancePane(preferences),
+            KeyBindingPane(preferences),
             LanguagePane(asContext, preferences),
             UpdatePane(preferences)
         ).forEach(this::addPane)
