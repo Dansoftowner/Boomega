@@ -22,6 +22,7 @@ class KeyBindDetectionField(initial: KeyCombination) : TextField() {
 
     init {
         this.isEditable = false
+        //TODO: tooltip
         this.keyCombination.set(initial)
         this.setOnContextMenuRequested(Event::consume)
         this.setOnKeyTyped(KeyEvent::consume)
