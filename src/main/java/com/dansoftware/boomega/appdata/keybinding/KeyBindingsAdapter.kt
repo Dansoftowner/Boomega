@@ -25,14 +25,15 @@ class KeyBindingsAdapter() : JsonSerializer<KeyBindings>, JsonDeserializer<KeyBi
         JsonObject().apply {
             src.javaClass.declaredFields
                 .filter { it.type == KeyBinding::class.java }
-                .forEach {
-                    this.addProperty(
-                        it.name,
-                        it.apply { isAccessible = true }.get(src)
-                            .run { this as KeyBinding }
-                            .keyCombination
-                            .toString()
-                    )
+                .map { it.apply { isAccessible = true }.get(src) }
+                .map { it as KeyBinding }
+                .forEach { keyBinding ->
+                    keyBinding.takeIf { it.keyCombination != it.defaultKeyCombination }?.let {
+                        this.addProperty(
+                            it.id,
+                            it.keyCombination.toString()
+                        )
+                    }
                 }
         }
     } ?: JsonNull.INSTANCE
