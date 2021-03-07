@@ -5,7 +5,10 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
 
-class KeyBinding(val id: String, val defaultKeyCombination: KeyCombination) {
+class KeyBinding(val id: String,
+                 val i18nTitle: String,
+                 val i18nDescription: String,
+                 val defaultKeyCombination: KeyCombination) {
 
     val keyCombinationProperty: ObjectProperty<KeyCombination> =
         SimpleObjectProperty(defaultKeyCombination)
