@@ -75,7 +75,15 @@ public class I18N {
     private static void loadPacks() {
         //Collecting LanguagePacks from the core project
         ReflectionUtils.getSubtypesOf(LanguagePack.class).forEach(ReflectionUtils::initializeClass);
-        PluginClassLoader.getInstance().initializeSubtypeClasses(LanguagePack.class);
+        initializePluginSubtypes();
+    }
+
+    private static void initializePluginSubtypes() {
+        try {
+            PluginClassLoader.getInstance().initializeSubtypeClasses(LanguagePack.class);
+        } catch (Throwable t) {
+            logger.error("Couldn't initialize LanguagePack subtypes in from plugins", t);
+        }
     }
 
     private I18N() {

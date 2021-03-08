@@ -73,7 +73,15 @@ public abstract class Theme {
         //collecting Themes from the core project
         ReflectionUtils.getSubtypesOf(Theme.class).forEach(ReflectionUtils::initializeClass);
         //collecting Themes from plugins
-        PluginClassLoader.getInstance().initializeSubtypeClasses(Theme.class);
+        initPluginThemes();
+    }
+
+    private static void initPluginThemes() {
+        try {
+            PluginClassLoader.getInstance().initializeSubtypeClasses(Theme.class);
+        } catch (Throwable t) {
+            logger.error("Couldn't initialize Theme subtypes from plugins", t);
+        }
     }
 
     protected static void registerTheme(@NotNull ThemeMeta<? extends Theme> themeMeta) {

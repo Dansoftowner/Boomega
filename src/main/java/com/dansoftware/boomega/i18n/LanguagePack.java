@@ -129,6 +129,6 @@ public abstract class LanguagePack {
     public abstract ResourceBundle getValues();
 
     protected ResourceBundle getBundle(String path) {
-        return ResourceBundle.getBundle(path, locale, PluginClassLoader.getInstance());
+        return ResourceBundle.getBundle(path, locale);
     }
 }
