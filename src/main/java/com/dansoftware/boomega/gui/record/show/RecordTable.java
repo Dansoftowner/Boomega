@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
@@ -98,6 +99,10 @@ public class RecordTable extends TableView<Record> {
         this.setRowFactory(p -> {
             var row = new TableRow<Record>();
             row.contextMenuProperty().bind(rowContextMenu);
+            row.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event -> {
+                if (row.isEmpty())
+                    event.consume();
+            });
             return row;
         });
     }
