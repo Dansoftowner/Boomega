@@ -7,7 +7,12 @@ import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.css.PseudoClass
 import javafx.scene.Node
+import javafx.scene.control.Button
+import javafx.scene.layout.StackPane
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
 
@@ -27,6 +32,21 @@ class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
                     it
                 )
             }
+            addRestoreButton()
+        }
+
+        private fun addRestoreButton() {
+            Button(I18N.getValue("preferences.keybindings.restore_defaults")).apply {
+                setOnAction {
+                    //TODO: confirmation dialog
+                    KeyBindings.allKeyBindings().forEach {
+                        it.keyCombinationProperty.set(it.defaultKeyCombination)
+                    }
+                }
+
+                //just for adding default button styles
+                pseudoClassStateChanged(PseudoClass.getPseudoClass("default"), true)
+            }.let { StackPane(it) }.let(::addSimpleControl)
         }
 
         private fun addKeyDetectionField(title: String, description: String, keyBinding: KeyBinding) {
@@ -34,11 +54,18 @@ class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
                 I18N.getValue(title),
                 I18N.getValue(description),
                 KeyBindDetectionField(keyBinding.keyCombination).apply {
-                    this.keyCombinationProperty().addListener { _, _, _ -> KeyBindings.writeTo(preferences) }
+                    this.keyCombinationProperty().addListener { _, _, _ ->
+                        logger.debug("Saving key combination to preferences...")
+                        KeyBindings.writeTo(preferences)
+                    }
                     this.keyCombinationProperty().bindBidirectional(keyBinding.keyCombinationProperty)
                     keyBinding.keyCombinationProperty.bindBidirectional(this.keyCombinationProperty())
                 }
             )
         }
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(KeyBindingPane::class.java)
     }
 }
