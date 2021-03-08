@@ -65,6 +65,31 @@ object KeyBindings {
             KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN)
         )
 
+    val deleteRecordKeyBinding: KeyBinding =
+        KeyBinding(
+            "deleteRecordKeyBinding",
+            "preferences.keybindings.delete_record",
+            "preferences.keybindings.delete_record.desc",
+            KeyCodeCombination(KeyCode.DELETE)
+        )
+
+    val copyRecordKeyBinding: KeyBinding =
+        KeyBinding(
+            "copyRecordKeyBinding",
+            "preferences.keybindings.copy_record",
+            "preferences.keybindings.copy_record.desc",
+            KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN)
+        )
+
+    val cutRecordKeyBinding: KeyBinding =
+        KeyBinding(
+            "cutRecordKeyBinding",
+            "preferences.keybindings.cut_record",
+            "preferences.keybindings.cut_record.desc",
+            KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN)
+        )
+
+
     @JvmStatic
     fun allKeyBindings(): List<KeyBinding> =
         javaClass.declaredFields
