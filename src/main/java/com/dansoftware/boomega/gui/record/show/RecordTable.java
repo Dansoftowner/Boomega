@@ -8,14 +8,13 @@ import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Node;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -73,6 +72,7 @@ public class RecordTable extends TableView<Record> {
 
     private static final String STYLE_CLASS = "books-table";
 
+    private final ObjectProperty<ContextMenu> rowContextMenu = new SimpleObjectProperty<>();
     private final IntegerProperty startIndex;
 
     public RecordTable(int startIndex) {
@@ -84,6 +84,7 @@ public class RecordTable extends TableView<Record> {
         this.getStyleClass().add(STYLE_CLASS);
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
+        this.initRowFactory();
         this.setPlaceholder(
                 new TableViewPlaceHolder(
                         this,
@@ -91,6 +92,14 @@ public class RecordTable extends TableView<Record> {
                         () -> I18N.getValue("record.table.place.holder.nocolumn")
                 )
         );
+    }
+
+    private void initRowFactory() {
+        this.setRowFactory(p -> {
+            var row = new TableRow<Record>();
+            row.contextMenuProperty().bind(rowContextMenu);
+            return row;
+        });
     }
 
     public List<ColumnType> getShowingColumns() {
@@ -146,6 +155,18 @@ public class RecordTable extends TableView<Record> {
 
     public IntegerProperty startIndexProperty() {
         return startIndex;
+    }
+
+    public ContextMenu getRowContextMenu() {
+        return rowContextMenu.get();
+    }
+
+    public ObjectProperty<ContextMenu> rowContextMenuProperty() {
+        return rowContextMenu;
+    }
+
+    public void setRowContextMenu(ContextMenu rowContextMenu) {
+        this.rowContextMenu.set(rowContextMenu);
     }
 
     private static class Column<T> extends TableColumn<Record, T> {
