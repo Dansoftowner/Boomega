@@ -9,7 +9,6 @@ class PreferencesWindow(view: PreferencesView, owner: Window?) :
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)
-        isResizable = false
         width = 800.0
         height = 500.0
     }
