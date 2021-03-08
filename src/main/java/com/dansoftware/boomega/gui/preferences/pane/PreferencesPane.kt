@@ -40,6 +40,11 @@ abstract class PreferencesPane(val preferences: Preferences) {
             vgap = 20.0
         }
 
+        fun addSimpleControl(region: Region) {
+            setConstraints(region, 0, rowCount, 2, 1)
+            children.add(region)
+        }
+
         fun addEntry(title: String, description: String?, region: Region) {
             rowCount.also { row ->
                 buildDescriptionPane(title, description)
