@@ -31,32 +31,31 @@ abstract class PreferencesPane(val preferences: Preferences) {
 
     protected abstract fun buildContent(): Content
 
-    open class Content : VBox() {
+    open class Content : GridPane() {
 
         init {
             styleClass.add(JMetroStyleClass.BACKGROUND)
             padding = Insets(10.0)
+            hgap = 100.0
+            vgap = 20.0
         }
 
         fun addEntry(title: String, description: String?, region: Region) {
-            children.add(buildEntry(title, description, region))
+            rowCount.also { row ->
+                buildDescriptionPane(title, description)
+                    .also { setConstraints(it, 0, row) }
+                    .let(children::add)
+                region.also {
+                    setConstraints(it, 1, row)
+                    setHgrow(it, Priority.ALWAYS)
+                    region.maxWidth = Double.MAX_VALUE
+                }.let(children::add)
+            }
         }
 
-        private fun buildEntry(title: String, description: String?, region: Region) = HBox(5.0).apply {
-            padding = Insets(10.0)
-            children.add(buildDescriptionPane(title, description))
-            children.add(region.also {
-                HBox.setHgrow(it, Priority.ALWAYS)
-                region.maxWidth = Double.MAX_VALUE
-            })
-        }
-
-        private fun buildDescriptionPane(title: String, description: String?) = StackPane().apply {
-            HBox.setHgrow(this, Priority.ALWAYS)
-            VBox(2.0).apply {
-                children.add(Label(title).apply { styleClass.add("entry-title") })
-                description?.let { children.add(Label(it).apply { styleClass.add("entry-description") }) }
-            }.let { Group(it) }.also { StackPane.setAlignment(it, Pos.CENTER_LEFT) }.let(children::add)
+        private fun buildDescriptionPane(title: String, description: String?) = VBox(2.0).apply {
+            children.add(Label(title).apply { styleClass.add("entry-title") })
+            description?.let { children.add(Label(it).apply { styleClass.add("entry-description") }) }
         }
     }
 }
