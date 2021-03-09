@@ -160,13 +160,13 @@ fun KeyEvent.asKeyCombination(): KeyCombination? =
     }
 
 fun KeyEvent.isOnlyCode(): Boolean {
-    var count: Int = 0
-    this.isControlDown.takeIf { it }?.let { count++ }
-    this.isAltDown.takeIf { it }?.let { count++ }
-    this.isShiftDown.takeIf { it }?.let { count++ }
-    this.isMetaDown.takeIf { it }?.let { count++ }
-    this.isShortcutDown.takeIf { it }?.let { count++ }
-    return count == 0
+    return listOf(
+        this.isControlDown.takeIf { it },
+        this.isAltDown.takeIf { it },
+        this.isShiftDown.takeIf { it },
+        this.isMetaDown.takeIf { it },
+        this.isShortcutDown.takeIf { it }
+    ).count { it !== null } == 0
 }
 
 fun KeyEvent.isUndefined(): Boolean =
