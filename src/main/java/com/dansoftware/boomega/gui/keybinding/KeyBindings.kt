@@ -89,6 +89,14 @@ object KeyBindings {
             KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN)
         )
 
+    val pasteRecordKeyBinding: KeyBinding =
+        KeyBinding(
+            "pasteRecordKeyBinding",
+            "preferences.keybindings.cut_record", //TODO: i18n
+            "preferences.keybindings.cut_record.desc", //TODO: i18n
+            KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN)
+        )
+
 
     @JvmStatic
     fun allKeyBindings(): List<KeyBinding> =
