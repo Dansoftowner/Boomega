@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.30'
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -12,6 +12,7 @@ def mainClass = 'com.dansoftware.libraryapp.main.Main'
 compileKotlin {
     kotlinOptions {
         jvmTarget = "11"
+        useIR = true
     }
 }
 
