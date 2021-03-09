@@ -66,6 +66,23 @@ class Record(
         this.serviceConnection = builder.serviceConnection
     }
 
+    fun copy() = Record(
+        this.id,
+        this.recordType,
+        this.title,
+        this.language,
+        this.publisher,
+        this.publishedDate,
+        this.notes,
+        this.rating,
+        this.subtitle,
+        this.isbn,
+        this.numberOfCopies,
+        this.authors,
+        this.subject,
+        this.magazineName
+    )
+
     enum class Type {
         BOOK, MAGAZINE
     }
