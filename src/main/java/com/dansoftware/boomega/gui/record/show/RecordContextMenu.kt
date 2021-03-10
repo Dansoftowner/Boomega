@@ -4,6 +4,7 @@ import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.binding.Bindings
 import javafx.collections.ObservableList
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
@@ -17,6 +18,8 @@ class RecordContextMenu(
     private val cutAction: Consumer<List<Record>>,
     private val pasteAction: Runnable
 ) : ContextMenu() {
+
+    private val itemsEmpty = Bindings.isEmpty(records)
 
     init {
         buildItems()
@@ -35,6 +38,7 @@ class RecordContextMenu(
         MenuItem("Delete", MaterialDesignIconView(MaterialDesignIcon.DELETE)).apply {
             setOnAction { deleteAction.accept(records.let(::ArrayList)) }
             acceleratorProperty().bind(KeyBindings.deleteRecordKeyBinding.keyCombinationProperty)
+            disableProperty().bind(itemsEmpty)
         }.let(items::add)
     }
 
@@ -43,6 +47,7 @@ class RecordContextMenu(
         MenuItem("Copy", MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)).apply {
             setOnAction { copyAction.accept(records.let(::ArrayList)) }
             acceleratorProperty().bind(KeyBindings.copyRecordKeyBinding.keyCombinationProperty)
+            disableProperty().bind(itemsEmpty)
         }.let(items::add)
     }
 
@@ -51,6 +56,7 @@ class RecordContextMenu(
         MenuItem("Cut", MaterialDesignIconView(MaterialDesignIcon.CONTENT_CUT)).apply {
             setOnAction { cutAction.accept(records.let(::ArrayList)) }
             acceleratorProperty().bind(KeyBindings.cutRecordKeyBinding.keyCombinationProperty)
+            disableProperty().bind(itemsEmpty)
         }.let(items::add)
     }
 
