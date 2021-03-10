@@ -30,7 +30,7 @@ class ServiceConnection {
         googleBookLink?.let { this.googleBookLink = it }
     }
 
-    constructor(info: Map<String, Any>) {
+    constructor(info: Map<String, Any?>) {
         infoMap.putAll(info)
     }
 
@@ -43,6 +43,8 @@ class ServiceConnection {
     fun remove(key: String) = infoMap.remove(key)
 
     fun isEmpty() = infoMap.isEmpty()
+
+    fun copy() = ServiceConnection(HashMap(this.infoMap))
 
     companion object {
         const val GOOGLE_BOOK_HANDLE = "google.book.handle"

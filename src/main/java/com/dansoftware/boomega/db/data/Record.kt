@@ -81,7 +81,7 @@ class Record(
         this.authors,
         this.subject,
         this.magazineName
-    )
+    ).also { it.serviceConnection = this.serviceConnection?.copy() }
 
     enum class Type {
         BOOK, MAGAZINE
