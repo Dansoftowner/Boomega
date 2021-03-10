@@ -5,6 +5,9 @@ import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
+import javafx.beans.binding.BooleanBinding
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.ReadOnlyBooleanProperty
 import javafx.collections.ObservableList
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
@@ -16,7 +19,8 @@ class RecordContextMenu(
     private val deleteAction: Consumer<List<Record>>,
     private val copyAction: Consumer<List<Record>>,
     private val cutAction: Consumer<List<Record>>,
-    private val pasteAction: Runnable
+    private val pasteAction: Runnable,
+    private val pasteItemDisable: ReadOnlyBooleanProperty?
 ) : ContextMenu() {
 
     private val itemsEmpty = Bindings.isEmpty(records)
@@ -65,6 +69,7 @@ class RecordContextMenu(
         MenuItem("Paste", MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE)).apply {
             setOnAction { pasteAction.run() }
             acceleratorProperty().bind(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
+            pasteItemDisable?.let(disableProperty()::bind)
         }.let(items::add)
     }
 
@@ -77,6 +82,7 @@ class RecordContextMenu(
         private var cutAction: Consumer<List<Record>>? = null
         private var copyAction: Consumer<List<Record>>? = null
         private var pasteAction: Runnable? = null
+        private var pasteItemDisablePolicy: ReadOnlyBooleanProperty? = null
 
         fun deleteAction(deleteAction: Consumer<List<Record>>) = this.apply {
             this.deleteAction = deleteAction
@@ -94,13 +100,18 @@ class RecordContextMenu(
             this.pasteAction = pasteAction
         }
 
+        fun pasteItemDisablePolicy(binding: ReadOnlyBooleanProperty) = this.apply {
+            this.pasteItemDisablePolicy = binding
+        }
+
         fun build(): RecordContextMenu =
             RecordContextMenu(
                 records,
                 deleteAction ?: Consumer { },
                 copyAction ?: Consumer { },
                 cutAction ?: Consumer { },
-                pasteAction ?: Runnable { }
+                pasteAction ?: Runnable { },
+                pasteItemDisablePolicy
             )
     }
 
