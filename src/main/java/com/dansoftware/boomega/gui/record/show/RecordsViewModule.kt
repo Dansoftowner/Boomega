@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import java.text.Collator
 import java.util.*
+import java.util.function.Consumer
 import java.util.function.Supplier
 import java.util.stream.Collectors
 import java.util.stream.Stream
@@ -276,13 +277,13 @@ class RecordsViewModule(
     }
 
     private fun invokeCutAction(items: List<Record>) {
-        RecordClipboard.pushItems(copyHandle, RecordClipboard.Action.CUT, items) { _, records, action ->
-            action?.let { invokeRemoveAction(records) }
+        RecordClipboard.pushItems(copyHandle, RecordClipboard.Action.CUT, items).also { push ->
+            push.onPulled { invokeRemoveAction(it.items) }
         }
     }
 
     private fun invokeCopyAction(items: List<Record>) {
-        RecordClipboard.pushItems(copyHandle, RecordClipboard.Action.COPY, items) { _, _, _ -> }
+        RecordClipboard.pushItems(copyHandle, RecordClipboard.Action.COPY, items)
     }
 
     private fun invokeRemoveAction(items: List<Record>) {
