@@ -20,6 +20,7 @@ import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
+import javafx.collections.ListChangeListener
 import javafx.concurrent.Task
 import javafx.concurrent.WorkerStateEvent
 import javafx.event.ActionEvent
@@ -142,9 +143,14 @@ class RecordsViewModule(
             .deleteAction(this::invokeRemoveAction)
             .copyAction(this::invokeCopyAction)
             .cutAction(this::invokeCutAction)
+            .pasteItemDisablePolicy(RecordClipboard.emptyProperty())
             .pasteAction { RecordClipboard.pullContent().items.let(this::invokePasteAction) }
             .build()
-            .let { table.rowContextMenu = it }
+            .let {
+                table.rowContextMenu = it
+                table.contextMenu = it.takeIf { table.items.isEmpty() }
+                table.items.addListener(ListChangeListener { _ -> table.contextMenu = it.takeIf { table.items.isEmpty() } })
+            }
     }
 
     private fun readColumnConfigurations(table: RecordTable) {
