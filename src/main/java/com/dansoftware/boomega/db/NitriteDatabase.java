@@ -12,6 +12,8 @@ import org.dizitart.no2.exceptions.SecurityException;
 import org.dizitart.no2.objects.ObjectFilter;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
@@ -28,10 +30,11 @@ import static com.dansoftware.boomega.i18n.I18N.getValue;
  */
 public class NitriteDatabase implements Database {
 
+    private static final Logger logger = LoggerFactory.getLogger(NitriteDatabase.class);
+    private static final String REPOSITORY_KEY = "BoomegaRecords";
+
     private final DatabaseMeta databaseMeta;
     private final Nitrite nitriteClient;
-
-    private final ObjectRepository<Record> recordRepository;
 
     public NitriteDatabase(@NotNull DatabaseMeta databaseMeta,
                            @NotNull Credentials credentials)
@@ -39,7 +42,6 @@ public class NitriteDatabase implements Database {
         Objects.requireNonNull(credentials, "The Credentials must not be null!");
         this.nitriteClient = init(databaseMeta, credentials);
         this.databaseMeta = databaseMeta;
-        this.recordRepository = nitriteClient.getRepository("BoomegaRecords", Record.class);
     }
 
     private Nitrite init(@NotNull DatabaseMeta databaseMeta,
@@ -59,37 +61,37 @@ public class NitriteDatabase implements Database {
 
     @Override
     public void insertRecord(@NotNull Record record) {
-        this.recordRepository.insert(record);
+        this.getRecordRepository().insert(record);
     }
 
     @Override
     public void updateRecord(@NotNull Record record) {
-        this.recordRepository.update(record);
+        this.getRecordRepository().update(record);
     }
 
     @Override
     public void removeRecord(@NotNull Record record) {
-        this.recordRepository.remove(record);
+        this.getRecordRepository().remove(record);
     }
 
     @Override
     public int getTotalRecordCount() {
-        return this.recordRepository.find().totalCount();
+        return this.getRecordRepository().find().totalCount();
     }
 
     @Override
     public List<Record> getRecords() {
-        return this.recordRepository.find().toList();
+        return this.getRecordRepository().find().toList();
     }
 
     @Override
     public List<Record> getRecords(@NotNull FindOptions findOptions) {
-        return this.recordRepository.find(findOptions).toList();
+        return this.getRecordRepository().find(findOptions).toList();
     }
 
     @Override
     public List<Record> getRecords(@NotNull ObjectFilter objectFilter, @NotNull FindOptions findOptions) {
-        return this.recordRepository.find(objectFilter, findOptions).toList();
+        return this.getRecordRepository().find(objectFilter, findOptions).toList();
     }
 
     @Override
@@ -105,6 +107,11 @@ public class NitriteDatabase implements Database {
     @Override
     public DatabaseMeta getMeta() {
         return this.databaseMeta;
+    }
+
+    private ObjectRepository<Record> getRecordRepository() {
+        logger.debug("Getting record object repository...");
+        return nitriteClient.getRepository(REPOSITORY_KEY, Record.class);
     }
 
     public static DatabaseAuthenticator getAuthenticator() {
