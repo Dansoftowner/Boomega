@@ -23,7 +23,6 @@ import javafx.beans.value.ObservableValue
 import javafx.collections.ListChangeListener
 import javafx.concurrent.Task
 import javafx.concurrent.WorkerStateEvent
-import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.geometry.Orientation
 import javafx.scene.Node
@@ -33,7 +32,6 @@ import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import java.text.Collator
 import java.util.*
-import java.util.function.Consumer
 import java.util.function.Supplier
 import java.util.stream.Collectors
 import java.util.stream.Stream
@@ -150,7 +148,9 @@ class RecordsViewModule(
             .let {
                 table.rowContextMenu = it
                 table.contextMenu = it.takeIf { table.items.isEmpty() }
-                table.items.addListener(ListChangeListener { _ -> table.contextMenu = it.takeIf { table.items.isEmpty() } })
+                table.items.addListener(ListChangeListener { _ ->
+                    table.contextMenu = it.takeIf { table.items.isEmpty() }
+                })
             }
     }
 
@@ -171,9 +171,9 @@ class RecordsViewModule(
             content.booksTable,
             database
         ).apply {
-           addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED) {
+            addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED) {
                 content.setDockFullyResizable()
-           }
+            }
         }.let(ExploitativeExecutor::submit)
     }
 
@@ -262,7 +262,7 @@ class RecordsViewModule(
                 setOnSucceeded {
                     context.stopProgress()
                     refresh()
-                //table.items.addAll(items)
+                    //table.items.addAll(items)
                 }
             }
 
@@ -376,6 +376,12 @@ class RecordsViewModule(
     private inner class DockMenuItem(private val dock: Dock) :
         CheckMenuItem(I18N.getValue(dock.i18nKey)) {
 
+        init {
+            graphic = dock.graphic
+            initContentListener()
+            setBehaviourPolicy()
+        }
+
         private fun initContentListener() {
             content.addListener(object : ChangeListener<RecordsView?> {
                 override fun changed(
@@ -383,8 +389,8 @@ class RecordsViewModule(
                     oldValue: RecordsView?,
                     recordsView: RecordsView?
                 ) {
-                    if (recordsView != null) {
-                        this@DockMenuItem.isSelected = recordsView.docks.contains(dock)
+                    recordsView?.let {
+                        this@DockMenuItem.isSelected = it.docks.contains(dock)
                         observable.removeListener(this)
                     }
                 }
@@ -392,25 +398,18 @@ class RecordsViewModule(
         }
 
         private fun setBehaviourPolicy() {
-            onAction = EventHandler { e: ActionEvent? ->
-                if (!this.isSelected) {
-                    getContent().docks
-                        .setAll(getContent()
-                            .docks
-                            .stream()
-                            .filter { dck: Dock -> dck !== dock }
-                            .collect(Collectors.toList())
-                        )
-                } else {
-                    getContent().docks.add(dock)
+            setOnAction {
+                when {
+                    this.isSelected.not() ->
+                        getContent().docks
+                            .setAll(
+                                getContent().docks.stream()
+                                    .filter { dck: Dock -> dck !== dock }
+                                    .collect(Collectors.toList())
+                            )
+                    else -> getContent().docks.add(dock)
                 }
             }
-        }
-
-        init {
-            graphic = dock.graphic
-            initContentListener()
-            setBehaviourPolicy()
         }
     }
 

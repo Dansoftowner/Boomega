@@ -2,9 +2,9 @@ package com.dansoftware.boomega.gui.info.dependency;
 
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import com.dansoftware.boomega.gui.info.dependency.meta.DependencyInfo;
 import com.dansoftware.boomega.gui.info.dependency.meta.LicenseInfo;
-import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -61,13 +61,15 @@ public class DependencyTable extends TableView<DependencyInfo>
                         setGraphic(null);
                     } else {
                         DependencyInfo dependencyInfo = getTableView().getItems().get(getIndex());
-                        dependencyInfo.getWebsiteUrl().ifPresentOrElse(
-                                website -> setGraphic(new WebsiteHyperLink(dependencyInfo.getName(), website)),
-                                () -> {
+                        dependencyInfo.getWebsiteUrl()
+                                .map(it -> new WebsiteHyperLink(dependencyInfo.getName(), it))
+                                .ifPresentOrElse(value -> {
+                                    setGraphic(value);
+                                    setText(null);
+                                }, () -> {
                                     setGraphic(null);
                                     setText(dependencyInfo.getName());
-                                }
-                        );
+                                });
                     }
                 }
             };
@@ -100,13 +102,15 @@ public class DependencyTable extends TableView<DependencyInfo>
                     } else {
                         DependencyInfo dependencyInfo = getTableView().getItems().get(getIndex());
                         LicenseInfo licenseInfo = dependencyInfo.getLicenseInfo();
-                        licenseInfo.getWebsiteUrl().ifPresentOrElse(
-                                website -> setGraphic(new WebsiteHyperLink(licenseInfo.getName(), website)),
-                                () -> {
-                                    setGraphic(null);
+                        licenseInfo.getWebsiteUrl()
+                                .map(it -> new WebsiteHyperLink(licenseInfo.getName(), it))
+                                .ifPresentOrElse(value -> {
+                                    setGraphic(value);
+                                    setText(null);
+                                }, () -> {
+                                    this.setGraphic(null);
                                     setText(licenseInfo.getName());
-                                }
-                        );
+                                });
                     }
                 }
             };
