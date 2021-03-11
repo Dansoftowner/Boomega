@@ -29,6 +29,10 @@
     -fx-fill: white;
 }
 
+.context-menu .menu-item .glyph-icon {
+    -fx-fill: white;
+}
+
 .text-field .langSelectorControl {
     -fx-fill: white;
 }
