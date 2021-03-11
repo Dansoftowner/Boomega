@@ -35,7 +35,7 @@ object RecordClipboard {
 
     @JvmStatic
     fun pullContent(): ClipboardContent =
-        ClipboardContent(identifier.get(), this.items.copy().let(Collections::unmodifiableList).also {
+        ClipboardContent(identifier.get(), ArrayList(this.items).let(Collections::unmodifiableList).also {
             this.callback.get()?.let { it.onPulled?.accept(it) }
             if (action.get() == Action.CUT) {
                 this.items.clear()

@@ -198,7 +198,7 @@ class RecordsViewModule(
 
     private fun buildDeleteItem(): ToolbarItem =
         ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.DELETE)).also { item ->
-            //TODO: item.setTooltip();
+            item.tooltip = Tooltip(I18N.getValue("record.delete"))
             content.addListener { _, _, newContent: RecordsView? ->
                 newContent?.let {
                     val selectedItems = newContent.booksTable.selectionModel.selectedItems
@@ -213,6 +213,7 @@ class RecordsViewModule(
 
     private fun buildPasteItem(): ToolbarItem =
         ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE)).also { item ->
+            item.tooltip = Tooltip(I18N.getValue("record.paste"))
             RecordClipboard.emptyProperty()
                 .or(RecordClipboard.identifierProperty().isEqualTo(copyHandle))
                 .let(item.disableProperty()::bind)
@@ -221,7 +222,7 @@ class RecordsViewModule(
 
     private fun buildCopyItem(): ToolbarItem =
         ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)).also { item ->
-            //TODO: tooltip
+            item.tooltip = Tooltip(I18N.getValue("record.copy"))
             content.addListener { _, _, newContent: RecordsView? ->
                 newContent?.let {
                     val selectedItems = newContent.booksTable.selectionModel.selectedItems
@@ -236,7 +237,7 @@ class RecordsViewModule(
 
     private fun buildCutItem(): ToolbarItem =
         ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.CONTENT_CUT)).also { item ->
-            //TODO: tooltip
+            item.tooltip = Tooltip(I18N.getValue("record.cut"))
             content.addListener { _, _, newContent: RecordsView? ->
                 newContent?.let {
                     val selectedItems = newContent.booksTable.selectionModel.selectedItems
@@ -260,7 +261,8 @@ class RecordsViewModule(
                 setOnRunning { context.showIndeterminateProgress() }
                 setOnSucceeded {
                     context.stopProgress()
-                    table.items.addAll(items)
+                    refresh()
+                //table.items.addAll(items)
                 }
             }
 

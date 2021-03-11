@@ -2,11 +2,10 @@ package com.dansoftware.boomega.gui.record.show
 
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
-import javafx.beans.binding.BooleanBinding
-import javafx.beans.property.BooleanProperty
 import javafx.beans.property.ReadOnlyBooleanProperty
 import javafx.collections.ObservableList
 import javafx.scene.control.ContextMenu
@@ -38,8 +37,7 @@ class RecordContextMenu(
     }
 
     private fun buildDeleteItem() {
-        //TODO: i18n
-        MenuItem("Delete", MaterialDesignIconView(MaterialDesignIcon.DELETE)).apply {
+        MenuItem(I18N.getValue("record.delete"), MaterialDesignIconView(MaterialDesignIcon.DELETE)).apply {
             setOnAction { deleteAction.accept(records.let(::ArrayList)) }
             acceleratorProperty().bind(KeyBindings.deleteRecordKeyBinding.keyCombinationProperty)
             disableProperty().bind(itemsEmpty)
@@ -47,8 +45,7 @@ class RecordContextMenu(
     }
 
     private fun buildCopyItem() {
-        //TODO: i18n
-        MenuItem("Copy", MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)).apply {
+        MenuItem(I18N.getValue("record.copy"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)).apply {
             setOnAction { copyAction.accept(records.let(::ArrayList)) }
             acceleratorProperty().bind(KeyBindings.copyRecordKeyBinding.keyCombinationProperty)
             disableProperty().bind(itemsEmpty)
@@ -56,8 +53,7 @@ class RecordContextMenu(
     }
 
     private fun buildCutItem() {
-        //TODO: i18n
-        MenuItem("Cut", MaterialDesignIconView(MaterialDesignIcon.CONTENT_CUT)).apply {
+        MenuItem(I18N.getValue("record.cut"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_CUT)).apply {
             setOnAction { cutAction.accept(records.let(::ArrayList)) }
             acceleratorProperty().bind(KeyBindings.cutRecordKeyBinding.keyCombinationProperty)
             disableProperty().bind(itemsEmpty)
@@ -65,8 +61,7 @@ class RecordContextMenu(
     }
 
     private fun buildPasteItem() {
-        //TODO: i18n
-        MenuItem("Paste", MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE)).apply {
+        MenuItem(I18N.getValue("record.paste"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE)).apply {
             setOnAction { pasteAction.run() }
             acceleratorProperty().bind(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
             pasteItemDisable?.let(disableProperty()::bind)
