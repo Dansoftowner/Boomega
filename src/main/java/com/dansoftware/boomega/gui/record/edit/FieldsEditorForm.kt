@@ -84,6 +84,10 @@ class FieldsEditorForm(
 
         this.setValues(buildRecordValues(items))
         this.itemsCount.set(items.size)
+        this.buildChangedBinding()
+    }
+
+    private fun buildChangedBinding() {
         this.currentForm.get()
             .changedProperty()
             .or(rating.isNotEqualTo(rating.get()))
@@ -275,6 +279,7 @@ class FieldsEditorForm(
             setOnSucceeded {
                 stopProgress()
                 onItemsModified.get()?.accept(items)
+                buildChangedBinding()
                 //TODO: showing success notification
             }
             setOnFailed {
