@@ -21,7 +21,7 @@ class FieldsEditor(
 
     var items: List<Record> = emptyList()
         set(value) {
-            if (field != value) {
+            if (field !== value) {
                 field = value
                 buildBaseUI(value, this.getPreferredType(value)?.also {
                     this.recordEditorForm.setItems(it, value)

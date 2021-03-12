@@ -25,7 +25,7 @@ class NotesEditor(
 
     var items: List<Record> = emptyList()
     set(value) {
-        if (field != value) {
+        if (field !== value) {
             field = value
             handleItemsChanged(value)
         }
