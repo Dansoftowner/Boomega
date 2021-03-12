@@ -261,70 +261,70 @@ class FieldsEditorForm(
         )
     ).i18n(ResourceBundleService(I18N.getValues()))
 
+    fun saveChanges() {
+        changed.takeIf { it.get() }?.let {
+            //TODO: preview dialog about what items will be changed
+            currentForm.get()?.persist()
+            ExploitativeExecutor.submit(buildSaveAction())
+        }
+    }
+
+    private fun buildSaveAction() = object : Task<Unit>() {
+        init {
+            setOnRunning { showProgress() }
+            setOnSucceeded {
+                stopProgress()
+                onItemsModified.get()?.accept(items)
+                //TODO: showing success notification
+            }
+            setOnFailed {
+                stopProgress()
+                logger.error("Something went wrong", it.source.exception)
+                //TODO: ALERT DIALOG
+            }
+        }
+
+        @Suppress("DuplicatedCode")
+        override fun call() {
+            items.forEach { record ->
+                this@FieldsEditorForm.apply {
+                    StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
+                    StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
+                    StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
+                    StringUtils.getIfBlank(magazineName.get(), null)?.run { record.magazineName = this }
+                    StringUtils.getIfBlank(authors.get(), null)?.run { record.authors = this.split(",") }
+                    StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
+                    StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
+                    StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
+                    numberOfCopies.value?.run { record.numberOfCopies = this }
+                    rating.value?.run { record.rating = this }
+                    publishedDate.get()
+                        ?.run {
+                            try {
+                                record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-mm"))
+                            } catch (e : RuntimeException) {
+                                logger.error("Couldn't parse date ", e)
+                            }
+                        }
+                }
+            }
+            logger.debug("Updating ({}) records in database...", items.size)
+            items.forEach(database::updateRecord)
+        }
+
+    }
 
     private inner class ControlBottom() : VBox(5.0) {
         init {
-            this.children.apply {
-                add(buildSaveChangesButton())
-            }
+            this.children.apply { add(buildSaveChangesButton()) }
         }
 
         private fun buildSaveChangesButton() = Button(I18N.getValue("save.changes")).apply {
             graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE)
             prefWidthProperty().bind(this@FieldsEditorForm.widthProperty())
             disableProperty().bind(this@FieldsEditorForm.changed.not())
-            setOnAction {
-                //TODO: preview dialog about what items will be changed
-                currentForm.get()?.persist()
-                ExploitativeExecutor.submit(buildSaveAction())
-            }
+            setOnAction { saveChanges() }
         }
-
-        private fun buildSaveAction() = object : Task<Unit>() {
-            init {
-                setOnRunning { showProgress() }
-                setOnSucceeded {
-                    stopProgress()
-                    onItemsModified.get()?.accept(items)
-                    //TODO: showing success notification
-                }
-                setOnFailed {
-                    stopProgress()
-                    logger.error("Something went wrong", it.source.exception)
-                    //TODO: ALERT DIALOG
-                }
-            }
-
-            @Suppress("DuplicatedCode")
-            override fun call() {
-                items.forEach { record ->
-                    this@FieldsEditorForm.apply {
-                        StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
-                        StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
-                        StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
-                        StringUtils.getIfBlank(magazineName.get(), null)?.run { record.magazineName = this }
-                        StringUtils.getIfBlank(authors.get(), null)?.run { record.authors = this.split(",") }
-                        StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
-                        StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
-                        StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
-                        numberOfCopies.value?.run { record.numberOfCopies = this }
-                        rating.value?.run { record.rating = this }
-                        publishedDate.get()
-                            ?.run {
-                                try {
-                                    record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-mm"))
-                                } catch (e : RuntimeException) {
-                                    logger.error("Couldn't parse date ", e)
-                                }
-                            }
-                    }
-                }
-                logger.debug("Updating ({}) records in database...", items.size)
-                items.forEach(database::updateRecord)
-            }
-
-        }
-
     }
     
     companion object {

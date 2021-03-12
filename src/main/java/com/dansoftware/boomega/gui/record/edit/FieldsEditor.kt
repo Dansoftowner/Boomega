@@ -3,6 +3,7 @@ package com.dansoftware.boomega.gui.record.edit
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
@@ -37,6 +38,18 @@ class FieldsEditor(
     init {
         this.styleClass.add("record-base-editor")
         this.items = items
+        this.initKeyPressedPolicy()
+    }
+
+    private fun initKeyPressedPolicy() {
+        KeyBindings.saveChangesKeyBinding.also { keyBinding ->
+            this.setOnKeyPressed {
+                if (keyBinding.match(it)) {
+                    logger.debug("Save changes key combination detected")
+                    recordEditorForm.saveChanges()
+                }
+            }
+        }
     }
 
     private fun getPreferredType(items: List<Record>) = items.map(Record::recordType).distinct().singleOrNull()
