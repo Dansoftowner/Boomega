@@ -108,5 +108,4 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.android.tools:dx:1.7" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.platform:junit-platform-engine:1.5.2" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="Boomega.main" />
 </module>
