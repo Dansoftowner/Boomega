@@ -37,8 +37,8 @@ class RecordEditor(
 
     var items: List<Record> = emptyList()
         set(value) {
-            field = value
-            value.let {
+            field = ArrayList(value)
+            field.let {
                 fieldsEditor.takeIf { baseEditorTab.isSelected }?.items = it
                 notesEditor.takeIf { notesEditorTab.isSelected }?.items = it
             }

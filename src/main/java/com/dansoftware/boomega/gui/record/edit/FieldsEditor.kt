@@ -20,10 +20,12 @@ class FieldsEditor(
 
     var items: List<Record> = emptyList()
         set(value) {
-            field = value
-            buildBaseUI(value, this.getPreferredType(value)?.also {
-                this.recordEditorForm.setItems(it, value)
-            })
+            if (field != value) {
+                field = value
+                buildBaseUI(value, this.getPreferredType(value)?.also {
+                    this.recordEditorForm.setItems(it, value)
+                })
+            }
         }
 
     var onItemsModified: Consumer<List<Record>>
