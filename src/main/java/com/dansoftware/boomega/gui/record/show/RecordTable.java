@@ -42,7 +42,6 @@ public class RecordTable extends TableView<Record> {
         PUBLISHER_COLUMN("record.table.column.publisher", PublisherColumn.class, true, table -> new PublisherColumn()),
         DATE_COLUMN("record.table.column.date", DateColumn.class, true, table -> new DateColumn()),
         COPY_COUNT_COLUMN("record.table.column.copycount", CopyCountColumn.class, false, table -> new CopyCountColumn()),
-        PAGE_COUNT_COLUMN("record.table.column.pagecount", PageCountColumn.class, false, table -> new PageCountColumn()),
         LANG_COLUMN("record.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
         RANK_COLUMN("record.table.column.rank", RankColumn.class, true, table -> new RankColumn()),
         SERVICE_CONNECTION_COLUMN("record.table.column.service", ServiceConnectionColumn.class, true, table -> new ServiceConnectionColumn());
@@ -347,13 +346,6 @@ public class RecordTable extends TableView<Record> {
         CopyCountColumn() {
             super(ColumnType.COPY_COUNT_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("numberOfCopies"));
-        }
-    }
-
-    private static final class PageCountColumn extends Column<Integer> {
-        PageCountColumn() {
-            super(ColumnType.PAGE_COUNT_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("numberOfPages"));
         }
     }
 
