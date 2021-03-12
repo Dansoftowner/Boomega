@@ -29,7 +29,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.function.Consumer
 
-class BaseEditorForm(
+class FieldsEditorForm(
     private val context: Context,
     private val database: Database,
 ) : VBox(5.0) {
@@ -271,8 +271,8 @@ class BaseEditorForm(
 
         private fun buildSaveChangesButton() = Button(I18N.getValue("save.changes")).apply {
             graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE)
-            prefWidthProperty().bind(this@BaseEditorForm.widthProperty())
-            disableProperty().bind(this@BaseEditorForm.changed.not())
+            prefWidthProperty().bind(this@FieldsEditorForm.widthProperty())
+            disableProperty().bind(this@FieldsEditorForm.changed.not())
             setOnAction {
                 //TODO: preview dialog about what items will be changed
                 currentForm.get()?.persist()
@@ -298,7 +298,7 @@ class BaseEditorForm(
             @Suppress("DuplicatedCode")
             override fun call() {
                 items.forEach { record ->
-                    this@BaseEditorForm.apply {
+                    this@FieldsEditorForm.apply {
                         StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
                         StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
                         StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
@@ -328,6 +328,6 @@ class BaseEditorForm(
     }
     
     companion object {
-        private val logger: Logger = LoggerFactory.getLogger(BaseEditorForm::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(FieldsEditorForm::class.java)
     }
 }

@@ -16,13 +16,13 @@ class RecordEditor(
     items: List<Record>
 ) : TabPane() {
 
-    private val baseEditor: BaseEditor = BaseEditor(context, database, items)
+    private val fieldsEditor: FieldsEditor = FieldsEditor(context, database, items)
     private val notesEditor: NotesEditor = NotesEditor(context, database, items)
 
-    private val baseEditorTab: Tab = TabImpl("record.editor.tab.fields", baseEditor).apply {
+    private val baseEditorTab: Tab = TabImpl("record.editor.tab.fields", fieldsEditor).apply {
         selectedProperty().addListener { _, _, selected ->
             when {
-                selected -> baseEditor.items = this@RecordEditor.items
+                selected -> fieldsEditor.items = this@RecordEditor.items
             }
         }
     }
@@ -39,15 +39,15 @@ class RecordEditor(
         set(value) {
             field = value
             value.let {
-                baseEditor.takeIf { baseEditorTab.isSelected }?.items = it
+                fieldsEditor.takeIf { baseEditorTab.isSelected }?.items = it
                 notesEditor.takeIf { notesEditorTab.isSelected }?.items = it
             }
         }
 
     var onItemsModified: Consumer<List<Record>>
-        get() = baseEditor.onItemsModified
+        get() = fieldsEditor.onItemsModified
         set(value) {
-            baseEditor.onItemsModified = value
+            fieldsEditor.onItemsModified = value
         }
 
     init {

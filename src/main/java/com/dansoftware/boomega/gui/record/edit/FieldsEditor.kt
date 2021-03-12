@@ -10,13 +10,13 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.function.Consumer
 
-class BaseEditor(
+class FieldsEditor(
     context: Context,
     database: Database,
     items: List<Record>
 ) : StackPane() {
 
-    private val recordEditorForm = BaseEditorForm(context, database)
+    private val recordEditorForm = FieldsEditorForm(context, database)
 
     var items: List<Record> = emptyList()
         set(value) {
@@ -69,6 +69,6 @@ class BaseEditor(
     }
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(BaseEditor::class.java)
+        val logger: Logger = LoggerFactory.getLogger(FieldsEditor::class.java)
     }
 }
