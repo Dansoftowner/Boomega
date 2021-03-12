@@ -4,10 +4,13 @@ import com.dansoftware.boomega.appdata.Preferences
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.geometry.HPos
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.CheckBox
+import javafx.scene.layout.GridPane
 import javafx.scene.layout.StackPane
+import org.controlsfx.control.ToggleSwitch
 
 class UpdatePane(preferences: Preferences): PreferencesPane(preferences) {
 
@@ -20,12 +23,12 @@ class UpdatePane(preferences: Preferences): PreferencesPane(preferences) {
         }
 
         private fun initEntries() {
-            CheckBox().apply {
+            ToggleSwitch().apply {
                 isSelected = preferences.get(Preferences.Key.SEARCH_UPDATES)
                 selectedProperty().addListener { _, _, selected ->
                     preferences.editor().put(Preferences.Key.SEARCH_UPDATES, selected)
                 }
-            }.let { StackPane(it.also { StackPane.setAlignment(it, Pos.CENTER_RIGHT) }) }.let {
+            }.also { StackPane.setAlignment(it, Pos.CENTER_RIGHT)}.let { StackPane(it) }.let {
                 addEntry(
                     I18N.getValue("preferences.update.automatic"),
                     I18N.getValue("preferences.update.automatic.desc"),
