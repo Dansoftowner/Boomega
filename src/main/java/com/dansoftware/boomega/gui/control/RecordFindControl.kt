@@ -1,6 +1,7 @@
 package com.dansoftware.boomega.gui.control
 
 import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
 import com.dansoftware.boomega.util.equalsIgnoreCase
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
@@ -16,6 +17,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
+import org.apache.commons.lang3.StringUtils
 import org.controlsfx.control.textfield.CustomTextField
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -51,6 +53,7 @@ class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
         }
 
     init {
+        styleClass.add("record-find-control")
         padding = Insets(5.0)
         spacing = 5.0
         buildUI()
@@ -70,7 +73,7 @@ class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
 
         children.add(Separator(Orientation.VERTICAL))
         Label().apply {
-            textProperty().bind(resultsCount.asString().concat(" results")) //TODO: i18n suffix
+            textProperty().bind(resultsCount.asString().concat(StringUtils.SPACE).concat(I18N.getValue("record.find.results")))
         }.let { StackPane(it) }.let(children::add)
 
         children.add(buildCloseButton().let {
@@ -154,6 +157,7 @@ class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
                 setOnRunning { showProgress() }
                 setOnFailed {
                     stopProgress()
+                    onItemsAvailable(emptyList())
                     logger.error("Search failed", it.source.exception)
                     //TODO: error dialog
                 }
@@ -188,22 +192,7 @@ class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
         abstract fun checkSingleValueMatches(value: String): Boolean
 
         fun filter(record: Record): Boolean =
-            getRecordValues(record).find { checkSingleValueMatches(it) } !== null
-
-        private fun getRecordValues(record: Record): List<String> {
-            return listOfNotNull(
-                record.title,
-                record.isbn,
-                record.language,
-                record.magazineName,
-                record.notes,
-                record.publishedDate,
-                record.publisher,
-                record.subject,
-                record.subtitle,
-                *record.authors?.toTypedArray() ?: emptyArray()
-            )
-        }
+            record.values().find { checkSingleValueMatches(it) } !== null
     }
 
     private class SimpleFilter(
@@ -216,7 +205,7 @@ class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
 
         private fun getValidBaseText() = baseText.get()?.let { if (caseSensitive.get().not()) it.toLowerCase() else it }
 
-        private fun getValidValue(value: String) = value.let { if (caseSensitive.get().not()) it.toLowerCase() else it }
+        private fun getValidValue(value: String) = value.let { if (caseSensitive.get().not()) it.toLowerCase() else it }.trim()
     }
 
     private class ExactFilter(
