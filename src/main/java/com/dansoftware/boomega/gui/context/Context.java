@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.context;
 
+import com.dansoftware.boomega.gui.keybinding.KeyBinding;
 import com.dlsc.workbenchfx.Workbench;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -160,6 +161,13 @@ public interface Context {
      * @param <D>      the type of the message
      */
     <D> void notifyModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data);
+
+
+    /* *** */
+
+    void addKeyBindingDetection(@NotNull KeyBinding keyBinding, Consumer<KeyBinding> onDetected);
+
+    /* *** */
 
     @Nullable
     Scene getContextScene();

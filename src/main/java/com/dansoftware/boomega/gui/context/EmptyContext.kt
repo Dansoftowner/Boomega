@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.context
 
+import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
@@ -105,6 +106,9 @@ private class EmptyContext : Context {
     override fun <D> showModule(classRef: Class<out NotifiableModule<D>>, data: D) {}
 
     override fun <D : Any?> notifyModule(classRef: Class<out NotifiableModule<D>>, data: D) {}
+    override fun addKeyBindingDetection(keyBinding: KeyBinding, onDetected: Consumer<KeyBinding>?) {
+        TODO("Not yet implemented")
+    }
 
     override fun getContextScene(): Scene? = null
 
