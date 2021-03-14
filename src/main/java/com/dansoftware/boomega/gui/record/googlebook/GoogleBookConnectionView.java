@@ -2,6 +2,7 @@ package com.dansoftware.boomega.gui.record.googlebook;
 
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.data.Record;
+import com.dansoftware.boomega.db.data.ServiceConnection;
 import com.dansoftware.boomega.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.boomega.googlebooks.SingleGoogleBookQuery;
 import com.dansoftware.boomega.googlebooks.Volume;
@@ -62,9 +63,19 @@ public class GoogleBookConnectionView extends VBox {
     private final Cache<String, DetailsPane> cache;
 
     private final ObjectProperty<Runnable> onRefreshed = new SimpleObjectProperty<>();
-
-    private final StringProperty currentGoogleHandle = new SimpleStringProperty();
+    private final ObjectProperty<Task<Volume>> lastTask = new SimpleObjectProperty<>();
     private final ObjectProperty<DetailsPane> currentDetailsPane = new SimpleObjectProperty<>();
+    private final StringProperty currentGoogleHandle = new SimpleStringProperty() {
+        @Override
+        protected void invalidated() {
+            final Task<Volume> task = lastTask.get();
+            if (task != null && task.isRunning()) {
+                logger.debug("Running task found");
+                task.cancel();
+                logger.debug("Task cancelled");
+            }
+        }
+    };
 
     private List<Record> items;
 
@@ -91,13 +102,17 @@ public class GoogleBookConnectionView extends VBox {
     public void setItems(@Nullable List<Record> items) {
         this.createCache();
         this.items = items;
-        currentGoogleHandle.set(retrieveGoogleBookHandle(items));
+        this.currentGoogleHandle.set(retrieveGoogleBookHandle(items));
+        logger.debug("Google book handle retrieved: {}", currentGoogleHandle.get());
         buildBaseContent(currentGoogleHandle.get(), Optional.ofNullable(items).orElseGet(Collections::emptyList));
     }
 
     private void createCache() {
-        if (currentGoogleHandle.get() != null && currentDetailsPane.get() != null) {
-            cache.put(currentGoogleHandle.get(), currentDetailsPane.get());
+        final String handle = currentGoogleHandle.get();
+        final DetailsPane pane = currentDetailsPane.get();
+        if (handle != null && pane != null) {
+            logger.debug("Creating cache for: '{}'...", currentGoogleHandle.get());
+            cache.put(handle, pane);
             currentGoogleHandle.set(null);
             currentDetailsPane.set(null);
         }
@@ -144,17 +159,9 @@ public class GoogleBookConnectionView extends VBox {
             currentDetailsPane.set(pane);
             setContent(pane);
         } else {
-            ExploitativeExecutor.INSTANCE.submit(
-                    buildVolumePullTask(
-                            googleBookLink,
-                            e -> setContent(new ErrorPlaceHolder(context, e)),
-                            volume -> {
-                                final var content = new DetailsPane(context, database, volume, items, this::refresh);
-                                currentDetailsPane.set(content);
-                                setContent(content);
-                            }
-                    )
-            );
+            Task<Volume> task = new VolumePullTask(googleBookLink);
+            lastTask.set(task);
+            ExploitativeExecutor.INSTANCE.submit(task);
         }
     }
 
@@ -164,7 +171,8 @@ public class GoogleBookConnectionView extends VBox {
         if (items == null)
             return null;
         List<String> distinctHandles = items.stream()
-                .map(record -> record.getServiceConnection().getGoogleBookLink())
+                .map(Record::getServiceConnection)
+                .map(ServiceConnection::getGoogleBookHandle)
                 .distinct()
                 .collect(Collectors.toList());
         if (distinctHandles.size() == 1)
@@ -172,25 +180,35 @@ public class GoogleBookConnectionView extends VBox {
         return null;
     }
 
-    private Task<Volume> buildVolumePullTask(String googleBook,
-                                             Consumer<Throwable> onFailed,
-                                             Consumer<Volume> onSucceeded) {
-        var task = new Task<Volume>() {
-            @Override
-            protected Volume call() throws Exception {
-                return new SingleGoogleBookQuery(googleBook).load();
-            }
-        };
-        task.setOnRunning(e -> showProgress());
-        task.setOnSucceeded(event -> {
-            stopProgress();
-            onSucceeded.accept(task.getValue());
-        });
-        task.setOnFailed(event -> {
-            stopProgress();
-            onFailed.accept(event.getSource().getException());
-        });
-        return task;
+    private class VolumePullTask extends Task<Volume> {
+
+        private final String googleHandle;
+
+        VolumePullTask(@NotNull String googleHandle) {
+            this.googleHandle = googleHandle;
+            this.initEventHandlers();
+        }
+
+        private void initEventHandlers() {
+            this.setOnRunning(e -> showProgress());
+            this.setOnSucceeded(event -> {
+                logger.debug("Pull task succeeded.");
+                stopProgress();
+                currentDetailsPane.set(new DetailsPane(context, database, this.getValue(), items, GoogleBookConnectionView.this::refresh));
+                setContent(currentDetailsPane.get());
+            });
+            this.setOnFailed(event -> {
+                logger.error("Pull task failed.", event.getSource().getException());
+                stopProgress();
+                setContent(new ErrorPlaceHolder(context, event.getSource().getException()));
+            });
+        }
+
+        @Override
+        protected Volume call() throws Exception {
+            logger.debug("Starting pull task...");
+            return new SingleGoogleBookQuery(googleHandle).load();
+        }
     }
 
     private static final class DetailsPane extends VBox {
