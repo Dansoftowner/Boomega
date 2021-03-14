@@ -37,3 +37,17 @@
 .records-view .table-view {
     -fx-border-width: 0;
 }
+
+.record-find-control .text-field {
+    -fx-padding: 5px;
+}
+
+.record-find-control .text-field .glyph-icon {
+    -fx-padding: 2;
+    -fx-fill: #e3e3e3;
+}
+
+.record-find-control .text-field:focused .glyph-icon {
+    -fx-padding: 2;
+    -fx-fill: #181818;
+}

@@ -42,3 +42,7 @@
     -fx-background-color: #acacac;
     -fx-padding: 0 1 0 0;
 }
+
+.record-find-control .text-field {
+    -fx-padding: 5px;
+}
