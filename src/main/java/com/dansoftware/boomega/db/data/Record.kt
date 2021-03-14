@@ -83,6 +83,19 @@ class Record(
         this.magazineName
     ).also { it.serviceConnection = this.serviceConnection?.copy() }
 
+    fun values(): List<String> = listOfNotNull(
+        title,
+        isbn,
+        language,
+        magazineName,
+        notes,
+        publishedDate,
+        publisher,
+        subject,
+        subtitle,
+        *authors?.toTypedArray() ?: emptyArray()
+    )
+
     enum class Type {
         BOOK, MAGAZINE
     }
