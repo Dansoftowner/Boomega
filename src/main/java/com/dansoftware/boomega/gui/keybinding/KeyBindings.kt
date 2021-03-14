@@ -97,6 +97,14 @@ object KeyBindings {
             KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN)
         )
 
+    val findRecordKeyBinding: KeyBinding =
+        KeyBinding(
+            "", //TODO: i18n
+            "", //TODO: i18n
+            "", //TODO: i18n
+            KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN)
+        )
+
 
     @JvmStatic
     fun allKeyBindings(): List<KeyBinding> =
