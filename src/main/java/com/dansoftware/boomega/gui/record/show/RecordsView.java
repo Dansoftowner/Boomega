@@ -3,6 +3,7 @@ package com.dansoftware.boomega.gui.record.show;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.control.RecordFindControl;
 import com.dansoftware.boomega.gui.record.edit.RecordEditor;
 import com.dansoftware.boomega.gui.record.googlebook.GoogleBookConnectionView;
 import com.dansoftware.boomega.gui.record.show.dock.GoogleBookConnectionDock;
@@ -11,7 +12,9 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -20,9 +23,9 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class RecordsView extends SplitPane {
+public class RecordsView extends VBox {
 
     private static final Logger logger = LoggerFactory.getLogger(RecordsView.class);
 
@@ -44,6 +47,7 @@ public class RecordsView extends SplitPane {
     private final Database database;
     private final RecordTable recordTable;
 
+    private final SplitPane baseSplitPane;
     private final SplitPane leftSplitPane;
     private final SplitPane rightSplitPane;
 
@@ -51,16 +55,45 @@ public class RecordsView extends SplitPane {
 
     private final ObjectProperty<Consumer<List<Record>>> onItemsDeleted = new SimpleObjectProperty<>();
 
-    RecordsView(@NotNull Context context, @NotNull Database database) {
+    private final BooleanProperty findDialogVisible = new SimpleBooleanProperty() {
+        @Override
+        protected void invalidated() {
+            if (get())
+                showFindDialog();
+            else
+                hideFindDialog();
+        }
+    };
+
+    private final ObservableList<Record> baseItems;
+
+    RecordsView(@NotNull Context context,
+                @NotNull Database database,
+                @NotNull ObservableList<Record> baseItems) {
         this.context = context;
         this.database = database;
+        this.baseItems = baseItems;
         this.recordTable = buildBooksTable();
+        this.baseSplitPane = buildBaseSplitPane();
         this.rightSplitPane = buildRightSplitPane();
         this.leftSplitPane = buildLeftSplitPane();
         this.docks = buildDocksList();
-        this.getStyleClass().add(STYLE_CLASS);
-        this.setOrientation(Orientation.HORIZONTAL);
         this.buildUI();
+    }
+
+    private void showFindDialog() {
+        getChildren().add(0, buildRecordFindControl());
+    }
+
+    private void hideFindDialog() {
+        getChildren().removeIf(it -> it instanceof RecordFindControl);
+    }
+
+    private RecordFindControl buildRecordFindControl() {
+        var control = new RecordFindControl(baseItems);
+        control.setOnCloseRequest(() -> setFindDialogVisible(false));
+        control.setOnNewResults(list -> recordTable.getItems().setAll(list));
+        return control;
     }
 
     private ObservableList<Dock> buildDocksList() {
@@ -71,13 +104,21 @@ public class RecordsView extends SplitPane {
                 change.getAddedSubList().forEach(dock -> dock.align(context, database, recordTable, leftSplitPane, rightSplitPane));
             }
 
-            if (rightSplitPane.getItems().isEmpty()) this.getItems().remove(rightSplitPane);
-            else if (!this.getItems().contains(rightSplitPane)) {
-                this.getItems().add(rightSplitPane);
+            if (rightSplitPane.getItems().isEmpty()) this.baseSplitPane.getItems().remove(rightSplitPane);
+            else if (!this.baseSplitPane.getItems().contains(rightSplitPane)) {
+                this.baseSplitPane.getItems().add(rightSplitPane);
                 rightSplitPane.setPrefWidth(RIGHT_DOCK_PANE_PREF_WIDTH);
             }
         });
         return docks;
+    }
+
+    private SplitPane buildBaseSplitPane() {
+        SplitPane splitPane = new SplitPane();
+        splitPane.getStyleClass().add(STYLE_CLASS);
+        splitPane.setOrientation(Orientation.HORIZONTAL);
+        VBox.setVgrow(splitPane, Priority.ALWAYS);
+        return splitPane;
     }
 
     private SplitPane buildLeftSplitPane() {
@@ -105,7 +146,8 @@ public class RecordsView extends SplitPane {
     }
 
     private void buildUI() {
-        this.getItems().add(leftSplitPane);
+        this.baseSplitPane.getItems().add(leftSplitPane);
+        this.getChildren().add(baseSplitPane);
     }
 
     public void setDockInfo(DockInfo dockInfo) {
@@ -139,6 +181,18 @@ public class RecordsView extends SplitPane {
 
     public void setItems(@NotNull List<Record> items) {
         this.recordTable.getItems().setAll(items);
+    }
+
+    public boolean isFindDialogVisible() {
+        return findDialogVisible.get();
+    }
+
+    public BooleanProperty findDialogVisibleProperty() {
+        return findDialogVisible;
+    }
+
+    public void setFindDialogVisible(boolean findDialogVisible) {
+        this.findDialogVisible.set(findDialogVisible);
     }
 
     public void setOnItemsDeleted(Consumer<List<Record>> onItemsDeleted) {
