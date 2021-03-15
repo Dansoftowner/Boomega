@@ -9,6 +9,8 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
+import javafx.collections.ListChangeListener
+import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.geometry.Insets
 import javafx.geometry.Orientation
@@ -25,7 +27,7 @@ import java.util.function.Consumer
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
-class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
+class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.0) {
 
     private val onNewResults: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
     private val onCloseRequest: ObjectProperty<Runnable> = SimpleObjectProperty()
@@ -52,16 +54,31 @@ class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
             }
         }
 
+    private val baseItemsChangeListener =
+        ListChangeListener<Record> {
+            search {
+                onNewResults.get()?.accept(it)
+                resultsCount.set(it.size)
+            }
+        }
+
     init {
         styleClass.add("record-find-control")
         padding = Insets(5.0)
         spacing = 5.0
+        baseItems.addListener(baseItemsChangeListener)
         buildUI()
+    }
+
+    fun releaseListeners() {
+        baseItems.removeListener(baseItemsChangeListener)
     }
 
     private fun buildUI() {
         CustomTextField().apply {
-            left = StackPane(FontAwesomeIconView(FontAwesomeIcon.SEARCH))
+            left = StackPane(FontAwesomeIconView(FontAwesomeIcon.SEARCH)).apply {
+                padding = Insets(5.0)
+            }
             baseText.bind(textProperty())
         }.let(children::add)
 
@@ -73,7 +90,9 @@ class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
 
         children.add(Separator(Orientation.VERTICAL))
         Label().apply {
-            textProperty().bind(resultsCount.asString().concat(StringUtils.SPACE).concat(I18N.getValue("record.find.results")))
+            textProperty().bind(
+                resultsCount.asString().concat(StringUtils.SPACE).concat(I18N.getValue("record.find.results"))
+            )
         }.let { StackPane(it) }.let(children::add)
 
         children.add(buildCloseButton().let {
@@ -187,49 +206,74 @@ class RecordFindControl(private val baseItems: List<Record>) : HBox(5.0) {
         onNewResults.set(value)
     }
 
-    private abstract class Filter {
+    private abstract class Filter(
+        private val baseText: StringProperty,
+        private val caseSensitive: BooleanProperty
+    ) {
 
-        abstract fun checkSingleValueMatches(value: String): Boolean
+        open val userInputFactory: (String) -> String = { it }
+        open val valueFactory: (String) -> String = { it }
+
+        abstract fun checkMatch(
+            userInput: String,
+            recordValue: String,
+            caseSensitive: Boolean
+        ): Boolean
 
         fun filter(record: Record): Boolean =
-            record.values().find { checkSingleValueMatches(it) } !== null
+            record.values().find {
+                checkMatch(userInputFactory(baseText.get() ?: ""), valueFactory(it), caseSensitive.get())
+            } !== null
     }
 
     private class SimpleFilter(
-        private val baseText: StringProperty,
-        private val caseSensitive: BooleanProperty
-    ) : Filter() {
+        baseText: StringProperty,
+        caseSensitive: BooleanProperty
+    ) : Filter(baseText, caseSensitive) {
 
-        override fun checkSingleValueMatches(value: String): Boolean =
-            getValidBaseText()?.let { baseText -> getValidValue(value).contains(baseText) } ?: false
+        override val userInputFactory: (String) -> String = {
+            it.let { if (caseSensitive.get().not()) it.toLowerCase() else it }.trim()
+        }
 
-        private fun getValidBaseText() = baseText.get()?.let { if (caseSensitive.get().not()) it.toLowerCase() else it }
+        override val valueFactory: (String) -> String = {
+            if (caseSensitive.get().not()) it.toLowerCase() else it
+        }
 
-        private fun getValidValue(value: String) = value.let { if (caseSensitive.get().not()) it.toLowerCase() else it }.trim()
+        override fun checkMatch(
+            userInput: String,
+            recordValue: String,
+            caseSensitive: Boolean
+        ): Boolean = recordValue.contains(userInput)
     }
 
     private class ExactFilter(
-        private val baseText: StringProperty,
-        private val caseSensitive: BooleanProperty
-    ) : Filter() {
+        baseText: StringProperty,
+        caseSensitive: BooleanProperty
+    ) : Filter(baseText, caseSensitive) {
 
-        override fun checkSingleValueMatches(value: String): Boolean =
-            if (caseSensitive.get()) value == baseText.get()
-            else value.equalsIgnoreCase(baseText.get())
-
+        override fun checkMatch(
+            userInput: String,
+            recordValue: String,
+            caseSensitive: Boolean
+        ): Boolean =
+            if (caseSensitive) recordValue == userInput
+            else recordValue.equalsIgnoreCase(userInput)
     }
 
     private class RegexFilter(
-        private val baseText: StringProperty,
-        private val caseSensitive: BooleanProperty
-    ) : Filter() {
+        baseText: StringProperty,
+        caseSensitive: BooleanProperty
+    ) : Filter(baseText, caseSensitive) {
 
-        override fun checkSingleValueMatches(value: String): Boolean =
-            getPattern().matcher(value).matches()
+        private fun getPattern(userInput: String, caseSensitive: Boolean) =
+            if (caseSensitive) Pattern.compile(userInput)
+            else Pattern.compile(userInput, Pattern.CASE_INSENSITIVE)
 
-        private fun getPattern() =
-            if (caseSensitive.get()) Pattern.compile(baseText.get())
-            else Pattern.compile(baseText.get(), Pattern.CASE_INSENSITIVE)
+        override fun checkMatch(
+            userInput: String,
+            recordValue: String,
+            caseSensitive: Boolean
+        ): Boolean = getPattern(userInput, caseSensitive).matcher(recordValue).matches()
     }
 
     companion object {
