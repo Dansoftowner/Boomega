@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -58,10 +59,12 @@ public class RecordsView extends VBox {
     private final BooleanProperty findDialogVisible = new SimpleBooleanProperty() {
         @Override
         protected void invalidated() {
-            if (get())
+            if (get()) {
                 showFindDialog();
-            else
+            } else {
                 hideFindDialog();
+                recordTable.setItems(baseItems);
+            }
         }
     };
 
@@ -86,13 +89,21 @@ public class RecordsView extends VBox {
     }
 
     private void hideFindDialog() {
-        getChildren().removeIf(it -> it instanceof RecordFindControl);
+        final Iterator<Node> iterator = getChildren().iterator();
+        while (iterator.hasNext()) {
+            final Node element = iterator.next();
+            if (element instanceof RecordFindControl) {
+                ((RecordFindControl) element).releaseListeners();
+                iterator.remove();
+                break;
+            }
+        }
     }
 
     private RecordFindControl buildRecordFindControl() {
         var control = new RecordFindControl(baseItems);
         control.setOnCloseRequest(() -> setFindDialogVisible(false));
-        control.setOnNewResults(list -> recordTable.getItems().setAll(list));
+        control.setOnNewResults(list -> recordTable.setItems(FXCollections.observableArrayList(list)));
         return control;
     }
 
@@ -142,7 +153,9 @@ public class RecordsView extends VBox {
     }
 
     private RecordTable buildBooksTable() {
-        return new RecordTable(0);
+        final RecordTable recordTable = new RecordTable(0);
+        recordTable.setItems(baseItems);
+        return recordTable;
     }
 
     private void buildUI() {

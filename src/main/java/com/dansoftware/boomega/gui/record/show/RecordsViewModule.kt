@@ -5,6 +5,7 @@ import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.context.NotifiableModule
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.record.RecordClipboard
 import com.dansoftware.boomega.gui.record.show.RecordsView.Dock
 import com.dansoftware.boomega.gui.record.show.RecordsView.DockInfo
@@ -20,7 +21,9 @@ import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
+import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
+import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.concurrent.WorkerStateEvent
 import javafx.event.EventHandler
@@ -64,6 +67,8 @@ class RecordsViewModule(
             Preferences.Key("books.view.dock.info", DockInfo::class.java) { DockInfo.defaultInfo() }
     }
 
+    private val baseItems: ObservableList<Record> = FXCollections.observableArrayList()
+
     private val content: ObjectProperty<RecordsView> =
         object : SimpleObjectProperty<RecordsView>() {
             override fun invalidated() {
@@ -82,10 +87,11 @@ class RecordsViewModule(
     init {
         readBaseConfig()
         buildToolbar()
+        buildFindKeyDetection()
     }
 
     override fun activate(): Node =
-        content.get() ?: RecordsView(context, database).also(content::set)
+        content.get() ?: RecordsView(context, database, baseItems).also(content::set)
 
     override fun destroy(): Boolean = true.also {
         writeConfig()
@@ -96,10 +102,10 @@ class RecordsViewModule(
         content.get()?.let {
             when (data?.action) {
                 Message.Action.DELETED -> {
-                    table.items.removeAll(data.records)
+                    baseItems.removeAll(data.records)
                 }
                 Message.Action.INSERTED -> {
-                    table.items.addAll(data.records)
+                    baseItems.addAll(data.records)
                 }
                 Message.Action.UPDATED -> {
                 }
@@ -108,11 +114,18 @@ class RecordsViewModule(
         }
     }
 
+    private fun buildFindKeyDetection() {
+        context.addKeyBindingDetection(KeyBindings.findRecordKeyBinding) {
+            content.get()?.isFindDialogVisible = true
+        }
+    }
+
     private fun readBaseConfig() {
         abcLocale.set(preferences.get(abcConfigKey))
     }
 
     private fun buildToolbar() {
+        toolbarControlsRight.add(buildSearchItem())
         toolbarControlsRight.add(buildSeparator())
         toolbarControlsRight.add(buildPasteItem())
         toolbarControlsRight.add(buildSeparator())
@@ -173,6 +186,7 @@ class RecordsViewModule(
         ).apply {
             addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED) {
                 content.setDockFullyResizable()
+                baseItems.setAll(this.value)
             }
         }.let(ExploitativeExecutor::submit)
     }
@@ -183,6 +197,14 @@ class RecordsViewModule(
             .put(abcConfigKey, abcLocale.get())
             .put(docksConfigKey, content.get().dockInfo)
     }
+
+    private fun buildSearchItem(): ToolbarItem =
+        ToolbarItem(FontAwesomeIconView(FontAwesomeIcon.SEARCH)).apply {
+            //TODO: tooltip
+            setOnClick {
+                content.get()?.isFindDialogVisible = content.get()!!.isFindDialogVisible.not()
+            }
+        }
 
     private fun buildCountItem(): ToolbarItem = ToolbarItem().also { toolbarItem ->
         content.addListener { _, _, newContent ->
@@ -298,7 +320,7 @@ class RecordsViewModule(
             setOnRunning { context.showIndeterminateProgress() }
             setOnSucceeded {
                 context.stopProgress()
-                table.items.removeAll(items)
+                baseItems.removeAll(items)
             }
             setOnFailed { context.stopProgress() }
         }
