@@ -54,12 +54,13 @@ class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
                 I18N.getValue(title),
                 I18N.getValue(description),
                 KeyBindDetectionField(keyBinding.keyCombination).apply {
-                    this.keyCombinationProperty().addListener { _, _, _ ->
+                    this.keyCombinationProperty().addListener { _, _, combination ->
+                        keyBinding.keyCombinationProperty.set(combination)
                         logger.debug("Saving key combination to preferences...")
                         KeyBindings.writeTo(preferences)
                     }
                     this.keyCombinationProperty().bindBidirectional(keyBinding.keyCombinationProperty)
-                    keyBinding.keyCombinationProperty.bindBidirectional(this.keyCombinationProperty())
+                    //keyBinding.keyCombinationProperty.bindBidirectional(this.keyCombinationProperty())
                 }
             )
         }

@@ -29,6 +29,7 @@ class KeyBindingsAdapter() : JsonSerializer<KeyBindings>, JsonDeserializer<KeyBi
                 .map { it as KeyBinding }
                 .forEach { keyBinding ->
                     keyBinding.takeIf { it.keyCombination != it.defaultKeyCombination }?.let {
+                        logger.debug("Writing key combination for '{}': '{}'...", it.id, it.keyCombination)
                         this.addProperty(
                             it.id,
                             it.keyCombination.toString()
