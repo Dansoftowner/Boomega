@@ -24,6 +24,7 @@ import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.image.Image
+import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
@@ -109,7 +110,8 @@ fun MenuItem.keyCombination(combination: KeyCombination): MenuItem = this.also {
 /**
  * Binds the key combination property of the [MenuItem] to the given property and then returns the object itself
  */
-fun <T : KeyCombination> MenuItem.keyCombination(combination: ObjectProperty<T>) = this.apply { acceleratorProperty().bind(combination) }
+fun <T : KeyCombination> MenuItem.keyCombination(combination: ObjectProperty<T>) =
+    this.apply { acceleratorProperty().bind(combination) }
 
 /**
  * Sets the icon of the [MenuItem] and then returns the object itself
@@ -152,8 +154,15 @@ fun KeyEvent.asKeyCombination(): KeyCombination? =
     }.let {
         this.code?.let { _ ->
             try {
-                KeyCodeCombination(this.code, *it.toTypedArray())
-            } catch(e: RuntimeException) {
+                when {
+                    it.isEmpty()
+                        .and(this.code.isFunctionKey.not())
+                        .and(this.code.isNavigationKey.not())
+                        .and(this.code != KeyCode.DELETE)
+                        .and(this.code != KeyCode.INSERT) -> throw RuntimeException()
+                    else -> KeyCodeCombination(this.code, *it.toTypedArray())
+                }
+            } catch (e: RuntimeException) {
                 null
             }
         }

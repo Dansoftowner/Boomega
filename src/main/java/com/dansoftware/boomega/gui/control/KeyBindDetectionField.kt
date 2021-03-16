@@ -8,6 +8,7 @@ import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.event.Event
 import javafx.scene.control.TextField
+import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
@@ -30,11 +31,6 @@ class KeyBindDetectionField(initial: KeyCombination) : TextField() {
         this.setOnKeyPressed { event ->
             event.consume()
             when {
-                event.isOnlyCode() -> {
-                    if (event.code.isFunctionKey) {
-                        keyCombination.set(KeyCodeCombination(event.code))
-                    }
-                }
                 event.isUndefined().not() -> {
                     event.asKeyCombination()?.let {
                         keyCombination.set(it)
