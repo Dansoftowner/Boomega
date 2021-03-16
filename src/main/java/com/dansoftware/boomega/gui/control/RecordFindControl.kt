@@ -33,6 +33,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
     private val onCloseRequest: ObjectProperty<Runnable> = SimpleObjectProperty()
     private val resultsCount: IntegerProperty = SimpleIntegerProperty()
     private val caseSensitive: BooleanProperty = SimpleBooleanProperty()
+    private val errorMessage: StringProperty = SimpleStringProperty()
 
     private val baseText: SimpleStringProperty =
         object : SimpleStringProperty() {
@@ -75,31 +76,38 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
     }
 
     private fun buildUI() {
-        CustomTextField().apply {
-            left = StackPane(FontAwesomeIconView(FontAwesomeIcon.SEARCH)).apply {
-                padding = Insets(5.0)
-            }
-            baseText.bind(textProperty())
-        }.let(children::add)
-
+        children.add(buildField())
         ToggleGroup().let {
             children.add(buildRegexToggle(it))
             children.add(buildExactToggle(it))
         }
         children.add(buildCaseToggle())
-
-        children.add(Separator(Orientation.VERTICAL))
-        Label().apply {
-            textProperty().bind(
-                resultsCount.asString().concat(StringUtils.SPACE).concat(I18N.getValue("record.find.results"))
-            )
-        }.let { StackPane(it) }.let(children::add)
-
-        children.add(buildCloseButton().let {
-            StackPane.setAlignment(it, Pos.CENTER_RIGHT)
-            StackPane(it).apply { setHgrow(this, Priority.ALWAYS) }
-        })
+        children.add(buildSeparator())
+        children.add(buildResultsLabel())
+        children.add(buildSeparator())
+        children.add(buildErrorLabel())
+        children.add(buildCloseButton())
     }
+
+    private fun buildField(): TextField = CustomTextField().apply {
+        left = StackPane(FontAwesomeIconView(FontAwesomeIcon.SEARCH)).apply {
+            padding = Insets(5.0)
+        }
+        baseText.bind(textProperty())
+    }
+
+    private fun buildResultsLabel() = Label().apply {
+        textProperty().bind(
+            resultsCount.asString().concat(StringUtils.SPACE).concat(I18N.getValue("record.find.results"))
+        )
+    }.let { StackPane(it) }
+
+    private fun buildErrorLabel() = Label().apply {
+        styleClass.add("error-label")
+        textProperty().bind(errorMessage)
+    }.let { StackPane(it) }
+
+    private fun buildSeparator(): Separator = Separator(Orientation.VERTICAL)
 
     private fun buildRegexToggle(group: ToggleGroup) =
         ToggleButton(null, MaterialDesignIconView(MaterialDesignIcon.REGEX)).apply {
@@ -156,6 +164,11 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
                 onCloseRequest.get()?.run()
             }
             visibleProperty().bind(onCloseRequest.isNotNull)
+            StackPane.setAlignment(this, Pos.CENTER_RIGHT)
+        }.let {
+            StackPane(it).apply {
+                setHgrow(this, Priority.ALWAYS)
+            }
         }
 
     private fun showProgress() {
@@ -173,14 +186,22 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         object : Task<List<Record>>() {
 
             init {
-                setOnRunning { showProgress() }
+                setOnRunning {
+                    errorMessage.set(null)
+                    showProgress()
+                }
                 setOnFailed {
+                    errorMessage.set(null)
                     stopProgress()
                     onItemsAvailable(emptyList())
                     logger.error("Search failed", it.source.exception)
-                    //TODO: error dialog
+                    when (it.source.exception) {
+                        is java.util.regex.PatternSyntaxException ->
+                            errorMessage.set(I18N.getValue("record.find.invalid_regex"))
+                    }
                 }
                 setOnSucceeded {
+                    errorMessage.set(null)
                     stopProgress()
                     onItemsAvailable(value)
                 }
