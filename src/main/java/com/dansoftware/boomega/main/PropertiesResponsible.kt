@@ -43,7 +43,7 @@ object PropertiesResponsible {
     /**
      * the app's version
      */
-    private const val BOOMEGA_VERSION_VALUE = "0.0.0"
+    private const val BOOMEGA_VERSION_VALUE = "0.5.0"
 
     /**
      * the libraryapp database file-extension
