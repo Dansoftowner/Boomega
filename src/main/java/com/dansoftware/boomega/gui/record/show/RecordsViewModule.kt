@@ -96,6 +96,7 @@ class RecordsViewModule(
     override fun destroy(): Boolean = true.also {
         writeConfig()
         content.set(null)
+        baseItems.clear()
     }
 
     override fun commitData(data: Message?) {
@@ -207,15 +208,11 @@ class RecordsViewModule(
         }
 
     private fun buildCountItem(): ToolbarItem = ToolbarItem().also { toolbarItem ->
-        content.addListener { _, _, newContent ->
-            newContent?.let {
-                toolbarItem.textProperty().bind(
-                    SimpleStringProperty(I18N.getValue("record.book.count"))
-                        .concat(StringUtils.SPACE)
-                        .concat(Bindings.size(newContent.booksTable.items))
-                )
-            } ?: toolbarItem.textProperty().unbind()
-        }
+        toolbarItem.textProperty().bind(
+            SimpleStringProperty(I18N.getValue("record.book.count"))
+                .concat(StringUtils.SPACE)
+                .concat(Bindings.size(baseItems))
+        )
     }
 
     private fun buildDeleteItem(): ToolbarItem =
