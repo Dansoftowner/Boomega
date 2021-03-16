@@ -103,7 +103,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
 
     private fun buildRegexToggle(group: ToggleGroup) =
         ToggleButton(null, MaterialDesignIconView(MaterialDesignIcon.REGEX)).apply {
-            //TODO: tooltip
+            tooltip = Tooltip(I18N.getValue("record.find.regex"))
             toggleGroup = group
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
             selectedProperty().addListener { _, _, newValue ->
@@ -118,7 +118,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
 
     private fun buildExactToggle(group: ToggleGroup) =
         ToggleButton(null, MaterialDesignIconView(MaterialDesignIcon.KEYBOARD)).apply {
-            //TODO: tooltip
+            tooltip = Tooltip(I18N.getValue("record.find.exact"))
             toggleGroup = group
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
             selectedProperty().addListener { _, _, newValue ->
@@ -133,7 +133,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
 
     private fun buildCaseToggle() =
         ToggleButton(null, MaterialDesignIconView(MaterialDesignIcon.CASE_SENSITIVE_ALT)).apply {
-            //TODO: tooltip
+            tooltip = Tooltip(I18N.getValue("record.find.case_sensitive"))
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
             caseSensitive.bind(selectedProperty())
             selectedProperty().addListener { _, _, _ ->
