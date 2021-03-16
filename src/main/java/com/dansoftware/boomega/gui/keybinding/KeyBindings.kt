@@ -92,16 +92,16 @@ object KeyBindings {
     val pasteRecordKeyBinding: KeyBinding =
         KeyBinding(
             "pasteRecordKeyBinding",
-            "preferences.keybindings.cut_record", //TODO: i18n
-            "preferences.keybindings.cut_record.desc", //TODO: i18n
+            "preferences.keybindings.paste_record",
+            "preferences.keybindings.paste_record.desc",
             KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN)
         )
 
     val findRecordKeyBinding: KeyBinding =
         KeyBinding(
-            "", //TODO: i18n
-            "", //TODO: i18n
-            "", //TODO: i18n
+            "findRecordKeyBinding",
+            "preferences.keybindings.find_record",
+            "preferences.keybindings.find_record.desc",
             KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN)
         )
 
