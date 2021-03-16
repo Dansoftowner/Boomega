@@ -8,7 +8,7 @@
 
 /** MDFXNode */
 .markdown-text {
-    -fx-font-family: ARIAL;
+    /*-fx-font-family: ARIAL;*/
 }
 .markdown-italic {
     -fx-font-style: italic;

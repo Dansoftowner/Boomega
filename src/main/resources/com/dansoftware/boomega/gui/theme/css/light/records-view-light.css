@@ -46,3 +46,7 @@
 .record-find-control .text-field {
     -fx-padding: 5px;
 }
+
+.record-find-control .error-label {
+    -fx-text-fill: red;
+}

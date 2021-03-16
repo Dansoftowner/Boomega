@@ -51,3 +51,7 @@
     -fx-padding: 2;
     -fx-fill: #181818;
 }
+
+.record-find-control .error-label {
+    -fx-text-fill: red;
+}
