@@ -200,7 +200,7 @@ class RecordsViewModule(
 
     private fun buildSearchItem(): ToolbarItem =
         ToolbarItem(FontAwesomeIconView(FontAwesomeIcon.SEARCH)).apply {
-            //TODO: tooltip
+            tooltip = Tooltip(I18N.getValue("record.find"))
             setOnClick {
                 content.get()?.isFindDialogVisible = content.get()!!.isFindDialogVisible.not()
             }
