@@ -7,7 +7,7 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
 version '0.0.0'
-def mainClass = 'com.dansoftware.libraryapp.main.Main'
+def mainClass = 'com.dansoftware.boomega.main.Main'
 
 compileKotlin {
     kotlinOptions {
