@@ -36,10 +36,12 @@
 > 4+ GB RAM
 
 ## Platform support
-|                    | Windows                                                  | Linux | MacOs |
-| ---                |   ---                                                    | ---   | ---   |
-| Installer (64-bit) |  [exe](https://github.com/Dansoftowner/Boomega/releases) |       | Help wanted
-| Portable (64-bit)  |  [zip](https://github.com/Dansoftowner/Boomega/releases) |       | Help wanted 
+|                    | Windows   | Linux | MacOS
+| ---                |   ---     | ---   | ---   
+| Installer (64-bit) |  exe, msi |       | Help wanted
+| Portable (64-bit)  |  zip      |       | Help wanted 
+
+Jump to [downloads](https://github.com/Dansoftowner/Boomega/releases).
 
 > Note: These binaries are bundled with the [Azul Zulu OpenJDK Runtime](https://www.azul.com/downloads/zulu-community/?package=jdk) 
 
