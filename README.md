@@ -40,6 +40,7 @@
 | Installer (64-bit) |  [exe](https://github.com/Dansoftowner/Boomega/releases) |       | Help wanted
 | Portable (64-bit)  |  [zip](https://github.com/Dansoftowner/Boomega/releases) |       | Help wanted 
 
+> Note: These binaries are bundled with the [Azul Zulu OpenJDK Runtime](https://www.azul.com/downloads/zulu-community/?package=jdk) 
 
 ## Build
 
