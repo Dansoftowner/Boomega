@@ -44,9 +44,9 @@
 ## Build
 
 ### Requirements:
-> * JDK 11+ with JavaFX binaries ( [Zulu]() or [Liberica]() recommended )
-> * Gradle 6.5 +
-> * +Kotlin support in your IDE (*the recommended IDE is Intellij*)
+* JDK 11+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
+* Gradle 6.5+
+* +Kotlin support in your IDE (*the recommended IDE is Intellij*)
 
 ## Used libraries
 [Used libraries](USED_LIBRARIES.md)
