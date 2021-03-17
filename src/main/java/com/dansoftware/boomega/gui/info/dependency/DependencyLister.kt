@@ -154,11 +154,6 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
-            "PDFViewerFX",
-            "https://github.com/Dansoftowner/PDFViewerFX",
-            LicenseInfo.apache20License()
-        ),
-        DependencyInfo(
             "Reflections",
             "https://github.com/ronmamo/reflections",
             LicenseInfo.wtfplLicense()
