@@ -12,7 +12,7 @@
 ![Gui](https://img.shields.io/badge/gui-javafx-blue)
 ![Issues](https://img.shields.io/github/issues/DansoftOwner/Boomega)
 
-### An advanced book explorer/catalog application written in Java and Kotlin.
+<h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
 
 ![Demo](readme/main-activity-preview.png)
 
