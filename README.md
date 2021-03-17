@@ -10,3 +10,13 @@
 ![License](https://img.shields.io/github/license/DansoftOwner/Boomega)
 ![Source code](https://img.shields.io/badge/source%20code-java%20%7C%20kotlin-orange)
 ![Issues](https://img.shields.io/github/issues/DansoftOwner/Boomega)
+
+| | |
+| ---- | ---- |
+| ![Demo 1](readme/login-activity-preview.png) | ![Demo 2](readme/main-activity-preview.png)
+
+## Features
+...
+
+## Platform support
+...
