@@ -49,4 +49,7 @@
 * +Kotlin support in your IDE (*the recommended IDE is Intellij*)
 
 ## Used libraries
-[Used libraries](USED_LIBRARIES.md)
+[Libraries list](USED_LIBRARIES.md)
+
+## License
+This software is licensed under the [GNU General Public License v3](https://en.wikipedia.org/wiki/GNU_General_Public_License).
