@@ -13,8 +13,10 @@ jdeps --module-path "C:\Users\judal\Documents\javafx-sdk-14.0.1\javafx-jmods-14.
 ---------
 jlink --no-header-files --no-man-pages --compress=2 --strip-debug --module-path [JAVAFX_JMODS_DIR] --add-modules [MODULES] --output [OUTPUT_DIR]
 
-Example:
+Examples:
 jlink --no-header-files --no-man-pages --compress=2 --strip-debug --module-path "C:\Users\judal\Documents\javafx-sdk-14.0.1\javafx-jmods-14.0.1" --add-modules java.base,java.datatransfer,java.desktop,java.scripting,java.xml,javafx.base,javafx.controls,javafx.graphics,javafx.media,javafx.web,jdk.jsobject,jdk.unsupported,jdk.xml.dom,java.naming,java.sql,javafx.fxml --output "C:\Users\judal\Documents\Projects\LibraryApp2020\distribution\java-runtime"
+
+"..\..\..\JDK\AdoptOpenJDK\jdk-11.0.6+10\bin\jlink" --no-header-files --no-man-pages --compress=2 --strip-debug --module-path %JAVAFX_JMODS% --add-modules java.se,javafx.base,javafx.controls,javafx.graphics,javafx.media,javafx.web,javafx.fxml,javafx.swing --output java-runtime
 
 --------
 (3) JPackage:
@@ -25,3 +27,4 @@ jpackage -t [PACKAGE_TYPE(app-image|native-options...)] --app-version [VERSION] 
 Example (on windows):
 jpackage -t "app-image" --app-version "0.0" --description "LibraryApp 2020" -n "LibraryApp2020" -d .\application-package --vendor "Dansoftware" --runtime-image "java-runtime" --icon "./icon/icon.ico" --main-jar "LibraryApp-0.0.0.jar" --input "..\build\libs"
 
+..\..\..\JDK\jdk-15.0.2\bin\jpackage -t "app-image" --app-version "0.5.0" --description "Boomega" -n "Boomega" -d .\application-package --vendor "Dansoftware" --runtime-image "java-runtime" --icon "./icon/icon.ico" --main-jar "Boomega-0.0.0.jar" --input "..\build\libs"
