@@ -9,6 +9,7 @@
 ![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)
 ![License](https://img.shields.io/github/license/DansoftOwner/Boomega)
 ![Source code](https://img.shields.io/badge/source%20code-java%20%7C%20kotlin-orange)
+![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)
 ![Gui](https://img.shields.io/badge/gui-javafx-blue)
 ![Issues](https://img.shields.io/github/issues/DansoftOwner/Boomega)
 
