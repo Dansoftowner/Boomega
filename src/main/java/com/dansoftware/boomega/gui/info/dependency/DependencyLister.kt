@@ -119,6 +119,11 @@ object DependencyLister {
             LicenseInfo("LGPL", null)
         ),
         DependencyInfo(
+            "Kotlin",
+            "https://kotlinlang.org",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
             "Logback Project",
             "http://logback.qos.ch/",
             LicenseInfo("EPL v1.0 and LGPL 2.1", "http://logback.qos.ch/license.html")
