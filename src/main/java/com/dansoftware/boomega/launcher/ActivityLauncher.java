@@ -176,17 +176,7 @@ public class ActivityLauncher implements Runnable {
      */
     private void handleArgumentInit(DatabaseMeta argument) {
         //we add the launched database to the last databases
-
-        LoginData loginData = getLoginData();
-        if (!loginData.getSavedDatabases().contains(argument)) {
-            logger.debug("adding the launched database into the LoginData...");
-            loginData.getSavedDatabases().add(argument);
-            onNewDatabaseAdded(argument);
-            saveLoginData(loginData);
-        } else {
-            logger.debug("The launched database is already in the login data");
-        }
-
+        onNewDatabaseAdded(argument);
         logger.debug("trying to sign in into the database...");
         Database database = NitriteDatabase.getAuthenticator()
                 .onFailed((title, message, t) -> {
@@ -222,7 +212,6 @@ public class ActivityLauncher implements Runnable {
         MainActivity.getByDatabase(argument)
                 .map(MainActivity::getContext)
                 .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> {
-                    onNewDatabaseAdded(argument);
                     handleArgumentInit(argument);
                 });
     }
@@ -231,6 +220,7 @@ public class ActivityLauncher implements Runnable {
         MainActivity.getByDatabase(argument)
                 .map(MainActivity::getContext)
                 .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> {
+                    onNewDatabaseAdded(argument);
                     final DatabaseLoginListener onDatabaseLogin = db -> onActivityLaunched(showMainActivity(db).getContext(), argument);
                     Database database = NitriteDatabase.getAuthenticator()
                             .onFailed((title, message, t) -> {
@@ -395,7 +385,15 @@ public class ActivityLauncher implements Runnable {
      * @param databaseMeta the meta-information of the database
      */
     protected void onNewDatabaseAdded(DatabaseMeta databaseMeta) {
-        databaseTracker.addDatabase(databaseMeta);
+        LoginData loginData = getLoginData();
+        if (!loginData.getSavedDatabases().contains(databaseMeta)) {
+            logger.debug("adding the launched database into the LoginData...");
+            loginData.getSavedDatabases().add(databaseMeta);
+            databaseTracker.addDatabase(databaseMeta);
+            saveLoginData(loginData);
+        } else {
+            logger.debug("The launched database is already in the login data");
+        }
     }
 
     /**
