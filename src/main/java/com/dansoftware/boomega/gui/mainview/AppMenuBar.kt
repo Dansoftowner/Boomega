@@ -113,11 +113,10 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             .action {
                 DatabaseOpener().showOpenDialog(context.contextWindow)?.also {
                     startActivityLauncher {
-                        ActivityLauncher(
-                            LauncherMode.ALREADY_RUNNING,
-                            it,
+                        RuntimeOpenActivityLauncher(
                             preferences,
-                            databaseTracker
+                            databaseTracker,
+                            it
                         )
                     }
                 }
