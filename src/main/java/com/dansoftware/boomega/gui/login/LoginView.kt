@@ -1,118 +1,111 @@
-package com.dansoftware.boomega.gui.login;
+package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.appdata.Preferences;
-import com.dansoftware.boomega.appdata.logindata.LoginData;
-import com.dansoftware.boomega.db.Database;
-import com.dansoftware.boomega.db.DatabaseMeta;
-import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.context.ContextTransformable;
-import com.dansoftware.boomega.gui.entry.DatabaseTracker;
-import com.dansoftware.boomega.gui.login.form.LoginForm;
-import com.dansoftware.boomega.i18n.I18N;
-import com.dlsc.workbenchfx.SimpleHeaderView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableStringValue;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.StackPane;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
+import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.appdata.logindata.LoginData
+import com.dansoftware.boomega.db.Database
+import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.context.ContextTransformable
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.info.InformationActivity
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
+import com.dansoftware.boomega.gui.preferences.PreferencesActivity
+import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
+import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.asKeyEvent
+import com.dansoftware.boomega.gui.util.keyCombination
+import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.main.ApplicationRestart
+import com.dansoftware.boomega.update.UpdateSearcher
+import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dlsc.workbenchfx.SimpleHeaderView
+import com.dlsc.workbenchfx.view.controls.ToolbarItem
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.ReadOnlyObjectProperty
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.value.ObservableStringValue
+import javafx.concurrent.Task
+import javafx.scene.control.MenuItem
+import javafx.scene.input.KeyCodeCombination
 
 /**
  * A LoginView is a graphical object that can handle
- * a login request and creates the {@link Database} object.
+ * a login request and creates the [Database] object.
  *
  * @author Daniel Gyorffy
  */
-public class LoginView extends SimpleHeaderView<LoginView.FormBase> implements ContextTransformable {
+class LoginView(
+    private val preferences: Preferences,
+    tracker: DatabaseTracker,
+    loginData: LoginData,
+    databaseLoginListener: DatabaseLoginListener
+) : SimpleHeaderView<LoginViewBase>(
+    I18N.getValue("database.auth"),
+    MaterialDesignIconView(MaterialDesignIcon.LOGIN)
+), ContextTransformable {
 
-    @SuppressWarnings({"unused", "FieldCanBeLocal"})
-    private final LoginActivity loginActivity;
+    private val asContext: Context = Context.from(this)
+    private val loginViewBase: LoginViewBase =
+        LoginViewBase(asContext, preferences, tracker, loginData, databaseLoginListener)
+    private val createdDatabase: ObjectProperty<Database> = SimpleObjectProperty()
 
-    private final Context asContext;
-    private final Preferences preferences;
-    private final LoginForm loginForm;
-    private final ObjectProperty<Database> createdDatabase;
-
-    public LoginView(@NotNull LoginActivity loginActivity,
-                     @NotNull DatabaseLoginListener databaseLoginListener,
-                     @NotNull Preferences preferences,
-                     @NotNull LoginData loginData,
-                     @NotNull DatabaseTracker tracker) {
-        super(I18N.getValue("database.auth"), new MaterialDesignIconView(MaterialDesignIcon.LOGIN));
-        this.loginActivity = loginActivity;
-        this.preferences = preferences;
-        this.asContext = Context.from(this);
-        this.createdDatabase = new SimpleObjectProperty<>();
-        this.loginForm = new LoginForm(asContext, preferences, loginData, tracker, databaseLoginListener);
-        this.setContent(new FormBase(loginForm, tracker));
-        this.createToolbarControls();
+    init {
+        content = loginViewBase
+        buildToolbar()
     }
 
-    private void createToolbarControls() {
-        this.getToolbarControlsRight().addAll(new ToolbarItemsBuilder(asContext, preferences).build());
+    private fun buildToolbar() {
+        toolbarControlsRight.add(buildOptionsItem())
+        toolbarControlsRight.add(buildInfoItem())
     }
 
-    public LoginData getLoginData() {
-        return loginForm.getLoginData();
+    val loginData: LoginData
+        get() = loginViewBase.loginData
+
+    fun createdDatabaseProperty(): ReadOnlyObjectProperty<Database> {
+        return createdDatabase
     }
 
-    public ReadOnlyObjectProperty<Database> createdDatabaseProperty() {
-        return createdDatabase;
+    override fun getContext(): Context {
+        return asContext
     }
 
-    @Override
-    public @NotNull Context getContext() {
-        return asContext;
+    fun titleProperty(): ObservableStringValue {
+        return loginViewBase.titleProperty()
     }
 
-    protected ObservableStringValue titleProperty() {
-        return this.loginForm.titleProperty();
+    private fun buildInfoItem(): ToolbarItem = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.INFORMATION)) {
+        InformationActivity(context).show()
     }
 
-    /**
-     * A {@link FormBase} is the parent of a {@link LoginForm}.
-     * It can be styled in css through the <i>login-form</i> class-name.
-     *
-     * <p>
-     * It has drag-support which means that the user can drag files into it
-     * and it's adding them into the {@link DatabaseTracker}.
-     */
-    static final class FormBase extends StackPane {
-        private static final String STYLE_CLASS = "login-form";
+    private fun buildOptionsItem() = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).apply {
+        items.addAll(
+            MenuItem(I18N.getValue("update.search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)).action {
+                val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
+                    init {
+                        setOnSucceeded {
+                            context.stopProgress()
+                            UpdateActivity(context, it.source.value as UpdateSearcher.UpdateSearchResult).show()
+                        }
+                        setOnRunning { context.showIndeterminateProgress() }
+                    }
 
-        private final DatabaseTracker databaseTracker;
-
-        private FormBase(@NotNull LoginForm loginForm,
-                         @NotNull DatabaseTracker databaseTracker) {
-            super(loginForm);
-            this.databaseTracker = databaseTracker;
-            this.getStyleClass().add(STYLE_CLASS);
-            this.enableDragSupport();
-        }
-
-        private void enableDragSupport() {
-            setOnDragOver(event -> {
-                Dragboard dragboard = event.getDragboard();
-                if (dragboard.hasFiles()) {
-                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                    override fun call() = UpdateSearcher.defaultInstance().search()
                 }
-            });
+                ExploitativeExecutor.submit(task)
+            },
 
-            setOnDragDropped(event -> {
-                Dragboard dragboard = event.getDragboard();
-                if (dragboard.hasFiles()) {
-                    dragboard.getFiles().stream()
-                            .filter(File::isFile)
-                            .map(DatabaseMeta::new)
-                            .forEach(databaseTracker::addDatabase);
-                }
-            });
-        }
+            MenuItem(I18N.getValue("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)).action {
+                PluginManagerActivity().show(context.contextWindow)
+            },
+
+            MenuItem(I18N.getValue("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).action {
+                PreferencesActivity(preferences).show(context.contextWindow)
+            }
+        )
     }
 }

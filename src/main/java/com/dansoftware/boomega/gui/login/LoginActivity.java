@@ -37,7 +37,7 @@ public class LoginActivity implements ContextTransformable {
                          @NotNull DatabaseTracker tracker) {
         this.showing = new SimpleBooleanProperty();
         this.preferences = Objects.requireNonNull(preferences);
-        this.loginView = new LoginView(this, databaseLoginListener, preferences, loginData, tracker);
+        this.loginView = new LoginView(preferences, tracker, loginData, databaseLoginListener);
         instances.add(new WeakReference<>(this));
     }
 

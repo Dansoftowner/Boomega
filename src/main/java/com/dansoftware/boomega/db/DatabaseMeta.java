@@ -67,9 +67,9 @@ public class DatabaseMeta {
             return null;
 
         var file = new File(filePath);
-        if (!file.exists()) {
+        /*if (!file.exists()) {
             return null;
-        }
+        }*/
 
         return new DatabaseMeta(file);
     }

@@ -19,6 +19,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
+import javafx.beans.value.ObservableStringValue
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Group
@@ -55,6 +56,8 @@ class LoginBox(
         this.controller.fillForm()
     }
 
+    fun titleProperty(): ObservableStringValue = databaseChooser.get().selectionModel.selectedItemProperty().asString()
+
     private fun buildUI() {
         children.add(buildHeader())
         children.add(buildDatabaseChooserArea())
@@ -84,10 +87,12 @@ class LoginBox(
         databaseChooser.set(this)
         minHeight = 35.0
         minWidth = 355.0
+        maxWidth = Double.MAX_VALUE
         promptText = I18N.getValue("login.source.combo.promt")
         buttonCell = ComboBoxButtonCell(databaseTracker)
         setCellFactory { DatabaseChooserItem(databaseTracker) }
         itemSelected.bind(selectionModel.selectedItemProperty().isNotNull)
+        selectionModel.selectedItemProperty().addListener { _, _, it -> loginData.selectedDatabase = it }
         HBox.setHgrow(this, Priority.ALWAYS)
     }
 
@@ -217,14 +222,15 @@ class LoginBox(
     private class ComboBoxButtonCell(databaseTracker: DatabaseTracker) : DatabaseChooserItem(databaseTracker) {
         override fun updateItem(item: DatabaseMeta?, empty: Boolean) {
             super.updateItem(item, empty)
-            item?.let {
+            if (item === null) {
                 text = I18N.getValue("login.source.combo.promt")
             }
         }
     }
 
     /**
-     * Responsible for the concrete actions, behaviours.
+     * Responsible for the concrete actions, behaviours. Also, it synchronizes the UI
+     * with the [DatabaseTracker]
      */
     private inner class Controller : DatabaseTracker.Observer {
 
@@ -276,7 +282,7 @@ class LoginBox(
 
                             NitriteDatabase.getAuthenticator()
                                 .onFailed { title, message, t ->
-                                    context.showErrorDialog(title, message, t as Exception)
+                                    context.showErrorDialog(title, message, t as Exception?)
                                     logger.error("Failed to create/open the database", t)
                                 }.auth(dbMeta, credentials)?.let {
                                     logger.debug("Signing in was successful; closing the LoginWindow")
