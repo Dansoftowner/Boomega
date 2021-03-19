@@ -4,6 +4,7 @@ import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.gui.record.show.RecordTable;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class RecordFindControlTest extends Application {
 
-    private final List<Record> records = List.of(
+    private final ObservableList<Record> records = FXCollections.observableArrayList(
             new Record.Builder(Record.Type.BOOK)
                     .authors(List.of("A", "B"))
                     .title("Abc1")
