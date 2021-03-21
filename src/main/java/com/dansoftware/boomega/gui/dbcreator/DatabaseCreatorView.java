@@ -8,6 +8,7 @@ import com.dansoftware.boomega.i18n.I18N;
 import com.dlsc.workbenchfx.SimpleHeaderView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> implements ContextTransformable {
+public class DatabaseCreatorView extends SimpleHeaderView<Node> implements ContextTransformable {
 
     private final DatabaseCreatorForm form;
     private final Context asContext;
@@ -26,7 +27,7 @@ public class DatabaseCreatorView extends SimpleHeaderView<DatabaseCreatorForm> i
         super(I18N.getValue("database.creator.title"),
                 new MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS));
         this.asContext = Context.from(this);
-        super.setContent(this.form = new DatabaseCreatorForm(asContext, databaseTracker));
+        this.setContent(this.form = new DatabaseCreatorForm(asContext, databaseTracker));
     }
 
     public DatabaseMeta getCreatedDatabase() {

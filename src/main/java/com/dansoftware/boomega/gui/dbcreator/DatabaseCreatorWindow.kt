@@ -14,7 +14,7 @@ class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) :
         initModality(Modality.APPLICATION_MODAL)
         initOwner(owner)
         width = 741.0
-        height = 400.0
+        height = 420.0
         centerOnScreen()
     }
 }
