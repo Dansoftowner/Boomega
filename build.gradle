@@ -1,12 +1,13 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.30'
+    id 'com.github.ben-manes.versions' version '0.38.0'
 }
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
-version '0.0.0'
+version '0.5.0'
 def mainClass = 'com.dansoftware.boomega.main.Main'
 
 compileKotlin {
@@ -59,6 +60,7 @@ repositories {
 
 processResources {
 
+    //TODO: DO NOT ACCEPT THESE RESOURCES IN THE JAVA MODULE
     //we accept the .fxml and .css resources from the java source set
     from('src/main/java') {
         include '**/*.fxml'
