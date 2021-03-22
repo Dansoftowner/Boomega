@@ -124,6 +124,7 @@ class LoginBox(
         text = I18N.getValue("login.add.source")
         //prefWidthProperty().bind(this@LoginBox.widthProperty())
         maxWidth = Double.MAX_VALUE
+        graphic = MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS)
         setOnAction {
             controller.openDatabaseCreator()
         }
