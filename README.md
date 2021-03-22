@@ -15,9 +15,10 @@
 
 <h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
 
-![Demo](readme/main-activity-preview.png)
-
-![Login Demo](readme/login-activity-preview.png) 
+<div>
+<img style="float: left;" src="readme/login-activity-preview.png">
+<img style="float: right;" src="readme/main-activity-preview.png">
+</div>
 
 ## Features
 * Cross-platform
@@ -53,7 +54,7 @@ Jump to [downloads](https://github.com/Dansoftowner/Boomega/releases).
 * +Kotlin support in your IDE (*the recommended IDE is Intellij*)
 
 ## Used libraries
-[Libraries list](USED_LIBRARIES.md)
+[Jumpt to list](USED_LIBRARIES.md)
 
 ## License
 This software is licensed under the [GNU General Public License v3](https://en.wikipedia.org/wiki/GNU_General_Public_License).
