@@ -15,10 +15,17 @@
 
 <h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
 
-<div>
-<img style="float: left;" src="readme/login-activity-preview.png">
-<img style="float: right;" src="readme/main-activity-preview.png">
-</div>
+<table style="width: 100%; border: none;">
+<tr>
+<td>
+    <img src="readme/login-activity-preview.png">
+</td>
+
+<td>
+    <img src="readme/main-activity-preview.png">
+</td>
+</tr>
+</table>
 
 ## Features
 * Cross-platform
