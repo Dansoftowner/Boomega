@@ -92,36 +92,36 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
 
     libraries 'com.google.code.gson:gson:2.8.6'
-    libraries 'org.jetbrains:annotations:19.0.0'
+    libraries 'org.jetbrains:annotations:20.1.0'
     libraries 'org.reflections:reflections:0.9.12'
     libraries 'commons-io:commons-io:2.6'
-    libraries 'org.apache.commons:commons-lang3:3.10'
+    libraries 'org.apache.commons:commons-lang3:3.12'
     libraries 'commons-collections:commons-collections:3.2.2'
     libraries 'com.github.Dansoftowner:jFileGoodies:1.2.6'
-    libraries 'com.github.oshi:oshi-core:5.3.4'
+    libraries 'com.github.oshi:oshi-core:5.6.0'
     libraries 'com.github.Dansoftowner:jSystemThemeDetector:2.1'
     libraries 'com.github.Dansoftowner:Restart4j:1.0'
     libraries 'org.jsoup:jsoup:1.13.1'
     libraries 'com.squareup.okhttp3:okhttp:4.9.0'
     libraries 'org.apache.httpcomponents:httpclient:4.5.13'
-    libraries 'com.github.ben-manes.caffeine:caffeine:2.8.8'
+    libraries 'com.github.ben-manes.caffeine:caffeine:3.0.1'
     libraries 'org.dizitart:nitrite:3.4.3'
     libraries 'it.sauronsoftware:junique:1.0.4'
 
     /*** JAVA FX LIBRARIES ***/
 
-    libraries 'com.jfoenix:jfoenix:9.0.9'
+    libraries 'com.jfoenix:jfoenix:9.0.10'
     libraries 'org.jfxtras:jmetro:11.6.14'
-    libraries 'org.controlsfx:controlsfx:11.0.1'
+    libraries 'org.controlsfx:controlsfx:11.1.0'
     libraries 'com.dlsc.formsfx:formsfx-core:11.4.1'
     libraries 'net.kurobako:gesturefx:0.6.0'
     //Modified WorkBenchFX, Original: 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
     libraries 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
     libraries 'de.jensd:fontawesomefx-commons:11.0'
     libraries 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
-    libraries 'io.github.typhon0:AnimateFX:1.2.1'
-    libraries "com.sandec:mdfx:0.1.6"
-    libraries 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.3'
+    libraries 'io.github.typhon0:AnimateFX:1.2.2'
+    libraries "com.sandec:mdfx:0.1.7"
+    libraries 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     libraries 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     libraries "de.jangassen:nsmenufx:3.1.0"
 
