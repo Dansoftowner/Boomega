@@ -53,12 +53,9 @@ Jump to [downloads](https://github.com/Dansoftowner/Boomega/releases).
 
 > Note: These binaries are bundled with the [Azul Zulu OpenJDK Runtime](https://www.azul.com/downloads/zulu-community/?package=jdk) 
 
-## Build
-
-### Requirements:
+## Build requirements:
 * JDK 11+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
 * Gradle 6.5+
-* +Kotlin support in your IDE (*the recommended IDE is Intellij*)
 
 ## Used libraries
 [Jump to list](USED_LIBRARIES.md)
