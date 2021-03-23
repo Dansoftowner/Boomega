@@ -19,7 +19,7 @@ object OsInfo {
         val operatingSystem = SystemInfo().operatingSystem
         val osVersionInfo = operatingSystem.versionInfo
 
-        platformType = SystemInfo.getCurrentPlatformEnum()
+        platformType = SystemInfo.getCurrentPlatform()
         version = osVersionInfo.version
         buildNumber = osVersionInfo.buildNumber
         name = operatingSystem.family
@@ -32,7 +32,7 @@ object OsInfo {
     fun isLinux(): Boolean = hasType(PlatformEnum.LINUX)
 
     @JvmStatic
-    fun isMac(): Boolean = hasType(PlatformEnum.MACOSX)
+    fun isMac(): Boolean = hasType(PlatformEnum.MACOS)
 
     @JvmStatic
     fun isWindows10(): Boolean = hasTypeAndVersion(PlatformEnum.WINDOWS, "10")
@@ -41,7 +41,7 @@ object OsInfo {
     fun isWindows10OrLater(): Boolean = hasTypeAndVersionOrHigher(PlatformEnum.WINDOWS, "10")
 
     @JvmStatic
-    fun isMacOsMojaveOrLater(): Boolean = hasTypeAndVersionOrHigher(PlatformEnum.MACOSX, "10.14")
+    fun isMacOsMojaveOrLater(): Boolean = hasTypeAndVersionOrHigher(PlatformEnum.MACOS, "10.14")
 
     @JvmStatic
     fun getName(): String = name
