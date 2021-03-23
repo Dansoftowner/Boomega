@@ -95,7 +95,7 @@ dependencies {
     libraries 'org.jetbrains:annotations:20.1.0'
     libraries 'org.reflections:reflections:0.9.12'
     libraries 'commons-io:commons-io:2.6'
-    libraries 'org.apache.commons:commons-lang3:3.12'
+    libraries 'org.apache.commons:commons-lang3:3.10'
     libraries 'commons-collections:commons-collections:3.2.2'
     libraries 'com.github.Dansoftowner:jFileGoodies:1.2.6'
     libraries 'com.github.oshi:oshi-core:5.6.0'
