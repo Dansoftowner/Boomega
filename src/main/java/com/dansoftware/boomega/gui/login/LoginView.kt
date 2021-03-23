@@ -2,20 +2,24 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.appdata.Preferences
 import com.dansoftware.boomega.appdata.logindata.LoginData
+import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.Database
+import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.db.NitriteDatabase
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.context.ContextTransformable
+import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
+import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
+import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.mainview.MainActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.util.action
-import com.dansoftware.boomega.gui.util.asKeyEvent
-import com.dansoftware.boomega.gui.util.keyCombination
+import com.dansoftware.boomega.gui.util.runOnUiThread
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.main.ApplicationRestart
 import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
 import com.dlsc.workbenchfx.SimpleHeaderView
@@ -30,7 +34,8 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ObservableStringValue
 import javafx.concurrent.Task
 import javafx.scene.control.MenuItem
-import javafx.scene.input.KeyCodeCombination
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * A LoginView is a graphical object that can handle
@@ -49,12 +54,11 @@ class LoginView(
 ), ContextTransformable {
 
     private val asContext: Context = Context.from(this)
-    private val loginViewBase: LoginViewBase =
-        LoginViewBase(asContext, preferences, tracker, loginData, databaseLoginListener)
+    private val loginBoxController = LoginBoxController(context, tracker, loginData, preferences, databaseLoginListener)
     private val createdDatabase: ObjectProperty<Database> = SimpleObjectProperty()
 
     init {
-        content = loginViewBase
+        content = LoginViewBase(loginBoxController)
         buildToolbar()
     }
 
@@ -64,7 +68,7 @@ class LoginView(
     }
 
     val loginData: LoginData
-        get() = loginViewBase.loginData
+        get() = loginBoxController.loginData
 
     fun createdDatabaseProperty(): ReadOnlyObjectProperty<Database> {
         return createdDatabase
@@ -75,7 +79,7 @@ class LoginView(
     }
 
     fun titleProperty(): ObservableStringValue {
-        return loginViewBase.titleProperty()
+        return loginBoxController.titleProperty()!!
     }
 
     private fun buildInfoItem(): ToolbarItem = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.INFORMATION)) {
@@ -107,5 +111,108 @@ class LoginView(
                 PreferencesActivity(preferences).show(context.contextWindow)
             }
         )
+    }
+
+    private class LoginBoxController(
+        override val context: Context,
+        override val databaseTracker: DatabaseTracker,
+        override val loginData: LoginData,
+        private val preferences: Preferences,
+        private val databaseLoginListener: DatabaseLoginListener
+    ) : LoginBox.Controller, DatabaseTracker.Observer {
+
+        init {
+            databaseTracker.registerObserver(this)
+        }
+
+        override var loginBox: LoginBox? = null
+            set(value) {
+                value?.takeIf { field !== it }?.let(this::initLoginBox)
+                field = value
+            }
+
+        fun titleProperty() = loginBox?.titleProperty()
+
+        private fun initLoginBox(box: LoginBox) {
+            box.fillForm(loginData)
+            box.addSelectedItemListener {
+                loginData.selectedDatabase = it
+            }
+        }
+
+        override fun openDatabaseManager() {
+            DatabaseManagerActivity().show(databaseTracker, context.contextWindow)
+        }
+
+        override fun openFile() {
+            DatabaseOpener().showMultipleOpenDialog(context.contextWindow).stream()
+                .peek(databaseTracker::addDatabase)
+                .reduce { _, second -> second }
+                .ifPresent { loginBox?.select(it) }
+        }
+
+        override fun openDatabaseCreator() {
+            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
+                loginBox?.select(it)
+            }
+        }
+
+        override fun login(databaseMeta: DatabaseMeta, credentials: Credentials, remember: Boolean) {
+            when {
+                databaseTracker.isDatabaseUsed(databaseMeta) ->
+                    MainActivity.getByDatabase(databaseMeta)
+                        .map(MainActivity::getContext)
+                        .ifPresent(Context::toFront)
+                else -> {
+                    loginData.isAutoLogin = remember
+                    loginData.autoLoginCredentials = credentials.takeIf { remember }
+
+                    NitriteDatabase.getAuthenticator()
+                        .onFailed { title, message, t ->
+                            context.showErrorDialog(title, message, t as Exception?)
+                            logger.error("Failed to create/open the database", t)
+                        }.auth(databaseMeta, credentials)?.let {
+                            logger.debug("Signing in was successful; closing the LoginWindow")
+                            preferences.editor().put(Preferences.Key.LOGIN_DATA, loginData)
+                            databaseLoginListener.onDatabaseOpened(it)
+                            context.close()
+                        }
+                }
+            }
+        }
+
+        override fun onUsingDatabase(databaseMeta: DatabaseMeta) {
+            runOnUiThread {
+                loginBox?.refresh()
+                when (databaseMeta) {
+                    loginBox?.selectedItem -> {
+                        loginBox?.select(null)
+                    }
+                }
+            }
+        }
+
+        override fun onClosingDatabase(databaseMeta: DatabaseMeta) {
+            runOnUiThread { loginBox?.refresh() }
+        }
+
+        override fun onDatabaseAdded(databaseMeta: DatabaseMeta) {
+            runOnUiThread {
+                logger.debug("Adding database {}", databaseMeta)
+                loginBox?.addItem(databaseMeta)
+                loginData.savedDatabases.add(databaseMeta)
+            }
+        }
+
+        override fun onDatabaseRemoved(databaseMeta: DatabaseMeta) {
+            runOnUiThread {
+                loginBox?.removeItem(databaseMeta)
+                loginData.savedDatabases.remove(databaseMeta)
+            }
+        }
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(LoginView::class.java)
     }
 }

@@ -11,21 +11,9 @@ import javafx.scene.input.TransferMode
 import javafx.scene.layout.StackPane
 import java.io.File
 
-class LoginViewBase(
-    private val context: Context,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker,
-    val loginData: LoginData,
-    private val databaseLoginListener: DatabaseLoginListener
-) : StackPane() {
+class LoginViewBase(private val controller: LoginBox.Controller) : StackPane() {
 
-    private val loginBox = LoginBox(
-        context,
-        preferences,
-        databaseTracker,
-        loginData,
-        databaseLoginListener
-    )
+    private val loginBox = LoginBox(controller)
 
     init {
         styleClass.add("login-form")
@@ -49,7 +37,7 @@ class LoginViewBase(
                 event.dragboard.files.stream()
                     .filter(File::isFile)
                     .map(::DatabaseMeta)
-                    .forEach(databaseTracker::addDatabase)
+                    .forEach(controller.databaseTracker::addDatabase)
             }
         }
     }

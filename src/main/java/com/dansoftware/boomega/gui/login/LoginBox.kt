@@ -1,18 +1,11 @@
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.appdata.Preferences
 import com.dansoftware.boomega.appdata.logindata.LoginData
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.db.NitriteDatabase
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
-import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
-import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.mainview.MainActivity
 import com.dansoftware.boomega.gui.util.refresh
-import com.dansoftware.boomega.gui.util.runOnUiThread
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
@@ -33,30 +26,61 @@ import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class LoginBox(
-    private val context: Context,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker,
-    val loginData: LoginData,
-    private val databaseLoginListener: DatabaseLoginListener
-) : VBox(10.0) {
+class LoginBox(private val controller: Controller) : VBox(10.0) {
 
-    private val controller: Controller = Controller().also(databaseTracker::registerObserver)
     private val itemSelected: BooleanProperty = SimpleBooleanProperty()
     private val usernameInput: StringProperty = SimpleStringProperty()
     private val passwordInput: StringProperty = SimpleStringProperty()
     private val remember: BooleanProperty = SimpleBooleanProperty()
     private val databaseChooser: ObjectProperty<ComboBox<DatabaseMeta>> = SimpleObjectProperty()
 
+    var selectedItem: DatabaseMeta?
+    get() = databaseChooser.get().selectionModel.selectedItem
+    set(value) { select(value) }
+
     init {
         this.styleClass.add("login-box")
         this.maxWidth = 650.0
         this.prefWidth = 550.0
         this.buildUI()
-        this.controller.fillForm()
+        controller.loginBox = this
     }
 
     fun titleProperty(): ObservableStringValue = databaseChooser.get().selectionModel.selectedItemProperty().asString()
+
+    fun refresh() {
+        databaseChooser.get().refresh()
+    }
+
+    fun addItem(item: DatabaseMeta) {
+        databaseChooser.get().items.add(item)
+    }
+
+    fun removeItem(item: DatabaseMeta) {
+        databaseChooser.get().items.remove(item)
+    }
+
+    fun select(databaseMeta: DatabaseMeta?) {
+        databaseChooser.get().selectionModel.select(databaseMeta)
+    }
+
+    fun addSelectedItemListener(listener: (DatabaseMeta?) -> Unit) {
+        databaseChooser.get().selectionModel.selectedItemProperty().addListener { _, _, it -> listener(it) }
+    }
+
+    fun fillForm(loginData: LoginData) {
+        databaseChooser.get().let { databaseChooser ->
+            databaseChooser.items.addAll(loginData.savedDatabases)
+            loginData.selectedDatabase?.let(databaseChooser.selectionModel::select)
+            loginData.autoLoginDatabase?.let {
+                remember.set(true)
+                loginData.autoLoginCredentials?.run {
+                    usernameInput.set(username)
+                    passwordInput.set(password)
+                }
+            }
+        }
+    }
 
     private fun buildUI() {
         children.add(buildHeader())
@@ -89,10 +113,9 @@ class LoginBox(
         minWidth = 355.0
         maxWidth = Double.MAX_VALUE
         promptText = I18N.getValue("login.source.combo.promt")
-        buttonCell = ComboBoxButtonCell(databaseTracker)
-        setCellFactory { DatabaseChooserItem(databaseTracker) }
+        buttonCell = ComboBoxButtonCell(controller.databaseTracker)
+        setCellFactory { DatabaseChooserItem(controller.databaseTracker) }
         itemSelected.bind(selectionModel.selectedItemProperty().isNotNull)
-        selectionModel.selectedItemProperty().addListener { _, _, it -> loginData.selectedDatabase = it }
         HBox.setHgrow(this, Priority.ALWAYS)
     }
 
@@ -170,7 +193,14 @@ class LoginBox(
         text = I18N.getValue("login.form.login")
         isDefaultButton = true
         setOnAction {
-            controller.login()
+            databaseChooser.get().selectionModel.selectedItem?.let { dbMeta ->
+                controller.login(
+                    dbMeta, Credentials(
+                        usernameInput.get().let(StringUtils::trim),
+                        passwordInput.get().let(StringUtils::trim)
+                    ), remember.get()
+                )
+            }
         }
     }
 
@@ -229,102 +259,17 @@ class LoginBox(
         }
     }
 
-    /**
-     * Responsible for the concrete actions, behaviours. Also, it synchronizes the UI
-     * with the [DatabaseTracker]
-     */
-    private inner class Controller : DatabaseTracker.Observer {
+    interface Controller {
+        var loginBox: LoginBox?
 
-        fun openDatabaseManager() {
-            DatabaseManagerActivity().show(databaseTracker, context.contextWindow)
-        }
+        val context: Context
+        val databaseTracker: DatabaseTracker
+        val loginData: LoginData
 
-        fun openFile() {
-            DatabaseOpener().showMultipleOpenDialog(context.contextWindow).stream()
-                .peek(databaseTracker::addDatabase)
-                .reduce { _, second -> second }
-                .ifPresent(databaseChooser.get().selectionModel::select)
-        }
-
-        fun openDatabaseCreator() {
-            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
-                databaseChooser.get().selectionModel.select(it)
-            }
-        }
-
-        fun fillForm() {
-            databaseChooser.get().let { databaseChooser ->
-                databaseChooser.items.addAll(loginData.savedDatabases)
-                loginData.selectedDatabase?.let(databaseChooser.selectionModel::select)
-                loginData.autoLoginDatabase?.let {
-                    remember.set(true)
-                    loginData.autoLoginCredentials?.run {
-                        usernameInput.set(username)
-                        passwordInput.set(password)
-                    }
-                }
-            }
-        }
-
-        fun login() {
-            databaseChooser.get().selectionModel.selectedItem?.let { dbMeta ->
-                when {
-                    databaseTracker.isDatabaseUsed(dbMeta) ->
-                        MainActivity.getByDatabase(dbMeta)
-                            .map(MainActivity::getContext)
-                            .ifPresent(Context::toFront)
-                    else ->
-                        Credentials(
-                            usernameInput.get().let(StringUtils::trim),
-                            passwordInput.get().let(StringUtils::trim)
-                        ).let { credentials ->
-                            loginData.isAutoLogin = remember.get()
-                            loginData.autoLoginCredentials = credentials.takeIf { remember.get() }
-
-                            NitriteDatabase.getAuthenticator()
-                                .onFailed { title, message, t ->
-                                    context.showErrorDialog(title, message, t as Exception?)
-                                    logger.error("Failed to create/open the database", t)
-                                }.auth(dbMeta, credentials)?.let {
-                                    logger.debug("Signing in was successful; closing the LoginWindow")
-                                    preferences.editor().put(Preferences.Key.LOGIN_DATA, loginData)
-                                    databaseLoginListener.onDatabaseOpened(it)
-                                    context.close()
-                                }
-                        }
-                }
-            }
-        }
-
-        override fun onUsingDatabase(databaseMeta: DatabaseMeta) {
-            runOnUiThread {
-                databaseChooser.get().refresh()
-                when (databaseMeta) {
-                    databaseChooser.get().selectionModel.selectedItem -> {
-                        databaseChooser.get().selectionModel.select(null)
-                    }
-                }
-            }
-        }
-
-        override fun onClosingDatabase(databaseMeta: DatabaseMeta) {
-            runOnUiThread(databaseChooser.get()::refresh)
-        }
-
-        override fun onDatabaseAdded(databaseMeta: DatabaseMeta) {
-            runOnUiThread {
-                logger.debug("Adding database {}", databaseMeta)
-                databaseChooser.get().items.add(databaseMeta)
-                loginData.savedDatabases.add(databaseMeta)
-            }
-        }
-
-        override fun onDatabaseRemoved(databaseMeta: DatabaseMeta) {
-            runOnUiThread {
-                databaseChooser.get().items.remove(databaseMeta)
-                loginData.savedDatabases.remove(databaseMeta)
-            }
-        }
+        fun openDatabaseManager()
+        fun openFile()
+        fun openDatabaseCreator()
+        fun login(databaseMeta: DatabaseMeta, credentials: Credentials, remember: Boolean)
     }
 
     companion object {
