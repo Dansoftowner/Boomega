@@ -10,7 +10,7 @@ import com.dansoftware.boomega.gui.record.RecordClipboard
 import com.dansoftware.boomega.gui.record.show.RecordsView.Dock
 import com.dansoftware.boomega.gui.record.show.RecordsView.DockInfo
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
@@ -189,7 +189,7 @@ class RecordsViewModule(
                 content.setDockFullyResizable()
                 baseItems.setAll(this.value)
             }
-        }.let(ExploitativeExecutor::submit)
+        }.let(CachedExecutor::submit)
     }
 
     private fun writeConfig() {
@@ -294,7 +294,7 @@ class RecordsViewModule(
                         .forEach(database::insertRecord)
                 }
             }
-        }.let(ExploitativeExecutor::submit)
+        }.let(CachedExecutor::submit)
     }
 
     private fun invokeCutAction(items: List<Record>) {
@@ -308,7 +308,7 @@ class RecordsViewModule(
     }
 
     private fun invokeRemoveAction(items: List<Record>) {
-        ExploitativeExecutor.submit(buildRemoveAction(items))
+        CachedExecutor.submit(buildRemoveAction(items))
     }
 
     private fun buildRemoveAction(items: List<Record>): Task<Unit> = object : Task<Unit>() {

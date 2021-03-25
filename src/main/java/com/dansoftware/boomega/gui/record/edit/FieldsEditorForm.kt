@@ -7,7 +7,7 @@ import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl
 import com.dansoftware.boomega.gui.record.RecordValues
 import com.dansoftware.boomega.gui.control.formsfx.SimpleRatingControl
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.structure.Group
@@ -269,7 +269,7 @@ class FieldsEditorForm(
         changed.takeIf { it.get() }?.let {
             //TODO: preview dialog about what items will be changed
             currentForm.get()?.persist()
-            ExploitativeExecutor.submit(buildSaveAction())
+            CachedExecutor.submit(buildSaveAction())
         }
     }
 

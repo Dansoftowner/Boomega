@@ -5,7 +5,7 @@ import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.context.TitledOverlayBox
 import com.dansoftware.boomega.gui.googlebooks.*
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.ObjectProperty
@@ -60,7 +60,7 @@ class GoogleBookJoinerView(
     }
 
     private fun buildPropertyChooserPane() = PropertyChooserPane(allParameters, searchParameters) {
-        ExploitativeExecutor.submit(
+        CachedExecutor.submit(
             GoogleBooksPaginationSearchTask(context, tablePagination, true, searchParameters)
         )
     }

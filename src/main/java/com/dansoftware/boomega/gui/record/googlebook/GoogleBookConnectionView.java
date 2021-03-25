@@ -14,7 +14,7 @@ import com.dansoftware.boomega.gui.record.show.RecordTable;
 import com.dansoftware.boomega.gui.util.BaseFXUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
 import com.dansoftware.boomega.i18n.I18N;
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor;
+import com.dansoftware.boomega.util.concurrent.CachedExecutor;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -42,7 +42,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -161,7 +160,7 @@ public class GoogleBookConnectionView extends VBox {
         } else {
             Task<Volume> task = new VolumePullTask(googleBookLink);
             lastTask.set(task);
-            ExploitativeExecutor.INSTANCE.submit(task);
+            CachedExecutor.INSTANCE.submit(task);
         }
     }
 
@@ -252,7 +251,7 @@ public class GoogleBookConnectionView extends VBox {
                         buildPreviewTable(items),
                         it -> {
                             if (BaseFXUtils.typeEquals(it, ButtonType.YES)) {
-                                ExploitativeExecutor.INSTANCE.submit(buildConnectionRemoveTask());
+                                CachedExecutor.INSTANCE.submit(buildConnectionRemoveTask());
                             }
                         }, I18NButtonTypes.CANCEL, I18NButtonTypes.YES);
             });
@@ -387,7 +386,7 @@ public class GoogleBookConnectionView extends VBox {
         public void showGoogleBookJoiner() {
             context.showOverlay(
                     new GoogleBookJoinerOverlay(context, buildSearchParameters(record), volume -> {
-                        ExploitativeExecutor.INSTANCE.submit(buildJoinActionTask(volume));
+                        CachedExecutor.INSTANCE.submit(buildJoinActionTask(volume));
                     })
             );
         }

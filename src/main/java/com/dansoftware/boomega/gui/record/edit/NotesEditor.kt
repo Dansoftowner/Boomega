@@ -5,7 +5,7 @@ import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.concurrent.Task
@@ -88,7 +88,7 @@ class NotesEditor(
     }
 
     private fun saveChanges() {
-        ExploitativeExecutor.submit(object : Task<Unit>() {
+        CachedExecutor.submit(object : Task<Unit>() {
 
             init {
                 setOnRunning { showProgress() }

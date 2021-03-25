@@ -21,7 +21,7 @@ import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.runOnUiThread
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.update.UpdateSearcher
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dlsc.workbenchfx.SimpleHeaderView
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
@@ -100,7 +100,7 @@ class LoginView(
 
                     override fun call() = UpdateSearcher.defaultInstance().search()
                 }
-                ExploitativeExecutor.submit(task)
+                CachedExecutor.submit(task)
             },
 
             MenuItem(I18N.getValue("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)).action {

@@ -7,7 +7,7 @@ import java.util.concurrent.*
  *
  * @author Daniel Gyorffy
  */
-object ExploitativeExecutor : ExecutorService {
+object CachedExecutor : ExecutorService {
 
     private val back = Executors.newCachedThreadPool { runnable ->
         Thread(runnable).also { it.isDaemon = true }

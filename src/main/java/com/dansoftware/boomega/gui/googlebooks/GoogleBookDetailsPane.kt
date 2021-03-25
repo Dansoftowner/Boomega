@@ -11,7 +11,7 @@ import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewActivity
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.pnikosis.html2markdown.HTML2Md
 import com.sandec.mdfx.MDFXNode
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -244,7 +244,7 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
                 5.0,
                 PropertyNameLabel(I18N.getValue("google.books.table.column.desc").plus(":"))
             ).also { hBox ->
-                ExploitativeExecutor.submit(object : Task<String>() {
+                CachedExecutor.submit(object : Task<String>() {
                     override fun call(): String? = volume.volumeInfo?.description?.let(HTML2Md::convert)
                 }.apply {
                     this.setOnSucceeded {

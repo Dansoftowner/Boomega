@@ -6,7 +6,7 @@ import com.dansoftware.boomega.googlebooks.Volumes
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.concurrent.Task
@@ -173,7 +173,7 @@ class GoogleBooksPaginationSearchTask(
         ) {
             when (it) {
                 I18NButtonTypes.RETRY ->
-                    ExploitativeExecutor.submit(
+                    CachedExecutor.submit(
                         GoogleBooksPaginationSearchTask(context, tablePagination, isInitSearch, searchParameters)
                     )
             }
@@ -199,7 +199,7 @@ class GoogleBooksPaginationSearchTask(
             else -> {
                 tablePagination.setOnNewContentRequest { start, _ ->
                     Runnable {
-                        ExploitativeExecutor.submit(
+                        CachedExecutor.submit(
                             GoogleBooksPaginationSearchTask(
                                 context,
                                 tablePagination,

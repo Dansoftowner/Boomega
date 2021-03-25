@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.util
 
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.boomega.util.os.OsInfo
 import java.awt.Desktop
 import java.net.URL
@@ -25,7 +25,7 @@ object SystemBrowser {
     }
 
     fun browse(url: String) {
-        ExploitativeExecutor.submit { browserCore.browse(url) }
+        CachedExecutor.submit { browserCore.browse(url) }
     }
 
     private abstract class BrowserCore {

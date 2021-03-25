@@ -237,8 +237,7 @@ abstract class BaseWindow : Stage, Themeable {
                     when {
                         dialogShowing.not() -> {
                             dialogShowing = true
-                            if (this@BaseWindow.isIconified)
-                                this@BaseWindow.isIconified = false
+                            this@BaseWindow.isIconified = false
                             val buttonType = context.showConfirmationDialogAndWait(
                                 I18N.getValue("window.close.dialog.title"),
                                 I18N.getValue("window.close.dialog.msg")

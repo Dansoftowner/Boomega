@@ -2,7 +2,7 @@ package com.dansoftware.boomega.gui.control
 
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.boomega.util.equalsIgnoreCase
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
@@ -212,7 +212,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
                     .filter { filter.get().filter(it) }
                     .collect(Collectors.toList())
             }
-        }.let(ExploitativeExecutor::submit)
+        }.let(CachedExecutor::submit)
     }
 
     fun onCloseRequestProperty() = onCloseRequest

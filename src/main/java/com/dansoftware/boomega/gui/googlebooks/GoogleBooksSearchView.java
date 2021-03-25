@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.googlebooks;
 
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.util.concurrent.ExploitativeExecutor;
+import com.dansoftware.boomega.util.concurrent.CachedExecutor;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +64,7 @@ class GoogleBooksSearchView extends VBox {
     private Consumer<SearchParameters> buildOnSearchAction() {
         return searchProperties -> {
             Runnable action = () ->
-                    ExploitativeExecutor.INSTANCE.submit(buildSearchTask(searchProperties));
+                    CachedExecutor.INSTANCE.submit(buildSearchTask(searchProperties));
             action.run();
             onRefreshRequest = action;
         };
