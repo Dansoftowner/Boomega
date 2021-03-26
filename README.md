@@ -26,6 +26,7 @@
 ## Features
 * Cross-platform
 * Multiple databases
+* Quick file launch support  
 * Importing from Google Books
 * Easy transportation between databases
 * Multiple record-types like "Book" and "Magazine"
@@ -62,16 +63,19 @@ The repo has two important branches:
 
 The code is written in `Java` and `Kotlin` mixed.
 The GUI toolkit used is `JavaFX`.<br>
-The app targets `Java 11+` but the code is `unmodularized`.
-
+The app targets `Java 11+` but the code is `unmodularized`.<br>
 The build tool used for this project is `Gradle`.
 
+The recommended IDE is `IntelliJ Idea`.
 
 ### Build requirements
-* JDK 11+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
+* JDK 11+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended) 
 
 ## Used libraries
-[Jump to list](USED_LIBRARIES.md)
+* [Jump to list](USED_LIBRARIES.md)
+* ...or you can view them in the `Boomega Info`:
+![viewing third-party libraries in the app](readme/third-party-info.gif)
+
 
 ## License
 This software is licensed under the [GNU General Public License v3](https://en.wikipedia.org/wiki/GNU_General_Public_License).
