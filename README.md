@@ -1,6 +1,5 @@
 <p align="center">
   <img src="readme/logo.png" alt="Boomega icon">
-  <br/>
   <h1 align="center">Boomega</h1>
 </p>
 
