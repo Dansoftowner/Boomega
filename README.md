@@ -4,9 +4,6 @@
   <h1 align="center">Boomega</h1>
 </p>
 
-![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)
-![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
-![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)
 ![License](https://img.shields.io/github/license/DansoftOwner/Boomega)
 ![Source code](https://img.shields.io/badge/source%20code-java%20%7C%20kotlin-orange)
 ![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)
@@ -40,16 +37,18 @@
 * ...and more!
 
 
-## System requirements
-> 4+ GB RAM
+## Releases
+![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
+![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)
+![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)
 
-## Platform support
+### Platform support
 |                    | Windows   | Linux | MacOS
 | ---                |   ---     | ---   | ---   
 | Installer (64-bit) |  exe, msi |       | Help wanted
 | Portable (64-bit)  |  zip      |       | Help wanted 
 
-Jump to [downloads](https://github.com/Dansoftowner/Boomega/releases).
+Jump to [releases](https://github.com/Dansoftowner/Boomega/releases).
 
 > Note: These binaries are bundled with the [Azul Zulu OpenJDK Runtime](https://www.azul.com/downloads/zulu-community/?package=jdk) 
 
