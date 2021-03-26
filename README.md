@@ -4,11 +4,10 @@
   <h1 align="center">Boomega</h1>
 </p>
 
-![License](https://img.shields.io/github/license/DansoftOwner/Boomega)
-![Source code](https://img.shields.io/badge/source%20code-java%20%7C%20kotlin-orange)
-![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)
-![Gui](https://img.shields.io/badge/gui-javafx-blue)
-![Issues](https://img.shields.io/github/issues/DansoftOwner/Boomega)
+<p align="center">
+    <img align="center" alt="License" src="https://img.shields.io/github/license/DansoftOwner/Boomega">
+    <img align="center" alt="Issues" src="https://img.shields.io/github/issues/DansoftOwner/Boomega">
+</p>
 
 <h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
 
@@ -37,7 +36,7 @@
 * ...and more!
 
 
-## Releases
+## Download
 ![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
 ![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)
 ![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)
@@ -52,9 +51,24 @@ Jump to [releases](https://github.com/Dansoftowner/Boomega/releases).
 
 > Note: These binaries are bundled with the [Azul Zulu OpenJDK Runtime](https://www.azul.com/downloads/zulu-community/?package=jdk) 
 
-## Build requirements:
+## Source code
+![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)
+![Source code](https://img.shields.io/badge/languages-java%20%7C%20kotlin-orange)
+![Gui](https://img.shields.io/badge/gui-javafx-blue)
+
+The repo has two important branches:
+* `master` - for stable versions
+* `dev` - for developing the app further
+
+The code is written in `Java` and `Kotlin` mixed.
+The GUI toolkit used is `JavaFX`.<br>
+The app targets `Java 11+` but the code is `unmodularized`.
+
+The build tool used for this project is `Gradle`.
+
+
+### Build requirements
 * JDK 11+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
-* Gradle 6.5+
 
 ## Used libraries
 [Jump to list](USED_LIBRARIES.md)
