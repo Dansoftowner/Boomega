@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="readme/logo.png" alt="Boomega icon">
+  <img align="center" src="readme/logo.png" alt="Boomega icon">
   <h1 align="center">Boomega</h1>
 </p>
 
