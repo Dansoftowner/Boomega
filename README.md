@@ -42,10 +42,10 @@
 ![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)
 
 ### Platform support
-|                    | Windows   | Linux | MacOS
-| ---                |   ---     | ---   | ---   
-| Installer (64-bit) |  exe, msi |       | Help wanted
-| Portable (64-bit)  |  zip      |       | Help wanted 
+|                    | Windows           | Linux | MacOS
+| ---                |   ---             | ---   | ---   
+| Installer (64-bit) |  **exe**, **msi** |       | Help wanted
+| Portable (64-bit)  |  **zip**          |       | Help wanted 
 
 Jump to [releases](https://github.com/Dansoftowner/Boomega/releases).
 
