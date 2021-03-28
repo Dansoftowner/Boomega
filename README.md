@@ -51,6 +51,12 @@ Jump to [releases](https://github.com/Dansoftowner/Boomega/releases).
 
 > Note: These binaries are bundled with the [Azul Zulu OpenJDK Runtime](https://www.azul.com/downloads/zulu-community/?package=jdk) 
 
+## Documentation
+<!---
+TODO: adding website/docs link
+-->
+The detailed documentation is available [here]().
+
 ## Source code
 ![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)
 ![Source code](https://img.shields.io/badge/languages-java%20%7C%20kotlin-orange)
@@ -72,7 +78,7 @@ The recommended IDE is `IntelliJ Idea`.
 
 ## Used libraries
 * [Jump to list](USED_LIBRARIES.md)
-* ...or you can view them in the `Boomega Info`:
+* ...or you can view them in the `Boomega Info`:<br>
 ![viewing third-party libraries in the app](readme/third-party-info.gif)
 
 
