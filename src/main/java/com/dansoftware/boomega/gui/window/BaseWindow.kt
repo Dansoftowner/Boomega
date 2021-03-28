@@ -120,6 +120,11 @@ abstract class BaseWindow : Stage, Themeable {
         }
     }
 
+    fun makeFocused() {
+        this.isIconified = false
+        this.toFront()
+    }
+
     private fun buildMenuBarContent(content: Parent, menuBar: MenuBar): Parent =
         when {
             OsInfo.isMac() -> content.also {
@@ -234,10 +239,10 @@ abstract class BaseWindow : Stage, Themeable {
         override fun handle(event: WindowEvent) {
             this@BaseWindow.getContext()?.also { context ->
                 if (this@BaseWindow.exitDialog) {
+                    this@BaseWindow.makeFocused()
                     when {
                         dialogShowing.not() -> {
                             dialogShowing = true
-                            this@BaseWindow.isIconified = false
                             val buttonType = context.showConfirmationDialogAndWait(
                                 I18N.getValue("window.close.dialog.title"),
                                 I18N.getValue("window.close.dialog.msg")
