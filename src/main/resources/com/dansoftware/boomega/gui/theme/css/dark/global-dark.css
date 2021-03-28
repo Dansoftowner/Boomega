@@ -45,7 +45,6 @@
     -fx-text-fill: white;
 }
 
-.table-view .table-row-cell:filled {
-    -fx-border-color: #bfbfbf;
-    -fx-border-width: 0 0 0.25 0;
+.table-view .table-row-cell:empty {
+    -fx-opacity: 0;
 }
