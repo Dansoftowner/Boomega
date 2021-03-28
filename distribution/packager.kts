@@ -1,6 +1,4 @@
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStreamReader
+import java.io.*
 
 val windowsName = "win"
 val linuxName = "nux"
@@ -29,11 +27,11 @@ Runtime.getRuntime().apply {
     getPackageTypes().forEach {
         println("Creating bundle for '$it'...")
         try {
-            exec(buildCommandLine().also { println("\n[DEBUG] cmd: $it\n") })
+            exec(buildCommandLine(it).also { println("\n[DEBUG] cmd: $it\n") })
                 .also { process ->
                     println("-".repeat(30))
                     printToOutput(process.inputStream)
-                    printToOutput(process.outputStream)
+                    printToOutput(process.errorStream)
                     process.waitFor()
                     println("-".repeat(30).plus("\n"))
                 }
@@ -50,9 +48,9 @@ fun getPackageTypes() = when {
     else -> arrayOf("app-image")
 }
 
-fun buildCommandLine() =
+fun buildCommandLine(type: String) =
     """${jPackage.surrounding('"')}
-       -t ${it.surrounding('"')}
+       -t ${type.surrounding('"')}
        --input ${inputDir.surrounding('"')}
        --app-version ${appVersion.surrounding('"')}
        --description ${description.surrounding('"')} 
@@ -62,7 +60,7 @@ fun buildCommandLine() =
        --runtime-image ${runtime.surrounding('"')} 
        --icon ${iconPath.surrounding('"')}
        --main-jar ${mainJarPath.surrounding('"')} 
-       ${getDependentFlags(it)}
+       ${getDependentFlags(type)}
        --verbose
     """.replace(Regex("(\\s|\n)+"), " ")
 
