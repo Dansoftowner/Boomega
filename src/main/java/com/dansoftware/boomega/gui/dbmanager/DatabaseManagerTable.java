@@ -3,6 +3,7 @@ package com.dansoftware.boomega.gui.dbmanager;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
+import com.dansoftware.boomega.gui.util.BaseFXUtils;
 import com.dansoftware.boomega.gui.util.FXCollectionUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
 import com.dansoftware.boomega.gui.util.UIUtils;
@@ -18,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -93,12 +95,12 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
     @Override
     public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
-        UIUtils.runOnUiThread(() -> this.getItems().add(databaseMeta));
+        BaseFXUtils.runOnUiThread(() -> this.getItems().add(databaseMeta));
     }
 
     @Override
     public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
-        UIUtils.runOnUiThread(() -> this.getItems().remove(databaseMeta));
+        BaseFXUtils.runOnUiThread(() -> this.getItems().remove(databaseMeta));
     }
 
 
