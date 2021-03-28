@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  *
  * @author Daniel Gyoerffy
  */
-class GoogleBooksSearchView extends VBox {
+public class GoogleBooksSearchView extends VBox {
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleBooksSearchView.class);
 
