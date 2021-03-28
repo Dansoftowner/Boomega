@@ -15,6 +15,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -62,6 +63,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
     private void init(Collection<DatabaseMeta> databases) {
         this.getItems().addAll(databases);
+        this.getStyleClass().add(JMetroStyleClass.ALTERNATING_ROW_COLORS);
         this.setPlaceholder(new Label(I18N.getValue("database.manager.table.place.holder")));
         Stream.of(
                 new StateColumn(),

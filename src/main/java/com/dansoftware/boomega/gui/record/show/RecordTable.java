@@ -20,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.util.Callback;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
@@ -82,6 +83,7 @@ public class RecordTable extends TableView<Record> {
 
     private void init() {
         this.getStyleClass().add(STYLE_CLASS);
+        this.getStyleClass().add(JMetroStyleClass.ALTERNATING_ROW_COLORS);
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
         this.initRowFactory();
