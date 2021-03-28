@@ -16,7 +16,7 @@ val appName = "Boomega"
 val description = "Boomega"
 val vendor = "Dansoftware"
 
-val destinationDir = File("application-package").absolutePath
+val destinationDir = File("build").absolutePath
 val inputDir = File("../build", "libs").absolutePath
 val mainJarPath = "Boomega-$appVersion.jar"
 val licenseFile = File("$projectDir/LICENSE").absolutePath
@@ -29,50 +29,18 @@ Runtime.getRuntime().apply {
     getPackageTypes().forEach {
         println("Creating bundle for '$it'...")
         try {
-            val process: Process = exec(
-                """
-               ${jPackage.surrounding('"')}
-               -t ${it.surrounding('"')}
-               --input ${inputDir.surrounding('"')}
-               --app-version ${appVersion.surrounding('"')}
-               --description ${description.surrounding('"')} 
-               -n ${appName.surrounding('"')}
-               -d ${destinationDir.surrounding('"')} 
-               --vendor ${vendor.surrounding('"')}
-               --runtime-image ${runtime.surrounding('"')} 
-               --icon ${iconPath.surrounding('"')}
-               --main-jar ${mainJarPath.surrounding('"')} 
-               ${getDependentFlags(it)}
-            """.replace(Regex("(\\s|\n)+"), " ").also { println("[DEBUG] cmd: $it") }
-            )
-
-            println("------------")
-
-            BufferedReader(InputStreamReader(process.inputStream)).use {
-                var line: String?
-                do {
-                    line = it.readLine()
-                    line?.let { println(it) }
-                } while (line != null)
-            }
-
-            BufferedReader(InputStreamReader(process.errorStream)).use {
-                var line: String?
-                do {
-                    line = it.readLine()
-                    line?.let { println(it) }
-                } while (line != null)
-            }
-
-            process.waitFor()
-
-            println("------------\n")
-
+            exec(buildCommandLine().also { println("\n[DEBUG] cmd: $it\n") })
+                .also { process ->
+                    println("-".repeat(30))
+                    printToOutput(process.inputStream)
+                    printToOutput(process.outputStream)
+                    process.waitFor()
+                    println("-".repeat(30).plus("\n"))
+                }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
-
 }
 
 fun getPackageTypes() = when {
@@ -82,21 +50,42 @@ fun getPackageTypes() = when {
     else -> arrayOf("app-image")
 }
 
+fun buildCommandLine() =
+    """${jPackage.surrounding('"')}
+       -t ${it.surrounding('"')}
+       --input ${inputDir.surrounding('"')}
+       --app-version ${appVersion.surrounding('"')}
+       --description ${description.surrounding('"')} 
+       -n ${appName.surrounding('"')}
+       -d ${destinationDir.surrounding('"')} 
+       --vendor ${vendor.surrounding('"')}
+       --runtime-image ${runtime.surrounding('"')} 
+       --icon ${iconPath.surrounding('"')}
+       --main-jar ${mainJarPath.surrounding('"')} 
+       ${getDependentFlags(it)}
+       --verbose
+    """.replace(Regex("(\\s|\n)+"), " ")
+
 fun getDependentFlags(type: String) = when {
     type == "app-image" -> ""
-    type == "exe" || type == "msi" -> """
-        --license-file ${licenseFile.surrounding('"')}
-        --file-associations ${fileAssociations.surrounding('"')}
+    arrayOf("exe", "msi").contains(type) ->
+        """
         --win-menu
         --win-per-user-install
+        --win-dir-chooser
         --win-shortcut
-        """.replace(Regex("\\s+"), " ")
-    else -> """ --license-file $licenseFile
-                --file-associations $fileAssociations"""
-}
+        --license-file ${licenseFile.surrounding('"')}
+        --file-associations ${fileAssociations.surrounding('"')}
+        """
+    else ->
+        """ 
+        --license-file $licenseFile   
+        --file-associations $fileAssociations
+        """
+}.replace(Regex("\\s+"), " ")
 
 fun createDirs() {
-    File("application-package").mkdir()
+    File(destinationDir).mkdir()
 }
 
 fun getIconPath(): String =
@@ -118,5 +107,15 @@ fun isWindows() = osNameContains(windowsName)
 fun isLinux() = osNameContains(linuxName)
 fun isMac() = osNameContains(macName)
 fun osNameContains(value: String) = System.getProperty("os.name").toLowerCase().contains(value)
+
+fun printToOutput(src: InputStream) {
+    BufferedReader(InputStreamReader(src)).use {
+        var line: String?
+        do {
+            line = it.readLine()
+            line?.let { println(it) }
+        } while (line != null)
+    }
+}
 
 fun String?.surrounding(char: Char) = char + (this ?: "null") + char
