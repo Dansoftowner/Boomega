@@ -32,7 +32,7 @@ public class DarkTheme extends Theme {
     private final ThemeApplier applier;
 
     public DarkTheme() {
-        this.applier = new AndThemeApplier(new StyleSheetThemeApplier(getStyleSheets()), new JMetroThemeApplier(Style.DARK));
+        this.applier = new AndThemeApplier(new JMetroThemeApplier(Style.DARK), new StyleSheetThemeApplier(getStyleSheets()));
     }
 
     @Override

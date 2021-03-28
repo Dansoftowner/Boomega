@@ -33,7 +33,7 @@ public class LightTheme extends Theme {
     private final ThemeApplier applier;
 
     public LightTheme() {
-        this.applier = new AndThemeApplier(new StyleSheetThemeApplier(getStyleSheets()), new JMetroThemeApplier(Style.LIGHT));
+        this.applier = new AndThemeApplier(new JMetroThemeApplier(Style.LIGHT), new StyleSheetThemeApplier(getStyleSheets()));
     }
 
     @NotNull
