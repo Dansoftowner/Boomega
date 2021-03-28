@@ -1,0 +1,1 @@
+kotlinc packager.kts -script
