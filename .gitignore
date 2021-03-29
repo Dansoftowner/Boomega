@@ -128,6 +128,9 @@ gradle-app.setting
 
 distribution/java-runtime
 distribution/application-package
+distribution/*.class
+distribution/*.jar
+distribution/META-INF
 UML
 planning
 icon-sources.txt
