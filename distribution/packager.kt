@@ -26,10 +26,6 @@ val licenseFile = File("$projectDir/LICENSE").absolutePath
 val fileAssociations = File("file-associations/file-associations-${platformName}.properties").absolutePath
 val iconPath = calcIconPath()
 
-val windowsPackages = arrayOf("app-image", "exe", "msi")
-val linuxPackages = arrayOf("app-image", "deb")
-val macPackages = arrayOf("app-image", "dmg")
-
 fun main() {
     createDirs()
     Runtime.getRuntime().apply {
@@ -155,8 +151,6 @@ class AppImageBundle : Bundle {
 }
 
 abstract class InstallerBundle : Bundle {
-    override val fileToRenamePattern: Regex
-        get() = Regex("Boomega-\\d\\.\\d\\.\\d\\.$type")
     override val additionalFlags: String =
         """
             --license-file ${licenseFile.surrounding('"')}
@@ -165,6 +159,9 @@ abstract class InstallerBundle : Bundle {
 }
 
 abstract class WinSystemInstallerBundle : InstallerBundle() {
+    override val fileToRenamePattern: Regex
+        get() = Regex("Boomega-\\d\\.\\d\\.\\d\\.$type")
+
     override val additionalFlags: String =
         """
             ${super.additionalFlags}
