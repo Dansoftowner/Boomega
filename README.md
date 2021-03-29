@@ -46,7 +46,7 @@
 | ---                |   ---             | ---     | ---   
 | Installer (64-bit) |  **exe**, **msi** | _Planned_ | _Help wanted_
 | Portable (64-bit)  |  **zip**          | _Planned_ | _Help wanted_ 
-|Jar | ✔ | ✔ | ✔ 
+|Jar                 | ✔                 | ✔         | ✔ 
 
 Jump to [releases](https://github.com/Dansoftowner/Boomega/releases).
 
