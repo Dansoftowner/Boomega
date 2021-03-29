@@ -3,9 +3,9 @@ import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 
-public val windowsName = "win"
-public val linuxName = "linux"
-public val macName = "mac"
+val windowsName = "win"
+val linuxName = "linux"
+val macName = "mac"
 
 val platformName = calcPlatformName()
 
@@ -18,7 +18,6 @@ val appVersion = "0.5.0"
 val appName = "Boomega"
 val description = "Boomega"
 val vendor = "Dansoftware"
-
 val destinationDir = File(File("build"), "$appVersion${File.separator}$platformName").absolutePath
 val inputDir = File(projectDir, "build${File.separator}libs").absolutePath
 val mainJarPath = "Boomega-$appVersion.jar"
@@ -57,7 +56,11 @@ fun getBundles(): List<Bundle> = when {
         WinExeSystemBundle(),
         WinExeUserBundle()
     )
-    isLinux() -> listOf(AppImageBundle()) //TODO: linux installers
+    isLinux() -> listOf(
+        AppImageBundle(),
+        LinuxDebInstallerBundle(),
+        LinuxRpmInstallerBundle()
+    )
     isMac() -> listOf(AppImageBundle()) //TODO: mac installers
     else -> listOf(AppImageBundle())
 }
@@ -97,7 +100,7 @@ fun InputStream.printToOutput() {
 }
 
 fun String?.surrounding(char: Char) = char + (this ?: "null") + char
-fun String?.quotation(): String = this?.surrounding('"') ?: "\"\""
+fun String?.quotation(): String = this?.surrounding(if(isWindows()) '"' else ' ') ?: "\"\""
 fun String?.cmdFormat(): String = this?.replace(Regex("(\\s|\n)+"), " ") ?: ""
 
 interface Bundle {
@@ -121,7 +124,7 @@ interface Bundle {
             ?: println("[DEBUG] the file that should be renamed is not found by the given regex: '$fileToRenamePattern'")
     }
 
-    fun commandLine(): String {
+    open fun commandLine(): String {
         return """${jPackage.quotation()}
                  --type ${type.quotation()}
                  --input ${inputDir.quotation()}
@@ -155,6 +158,40 @@ abstract class InstallerBundle : Bundle {
         """
             --license-file ${licenseFile.surrounding('"')}
             --file-associations ${fileAssociations.surrounding('"')}
+        """
+}
+
+abstract class LinuxInstallerBundle : InstallerBundle() {
+    override val fileToRenamePattern: Regex
+        get() = Regex("")
+
+    override fun renameFile(destinationDir: String, appVersion: String) {
+    }
+
+    override fun preferredFileName(version: String): String = ""
+
+    override val additionalFlags: String =
+        """
+           --linux-menu-group Office;
+           --linux-shortcut
+        """
+}
+
+class LinuxDebInstallerBundle : LinuxInstallerBundle() {
+    override val name: String = "deb"
+    override val type: String = "deb"
+}
+
+
+class LinuxRpmInstallerBundle : LinuxInstallerBundle() {
+    override val name: String = "rpm"
+    override val type: String = "rpm"
+
+
+    override val additionalFlags: String =
+        """
+           ${super.additionalFlags}
+           --linux-rpm-license-type "GPLv3"
         """
 }
 
