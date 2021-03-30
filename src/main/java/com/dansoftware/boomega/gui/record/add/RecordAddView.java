@@ -63,6 +63,7 @@ public class RecordAddView extends VBox {
     }
 
     private void buildBaseUI() {
+        this.getChildren().add(new RecordAddToolbar(this));
         this.getChildren().add(buildScrollPane());
         this.getChildren().add(buildCommitButton());
     }

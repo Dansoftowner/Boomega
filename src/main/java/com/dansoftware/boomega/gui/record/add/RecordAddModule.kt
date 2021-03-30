@@ -34,59 +34,6 @@ class RecordAddModule(
     private val content: ObjectProperty<RecordAddView> = SimpleObjectProperty()
     private lateinit var typeChooserItem: ToolbarItem
 
-    init {
-        buildToolbar()
-    }
-
-    private fun buildToolbar() {
-        toolbarControlsLeft.add(buildRecordTypeChooserItem())
-        toolbarControlsRight.add(buildClearItem())
-    }
-
-    private fun buildClearItem(): ToolbarItem =
-        ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.DELETE)).apply {
-            //TODO: tooltip
-            setOnClick {
-                //TODO: confirmation dialog before clearing
-                content.get().clearForm()
-            }
-        }
-
-    private fun buildRecordTypeChooserItem(): ToolbarItem =
-        ToolbarItem().also { toolbarItem ->
-            typeChooserItem = toolbarItem
-            ToggleGroup().also { toggleGroup ->
-                toggleGroup.selectedToggleProperty()
-                    .addListener { _, _, newSelected ->
-                        toolbarItem.graphic = (newSelected as MenuItem?)?.graphic
-                        toolbarItem.text = (newSelected as MenuItem?)?.text
-                    }
-
-                fun createItem(i18n: String, recordType: Record.Type, icon: MaterialDesignIcon) =
-                    toolbarItem.items.add(RadioMenuItem(I18N.getValue(i18n)).also {
-                        it.graphic = MaterialDesignIconView(icon)
-                        it.toggleGroup = toggleGroup
-                        it.userData = recordType
-                        it.setOnAction { content.get().recordType = recordType }
-                        content.addListener { _, _, newForm: RecordAddView? ->
-                            it.isSelected = recordType == newForm?.recordType
-                        }
-                    })
-
-
-                createItem(
-                    "record.add.rectype.book",
-                    Record.Type.BOOK,
-                    MaterialDesignIcon.BOOK
-                )
-                createItem(
-                    "record.add.rectype.magazine",
-                    Record.Type.MAGAZINE,
-                    MaterialDesignIcon.NEWSPAPER
-                )
-            }
-        }
-
     override fun commitData(data: RecordValues?) {
         content.get()?.also { content ->
             data?.let {
