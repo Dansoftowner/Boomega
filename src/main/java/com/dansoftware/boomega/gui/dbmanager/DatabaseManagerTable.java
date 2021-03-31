@@ -63,7 +63,6 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
     private void init(Collection<DatabaseMeta> databases) {
         this.getItems().addAll(databases);
-        this.getStyleClass().add(JMetroStyleClass.ALTERNATING_ROW_COLORS);
         this.setPlaceholder(new Label(I18N.getValue("database.manager.table.place.holder")));
         Stream.of(
                 new StateColumn(),

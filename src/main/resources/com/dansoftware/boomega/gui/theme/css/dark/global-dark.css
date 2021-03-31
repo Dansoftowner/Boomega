@@ -45,6 +45,11 @@
     -fx-text-fill: white;
 }
 
+/*
 .table-view .table-row-cell:empty {
     -fx-opacity: 0;
 }
+
+.table-view {
+    !*-fx-background-color: white;*!
+}*/

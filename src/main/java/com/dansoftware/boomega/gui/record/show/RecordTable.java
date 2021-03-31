@@ -83,7 +83,6 @@ public class RecordTable extends TableView<Record> {
 
     private void init() {
         this.getStyleClass().add(STYLE_CLASS);
-        this.getStyleClass().add(JMetroStyleClass.ALTERNATING_ROW_COLORS);
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
         this.initRowFactory();
