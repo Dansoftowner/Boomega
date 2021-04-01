@@ -5,14 +5,11 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 
-public class DockView<T extends Node> extends VBox {
+public abstract class DockView<T extends Node> extends VBox {
     private final T content;
 
     public DockView(@NotNull SplitPane parent,
