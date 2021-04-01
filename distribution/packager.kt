@@ -156,8 +156,8 @@ class AppImageBundle : Bundle {
 abstract class InstallerBundle : Bundle {
     override val additionalFlags: String =
         """
-            --license-file ${licenseFile.surrounding('"')}
-            --file-associations ${fileAssociations.surrounding('"')}
+            --license-file ${ licenseFile.quotation() }
+            --file-associations ${ fileAssociations.quotation() }
         """
 }
 
@@ -172,7 +172,7 @@ abstract class LinuxInstallerBundle : InstallerBundle() {
 
     override val additionalFlags: String =
         """
-           --linux-menu-group Office;
+           --linux-menu-group ${ appName }
            --linux-shortcut
         """
 }
@@ -182,7 +182,6 @@ class LinuxDebInstallerBundle : LinuxInstallerBundle() {
     override val type: String = "deb"
 }
 
-
 class LinuxRpmInstallerBundle : LinuxInstallerBundle() {
     override val name: String = "rpm"
     override val type: String = "rpm"
@@ -191,7 +190,7 @@ class LinuxRpmInstallerBundle : LinuxInstallerBundle() {
     override val additionalFlags: String =
         """
            ${super.additionalFlags}
-           --linux-rpm-license-type "GPLv3"
+           --linux-rpm-license-type GPLv3
         """
 }
 
