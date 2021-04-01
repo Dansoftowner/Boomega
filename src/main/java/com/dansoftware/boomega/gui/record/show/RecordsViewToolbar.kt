@@ -1,0 +1,260 @@
+package com.dansoftware.boomega.gui.record.show
+
+import com.dansoftware.boomega.gui.control.TwoSideToolBar
+import com.dansoftware.boomega.gui.record.show.dock.Dock
+import com.dansoftware.boomega.i18n.I18N
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.binding.Bindings
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.collections.ListChangeListener
+import javafx.event.ActionEvent
+import javafx.event.EventHandler
+import javafx.geometry.Insets
+import javafx.geometry.Orientation
+import javafx.scene.Node
+import javafx.scene.control.*
+import org.apache.commons.lang3.StringUtils
+import java.text.Collator
+import java.util.*
+import java.util.function.Supplier
+import java.util.stream.Collectors
+import java.util.stream.Stream
+
+class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
+
+    private val abcLocaleProp: ObjectProperty<Locale> = SimpleObjectProperty<Locale>(Locale.getDefault())
+    var abcLocale: Locale
+        get() = abcLocaleProp.get()
+        set(value) {
+            abcLocaleProp.set(value)
+        }
+
+    private lateinit var columnChooserItem: MenuButton
+
+    init {
+        buildUI()
+    }
+
+    fun updateColumnChooser() {
+        columnChooserItem.items.stream()
+            .map { it as TableColumnMenuItem }
+            .forEach { it.isSelected = view.table.isColumnShown(it.columnType) }
+    }
+
+    private fun buildUI() {
+        buildRightSide()
+        buildLeftSide()
+    }
+
+    private fun buildRightSide() {
+        rightItems.add(buildRefreshItem())
+        rightItems.add(buildScrollToTopItem())
+        rightItems.add(buildSeparator())
+        rightItems.add(buildCountItem())
+        rightItems.add(buildSeparator())
+        rightItems.add(buildDeleteItem())
+        rightItems.add(buildSeparator())
+        rightItems.add(buildCopyItem())
+        rightItems.add(buildCutItem())
+        rightItems.add(buildPasteItem())
+        rightItems.add(buildSeparator())
+        rightItems.add(buildSearchItem())
+    }
+
+    private fun buildLeftSide() {
+        leftItems.add(buildColumnChooserItem().also { columnChooserItem = it })
+        leftItems.add(buildColumnResetItem())
+        leftItems.add(buildABCChooserItem())
+        leftItems.add(buildDockSelectionItem())
+    }
+
+    private fun buildSearchItem() =
+        buildToolbarItem(FontAwesomeIcon.SEARCH, "record.find") {
+            view.isFindDialogVisible = view.isFindDialogVisible.not()
+        }
+
+    private fun buildCountItem() = Label().apply {
+        padding = Insets(5.0)
+        textProperty().bind(
+            SimpleStringProperty(I18N.getValue("record.book.count"))
+                .concat(StringUtils.SPACE)
+                .concat(view.itemsCountProperty())
+        )
+    }
+
+    private fun buildDeleteItem() =
+        buildToolbarItem(MaterialDesignIcon.DELETE, "record.delete") {
+            view.removeSelectedItems()
+        }.apply {
+            disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
+        }
+
+    private fun buildPasteItem() =
+        buildToolbarItem(MaterialDesignIcon.CONTENT_PASTE, "record.paste") {
+            view.pasteItemsFromClipboard()
+        }.apply {
+            disableProperty().bind(view.clipboardEmptyProperty())
+        }
+
+    private fun buildCopyItem() =
+        buildToolbarItem(MaterialDesignIcon.CONTENT_COPY, "record.copy") {
+            view.copySelectedToClipboard()
+        }.apply {
+            disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
+        }
+
+    private fun buildCutItem() =
+        buildToolbarItem(MaterialDesignIcon.CONTENT_CUT, "record.cut") {
+            view.cutSelectedToClipboard()
+        }.apply {
+            disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
+        }
+
+    private fun buildRefreshItem() =
+        buildToolbarItem(MaterialDesignIcon.REFRESH, "record.toolbar.refresh") { view.refresh() }
+
+
+    private fun buildScrollToTopItem() =
+        buildToolbarItem(MaterialDesignIcon.BORDER_TOP, "record.table.scrolltop") { view.scrollToTop() }
+
+
+    private fun buildColumnChooserItem() =
+        MenuButton(
+            I18N.getValue("record.table.preferred.columns"),
+            FontAwesomeIconView(FontAwesomeIcon.COLUMNS)
+        ).apply {
+            Stream.of(*RecordTable.ColumnType.values())
+                .map(::TableColumnMenuItem)
+                .forEach(this.items::add)
+        }
+
+    private fun buildColumnResetItem() =
+        buildToolbarItem(MaterialDesignIcon.TABLE, "record.table.colreset") {
+            view.table.buildDefaultColumns()
+            columnChooserItem.items.stream()
+                .map { it as TableColumnMenuItem }
+                .forEach { it.isSelected = it.columnType.isDefaultVisible }
+        }
+
+    private fun buildABCChooserItem() =
+        MenuButton(I18N.getValue("record.table.abc")).also { toolbarItem ->
+            ToggleGroup().let { toggleGroup ->
+                I18N.getAvailableCollators().forEach { locale, collatorSupplier ->
+                    toolbarItem.items.add(AbcMenuItem(locale, collatorSupplier, toggleGroup))
+                }
+            }
+        }
+
+    private fun buildDockSelectionItem() =
+        MenuButton(null, MaterialDesignIconView(MaterialDesignIcon.DIVISION)).apply {
+            //TODO: Tooltip
+            Stream.of(*Dock.values())
+                .map(::DockMenuItem)
+                .collect(Collectors.toList())
+                .let(items::addAll)
+            /*view.docks.addListener { _: Observable ->
+                view.docks.forEach { dck ->
+                    items.map { it as DockMenuItem }
+                        .forEach { it.isSelected = it.dock == dck }
+                }
+            }*/
+        }
+
+    private fun buildSeparator() = Separator(Orientation.VERTICAL)
+
+    private fun buildToolbarItem(
+        icon: MaterialDesignIcon,
+        i18nTooltip: String,
+        onClick: EventHandler<ActionEvent>
+    ): Button = buildToolbarItem(MaterialDesignIconView(icon), i18nTooltip, onClick)
+
+    private fun buildToolbarItem(
+        icon: FontAwesomeIcon,
+        i18nTooltip: String,
+        onClick: EventHandler<ActionEvent>
+    ): Button = buildToolbarItem(FontAwesomeIconView(icon), i18nTooltip, onClick)
+
+    private fun buildToolbarItem(
+        graphic: Node,
+        i18nTooltip: String,
+        onClick: EventHandler<ActionEvent>
+    ): Button = Button(null, graphic).apply {
+        onAction = onClick
+        tooltip = Tooltip(I18N.getValue(i18nTooltip))
+    }
+
+    private inner class DockMenuItem(val dock: Dock) :
+        CheckMenuItem(I18N.getValue(dock.i18nKey)) {
+
+        init {
+            graphic = dock.graphic
+            initListener()
+            setBehaviourPolicy()
+        }
+
+        private fun initListener() {
+            view.docks.addListener(ListChangeListener {
+                isSelected = view.docks.contains(dock)
+            })
+        }
+
+        private fun setBehaviourPolicy() {
+            setOnAction {
+                when {
+                    this.isSelected.not() ->
+                        view.docks.setAll(
+                            view.docks.stream()
+                                .filter { it !== dock }
+                                .collect(Collectors.toList())
+                        )
+                    else -> view.docks.add(dock)
+                }
+            }
+        }
+    }
+
+    private inner class TableColumnMenuItem(val columnType: RecordTable.ColumnType) :
+        CheckMenuItem(I18N.getValue(columnType.i18Nkey)) {
+
+        init {
+            setOnAction {
+                when {
+                    this.isSelected.not() -> view.table.removeColumn(columnType)
+                    else -> {
+                        view.table.removeAllColumns()
+                        columnChooserItem.items.stream()
+                            .map { it as TableColumnMenuItem }
+                            .filter(TableColumnMenuItem::isSelected)
+                            .map(TableColumnMenuItem::columnType)
+                            .forEach(view.table::addColumn)
+                    }
+                }
+            }
+        }
+    }
+
+    private inner class AbcMenuItem(
+        val locale: Locale,
+        collatorSupplier: Supplier<Collator>,
+        toggleGroup: ToggleGroup
+    ) : RadioMenuItem(locale.displayLanguage, MaterialDesignIconView(MaterialDesignIcon.TRANSLATE)) {
+        init {
+            this.selectedProperty()
+                .bindBidirectional(SimpleBooleanProperty().apply { bind(abcLocaleProp.isEqualTo(locale)) })
+            this.setOnAction {
+                @Suppress("UNCHECKED_CAST")
+                view.table.setSortingComparator(collatorSupplier.get() as Comparator<String>)
+                abcLocaleProp.set(locale)
+            }
+            setToggleGroup(toggleGroup)
+        }
+    }
+
+
+}
