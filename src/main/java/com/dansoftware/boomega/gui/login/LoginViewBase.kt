@@ -1,10 +1,6 @@
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.appdata.Preferences
-import com.dansoftware.boomega.appdata.logindata.LoginData
 import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import javafx.beans.value.ObservableStringValue
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
@@ -34,10 +30,14 @@ class LoginViewBase(private val controller: LoginBox.Controller) : StackPane() {
         }
         setOnDragDropped { event ->
             if (event.dragboard.hasFiles()) {
-                event.dragboard.files.stream()
+                event.dragboard.files
                     .filter(File::isFile)
                     .map(::DatabaseMeta)
-                    .forEach(controller.databaseTracker::addDatabase)
+                    .toList()
+                    .apply {
+                        forEach(controller.databaseTracker::addDatabase)
+                        lastOrNull()?.let { loginBox.selectedItem = it }
+                    }
             }
         }
     }
