@@ -24,9 +24,6 @@ public class LanguageSegment extends FixedContentTitledSegment {
 
     @Override
     protected @NotNull Node createCenterContent() {
-        return new ImprovedFXMLLoader(
-                new LanguageSegmentController(this.preferences),
-                getClass().getResource("LanguageSegment.fxml"),
-                I18N.getValues()).load();
+        return new LanguageSegmentView(preferences);
     }
 }
