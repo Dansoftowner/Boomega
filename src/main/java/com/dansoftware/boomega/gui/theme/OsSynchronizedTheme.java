@@ -55,6 +55,8 @@ public class OsSynchronizedTheme extends Theme {
 
     @Override
     protected void onThemeDropped() {
+        logger.debug("OsSynchronizedTheme dropped!");
+        logger.debug("Removing os theme listener...");
         osThemeDetector.removeListener(osThemeListener);
     }
 

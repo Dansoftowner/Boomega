@@ -23,9 +23,6 @@ public class ThemeSegment extends FixedContentTitledSegment {
 
     @Override
     protected @NotNull Node createCenterContent() {
-        return new ImprovedFXMLLoader(
-                new ThemeSegmentController(preferences),
-                getClass().getResource("ThemeSegment.fxml"),
-                I18N.getValues()).load();
+        return new ThemeSegmentView(preferences);
     }
 }
