@@ -15,6 +15,7 @@ import com.dansoftware.boomega.instance.ApplicationInstanceService;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
 import com.dansoftware.boomega.launcher.LauncherMode;
 import com.dansoftware.boomega.plugin.PluginClassLoader;
+import com.dansoftware.boomega.plugin.Plugins;
 import com.dansoftware.boomega.update.UpdateSearcher;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -142,8 +143,8 @@ public class Main extends BaseApplication {
     @Init
     private void loadPlugins(@NotNull ActivityLauncher.PostLaunchQueue queue) {
         notifyPreloader("preloader.plugins.load");
-        final PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance();
-        final int readPluginsCount = pluginClassLoader.getReadPluginsCount();
+        Plugins.getInstance().load();
+        int readPluginsCount = Plugins.getInstance().pluginFileCount();
         if (readPluginsCount > 0)
             queue.pushItem((context, databaseMeta) -> {
                 context.showInformationNotification(
