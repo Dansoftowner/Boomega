@@ -14,10 +14,6 @@ public class HungarianLanguagePack extends InternalLanguagePack {
 
     private static final Locale LOCALE = new Locale("hu", "HU");
 
-    static {
-        registerLanguagePack(LOCALE, new HungarianLanguagePack());
-    }
-
     public HungarianLanguagePack() {
         super(LOCALE);
     }

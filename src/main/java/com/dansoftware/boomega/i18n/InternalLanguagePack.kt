@@ -8,7 +8,7 @@ import java.util.*
  *
  * @author Daniel Gyorffy
  */
-abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
+private abstract class InternalLanguagePack(locale: Locale) : LanguagePack(locale) {
 
     companion object {
         private const val VALUES = "com.dansoftware.boomega.i18n.Values"

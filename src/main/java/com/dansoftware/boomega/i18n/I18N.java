@@ -1,6 +1,8 @@
 package com.dansoftware.boomega.i18n;
 
 import com.dansoftware.boomega.plugin.PluginClassLoader;
+import com.dansoftware.boomega.plugin.Plugins;
+import com.dansoftware.boomega.plugin.api.LanguagePlugin;
 import com.dansoftware.boomega.util.ReflectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +22,8 @@ public class I18N {
 
     private static final Logger logger = LoggerFactory.getLogger(I18N.class);
 
+    private static Map<Locale, List<LanguagePack>> loadedLanguagePacks = new LinkedHashMap<>();
+
     /**
      * The backing language-pack
      */
@@ -29,16 +33,26 @@ public class I18N {
         loadPacks();
     }
 
+    private I18N() {
+    }
+
     public static LanguagePack getLanguagePack() {
         return languagePack;
     }
 
     public static Set<Locale> getAvailableLocales() {
-        return LanguagePack.getSupportedLocales();
+        return loadedLanguagePacks.keySet();
     }
 
     public static Map<Locale, Supplier<Collator>> getAvailableCollators() {
-        return LanguagePack.getAvailableCollators();
+        var map = new HashMap<Locale, Supplier<Collator>>();
+        loadedLanguagePacks.forEach((locale, languagePacks) ->
+                languagePacks.stream()
+                        .map(languagePack -> (Supplier<Collator>) languagePack::getABCCollator)
+                        .findFirst()
+                        .ifPresent(collatorSupplier -> map.put(locale, collatorSupplier))
+        );
+        return map;
     }
 
     @NotNull
@@ -66,26 +80,34 @@ public class I18N {
      */
     private static void recognizeLanguagePack() {
         if (languagePack == null || !languagePack.getLocale().equals(Locale.getDefault()))
-            languagePack = LanguagePack.getLanguagePackForLocale(Locale.getDefault()).orElseGet(EnglishLanguagePack::new);
+            languagePack = getLanguagePackForLocale(Locale.getDefault()).orElseGet(EnglishLanguagePack::new);
     }
 
-    /**
-     * Initializes the {@link LanguagePack} classes.
-     */
     private static void loadPacks() {
-        //Collecting LanguagePacks from the core project
-        ReflectionUtils.getSubtypesOf(LanguagePack.class).forEach(ReflectionUtils::initializeClass);
-        initializePluginSubtypes();
+        registerBasePacks();
+        registerPluginPacks();
     }
 
-    private static void initializePluginSubtypes() {
-        try {
-            PluginClassLoader.getInstance().initializeSubtypeClasses(LanguagePack.class);
-        } catch (Throwable t) {
-            logger.error("Couldn't initialize LanguagePack subtypes in from plugins", t);
-        }
+    private static void registerBasePacks() {
+        putPack(Locale.ENGLISH, new EnglishLanguagePack());
+        putPack(new Locale("hu"), new HungarianLanguagePack());
     }
 
-    private I18N() {
+    private static void registerPluginPacks() {
+        logger.debug("Checking plugins for language-packs...");
+        Plugins.getInstance().of(LanguagePlugin.class).stream()
+                .map(LanguagePlugin::getLanguagePack)
+                .peek(pack -> logger.debug("Found LanguagePack for locale '{}'", pack.getLocale()))
+                .forEach(pack -> putPack(pack.getLocale(), pack));
+    }
+
+    private static void putPack(Locale locale, LanguagePack pack) {
+        List<LanguagePack> list = loadedLanguagePacks.getOrDefault(locale, new ArrayList<>());
+        list.add(pack);
+        loadedLanguagePacks.put(locale, list);
+    }
+
+    private static Optional<LanguagePack> getLanguagePackForLocale(Locale locale) {
+         return Optional.ofNullable(loadedLanguagePacks.getOrDefault(locale, new ArrayList<>() {{ add(null); }}).get(0));
     }
 }
