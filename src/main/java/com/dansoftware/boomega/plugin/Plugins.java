@@ -28,12 +28,11 @@ public class Plugins {
     private final List<BoomegaPlugin> plugins = new ArrayList<>();
     private boolean loaded;
 
-    private Plugins() { }
+    private Plugins() {
+    }
 
     /**
      * Loads and instantiates all the plugins found in the plugin-directory.
-     *
-     * @throws AlreadyLoadedException if this method is called more than once
      */
     public synchronized void load() {
         if (!loaded) {
@@ -49,8 +48,7 @@ public class Plugins {
                             .peek(BoomegaPlugin::init)
                             .collect(Collectors.toList())
             );
-        } else {
-            throw new AlreadyLoadedException();
+            loaded = true;
         }
     }
 
@@ -77,13 +75,14 @@ public class Plugins {
      * Searches plugins with the given type.
      *
      * @param classRef the class-reference of the type
-     * @param <P> the type, subtype of the {@link BoomegaPlugin}
+     * @param <P>      the type, subtype of the {@link BoomegaPlugin}
      * @return the list of plugin objects
      */
     @SuppressWarnings("unchecked")
     public <P extends BoomegaPlugin> List<P> of(Class<P> classRef) {
+        load();
         return plugins.stream()
-                .filter(it -> it.getClass().isAssignableFrom(classRef))
+                .filter(it -> classRef.isAssignableFrom(it.getClass()))
                 .map(it -> (P) it)
                 .collect(Collectors.toList());
     }
@@ -104,8 +103,5 @@ public class Plugins {
 
     public static Plugins getInstance() {
         return INSTANCE;
-    }
-
-    public static class AlreadyLoadedException extends RuntimeException {
     }
 }
