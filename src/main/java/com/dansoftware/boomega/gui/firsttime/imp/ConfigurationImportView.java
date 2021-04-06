@@ -24,9 +24,7 @@ public class ConfigurationImportView extends Workbench implements ContextTransfo
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationImportView.class);
 
-    private final ConfigurationImportController controller;
-    private final Node content;
-
+    private final ConfigurationImportViewContent content;
     private final Context asContext;
 
     /**
@@ -35,19 +33,9 @@ public class ConfigurationImportView extends Workbench implements ContextTransfo
      * @param target the object to read the configurations to
      */
     public ConfigurationImportView(@NotNull Preferences target) {
-        super();
         this.asContext = Context.from(this);
-        this.controller = new ConfigurationImportController(asContext, target);
-        this.content = loadContent(controller);
+        this.content = new ConfigurationImportViewContent(asContext, target);
         this.getModules().add(this.new SingleModule());
-    }
-
-    private Node loadContent(Initializable controller) {
-        return new ImprovedFXMLLoader(
-                controller,
-                getClass().getResource("ConfigurationImport.fxml"),
-                I18N.getValues()
-        ).load();
     }
 
     /**
@@ -56,7 +44,7 @@ public class ConfigurationImportView extends Workbench implements ContextTransfo
      * @return {@code true} if external settings are imported; {@code false} otherwise.
      */
     public boolean externalSettingsImported() {
-        return controller.isImported();
+        return content.isImported();
     }
 
     @Override
