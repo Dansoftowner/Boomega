@@ -58,15 +58,6 @@ repositories {
     }
 }
 
-processResources {
-
-    //TODO: DO NOT ACCEPT THESE RESOURCES IN THE JAVA MODULE
-    //we accept the .fxml resources from the java source set
-    from('src/main/java') {
-        include '**/*.fxml'
-    }
-}
-
 configurations {
     //for holding the dependencies
     libraries
