@@ -27,11 +27,11 @@
 * Multiple databases
 * Quick file launch support  
 * Importing from Google Books
+* Dark/Light theme, modern UI
+* Localization into multiple languages
+* Plugin support
 * Easy transportation between databases
 * Multiple record-types like "Book" and "Magazine"
-* Localization into multiple languages
-* Dark/Light theme, modern UI
-* Language/theme plugin support 
 * Customizable key-bindings
 * ...and more!
 
