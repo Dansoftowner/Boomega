@@ -36,7 +36,7 @@ object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls()
         PluginDirectory.clear()
     }
 
-    fun getAllClasses(): List<Class<*>> = LinkedList<Class<*>>().run {
+    fun listAllClasses(): List<Class<*>> = LinkedList<Class<*>>().run {
         Arrays.stream(urLs)
             .map(URL::toExternalForm)
             .peek { logger.debug("Plugin file found: {}", it)}

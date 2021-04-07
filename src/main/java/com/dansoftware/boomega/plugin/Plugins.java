@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.plugin;
 
 import com.dansoftware.boomega.plugin.api.BoomegaPlugin;
-import com.dansoftware.boomega.plugin.api.RegisteredPlugin;
+import com.dansoftware.boomega.plugin.api.ActivePlugin;
 import com.dansoftware.boomega.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +32,15 @@ public class Plugins {
     }
 
     /**
-     * Loads and instantiates all the plugins found in the plugin-directory.
+     * Loads and instantiates all the plugin classes found in the plugin-directory.
      */
     public synchronized void load() {
         if (!loaded) {
             plugins.addAll(
-                    PluginClassLoader.getInstance().getAllClasses().stream()
-                            .filter(classRef -> classRef.getAnnotation(RegisteredPlugin.class) != null)
+                    PluginClassLoader.getInstance().listAllClasses().stream()
                             .filter(BoomegaPlugin.class::isAssignableFrom)
                             .filter(classRef -> !Modifier.isAbstract(classRef.getModifiers()))
+                            .filter(classRef -> classRef.getAnnotation(ActivePlugin.class) != null)
                             .peek(classRef -> logger.debug("Found plugin class: {}", classRef.getName()))
                             .map(ReflectionUtils::tryConstructObject)
                             .filter(Objects::nonNull)
