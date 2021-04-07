@@ -23,13 +23,6 @@ import java.util.List;
  */
 public class LightTheme extends Theme {
 
-    private static final ThemeMeta<LightTheme> THEME_META =
-            new ThemeMeta<>(LightTheme.class, () -> I18N.getValue("theme.light"), InternalThemeDesigner.INSTANCE);
-
-    static {
-        registerTheme(THEME_META);
-    }
-
     private final ThemeApplier applier;
 
     public LightTheme() {
@@ -63,4 +56,7 @@ public class LightTheme extends Theme {
         );
     }
 
+    public static ThemeMeta<LightTheme> getMeta() {
+        return new ThemeMeta<>(LightTheme.class, () -> I18N.getValue("theme.light"), InternalThemeDesigner.INSTANCE);
+    }
 }

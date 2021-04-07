@@ -1,9 +1,11 @@
 package com.dansoftware.boomega.gui.theme;
 
 import com.dansoftware.boomega.gui.theme.applier.ThemeApplier;
+import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.plugin.PluginClassLoader;
+import com.dansoftware.boomega.plugin.Plugins;
+import com.dansoftware.boomega.plugin.api.ThemePlugin;
 import com.dansoftware.boomega.util.IdentifiableWeakReference;
-import com.dansoftware.boomega.util.ReflectionUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Parent;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A Theme can change the appearance of GUI elements.
@@ -42,10 +45,6 @@ import java.util.*;
  * Every time when a new theme is set as default every registered {@link Themeable} object will be notified.
  * <i><b>Kind of an Observable-Observer pattern</b></i>
  *
- * <br>
- * The {@link Theme#applyDefault(Scene)}, {@link Theme#applyDefault(Parent)} methods can be used for applying the default
- * theme on the particular component.
- *
  * @author Daniel Gyorffy
  * @see ThemeApplier
  * @see Themeable
@@ -66,35 +65,7 @@ public abstract class Theme {
     private static final ObjectProperty<Theme> defaultTheme = new SimpleObjectProperty<>();
 
     static {
-        loadThemes();
-    }
-
-    private static void loadThemes() {
-        //collecting Themes from the core project
-        ReflectionUtils.getSubtypesOf(Theme.class).forEach(ReflectionUtils::initializeClass);
-        //collecting Themes from plugins
-        initPluginThemes();
-    }
-
-    private static void initPluginThemes() {
-        try {
-            PluginClassLoader.getInstance().initializeSubtypeClasses(Theme.class);
-        } catch (Throwable t) {
-            logger.error("Couldn't initialize Theme subtypes from plugins", t);
-        }
-    }
-
-    protected static void registerTheme(@NotNull ThemeMeta<? extends Theme> themeMeta) {
-        Objects.requireNonNull(themeMeta);
-        REGISTERED_THEMES.put(themeMeta.getThemeClass(), themeMeta);
-    }
-
-    public static Set<Class<? extends Theme>> getAvailableThemes() {
-        return REGISTERED_THEMES.keySet();
-    }
-
-    public static Collection<ThemeMeta<? extends Theme>> getAvailableThemesData() {
-        return REGISTERED_THEMES.values();
+        registerThemes();
     }
 
     protected Theme() {
@@ -136,6 +107,33 @@ public abstract class Theme {
         ThemeApplier applier = getApplier();
         applier.applyBack(parent);
         applier.apply(parent);
+    }
+
+    private static void registerThemes() {
+        registerBaseThemes();
+        registerPluginThemes();
+    }
+
+    private static void registerBaseThemes() {
+        REGISTERED_THEMES.put(DarkTheme.class, DarkTheme.getMeta());
+        REGISTERED_THEMES.put(LightTheme.class, LightTheme.getMeta());
+        REGISTERED_THEMES.put(OsSynchronizedTheme.class, OsSynchronizedTheme.getMeta());
+    }
+
+    private static void registerPluginThemes() {
+        logger.debug("Checking plugins for themes...");
+        Plugins.getInstance().of(ThemePlugin.class).stream()
+                .map(ThemePlugin::getThemeMeta)
+                .peek(it -> logger.debug("Found theme: '{}'", it.getThemeClass()))
+                .forEach(it -> REGISTERED_THEMES.put(it.getThemeClass(), it));
+    }
+
+    public static Set<Class<? extends Theme>> getAvailableThemes() {
+        return REGISTERED_THEMES.keySet();
+    }
+
+    public static Collection<ThemeMeta<? extends Theme>> getAvailableThemesData() {
+        return REGISTERED_THEMES.values().stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     public static synchronized void registerThemeable(@NotNull Themeable themeable) {
@@ -180,14 +178,6 @@ public abstract class Theme {
             defaultTheme.set(DefaultThemeFactory.INSTANCE.get());
         }
         return defaultTheme.get();
-    }
-
-    public static void applyDefault(Scene scene) {
-        getDefault().apply(scene);
-    }
-
-    public static void applyDefault(Parent parent) {
-        getDefault().apply(parent);
     }
 
     public static Theme empty() {

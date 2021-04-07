@@ -20,13 +20,6 @@ public class OsSynchronizedTheme extends Theme {
 
     private static final Logger logger = LoggerFactory.getLogger(OsSynchronizedTheme.class);
 
-    private static final ThemeMeta<OsSynchronizedTheme> THEME_META =
-            new ThemeMeta<>(OsSynchronizedTheme.class, () -> I18N.getValue("theme.sync"), InternalThemeDesigner.INSTANCE);
-
-    static {
-        registerTheme(THEME_META);
-    }
-
     private final Consumer<Boolean> osThemeListener;
 
     private final OsThemeDetector osThemeDetector;
@@ -60,6 +53,9 @@ public class OsSynchronizedTheme extends Theme {
         osThemeDetector.removeListener(osThemeListener);
     }
 
+    public static ThemeMeta<OsSynchronizedTheme> getMeta() {
+        return new ThemeMeta<>(OsSynchronizedTheme.class, () -> I18N.getValue("theme.sync"), InternalThemeDesigner.INSTANCE);
+    }
 
     private static final class SyncFunction implements Consumer<Boolean> {
 

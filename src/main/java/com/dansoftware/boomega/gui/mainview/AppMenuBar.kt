@@ -255,7 +255,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             private fun buildItems() {
                 val toggleGroup = ToggleGroup()
                 Theme.getAvailableThemesData().forEach { themeMeta ->
-                    this.menuItem(RadioMenuItem(themeMeta.displayNameSupplier.get()).also {
+                    this.menuItem(RadioMenuItem(themeMeta.displayName).also {
                         it.toggleGroup = toggleGroup
                         it.userData = themeMeta.themeClass
                         it.isSelected = Theme.getDefault().javaClass == themeMeta.themeClass

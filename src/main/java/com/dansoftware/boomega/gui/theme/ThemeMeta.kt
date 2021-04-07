@@ -12,6 +12,9 @@ data class ThemeMeta<T : Theme>(
     val displayNameSupplier: Supplier<String>,
     val designer: ThemeDesigner
 ) {
+    val displayName: String
+        get() = displayNameSupplier.get()
+
     init {
         Objects.requireNonNull(themeClass)
         Objects.requireNonNull(designer)

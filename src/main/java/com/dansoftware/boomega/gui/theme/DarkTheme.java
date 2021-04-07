@@ -22,13 +22,6 @@ import java.util.List;
  */
 public class DarkTheme extends Theme {
 
-    private static final ThemeMeta<DarkTheme> THEME_META =
-            new ThemeMeta<>(DarkTheme.class, () -> I18N.getValue("theme.dark"), InternalThemeDesigner.INSTANCE);
-
-    static {
-        registerTheme(THEME_META);
-    }
-
     private final ThemeApplier applier;
 
     public DarkTheme() {
@@ -59,5 +52,9 @@ public class DarkTheme extends Theme {
                 "/com/dansoftware/boomega/gui/theme/css/dark/records-view-dark.css",
                 "/com/dansoftware/boomega/gui/theme/css/dark/preferences-dark.css"
         );
+    }
+
+    public static ThemeMeta<DarkTheme> getMeta() {
+        return new ThemeMeta<>(DarkTheme.class, () -> I18N.getValue("theme.dark"), InternalThemeDesigner.INSTANCE);
     }
 }
