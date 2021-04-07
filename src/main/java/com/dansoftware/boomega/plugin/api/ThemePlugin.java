@@ -12,6 +12,4 @@ import org.jetbrains.annotations.NotNull;
 public interface ThemePlugin extends BoomegaPlugin {
     @NotNull
     ThemeMeta<? extends Theme> getThemeMeta();
-    @NotNull
-    Theme getTheme();
 }
