@@ -69,6 +69,7 @@ configurations {
 test {
     useJUnitPlatform()
 }
+
 dependencies {
     //Kotlin
     libraries "org.jetbrains.kotlin:kotlin-stdlib"
@@ -78,8 +79,9 @@ dependencies {
     libraries group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     libraries group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
 
-    //JUnit 5
-    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+    //Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
 
     libraries 'com.google.code.gson:gson:2.8.6'
     libraries 'org.jetbrains:annotations:20.1.0'
