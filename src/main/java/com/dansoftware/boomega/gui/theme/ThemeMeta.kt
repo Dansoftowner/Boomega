@@ -24,4 +24,7 @@ data class ThemeMeta<T : Theme>(
 /**
  * Represents the person or company who created a particular [Theme] implementation
  */
-open class ThemeDesigner(val firstName: String, val lastName: String = StringUtils.EMPTY)
+open class ThemeDesigner(val name: String) {
+    @Deprecated("Use the one-arg constructor instead")
+    constructor(firstname: String, lastname: String) : this("$firstname $lastname")
+}
