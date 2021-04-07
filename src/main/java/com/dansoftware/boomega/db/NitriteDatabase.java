@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,15 +37,21 @@ public class NitriteDatabase implements Database {
     private final DatabaseMeta databaseMeta;
     private final Nitrite nitriteClient;
 
+    /**
+     * Creates a database with a custom {@link Nitrite} object.
+     */
+    private NitriteDatabase(Nitrite client, DatabaseMeta databaseMeta) {
+        this.databaseMeta = databaseMeta;
+        this.nitriteClient = client;
+    }
+
     public NitriteDatabase(@NotNull DatabaseMeta databaseMeta,
                            @NotNull Credentials credentials)
             throws SecurityException, NitriteIOException {
-        Objects.requireNonNull(credentials, "The Credentials must not be null!");
-        this.nitriteClient = init(databaseMeta, credentials);
-        this.databaseMeta = databaseMeta;
+        this(init(databaseMeta, Objects.requireNonNull(credentials, "The Credentials must not be null!")), databaseMeta);
     }
 
-    private Nitrite init(@NotNull DatabaseMeta databaseMeta,
+    private static Nitrite init(@NotNull DatabaseMeta databaseMeta,
                          @NotNull Credentials credentials)
             throws SecurityException, NitriteIOException {
         String username = credentials.getUsername();
@@ -112,6 +119,15 @@ public class NitriteDatabase implements Database {
     private ObjectRepository<Record> getRecordRepository() {
         logger.debug("Getting record object repository...");
         return nitriteClient.getRepository(REPOSITORY_KEY, Record.class);
+    }
+
+    /**
+     * Creates a {@link NitriteDatabase} object
+     * @param client
+     * @return
+     */
+    public static NitriteDatabase of(Nitrite client) {
+        return new NitriteDatabase(client, null);
     }
 
     public static DatabaseAuthenticator getAuthenticator() {
