@@ -75,9 +75,9 @@ dependencies {
     libraries "org.jetbrains.kotlin:kotlin-stdlib"
 
     //logging
-    libraries group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-    libraries group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    libraries group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    libraries 'org.slf4j:slf4j-api:1.7.30'
+    libraries 'ch.qos.logback:logback-classic:1.2.3'
+    libraries 'ch.qos.logback:logback-core:1.2.3'
 
     //Testing
     testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
