@@ -6,6 +6,7 @@
 <p align="center">
     <img align="center" alt="License" src="https://img.shields.io/github/license/DansoftOwner/Boomega">
     <img align="center" alt="Issues" src="https://img.shields.io/github/issues/DansoftOwner/Boomega">
+    <img align="center" alt="Last commit" src="https://img.shields.io/github/last-commit/Dansoftowner/Boomega">
 </p>
 
 <h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
@@ -40,6 +41,7 @@
 ![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
 ![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)
 ![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)
+![GitHub Release Date](https://img.shields.io/github/release-date/Dansoftowner/Boomega)
 
 ### Platform support
 |                    | Windows           | Linux   | MacOS
@@ -59,6 +61,8 @@ TODO: adding website/docs link
 The detailed documentation is available [here]().
 
 ## Source code
+![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)
+![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)
 ![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)
 ![Source code](https://img.shields.io/badge/languages-java%20%7C%20kotlin-orange)
 ![Gui](https://img.shields.io/badge/gui-javafx-blue)
