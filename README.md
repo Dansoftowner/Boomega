@@ -40,7 +40,7 @@
 ## Download
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)]()
 [![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)](https://github.com/Dansoftowner/Boomega/releases)
-[![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)]()
+[![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 [![GitHub Release Date](https://img.shields.io/github/release-date/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 
 ### Platform support
@@ -65,7 +65,7 @@ The detailed documentation is available [here]().
 [![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)]()
 [![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)]()
 [![Languages](https://img.shields.io/badge/languages-java%20%7C%20kotlin-orange)]()
-[![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://www.openjfx.io)
+[![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 
 The repo has two important branches:
 * `master` - for stable versions
