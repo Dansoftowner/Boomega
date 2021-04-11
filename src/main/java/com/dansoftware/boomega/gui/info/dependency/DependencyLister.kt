@@ -129,6 +129,11 @@ object DependencyLister {
             LicenseInfo("EPL v1.0 and LGPL 2.1", "http://logback.qos.ch/license.html")
         ),
         DependencyInfo(
+            "MarkdownEditorControlFX",
+            "https://github.com/Dansoftowner/MarkdownEditorControlFX",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
             "MDFX",
             "https://github.com/JPro-one/markdown-javafx-renderer",
             LicenseInfo.apache20License()

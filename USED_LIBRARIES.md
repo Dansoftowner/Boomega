@@ -90,6 +90,10 @@
         <td><a href="http://logback.qos.ch/license.html">EPL v1.0 and LGPL 2.1</a></td>
     </tr>
     <tr>
+        <td><a href="https://github.com/Dansoftowner/MarkdownEditorControlFX">MarkdownEditorControlFX</a></td>
+        <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
+    </tr>
+    <tr>
         <td><a href="https://github.com/JPro-one/markdown-javafx-renderer">MDFX</a></td>
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
