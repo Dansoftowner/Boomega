@@ -5,6 +5,7 @@ import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.util.SystemBrowser
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.mdeditor.MarkdownEditorControl
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -94,6 +95,7 @@ class NotesEditor(
                 observable.removeListener(this)
             }
         })
+        setOnLinkClicked { SystemBrowser.browse(it) }
     }
 
     private fun buildSaveButton() = Button().apply {
