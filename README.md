@@ -67,19 +67,19 @@ The detailed documentation is available [here]().
 [![Languages](https://img.shields.io/badge/languages-java%20%7C%20kotlin-orange)]()
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 
-The repo has two important branches:
-* `master` - for stable versions
-* `dev` - for developing the app further
-
-The code is written in `Java` and `Kotlin` mixed.
-The GUI toolkit used is `JavaFX`.<br>
-The app targets `Java 11+` but the code is `unmodularized`.<br>
-The build tool used for this project is `Gradle`.
-
-The recommended IDE is `IntelliJ Idea`.
+* The repo has two important branches:
+    * `master` - for stable versions
+    * `dev` - for developing the app further
+* The code is written in `Java` and `Kotlin` mixed.
+* The GUI toolkit used is [JavaFX](https://openjfx.io/)
+* The app targets `Java 11+` 
+* The code is `unmodularized`
+* The build tool used for this project is `Gradle`
 
 ### Build requirements
 * JDK 11+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended) 
+
+The recommended IDE for building this project is `IntelliJ Idea`. 
 
 ## Used libraries
 * [Jump to list](USED_LIBRARIES.md)
