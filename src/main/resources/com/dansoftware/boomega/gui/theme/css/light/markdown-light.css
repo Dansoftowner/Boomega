@@ -1,0 +1,79 @@
+/**********************************************************************
+ * Preview styles
+ **********************************************************************
+*/
+
+/* The MDFXNode styles */
+
+* {
+    -mdfx-font-color: #3b3b3b;
+    -mdfx-border-color-1: #888;
+
+    -mdfx-bg-color-1: #ccc;
+    -mdfx-bg-color-2: #ddd;
+    -mdfx-bg-color-3: #eee;
+
+    -mdfx-link-color: blue;
+}
+
+.markdown-italic {
+    -fx-font-style: italic;
+}
+.markdown-bold {
+    -fx-font-weight: bold;
+}
+
+.markdown-text {
+    -fx-font-family: "Jetbrains Mono";
+}
+
+.markdown-link-hover {
+    -fx-underline: true;
+}
+
+.markdown-strikethrough {
+    -fx-strikethrough: true;
+}
+
+.markdown-preview-area .mdfx-node {
+    -fx-padding: 5;
+}
+
+/**********************************************************************
+ * Editor styles
+ **********************************************************************
+*/
+
+.markdown-edit-area .code-area {
+    -fx-background-color: #f5f3f3;
+    -fx-padding: 5;
+}
+
+.markdown-edit-area * {
+    -fx-highlight-fill: #4370c6;
+}
+
+.markdown-edit-area .caret {
+    -fx-stroke: #222222;
+}
+
+/* https://github.com/FXMisc/RichTextFX/issues/737 */
+
+.markdown-edit-area .styled-text-area .text {
+    -fx-font-family: "Jetbrains Mono";
+    -fx-font-size: 15px;
+    -fx-fill: #101010;
+}
+
+/**********************************************************************
+ * Toolbar styles
+ **********************************************************************
+*/
+
+.markdown-editor-toolbar .toggle-button, .markdown-editor-toolbar .button {
+    -fx-padding: 1;
+}
+
+.markdown-editor-toolbar .toggle-button > .glyph-icon, .markdown-editor-toolbar .button > .glyph-icon {
+    -fx-fill: black;
+}

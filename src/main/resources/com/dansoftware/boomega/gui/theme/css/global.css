@@ -1,6 +1,113 @@
 @font-face {
     src: url('/com/dansoftware/boomega/font/JetBrainsMono-Bold.ttf');
 }
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-BoldItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-ExtraBold.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-ExtraBoldItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-ExtraLight.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-ExtraLightItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-Italic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-Light.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-LightItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-Medium.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-MediumItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-Regular.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-Thin.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMono-ThinItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-Bold.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-BoldItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-ExtraBold.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-ExtraBoldItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-ExtraLight.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-ExtraLightItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-Italic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-Light.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-LightItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-Medium.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-MediumItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-Regular.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-Thin.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/font/JetBrainsMonoNL-ThinItalic.ttf');
+}
 
 .medium-font {
     -fx-font-size: 16px;

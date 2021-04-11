@@ -52,7 +52,8 @@ public class LightTheme extends Theme {
                 "/com/dansoftware/boomega/gui/theme/css/light/record-add-form-light.css",
                 "/com/dansoftware/boomega/gui/theme/css/light/dock-system-light.css",
                 "/com/dansoftware/boomega/gui/theme/css/light/records-view-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/preferences-light.css"
+                "/com/dansoftware/boomega/gui/theme/css/light/preferences-light.css",
+                "/com/dansoftware/boomega/gui/theme/css/light/markdown-light.css"
         );
     }
 

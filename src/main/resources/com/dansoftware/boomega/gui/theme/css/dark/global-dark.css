@@ -7,16 +7,6 @@
     -fx-background-color: red;
 }
 
-/** MDFXNode */
-* {
-    -mdfx-font-color: white;
-    -mdfx-border-color-1: #ffffff;
-
-    -mdfx-bg-color-1: #ccc;
-    -mdfx-bg-color-2: #ddd;
-    -mdfx-bg-color-3: #eee;
-}
-
 .tab-pane .glyph-icon {
     -fx-fill: #e0e0e0;
 }
