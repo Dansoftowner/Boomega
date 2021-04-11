@@ -113,6 +113,7 @@ dependencies {
     libraries 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
     libraries 'de.jensd:fontawesomefx-commons:11.0'
     libraries 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
+    libraries 'de.jensd:fontawesomefx-materialdesignfont:1.7.22-11'
     libraries 'io.github.typhon0:AnimateFX:1.2.2'
     libraries "com.sandec:mdfx:0.1.7"
     libraries 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
