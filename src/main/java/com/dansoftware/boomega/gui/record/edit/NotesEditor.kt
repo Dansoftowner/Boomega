@@ -6,14 +6,18 @@ import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.dansoftware.mdeditor.MarkdownEditorControl
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 import javafx.concurrent.Task
 import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.StackPane
-import javafx.scene.web.HTMLEditor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -31,7 +35,8 @@ class NotesEditor(
         }
     }
 
-    private val htmlEditor: HTMLEditor = buildHTMLEditor()
+    private val markdownEditor: MarkdownEditorControl = buildMarkdownEditor()
+    private val changed: BooleanProperty = SimpleBooleanProperty()
 
     init {
         this.styleClass.add("notes-editor")
@@ -66,49 +71,62 @@ class NotesEditor(
         when {
             items.isEmpty() -> setContent(NoSelectionPlaceHolder())
             items.size > 1 -> setContent(MultipleSelectionPlaceHolder())
-            else -> setContent(htmlEditor.also { fillHTMLEditor(it, items[0]) })
+            else -> {
+                setContent(markdownEditor.also { markdownEditor.markdown = items[0].notes })
+                buildChangedBinding()
+            }
         }
     }
 
-    private fun fillHTMLEditor(htmlEditor: HTMLEditor, record: Record) {
-        htmlEditor.htmlText = record.notes
+    private fun buildChangedBinding() {
+        changed.bind(markdownEditor.markdownProperty().isNotEqualTo(markdownEditor.markdown))
     }
 
-    private fun buildHTMLEditor() = HTMLEditor().apply {
+    private fun buildMarkdownEditor() = MarkdownEditorControl().apply {
         minHeight = 0.0
-        lookup(".top-toolbar").let { it as ToolBar }.apply {
-            items.add(0, Separator(Orientation.VERTICAL))
-            items.add(0, buildSaveButton())
-        }
+        setToolbarVisible(true)
+        skinProperty().addListener(object : ChangeListener<Skin<*>> {
+            override fun changed(observable: ObservableValue<out Skin<*>>, oldValue: Skin<*>?, newValue: Skin<*>) {
+                lookup(".markdown-editor-toolbar").lookup(".right").let { it as ToolBar }.apply {
+                    items.add(0,Separator(Orientation.VERTICAL))
+                    items.add(0, buildSaveButton())
+                }
+                observable.removeListener(this)
+            }
+        })
     }
 
     private fun buildSaveButton() = Button().apply {
         graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE)
+        disableProperty().bind(changed.not())
         setOnAction { saveChanges() }
     }
 
     private fun saveChanges() {
-        CachedExecutor.submit(object : Task<Unit>() {
+        CachedExecutor.submit(buildSaveAction())
+    }
 
-            init {
-                setOnRunning { showProgress() }
-                setOnFailed {
-                    stopProgress()
-                    logger.error("Failed to save record notes", it.source.exception)
-                    //TODO: error dialog
-                }
-                setOnSucceeded {
-                    stopProgress()
-                }
-            }
+    private fun buildSaveAction() = object : Task<Unit>() {
 
-            override fun call() {
-                items[0].also {
-                    it.notes = htmlEditor.htmlText
-                    database.updateRecord(it)
-                }
+        init {
+            setOnRunning { showProgress() }
+            setOnFailed {
+                stopProgress()
+                logger.error("Failed to save record notes", it.source.exception)
+                //TODO: error dialog
             }
-        })
+            setOnSucceeded {
+                stopProgress()
+                buildChangedBinding()
+            }
+        }
+
+        override fun call() {
+            items[0].also {
+                it.notes = markdownEditor.markdown
+                database.updateRecord(it)
+            }
+        }
     }
 
     private class NoSelectionPlaceHolder : StackPane() {
