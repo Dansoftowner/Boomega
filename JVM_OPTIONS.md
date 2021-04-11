@@ -17,7 +17,7 @@ These are specified in the `build.gradle` script in the compiler tasks.
 
 ## Runtime JVM options
 
-These options should be specified if the JVM is version `16` or later.
+These options should be specified if the java has version `16` or later.
 ```
 --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED 
 --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
