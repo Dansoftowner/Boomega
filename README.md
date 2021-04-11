@@ -72,8 +72,7 @@ The detailed documentation is available [here]().
     * `dev` - for developing the app further
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
-* The app targets `Java 11+` 
-* The code is `unmodularized`
+* The app targets `Java 11+` but the code is `unmodularized`
 * The build tool used for this project is `Gradle`
 
 ### Build requirements
