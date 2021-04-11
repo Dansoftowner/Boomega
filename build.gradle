@@ -118,6 +118,7 @@ dependencies {
     libraries 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     libraries 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     libraries "de.jangassen:nsmenufx:3.1.0"
+    libraries 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.3'
 
     //libraries from the local file system
     libraries fileTree(dir: 'external-libraries', include: '*.jar')
