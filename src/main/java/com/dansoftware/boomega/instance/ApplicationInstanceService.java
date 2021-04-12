@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.instance;
 
-import com.dansoftware.boomega.appdata.Preferences;
-import com.dansoftware.boomega.appdata.logindata.LoginData;
+import com.dansoftware.boomega.config.Preferences;
+import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;

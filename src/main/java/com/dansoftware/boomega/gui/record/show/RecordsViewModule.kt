@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.record.show
 
-import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context

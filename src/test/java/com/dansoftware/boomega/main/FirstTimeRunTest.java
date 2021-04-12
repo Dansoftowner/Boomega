@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.main;
 
-import com.dansoftware.boomega.appdata.ConfigFile;
+import com.dansoftware.boomega.config.ConfigFile;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;

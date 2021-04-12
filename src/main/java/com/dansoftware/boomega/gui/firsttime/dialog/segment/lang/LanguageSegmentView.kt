@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.firsttime.dialog.segment.lang
 
-import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.i18n.I18N
 import javafx.geometry.Insets
 import javafx.scene.control.ListView

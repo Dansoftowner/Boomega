@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.mainview;
 
-import com.dansoftware.boomega.appdata.Preferences;
+import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.context.Context;

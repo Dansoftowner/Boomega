@@ -1,8 +1,8 @@
 package com.dansoftware.boomega.gui.firsttime.imp
 
-import com.dansoftware.boomega.appdata.Preferences
-import com.dansoftware.boomega.appdata.PreferencesImporter
-import com.dansoftware.boomega.appdata.PreferencesImporter.InvalidZipContentException
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.config.PreferencesImporter
+import com.dansoftware.boomega.config.PreferencesImporter.InvalidZipContentException
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon

@@ -1,13 +1,10 @@
 package com.dansoftware.boomega.gui.firsttime.imp;
 
-import com.dansoftware.boomega.appdata.Preferences;
+import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
-import com.dansoftware.boomega.gui.util.ImprovedFXMLLoader;
-import com.dansoftware.boomega.i18n.I18N;
 import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.model.WorkbenchModule;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import org.apache.commons.lang3.StringUtils;

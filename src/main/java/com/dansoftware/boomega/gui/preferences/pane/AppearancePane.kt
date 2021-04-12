@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.preferences.pane
 
-import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.ThemeMeta
 import com.dansoftware.boomega.gui.window.BaseWindow

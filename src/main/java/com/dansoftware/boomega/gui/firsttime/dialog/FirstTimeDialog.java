@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.firsttime.dialog;
 
-import com.dansoftware.boomega.appdata.Preferences;
+import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
 import com.dansoftware.boomega.i18n.I18N;

@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.main;
 
-import com.dansoftware.boomega.appdata.Preferences;
+import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.gui.theme.LightTheme;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.util.ReflectionUtils;

@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.appdata.keybinding
+package com.dansoftware.boomega.config.keybinding
 
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import com.dansoftware.boomega.gui.keybinding.KeyBindings

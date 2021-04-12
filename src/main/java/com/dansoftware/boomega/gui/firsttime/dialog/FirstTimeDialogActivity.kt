@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.firsttime.dialog
 
-import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.config.Preferences
 import java.util.*
 
 /**

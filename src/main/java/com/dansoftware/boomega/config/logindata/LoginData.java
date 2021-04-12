@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.appdata.logindata;
+package com.dansoftware.boomega.config.logindata;
 
 import com.dansoftware.boomega.db.Credentials;
 import com.dansoftware.boomega.db.DatabaseMeta;

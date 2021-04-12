@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.appdata.logindata.LoginData
+import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.context.Context

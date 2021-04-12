@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.appdata.theme;
+package com.dansoftware.boomega.config.theme;
 
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.google.gson.*;

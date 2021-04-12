@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.window.BaseWindow
 import javafx.event.EventHandler
@@ -14,7 +14,7 @@ import java.util.*
  *
  *
  *
- * Also, when a user closes the LoginWindow, it will save the [com.dansoftware.boomega.appdata.logindata.LoginData] to the
+ * Also, when a user closes the LoginWindow, it will save the [com.dansoftware.boomega.config.logindata.LoginData] to the
  * configurations.
  */
 private class LoginWindow(private val root: LoginView, private val preferences: Preferences) :

@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.window
 
-import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.theme.Theme

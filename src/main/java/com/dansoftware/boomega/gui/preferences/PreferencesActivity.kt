@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.preferences
 
-import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.config.Preferences
 import javafx.stage.Stage
 import javafx.stage.Window
 

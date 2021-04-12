@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.googlebooks
 
-import com.dansoftware.boomega.appdata.Preferences
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.record.RecordValues

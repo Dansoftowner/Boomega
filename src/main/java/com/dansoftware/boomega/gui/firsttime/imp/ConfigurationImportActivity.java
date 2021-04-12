@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.firsttime.imp;
 
-import com.dansoftware.boomega.appdata.Preferences;
+import com.dansoftware.boomega.config.Preferences;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

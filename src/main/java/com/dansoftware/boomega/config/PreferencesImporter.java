@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.appdata;
+package com.dansoftware.boomega.config;
 
 import org.jetbrains.annotations.NotNull;
 
