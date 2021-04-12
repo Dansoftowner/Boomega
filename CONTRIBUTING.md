@@ -1,5 +1,9 @@
 # Contributing to Boomega
 
+## To do
+You can look at the [issues](https://github.com/Dansoftowner/Boomega/issues) list if you want to fix/add something.
+Also, you can look for `// TODO:` messages in the source code.
+
 ## Writing code
 
 You can use both `Java` and `Kotlin` for writing your code.  
