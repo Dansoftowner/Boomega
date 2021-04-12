@@ -1,9 +1,6 @@
 package com.dansoftware.boomega.config;
 
-import com.dansoftware.boomega.config.source.ConfigSource;
-import com.dansoftware.boomega.config.source.InMemorySource;
-import com.dansoftware.boomega.config.source.JsonFileSource;
-import com.dansoftware.boomega.config.source.JsonSource;
+import com.dansoftware.boomega.config.source.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
@@ -83,7 +80,7 @@ public class Preferences {
     @NotNull
     public static Preferences getPreferences() {
         if (Objects.isNull(defaultPrefs)) {
-            defaultPrefs = new Preferences(new JsonFileSource(ConfigFile.getConfigFile()));
+            defaultPrefs = new Preferences(new DefaultSource());
         }
         return defaultPrefs;
     }
