@@ -62,6 +62,21 @@ public class ConfigFile extends File {
     }
 
     /**
+     * Opens an {@link InputStream} with the file.
+     *
+     * @return the {@link InputStream} that can be used for reading the file
+     * @throws IOException if some I/o exception occurs
+     */
+    public InputStream openStream() throws IOException {
+        if (!determineExists()) create();
+        return new FileInputStream(this);
+    }
+
+    public OutputStream openOutputStream() throws FileNotFoundException {
+        return new FileOutputStream(this);
+    }
+
+    /**
      * Sets the default {@link ConfigFile}
      *
      * @param configFile the ConfigFile object
