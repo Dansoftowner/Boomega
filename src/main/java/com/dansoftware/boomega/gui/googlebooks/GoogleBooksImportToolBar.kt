@@ -1,7 +1,5 @@
 package com.dansoftware.boomega.gui.googlebooks
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.control.TwoSideToolBar
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.SystemBrowser

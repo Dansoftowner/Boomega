@@ -1,10 +1,10 @@
-package com.dansoftware.boomega.appdata;
+package com.dansoftware.boomega.config;
 
 import com.dansoftware.boomega.gui.keybinding.KeyBindings;
-import com.dansoftware.boomega.appdata.keybinding.KeyBindingsAdapter;
-import com.dansoftware.boomega.appdata.logindata.LoginData;
-import com.dansoftware.boomega.appdata.logindata.LoginDataAdapter;
-import com.dansoftware.boomega.appdata.theme.ThemeAdapter;
+import com.dansoftware.boomega.config.keybinding.KeyBindingsAdapter;
+import com.dansoftware.boomega.config.logindata.LoginData;
+import com.dansoftware.boomega.config.logindata.LoginDataAdapter;
+import com.dansoftware.boomega.config.theme.ThemeAdapter;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.util.function.UncaughtSupplier;
 import com.google.gson.*;

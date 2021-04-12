@@ -4,11 +4,8 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
-import javafx.geometry.HPos
 import javafx.geometry.Pos
 import javafx.scene.Node
-import javafx.scene.control.CheckBox
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.StackPane
 import org.controlsfx.control.ToggleSwitch
 
