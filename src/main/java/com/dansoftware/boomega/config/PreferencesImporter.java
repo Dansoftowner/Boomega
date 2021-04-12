@@ -10,6 +10,7 @@ import java.util.zip.ZipInputStream;
 /**
  * @author Daniel Gyorffy
  */
+@Deprecated
 public class PreferencesImporter {
 
     private final Preferences target;

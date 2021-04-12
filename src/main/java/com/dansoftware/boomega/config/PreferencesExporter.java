@@ -9,6 +9,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * @author Daniel Gyorffy
  */
+@Deprecated
 public class PreferencesExporter {
 
     private final Preferences src;
@@ -18,7 +19,7 @@ public class PreferencesExporter {
     }
 
     public void writeToZip(File outputFile) throws IOException {
-        try (var prefInput = new BufferedInputStream(src.openInputStream());
+        /*try (var prefInput = new BufferedInputStream(src.openInputStream());
              var prefOutput = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
 
             ZipEntry zipEntry = new ZipEntry("config.conf");
@@ -30,6 +31,6 @@ public class PreferencesExporter {
             while ((byteCount = prefInput.read(buf)) >= 0) {
                 prefOutput.write(buf, 0, byteCount);
             }
-        }
+        }*/
     }
 }
