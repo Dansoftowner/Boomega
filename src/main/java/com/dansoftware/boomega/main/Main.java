@@ -185,7 +185,7 @@ public class Main extends BaseApplication {
                         });
             });
         }
-        return Preferences.getOnlyOutputPreferences();
+        return Preferences.empty();
     }
 
     /**
