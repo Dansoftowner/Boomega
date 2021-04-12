@@ -1,10 +1,8 @@
 package com.dansoftware.boomega.config;
 
-import com.dansoftware.boomega.gui.keybinding.KeyBindings;
-import com.dansoftware.boomega.config.keybinding.KeyBindingsAdapter;
 import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.config.logindata.LoginDataAdapter;
-import com.dansoftware.boomega.config.theme.ThemeAdapter;
+import com.dansoftware.boomega.gui.theme.config.ThemeAdapter;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.util.function.UncaughtSupplier;
 import com.google.gson.*;
@@ -74,11 +72,7 @@ public class Preferences {
     }
 
     private Gson createGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(Theme.class, new ThemeAdapter())
-                .registerTypeAdapter(LoginData.class, new LoginDataAdapter())
-                .registerTypeAdapter(KeyBindings.class, new KeyBindingsAdapter())
-                .create();
+        return new GsonBuilder().create();
     }
 
     /**
@@ -101,7 +95,8 @@ public class Preferences {
                 return key.defaultValue.get();
             }
 
-            T value = gson.fromJson(jsonElement, key.type);
+            T value = key.adapter == null ? gson.fromJson(jsonElement, key.type) :
+                    key.adapter.deserialize(jsonElement, key.type, null);
             return Objects.isNull(value) ? key.defaultValue.get() : value;
         } catch (RuntimeException e) {
             logger.error("Couldn't parse value for '{}'", key.jsonKey, e);
@@ -215,7 +210,8 @@ public class Preferences {
                               @Nullable T value) {
             JsonElement element = null;
             if (value != null)
-                element = gson.toJsonTree(value, key.type);
+                element = key.adapter == null ? gson.toJsonTree(value, key.type) :
+                        key.adapter.serialize(value, value.getClass(), null);
 
             Preferences.this.jsonStorage.add(key.jsonKey, element);
             return this;
@@ -297,11 +293,23 @@ public class Preferences {
         private final Class<T> type;
         private final Supplier<@NotNull T> defaultValue;
 
+        private ConfigAdapter<T> adapter;
+
         public Key(@NotNull String jsonKey,
                    @NotNull Class<T> type,
                    @NotNull Supplier<@NotNull T> defaultValue) {
             this.jsonKey = jsonKey;
             this.type = type;
+            this.defaultValue = defaultValue;
+        }
+
+        public Key(@NotNull String jsonKey,
+                   @NotNull Class<T> type,
+                   @Nullable ConfigAdapter<T> adapter,
+                   @NotNull Supplier<@NotNull T> defaultValue) {
+            this.jsonKey = jsonKey;
+            this.type = type;
+            this.adapter = adapter;
             this.defaultValue = defaultValue;
         }
 
@@ -317,7 +325,7 @@ public class Preferences {
         /**
          * Key for accessing the login data
          */
-        public static final Key<LoginData> LOGIN_DATA = new Key<>("loginData", LoginData.class, LoginData::new);
+        public static final Key<LoginData> LOGIN_DATA = new Key<>("loginData", LoginData.class, new LoginDataAdapter(), LoginData::new);
 
         /**
          * Key for accessing that the automatic update-searching is turned on or off
@@ -327,6 +335,6 @@ public class Preferences {
         /**
          * Key for accessing the configured theme
          */
-        public static final Key<Theme> THEME = new Key<>("theme", Theme.class, Theme::getDefault);
+        public static final Key<Theme> THEME = new Key<>("theme", Theme.class, new ThemeAdapter(), Theme::getDefault);
     }
 }

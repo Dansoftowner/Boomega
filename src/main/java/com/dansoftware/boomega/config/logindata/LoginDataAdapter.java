@@ -1,10 +1,11 @@
 package com.dansoftware.boomega.config.logindata;
 
+import com.dansoftware.boomega.config.ConfigAdapter;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-public class LoginDataAdapter implements JsonDeserializer<LoginData>, JsonSerializer<LoginData> {
+public class LoginDataAdapter implements ConfigAdapter<LoginData> {
 
     private final LoginDataSerializer serializer;
     private final LoginDataDeserializer deserializer;

@@ -7,7 +7,7 @@ import javafx.scene.input.KeyCombination
 
 object KeyBindings {
 
-    private val CONFIG_KEY = Preferences.Key("default.key.bindings", KeyBindings::class.java) { this }
+    private val CONFIG_KEY = Preferences.Key("default.key.bindings", KeyBindings::class.java, KeyBindingsAdapter()) { this }
 
     val newEntryKeyBinding: KeyBinding =
         KeyBinding(
