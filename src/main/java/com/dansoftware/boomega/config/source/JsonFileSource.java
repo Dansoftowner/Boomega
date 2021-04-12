@@ -50,7 +50,7 @@ public class JsonFileSource extends JsonSource {
     }
 
     private JsonObject readJsonBase(File file) {
-        try (JsonReader jsonReader = new JsonReader(new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)))) {
+        try (JsonReader jsonReader = new JsonReader(new BufferedReader(new InputStreamReader(openStream(file), StandardCharsets.UTF_8)))) {
             jsonReader.setLenient(true);
             JsonObject jsonObject = gson.fromJson(jsonReader, JsonObject.class);
             return jsonObject == null ? new JsonObject() : jsonObject;
@@ -60,9 +60,17 @@ public class JsonFileSource extends JsonSource {
         }
     }
 
+    protected InputStream openStream(File file) throws IOException {
+        return new FileInputStream(file);
+    }
+
+    protected OutputStream openOutputStream(File file) throws FileNotFoundException {
+        return new FileOutputStream(file);
+    }
+
     @Override
     public void commit() throws IOException {
-        try (var writer = new JsonWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)))) {
+        try (var writer = new JsonWriter(new BufferedWriter(new OutputStreamWriter(openOutputStream(file), StandardCharsets.UTF_8)))) {
             gson.toJson(this.jsonBase, writer);
         } catch (JsonIOException e) {
             throw new IOException(e);
