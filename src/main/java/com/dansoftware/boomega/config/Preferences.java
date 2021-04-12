@@ -1,18 +1,18 @@
 package com.dansoftware.boomega.config;
 
-import com.dansoftware.boomega.config.source.*;
+import com.dansoftware.boomega.config.source.ConfigSource;
+import com.dansoftware.boomega.config.source.DefaultSource;
+import com.dansoftware.boomega.config.source.InMemorySource;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -38,7 +38,7 @@ public class Preferences {
 
     private final ConfigSource src;
 
-    private Preferences(@NotNull ConfigSource src) {
+    Preferences(@NotNull ConfigSource src) {
         this.src = src;
     }
 
