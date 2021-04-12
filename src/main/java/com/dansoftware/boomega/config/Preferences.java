@@ -1,9 +1,5 @@
 package com.dansoftware.boomega.config;
 
-import com.dansoftware.boomega.config.logindata.LoginData;
-import com.dansoftware.boomega.config.logindata.LoginDataAdapter;
-import com.dansoftware.boomega.gui.theme.config.ThemeAdapter;
-import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.util.function.UncaughtSupplier;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
@@ -15,10 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * An Preferences object is a bridge between the application and the configuration-source (config-file).
@@ -88,19 +82,19 @@ public class Preferences {
     //
 
     // ------> Methods for reading data
-    public <T> T get(@NotNull Key<T> key) {
+    public <T> T get(@NotNull PreferenceKey<T> key) {
         try {
-            JsonElement jsonElement = this.jsonStorage.get(key.jsonKey);
+            JsonElement jsonElement = this.jsonStorage.get(key.getJsonKey());
             if (Objects.isNull(jsonElement)) {
-                return key.defaultValue.get();
+                return key.getDefaultValue().get();
             }
 
-            T value = key.adapter == null ? gson.fromJson(jsonElement, key.type) :
-                    key.adapter.deserialize(jsonElement, key.type, null);
-            return Objects.isNull(value) ? key.defaultValue.get() : value;
+            T value = key.getAdapter() == null ? gson.fromJson(jsonElement, key.getType()) :
+                    key.getAdapter().deserialize(jsonElement, key.getType(), null);
+            return Objects.isNull(value) ? key.getDefaultValue().get() : value;
         } catch (RuntimeException e) {
-            logger.error("Couldn't parse value for '{}'", key.jsonKey, e);
-            return key.defaultValue.get();
+            logger.error("Couldn't parse value for '{}'", key.getJsonKey(), e);
+            return key.getDefaultValue().get();
         }
     }
 
@@ -193,27 +187,27 @@ public class Preferences {
         private Editor() {
         }
 
-        public <T> Editor modify(Key<T> key, Consumer<T> modifier) {
+        public <T> Editor modify(PreferenceKey<T> key, Consumer<T> modifier) {
             T value = get(key);
             modifier.accept(value);
             set(key, value);
             return this;
         }
 
-        public <T> Editor set(@NotNull Key<T> key,
+        public <T> Editor set(@NotNull PreferenceKey<T> key,
                               @Nullable T value) {
             put(key, value);
             return this;
         }
 
-        public <T> Editor put(@NotNull Key<T> key,
+        public <T> Editor put(@NotNull PreferenceKey<T> key,
                               @Nullable T value) {
             JsonElement element = null;
             if (value != null)
-                element = key.adapter == null ? gson.toJsonTree(value, key.type) :
-                        key.adapter.serialize(value, value.getClass(), null);
+                element = key.getAdapter() == null ? gson.toJsonTree(value, key.getType()) :
+                        key.getAdapter().serialize(value, value.getClass(), null);
 
-            Preferences.this.jsonStorage.add(key.jsonKey, element);
+            Preferences.this.jsonStorage.add(key.getJsonKey(), element);
             return this;
         }
 
@@ -237,8 +231,8 @@ public class Preferences {
             return this;
         }
 
-        public Editor remove(@NotNull Key<?> key) {
-            Preferences.this.jsonStorage.remove(key.jsonKey);
+        public Editor remove(@NotNull PreferenceKey<?> key) {
+            Preferences.this.jsonStorage.remove(key.getJsonKey());
             return this;
         }
 
@@ -281,60 +275,4 @@ public class Preferences {
         }
     }
 
-    /**
-     * A {@link Key} is an accessor to a particular configuration.
-     *
-     * @param <T> the type of the object that can be accessed by the key
-     */
-    public static class Key<T> {
-
-
-        private final String jsonKey;
-        private final Class<T> type;
-        private final Supplier<@NotNull T> defaultValue;
-
-        private ConfigAdapter<T> adapter;
-
-        public Key(@NotNull String jsonKey,
-                   @NotNull Class<T> type,
-                   @NotNull Supplier<@NotNull T> defaultValue) {
-            this.jsonKey = jsonKey;
-            this.type = type;
-            this.defaultValue = defaultValue;
-        }
-
-        public Key(@NotNull String jsonKey,
-                   @NotNull Class<T> type,
-                   @Nullable ConfigAdapter<T> adapter,
-                   @NotNull Supplier<@NotNull T> defaultValue) {
-            this.jsonKey = jsonKey;
-            this.type = type;
-            this.adapter = adapter;
-            this.defaultValue = defaultValue;
-        }
-
-        public static <T> Key<T> createKey(@NotNull Class<T> type, @NotNull Supplier<@NotNull T> defaultValue) {
-            return new Key<>(type.getName(), type, defaultValue);
-        }
-
-        /**
-         * Key for accessing the default locale.
-         */
-        public static final Key<Locale> LOCALE = new Key<>("locale", Locale.class, Locale::getDefault);
-
-        /**
-         * Key for accessing the login data
-         */
-        public static final Key<LoginData> LOGIN_DATA = new Key<>("loginData", LoginData.class, new LoginDataAdapter(), LoginData::new);
-
-        /**
-         * Key for accessing that the automatic update-searching is turned on or off
-         */
-        public static final Key<Boolean> SEARCH_UPDATES = new Key<>("searchUpdates", Boolean.class, () -> Boolean.TRUE);
-
-        /**
-         * Key for accessing the configured theme
-         */
-        public static final Key<Theme> THEME = new Key<>("theme", Theme.class, new ThemeAdapter(), Theme::getDefault);
-    }
 }

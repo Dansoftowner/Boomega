@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.firsttime.dialog.segment.theme
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.theme.DarkTheme
 import com.dansoftware.boomega.gui.theme.LightTheme
@@ -75,7 +76,7 @@ class ThemeSegmentView(private val preferences: Preferences) : StackPane() {
             newItem?.let {
                 if (it is ThemeToggle<*>) {
                     val theme = it.themeFactory()
-                    preferences.editor().put(Preferences.Key.THEME, theme).tryCommit()
+                    preferences.editor().put(PreferenceKey.THEME, theme).tryCommit()
                     Theme.setDefault(theme)
                     logger.debug("Theme selected: {}", Theme.getDefault().javaClass.name)
                 }

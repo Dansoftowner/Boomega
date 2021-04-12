@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.login
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.db.Credentials
@@ -173,7 +174,7 @@ class LoginView(
                             logger.error("Failed to create/open the database", t)
                         }.auth(databaseMeta, credentials)?.let {
                             logger.debug("Signing in was successful; closing the LoginWindow")
-                            preferences.editor().put(Preferences.Key.LOGIN_DATA, loginData)
+                            preferences.editor().put(PreferenceKey.LOGIN_DATA, loginData)
                             databaseLoginListener.onDatabaseOpened(it)
                             context.close()
                         }

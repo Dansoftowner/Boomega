@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.main;
 
+import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.gui.keybinding.KeyBindings;
 import com.dansoftware.boomega.config.logindata.LoginData;
@@ -229,9 +230,9 @@ public class Main extends BaseApplication {
     @Init
     private void applyBaseConfigurations(@NotNull Preferences preferences) {
         notifyPreloader("preloader.lang");
-        Locale.setDefault(preferences.get(Preferences.Key.LOCALE));
+        Locale.setDefault(preferences.get(PreferenceKey.LOCALE));
         notifyPreloader("preloader.theme");
-        Theme.setDefault(preferences.get(Preferences.Key.THEME));
+        Theme.setDefault(preferences.get(PreferenceKey.THEME));
     }
 
     /**
@@ -277,7 +278,7 @@ public class Main extends BaseApplication {
     private LoginData readLoginData(@NotNull Preferences preferences, @NotNull DatabaseTracker databaseTracker) {
         //adding the saved databases from the login-data to DatabaseTracker
         notifyPreloader("preloader.logindata");
-        LoginData loginData = preferences.get(Preferences.Key.LOGIN_DATA);
+        LoginData loginData = preferences.get(PreferenceKey.LOGIN_DATA);
         loginData.getSavedDatabases().forEach(databaseTracker::addDatabase);
         return loginData;
     }
@@ -291,7 +292,7 @@ public class Main extends BaseApplication {
      */
     @Init
     private UpdateSearcher.UpdateSearchResult searchForUpdates(@NotNull Preferences preferences) {
-        if (preferences.get(Preferences.Key.SEARCH_UPDATES)) {
+        if (preferences.get(PreferenceKey.SEARCH_UPDATES)) {
             notifyPreloader("preloader.update.search");
             UpdateSearcher updateSearcher = UpdateSearcher.defaultInstance();
             return updateSearcher.search();
@@ -352,7 +353,7 @@ public class Main extends BaseApplication {
         @Override
         protected void saveLoginData(LoginData loginData) {
             preferences.editor()
-                    .set(Preferences.Key.LOGIN_DATA, loginData)
+                    .set(PreferenceKey.LOGIN_DATA, loginData)
                     .tryCommit();
         }
 

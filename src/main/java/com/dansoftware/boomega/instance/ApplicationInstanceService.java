@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.instance;
 
+import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.db.DatabaseMeta;
@@ -142,7 +143,7 @@ public class ApplicationInstanceService implements MessageHandler {
         private LoginData buildLoginData() {
             //removing all already opened databases from the LoginData
             Set<DatabaseMeta> databaseUsing = DatabaseTracker.getGlobal().getUsingDatabases();
-            LoginData loginData = getPreferences().get(Preferences.Key.LOGIN_DATA);
+            LoginData loginData = getPreferences().get(PreferenceKey.LOGIN_DATA);
             loginData.getSavedDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);
             loginData.setAutoLogin(false);
@@ -158,7 +159,7 @@ public class ApplicationInstanceService implements MessageHandler {
         protected void saveLoginData(LoginData loginData) {
             getPreferences()
                     .editor()
-                    .put(Preferences.Key.LOGIN_DATA, loginData)
+                    .put(PreferenceKey.LOGIN_DATA, loginData)
                     .tryCommit();
         }
 

@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.keybinding
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCodeCombination
@@ -7,7 +8,11 @@ import javafx.scene.input.KeyCombination
 
 object KeyBindings {
 
-    private val CONFIG_KEY = Preferences.Key("default.key.bindings", KeyBindings::class.java, KeyBindingsAdapter()) { this }
+    private val CONFIG_KEY = PreferenceKey(
+        "default.key.bindings",
+        KeyBindings::class.java,
+        KeyBindingsAdapter()
+    ) { this }
 
     val newEntryKeyBinding: KeyBinding =
         KeyBinding(

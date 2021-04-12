@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.pluginmngr;
 
+import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.main.PropertiesResponsible;
@@ -11,7 +12,7 @@ public class PluginManagerTest extends Application {
 
     static {
         PropertiesResponsible.setupSystemProperties();
-        Theme.setDefault(Preferences.getPreferences().get(Preferences.Key.THEME));
+        Theme.setDefault(Preferences.getPreferences().get(PreferenceKey.THEME));
     }
 
     public static void main(String[] args) {

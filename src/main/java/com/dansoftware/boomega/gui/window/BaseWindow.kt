@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.window
 
-import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.theme.Theme
@@ -267,7 +267,10 @@ abstract class BaseWindow : Stage, Themeable {
         private val logger: Logger = LoggerFactory.getLogger(BaseWindow::class.java)
 
         @JvmField
-        val GLOBAL_OPACITY_CONFIG_KEY = Preferences.Key("basewindow.global.opacity", Double::class.java) { 1.0 }
+        val GLOBAL_OPACITY_CONFIG_KEY = PreferenceKey(
+            "basewindow.global.opacity",
+            Double::class.java
+        ) { 1.0 }
         @JvmField
         val globalOpacity: DoubleProperty = SimpleDoubleProperty(1.0)
 

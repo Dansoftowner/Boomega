@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.record.show
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
@@ -226,20 +227,24 @@ class RecordsView(
         private val logger = LoggerFactory.getLogger(RecordsView::class.java)
 
         private val colConfigKey =
-            Preferences.Key(
+            PreferenceKey(
                 "books.view.table.columns",
                 RecordsViewBase.TableColumnsInfo::class.java,
                 RecordsViewBase.TableColumnsInfo::byDefault
             )
 
         private val docksConfigKey =
-            Preferences.Key(
+            PreferenceKey(
                 "books.view.dock.info",
                 RecordsViewBase.DockInfo::class.java,
                 RecordsViewBase.DockInfo::defaultInfo
             )
 
         private val abcConfigKey =
-            Preferences.Key("books.view.module.table.abcsort", Locale::class.java, Locale::getDefault)
+            PreferenceKey(
+                "books.view.module.table.abcsort",
+                Locale::class.java,
+                Locale::getDefault
+            )
     }
 }

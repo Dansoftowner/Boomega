@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.preferences.pane
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -21,9 +22,9 @@ class UpdatePane(preferences: Preferences): PreferencesPane(preferences) {
 
         private fun initEntries() {
             ToggleSwitch().apply {
-                isSelected = preferences.get(Preferences.Key.SEARCH_UPDATES)
+                isSelected = preferences.get(PreferenceKey.SEARCH_UPDATES)
                 selectedProperty().addListener { _, _, selected ->
-                    preferences.editor().put(Preferences.Key.SEARCH_UPDATES, selected)
+                    preferences.editor().put(PreferenceKey.SEARCH_UPDATES, selected)
                 }
             }.also { StackPane.setAlignment(it, Pos.CENTER_RIGHT)}.let { StackPane(it) }.let {
                 addEntry(

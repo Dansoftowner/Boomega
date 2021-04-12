@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.preferences.pane
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.ThemeMeta
@@ -75,7 +76,7 @@ class AppearancePane(preferences: Preferences) : PreferencesPane(preferences) {
                         val themeObject = ReflectionUtils.constructObject(it.themeClass)
                         logger.debug("The theme object: {}", themeObject)
                         Theme.setDefault(themeObject)
-                        preferences.editor().put(Preferences.Key.THEME, themeObject)
+                        preferences.editor().put(PreferenceKey.THEME, themeObject)
                     } catch (e: Exception) {
                         logger.error("Couldn't set the theme", e)
                         // TODO: error dialog

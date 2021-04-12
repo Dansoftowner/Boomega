@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.main;
 
+import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.gui.theme.LightTheme;
 import com.dansoftware.boomega.gui.theme.Theme;
@@ -15,10 +16,10 @@ public class SpecifiedThemeTest {
     public static void main(String... args) throws ReflectiveOperationException {
         Preferences preferences = Preferences.getPreferences();
         preferences.editor()
-                .put(Preferences.Key.THEME, parseArgs(args))
+                .put(PreferenceKey.THEME, parseArgs(args))
                 .tryCommit();
 
-        logger.debug("Preferences theme: {}", preferences.get(Preferences.Key.THEME).getClass());
+        logger.debug("Preferences theme: {}", preferences.get(PreferenceKey.THEME).getClass());
         Main.main(args);
     }
 

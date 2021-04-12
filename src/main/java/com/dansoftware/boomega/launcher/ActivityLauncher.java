@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.launcher;
 
+import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.db.Database;
@@ -365,14 +366,14 @@ public class ActivityLauncher implements Runnable {
      * @return the {@link LoginData} object.
      */
     protected LoginData getLoginData() {
-        return preferences.get(Preferences.Key.LOGIN_DATA);
+        return preferences.get(PreferenceKey.LOGIN_DATA);
     }
 
     /**
      * Defines how to save the {@link LoginData} for the base {@link ActivityLauncher} object.
      */
     protected void saveLoginData(LoginData loginData) {
-        preferences.editor().put(Preferences.Key.LOGIN_DATA, loginData);
+        preferences.editor().put(PreferenceKey.LOGIN_DATA, loginData);
     }
 
     /**

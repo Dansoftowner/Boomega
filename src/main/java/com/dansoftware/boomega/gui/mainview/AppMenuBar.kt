@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.mainview
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.context.Context
@@ -264,7 +265,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                                 val themeObject = ReflectionUtils.constructObject(themeMeta.themeClass)
                                 logger.debug("The theme object: {}", themeObject)
                                 Theme.setDefault(themeObject)
-                                preferences.editor().put(Preferences.Key.THEME, themeObject)
+                                preferences.editor().put(PreferenceKey.THEME, themeObject)
                             } catch (e: Exception) {
                                 logger.error("Couldn't set the theme", e)
                                 // TODO: error dialog
@@ -283,7 +284,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                         it.toggleGroup = toggleGroup
                         it.isSelected = Locale.getDefault() == locale
                         it.setOnAction {
-                            preferences.editor().put(Preferences.Key.LOCALE, locale)
+                            preferences.editor().put(PreferenceKey.LOCALE, locale)
                             context.showConfirmationDialog(
                                 I18N.getValue("app.lang.restart.title"),
                                 I18N.getValue("app.lang.restart.msg")

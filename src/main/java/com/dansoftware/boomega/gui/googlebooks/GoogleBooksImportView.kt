@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.googlebooks
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
@@ -28,13 +29,17 @@ class GoogleBooksImportView(
 
     companion object {
         private val colConfigKey =
-            Preferences.Key(
+            PreferenceKey(
                 "google.books.module.table.columns",
                 TableColumnsInfo::class.java,
                 TableColumnsInfo::byDefault
             )
         private val abcConfigKey =
-            Preferences.Key("google.books.module.table.abcsort", Locale::class.java, Locale::getDefault)
+            PreferenceKey(
+                "google.books.module.table.abcsort",
+                Locale::class.java,
+                Locale::getDefault
+            )
     }
 
     private val toolBar = buildToolBar()

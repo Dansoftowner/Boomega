@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.login
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.window.BaseWindow
@@ -34,7 +35,7 @@ private class LoginWindow(private val root: LoginView, private val preferences: 
 
     override fun handle(event: WindowEvent) {
         logger.debug("Putting loginData to Preferences")
-        preferences.editor().put(Preferences.Key.LOGIN_DATA, root.loginData)
+        preferences.editor().put(PreferenceKey.LOGIN_DATA, root.loginData)
     }
 
     companion object {
