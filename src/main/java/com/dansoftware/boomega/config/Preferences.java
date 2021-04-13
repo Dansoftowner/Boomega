@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.config;
 
+import com.dansoftware.boomega.config.file.ConfigFile;
 import com.dansoftware.boomega.config.source.ConfigSource;
 import com.dansoftware.boomega.config.source.DefaultSource;
 import com.dansoftware.boomega.config.source.InMemorySource;
@@ -10,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Objects;

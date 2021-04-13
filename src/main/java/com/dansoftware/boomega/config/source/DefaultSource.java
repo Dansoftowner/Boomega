@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.config.source;
 
-import com.dansoftware.boomega.config.ConfigFile;
+import com.dansoftware.boomega.config.file.ConfigFile;
 
 import java.io.*;
 

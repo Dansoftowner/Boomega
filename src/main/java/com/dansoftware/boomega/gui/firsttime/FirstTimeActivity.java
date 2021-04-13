@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.firsttime;
 
-import com.dansoftware.boomega.config.ConfigFile;
+import com.dansoftware.boomega.config.file.ConfigFile;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.gui.firsttime.dialog.FirstTimeDialog;
 import com.dansoftware.boomega.gui.firsttime.dialog.FirstTimeDialogActivity;
