@@ -20,7 +20,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.util.Callback;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
@@ -413,7 +412,7 @@ public class RecordTable extends TableView<Record> {
                     } else {
                         Record record = getRecordAtPosition(this);
                         Optional.ofNullable(record.getServiceConnection())
-                                .map(ServiceConnection::getGoogleBookLink)
+                                .map(ServiceConnection::getGoogleBookHandle)
                                 .map(value -> StringUtils.getIfBlank(value, null))
                                 .ifPresentOrElse(
                                         value -> setGraphic(buildGoogleBooksIcon()),

@@ -1,8 +1,8 @@
 package com.dansoftware.boomega.gui.window
 
 import com.dansoftware.boomega.config.PreferenceKey
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.util.loadImageResource

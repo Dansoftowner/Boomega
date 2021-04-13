@@ -6,9 +6,7 @@ import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.record.show.dock.Dock
 import javafx.beans.property.BooleanProperty
-import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
@@ -17,7 +15,6 @@ import javafx.scene.control.SplitPane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import java.util.*
-import java.util.function.Consumer
 import java.util.stream.Collectors
 
 class RecordsViewBase(

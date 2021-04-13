@@ -4,7 +4,10 @@ import com.dansoftware.boomega.config.Preferences
 import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.Label
-import javafx.scene.layout.*
+import javafx.scene.layout.GridPane
+import javafx.scene.layout.Priority
+import javafx.scene.layout.Region
+import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

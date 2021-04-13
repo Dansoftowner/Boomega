@@ -275,7 +275,7 @@ public class GoogleBookConnectionView extends VBox {
                 @Override
                 protected Void call() {
                     items.stream()
-                            .peek(record -> record.getServiceConnection().setGoogleBookLink(null))
+                            .peek(record -> record.getServiceConnection().setGoogleBookHandle(null))
                             .forEach(database::updateRecord);
                     return null;
                 }
@@ -408,7 +408,7 @@ public class GoogleBookConnectionView extends VBox {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 protected Void call() {
-                    record.getServiceConnection().setGoogleBookLink(volume.getSelfLink());
+                    record.getServiceConnection().setGoogleBookHandle(volume.getSelfLink());
                     database.updateRecord(record);
                     return null;
                 }

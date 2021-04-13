@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.plugin;
 
-import com.dansoftware.boomega.plugin.api.BoomegaPlugin;
 import com.dansoftware.boomega.plugin.api.ActivePlugin;
+import com.dansoftware.boomega.plugin.api.BoomegaPlugin;
 import com.dansoftware.boomega.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -4,9 +4,7 @@ import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.util.BaseFXUtils;
-import com.dansoftware.boomega.gui.util.FXCollectionUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
-import com.dansoftware.boomega.gui.util.UIUtils;
 import com.dansoftware.boomega.i18n.I18N;
 import com.jfilegoodies.explorer.FileExplorers;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -15,12 +13,10 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -86,12 +82,12 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
     @Override
     public void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        UIUtils.runOnUiThread(this::refresh);
+        BaseFXUtils.runOnUiThread(this::refresh);
     }
 
     @Override
     public void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        UIUtils.runOnUiThread(this::refresh);
+        BaseFXUtils.runOnUiThread(this::refresh);
     }
 
     @Override
@@ -292,7 +288,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                         deleteButton.prefWidthProperty().bind(tableColumn.widthProperty());
                         deleteButton.setOnAction(event -> {
                             ObservableList<DatabaseMeta> selectedItems =
-                                    FXCollectionUtils.copyOf(getTableView().getSelectionModel().getSelectedItems());
+                                    BaseFXUtils.copy(getTableView().getSelectionModel().getSelectedItems());
                             DBDeleteDialog dialog = new DBDeleteDialog();
                             dialog.show(selectedItems);
                         });

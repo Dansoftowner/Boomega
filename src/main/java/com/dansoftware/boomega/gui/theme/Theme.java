@@ -1,7 +1,6 @@
 package com.dansoftware.boomega.gui.theme;
 
 import com.dansoftware.boomega.gui.theme.applier.ThemeApplier;
-import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.plugin.PluginClassLoader;
 import com.dansoftware.boomega.plugin.Plugins;
 import com.dansoftware.boomega.plugin.api.ThemePlugin;

@@ -2,12 +2,12 @@ package com.dansoftware.boomega.main;
 
 import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
-import com.dansoftware.boomega.gui.keybinding.KeyBindings;
 import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity;
+import com.dansoftware.boomega.gui.keybinding.KeyBindings;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity;
 import com.dansoftware.boomega.gui.window.BaseWindow;

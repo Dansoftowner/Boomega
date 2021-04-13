@@ -17,11 +17,9 @@ import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
-import javafx.scene.layout.VBox
 import javafx.stage.DirectoryChooser
 import org.apache.commons.lang3.StringUtils
 import java.io.File
-import java.lang.Exception
 
 class DatabaseCreatorForm(
     private val context: Context,

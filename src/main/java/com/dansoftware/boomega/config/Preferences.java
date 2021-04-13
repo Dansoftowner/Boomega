@@ -4,15 +4,12 @@ import com.dansoftware.boomega.config.file.ConfigFile;
 import com.dansoftware.boomega.config.source.ConfigSource;
 import com.dansoftware.boomega.config.source.DefaultSource;
 import com.dansoftware.boomega.config.source.InMemorySource;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.util.Objects;
 import java.util.function.Consumer;
 

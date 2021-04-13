@@ -1,6 +1,5 @@
 package com.dansoftware.boomega.gui.preloader;
 
-import com.dansoftware.boomega.i18n.I18N;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

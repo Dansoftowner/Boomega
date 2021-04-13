@@ -1,7 +1,6 @@
 package com.dansoftware.boomega.gui.record
 
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.gui.util.copy
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.collections.FXCollections

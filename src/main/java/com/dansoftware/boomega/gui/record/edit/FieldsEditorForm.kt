@@ -4,8 +4,8 @@ import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl
-import com.dansoftware.boomega.gui.record.RecordValues
 import com.dansoftware.boomega.gui.control.formsfx.SimpleRatingControl
+import com.dansoftware.boomega.gui.record.RecordValues
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dlsc.formsfx.model.structure.Field

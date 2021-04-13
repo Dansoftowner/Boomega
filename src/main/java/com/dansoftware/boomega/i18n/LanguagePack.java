@@ -1,14 +1,12 @@
 package com.dansoftware.boomega.i18n;
 
-import com.dansoftware.boomega.plugin.PluginClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.Collator;
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * A {@link LanguagePack} provides {@link ResourceBundle}s for a particular {@link Locale}.

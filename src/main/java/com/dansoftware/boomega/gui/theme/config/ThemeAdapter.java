@@ -20,7 +20,10 @@ package com.dansoftware.boomega.gui.theme.config;
 
 import com.dansoftware.boomega.config.ConfigAdapter;
 import com.dansoftware.boomega.gui.theme.Theme;
-import com.google.gson.*;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

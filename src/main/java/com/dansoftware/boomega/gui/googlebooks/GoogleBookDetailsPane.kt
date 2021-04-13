@@ -9,7 +9,7 @@ import com.dansoftware.boomega.gui.control.ReadOnlyRating
 import com.dansoftware.boomega.gui.control.WebsiteHyperLink
 import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewActivity
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
-import com.dansoftware.boomega.gui.util.*
+import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.pnikosis.html2markdown.HTML2Md

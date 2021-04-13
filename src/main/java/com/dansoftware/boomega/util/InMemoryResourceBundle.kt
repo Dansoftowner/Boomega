@@ -1,7 +1,6 @@
 package com.dansoftware.boomega.util
 
 import java.util.*
-import kotlin.collections.HashMap
 
 class InMemoryResourceBundle(private val map: Map<String, String>) : ResourceBundle() {
 

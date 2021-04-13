@@ -24,7 +24,6 @@ import javafx.util.Callback
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 import java.util.function.Consumer
-import kotlin.collections.HashSet
 
 /**
  * Control for [TextField] that allows selecting languages.

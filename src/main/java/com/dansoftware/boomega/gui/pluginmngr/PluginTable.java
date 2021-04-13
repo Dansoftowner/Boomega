@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.pluginmngr;
 
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.util.FXCollectionUtils;
+import com.dansoftware.boomega.gui.util.BaseFXUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.plugin.PluginDirectory;
@@ -118,7 +118,7 @@ public class PluginTable extends TableView<File> {
                         deleteButton.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DELETE));
                         deleteButton.setOnAction(e -> {
                             var dialog = new PluginDeleteDialog();
-                            dialog.show(FXCollectionUtils.copyOf(getTableView().getSelectionModel().getSelectedItems()));
+                            dialog.show(BaseFXUtils.copy(getTableView().getSelectionModel().getSelectedItems()));
                         });
                         try {
                             deleteButton.disableProperty().bind(getTableRow().selectedProperty().not());

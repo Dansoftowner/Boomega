@@ -1,7 +1,5 @@
 package com.dansoftware.boomega.plugin
 
-import com.dansoftware.boomega.util.ReflectionUtils
-import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import java.net.URL
 import java.net.URLClassLoader
@@ -54,31 +52,5 @@ object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls()
                     .let { addAll(it) }
             }
         Collections.unmodifiableList(this)
-    }
-
-    /**
-     * Collects all subtypes of the given class
-     */
-    @Suppress("UNCHECKED_CAST")
-    @Deprecated("")
-    fun <T, S : T> getSubtypesOf(classRef: Class<T>): Set<Class<S>> {
-        return when {
-            this.isEmpty().not() -> ReflectionUtils.getSubtypesOf(classRef, this) as Set<Class<S>>
-            else -> Collections.emptySet()
-        }
-    }
-
-    /**
-     * Collects and initializes the subclasses of the given class
-     */
-    @Deprecated("")
-    fun <T> initializeSubtypeClasses(classRef: Class<T>) {
-        getSubtypesOf(classRef).forEach {
-            try {
-                ReflectionUtils.initializeClass(it, getInstance())
-            } catch (e: ExceptionInInitializerError) {
-                logger.error("Failed to initialize a plugin class called '{}'", classRef.name, e)
-            }
-        }
     }
 }

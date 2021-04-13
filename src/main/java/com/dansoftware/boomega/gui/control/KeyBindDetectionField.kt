@@ -1,15 +1,11 @@
 package com.dansoftware.boomega.gui.control
 
 import com.dansoftware.boomega.gui.util.asKeyCombination
-import com.dansoftware.boomega.gui.util.isOnlyCode
 import com.dansoftware.boomega.gui.util.isUndefined
-import com.dansoftware.boomega.util.equalsIgnoreCase
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.event.Event
 import javafx.scene.control.TextField
-import javafx.scene.input.KeyCode
-import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
 import org.apache.commons.lang3.StringUtils

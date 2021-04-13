@@ -10,13 +10,10 @@ import com.dansoftware.boomega.i18n.I18N
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import com.dlsc.workbenchfx.view.controls.ToolbarItem
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
-import javafx.scene.control.MenuItem
 import javafx.scene.control.RadioMenuItem
-import javafx.scene.control.ToggleGroup
 import javafx.util.Duration
 import java.util.function.Consumer
 
