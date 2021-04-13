@@ -1,10 +1,8 @@
 package com.dansoftware.boomega.gui.firsttime;
 
-import com.dansoftware.boomega.config.file.ConfigFile;
 import com.dansoftware.boomega.config.Preferences;
-import com.dansoftware.boomega.gui.firsttime.dialog.FirstTimeDialog;
+import com.dansoftware.boomega.config.file.ConfigFile;
 import com.dansoftware.boomega.gui.firsttime.dialog.FirstTimeDialogActivity;
-import com.dansoftware.boomega.gui.firsttime.imp.ConfigurationImportActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -18,9 +16,6 @@ import java.util.Objects;
  *
  * <p>
  * A {@link FirstTimeActivity} is not a GUI element itself, it only launches a GUI environment.
- *
- * <p>
- * Basically, it shows a {@link ConfigurationImportActivity} and then a {@link FirstTimeDialogActivity}.
  *
  * @author Daniel Gyorffy
  */
@@ -39,16 +34,8 @@ public class FirstTimeActivity {
         this.preferences = Objects.requireNonNull(preferences, "Preferences shouldn't be null");
     }
 
-    /**
-     * Shows the {@link ConfigurationImportActivity} and the {@link FirstTimeDialog} if needed.
-     */
     public void show() {
-        if (!showConfigurationImport(preferences))
-            showFirstTimeDialog(preferences);
-    }
-
-    private boolean showConfigurationImport(@NotNull Preferences preferences) {
-        return new ConfigurationImportActivity(preferences).show();
+        showFirstTimeDialog(preferences);
     }
 
     private void showFirstTimeDialog(@NotNull Preferences preferences) {

@@ -151,16 +151,6 @@ public class Preferences {
         }
 
         /**
-         * @deprecated isn't working
-         */
-        @Deprecated
-        public Editor putFromInput(@NotNull Reader reader) {
-            JsonObject readJson = new Gson().fromJson(reader, JsonObject.class);
-            //readJson.keySet().forEach(key -> Preferences.this.sr.add(key, readJson.get(key)));
-            return this;
-        }
-
-        /**
          * Writes all data into the config-file.
          *
          * @throws IOException if some I/o exception occurs
