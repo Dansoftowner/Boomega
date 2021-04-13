@@ -17,12 +17,11 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * An Preferences object is a bridge between the application and the configuration-source (config-file).
+ * A Preferences object is a bridge between the application and the particular configuration-source (represented by {@link ConfigSource}).
  *
  * <p>
  * If we want to create a {@link Preferences} object that reads from the default config-file we can use the
- * static {@link #getPreferences()} method, or if we want to read from a custom file we can use the {@link #getPreferences(File)}
- * method.
+ * static {@link #getPreferences()} method.
  *
  * <p>
  * For modifying the data we can use an {@link Editor} object that can be instantiated by the {@link #editor()} method.
