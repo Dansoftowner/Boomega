@@ -102,23 +102,17 @@ public class DownloaderTask extends Task<File> {
     protected File call() throws IOException, InterruptedException {
         synchronized (lock) {
             logger.debug("Starting downloading the update bundle...");
-            String stringUrl = this.binary.getDownloadUrl();
-            logger.debug("The download url is: {}", stringUrl);
-
-            URL url = new URL(stringUrl);
-            URLConnection connection = url.openConnection();
-            connection.connect();
 
             //defining the file that we want to write to
             File outputFile = getOutputFile(this.binary, this.dir);
 
             //creating the input-, and output-stream
-            try (var input = new BufferedInputStream(connection.getInputStream());
+            try (var input = new BufferedInputStream(binary.openStream());
                  var output = new BufferedOutputStream(new FileOutputStream(outputFile))) {
                 updateMessage(I18N.getValue("update.page.download.happening"));
 
-                //getting the size of the downloadable content
-                long contentSize = connection.getContentLengthLong();
+                //getting the size (in bytes) of the downloadable content
+                long contentSize = this.binary.getSize() * 1024L * 1024L;
                 //calculating the value of 1 %
                 long onePercent = contentSize / 100;
                 //this variable will count that how many bytes are read
@@ -159,9 +153,6 @@ public class DownloaderTask extends Task<File> {
 
                 logger.debug("Downloader task succeeded: {}", outputFile);
                 return outputFile;
-            } finally {
-                if (connection instanceof HttpURLConnection)
-                    ((HttpURLConnection) connection).disconnect();
             }
         }
     }
