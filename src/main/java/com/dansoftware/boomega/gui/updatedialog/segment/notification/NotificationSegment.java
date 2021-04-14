@@ -23,9 +23,6 @@ public class NotificationSegment extends FixedContentSegment {
 
     @Override
     protected @NotNull Node createContent() {
-        return new ImprovedFXMLLoader(
-                new NotificationSegmentController(context, updateInformation),
-                getClass().getResource("NotificationSegment.fxml"),
-                I18N.getValues()).load();
+        return new NotificationSegmentView(updateInformation);
     }
 }
