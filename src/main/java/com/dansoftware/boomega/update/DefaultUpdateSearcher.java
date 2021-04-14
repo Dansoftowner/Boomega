@@ -18,12 +18,12 @@ import java.util.Objects;
  *
  * @author Daniel Gyorffy
  */
-class NetworkUpdateSearcher extends UpdateSearcher {
+class DefaultUpdateSearcher extends UpdateSearcher {
 
     /**
      * The updater server-address
      */
-    private static final String LOCATION = "https://update-server-ed6c3.firebaseio.com/libraryapp.json";
+    private static final String LOCATION = "https://update-server-ed6c3.firebaseio.com/boomega.json";
 
     private final VersionInteger base;
 
@@ -33,7 +33,7 @@ class NetworkUpdateSearcher extends UpdateSearcher {
      * @param base the base version that the object should compare to; mustn't be null
      * @throws NullPointerException if base is null.
      */
-    public NetworkUpdateSearcher(@NotNull VersionInteger base) {
+    public DefaultUpdateSearcher(@NotNull VersionInteger base) {
         this.base = Objects.requireNonNull(base, "The base mustn't be null");
     }
 

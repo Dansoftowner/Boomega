@@ -32,7 +32,7 @@ public abstract class UpdateSearcher {
     private static Function<@NotNull VersionInteger, @NotNull UpdateSearcher> instanceFactory;
 
     static {
-        DEFAULT_INSTANCE_FACTORY = NetworkUpdateSearcher::new;
+        DEFAULT_INSTANCE_FACTORY = DefaultUpdateSearcher::new;
         instanceFactory = DEFAULT_INSTANCE_FACTORY;
     }
 
@@ -77,7 +77,7 @@ public abstract class UpdateSearcher {
      * An UpdateSearchResult object can hold all information
      * about an update-search.
      *
-     * @see NetworkUpdateSearcher#search()
+     * @see DefaultUpdateSearcher#search()
      */
     public static final class UpdateSearchResult {
         private boolean newUpdate;
@@ -160,7 +160,7 @@ public abstract class UpdateSearcher {
          * @see #getFailedCause()
          */
         @NotNull
-        public NetworkUpdateSearcher.UpdateSearchResult ifFailed(@NotNull Consumer<Exception> onFailed) {
+        public DefaultUpdateSearcher.UpdateSearchResult ifFailed(@NotNull Consumer<Exception> onFailed) {
             if (failed)
                 onFailed.accept(failedCause);
             return this;
@@ -187,7 +187,7 @@ public abstract class UpdateSearcher {
          * @see #getInformation()
          */
         @NotNull
-        public NetworkUpdateSearcher.UpdateSearchResult ifNewUpdateAvailable(@NotNull Consumer<UpdateInformation> onAvailable) {
+        public DefaultUpdateSearcher.UpdateSearchResult ifNewUpdateAvailable(@NotNull Consumer<UpdateInformation> onAvailable) {
             if (newUpdate)
                 onAvailable.accept(information);
             return this;
@@ -215,7 +215,7 @@ public abstract class UpdateSearcher {
          * @see #getInformation()
          */
         @NotNull
-        public NetworkUpdateSearcher.UpdateSearchResult ifNoUpdateAvailable(@NotNull Consumer<UpdateInformation> handler) {
+        public DefaultUpdateSearcher.UpdateSearchResult ifNoUpdateAvailable(@NotNull Consumer<UpdateInformation> handler) {
             if (!failed && !newUpdate)
                 handler.accept(information);
             return this;
