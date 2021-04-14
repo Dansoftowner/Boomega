@@ -21,6 +21,8 @@ package com.dansoftware.boomega.update;
 import com.dansoftware.boomega.util.os.OsInfo;
 import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -33,6 +35,8 @@ import java.util.Locale;
  * @author Daniel Gyorffy
  */
 class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformation> {
+
+    private static final Logger logger = LoggerFactory.getLogger(UpdateInformationDeserializer.class);
 
     //JSon element IDENTIFIERS
 
@@ -63,7 +67,9 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
      * @return the version-string
      */
     private String getVersion(@NotNull JsonObject jsonObject) {
-        return jsonObject.get(VERSION).getAsString();
+        String versionString = jsonObject.get(VERSION).getAsString();
+        logger.debug("Version string read: '{}'", versionString);
+        return versionString;
     }
 
     /**
@@ -75,14 +81,19 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
     @NotNull
     private String getReviewUrl(@NotNull JsonObject jsonObject) {
         JsonObject reviewBundle = jsonObject.getAsJsonObject(REVIEW);
+
+        logger.debug("Finding review for the current locale...");
         JsonElement reviewUrl = reviewBundle.get(Locale.getDefault().getLanguage());
 
         if (reviewUrl == null) {
+            logger.debug("Didn't find review for the current locale; falling back to the default one");
             String defaultLang = reviewBundle.get(DEFAULT_LANG).getAsString();
             reviewUrl = reviewBundle.get(defaultLang);
         }
 
-        return reviewUrl.getAsString();
+        String asString = reviewUrl.getAsString();
+        logger.debug("Review url read: '{}'", asString);
+        return asString;
     }
 
     /**
@@ -91,19 +102,26 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
      */
     @NotNull
     private List<DownloadableBinary> getPacks(@NotNull JsonObject jsonObject) {
+        logger.debug("Reading packs...");
+
         //the json object that contains the binaries for each platform
         JsonArray jsonPacks = jsonObject.getAsJsonArray(PACKS);
 
         List<DownloadableBinary> packs = new LinkedList<>();
         jsonPacks.forEach(jsonElement -> {
             JsonObject asObject = jsonElement.getAsJsonObject();
+            String name = asObject.get(SIMPLE_NAME).getAsString();
+            logger.debug("Found pack '{}'", name);
+
             JsonElement downloadUrlJson = asObject.get(DOWNLOAD_URL);
             if (!downloadUrlJson.isJsonNull()) {
+                logger.debug("Pack has url");
                 JsonArray scope = asObject.get(SCOPE).getAsJsonArray();
                 if (scope.contains(new JsonPrimitive(getOsId()))) {
-                    String name = asObject.get(SIMPLE_NAME).getAsString();
+                    logger.debug("Pack is compatible with the current os");
                     String fileExtension = asObject.get(FILE_EXTENSION).getAsString();
                     String downloadUrl = downloadUrlJson.getAsString();
+                    logger.debug("File extension: '{}' , download url: '{}'", fileExtension, downloadUrl);
                     packs.add(new DownloadableBinary(name, fileExtension, downloadUrl));
                 }
             }
