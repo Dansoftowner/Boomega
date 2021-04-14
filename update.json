@@ -11,36 +11,42 @@
         "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.5.0/Boomega-0.5.0-Windows.exe",
         "fileExtension" : "exe",
         "name" : "Exe installer",
+        "size" : 112,
         "scope" : [ "win" ]
       },
       {
         "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.5.0/Boomega-0.5.0-Windows.zip",
         "fileExtension" : "zip",
         "name" : "Zip archive",
+        "size" : 140,
         "scope" : [ "win" ]
       },
       {
         "url" : null,
         "fileExtension" : "deb",
         "name" : "Debian package",
+        "size" : -1,
         "scope" : [ "linux" ]
       },
       {
         "url" : null,
         "fileExtension" : "tar.gz",
         "name" : "Tar.gz archive",
+        "size" : -1,
         "scope" : [ "linux" ]
       },
       {
         "url" : null,
         "fileExtension" : "dmg",
         "name" : "Dmg installer",
+        "size" : -1,
         "scope" : [ "mac" ]
       },
       {
         "url" : null,
         "fileExtension" : "jar",
         "name" : "Jar executable",
+        "size" : -1,
         "scope" : [ "*" ]
       }
     ]
