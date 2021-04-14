@@ -47,6 +47,7 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
     private static final String SIMPLE_NAME = "name";
     private static final String SCOPE = "scope";
     private static final String DOWNLOAD_URL = "url";
+    private static final String SIZE = "size";
     private static final String FILE_EXTENSION = "fileExtension";
 
     private static final String DEFAULT_LANG = "defaultLang";
@@ -121,8 +122,9 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
                     logger.debug("Pack is compatible with the current os");
                     String fileExtension = asObject.get(FILE_EXTENSION).getAsString();
                     String downloadUrl = downloadUrlJson.getAsString();
+                    int size = asObject.get(SIZE).getAsInt();
                     logger.debug("File extension: '{}' , download url: '{}'", fileExtension, downloadUrl);
-                    packs.add(new DownloadableBinary(name, fileExtension, downloadUrl));
+                    packs.add(new DownloadableBinary(name, fileExtension, downloadUrl, size));
                 }
             }
         });
