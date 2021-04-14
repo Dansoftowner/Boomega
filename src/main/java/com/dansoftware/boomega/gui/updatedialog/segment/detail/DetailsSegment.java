@@ -27,9 +27,6 @@ public class DetailsSegment extends FixedContentSegment {
 
     @Override
     protected @NotNull Node createContent() {
-        return new ImprovedFXMLLoader(
-                new DetailsSegmentController(context, updateInformation),
-                getClass().getResource("DetailsSegment.fxml"),
-                I18N.getValues()).load();
+        return new DetailsSegmentView(context, updateInformation);
     }
 }
