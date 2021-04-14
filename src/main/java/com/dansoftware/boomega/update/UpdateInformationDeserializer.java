@@ -1,58 +1,34 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.update;
 
-import com.dansoftware.boomega.i18n.I18N;
-import com.dansoftware.boomega.util.os.PlatformName;
+import com.dansoftware.boomega.util.os.OsInfo;
 import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Defines an {@link UpdateInformation} json-deserialization process for {@link Gson}.
- *
- * <p>
- * A json sample:
- * <pre>{@code
- * {
- *     "binaries" : {
- *       "Linux" : {
- *         "bundles" : {
- *           "deb" : {
- *             "downloadUrl" : "about:blank",
- *             "localeKey" : "-",
- *             "simpleName" : "Deb archieve"
- *           },
- *           "targz" : {
- *             "downloadUrl" : "about:blank",
- *             "localeKey" : "-",
- *             "simpleName" : "Tar.gz archieve"
- *           }
- *         }
- *       },
- *       "Windows" : {
- *         "bundles" : {
- *           "exe" : {
- *             "downloadUrl" : "about:blank",
- *             "localeKey" : "-",
- *             "simpleName" : "Exe installer"
- *           },
- *           "zip" : {
- *             "downloadUrl" : "about:blank",
- *             "localeKey" : "-",
- *             "simpleName" : "Zip archieve"
- *           }
- *         }
- *       }
- *     },
- *     "review" : {
- *       "defaultLang" : "en",
- *       "en" : "about:blank",
- *       "hu" : "about:blank"
- *     },
- *     "version" : "0.0.0"
- * }
- * } </pre>
  *
  * @author Daniel Gyorffy
  */
@@ -60,14 +36,13 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
 
     //JSon element IDENTIFIERS
 
-    private static final String BINARIES = "binaries";
+    private static final String PACKS = "packs";
     private static final String VERSION = "version";
     private static final String REVIEW = "review";
 
-    private static final String BUNDLES = "bundles";
-    private static final String SIMPLE_NAME = "simpleName";
-    private static final String LOCALE_KEY = "localeKey";
-    private static final String DOWNLOAD_URL = "downloadUrl";
+    private static final String SIMPLE_NAME = "name";
+    private static final String SCOPE = "scope";
+    private static final String DOWNLOAD_URL = "url";
     private static final String FILE_EXTENSION = "fileExtension";
 
     private static final String DEFAULT_LANG = "defaultLang";
@@ -78,7 +53,7 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
     public UpdateInformation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
         //handling the Json as a JsonObject
         JsonObject jsonObject = json.getAsJsonObject();
-        return new UpdateInformation(getVersion(jsonObject), getReviewUrl(jsonObject), getBinaries(jsonObject));
+        return new UpdateInformation(getVersion(jsonObject), getReviewUrl(jsonObject), getPacks(jsonObject));
     }
 
     /**
@@ -115,45 +90,28 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
      * into a {@link List}.
      */
     @NotNull
-    private List<DownloadableBinary> getBinaries(@NotNull JsonObject jsonObject) {
+    private List<DownloadableBinary> getPacks(@NotNull JsonObject jsonObject) {
         //the json object that contains the binaries for each platform
-        JsonObject binaries = jsonObject.getAsJsonObject(BINARIES);
+        JsonArray jsonPacks = jsonObject.getAsJsonArray(PACKS);
 
-        //the json object that contains the binaries for the particular platform
-        JsonObject osSpecificBinaries = binaries.getAsJsonObject(new PlatformName().toString());
-
-        if (osSpecificBinaries == null)
-            return Collections.emptyList();
-
-        //the json object that contains the bundles for the particular platform
-        JsonObject bundles = osSpecificBinaries.getAsJsonObject(BUNDLES);
-
-        List<DownloadableBinary> result = new ArrayList<>(3);
-        Set<Map.Entry<String, JsonElement>> entries = bundles.entrySet();
-        entries.forEach(entry -> {
-            //the json object that contains the information of the particular bundle
-            JsonObject value = entry.getValue().getAsJsonObject();
-
-            //simple name for example: "Exe installer", "Zip Archieve"
-            String simpleName = value.get(SIMPLE_NAME).getAsString();
-            //the localeKey for internationalization
-            String localeKey = value.get(LOCALE_KEY).getAsString();
-            //the url where we can find the actual resource
-            String downloadUrl = value.get(DOWNLOAD_URL).getAsString();
-            //it's file extension
-            String fileExtension = value.get(FILE_EXTENSION).getAsString();
-
-            //trying to localize the name...
-            String localizedName;
-            try {
-                localizedName = I18N.getValue(localeKey);
-            } catch (MissingResourceException e) {
-                localizedName = simpleName;
+        List<DownloadableBinary> packs = new LinkedList<>();
+        jsonPacks.forEach(jsonElement -> {
+            JsonObject asObject = jsonElement.getAsJsonObject();
+            JsonElement downloadUrlJson = asObject.get(DOWNLOAD_URL);
+            if (!downloadUrlJson.isJsonNull()) {
+                JsonArray scope = asObject.get(SCOPE).getAsJsonArray();
+                if (scope.contains(new JsonPrimitive(getOsId()))) {
+                    String name = asObject.get(SIMPLE_NAME).getAsString();
+                    String fileExtension = asObject.get(FILE_EXTENSION).getAsString();
+                    String downloadUrl = downloadUrlJson.getAsString();
+                    packs.add(new DownloadableBinary(name, fileExtension, downloadUrl));
+                }
             }
-
-            result.add(new DownloadableBinary(localizedName, fileExtension, downloadUrl));
         });
+        return packs;
+    }
 
-        return result;
+    private String getOsId() {
+        return OsInfo.isWindows() ? "win" : OsInfo.isLinux() ? "linux" : OsInfo.isMac() ? "mac" : "*";
     }
 }
