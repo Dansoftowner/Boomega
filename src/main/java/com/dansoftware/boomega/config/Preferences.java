@@ -50,7 +50,7 @@ public class Preferences {
 
     private final ConfigSource source;
 
-    Preferences(@NotNull ConfigSource source) {
+    public Preferences(@NotNull ConfigSource source) {
         this.source = source;
     }
 
