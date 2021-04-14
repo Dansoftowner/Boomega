@@ -18,26 +18,14 @@
 
 package com.dansoftware.boomega.config.source;
 
-import com.dansoftware.boomega.config.file.ConfigFile;
-
 import java.io.*;
 
 /**
- * The default source used by the application. Accesses the configuration file
- * represented by the {@link ConfigFile}.
+ * The default source used by the application.
+ * Accesses the default configuration file.
  */
 public class DefaultSource extends JsonFileSource {
     public DefaultSource() {
-        super(ConfigFile.getConfigFile());
-    }
-
-    @Override
-    protected InputStream openStream(File file) throws IOException {
-        return ((ConfigFile) file).openStream();
-    }
-
-    @Override
-    protected OutputStream openOutputStream(File file) throws FileNotFoundException {
-        return ((ConfigFile) file).openOutputStream();
+        super(new File(System.getProperty("libraryapp.config.file.path")));
     }
 }

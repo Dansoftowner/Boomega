@@ -103,6 +103,16 @@ public class InMemorySource implements ConfigSource {
     }
 
     @Override
+    public boolean isCreated() {
+        return true;
+    }
+
+    @Override
+    public boolean isOpened() {
+        return false;
+    }
+
+    @Override
     public void commit() throws IOException {
     }
 }

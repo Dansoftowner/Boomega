@@ -1,7 +1,6 @@
 package com.dansoftware.boomega.gui.firsttime;
 
 import com.dansoftware.boomega.config.Preferences;
-import com.dansoftware.boomega.config.file.ConfigFile;
 import com.dansoftware.boomega.gui.firsttime.dialog.FirstTimeDialogActivity;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +41,7 @@ public class FirstTimeActivity {
         new FirstTimeDialogActivity(preferences).show();
     }
 
-    public static boolean isNeeded() {
-        return ConfigFile.getConfigFile().isNonExisted();
+    public static boolean isNeeded(@NotNull Preferences preferences) {
+        return preferences.getSource().isCreated();
     }
 }

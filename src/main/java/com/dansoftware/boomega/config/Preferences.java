@@ -1,6 +1,5 @@
 package com.dansoftware.boomega.config;
 
-import com.dansoftware.boomega.config.file.ConfigFile;
 import com.dansoftware.boomega.config.source.ConfigSource;
 import com.dansoftware.boomega.config.source.DefaultSource;
 import com.dansoftware.boomega.config.source.InMemorySource;
@@ -32,10 +31,10 @@ public class Preferences {
 
     private static Preferences defaultPrefs;
 
-    private final ConfigSource src;
+    private final ConfigSource source;
 
-    Preferences(@NotNull ConfigSource src) {
-        this.src = src;
+    Preferences(@NotNull ConfigSource source) {
+        this.source = source;
     }
 
     /**
@@ -49,36 +48,49 @@ public class Preferences {
     }
 
     public <T> T get(@NotNull PreferenceKey<T> key) {
-        return src.get(key);
+        return source.get(key);
     }
 
     @SuppressWarnings("unused")
     public String getString(@NotNull String key, String defValue) {
-        return src.getString(key, defValue);
+        return source.getString(key, defValue);
     }
 
     @SuppressWarnings("unused")
     public boolean getBoolean(@NotNull String key, boolean defValue) {
-        return src.getBoolean(key, defValue);
+        return source.getBoolean(key, defValue);
     }
 
     @SuppressWarnings("unused")
     public int getInteger(@NotNull String key, int defValue) {
-        return src.getInteger(key, defValue);
+        return source.getInteger(key, defValue);
     }
 
     @SuppressWarnings("unused")
     public double getDouble(@NotNull String key, double defValue) {
-        return src.getDouble(key, defValue);
+        return source.getDouble(key, defValue);
     }
 
-    // <------
+    public ConfigSource getSource() {
+        return source;
+    }
+
     @NotNull
-    public static Preferences getPreferences() {
+    public static synchronized Preferences getPreferences() {
         if (Objects.isNull(defaultPrefs)) {
-            defaultPrefs = new Preferences(new DefaultSource());
+            setDefault(buildDefaultPrefs());
         }
         return defaultPrefs;
+    }
+
+    public static synchronized void setDefault(@NotNull Preferences preferences) {
+        Objects.requireNonNull(preferences, "The default preferences object shouldn't be null");
+        defaultPrefs = preferences;
+        logger.debug("Default preferences/config source set: '{}'", preferences.getSource().getClass().getName());
+    }
+
+    private static Preferences buildDefaultPrefs() {
+        return new Preferences(new DefaultSource());
     }
 
     public static Preferences empty() {
@@ -113,37 +125,37 @@ public class Preferences {
 
         public <T> Editor put(@NotNull PreferenceKey<T> key,
                               @Nullable T value) {
-            Preferences.this.src.put(key, value);
+            Preferences.this.source.put(key, value);
             return this;
         }
 
         public Editor putBoolean(String key, boolean value) {
-            Preferences.this.src.putBoolean(key, value);
+            Preferences.this.source.putBoolean(key, value);
             return this;
         }
 
         public Editor putString(String key, String value) {
-            Preferences.this.src.putString(key, value);
+            Preferences.this.source.putString(key, value);
             return this;
         }
 
         public Editor putInteger(String key, int value) {
-            Preferences.this.src.putInteger(key, value);
+            Preferences.this.source.putInteger(key, value);
             return this;
         }
 
         public Editor putDouble(String key, double value) {
-            Preferences.this.src.putDouble(key, value);
+            Preferences.this.source.putDouble(key, value);
             return this;
         }
 
         public Editor remove(@NotNull PreferenceKey<?> key) {
-            Preferences.this.src.remove(key);
+            Preferences.this.source.remove(key);
             return this;
         }
 
         public Editor remove(@NotNull String key) {
-            Preferences.this.src.remove(key);
+            Preferences.this.source.remove(key);
             return this;
         }
 
@@ -153,7 +165,7 @@ public class Preferences {
          * @throws IOException if some I/o exception occurs
          */
         public void commit() throws IOException {
-            Preferences.this.src.commit();
+            Preferences.this.source.commit();
         }
 
         /**

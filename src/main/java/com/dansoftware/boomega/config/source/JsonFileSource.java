@@ -43,9 +43,12 @@ public class JsonFileSource extends JsonSource {
     private final JsonObject jsonBase;
     private final Gson gson;
 
+    private final boolean created;
+
     public JsonFileSource(@NotNull File file) {
         this.file = file;
         this.gson = new Gson();
+        this.created = createIfNotExists(file);
         this.jsonBase = readJsonBase(file);
     }
 
@@ -60,12 +63,31 @@ public class JsonFileSource extends JsonSource {
         }
     }
 
+    private boolean createIfNotExists(File file) {
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            logger.error("Couldn't create file", e);
+            return false;
+        }
+    }
+
     protected InputStream openStream(File file) throws IOException {
         return new FileInputStream(file);
     }
 
     protected OutputStream openOutputStream(File file) throws FileNotFoundException {
         return new FileOutputStream(file);
+    }
+
+    @Override
+    public boolean isCreated() {
+        return created;
+    }
+
+    @Override
+    public boolean isOpened() {
+        return !created;
     }
 
     @Override

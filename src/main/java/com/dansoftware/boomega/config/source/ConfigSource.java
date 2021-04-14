@@ -44,5 +44,8 @@ public interface ConfigSource {
     void putDouble(@NotNull String key, double value);
     <T> void put(@NotNull PreferenceKey<T> key, T value);
 
+    boolean isCreated();
+    boolean isOpened();
+
     void commit() throws IOException;
 }

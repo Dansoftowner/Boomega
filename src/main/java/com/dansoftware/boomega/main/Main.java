@@ -199,7 +199,7 @@ public class Main extends BaseApplication {
     private boolean showFirstTimeActivity(@NotNull Preferences preferences) throws InterruptedException {
         synchronized (initThreadLock) {
             //creating and showing a FirstTimeDialog
-            if (FirstTimeActivity.isNeeded()) {
+            if (FirstTimeActivity.isNeeded(preferences)) {
                 hidePreloader();
                 logger.debug("FirstTimeDialog needed");
                 Platform.runLater(() -> {
