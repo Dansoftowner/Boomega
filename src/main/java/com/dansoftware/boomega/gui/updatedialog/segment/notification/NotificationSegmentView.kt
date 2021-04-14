@@ -21,8 +21,10 @@ package com.dansoftware.boomega.gui.updatedialog.segment.notification
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.update.UpdateInformation
 import javafx.geometry.Insets
+import javafx.geometry.Orientation
 import javafx.scene.Group
 import javafx.scene.control.Label
+import javafx.scene.control.Separator
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
@@ -75,6 +77,7 @@ class NotificationSegmentView(
         private fun buildHBox() = HBox(10.0).apply {
             children.add(buildDescriptionLabel("update.view.current.version"))
             children.add(buildCurrentVersionLabel())
+            children.add(Separator(Orientation.VERTICAL))
             children.add(buildDescriptionLabel("update.view.next.version"))
             children.add(buildNextVersionLabel())
         }
@@ -84,7 +87,6 @@ class NotificationSegmentView(
         }
 
         private fun buildCurrentVersionLabel() = Label(System.getProperty("boomega.version")).apply {
-            HBox.setMargin(this, Insets(10.0))
             HBox.setHgrow(this, Priority.SOMETIMES)
         }
 
