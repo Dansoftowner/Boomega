@@ -1,37 +1,27 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.30'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.32'
     id 'com.github.ben-manes.versions' version '0.38.0'
 }
 
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = 'UTF-8'
-
+sourceCompatibility = '16'
 version '0.5.0'
+
 def mainClass = 'com.dansoftware.boomega.main.Main'
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = '15'
         useIR = true
     }
 }
 
 compileJava {
-    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx.runtime=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED"]
-    options.compilerArgs << '-Xlint:unchecked'
+    options.encoding = 'UTF-8'
 }
 
 compileTestJava {
-    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx.runtime=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.base/com.sun.javafx=ALL-UNNAMED"]
-    options.compilerArgs += ["--add-exports", "javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED"]
+    options.encoding = 'UTF-8'
 }
 
 repositories {
@@ -49,7 +39,7 @@ repositories {
 
     //repository for markdown-javafx-renderer
     maven {
-        url "http://sandec.bintray.com/repo"
+        url "https://sandec.bintray.com/repo"
     }
 
     //repository for JUnique
@@ -87,7 +77,7 @@ dependencies {
 
     libraries 'com.google.code.gson:gson:2.8.6'
     libraries 'org.jetbrains:annotations:20.1.0'
-    libraries 'org.reflections:reflections:0.9.12'
+    libraries 'org.reflections:reflections:0.9.12' // TODO: remove it
     libraries 'commons-io:commons-io:2.6'
     libraries 'org.apache.commons:commons-lang3:3.10'
     libraries 'commons-collections:commons-collections:3.2.2'
