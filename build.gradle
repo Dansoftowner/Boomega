@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.32'
     id 'com.github.ben-manes.versions' version '0.38.0'
+    id 'com.github.johnrengelman.shadow' version '6.1.0' // building fat jars
 }
 
 sourceCompatibility = '16'
@@ -118,21 +119,13 @@ dependencies {
 }
 
 
-jar {
-    //we exclude the javafx package from the jar
+shadowJar {
     exclude('javafx/**')
-    //we exclude junit from the jar
-    exclude('junit/**')
-    //we exclude unnecessary javafx-swt.jar resource
+    exclude('javafx.properties')
     exclude('javafx-swt.jar')
+    exclude('junit/**')
+    exclude('module-info.class')
 
-    manifest {
-        attributes 'Main-Class': mainClass
-    }
-
-    from {
-        // we include all libraries in a single jar
-        configurations.libraries.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+    manifest.attributes('Main-Class': mainClass)
 }
 
