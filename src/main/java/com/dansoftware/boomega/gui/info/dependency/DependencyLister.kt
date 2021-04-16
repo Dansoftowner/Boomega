@@ -164,11 +164,6 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
-            "Reflections",
-            "https://github.com/ronmamo/reflections",
-            LicenseInfo.wtfplLicense()
-        ),
-        DependencyInfo(
             "SLF4J API",
             "http://www.slf4j.org/",
             LicenseInfo.mitLicense()

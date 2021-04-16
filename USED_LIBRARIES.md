@@ -114,10 +114,6 @@
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
     <tr>
-        <td><a href="https://github.com/ronmamo/reflections">Reflections</a></td>
-        <td>WTFPL</td>
-    </tr>
-    <tr>
         <td><a href="http://www.slf4j.org/">SLF4J API</a></td>
         <td><a href="https://opensource.org/licenses/MIT">MIT License</a></td>
     </tr>
