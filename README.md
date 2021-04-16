@@ -65,6 +65,7 @@ The detailed documentation is available [here]().
 [![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)]()
 [![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)]()
 [![Languages](https://img.shields.io/badge/languages-java%20%7C%20kotlin-orange)]()
+[![Java version](https://img.shields.io/badge/java-16-orange)]()
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 
 * The repo has two important branches:
@@ -72,7 +73,7 @@ The detailed documentation is available [here]().
     * `dev` - for developing the app further
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
-* The app targets `Java 11+` but the code is `unmodularized`
+* The app targets `Java 16+` but the code is `unmodularized`
 * The build tool used for this project is `Gradle`
 
 ### Build requirements
