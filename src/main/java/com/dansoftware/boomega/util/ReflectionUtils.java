@@ -2,13 +2,10 @@ package com.dansoftware.boomega.util;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -110,57 +107,5 @@ public final class ReflectionUtils {
     public static <T> Class<T> forName(@NotNull Class<T> classRef)
             throws ClassNotFoundException {
         return (Class<T>) Class.forName(classRef.getName());
-    }
-
-    /**
-     * Invokes the static block on the given {@code class},
-     * if it's not executed yet
-     *
-     * @param classRef the class-reference
-     */
-    public static void initializeClass(@NotNull Class<?> classRef) {
-        try {
-            forName(classRef);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Invokes the static block on the given {@code class},
-     * if it's not executed yet
-     *
-     * @param classRef the class-reference
-     */
-    public static void initializeClass(@NotNull Class<?> classRef, ClassLoader classLoader) {
-        try {
-            Class.forName(classRef.getName(), true, classLoader);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Collects all the subtypes of a class with given class reference.
-     *
-     * @param classRef the class reference that we want to get the subtypes from
-     * @return the Set of class references
-     */
-    public static <T> Set<Class<? extends T>> getSubtypesOf(@NotNull Class<T> classRef) {
-        return new Reflections(classRef).getSubTypesOf(classRef);
-    }
-
-    /**
-     * Collects all subtypes of a class with the given class reference in
-     * a given {@link ClassLoader}.
-     *
-     * @param classRef    the class reference that we want to get the subtypes from
-     * @param classLoader the class loader
-     * @return the Set of class references
-     */
-    public static <T> Set<Class<? extends T>> getSubtypesOf(@NotNull Class<T> classRef,
-                                                            @NotNull ClassLoader classLoader) {
-        Reflections reflections = new Reflections(classLoader, classRef, new SubTypesScanner());
-        return reflections.getSubTypesOf(classRef);
     }
 }
