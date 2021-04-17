@@ -120,11 +120,13 @@ dependencies {
 
 
 shadowJar {
-    exclude('javafx/**')
-    exclude('javafx.properties')
-    exclude('javafx-swt.jar')
-    exclude('junit/**')
-    exclude('module-info.class')
+    configurations = [project.configurations.libraries]
+
+    exclude 'javafx/**'
+    exclude 'javafx.properties'
+    exclude 'javafx-swt.jar'
+    exclude 'junit/**'
+    exclude 'module-info.class'
 
     manifest.attributes('Main-Class': mainClass)
 }
