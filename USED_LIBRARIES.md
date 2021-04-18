@@ -1,5 +1,7 @@
 # Used libraries
 
+Here is the list of used third party software:
+
 <table>
     <tr>
         <th>Software</th>
@@ -58,8 +60,8 @@
         <td><a href="https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt">Apache 2.0</a></td>
     </tr>
     <tr>
-        <td><a href="https://github.com/Dansoftowner/jSystemThemeDetector">jSystemThemeDetector</a></td>
-        <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
+        <td><a href="https://github.com/java-native-access/jna">JNA</a></td>
+        <td><a href="https://github.com/java-native-access/jna/blob/master/LICENSE">Apache-2.0 OR LGPL-2.1</a></td>
     </tr>
     <tr>
         <td><a href="https://github.com/nico2sh/jHTML2Md">jHTML2Md</a></td>
@@ -71,6 +73,10 @@
     </tr>
     <tr>
         <td><a href="https://github.com/Dansoftowner/jFileGoodies">jFileGoodies</a></td>
+        <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
+    </tr>
+    <tr>
+        <td><a href="https://github.com/Dansoftowner/jSystemThemeDetector">jSystemThemeDetector</a></td>
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
     <tr>
@@ -122,3 +128,10 @@
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
 </table>
+
+# Used Gradle plugins
+
+| Software | License |
+| -----    | ------- |
+| [Shadow](https://github.com/johnrengelman/shadow) | [Apache 2.0](https://github.com/johnrengelman/shadow/blob/master/LICENSE)
+| [gradle-versions-plugin](https://github.com/ben-manes/gradle-versions-plugin) | [Apache 2.0](https://github.com/ben-manes/gradle-versions-plugin/blob/master/LICENSE.txt)
