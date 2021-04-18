@@ -63,7 +63,7 @@ public class UpdateSimulation {
 
         @Override
         protected UpdateInformation loadInfo() {
-            return new UpdateInformation(newVersion(), "", buildFakeBinaries()) {
+            return new UpdateInformation(newVersion(), "", "about:blank",buildFakeBinaries()) {
                 @NotNull
                 @Override
                 public Reader reviewReader() {

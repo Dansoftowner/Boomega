@@ -42,6 +42,7 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
 
     private static final String PACKS = "packs";
     private static final String VERSION = "version";
+    private static final String WEBSITE = "website";
     private static final String REVIEW = "review";
 
     private static final String SIMPLE_NAME = "name";
@@ -58,7 +59,7 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
     public UpdateInformation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
         //handling the Json as a JsonObject
         JsonObject jsonObject = json.getAsJsonObject();
-        return new UpdateInformation(getVersion(jsonObject), getReviewUrl(jsonObject), getPacks(jsonObject));
+        return new UpdateInformation(getVersion(jsonObject), getReviewUrl(jsonObject), getWebsite(jsonObject), getPacks(jsonObject));
     }
 
     /**
@@ -95,6 +96,11 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
         String asString = reviewUrl.getAsString();
         logger.debug("Review url read: '{}'", asString);
         return asString;
+    }
+
+    @NotNull
+    private String getWebsite(@NotNull JsonObject jsonObject) {
+        return jsonObject.get(WEBSITE).getAsString();
     }
 
     /**

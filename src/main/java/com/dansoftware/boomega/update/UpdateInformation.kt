@@ -36,8 +36,9 @@ open class UpdateInformation
  *
  * @param version   the new version of the update
  * @param reviewUrl the location of the review markdown-text.
+ * @param website   the website where the user can manually download the binaries from
  * @param binaries  the List that contains the object representations of the downloadable binaries
  */
-constructor(val version: String, val reviewUrl: String, val binaries: List<DownloadableBinary>) {
+constructor(val version: String, val reviewUrl: String, val website: String, val binaries: List<DownloadableBinary>) {
     open fun reviewReader(): Reader = InputStreamReader(URL(reviewUrl).openStream(), StandardCharsets.UTF_8)
 }
