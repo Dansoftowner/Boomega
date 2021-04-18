@@ -1,6 +1,7 @@
 {
   "boomega" : {
     "version" : "0.5.0",
+    "website" : "https://github.com/Dansoftowner/Boomega/releases/tag/v0.5.0",
     "review" : {
       "defaultLang" : "en",
       "en" : "https://pastebin.com/raw/wJ3tciKc",
