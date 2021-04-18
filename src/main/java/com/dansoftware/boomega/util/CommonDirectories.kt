@@ -39,7 +39,7 @@ object CommonDirectories {
 
                 if (Advapi32Util.registryValueExists(WinReg.HKEY_CURRENT_USER, registryPath, registryValue))
                     File(Advapi32Util.registryGetStringValue(WinReg.HKEY_CURRENT_USER, registryPath, registryValue))
-                null
+                else null
             }
             else -> null
         }
