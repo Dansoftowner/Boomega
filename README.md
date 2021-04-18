@@ -77,7 +77,7 @@ The detailed documentation is available [here]().
 * The build tool used for this project is `Gradle`
 
 ### Build requirements
-* JDK 11+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended) 
+* JDK 16+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended) 
 * Read about the [necessary JVM options](JVM_OPTIONS.md)
 
 The recommended IDE for building this project is `IntelliJ Idea`. 
