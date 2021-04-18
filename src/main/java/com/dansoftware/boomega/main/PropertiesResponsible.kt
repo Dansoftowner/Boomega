@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.main
 
+import com.dansoftware.boomega.util.CommonDirectories
 import com.dansoftware.boomega.util.os.OsInfo
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
@@ -117,7 +118,7 @@ object PropertiesResponsible {
     }
 
     private fun getDefaultDirectoryFilePath() =
-        File(FileSystemView.getFileSystemView().defaultDirectory, BOOMEGA_DOCUMENTS_FOLDER).absolutePath
+        File(CommonDirectories.documentsDir, BOOMEGA_DOCUMENTS_FOLDER).absolutePath
 
     /**
      * Returns the config file's path
