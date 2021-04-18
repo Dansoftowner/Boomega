@@ -92,6 +92,9 @@ dependencies {
     libraries 'org.dizitart:nitrite:3.4.3'
     libraries 'it.sauronsoftware:junique:1.0.4'
 
+    libraries 'net.java.dev.jna:jna:5.6.0'
+    libraries 'net.java.dev.jna:jna-platform:5.6.0'
+
     /*** JAVA FX LIBRARIES ***/
 
     libraries 'com.jfoenix:jfoenix:9.0.10'
