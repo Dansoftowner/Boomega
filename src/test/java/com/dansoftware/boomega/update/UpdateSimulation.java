@@ -7,10 +7,7 @@ import com.dansoftware.boomega.main.PropertiesResponsible;
 import com.dansoftware.boomega.util.adapter.VersionInteger;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -63,7 +60,7 @@ public class UpdateSimulation {
 
         @Override
         protected UpdateInformation loadInfo() {
-            return new UpdateInformation(newVersion(), "", "about:blank",buildFakeBinaries()) {
+            return new UpdateInformation(newVersion(), "", "https://google.com",buildFakeBinaries()) {
                 @NotNull
                 @Override
                 public Reader reviewReader() {
@@ -96,13 +93,11 @@ public class UpdateSimulation {
         @NotNull
         @Override
         public InputStream openStream() {
-            return new InputStream() {
-                private int fakeSize = getSize() * 1024 * 1024;
-
+            return new ByteArrayInputStream(new byte[getSize() * 1024 * 1024]) {
                 @Override
-                public int read() throws IOException {
-                    sleep(500);
-                    return fakeSize--;
+                public synchronized int read() {
+                    sleep(10000);
+                    return super.read();
                 }
             };
         }
