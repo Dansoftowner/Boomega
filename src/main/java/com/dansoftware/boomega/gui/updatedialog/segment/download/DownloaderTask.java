@@ -90,7 +90,7 @@ public class DownloaderTask extends Task<File> {
     private File getOutputFile(DownloadableBinary binary, File dir) {
         String fileName = FilenameUtils.getName(binary.getDownloadUrl());
         if (StringUtils.isBlank(fileName)) {
-            fileName = "libraryapp-" + updateInformation.getVersion() + "." + binary.getFileExtension();
+            fileName = "boomega-" + updateInformation.getVersion() + "." + binary.getFileExtension();
         } else if (!StringUtils.endsWithIgnoreCase(fileName, binary.getFileExtension())) {
             fileName += (fileName.endsWith(".") ? StringUtils.EMPTY : ".") + binary.getFileExtension();
         }
@@ -113,13 +113,18 @@ public class DownloaderTask extends Task<File> {
 
                 //getting the size (in bytes) of the downloadable content
                 long contentSize = this.binary.getSize() * 1024L * 1024L;
+                logger.debug("Full content size (in bytes): {}", contentSize);
+
                 //calculating the value of 1 %
                 long onePercent = contentSize / 100;
+                logger.debug("One percent is : {}", onePercent);
+
                 //this variable will count that how many bytes are read
                 int allReadBytesCount = 0;
 
                 byte[] buf = new byte[2048];
                 int bytesRead;
+                logger.debug("Starting loop...");
                 while ((bytesRead = input.read(buf)) >= 0) {
                     allReadBytesCount += bytesRead;
                     output.write(buf, 0, bytesRead);
@@ -134,6 +139,7 @@ public class DownloaderTask extends Task<File> {
 
                     //if the user cancelled the task, we return
                     if (this.isCancelled()) {
+                        logger.debug("Cancelled during loop");
                         updateProgress(0, 0);
                         return null;
                     }
@@ -141,6 +147,7 @@ public class DownloaderTask extends Task<File> {
                     //if a pause request detected, we pause the thread
                     // by the thread-locker object's wait() method
                     if (this.paused) {
+                        logger.debug("Paused");
                         Platform.runLater(() -> pausedProperty.set(true));
                         updateMessage(I18N.getValue("update.page.download.paused"));
                         lock.wait();
@@ -148,6 +155,7 @@ public class DownloaderTask extends Task<File> {
                         updateMessage(I18N.getValue("update.page.download.happening"));
                     }
                 }
+                logger.debug("Ending loop...");
 
                 updateProgress(100, 100);
 
