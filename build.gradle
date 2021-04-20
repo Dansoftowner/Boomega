@@ -80,7 +80,7 @@ dependencies {
     implementation 'commons-collections:commons-collections:3.2.2'
     implementation 'com.github.Dansoftowner:jFileGoodies:1.2.6'
     implementation 'com.github.oshi:oshi-core:5.7.1'
-    implementation 'com.github.Dansoftowner:jSystemThemeDetector:2.1'
+    implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.4'
     implementation 'com.github.Dansoftowner:Restart4j:1.4.1'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
