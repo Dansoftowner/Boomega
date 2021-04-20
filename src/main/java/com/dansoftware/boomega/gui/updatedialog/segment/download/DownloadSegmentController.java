@@ -146,9 +146,11 @@ public class DownloadSegmentController implements Initializable {
             }
         } catch (IOException e) {
             context.showErrorDialog(
-                    I18N.getValue("update.view.downloaded.run.failed.title", result.getName()),
-                    I18N.getValue("update.view.downloaded.run.failed.msg"), e, buttonType -> {
-                    });
+                    I18N.getValue("update.view.downloaded.run.failed.title"),
+                    I18N.getValue("update.view.downloaded.run.failed.msg", result.getName()),
+                    e,
+                    buttonType -> {}
+            );
         }
     }
 
