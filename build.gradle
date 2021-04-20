@@ -112,7 +112,7 @@ dependencies {
     implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.3'
 
     //implementation from the local file system
-    implementation fileTree(dir: 'external-implementation', include: '*.jar')
+    implementation fileTree(dir: 'external-libraries', include: '*.jar')
 }
 
 
