@@ -28,9 +28,11 @@ import javax.swing.filechooser.FileSystemView
  * Used for retrieving some common directory paths (like 'Documents', 'Downloads' etc..)
  */
 object CommonDirectories {
+    @JvmStatic
     val documentsDir: File?
         get() = FileSystemView.getFileSystemView().defaultDirectory
 
+    @JvmStatic
     val downloadsDir: File?
         get() = when {
             OsInfo.isWindows() -> {
@@ -43,4 +45,8 @@ object CommonDirectories {
             }
             else -> null
         }
+
+    @JvmStatic
+    val downloadsDirPath: String?
+        get() = downloadsDir?.absolutePath
 }
