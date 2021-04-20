@@ -77,9 +77,9 @@ public class UpdateSimulation {
 
         private List<DownloadableBinary> buildFakeBinaries() {
             return List.of(
-                    new FakeBinary("Exe installer", "exe", 112),
-                    new FakeBinary("Zip archive", "zip", 140),
-                    new FakeBinary("Jar archive", "jar", 40)
+                    new FakeBinary("Exe installer", "exe", 112_0),
+                    new FakeBinary("Zip archive", "zip", 140_0),
+                    new FakeBinary("Jar archive", "jar", 40_0)
             );
         }
     }
@@ -93,13 +93,7 @@ public class UpdateSimulation {
         @NotNull
         @Override
         public InputStream openStream() {
-            return new ByteArrayInputStream(new byte[getSize() * 1024 * 1024]) {
-                @Override
-                public synchronized int read() {
-                    sleep(10000);
-                    return super.read();
-                }
-            };
+            return new ByteArrayInputStream(new byte[getSize() * 1024 * 1024]);
         }
     }
 }
