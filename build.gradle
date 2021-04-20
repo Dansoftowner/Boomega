@@ -50,11 +50,8 @@ repositories {
 }
 
 configurations {
-    //for holding the dependencies
-    libraries
-
     //we exclude the javafx group
-    libraries.exclude group: 'org.openjfx'
+    implementation.exclude group: 'org.openjfx'
 }
 
 test {
@@ -63,12 +60,12 @@ test {
 
 dependencies {
     //Kotlin
-    libraries "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
 
     //logging
-    libraries 'org.slf4j:slf4j-api:1.7.30'
-    libraries 'ch.qos.logback:logback-classic:1.2.3'
-    libraries 'ch.qos.logback:logback-core:1.2.3'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'ch.qos.logback:logback-core:1.2.3'
 
     //Testing
     testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
@@ -76,54 +73,51 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.8.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:3.8.0'
 
-    libraries 'com.google.code.gson:gson:2.8.6'
-    libraries 'org.jetbrains:annotations:20.1.0'
-    libraries 'commons-io:commons-io:2.6'
-    libraries 'org.apache.commons:commons-lang3:3.10'
-    libraries 'commons-collections:commons-collections:3.2.2'
-    libraries 'com.github.Dansoftowner:jFileGoodies:1.2.6'
-    libraries 'com.github.oshi:oshi-core:5.6.0'
-    libraries 'com.github.Dansoftowner:jSystemThemeDetector:2.1'
-    libraries 'com.github.Dansoftowner:Restart4j:1.0'
-    libraries 'org.jsoup:jsoup:1.13.1'
-    libraries 'com.squareup.okhttp3:okhttp:4.9.0'
-    libraries 'org.apache.httpcomponents:httpclient:4.5.13'
-    libraries 'com.github.ben-manes.caffeine:caffeine:3.0.1'
-    libraries 'org.dizitart:nitrite:3.4.3'
-    libraries 'it.sauronsoftware:junique:1.0.4'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'org.apache.commons:commons-lang3:3.10'
+    implementation 'commons-collections:commons-collections:3.2.2'
+    implementation 'com.github.Dansoftowner:jFileGoodies:1.2.6'
+    implementation 'com.github.oshi:oshi-core:5.6.0'
+    implementation 'com.github.Dansoftowner:jSystemThemeDetector:2.1'
+    implementation 'com.github.Dansoftowner:Restart4j:1.0'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.1'
+    implementation 'org.dizitart:nitrite:3.4.3'
+    implementation 'it.sauronsoftware:junique:1.0.4'
 
-    libraries 'net.java.dev.jna:jna:5.6.0'
-    libraries 'net.java.dev.jna:jna-platform:5.6.0'
+    implementation 'net.java.dev.jna:jna:5.6.0'
+    implementation 'net.java.dev.jna:jna-platform:5.6.0'
 
-    /*** JAVA FX LIBRARIES ***/
+    /*** JAVA FX implementation ***/
 
-    libraries 'com.jfoenix:jfoenix:9.0.10'
-    libraries 'org.jfxtras:jmetro:11.6.14'
-    libraries 'org.controlsfx:controlsfx:11.1.0'
-    libraries 'com.dlsc.formsfx:formsfx-core:11.4.1'
-    libraries 'net.kurobako:gesturefx:0.6.0'
+    implementation 'com.jfoenix:jfoenix:9.0.10'
+    implementation 'org.jfxtras:jmetro:11.6.14'
+    implementation 'org.controlsfx:controlsfx:11.1.0'
+    implementation 'com.dlsc.formsfx:formsfx-core:11.4.1'
+    implementation 'net.kurobako:gesturefx:0.6.0'
     //Modified WorkBenchFX, Original: 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
-    libraries 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
-    libraries 'de.jensd:fontawesomefx-commons:11.0'
-    libraries 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
-    libraries 'de.jensd:fontawesomefx-materialdesignfont:1.7.22-11'
-    libraries 'io.github.typhon0:AnimateFX:1.2.2'
-    libraries "com.sandec:mdfx:0.1.9"
-    libraries 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
-    libraries 'com.github.Dansoftowner:SegmentDialogFX:2.0'
-    libraries "de.jangassen:nsmenufx:3.1.0"
-    libraries 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.3'
+    implementation 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
+    implementation 'de.jensd:fontawesomefx-commons:11.0'
+    implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
+    implementation 'de.jensd:fontawesomefx-materialdesignfont:1.7.22-11'
+    implementation 'io.github.typhon0:AnimateFX:1.2.2'
+    implementation "com.sandec:mdfx:0.1.9"
+    implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
+    implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
+    implementation "de.jangassen:nsmenufx:3.1.0"
+    implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.3'
 
-    //libraries from the local file system
-    libraries fileTree(dir: 'external-libraries', include: '*.jar')
-
-    // libraries = implementation
-    configurations.implementation.extendsFrom(configurations.libraries)
+    //implementation from the local file system
+    implementation fileTree(dir: 'external-implementation', include: '*.jar')
 }
 
 
 shadowJar {
-    configurations = [project.configurations.libraries]
+    configurations = [project.configurations.implementation]
 
     exclude 'javafx/**'
     exclude 'javafx.properties'
