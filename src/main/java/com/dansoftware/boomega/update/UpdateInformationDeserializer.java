@@ -121,10 +121,10 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
             logger.debug("Found pack '{}'", name);
 
             JsonElement downloadUrlJson = asObject.get(DOWNLOAD_URL);
-            if (!downloadUrlJson.isJsonNull()) {
+            if (downloadUrlJson != null && !downloadUrlJson.isJsonNull()) {
                 logger.debug("Pack has url");
                 JsonArray scope = asObject.get(SCOPE).getAsJsonArray();
-                if (scope.contains(new JsonPrimitive(getOsId()))) {
+                if (scope.contains(new JsonPrimitive(getOsId())) || scope.contains(new JsonPrimitive("*"))) {
                     logger.debug("Pack is compatible with the current os");
                     String fileExtension = asObject.get(FILE_EXTENSION).getAsString();
                     String downloadUrl = downloadUrlJson.getAsString();
