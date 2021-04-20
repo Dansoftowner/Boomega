@@ -1,7 +1,6 @@
 package com.dansoftware.boomega.gui.updatedialog.segment.notification;
 
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.util.ImprovedFXMLLoader;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.update.UpdateInformation;
 import com.dansoftware.sgmdialog.FixedContentSegment;

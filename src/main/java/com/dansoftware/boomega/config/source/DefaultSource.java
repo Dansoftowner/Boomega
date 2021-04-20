@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.config.source;
 
-import java.io.*;
+import java.io.File;
 
 /**
  * The default source used by the application.

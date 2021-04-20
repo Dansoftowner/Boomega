@@ -6,7 +6,6 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
-import javax.swing.filechooser.FileSystemView
 
 /**
  * Responsible for adding the necessary system properties that are needed for the application.
