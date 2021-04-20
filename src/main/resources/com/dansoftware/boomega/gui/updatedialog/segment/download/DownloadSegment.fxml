@@ -70,8 +70,8 @@
         <ProgressBar fx:id="progressBar" prefWidth="${root.width}" progress="0.0"/>
         <StackPane fx:id="progressIndicator">
             <children>
-                <Label fx:id="progressMessageLabel" StackPane.alignment="CENTER_RIGHT"/>
                 <Label fx:id="progressTitleLabel" StackPane.alignment="CENTER_LEFT"/>
+                <Label fx:id="progressMessageLabel" StackPane.alignment="CENTER_RIGHT"/>
             </children>
         </StackPane>
     </children>
