@@ -3,6 +3,24 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<!--
+  ~ Boomega
+  ~ Copyright (C)  2021  Daniel Gyoerffy
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <VBox fx:id="root" prefWidth="320.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.dansoftware.boomega.gui.updatedialog.segment.download.DownloadSegmentController">
@@ -12,18 +30,22 @@
                 <Insets/>
             </VBox.margin>
         </Label>
-        <ScrollPane>
-            <content>
-                <VBox fx:id="radioBtnVBox" spacing="10.0"/>
-            </content>
+        <ScrollPane fx:id="packageScrollPane" fitToWidth="true" fitToHeight="true">
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
         </ScrollPane>
+        <HBox fx:id="sizeIndicator" spacing="10.0">
+            <children>
+                <Label text="%update.view.download.size" HBox.hgrow="ALWAYS"/>
+                <Label fx:id="sizeLabel" text=" - "/>
+            </children>
+        </HBox>
         <Separator prefWidth="200.0"/>
+        <Label text="%update.view.download.path.prompt"/>
         <HBox spacing="5.0">
             <children>
-                <TextField fx:id="downloadPathField" editable="false" promptText="%update.view.download.path.prompt"
+                <TextField fx:id="downloadPathField" editable="false"
                            HBox.hgrow="ALWAYS"/>
                 <Button fx:id="downloadPathChooserBtn" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false"
                         onAction="#openDirChooser" text="Button"/>
@@ -46,6 +68,12 @@
             </Button>
         </HBox>
         <ProgressBar fx:id="progressBar" prefWidth="${root.width}" progress="0.0"/>
+        <StackPane fx:id="progressIndicator">
+            <children>
+                <Label fx:id="progressMessageLabel" StackPane.alignment="CENTER_RIGHT"/>
+                <Label fx:id="progressTitleLabel" StackPane.alignment="CENTER_LEFT"/>
+            </children>
+        </StackPane>
     </children>
     <Button fx:id="fileOpenerBtn" defaultButton="true" disable="true" mnemonicParsing="false"
             onAction="#runDownloaded" prefWidth="${root.width}" text="%update.view.download.finished.run"/>

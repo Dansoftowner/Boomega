@@ -5,7 +5,7 @@ import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Font
 
-private class NoBinaryAvailablePlaceHolder : StackPane() {
+class NoBinaryAvailablePlaceHolder : StackPane() {
     init {
         styleClass.add("no-binary-available-place-holder")
         buildUI()

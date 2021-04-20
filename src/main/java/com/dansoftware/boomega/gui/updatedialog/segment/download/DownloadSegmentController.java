@@ -1,21 +1,27 @@
 package com.dansoftware.boomega.gui.updatedialog.segment.download;
 
 import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import com.dansoftware.boomega.gui.updatedialog.UpdateDialog;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.update.DownloadableBinary;
 import com.dansoftware.boomega.update.UpdateInformation;
+import com.dansoftware.boomega.util.CommonDirectories;
 import com.jfilegoodies.FileGoodies;
 import com.jfilegoodies.explorer.FileExplorers;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
+import kotlin.Unit;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -41,11 +47,21 @@ public class DownloadSegmentController implements Initializable {
     @FXML
     private VBox root;
     @FXML
-    private VBox radioBtnVBox;
+    private ScrollPane packageScrollPane;
+    @FXML
+    private HBox sizeIndicator;
+    @FXML
+    private Label sizeLabel;
     @FXML
     private TextField downloadPathField;
     @FXML
     private ProgressBar progressBar;
+    @FXML
+    private StackPane progressIndicator;
+    @FXML
+    private Label progressMessageLabel;
+    @FXML
+    private Label progressTitleLabel;
     @FXML
     private Button downloadPathChooserBtn;
     @FXML
@@ -59,36 +75,38 @@ public class DownloadSegmentController implements Initializable {
     @FXML
     private Button downloadKillBtn;
 
+    private PackageChooserArea packageChooserArea;
+
     /**
      * The last selected directory where the user wants to save the update.
      */
-    private File downloadDirectory;
-
-    /**
-     * The {@link ToggleGroup} that is the group of the {@link RadioButton} objects used
-     * for selecting the downloadable binary-type.
-     */
-    private ToggleGroup radioGroup;
+    private final ObjectProperty<File> downloadDirectory =
+            new SimpleObjectProperty<>();
 
     private final Context context;
     private final UpdateInformation updateInformation;
-    private final DownloaderTaskExecutor downloaderTaskExecutor;
+    //private final DownloaderTaskExecutor downloaderTaskExecutor;
+
+    private final DownloaderTaskFactory taskFactory;
+
 
     DownloadSegmentController(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
         this.context = Objects.requireNonNull(context);
         this.updateInformation = Objects.requireNonNull(updateInformation);
-        this.downloaderTaskExecutor = new DownloaderTaskExecutor(context, updateInformation, this);
+        this.taskFactory = new DownloaderTaskFactory(context, updateInformation);
+      //  this.downloaderTaskExecutor = new DownloaderTaskExecutor(context, updateInformation, this);
     }
+
+
 
     @FXML
     private void openDirChooser() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        this.downloadDirectory = directoryChooser.showDialog(context.getContextWindow());
 
         //if the file exists we set it's absolute-path into the textfield,
         //otherwise we just set an empty string ("") into it.
         this.downloadPathField.setText(Optional
-                .ofNullable(downloadDirectory)
+                .ofNullable(directoryChooser.showDialog(context.getContextWindow()))
                 .map(File::getAbsolutePath)
                 .orElse(StringUtils.EMPTY)
         );
@@ -98,25 +116,24 @@ public class DownloadSegmentController implements Initializable {
     private void downloadSelected() {
         //creating a TaskbarProgressbar object if we haven't already
         context.showIndeterminateProgress();
-        BinaryEntryRadioButton selectedRadio = (BinaryEntryRadioButton) this.radioGroup.getSelectedToggle();
-        downloaderTaskExecutor.start(selectedRadio.binary, downloadDirectory);
+        taskFactory.start(packageChooserArea.getSelectedBinary(), downloadDirectory.get());
     }
 
     @FXML
     private void pauseDownload() {
         //we pause if it's running; or we start if it's paused
-        downloaderTaskExecutor.startPause();
+        taskFactory.startPause();
 
         //we set the right icon depending on it's paused or not
         downloadPauseBtn.setGraphic(new MaterialDesignIconView(
-                downloaderTaskExecutor.isPaused() ?
+                taskFactory.isPaused() ?
                         MaterialDesignIcon.PLAY :
                         MaterialDesignIcon.PAUSE
         ));
 
         //changing the tooltip on the download/pause button
         downloadPauseBtn.setTooltip(new Tooltip(
-                downloaderTaskExecutor.isPaused() ?
+                taskFactory.isPaused() ?
                         I18N.getValues().getString("update.view.download.resume") :
                         I18N.getValues().getString("update.view.download.pause")
         ));
@@ -125,19 +142,19 @@ public class DownloadSegmentController implements Initializable {
     @FXML
     private void killDownload() {
         //we cancel the task
-        downloaderTaskExecutor.kill();
+        taskFactory.kill();
     }
 
     @FXML
     private void openDownloaded() {
-        File result = downloaderTaskExecutor.getResult();
+        File result = taskFactory.getFile();
         if (result != null)
             FileExplorers.getLazy().openSelect(result);
     }
 
     @FXML
     private void runDownloaded() {
-        File result = downloaderTaskExecutor.getResult();
+        File result = taskFactory.getFile();
         try {
             if (result != null) {
 
@@ -156,55 +173,141 @@ public class DownloadSegmentController implements Initializable {
         }
     }
 
-    private void createFormatChooserRadioButtons() {
-        this.radioGroup = new ToggleGroup();
-        List<DownloadableBinary> binaries = updateInformation.getBinaries();
-        if (!binaries.isEmpty()) {
-            binaries.forEach(binary ->
-                    radioBtnVBox.getChildren().add(new BinaryEntryRadioButton(radioGroup, binary)));
-        } else {
-            radioBtnVBox.getChildren().add(new NoBinaryAvailablePlaceHolder());
-        }
+    private void buildPackageChooserArea() {
+        packageChooserArea = new PackageChooserArea();
+        updateInformation.getBinaries().forEach(packageChooserArea::putEntry);
+        if (packageChooserArea.isEmpty())
+            packageScrollPane.setContent(new NoBinaryAvailablePlaceHolder());
+        else
+            packageScrollPane.setContent(packageChooserArea);
+    }
+
+    private void buildWebsiteHyperlink() {
+        root.getChildren().add(
+                new StackPane(
+                        new WebsiteHyperLink(
+                                I18N.getValue("update.view.website.open"),
+                                updateInformation.getWebsite()
+                        )
+                )
+        );
     }
 
     UpdateDialog getDialog() {
         return (UpdateDialog) this.root.getParent().getParent();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        this.createFormatChooserRadioButtons();
+    private void initDownloadButtonBehaviour() {
         this.downloadBtn.disableProperty().bind(
-                this.radioGroup.selectedToggleProperty().isNull().or(this.downloadPathField.textProperty().isEmpty()));
+                this.packageChooserArea.selectedBinaryProperty().isNull()
+                        .or(this.downloadPathField.textProperty().isEmpty())
+                        .or(this.taskFactory.getRunningProperty())
+        );
+    }
+
+    private void initSizeIndicatorBehaviour() {
+        sizeIndicator.visibleProperty().bind(packageChooserArea.selectedBinaryProperty().isNotNull());
+        sizeIndicator.managedProperty().bind(packageChooserArea.selectedBinaryProperty().isNotNull());
+        packageChooserArea.selectedBinaryProperty().addListener((observable, oldValue, pack) ->
+                sizeLabel.setText(String.format("%d MB", pack.getSize())));
+    }
+
+    private void initProgressbarBehaviour() {
+        progressBar.progressProperty().bind(taskFactory.getProgressProperty());
+        progressBar.managedProperty().bind(taskFactory.getRunningProperty());
+        progressBar.visibleProperty().bind(taskFactory.getRunningProperty());
+        taskFactory.getPausedProperty().addListener((observable, oldValue, running) -> {
+            if (running) progressBar.getStyleClass().add("paused");
+            else progressBar.getStyleClass().remove("paused");
+        });
+    }
+
+    private void initProgressIndicatorBehaviour() {
+        progressIndicator.managedProperty().bind(taskFactory.getRunningProperty());
+        progressIndicator.visibleProperty().bind(taskFactory.getRunningProperty());
+    }
+
+    private void initProgressMessageLabelBehaviour() {
+        progressMessageLabel.textProperty().bind(taskFactory.getMessageProperty());
+    }
+
+    private void initProgressTitleLabelBehaviour() {
+        progressTitleLabel.textProperty().bind(taskFactory.getTitleProperty());
+    }
+
+    private void initPauseButtonBehaviour() {
+        downloadPauseBtn.disableProperty().bind(taskFactory.getRunningProperty().not());
+    }
+
+    private void initKillButtonBehaviour() {
+        downloadKillBtn.disableProperty().bind(taskFactory.getRunningProperty().not());
+    }
+
+    private void initPathFieldBehaviour() {
+        downloadPathField.textProperty().addListener((observable, oldValue, newValue) -> downloadDirectory.set(new File(newValue)));
+        downloadPathField.disableProperty().bind(taskFactory.getRunningProperty());
+    }
+
+    private void initDirChooserButtonBehaviour() {
+        downloadPathChooserBtn.disableProperty().bind(taskFactory.getRunningProperty());
+    }
+
+    private void initOpenerButtonBehaviour() {
+        fileOpenerBtn.disableProperty().bind(taskFactory.getWorkDoneProperty().lessThan(100));
+    }
+
+    private void initPackageChooserBehaviour() {
+        packageChooserArea.disableProperty().bind(taskFactory.getRunningProperty());
+    }
+
+    private void initRunnerButtonBehaviour() {
+        runnerBtn.disableProperty().bind(taskFactory.getWorkDoneProperty().lessThan(100));
+    }
+
+
+    private void initDialogBehaviour() {
+        taskFactory.onNewTaskCreated(task -> {
+            UpdateDialog dialog = getDialog();
+            dialog.nextButtonDisableProperty().bind(taskFactory.getRunningProperty());
+            dialog.prevButtonDisableProperty().bind(taskFactory.getRunningProperty());
+            return Unit.INSTANCE;
+        });
+    }
+
+    private void initBehaviours() {
+        initDownloadButtonBehaviour();
+        initSizeIndicatorBehaviour();
+        initProgressbarBehaviour();
+        initProgressIndicatorBehaviour();
+        initProgressTitleLabelBehaviour();
+        initProgressMessageLabelBehaviour();
+        initPauseButtonBehaviour();
+        initKillButtonBehaviour();
+        initPathFieldBehaviour();
+        initDirChooserButtonBehaviour();
+        initOpenerButtonBehaviour();
+        initRunnerButtonBehaviour();
+        initPackageChooserBehaviour();
+        initDialogBehaviour();
+    }
+
+    private void setIcons() {
         this.downloadPathChooserBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.FOLDER));
         this.downloadPauseBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.PAUSE));
         this.downloadKillBtn.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.STOP));
     }
 
-    private static final class NoAvailableBinariesPlaceHolder extends StackPane {
-        NoAvailableBinariesPlaceHolder() {
-//            getChildren()
-        }
+    private void setDefaults() {
+        this.downloadPathField.setText(CommonDirectories.getDownloadsDirPath());
     }
 
-    /**
-     * A {@link BinaryEntryRadioButton} is a {@link RadioButton} that represents a
-     * binary-type.
-     *
-     * <p>
-     * It requires a {@link ToggleGroup} and a {@link DownloadableBinary} object that represents the
-     * downloadable update-file.
-     */
-    private static final class BinaryEntryRadioButton extends RadioButton {
-
-        private final DownloadableBinary binary;
-
-        public BinaryEntryRadioButton(@NotNull ToggleGroup toggleGroup,
-                                      @NotNull DownloadableBinary binary) {
-            this.binary = binary;
-            this.setText(binary.getName());
-            this.setToggleGroup(toggleGroup);
-        }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        buildPackageChooserArea();
+        buildWebsiteHyperlink();
+        initBehaviours();
+        setDefaults();
+        setIcons();
     }
 
     ProgressBar getProgressBar() {
@@ -237,10 +340,6 @@ public class DownloadSegmentController implements Initializable {
 
     Button getDownloadKillBtn() {
         return downloadKillBtn;
-    }
-
-    VBox getRadioBtnVBox() {
-        return radioBtnVBox;
     }
 
     VBox getRoot() {
