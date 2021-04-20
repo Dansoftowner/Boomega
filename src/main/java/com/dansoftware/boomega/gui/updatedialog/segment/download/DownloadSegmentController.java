@@ -4,7 +4,6 @@ import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import com.dansoftware.boomega.gui.updatedialog.UpdateDialog;
 import com.dansoftware.boomega.i18n.I18N;
-import com.dansoftware.boomega.update.DownloadableBinary;
 import com.dansoftware.boomega.update.UpdateInformation;
 import com.dansoftware.boomega.util.CommonDirectories;
 import com.jfilegoodies.FileGoodies;
@@ -30,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -85,19 +83,14 @@ public class DownloadSegmentController implements Initializable {
 
     private final Context context;
     private final UpdateInformation updateInformation;
-    //private final DownloaderTaskExecutor downloaderTaskExecutor;
 
     private final DownloaderTaskFactory taskFactory;
-
 
     DownloadSegmentController(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
         this.context = Objects.requireNonNull(context);
         this.updateInformation = Objects.requireNonNull(updateInformation);
         this.taskFactory = new DownloaderTaskFactory(context, updateInformation);
-      //  this.downloaderTaskExecutor = new DownloaderTaskExecutor(context, updateInformation, this);
     }
-
-
 
     @FXML
     private void openDirChooser() {
@@ -123,20 +116,6 @@ public class DownloadSegmentController implements Initializable {
     private void pauseDownload() {
         //we pause if it's running; or we start if it's paused
         taskFactory.startPause();
-
-        //we set the right icon depending on it's paused or not
-        downloadPauseBtn.setGraphic(new MaterialDesignIconView(
-                taskFactory.isPaused() ?
-                        MaterialDesignIcon.PLAY :
-                        MaterialDesignIcon.PAUSE
-        ));
-
-        //changing the tooltip on the download/pause button
-        downloadPauseBtn.setTooltip(new Tooltip(
-                taskFactory.isPaused() ?
-                        I18N.getValues().getString("update.view.download.resume") :
-                        I18N.getValues().getString("update.view.download.pause")
-        ));
     }
 
     @FXML
@@ -237,6 +216,10 @@ public class DownloadSegmentController implements Initializable {
 
     private void initPauseButtonBehaviour() {
         downloadPauseBtn.disableProperty().bind(taskFactory.getRunningProperty().not());
+        taskFactory.getPausedProperty().addListener((observable, oldValue, isPaused) -> {
+            downloadPauseBtn.setGraphic(new MaterialDesignIconView(isPaused ? MaterialDesignIcon.PLAY : MaterialDesignIcon.PAUSE));
+            downloadPauseBtn.setTooltip(new Tooltip(I18N.getValue(taskFactory.isPaused() ? "update.view.download.resume" : "update.view.download.pause")));
+        });
     }
 
     private void initKillButtonBehaviour() {
@@ -308,42 +291,6 @@ public class DownloadSegmentController implements Initializable {
         initBehaviours();
         setDefaults();
         setIcons();
-    }
-
-    ProgressBar getProgressBar() {
-        return progressBar;
-    }
-
-    TextField getDownloadPathField() {
-        return downloadPathField;
-    }
-
-    Button getDownloadPathChooserBtn() {
-        return downloadPathChooserBtn;
-    }
-
-    Button getFileOpenerBtn() {
-        return fileOpenerBtn;
-    }
-
-    Button getRunnerBtn() {
-        return runnerBtn;
-    }
-
-    Button getDownloadBtn() {
-        return downloadBtn;
-    }
-
-    Button getDownloadPauseBtn() {
-        return downloadPauseBtn;
-    }
-
-    Button getDownloadKillBtn() {
-        return downloadKillBtn;
-    }
-
-    VBox getRoot() {
-        return root;
     }
 }
 
