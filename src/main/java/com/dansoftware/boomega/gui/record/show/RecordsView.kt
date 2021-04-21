@@ -8,26 +8,29 @@ import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.record.RecordClipboard
 import com.dansoftware.boomega.gui.record.show.dock.Dock
+import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.binding.IntegerBinding
+import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.concurrent.WorkerStateEvent
 import javafx.scene.layout.BorderPane
 import org.slf4j.LoggerFactory
+import java.lang.Exception
 import java.util.*
 
 class RecordsView(
     private val context: Context,
     private val database: Database,
-    private val preferences: Preferences,
-    private val baseItems: ObservableList<Record>
+    private val preferences: Preferences
 ) : BorderPane() {
 
     private val copyHandle = Any()
+    private val baseItems: ObservableList<Record> = FXCollections.observableArrayList()
 
     private val recordsViewBase = RecordsViewBase(context, database, baseItems)
     private val toolbar = RecordsViewToolbar(this)
@@ -199,6 +202,40 @@ class RecordsView(
         //TODO: showing confirmation dialog
         removeItems(ArrayList(table.selectionModel.selectedItems))
     }
+
+    fun insertNewRecord(record: Record = Record.Builder(Record.Type.BOOK).build()) {
+        CachedExecutor.submit(buildInsertAction(record))
+    }
+
+    private fun buildInsertAction(record: Record): Task<Unit> =
+        object : Task<Unit>() {
+
+            init {
+                setOnRunning {
+                    context.showIndeterminateProgress()
+                }
+
+                setOnFailed {
+                    context.stopProgress()
+                    context.showErrorDialog(
+                        I18N.getValue("record.add.error.title"),
+                        I18N.getValue("record.add.error.msg"),
+                        it.source.exception as Exception?
+                    )
+                }
+
+                setOnSucceeded {
+                    context.stopProgress()
+                    baseItems.add(record)
+                    table.selectionModel.clearSelection()
+                    table.selectionModel.select(record)
+                }
+            }
+
+            override fun call() {
+                database.insertRecord(record)
+            }
+        }
 
     private fun removeItems(items: List<Record>) {
         CachedExecutor.submit(buildRemoveAction(items))

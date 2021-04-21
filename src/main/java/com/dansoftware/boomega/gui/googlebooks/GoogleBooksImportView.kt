@@ -2,10 +2,9 @@ package com.dansoftware.boomega.gui.googlebooks
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.googlebooks.asRecord
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.record.RecordValues
-import com.dansoftware.boomega.gui.record.add.RecordAddModule
+import com.dansoftware.boomega.gui.record.show.RecordsViewModule
 import com.dansoftware.boomega.i18n.I18N
 import javafx.beans.property.SimpleStringProperty
 import javafx.event.ActionEvent
@@ -106,26 +105,9 @@ class GoogleBooksImportView(
             }
 
         private fun buildButtonAction() = EventHandler<ActionEvent> {
-            context.showModule(RecordAddModule::class.java, RecordValues()
-                .apply {
-                    table.selectionModel.selectedItem.also { volume ->
-                        recordType(
-                            when {
-                                volume.volumeInfo?.isMagazine ?: false -> Record.Type.MAGAZINE
-                                else -> Record.Type.BOOK
-                            }
-                        )
-                        authors(volume.volumeInfo?.authors?.joinToString(", "))
-                        date(volume.volumeInfo?.getPublishedDateObject())
-                        isbn(volume.volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier)
-                        language(volume.volumeInfo?.language)
-                        title(volume.volumeInfo?.title)
-                        subtitle(volume.volumeInfo?.subtitle)
-                        notes(volume.volumeInfo?.description)
-                        publisher(volume.volumeInfo?.publisher)
-                        googleVolumeObject(volume)
-                    }
-                })
+            table.selectionModel.selectedItem.also { volume ->
+                context.showModule(RecordsViewModule::class.java, RecordsViewModule.InsertionRequest(volume.asRecord()))
+            }
         }
     }
 

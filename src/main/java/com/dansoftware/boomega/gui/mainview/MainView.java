@@ -6,7 +6,6 @@ import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksImportModule;
-import com.dansoftware.boomega.gui.record.add.RecordAddModule;
 import com.dansoftware.boomega.gui.record.show.RecordsViewModule;
 import com.dlsc.workbenchfx.Workbench;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -71,7 +70,6 @@ public class MainView extends Workbench implements ContextTransformable {
 
     private void initModules() {
         getModules().add(new GoogleBooksImportModule(asContext, preferences));
-        getModules().add(new RecordAddModule(asContext, database));
         getModules().add(new RecordsViewModule(asContext, preferences, database));
     }
 

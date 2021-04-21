@@ -59,6 +59,7 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
         rightItems.add(buildCountItem())
         rightItems.add(buildSeparator())
         rightItems.add(buildDeleteItem())
+        rightItems.add(buildInsertItem())
         rightItems.add(buildSeparator())
         rightItems.add(buildCopyItem())
         rightItems.add(buildCutItem())
@@ -77,6 +78,11 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
     private fun buildSearchItem() =
         buildToolbarItem(FontAwesomeIcon.SEARCH, "record.find") {
             view.isFindDialogVisible = view.isFindDialogVisible.not()
+        }
+
+    private fun buildInsertItem() =
+        buildToolbarItem(MaterialDesignIcon.PLUS, "record.add.module.title") {
+            view.insertNewRecord()
         }
 
     private fun buildCountItem() = Label().apply {
