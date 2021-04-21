@@ -367,17 +367,10 @@ public class RecordTable extends TableView<Record> {
                         setText(null);
                     } else {
                         Record record = getRecordAtPosition(this);
-                        Optional.ofNullable(record.getRating())
-                                .ifPresentOrElse(rating -> {
-                                    Rating graphic = buildGraphic(rating);
-                                    setGraphic(graphic);
-                                    setText(null);
-                                    RankColumn.this.minWidthProperty().bind(graphic.widthProperty().add(25));
-                                    RankColumn.this.maxWidthProperty().bind(graphic.widthProperty().add(25));
-                                }, () -> {
-                                    setGraphic(null);
-                                    setText("-");
-                                });
+                        Rating graphic = buildGraphic(Optional.ofNullable(record.getRating()).orElse(0));
+                        setGraphic(graphic);
+                        RankColumn.this.minWidthProperty().bind(graphic.widthProperty().add(25));
+                        RankColumn.this.maxWidthProperty().bind(graphic.widthProperty().add(25));
                     }
                 }
 
