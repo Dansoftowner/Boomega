@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.firsttime.dialog.segment.theme;
+package com.dansoftware.boomega.gui.firsttime.segment.theme;
 
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.i18n.I18N;

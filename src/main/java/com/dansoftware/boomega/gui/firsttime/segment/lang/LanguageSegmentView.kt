@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.firsttime.dialog.segment.lang
+package com.dansoftware.boomega.gui.firsttime.segment.lang
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
