@@ -34,7 +34,6 @@ fun Volume.asRecord(): Record {
         language(volumeInfo?.language)
         title(volumeInfo?.title)
         subtitle(volumeInfo?.subtitle)
-        notes(volumeInfo?.description)
         publisher(volumeInfo?.publisher)
         serviceConnection(ServiceConnection().apply { googleBookHandle = selfLink })
 
