@@ -11,12 +11,7 @@ You can use both `Java` and `Kotlin` for writing your code.
 Use the default formatting of your IDE for the code you write.  
 Only format code that you are modifying, do not format entire classes at a time!  
 
-You can use any JDK `16` that has `JavaFX` modules for building the app.
-
-## Working with JavaFX
-
-In this project `fxml` shouldn't be used. Build your UIs from code.  
-The stylesheets (`.css`) should be located in the `resources/.../gui/theme/css` directory.
+You can use any JDK `16` with `JavaFX` modules for building the app.
 
 ## Commit messages
 
