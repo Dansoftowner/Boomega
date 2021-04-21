@@ -73,7 +73,7 @@ class NotesEditor(
             items.isEmpty() -> setContent(NoSelectionPlaceHolder())
             items.size > 1 -> setContent(MultipleSelectionPlaceHolder())
             else -> {
-                setContent(markdownEditor.also { markdownEditor.markdown = items[0].notes })
+                setContent(markdownEditor.also { markdownEditor.markdown = items[0].notes ?: "" })
                 buildChangedBinding()
             }
         }
