@@ -59,11 +59,11 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
         rightItems.add(buildCountItem())
         rightItems.add(buildSeparator())
         rightItems.add(buildDeleteItem())
-        rightItems.add(buildInsertItem())
-        rightItems.add(buildSeparator())
         rightItems.add(buildCopyItem())
         rightItems.add(buildCutItem())
         rightItems.add(buildPasteItem())
+        rightItems.add(buildSeparator())
+        rightItems.add(buildInsertItem())
         rightItems.add(buildSeparator())
         rightItems.add(buildSearchItem())
     }
