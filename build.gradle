@@ -121,6 +121,7 @@ dependencies {
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation "de.jangassen:nsmenufx:3.1.0"
     implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.3'
+    implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
 
     //implementation from the local file system
     implementation fileTree(dir: 'external-libraries', include: '*.jar')

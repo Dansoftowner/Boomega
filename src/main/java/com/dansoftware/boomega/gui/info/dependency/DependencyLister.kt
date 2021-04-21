@@ -169,6 +169,11 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
+            "RichTextFX",
+            "https://github.com/FXMisc/RichTextFX",
+            LicenseInfo("BSD-2-Clause License", "https://github.com/FXMisc/RichTextFX/blob/master/LICENSE")
+        ),
+        DependencyInfo(
             "SLF4J API",
             "http://www.slf4j.org/",
             LicenseInfo.mitLicense()
