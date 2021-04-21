@@ -25,6 +25,7 @@ import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.ReflectionUtils
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import com.dansoftware.boomega.util.revealInExplorer
+import com.jfilegoodies.explorer.FileExplorers
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
@@ -37,6 +38,7 @@ import javafx.stage.Stage
 import javafx.stage.Window
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -57,6 +59,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             ModuleMenu(mainView),
             PreferencesMenu(context, preferences),
             WindowMenu(context),
+            PluginMenu(context),
             HelpMenu(context)
         )
     }
@@ -89,8 +92,6 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                 .menuItem(databaseCreatorMenuItem())
                 .menuItem(databaseManagerMenuItem())
                 .menuItem(recentDatabasesMenuItem())
-                .separator()
-                .menuItem(pluginManagerMenuItem())
                 .separator()
                 .menuItem(revealInExplorerMenuItem())
                 .separator()
@@ -171,10 +172,6 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                     this.graphic(MaterialDesignIcon.BOOK_OPEN_VARIANT)
                 }
             }
-
-        private fun pluginManagerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.pluginmanager"))
-            .action { PluginManagerActivity().show(context.contextWindow) }
-            .graphic(MaterialDesignIcon.POWER_PLUG)
 
         private fun revealInExplorerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.reveal"))
             .action { databaseMeta.file.revealInExplorer() }
@@ -368,6 +365,22 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             .action { context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() } }
             .keyCombination(KeyBindings.fullScreenKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.FULLSCREEN)
+    }
+
+    private class PluginMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.plugin")) {
+
+        init {
+            this.menuItem(pluginManagerMenuItem())
+                .menuItem(pluginDirectoryItem())
+        }
+
+        private fun pluginManagerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.pluginmanager"))
+            .action { PluginManagerActivity().show(context.contextWindow) }
+            .graphic(MaterialDesignIcon.POWER_PLUG)
+
+        private fun pluginDirectoryItem() = MenuItem(I18N.getValue("menubar.menu.plugin.opendir"))
+            .action { FileExplorers.get().openDir(File(System.getProperty("boomega.plugin.dir"))) }
+            .graphic(MaterialDesignIcon.FOLDER)
     }
 
     private class HelpMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.help")) {
