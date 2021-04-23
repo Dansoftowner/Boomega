@@ -43,3 +43,22 @@
 .table-view {
     !*-fx-background-color: white;*!
 }*/
+
+.split-pane > .split-pane-divider {
+    -fx-background-color: #424242;
+    -fx-border-color: #424242;
+    -fx-pref-width: 4;
+}
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-insets: 0, 0 1 0 1;
+    -fx-border-width: 0 1 0 1;
+}
+
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-insets: 0, 1 0 1 0;
+    -fx-border-width: 1 0 1 0;
+}
+.split-pane > .split-pane-divider:hover {
+    -fx-background-color: #6f6e6e;
+    -fx-border-color: #6f6e6e;
+}

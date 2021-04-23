@@ -28,12 +28,6 @@
     -fx-box-border: transparent;
 }
 
-.records-view .split-pane:vertical > .split-pane-divider,
-.records-view.split-pane:horizontal > .split-pane-divider {
-    -fx-background-color: #585858;
-    -fx-padding: 0 1 0 0;
-}
-
 .records-view .table-view {
     -fx-border-width: 0;
 }

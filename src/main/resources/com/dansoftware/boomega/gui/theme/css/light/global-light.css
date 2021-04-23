@@ -26,3 +26,22 @@
 .table-view {
     -fx-background-color: white;
 }*/
+
+.split-pane > .split-pane-divider {
+    -fx-background-color: #eeeeee;
+    -fx-border-color: #eeeeee;
+    -fx-pref-width: 4;
+}
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-insets: 0, 0 1 0 1;
+    -fx-border-width: 0 1 0 1;
+}
+/* vertical the two nodes are placed on top of each other. */
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-insets: 0, 1 0 1 0;
+    -fx-border-width: 1 0 1 0;
+}
+.split-pane > .split-pane-divider:hover {
+    -fx-border-color: #c4c3c3;
+    -fx-background-color: #c4c3c3;
+}
