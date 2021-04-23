@@ -1,6 +1,10 @@
-# Used libraries
+# Third party software used by the app
 
-Here is the list of used third party software:
+* [Used libraries](#used-libraries)
+* [Used libraries/frameworks for testing](#used-librariesframeworks-for-testing)
+* [Used Gradle plugins](#used-gradle-plugins)
+
+## Used libraries
 
 <table>
     <tr>
@@ -133,7 +137,14 @@ Here is the list of used third party software:
     </tr>
 </table>
 
-# Used Gradle plugins
+## Used libraries/frameworks for testing
+| Software | License |
+| -------- | ------- |
+| [JUnit 5](https://junit.org/junit5/) | [Eclipse Public License - v 2.0](https://github.com/junit-team/junit5/blob/main/LICENSE.md)
+| [AssertJ](https://assertj.github.io/doc/) | [Apache-2.0 License](https://github.com/assertj/assertj-core/blob/main/LICENSE.txt)
+| [Mockito](https://site.mockito.org/) | [MIT License](https://github.com/mockito/mockito/blob/release/3.x/LICENSE)
+
+## Used Gradle plugins
 
 | Software | License |
 | -----    | ------- |
