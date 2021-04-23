@@ -65,6 +65,7 @@ public class JsonFileSource extends JsonSource {
 
     private boolean createIfNotExists(File file) {
         try {
+            file.getParentFile().mkdirs();
             return file.createNewFile();
         } catch (IOException e) {
             logger.error("Couldn't create file", e);
