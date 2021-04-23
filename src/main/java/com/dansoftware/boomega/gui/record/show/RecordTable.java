@@ -185,10 +185,23 @@ public class RecordTable extends TableView<Record> {
         public Column(@NotNull ColumnType columnType) {
             this(columnType, true);
         }
+    }
 
-        protected Record getRecordAtPosition(TableCell<Record, T> tableCell) {
-            return getTableView().getItems().get(tableCell.getIndex());
+    private static class RecordTableCell<T> extends TableCell<Record, T> {
+
+        @Override
+        public final void updateIndex(int i) {
+            super.updateIndex(i);
+            if (i >= 0 && getTableView().getItems().size() > i) {
+                updateItem(getTableView().getItems().get(i));
+            } else {
+                updateItem(null);
+            }
         }
+
+        protected void updateItem(@Nullable Record item) {
+        }
+
     }
 
     private static abstract class AbcSortableColumn extends Column<String> {
@@ -239,19 +252,15 @@ public class RecordTable extends TableView<Record> {
 
         @Override
         public TableCell<Record, String> call(TableColumn<Record, String> param) {
-            return new TableCell<>() {
+            return new RecordTableCell<>() {
                 @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
+                protected void updateItem(@Nullable Record item) {
+                    if (item == null) {
                         setGraphic(null);
-                        setText(null);
-                        setTooltip(null);
                     } else {
                         setGraphic(new MaterialDesignIconView(
-                                getRecordAtPosition(this).getRecordType() == Record.Type.BOOK ?
+                                item.getRecordType() == Record.Type.BOOK ?
                                         MaterialDesignIcon.BOOK : MaterialDesignIcon.NEWSPAPER));
-                        //TODO: TOOLTIP (BOOK/MAGAZINE)
                     }
                 }
             };
@@ -358,16 +367,14 @@ public class RecordTable extends TableView<Record> {
 
         @Override
         public TableCell<Record, String> call(TableColumn<Record, String> param) {
-            return new TableCell<>() {
+            return new RecordTableCell<>() {
                 @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
+                protected void updateItem(@Nullable Record item) {
+                    if (item == null) {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        Record record = getRecordAtPosition(this);
-                        Rating graphic = buildGraphic(Optional.ofNullable(record.getRating()).orElse(0));
+                        Rating graphic = buildGraphic(Optional.ofNullable(item.getRating()).orElse(0));
                         setGraphic(graphic);
                         RankColumn.this.minWidthProperty().bind(graphic.widthProperty().add(25));
                         RankColumn.this.maxWidthProperty().bind(graphic.widthProperty().add(25));
@@ -395,16 +402,15 @@ public class RecordTable extends TableView<Record> {
 
         @Override
         public TableCell<Record, String> call(TableColumn<Record, String> param) {
-            return new TableCell<>() {
+            return new RecordTableCell<>() {
                 @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
+                protected void updateItem(@Nullable Record item) {
+                    super.updateItem(item);
+                    if (item == null) {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        Record record = getRecordAtPosition(this);
-                        Optional.ofNullable(record.getServiceConnection())
+                        Optional.ofNullable(item.getServiceConnection())
                                 .map(ServiceConnection::getGoogleBookHandle)
                                 .map(value -> StringUtils.getIfBlank(value, null))
                                 .ifPresentOrElse(
@@ -412,6 +418,12 @@ public class RecordTable extends TableView<Record> {
                                         () -> setGraphic(null)
                                 );
                     }
+                }
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+
                 }
             };
         }
