@@ -110,6 +110,14 @@ object KeyBindings {
             KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN)
         )
 
+    val openSettingsKeyBinding: KeyBinding =
+        KeyBinding(
+            "openSettingsKeyBinding",
+            "preferences.keybindings.open_settings",
+            "preferences.keybindings.open_settings.desc",
+            KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN)
+        )
+
 
     @JvmStatic
     fun allKeyBindings(): List<KeyBinding> =

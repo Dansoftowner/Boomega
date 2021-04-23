@@ -236,6 +236,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
 
         private fun settingsMenu() = MenuItem(I18N.getValue("menubar.menu.preferences.settings"))
             .action { PreferencesActivity(preferences).show(context.contextWindow) }
+            .keyCombination(KeyBindings.openSettingsKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.SETTINGS)
 
         private fun themeMenu() = object : Menu(I18N.getValue("menubar.menu.preferences.theme")) {
