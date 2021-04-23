@@ -12,14 +12,14 @@
         "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.5.0/Boomega-0.5.0-Windows.exe",
         "fileExtension" : "exe",
         "name" : "Exe installer",
-        "size" : 112,
+        "size" : 112000,
         "scope" : [ "win" ]
       },
       {
         "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.5.0/Boomega-0.5.0-Windows.zip",
         "fileExtension" : "zip",
         "name" : "Zip archive",
-        "size" : 140,
+        "size" : 140000,
         "scope" : [ "win" ]
       },
       {

@@ -190,7 +190,7 @@ public class DownloadSegmentController implements Initializable {
         sizeIndicator.visibleProperty().bind(packageChooserArea.selectedBinaryProperty().isNotNull());
         sizeIndicator.managedProperty().bind(packageChooserArea.selectedBinaryProperty().isNotNull());
         packageChooserArea.selectedBinaryProperty().addListener((observable, oldValue, pack) ->
-                sizeLabel.setText(String.format("%d MB", pack.getSize())));
+                sizeLabel.setText(String.format("%d MB", pack.getSize() / 1024)));
     }
 
     private void initProgressbarBehaviour() {

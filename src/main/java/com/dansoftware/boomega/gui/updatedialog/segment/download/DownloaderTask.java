@@ -109,7 +109,7 @@ public class DownloaderTask extends Task<File> {
                 updateMessage(I18N.getValue("update.page.download.happening"));
 
                 //getting the size (in bytes) of the downloadable content
-                long contentSize = this.binary.getSize() * 1024L * 1024L;
+                long contentSize = this.binary.getSize() * 1024L;
                 logger.debug("Full content size (in bytes): {}", contentSize);
 
                 //calculating the value of 1 %
