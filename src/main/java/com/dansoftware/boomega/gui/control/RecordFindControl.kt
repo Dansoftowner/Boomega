@@ -94,6 +94,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
             padding = Insets(5.0)
         }
         baseText.bind(textProperty())
+        prefHeight = 32.0
     }
 
     private fun buildResultsLabel() = Label().apply {
