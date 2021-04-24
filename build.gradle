@@ -158,7 +158,12 @@ jpackage {
     }
 
     linux {
-
+        linuxDebMaintainer = "dansoftwareowner@gmail.com"
+        linuxMenuGroup = project.name
+        icon = "${projectDir}/distribution/icon/Boomega.png"
+        linuxShortcut = true
+        //        linuxAppCategory
+        //        linuxAppRelease
     }
 
     mac {
