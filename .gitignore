@@ -126,6 +126,7 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/intellij,gradle
 
 
+distribution/temp
 distribution/java-runtime
 distribution/application-package
 distribution/*.class
