@@ -52,8 +52,6 @@
 
 Jump to [releases](https://github.com/Dansoftowner/Boomega/releases).
 
-> Note: These binaries are bundled with the [Azul Zulu OpenJDK Runtime](https://www.azul.com/downloads/zulu-community/?package=jdk) 
-
 ## Documentation
 <!---
 TODO: adding website/docs link
