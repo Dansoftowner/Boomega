@@ -150,3 +150,4 @@
 | -----    | ------- |
 | [Shadow](https://github.com/johnrengelman/shadow) | [Apache 2.0](https://github.com/johnrengelman/shadow/blob/master/LICENSE)
 | [gradle-versions-plugin](https://github.com/ben-manes/gradle-versions-plugin) | [Apache 2.0](https://github.com/ben-manes/gradle-versions-plugin/blob/master/LICENSE.txt)
+| [jpackage-gradle-plugin](https://github.com/petr-panteleyev/jpackage-gradle-plugin) | [BSD-2-Clause License](https://github.com/petr-panteleyev/jpackage-gradle-plugin)
