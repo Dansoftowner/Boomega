@@ -161,6 +161,7 @@ jpackage {
         linuxDebMaintainer = "dansoftwareowner@gmail.com"
         linuxMenuGroup = project.name
         icon = "${projectDir}/distribution/icon/Boomega.png"
+        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-linux.properties"]
         linuxShortcut = true
         //        linuxAppCategory
         //        linuxAppRelease
