@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.32'
     id 'com.github.ben-manes.versions' version '0.38.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0' // building fat jars
+    id "org.panteleyev.jpackageplugin" version "1.3.1" // for jpackage
 }
 
 sourceCompatibility = '16'
@@ -125,8 +126,6 @@ dependencies {
 
 
 shadowJar {
-    configurations = [project.configurations.implementation]
-
     exclude 'javafx/**'
     exclude 'javafx.properties'
     exclude 'javafx-swt.jar'
@@ -135,4 +134,36 @@ shadowJar {
 
     manifest.attributes('Main-Class': mainClassName)
 }
+
+jpackage {
+    dependsOn tasks.shadowJar
+
+    appName = project.name
+    appVersion = project.version
+    input = "${buildDir}${File.separator}libs"
+    temp = "distribution${File.separator}temp"
+    vendor = 'Dansoftware'
+    mainJar = shadowJar.archiveFileName.get().toString()
+    //verbose
+    destination = String.join(File.separator, "distribution", "build")
+    licenseFile = String.join(File.separator, "LICENSE")
+    javaOptions = applicationDefaultJvmArgs
+
+    windows {
+        winMenu = true
+        winDirChooser = true
+        winShortcut = true
+        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-win.properties"]
+        icon = "${projectDir}/distribution/icon/Boomega.ico"
+    }
+
+    linux {
+
+    }
+
+    mac {
+
+    }
+}
+
 
