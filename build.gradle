@@ -149,22 +149,22 @@ jpackage {
     licenseFile = String.join(File.separator, "LICENSE")
     javaOptions = applicationDefaultJvmArgs
 
+    winMenu = true
+    winDirChooser = true
+    winShortcut = true
+
+    linuxDebMaintainer = "dansoftwareowner@gmail.com"
+    linuxMenuGroup = project.name
+    linuxShortcut = true
+
     windows {
-        winMenu = true
-        winDirChooser = true
-        winShortcut = true
-        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-win.properties"]
         icon = "${projectDir}/distribution/icon/Boomega.ico"
+        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-win.properties"]
     }
 
     linux {
-        linuxDebMaintainer = "dansoftwareowner@gmail.com"
-        linuxMenuGroup = project.name
         icon = "${projectDir}/distribution/icon/Boomega.png"
         fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-linux.properties"]
-        linuxShortcut = true
-        //        linuxAppCategory
-        //        linuxAppRelease
     }
 
     mac {
