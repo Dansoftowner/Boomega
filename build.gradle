@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.nio.file.Paths
+
 plugins {
     id 'java'
     id 'application'
@@ -135,12 +138,59 @@ shadowJar {
     manifest.attributes('Main-Class': mainClassName)
 }
 
+/* -------------------------- Distribution -------------------------- */
+
+
+task cleanDistributionTemp(type: Delete) {
+    doFirst {
+        delete "distribution/temp"
+    }
+
+    doLast {
+        Files.createDirectory(Paths.get(projectDir.toString(), "distribution", "temp"))
+    }
+}
+
+task cleanDistributionBuild(type: Delete) {
+    doFirst {
+        delete "distribution/build"
+    }
+}
+
+
+task cleanDistributionInput(type: Delete) {
+    doFirst {
+        delete "distribution/input"
+    }
+
+    doLast {
+        Files.createDirectory(Paths.get(projectDir.toString(), "distribution", "input"))
+    }
+}
+
+task createDistributionInput {
+    dependsOn shadowJar
+    dependsOn cleanDistributionInput
+    doLast {
+        Files.copy(
+                tasks.shadowJar.archiveFile.get().asFile.toPath(),
+                Paths.get(projectDir.toString(), "distribution", "input", tasks.shadowJar.archiveFileName.get())
+        )
+    }
+}
+
+task preparteDistribution {
+    dependsOn cleanDistributionTemp
+    dependsOn cleanDistributionBuild
+    dependsOn createDistributionInput
+}
+
 jpackage {
-    dependsOn tasks.shadowJar
+    dependsOn preparteDistribution
 
     appName = project.name
     appVersion = project.version
-    input = "${buildDir}${File.separator}libs"
+    input = "${projectDir}${File.separator}distribution${File.separator}input"
     temp = "distribution${File.separator}temp"
     vendor = 'Dansoftware'
     mainJar = shadowJar.archiveFileName.get().toString()
@@ -171,5 +221,8 @@ jpackage {
 
     }
 }
+
+
+
 
 
