@@ -168,7 +168,7 @@ task cleanDistributionInput(type: Delete) {
     }
 }
 
-task createDistributionInput {
+task buildDistributionInput {
     dependsOn shadowJar
     dependsOn cleanDistributionInput
     doLast {
@@ -182,7 +182,7 @@ task createDistributionInput {
 task preparteDistribution {
     dependsOn cleanDistributionTemp
     dependsOn cleanDistributionBuild
-    dependsOn createDistributionInput
+    dependsOn buildDistributionInput
 }
 
 jpackage {
@@ -190,14 +190,15 @@ jpackage {
 
     appName = project.name
     appVersion = project.version
-    input = "${projectDir}${File.separator}distribution${File.separator}input"
-    temp = "distribution${File.separator}temp"
     vendor = 'Dansoftware'
-    mainJar = shadowJar.archiveFileName.get().toString()
-    //verbose
-    destination = String.join(File.separator, "distribution", "build")
-    licenseFile = String.join(File.separator, "LICENSE")
     javaOptions = applicationDefaultJvmArgs
+
+    input = String.join(File.separator, projectDir.toString(), "distribution", "input")
+    destination = String.join(File.separator, "distribution", "build")
+    temp = String.join(File.separator, "distribution", "temp")
+    mainJar = shadowJar.archiveFileName.get().toString()
+
+    licenseFile = "LICENSE"
 
     winMenu = true
     winDirChooser = true
