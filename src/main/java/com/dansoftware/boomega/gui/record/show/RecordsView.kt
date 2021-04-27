@@ -229,6 +229,7 @@ class RecordsView(
                     baseItems.add(record)
                     table.selectionModel.clearSelection()
                     table.selectionModel.select(record)
+                    table.scrollTo(record)
                 }
             }
 
