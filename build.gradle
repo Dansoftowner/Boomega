@@ -219,7 +219,8 @@ jpackage {
     }
 
     mac {
-
+        icon = "${projectDir}/distribution/icon/Boomega.icns"
+        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-mac.properties"]
     }
 }
 
