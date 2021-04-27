@@ -16,5 +16,6 @@ Required items:
 
 ## Output
 
-* `distribution/build` - contains the one primary image/installer according to the platform
-* `distribution/temp` - other images/installers and the raw image
+* `distribution/build` - contains the one primary image/installer according to the platform 
+  (usually **.exe** for Windows and **.deb** for Linux Debian)
+* `distribution/temp` - contains other types of images/installers (like **.msi** for Windows), and the directory containing the raw image 
