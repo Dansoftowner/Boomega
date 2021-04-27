@@ -90,7 +90,7 @@ To build executable binaries, use `gradlew jpackage` ([more info here](distribut
 ## Used libraries
 * [Jump to list](USED_LIBRARIES.md)
 * ...or you can view them in the `Boomega Info`:<br>
-![viewing third-party libraries in the app](readme/third-party-info.gif)
+![Viewing third-party libraries in the app](readme/BoomegaThirdPartyInfo.png)
 
 
 ## License
