@@ -50,7 +50,8 @@
 | Portable (64-bit)  |  **zip**          | **tar.gz** | _Help wanted_ 
 |Jar                 | ✔                 | ✔         | ✔ 
 
-Jump to [releases](https://github.com/Dansoftowner/Boomega/releases).
+Jump to [releases](https://github.com/Dansoftowner/Boomega/releases). <br/>
+Or [build it yourself](#build)
 
 ## Documentation
 <!---
@@ -74,11 +75,17 @@ The detailed documentation is available [here]().
 * The app targets `Java 16+` but the code is `unmodularized`
 * The build tool used for this project is `Gradle`
 
-### Build requirements
-* JDK 16+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended) 
-* Read about the [necessary JVM options](JVM_OPTIONS.md)
+## Build
+The recommended IDE for building this project is `IntelliJ Idea`.
 
-The recommended IDE for building this project is `IntelliJ Idea`. 
+### Build requirements
+* JDK 16+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
+
+### Build manually (without using an IDE)
+If you want to run the project, simply use `gradlew run`. <br/>
+To build a fat jar, use `gradlew shadowJar`. <br/>
+To build executable binaries, use `gradlew jpackage` ([more info here](distribution/DISTRIBUTION_GUIDELINE.md))
+
 
 ## Used libraries
 * [Jump to list](USED_LIBRARIES.md)
