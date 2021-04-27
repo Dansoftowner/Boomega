@@ -306,7 +306,7 @@ class FieldsEditorForm(
                     publishedDate.get()
                         ?.run {
                             try {
-                                record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-mm"))
+                                record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                             } catch (e : RuntimeException) {
                                 logger.error("Couldn't parse date ", e)
                             }
