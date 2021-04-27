@@ -58,11 +58,11 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
         rightItems.add(buildSeparator())
         rightItems.add(buildCountItem())
         rightItems.add(buildSeparator())
-        rightItems.add(buildDeleteItem())
         rightItems.add(buildCopyItem())
         rightItems.add(buildCutItem())
         rightItems.add(buildPasteItem())
         rightItems.add(buildSeparator())
+        rightItems.add(buildDeleteItem())
         rightItems.add(buildInsertItem())
         rightItems.add(buildSeparator())
         rightItems.add(buildSearchItem())
@@ -81,7 +81,7 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
         }
 
     private fun buildInsertItem() =
-        buildToolbarItem(MaterialDesignIcon.PLUS, "record.add.module.title") {
+        buildToolbarItem(MaterialDesignIcon.PLUS_BOX, "record.add.module.title") {
             view.insertNewRecord()
         }
 
