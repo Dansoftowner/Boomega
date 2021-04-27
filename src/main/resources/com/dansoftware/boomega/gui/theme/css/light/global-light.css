@@ -41,7 +41,7 @@
     -fx-background-insets: 0, 1 0 1 0;
     -fx-border-width: 1 0 1 0;
 }
-.split-pane > .split-pane-divider:hover {
+.split-pane > .split-pane-divider:hover, .split-pane > .split-pane-divider:pressed{
     -fx-border-color: #c4c3c3;
     -fx-background-color: #c4c3c3;
 }
