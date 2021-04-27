@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.nio.file.Paths
+
 plugins {
     id 'java'
     id 'application'
@@ -135,41 +138,93 @@ shadowJar {
     manifest.attributes('Main-Class': mainClassName)
 }
 
+/* -------------------------- Distribution -------------------------- */
+
+
+task cleanDistributionTemp(type: Delete) {
+    doFirst {
+        delete "distribution/temp"
+    }
+
+    doLast {
+        Files.createDirectory(Paths.get(projectDir.toString(), "distribution", "temp"))
+    }
+}
+
+task cleanDistributionBuild(type: Delete) {
+    doFirst {
+        delete "distribution/build"
+    }
+}
+
+
+task cleanDistributionInput(type: Delete) {
+    doFirst {
+        delete "distribution/input"
+    }
+
+    doLast {
+        Files.createDirectory(Paths.get(projectDir.toString(), "distribution", "input"))
+    }
+}
+
+task buildDistributionInput {
+    dependsOn shadowJar
+    dependsOn cleanDistributionInput
+    doLast {
+        Files.copy(
+                tasks.shadowJar.archiveFile.get().asFile.toPath(),
+                Paths.get(projectDir.toString(), "distribution", "input", tasks.shadowJar.archiveFileName.get())
+        )
+    }
+}
+
+task preparteDistribution {
+    dependsOn cleanDistributionTemp
+    dependsOn cleanDistributionBuild
+    dependsOn buildDistributionInput
+}
+
 jpackage {
-    dependsOn tasks.shadowJar
+    dependsOn preparteDistribution
 
     appName = project.name
     appVersion = project.version
-    input = "${buildDir}${File.separator}libs"
-    temp = "distribution${File.separator}temp"
     vendor = 'Dansoftware'
-    mainJar = shadowJar.archiveFileName.get().toString()
-    //verbose
-    destination = String.join(File.separator, "distribution", "build")
-    licenseFile = String.join(File.separator, "LICENSE")
     javaOptions = applicationDefaultJvmArgs
 
+    input = String.join(File.separator, projectDir.toString(), "distribution", "input")
+    destination = String.join(File.separator, "distribution", "build")
+    temp = String.join(File.separator, "distribution", "temp")
+    mainJar = shadowJar.archiveFileName.get().toString()
+
+    licenseFile = "LICENSE"
+
+    winMenu = true
+    winDirChooser = true
+    winShortcut = true
+
+    linuxDebMaintainer = "dansoftwareowner@gmail.com"
+    linuxMenuGroup = project.name
+    linuxShortcut = true
+
     windows {
-        winMenu = true
-        winDirChooser = true
-        winShortcut = true
-        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-win.properties"]
         icon = "${projectDir}/distribution/icon/Boomega.ico"
+        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-win.properties"]
     }
 
     linux {
-        linuxDebMaintainer = "dansoftwareowner@gmail.com"
-        linuxMenuGroup = project.name
         icon = "${projectDir}/distribution/icon/Boomega.png"
         fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-linux.properties"]
-        linuxShortcut = true
-        //        linuxAppCategory
-        //        linuxAppRelease
     }
 
     mac {
-
+        icon = "${projectDir}/distribution/icon/Boomega.icns"
+        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-mac.properties"]
     }
 }
+
+
+
 
 
