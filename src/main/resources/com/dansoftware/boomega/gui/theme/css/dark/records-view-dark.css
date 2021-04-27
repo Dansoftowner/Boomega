@@ -18,10 +18,17 @@
 .records-view .tab-pane {
     -fx-tab-min-height: 2.2em;
     -fx-tab-max-height: 2.2em;
+    -fx-background-color: #252525;
 }
 
 .records-view .tab-pane > .tab-header-area {
     -fx-padding: 0;
+}
+
+.records-view .tab-pane>*.tab-header-area>*.tab-header-background,
+.records-view .tab-pane.underlined > .tab-header-area > .headers-region > .tab,
+.records-view .tab-pane.underlined > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: #252525, #252525, #252525;
 }
 
 .records-view .html-editor {
