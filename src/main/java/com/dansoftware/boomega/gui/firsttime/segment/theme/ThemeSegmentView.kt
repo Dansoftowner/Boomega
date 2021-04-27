@@ -75,7 +75,7 @@ class ThemeSegmentView(private val preferences: Preferences) : StackPane() {
         selectedToggleProperty().addListener { _, _, newItem ->
             newItem?.let {
                 if (it is ThemeToggle<*>) {
-                    val theme = it.themeFactory()
+                    val theme = if (Theme.getDefault().javaClass == it.themeClass) Theme.getDefault() else it.themeFactory()
                     preferences.editor().put(PreferenceKey.THEME, theme).tryCommit()
                     Theme.setDefault(theme)
                     logger.debug("Theme selected: {}", Theme.getDefault().javaClass.name)
@@ -91,7 +91,7 @@ class ThemeSegmentView(private val preferences: Preferences) : StackPane() {
     private class ThemeToggle<T : Theme>(
         text: String,
         thumbnail: Node,
-        themeClass: Class<T>,
+        val themeClass: Class<T>,
         val themeFactory: () -> T,
     ) : RadioButton() {
         init {

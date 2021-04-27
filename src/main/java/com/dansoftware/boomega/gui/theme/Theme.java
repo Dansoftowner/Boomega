@@ -74,7 +74,8 @@ public abstract class Theme {
     protected abstract ThemeApplier getApplier();
 
     protected void update(@NotNull Theme oldTheme) {
-        notifyThemeableInstances(oldTheme, this);
+        if (getDefault().equals(this))
+            notifyThemeableInstances(oldTheme, this);
     }
 
     protected void update() {
