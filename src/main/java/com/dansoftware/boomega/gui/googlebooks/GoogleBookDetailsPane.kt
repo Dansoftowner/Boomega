@@ -3,20 +3,25 @@ package com.dansoftware.boomega.gui.googlebooks
 import com.dansoftware.boomega.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.context.TitledOverlayBox
-import com.dansoftware.boomega.gui.control.HighlightableLabel
-import com.dansoftware.boomega.gui.control.RadioToggleButton
-import com.dansoftware.boomega.gui.control.ReadOnlyRating
-import com.dansoftware.boomega.gui.control.WebsiteHyperLink
+import com.dansoftware.boomega.gui.control.*
 import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewActivity
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.util.SystemBrowser
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.pnikosis.html2markdown.HTML2Md
 import com.sandec.mdfx.MDFXNode
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.property.*
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 import javafx.concurrent.Task
+import javafx.geometry.NodeOrientation
+import javafx.geometry.Side
 import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
@@ -30,6 +35,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 
 /**
@@ -44,12 +50,414 @@ class GoogleBookDetailsOverlay(context: Context, volume: Volume) :
         GoogleBookDetailsPane(context, volume)
     )
 
+class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
+
+    private val volume: ObjectProperty<Volume> = object : SimpleObjectProperty<Volume>() {
+        override fun invalidated() {
+            get().let {
+                title.set(it?.volumeInfo?.title)
+                subtitle.set(it?.volumeInfo?.subtitle)
+                authors.set(it?.volumeInfo?.authors?.joinToString(", "))
+                publisher.set(it?.volumeInfo?.publisher)
+                date.set(it?.volumeInfo?.publishedDate)
+                language.set(it?.volumeInfo?.language?.let(Locale::forLanguageTag)?.displayLanguage)
+                previewLink.set(it?.volumeInfo?.previewLink)
+                averageRating.value = it?.volumeInfo?.averageRating
+                industryIdentifiers.set(it?.volumeInfo?.industryIdentifiers?.map(Volume.VolumeInfo.IndustryIdentifier::toString))
+                categories.set(it?.volumeInfo?.categories)
+                retrieveThumbnail(it) { value -> thumbnail.set(value) }
+                retrieveDescription(it) { value -> description.set(value) }
+            }
+        }
+    }
+
+    private val thumbnail: ObjectProperty<Image?> = SimpleObjectProperty()
+    private val title: StringProperty = SimpleStringProperty()
+    private val subtitle: StringProperty = SimpleStringProperty()
+    private val authors: StringProperty = SimpleStringProperty()
+    private val publisher: StringProperty = SimpleStringProperty()
+    private val date: StringProperty = SimpleStringProperty()
+    private val language: StringProperty = SimpleStringProperty()
+    private val averageRating: DoubleProperty = SimpleDoubleProperty()
+    private val previewLink: StringProperty = SimpleStringProperty()
+    private val description: StringProperty = SimpleStringProperty()
+    private val industryIdentifiers: ObjectProperty<List<String>?> = SimpleObjectProperty()
+    private val categories: ObjectProperty<List<String>?> = SimpleObjectProperty()
+
+    private val thumbnailCache: Cache<Volume, Image> =
+        Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .build()
+
+    private val descriptionCache: Cache<Volume, String> =
+        Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .build()
+
+    init {
+        styleClass.add("google-book-details-pane")
+        styleClass.add(JMetroStyleClass.BACKGROUND)
+        VBox.setVgrow(this, Priority.ALWAYS)
+        buildUI()
+    }
+
+    constructor(context: Context, volume: Volume) : this(context) {
+        this.volume.set(volume)
+    }
+
+    private fun retrieveThumbnail(volume: Volume?, onAvailable: (Image?) -> Unit) {
+        thumbnailCache.getIfPresent(volume)?.let { onAvailable(it) } ?: volume?.volumeInfo?.imageLinks?.thumbnail?.let {
+            Image(it, true).also { image ->
+                thumbnailCache.put(volume, image)
+                onAvailable(image)
+            }
+        } ?: onAvailable(null)
+    }
+
+    private fun retrieveDescription(volume: Volume?, onAvailable: (String?) -> Unit) {
+        descriptionCache.getIfPresent(volume)?.let { onAvailable(it) }
+            ?: volume?.volumeInfo?.description.let { description ->
+                CachedExecutor.submit(
+                    object : Task<String>() {
+                        override fun call(): String? = description?.let(HTML2Md::convert)
+                    }.apply {
+                        setOnSucceeded {
+                            value?.let { descriptionCache.put(volume, it) }
+                            onAvailable(value)
+                        }
+                    }
+                )
+            }
+    }
+
+    private fun buildUI() {
+        children.add(ThumbnailArea())
+        children.add(TabArea())
+    }
+
+    private inner class ThumbnailArea() : VBox() {
+        init {
+            buildUI()
+        }
+
+        private fun buildUI() {
+            thumbnail.addListener { _, _, newImage ->
+                newImage?.let {
+                    children.setAll(
+                        StackPane(ImageView(it).apply {
+                            cursor = Cursor.HAND
+                            setOnMouseClicked { event ->
+                                when {
+                                    event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
+                                        ImageViewerActivity(
+                                            Image(volume.get()?.volumeInfo?.imageLinks?.getLargest()),
+                                            context.contextWindow
+                                        ).show()
+                                }
+                            }
+                        })
+                    )
+                } ?: children.setAll(ThumbnailPlaceHolder())
+            }
+        }
+
+        /**
+         * Used as a place holder if the thumbnail is not available
+         */
+        private inner class ThumbnailPlaceHolder :
+            StackPane(Label(I18N.getValue("google.books.table.thumbnail.not.available")))
+    }
+
+    private inner class TabArea : TabPane() {
+        init {
+            styleClass.add(JMetroStyleClass.UNDERLINE_TAB_PANE)
+            setHgrow(this, Priority.ALWAYS)
+            initUI()
+            initTabs()
+            selectionModel.selectLast()
+        }
+
+        private fun initUI() {
+            side = Side.BOTTOM
+            tabClosingPolicy = TabClosingPolicy.UNAVAILABLE
+            initOrientation()
+        }
+
+        private fun initTabs() {
+            tabs.add(Tab(I18N.getValue("google.books.details.sale"), wrapToScrollPane(SalePane())))
+            tabs.add(Tab(I18N.getValue("google.books.table.column.desc"), DescriptionPane()))
+            tabs.add(Tab(I18N.getValue("google.books.details.info"), wrapToScrollPane(InfoPane())))
+        }
+
+        private fun initOrientation() {
+            skinProperty().addListener(object : ChangeListener<Skin<*>?> {
+                override fun changed(
+                    observable: ObservableValue<out Skin<*>?>,
+                    oldValue: Skin<*>?,
+                    newValue: Skin<*>?
+                ) {
+                    newValue?.let {
+                        lookup(".tab-header-area").nodeOrientation = NodeOrientation.RIGHT_TO_LEFT
+                        observable.removeListener(this)
+                    }
+                }
+
+            })
+        }
+
+        private fun wrapToScrollPane(element: Node) = ScrollPane().apply {
+            content = element
+            isFitToWidth = true
+        }
+    }
+
+    private inner class InfoPane : ScrollPane() {
+        init {
+            isFitToWidth = true
+            buildUI()
+        }
+
+        private fun buildUI() {
+            content = buildVBox()
+        }
+
+        private fun buildVBox() = VBox(10.0).apply {
+            children.add(buildTypeIndicator())
+            children.add(buildTitleLabel())
+            children.add(buildSubtitleLabel())
+            children.add(buildAuthorLabel())
+            children.add(buildPublisherLabel())
+            children.add(buildDateLabel())
+            children.add(buildLangLabel())
+            children.add(buildISBNIndicator())
+            children.add(buildCategoriesIndicator())
+            children.add(buildRatingsIndicator())
+        }
+
+        private fun buildTypeIndicator(): Node =
+            HBox(5.0).also { hBox ->
+                volume.addListener { _, _, newVolume ->
+                    newVolume?.volumeInfo?.let {
+                        when {
+                            it.isMagazine -> {
+                                hBox.children.setAll(
+                                    MaterialDesignIconView(MaterialDesignIcon.NEWSPAPER),
+                                    Label(I18N.getValue("google.books.magazine"))
+                                )
+                            }
+                            else -> {
+                                hBox.children.setAll(
+                                    MaterialDesignIconView(MaterialDesignIcon.BOOK),
+                                    Label(I18N.getValue("google.books.book"))
+                                )
+                            }
+                        }
+                    } ?: hBox.children.clear()
+
+                }
+            }
+
+        private fun buildTitleLabel() =
+            PropertyValuePair(
+                I18N.getValue("google.books.table.column.title"),
+                title
+            )
+
+        private fun buildSubtitleLabel() =
+            PropertyValuePair(
+                I18N.getValue("google.books.table.column.subtitle"),
+                subtitle
+            )
+
+        private fun buildAuthorLabel() =
+            PropertyValuePair(
+                I18N.getValue("google.books.table.column.author"),
+                authors
+            )
+
+        private fun buildPublisherLabel() =
+            PropertyValuePair(
+                I18N.getValue("google.books.table.column.publisher"),
+                publisher
+            )
+
+        private fun buildDateLabel() =
+            PropertyValuePair(
+                I18N.getValue("google.books.table.column.date"),
+                date
+            )
+
+        private fun buildLangLabel() =
+            PropertyValuePair(
+                I18N.getValue("google.books.table.column.lang"),
+                language
+            )
+
+        private fun buildISBNIndicator(): Node =
+            VBox(5.0,
+                PropertyNameLabel(I18N.getValue("google.books.table.column.isbn").plus(":")),
+                VBox(2.0).also { vBox ->
+                    industryIdentifiers.addListener { _, _, identifiers ->
+                        vBox.children.setAll(identifiers?.map {
+                            HBox(2.0,
+                                Label("${8226.toChar()}"),
+                                HighlightableLabel(it).apply {
+                                    HBox.setHgrow(this, Priority.ALWAYS)
+                                }
+                            )
+                        } ?: listOf(Label(" - ")))
+                    }
+                }
+            )
+
+
+        private fun buildCategoriesIndicator() =
+            VBox(5.0,
+                PropertyNameLabel(I18N.getValue("google.books.categories").plus(":")),
+                VBox(2.0).also { vBox ->
+                    categories.addListener { _, _, categories ->
+                        vBox.children.setAll(categories?.map {
+                            HBox(2.0,
+                                Label("${8226.toChar()}"),
+                                HighlightableLabel(it).apply {
+                                    HBox.setHgrow(this, Priority.ALWAYS)
+                                }
+                            )
+                        } ?: listOf(Label(" - ")))
+                    }
+                }
+            )
+
+        private fun buildRatingsIndicator() =
+            VBox(
+                5.0,
+                PropertyNameLabel(I18N.getValue("google.books.table.column.rank").plus(":")),
+                ReadOnlyRating(5, 0).apply {
+                    ratingProperty().bind(averageRating)
+                }
+            )
+
+    }
+
+    private inner class DescriptionPane : ScrollPane() {
+        private val mdfxNode = object : MDFXNode() {
+            init {
+                mdStringProperty().bind(description)
+                maxWidthProperty().bind(this@GoogleBookDetailsPane.prefWidthProperty())
+            }
+
+            override fun setLink(node: Node, link: String, description: String?) {
+                node.cursor = Cursor.HAND
+                node.setOnMouseClicked {
+                    if (it.button == MouseButton.PRIMARY) {
+                        SystemBrowser.browse(link)
+                    }
+                }
+
+            }
+        }
+
+        init {
+            content = mdfxNode
+            isFitToWidth = true
+            prefWidth = 500.0
+        }
+    }
+
+    private inner class SalePane : VBox(10.0) {
+        init {
+            volume.addListener { _, _, volume ->
+                when (volume.saleInfo?.saleability) {
+                    Volume.SaleInfo.FOR_SALE -> {
+                        this.children.setAll(
+                            buildEBookIndicator(volume),
+                            buildCountryIndicator(volume),
+                            buildListPriceLabel(volume),
+                            buildRetailPriceLabel(volume),
+                            buildBuyLinkLabel(volume)
+                        )
+                    }
+                    else -> {
+                        this.children.setAll(buildNotSaleablePlaceHolder())
+                    }
+                }
+            }
+        }
+
+        private fun buildEBookIndicator(volume: Volume): Node =
+            PropertyValuePair(
+                I18N.getValue("google.books.details.sale.isebook"),
+                I18N.getValues().getString(
+                    when (volume.saleInfo?.isEbook) {
+                        true -> "Dialog.yes.button"
+                        else -> "Dialog.no.button"
+                    }
+                )
+            )
+
+        private fun buildCountryIndicator(volume: Volume): Node =
+            PropertyValuePair(
+                I18N.getValue("google.books.details.sale.country"),
+                volume.saleInfo?.country
+            )
+
+        private fun buildListPriceLabel(volume: Volume): Node =
+            PropertyValuePair(
+                I18N.getValue("google.books.details.sale.listprice"),
+                volume.saleInfo?.listPrice.toString()
+            )
+
+        private fun buildRetailPriceLabel(volume: Volume): Node =
+            PropertyValuePair(
+                I18N.getValue("google.books.details.sale.retailprice"),
+                volume.saleInfo?.retailPrice.toString()
+            )
+
+        private fun buildBuyLinkLabel(volume: Volume): Node =
+            HBox(
+                5.0,
+                MaterialDesignIconView(MaterialDesignIcon.GOOGLE_PLAY),
+                WebsiteHyperLink(
+                    I18N.getValue("google.books.details.sale.buylink"),
+                    volume.saleInfo?.buyLink
+                )
+            )
+
+
+        private fun buildNotSaleablePlaceHolder(): Node =
+            Label(I18N.getValue("google.books.details.notforsale")).apply {
+                styleClass.add("not-for-sale-place-holder")
+            }
+    }
+
+    //Utility classes
+
+    private class PropertyValuePair(key: String, value: StringProperty) : VBox(5.0) {
+        init {
+            children.add(PropertyNameLabel("$key:"))
+            children.add(HighlightableLabel().apply {
+                textProperty().bind(value)
+            })
+            visibleProperty().bind(value.isNotNull)
+            managedProperty().bind(value.isNotNull)
+        }
+
+        constructor(key: String, value: String?) : this(key, SimpleStringProperty(value))
+    }
+
+    private class PropertyNameLabel(initial: String? = null) : Label(initial) {
+        init {
+            styleClass.add("property-mark-label")
+        }
+    }
+}
+
 /**
  * Used for displaying more detailed data about a Google Book
  *
  * @author Daniel Gyorffy
  */
-class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox(10.0) {
+class GoogleBookDetailsPaneOld(private val context: Context, volume: Volume) : VBox(10.0) {
 
     init {
         styleClass.add("google-book-details-pane")
@@ -296,16 +704,16 @@ class GoogleBookDetailsPane(private val context: Context, volume: Volume) : VBox
         private fun buildPreviewHyperLink(volume: Volume): Node =
             StackPane(
                 WebsiteHyperLink(
-                I18N.getValue("google.books.details.preview"),
-                volume.volumeInfo?.previewLink
-            ).apply {
-                contextMenu = ContextMenu().also { menu ->
-                    menu.items.add(
-                        MenuItem(I18N.getValue("google.books.preview.open.embedded"))
-                            .action { GoogleBookPreviewActivity(volume, context.contextWindow).show() }
-                    )
-                }
-            })
+                    I18N.getValue("google.books.details.preview"),
+                    volume.volumeInfo?.previewLink
+                ).apply {
+                    contextMenu = ContextMenu().also { menu ->
+                        menu.items.add(
+                            MenuItem(I18N.getValue("google.books.preview.open.embedded"))
+                                .action { GoogleBookPreviewActivity(volume, context.contextWindow).show() }
+                        )
+                    }
+                })
     }
 
     /**
