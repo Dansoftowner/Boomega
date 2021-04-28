@@ -141,6 +141,10 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         private fun buildUI() {
+            buildThumbnailLayoutPolicy()
+        }
+
+        private fun buildThumbnailLayoutPolicy() {
             thumbnail.addListener { _, _, newImage ->
                 newImage?.let {
                     children.setAll(
@@ -184,9 +188,9 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         private fun initTabs() {
-            tabs.add(Tab(I18N.getValue("google.books.details.sale"), wrapToScrollPane(SalePane())))
+            tabs.add(Tab(I18N.getValue("google.books.details.sale"), SalePane()))
             tabs.add(Tab(I18N.getValue("google.books.table.column.desc"), DescriptionPane()))
-            tabs.add(Tab(I18N.getValue("google.books.details.info"), wrapToScrollPane(InfoPane())))
+            tabs.add(Tab(I18N.getValue("google.books.details.info"), InfoPane()))
         }
 
         private fun initOrientation() {
@@ -214,6 +218,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
     private inner class InfoPane : ScrollPane() {
         init {
             isFitToWidth = true
+            styleClass.add("info-panel")
             buildUI()
         }
 
@@ -232,6 +237,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
             children.add(buildISBNIndicator())
             children.add(buildCategoriesIndicator())
             children.add(buildRatingsIndicator())
+            children.add(buildPreviewHyperlink())
         }
 
         private fun buildTypeIndicator(): Node =
@@ -337,6 +343,24 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                 }
             )
 
+        private fun buildBrowserButton() = Button().apply {
+            graphic = MaterialDesignIconView(MaterialDesignIcon.GOOGLE_CHROME)
+            text = I18N.getValue("google.book.preview.browser")
+            setOnAction {
+                volume.get()?.volumeInfo?.previewLink?.let {
+                    SystemBrowser.browse(it)
+                }
+            }
+        }
+
+        private fun buildPreviewHyperlink() = WebsiteHyperLink(I18N.getValue("google.books.details.preview"), null).apply {
+            graphic = MaterialDesignIconView(MaterialDesignIcon.APPLICATION)
+
+            setOnAction {
+                GoogleBookPreviewActivity(volume.get()).show()
+            }
+        }
+
     }
 
     private inner class DescriptionPane : ScrollPane() {
@@ -364,12 +388,17 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
     }
 
-    private inner class SalePane : VBox(10.0) {
+    private inner class SalePane : ScrollPane() {
         init {
+            this.isFitToWidth = true
+            content = buildVBox()
+        }
+
+        private fun buildVBox() = VBox(10.0).apply {
             volume.addListener { _, _, volume ->
                 when (volume.saleInfo?.saleability) {
                     Volume.SaleInfo.FOR_SALE -> {
-                        this.children.setAll(
+                        children.setAll(
                             buildEBookIndicator(volume),
                             buildCountryIndicator(volume),
                             buildListPriceLabel(volume),
@@ -378,7 +407,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                         )
                     }
                     else -> {
-                        this.children.setAll(buildNotSaleablePlaceHolder())
+                        children.setAll(buildNotSaleablePlaceHolder())
                     }
                 }
             }
