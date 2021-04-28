@@ -3,8 +3,9 @@
 package com.dansoftware.boomega.gui.googlebooks.preview
 
 import com.dansoftware.boomega.googlebooks.Volume
+import com.dansoftware.boomega.i18n.I18N
 
-fun generateHTMLContent(volume: Volume) =
+fun generateHTMLContent(volume: Volume?) =
     """
 <!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -16,15 +17,20 @@ fun generateHTMLContent(volume: Volume) =
     <script type="text/javascript">
       google.books.load();
 
+      function onNotFound() {
+            const prevHTML = document.getElementsByTagName("BODY")[0].innerHTML;
+            document.getElementsByTagName("BODY")[0].innerHTML = prevHTML + '${I18N.getValue("google.book.preview.notavailable")}';
+      }
+
       function initialize() {
         var viewer = new google.books.DefaultViewer(document.getElementById('viewerCanvas'));
-        viewer.load('${volume.id}');
+        viewer.load('${volume?.id}', onNotFound);
       }
 
       google.books.setOnLoadCallback(initialize);
     </script>
   </head>
-  <body>
+  <body style='overflow-x: hidden; overflow-y: hidden;'>
     <div id="viewerCanvas" style="resize: horizontal; height: 98vh;"></div>
   </body>
 </html>
