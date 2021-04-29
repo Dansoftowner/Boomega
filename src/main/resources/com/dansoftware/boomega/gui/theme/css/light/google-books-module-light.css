@@ -20,7 +20,7 @@
 }
 
 .google-book-details-pane .info-panel .label {
-    -fx-font-size: 15px;
+    -fx-font-size: 16px;
 }
 
 .google-book-details-pane .property-mark-label {
@@ -31,41 +31,8 @@
     -fx-padding: 5;
 }
 
-.google-book-details-pane .not-for-sale-place-holder {
-    -fx-font-weight: bold;
-}
-
 .google-book-details-pane .hyperlink {
     -fx-padding: 0;
-    -fx-font-weight: bold;
-}
-
-.google-book-tile {
-    -fx-background-color: #e7e7e7;
-    -fx-padding: 10;
-    -fx-border-width: 0.3;
-    -fx-border-color: #535353;
-}
-
-.google-book-tile:hover {
-    -fx-background-color: #c8c8c8;
-}
-
-.google-book-tile .tile-title {
-    -fx-font-weight: bold;
-}
-
-.google-book-tile .title-label {
-    -fx-font-size: 25px;
-}
-
-.google-book-tile .sub-title-label {
-    -fx-font-size: 20px;
-}
-
-.google-book-tile .authors-label {
-    -fx-font-size: 17px;
-    -fx-font-style: italic;
 }
 
 .google-books-import-view .google-books-import-btn {
