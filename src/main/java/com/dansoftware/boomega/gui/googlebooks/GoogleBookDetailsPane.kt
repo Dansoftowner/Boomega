@@ -135,41 +135,83 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         children.add(TabArea())
     }
 
-    private inner class ThumbnailArea() : VBox() {
+    private inner class ThumbnailArea() : VBox(10.0) {
         init {
             buildUI()
         }
 
         private fun buildUI() {
-            buildThumbnailLayoutPolicy()
+            children.add(Thumbnail())
+            children.add(buildTypeIndicator())
+            children.add(buildPreviewHyperlink())
         }
 
-        private fun buildThumbnailLayoutPolicy() {
-            thumbnail.addListener { _, _, newImage ->
-                newImage?.let {
-                    children.setAll(
-                        StackPane(ImageView(it).apply {
-                            cursor = Cursor.HAND
-                            setOnMouseClicked { event ->
-                                when {
-                                    event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
-                                        ImageViewerActivity(
-                                            Image(volume.get()?.volumeInfo?.imageLinks?.getLargest()),
-                                            context.contextWindow
-                                        ).show()
-                                }
+        private fun buildTypeIndicator(): Node =
+            HBox(5.0).run {
+                volume.addListener { _, _, newVolume ->
+                    newVolume?.volumeInfo?.let {
+                        when {
+                            it.isMagazine -> {
+                                children.setAll(
+                                    FixedFontMaterialDesignIconView(MaterialDesignIcon.NEWSPAPER, 17.0),
+                                    StackPane(Label(I18N.getValue("google.books.magazine")))
+                                )
                             }
-                        })
-                    )
-                } ?: children.setAll(ThumbnailPlaceHolder())
+                            else -> {
+                                children.setAll(
+                                    FixedFontMaterialDesignIconView(MaterialDesignIcon.BOOK, 17.0),
+                                    StackPane(Label(I18N.getValue("google.books.book")))
+                                )
+                            }
+                        }
+                    } ?: children.clear()
+                }
+                StackPane(this)
+            }
+
+        private fun buildPreviewHyperlink() = Hyperlink(I18N.getValue("google.books.details.preview")).apply {
+            graphic = MaterialDesignIconView(MaterialDesignIcon.APPLICATION)
+            contextMenu = ContextMenu(
+                MenuItem(I18N.getValue("google.book.preview.browser"))
+                    .action { volume.get()?.volumeInfo?.previewLink?.let(SystemBrowser::browse) }
+            )
+            setOnAction {
+                GoogleBookPreviewActivity(volume.get()).show()
+            }
+        }
+
+        private inner class Thumbnail() : StackPane() {
+            init {
+                placeholder()
+                thumbnail.addListener { _, _, newImage ->
+                    newImage?.let {
+                        children.setAll(
+                            StackPane(ImageView(it).apply {
+                                cursor = Cursor.HAND
+                                setOnMouseClicked { event ->
+                                    when {
+                                        event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
+                                            ImageViewerActivity(
+                                                Image(volume.get()?.volumeInfo?.imageLinks?.getLargest()),
+                                                context.contextWindow
+                                            ).show()
+                                    }
+                                }
+                            })
+                        )
+                    } ?: placeholder()
+                }
+            }
+
+            private fun placeholder() {
+                children.setAll(ThumbnailPlaceHolder())
             }
         }
 
         /**
          * Used as a place holder if the thumbnail is not available
          */
-        private inner class ThumbnailPlaceHolder :
-            StackPane(Label(I18N.getValue("google.books.table.thumbnail.not.available")))
+        private inner class ThumbnailPlaceHolder : FixedFontMaterialDesignIconView(MaterialDesignIcon.IMAGE, 50.0)
     }
 
     private inner class TabArea : TabPane() {
@@ -227,7 +269,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         private fun buildVBox() = VBox(10.0).apply {
-            children.add(buildTypeIndicator())
+            //children.add(buildTypeIndicator())
             children.add(buildTitleLabel())
             children.add(buildSubtitleLabel())
             children.add(buildAuthorLabel())
@@ -237,7 +279,6 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
             children.add(buildISBNIndicator())
             children.add(buildCategoriesIndicator())
             children.add(buildRatingsIndicator())
-            children.add(buildPreviewHyperlink())
         }
 
         private fun buildTypeIndicator(): Node =
@@ -247,13 +288,13 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                         when {
                             it.isMagazine -> {
                                 hBox.children.setAll(
-                                    MaterialDesignIconView(MaterialDesignIcon.NEWSPAPER),
+                                    FixedFontMaterialDesignIconView(MaterialDesignIcon.NEWSPAPER, 20.0),
                                     Label(I18N.getValue("google.books.magazine"))
                                 )
                             }
                             else -> {
                                 hBox.children.setAll(
-                                    MaterialDesignIconView(MaterialDesignIcon.BOOK),
+                                    FixedFontMaterialDesignIconView(MaterialDesignIcon.BOOK, 20.0),
                                     Label(I18N.getValue("google.books.book"))
                                 )
                             }
@@ -352,15 +393,6 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                 }
             }
         }
-
-        private fun buildPreviewHyperlink() = WebsiteHyperLink(I18N.getValue("google.books.details.preview"), null).apply {
-            graphic = MaterialDesignIconView(MaterialDesignIcon.APPLICATION)
-
-            setOnAction {
-                GoogleBookPreviewActivity(volume.get()).show()
-            }
-        }
-
     }
 
     private inner class DescriptionPane : ScrollPane() {
@@ -382,35 +414,61 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         init {
-            content = mdfxNode
             isFitToWidth = true
             prefWidth = 500.0
+            initPlaceHolderPolicy()
+        }
+
+        private fun initPlaceHolderPolicy() {
+            placeHolder()
+            volume.addListener { _, _, newVolume ->
+                newVolume?.volumeInfo?.description?.let {
+                    normalContent()
+                } ?: placeHolder()
+            }
+        }
+
+        private fun normalContent() {
+            content = mdfxNode
+            isFitToHeight = false
+        }
+
+        private fun placeHolder() {
+            content = StackPane(Label(I18N.getValue("google.book.description.empty")))
+            isFitToHeight = true
         }
     }
 
     private inner class SalePane : ScrollPane() {
         init {
-            this.isFitToWidth = true
-            content = buildVBox()
+            isFitToWidth = true
+            isFitToHeight = true
+            initPlaceHolderPolicy()
         }
 
-        private fun buildVBox() = VBox(10.0).apply {
+        private fun initPlaceHolderPolicy() {
+            placeholder()
             volume.addListener { _, _, volume ->
                 when (volume.saleInfo?.saleability) {
-                    Volume.SaleInfo.FOR_SALE -> {
-                        children.setAll(
-                            buildEBookIndicator(volume),
-                            buildCountryIndicator(volume),
-                            buildListPriceLabel(volume),
-                            buildRetailPriceLabel(volume),
-                            buildBuyLinkLabel(volume)
-                        )
-                    }
-                    else -> {
-                        children.setAll(buildNotSaleablePlaceHolder())
-                    }
+                    Volume.SaleInfo.FOR_SALE -> normalContent(volume)
+                    else -> placeholder()
                 }
             }
+        }
+
+        private fun placeholder() {
+            content = buildNotSaleablePlaceHolder()
+        }
+
+        private fun normalContent(volume: Volume) {
+            content = VBox(
+                10.0,
+                buildEBookIndicator(volume),
+                buildCountryIndicator(volume),
+                buildListPriceLabel(volume),
+                buildRetailPriceLabel(volume),
+                buildBuyLinkLabel(volume)
+            )
         }
 
         private fun buildEBookIndicator(volume: Volume): Node =
@@ -454,9 +512,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
 
 
         private fun buildNotSaleablePlaceHolder(): Node =
-            Label(I18N.getValue("google.books.details.notforsale")).apply {
-                styleClass.add("not-for-sale-place-holder")
-            }
+            StackPane(Label(I18N.getValue("google.books.details.notforsale")))
     }
 
     //Utility classes
