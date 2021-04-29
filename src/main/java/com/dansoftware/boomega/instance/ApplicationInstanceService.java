@@ -39,7 +39,7 @@ public class ApplicationInstanceService implements MessageHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationInstanceService.class);
 
-    private static final String APPLICATION_ID = "com.dansoftware.libraryapp";
+    private static final String APPLICATION_ID = "com.dansoftware.boomega";
     private static ApplicationInstanceService instance;
 
     private static final int ERROR_MESSAGE = -1;
