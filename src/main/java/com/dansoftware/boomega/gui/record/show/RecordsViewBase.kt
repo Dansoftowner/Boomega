@@ -12,8 +12,6 @@ import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.geometry.Orientation
 import javafx.scene.control.SplitPane
-import javafx.scene.layout.Priority
-import javafx.scene.layout.VBox
 import java.util.*
 import java.util.stream.Collectors
 
@@ -105,13 +103,12 @@ class RecordsViewBase(
     private fun buildDocksList(): ObservableList<Dock> = FXCollections.observableArrayList<Dock>().apply {
         addListener { change: ListChangeListener.Change<out Dock> ->
             while (change.next()) {
-                change.removed.forEach { it.remove(this@RecordsViewBase, horizontalSplitPane) }
+                change.removed.forEach { it.removeFrom(horizontalSplitPane) }
                 change.addedSubList.forEach {
                     it.align(
                         context,
                         database,
                         booksTable,
-                        this@RecordsViewBase,
                         horizontalSplitPane
                     )
                 }
