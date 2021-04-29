@@ -58,7 +58,7 @@ object PropertiesResponsible {
     /**
      * The log-file's path without the extension
      */
-    private val LOG_FILE_PATH_VALUE = FileUtils.getFile(FileUtils.getTempDirectory(), "libraryapp").toString()
+    private val LOG_FILE_PATH_VALUE = FileUtils.getFile(FileUtils.getTempDirectory(), "boomega").toString()
 
     /**
      * The log-file's path with the extension
