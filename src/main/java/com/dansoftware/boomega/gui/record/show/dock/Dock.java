@@ -18,25 +18,13 @@ import org.jetbrains.annotations.NotNull;
 
 public enum Dock {
 
-    RECORD_EDITOR("record.editor.dock.title") {
+    RECORD_EDITOR(RecordEditorDock.class, "record.editor.dock.title") {
         @Override
-        public void align(@NotNull Context context,
-                          @NotNull Database database,
-                          @NotNull RecordTable table,
-                          @NotNull SplitPane splitPane) {
-            if (splitPane.getItems().stream().noneMatch(RecordEditorDock.class::isInstance)) {
-                var recordEditor = new RecordEditor(context, database, table.getSelectionModel().getSelectedItems());
-                recordEditor.setOnItemsModified(items -> table.refresh());
-                table.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change ->
-                        recordEditor.setItems(table.getSelectionModel().getSelectedItems()));
-                RecordEditorDock dock = new RecordEditorDock(splitPane, recordEditor);
-                splitPane.getItems().add(dock);
-            }
-        }
-
-        @Override
-        public void removeFrom(@NotNull SplitPane splitPane) {
-            splitPane.getItems().removeIf(RecordEditorDock.class::isInstance);
+        protected DockView<?> buildView(@NotNull Context context,
+                                        @NotNull Database database,
+                                        @NotNull RecordTable table,
+                                        @NotNull SplitPane splitPane) {
+            return new RecordEditorDock(context, database, splitPane, table);
         }
 
         @Override
@@ -45,25 +33,14 @@ public enum Dock {
         }
     },
 
-    GOOGLE_BOOK_CONNECTION("google.books.dock.title") {
+    GOOGLE_BOOK_CONNECTION(GoogleBookConnectionDock.class,"google.books.dock.title") {
         @Override
-        public void align(@NotNull Context context,
-                          @NotNull Database database,
-                          @NotNull RecordTable table,
-                          @NotNull SplitPane splitPane) {
-            if (splitPane.getItems().stream().noneMatch(GoogleBookConnectionDock.class::isInstance)) {
-                var dockContent = new GoogleBookConnectionView(context, database, table.getSelectionModel().getSelectedItems());
-                dockContent.setOnRefreshed(table::refresh);
-                table.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change ->
-                        dockContent.setItems(table.getSelectionModel().getSelectedItems()));
-                GoogleBookConnectionDock dock = new GoogleBookConnectionDock(splitPane, dockContent);
-                splitPane.getItems().add(dock);
-            }
-        }
+        protected DockView<?> buildView(@NotNull Context context,
+                                        @NotNull Database database,
+                                        @NotNull RecordTable table,
+                                        @NotNull SplitPane splitPane) {
 
-        @Override
-        public void removeFrom(@NotNull SplitPane splitPane) {
-            splitPane.getItems().removeIf(GoogleBookConnectionDock.class::isInstance);
+            return new GoogleBookConnectionDock(context, database, splitPane, table);
         }
 
         @Override
@@ -72,9 +49,11 @@ public enum Dock {
         }
     };
 
+    private final Class<? extends DockView<?>> dockViewClass;
     private final String i18n;
 
-    Dock(String i18n) {
+    Dock(@NotNull Class<? extends DockView<?>> dockViewClass, @NotNull String i18n) {
+        this.dockViewClass = dockViewClass;
         this.i18n = i18n;
     }
 
@@ -82,27 +61,25 @@ public enum Dock {
         return i18n;
     }
 
-    /**
-     * Adds the particular {@link DockView} to the given {@link SplitPane}.
-     *
-     * @param context the gui-context
-     * @param database the database reference
-     * @param table the record-table
-     * @param splitPane the split pane
-     */
-    public abstract void align(
+    protected abstract DockView<?> buildView(
             @NotNull Context context,
             @NotNull Database database,
             @NotNull RecordTable table,
             @NotNull SplitPane splitPane
     );
 
-    /**
-     * Removes the dock from the split pane.
-     *
-     * @param splitPane the {@link SplitPane} reference
-     */
-    public abstract void removeFrom(@NotNull SplitPane splitPane);
+    public final void align(@NotNull Context context,
+                      @NotNull Database database,
+                      @NotNull RecordTable table,
+                      @NotNull SplitPane splitPane) {
+        if (splitPane.getItems().stream().noneMatch(dockViewClass::isInstance)) {
+            splitPane.getItems().add(buildView(context, database, table, splitPane));
+        }
+    }
+
+    public final void removeFrom(@NotNull SplitPane splitPane) {
+        splitPane.getItems().removeIf(dockViewClass::isInstance);
+    }
 
     /**
      * @return the icon of the dock
