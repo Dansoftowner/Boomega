@@ -127,7 +127,6 @@ class RecordsView(
             database
         ).apply {
             addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED) {
-                setDockFullyResizable()
                 baseItems.setAll(this.value)
             }
         }
@@ -136,10 +135,6 @@ class RecordsView(
         .or(RecordClipboard.identifierProperty().isEqualTo(copyHandle))
 
     fun itemsCountProperty(): IntegerBinding = Bindings.size(baseItems)
-
-    private fun setDockFullyResizable() {
-        recordsViewBase.setDockFullyResizable()
-    }
 
     fun scrollToTop() {
         table.scrollTo(0)

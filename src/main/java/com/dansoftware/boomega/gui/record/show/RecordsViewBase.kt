@@ -21,14 +21,12 @@ class RecordsViewBase(
     private val context: Context,
     private val database: Database,
     private val baseItems: ObservableList<Record>
-) : VBox() {
+) : SplitPane() {
 
     val booksTable: RecordTable = buildBooksTable()
     val docks: ObservableList<Dock> = buildDocksList()
 
-    private val baseSplitPane: SplitPane = buildBaseSplitPane()
-    private val leftSplitPane: SplitPane = buildLeftSplitPane()
-    private val rightSplitPane: SplitPane = buildRightSplitPane()
+    private val horizontalSplitPane: SplitPane = buildHorizontalSplitPane()
 
     private val findDialogVisible: BooleanProperty = object : SimpleBooleanProperty() {
         override fun invalidated() {
@@ -49,10 +47,9 @@ class RecordsViewBase(
         }
 
     var dockInfo: DockInfo
-        get() = DockInfo(docks, recordTablePos)
+        get() = DockInfo(docks)
         set(dockInfo) {
             docks.setAll(dockInfo.docks)
-            recordTablePos = dockInfo.recordTablePos
         }
 
     var columnsInfo: TableColumnsInfo
@@ -61,19 +58,15 @@ class RecordsViewBase(
             value.columnTypes.forEach(booksTable::addColumn)
         }
 
-    private var recordTablePos: Int
-        get() = leftSplitPane.items.indexOf(booksTable)
-        set(pos) {
-            leftSplitPane.items.add(pos, booksTable)
-        }
-
     init {
+        styleClass.add("records-view")
+        orientation = Orientation.VERTICAL
         buildUI()
     }
 
     private fun buildUI() {
-        baseSplitPane.items.add(leftSplitPane)
-        children.add(baseSplitPane)
+        items.add(booksTable)
+        items.add(horizontalSplitPane)
     }
 
     private fun buildBooksTable(): RecordTable =
@@ -81,28 +74,10 @@ class RecordsViewBase(
             items = baseItems
         }
 
-    private fun buildBaseSplitPane(): SplitPane =
+    private fun buildHorizontalSplitPane(): SplitPane =
         SplitPane().apply {
-            styleClass.add("records-view")
             orientation = Orientation.HORIZONTAL
-            setVgrow(this, Priority.ALWAYS)
-        }
-
-    private fun buildLeftSplitPane(): SplitPane =
-        buildDockSplitPane().apply {
-            SplitPane.setResizableWithParent(this, true)
-        }
-
-    private fun buildRightSplitPane(): SplitPane =
-        buildDockSplitPane().apply {
-            prefWidth = 500.0
-            maxWidth = 500.0
-            SplitPane.setResizableWithParent(this, false)
-        }
-
-    private fun buildDockSplitPane(): SplitPane =
-        SplitPane().apply {
-            orientation = Orientation.VERTICAL
+            setResizableWithParent(this, false)
         }
 
     private fun buildRecordFindControl() =
@@ -110,10 +85,6 @@ class RecordsViewBase(
             setOnCloseRequest { isFindDialogVisible = false }
             setOnNewResults { list -> booksTable.items = FXCollections.observableArrayList(list) }
         }
-
-    fun setDockFullyResizable() {
-        rightSplitPane.maxWidth = USE_COMPUTED_SIZE
-    }
 
     private fun showFindDialog() {
         children.add(0, buildRecordFindControl())
@@ -134,22 +105,21 @@ class RecordsViewBase(
     private fun buildDocksList(): ObservableList<Dock> = FXCollections.observableArrayList<Dock>().apply {
         addListener { change: ListChangeListener.Change<out Dock> ->
             while (change.next()) {
-                change.removed.forEach { it.remove(leftSplitPane, rightSplitPane) }
+                change.removed.forEach { it.remove(this@RecordsViewBase, horizontalSplitPane) }
                 change.addedSubList.forEach {
                     it.align(
                         context,
                         database,
                         booksTable,
-                        leftSplitPane,
-                        rightSplitPane
+                        this@RecordsViewBase,
+                        horizontalSplitPane
                     )
                 }
             }
             when {
-                rightSplitPane.items.isEmpty() -> baseSplitPane.items.remove(rightSplitPane)
-                baseSplitPane.items.contains(rightSplitPane).not() -> {
-                    baseSplitPane.items.add(rightSplitPane)
-                    rightSplitPane.prefWidth = RIGHT_DOCK_PANE_PREF_WIDTH
+                horizontalSplitPane.items.isEmpty() -> this@RecordsViewBase.items.remove(horizontalSplitPane)
+                this@RecordsViewBase.items.contains(horizontalSplitPane).not() -> {
+                    this@RecordsViewBase.items.add(horizontalSplitPane)
                 }
             }
         }
@@ -169,10 +139,10 @@ class RecordsViewBase(
         }
     }
 
-    class DockInfo(val docks: List<Dock>, val recordTablePos: Int) {
+    class DockInfo(val docks: List<Dock>) {
         companion object {
             fun defaultInfo() =
-                DockInfo(listOf(*Dock.values()), 0)
+                DockInfo(listOf(*Dock.values()))
         }
     }
 
