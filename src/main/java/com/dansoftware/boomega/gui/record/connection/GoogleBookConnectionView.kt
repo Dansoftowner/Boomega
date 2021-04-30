@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.record.googlebook
+package com.dansoftware.boomega.gui.record.connection
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
@@ -27,7 +27,7 @@ import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.googlebooks.GoogleBookDetailsPane
 import com.dansoftware.boomega.gui.googlebooks.SearchParameters
 import com.dansoftware.boomega.gui.googlebooks.join.GoogleBookJoinerOverlay
-import com.dansoftware.boomega.gui.record.show.RecordTable
+import com.dansoftware.boomega.gui.record.RecordTable
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N

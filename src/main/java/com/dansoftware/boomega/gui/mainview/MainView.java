@@ -6,7 +6,7 @@ import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksImportModule;
-import com.dansoftware.boomega.gui.record.show.RecordsViewModule;
+import com.dansoftware.boomega.gui.record.RecordsViewModule;
 import com.dlsc.workbenchfx.Workbench;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;

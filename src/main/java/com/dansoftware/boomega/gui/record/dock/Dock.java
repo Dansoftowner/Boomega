@@ -1,19 +1,16 @@
-package com.dansoftware.boomega.gui.record.show.dock;
+package com.dansoftware.boomega.gui.record.dock;
 
 import com.dansoftware.boomega.db.Database;
-import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.record.edit.RecordEditor;
-import com.dansoftware.boomega.gui.record.googlebook.GoogleBookConnectionView;
-import com.dansoftware.boomega.gui.record.show.RecordTable;
+import com.dansoftware.boomega.gui.record.connection.GoogleBookConnectionDock;
+import com.dansoftware.boomega.gui.record.edit.RecordEditorDock;
+import com.dansoftware.boomega.gui.record.RecordTable;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableView;
 import org.jetbrains.annotations.NotNull;
 
 public enum Dock {

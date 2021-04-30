@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.record.show.dock;
+package com.dansoftware.boomega.gui.record.dock;
 
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
