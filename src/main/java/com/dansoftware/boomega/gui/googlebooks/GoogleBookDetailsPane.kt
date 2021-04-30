@@ -135,6 +135,8 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         children.add(TabArea())
     }
 
+    fun volumeProperty() = volume
+
     private inner class ThumbnailArea() : VBox(10.0) {
         init {
             buildUI()
