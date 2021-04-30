@@ -12,6 +12,9 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 public enum Dock {
 
@@ -82,4 +85,9 @@ public enum Dock {
      * @return the icon of the dock
      */
     public abstract Node getGraphic();
+
+    @Nullable
+    public static Dock parse(Class<? extends DockView<?>> dockViewClass) {
+        return Arrays.stream(values()).filter(it -> it.dockViewClass.equals(dockViewClass)).findFirst().orElse(null);
+    }
 }

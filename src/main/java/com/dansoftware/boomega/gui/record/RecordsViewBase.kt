@@ -23,12 +23,14 @@ import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.record.dock.Dock
+import com.dansoftware.boomega.gui.record.dock.DockView
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.geometry.Orientation
+import javafx.scene.Node
 import javafx.scene.control.SplitPane
 import java.util.*
 import java.util.stream.Collectors
@@ -39,10 +41,10 @@ class RecordsViewBase(
     private val baseItems: ObservableList<Record>
 ) : SplitPane() {
 
+    private val dockSplitPane: SplitPane = buildDockSplitPane()
+
     val booksTable: RecordTable = buildBooksTable()
     val docks: ObservableList<Dock> = buildDocksList()
-
-    private val horizontalSplitPane: SplitPane = buildHorizontalSplitPane()
 
     private val findDialogVisible: BooleanProperty = object : SimpleBooleanProperty() {
         override fun invalidated() {
@@ -63,7 +65,7 @@ class RecordsViewBase(
         }
 
     var dockInfo: DockInfo
-        get() = DockInfo(docks)
+        get() = DockInfo(dockSplitPane)
         set(dockInfo) {
             docks.setAll(dockInfo.docks)
         }
@@ -82,7 +84,6 @@ class RecordsViewBase(
 
     private fun buildUI() {
         items.add(booksTable)
-        items.add(horizontalSplitPane)
     }
 
     private fun buildBooksTable(): RecordTable =
@@ -90,7 +91,7 @@ class RecordsViewBase(
             items = baseItems
         }
 
-    private fun buildHorizontalSplitPane(): SplitPane =
+    private fun buildDockSplitPane(): SplitPane =
         SplitPane().apply {
             orientation = Orientation.HORIZONTAL
             setResizableWithParent(this, false)
@@ -121,20 +122,20 @@ class RecordsViewBase(
     private fun buildDocksList(): ObservableList<Dock> = FXCollections.observableArrayList<Dock>().apply {
         addListener { change: ListChangeListener.Change<out Dock> ->
             while (change.next()) {
-                change.removed.forEach { it.removeFrom(horizontalSplitPane) }
+                change.removed.forEach { it.removeFrom(dockSplitPane) }
                 change.addedSubList.forEach {
                     it.align(
                         context,
                         database,
                         booksTable,
-                        horizontalSplitPane
+                        dockSplitPane
                     )
                 }
             }
             when {
-                horizontalSplitPane.items.isEmpty() -> this@RecordsViewBase.items.remove(horizontalSplitPane)
-                this@RecordsViewBase.items.contains(horizontalSplitPane).not() -> {
-                    this@RecordsViewBase.items.add(horizontalSplitPane)
+                dockSplitPane.items.isEmpty() -> this@RecordsViewBase.items.remove(dockSplitPane)
+                this@RecordsViewBase.items.contains(dockSplitPane).not() -> {
+                    this@RecordsViewBase.items.add(dockSplitPane)
                 }
             }
         }
@@ -155,6 +156,9 @@ class RecordsViewBase(
     }
 
     class DockInfo(val docks: List<Dock>) {
+        constructor(dockSplitPane: SplitPane) :
+                this(dockSplitPane.items.filterIsInstance<DockView<*>>().mapNotNull { Dock.parse(it.javaClass) })
+
         companion object {
             fun defaultInfo() =
                 DockInfo(listOf(*Dock.values()))
