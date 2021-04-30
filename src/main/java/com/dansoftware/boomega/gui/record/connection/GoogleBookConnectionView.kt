@@ -60,8 +60,9 @@ class GoogleBookConnectionView(
     private val context: Context,
     private val database: Database,
     items: List<Record>
-) : VBox() {
+) : StackPane() {
 
+    private val vBox: VBox = buildVBox()
     private val detailsPane: GoogleBookDetailsPane = GoogleBookDetailsPane(context)
     private val volumeCache: Cache<String, Volume> = buildCache()
 
@@ -88,8 +89,15 @@ class GoogleBookConnectionView(
 
     init {
         styleClass.add("google-book-dock")
-        noSelectionUI()
+        buildUI()
         this.items = items
+    }
+
+    private fun buildVBox() = VBox().apply { minHeight = 0.0 }
+
+    private fun buildUI() {
+        children.add(vBox)
+        noSelectionUI()
     }
 
     private fun buildCache(): Cache<String, Volume> =
@@ -113,23 +121,23 @@ class GoogleBookConnectionView(
     }
 
     private fun normalUI() {
-        children.setAll(detailsPane, buildRemoveButton())
+        vBox.children.setAll(detailsPane, buildRemoveButton())
     }
 
     private fun noConnectionUI() {
-        children.setAll(NoConnectionPlaceHolder())
+        vBox.children.setAll(NoConnectionPlaceHolder())
     }
 
     private fun noSelectionUI() {
-        children.setAll(NoSelectionPlaceHolder())
+        vBox.children.setAll(NoSelectionPlaceHolder())
     }
 
     private fun multipleSelectionUI() {
-        children.setAll(MultipleSelectionPlaceHolder())
+        vBox.children.setAll(MultipleSelectionPlaceHolder())
     }
 
     private fun errorUI() {
-        children.setAll(ErrorPlaceHolder())
+        vBox.children.setAll(ErrorPlaceHolder())
     }
 
     private fun buildRemoveButton() =
@@ -170,13 +178,13 @@ class GoogleBookConnectionView(
     }
 
     private fun showProgress() {
-        children.add(0, ProgressBar().apply {
+        vBox.children.add(0, ProgressBar().apply {
             progress = ProgressIndicator.INDETERMINATE_PROGRESS
         })
     }
 
     private fun stopProgress() {
-        children.removeIf { it is ProgressBar }
+        vBox.children.removeIf { it is ProgressBar }
     }
 
     private inner class VolumePullTask(private val googleHandle: String) : Task<Volume?>() {
@@ -259,7 +267,7 @@ class GoogleBookConnectionView(
         private fun buildUI() {
             styleClass.add(JMetroStyleClass.BACKGROUND)
             children.add(buildLabel())
-            setVgrow(this, Priority.ALWAYS)
+            VBox.setVgrow(this, Priority.ALWAYS)
         }
 
         private fun buildLabel() =
@@ -276,19 +284,20 @@ class GoogleBookConnectionView(
         private fun buildUI() {
             styleClass.add(JMetroStyleClass.BACKGROUND)
             children.add(buildLabel())
-            setVgrow(this, Priority.ALWAYS)
+            VBox.setVgrow(this, Priority.ALWAYS)
         }
 
         private fun buildLabel() =
             Label(I18N.getValue("google.books.dock.placeholder.multiple")).apply {
                 styleClass.add("place-holder-label")
+                minHeight = 0.0
             }
     }
 
     private inner class ErrorPlaceHolder : StackPane() {
         init {
             styleClass.add(JMetroStyleClass.BACKGROUND)
-            setVgrow(this, Priority.ALWAYS)
+            VBox.setVgrow(this, Priority.ALWAYS)
             buildUI()
         }
 
@@ -328,7 +337,7 @@ class GoogleBookConnectionView(
 
        init {
             styleClass.add(JMetroStyleClass.BACKGROUND)
-            setVgrow(this, Priority.ALWAYS)
+            VBox.setVgrow(this, Priority.ALWAYS)
             buildUI()
         }
 
