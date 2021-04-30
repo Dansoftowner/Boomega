@@ -32,7 +32,7 @@ applicationDefaultJvmArgs = [
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = '16'
+        jvmTarget = '15'
         useIR = true
     }
 }
