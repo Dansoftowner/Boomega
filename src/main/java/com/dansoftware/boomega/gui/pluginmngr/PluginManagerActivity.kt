@@ -14,7 +14,7 @@ class PluginManagerActivity {
     fun show() = show(null)
 
     fun show(ownerWindow: Window?) {
-        show(ownerWindow, PluginDirectory.getPluginFiles()?.asList())
+        show(ownerWindow, PluginDirectory.getPluginFiles().asList())
     }
 
     fun show(ownerWindow: Window?, pluginFiles: List<File>?) {
