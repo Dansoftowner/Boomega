@@ -32,15 +32,15 @@ public abstract class DockView<T extends Node> extends VBox {
     }
 
     private Node buildTitleBar(SplitPane parent, Node icon, String title) {
-        var buttonBar = new HBox(5.0, buildUpButton(parent), buildDownButton(parent));
+        var buttonBar = new HBox(5.0, buildLeftButton(parent), buildRightButton(parent));
         var iconTitleBar = new HBox(10.0, new StackPane(icon), new StackPane(new Label(title)));
         var titleBar = new BorderPane(null, null, buttonBar, null, iconTitleBar);
         titleBar.getStyleClass().add("dock-title-bar");
         return titleBar;
     }
 
-    private Button buildUpButton(SplitPane parent) {
-        Button btn = buildRearrangeButton(MaterialDesignIcon.ARROW_UP);
+    private Button buildLeftButton(SplitPane parent) {
+        Button btn = buildRearrangeButton(MaterialDesignIcon.ARROW_LEFT);
         parent.getItems().addListener((ListChangeListener<? super Node>) modification -> {
             btn.setDisable(parent.getItems().size() < 2 || parent.getItems().indexOf(this) == 0);
         });
@@ -52,8 +52,8 @@ public abstract class DockView<T extends Node> extends VBox {
         return btn;
     }
 
-    private Button buildDownButton(SplitPane parent) {
-        Button btn = buildRearrangeButton(MaterialDesignIcon.ARROW_DOWN);
+    private Button buildRightButton(SplitPane parent) {
+        Button btn = buildRearrangeButton(MaterialDesignIcon.ARROW_RIGHT);
         parent.getItems().addListener((ListChangeListener<? super Node>) modification -> {
             btn.setDisable(parent.getItems().size() < 2 || parent.getItems().indexOf(this) == parent.getItems().size() -1);
         });
