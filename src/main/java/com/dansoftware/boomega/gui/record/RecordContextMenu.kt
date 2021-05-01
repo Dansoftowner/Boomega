@@ -18,119 +18,55 @@
 
 package com.dansoftware.boomega.gui.record
 
-import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.keyCombination
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
-import javafx.beans.property.ReadOnlyBooleanProperty
-import javafx.collections.ObservableList
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
 import javafx.scene.control.SeparatorMenuItem
-import java.util.function.Consumer
 
-class RecordContextMenu(
-    private val records: ObservableList<Record>,
-    private val deleteAction: Consumer<List<Record>>,
-    private val copyAction: Consumer<List<Record>>,
-    private val cutAction: Consumer<List<Record>>,
-    private val pasteAction: Runnable,
-    private val pasteItemDisable: ReadOnlyBooleanProperty?
-) : ContextMenu() {
+class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
 
-    private val itemsEmpty = Bindings.isEmpty(records)
+    private val itemsEmpty = Bindings.isEmpty(recordsView.table.selectionModel.selectedItems)
 
     init {
         buildItems()
     }
 
     private fun buildItems() {
-        buildDeleteItem()
-        buildCopyItem()
-        buildCutItem()
-        buildSeparator()
-        buildPasteItem()
-    }
-
-    private fun buildDeleteItem() {
-        MenuItem(I18N.getValue("record.delete"), MaterialDesignIconView(MaterialDesignIcon.DELETE)).apply {
-            setOnAction { deleteAction.accept(records.let(::ArrayList)) }
-            acceleratorProperty().bind(KeyBindings.deleteRecordKeyBinding.keyCombinationProperty)
-            disableProperty().bind(itemsEmpty)
-        }.let(items::add)
-    }
-
-    private fun buildCopyItem() {
-        MenuItem(I18N.getValue("record.copy"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)).apply {
-            setOnAction { copyAction.accept(records.let(::ArrayList)) }
-            acceleratorProperty().bind(KeyBindings.copyRecordKeyBinding.keyCombinationProperty)
-            disableProperty().bind(itemsEmpty)
-        }.let(items::add)
-    }
-
-    private fun buildCutItem() {
-        MenuItem(I18N.getValue("record.cut"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_CUT)).apply {
-            setOnAction { cutAction.accept(records.let(::ArrayList)) }
-            acceleratorProperty().bind(KeyBindings.cutRecordKeyBinding.keyCombinationProperty)
-            disableProperty().bind(itemsEmpty)
-        }.let(items::add)
-    }
-
-    private fun buildPasteItem() {
-        MenuItem(I18N.getValue("record.paste"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE)).apply {
-            setOnAction { pasteAction.run() }
-            acceleratorProperty().bind(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
-            pasteItemDisable?.let(disableProperty()::bind)
-        }.let(items::add)
-    }
-
-    private fun buildSeparator() {
+        items.add(buildDeleteItem())
+        items.add(buildCopyItem())
+        items.add(buildCutItem())
         items.add(SeparatorMenuItem())
+        items.add(buildPasteItem())
     }
 
-    class Builder(private val records: ObservableList<Record>) {
-        private var deleteAction: Consumer<List<Record>>? = null
-        private var cutAction: Consumer<List<Record>>? = null
-        private var copyAction: Consumer<List<Record>>? = null
-        private var pasteAction: Runnable? = null
-        private var pasteItemDisablePolicy: ReadOnlyBooleanProperty? = null
+    private fun buildDeleteItem() =
+        MenuItem(I18N.getValue("record.delete"), MaterialDesignIconView(MaterialDesignIcon.DELETE))
+            .action { recordsView.removeSelectedItems() }
+            .keyCombination(KeyBindings.deleteRecordKeyBinding.keyCombinationProperty)
+            .apply { disableProperty().bind(itemsEmpty) }
 
-        fun deleteAction(deleteAction: Consumer<List<Record>>) = this.apply {
-            this.deleteAction = deleteAction
-        }
+    private fun buildCopyItem() =
+        MenuItem(I18N.getValue("record.copy"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY))
+            .action { recordsView.copySelectedToClipboard() }
+            .keyCombination(KeyBindings.copyRecordKeyBinding.keyCombinationProperty)
+            .apply { disableProperty().bind(itemsEmpty) }
 
-        fun cutAction(cutAction: Consumer<List<Record>>) = this.apply {
-            this.cutAction = cutAction
-        }
 
-        fun copyAction(copyAction: Consumer<List<Record>>) = this.apply {
-            this.copyAction = copyAction
-        }
+    private fun buildCutItem() =
+        MenuItem(I18N.getValue("record.cut"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_CUT))
+            .action { recordsView.cutSelectedToClipboard() }
+            .keyCombination(KeyBindings.cutRecordKeyBinding.keyCombinationProperty)
+            .apply { disableProperty().bind(itemsEmpty) }
 
-        fun pasteAction(pasteAction: Runnable?) = this.apply {
-            this.pasteAction = pasteAction
-        }
-
-        fun pasteItemDisablePolicy(binding: ReadOnlyBooleanProperty) = this.apply {
-            this.pasteItemDisablePolicy = binding
-        }
-
-        fun build(): RecordContextMenu =
-            RecordContextMenu(
-                records,
-                deleteAction ?: Consumer { },
-                copyAction ?: Consumer { },
-                cutAction ?: Consumer { },
-                pasteAction ?: Runnable { },
-                pasteItemDisablePolicy
-            )
-    }
-
-    companion object {
-        @JvmStatic
-        fun builder(records: ObservableList<Record>): Builder = records.let(RecordContextMenu::Builder)
-    }
-
+    private fun buildPasteItem() =
+        MenuItem(I18N.getValue("record.paste"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE))
+            .action {  recordsView.pasteItemsFromClipboard() }
+            .keyCombination(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
+            .apply { disableProperty().bind(RecordClipboard.emptyProperty()) }
 }

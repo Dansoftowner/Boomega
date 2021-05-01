@@ -87,20 +87,13 @@ class RecordsView(
     }
 
     private fun buildTableRowContextMenu() {
-        RecordContextMenu.builder(table.selectionModel.selectedItems)
-            .deleteAction(this::removeItems)
-            .copyAction(this::copyItemsToClipboard)
-            .cutAction(this::cutItemsToClipboard)
-            .pasteItemDisablePolicy(RecordClipboard.emptyProperty())
-            .pasteAction(this::pasteItemsFromClipboard)
-            .build()
-            .let {
-                table.rowContextMenu = it
+        RecordContextMenu(this).let {
+            table.rowContextMenu = it
+            table.contextMenu = it.takeIf { table.items.isEmpty() }
+            table.items.addListener(ListChangeListener { _ ->
                 table.contextMenu = it.takeIf { table.items.isEmpty() }
-                table.items.addListener(ListChangeListener { _ ->
-                    table.contextMenu = it.takeIf { table.items.isEmpty() }
-                })
-            }
+            })
+        }
     }
 
     private fun readConfigurations() {
