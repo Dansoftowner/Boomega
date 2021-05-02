@@ -32,6 +32,10 @@ import javafx.collections.ObservableList
 import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.scene.control.SplitPane
+import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.*
 import java.util.stream.Collectors
 
@@ -83,12 +87,13 @@ class RecordsViewBase(
     }
 
     private fun buildUI() {
-        items.add(booksTable)
+        items.add(VBox(booksTable))
     }
 
     private fun buildBooksTable(): RecordTable =
         RecordTable(0).apply {
             items = baseItems
+            VBox.setVgrow(this, Priority.ALWAYS)
         }
 
     private fun buildDockSplitPane(): SplitPane =
@@ -104,11 +109,13 @@ class RecordsViewBase(
         }
 
     private fun showFindDialog() {
-        children.add(0, buildRecordFindControl())
+        logger.debug("Showing find dialog...")
+        (booksTable.parent as VBox).children.add(0, buildRecordFindControl())
     }
 
     private fun hideFindDialog() {
-        val iterator = children.iterator()
+        logger.debug("Hiding find dialog...")
+        val iterator = (booksTable.parent as VBox).children.iterator()
         while (iterator.hasNext()) {
             val element = iterator.next()
             if (element is RecordFindControl) {
@@ -166,7 +173,6 @@ class RecordsViewBase(
     }
 
     companion object {
-        private const val RECORD_EDITOR_PREF_HEIGHT = 400.0
-        private const val RIGHT_DOCK_PANE_PREF_WIDTH = 500.0
+        private val logger: Logger = LoggerFactory.getLogger(RecordsViewBase::class.java)
     }
 }
