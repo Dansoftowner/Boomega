@@ -381,6 +381,7 @@ public class RecordTable extends TableView<Record> {
         RankColumn() {
             super(ColumnType.RANK_COLUMN);
             setCellFactory(this);
+            setMinWidth(25);
         }
 
         @Override
@@ -394,8 +395,6 @@ public class RecordTable extends TableView<Record> {
                     } else {
                         Rating graphic = buildGraphic(Optional.ofNullable(item.getRating()).orElse(0));
                         setGraphic(graphic);
-                        RankColumn.this.minWidthProperty().bind(graphic.widthProperty().add(25));
-                        RankColumn.this.maxWidthProperty().bind(graphic.widthProperty().add(25));
                     }
                 }
 
