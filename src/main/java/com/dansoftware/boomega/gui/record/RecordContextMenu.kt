@@ -25,6 +25,7 @@ import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
+import javafx.collections.ListChangeListener
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
 import javafx.scene.control.SeparatorMenuItem
@@ -69,4 +70,12 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
             .action {  recordsView.pasteItemsFromClipboard() }
             .keyCombination(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(RecordClipboard.emptyProperty()) }
+
+    fun applyOn(table: RecordTable) {
+        table.rowContextMenu = this
+        table.contextMenu = this.takeIf { table.items.isEmpty() }
+        table.items.addListener(ListChangeListener {
+            table.contextMenu = this.takeIf { table.items.isEmpty() }
+        })
+    }
 }

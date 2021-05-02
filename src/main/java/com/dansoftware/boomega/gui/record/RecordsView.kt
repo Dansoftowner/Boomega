@@ -87,13 +87,7 @@ class RecordsView(
     }
 
     private fun buildTableRowContextMenu() {
-        RecordContextMenu(this).let {
-            table.rowContextMenu = it
-            table.contextMenu = it.takeIf { table.items.isEmpty() }
-            table.items.addListener(ListChangeListener { _ ->
-                table.contextMenu = it.takeIf { table.items.isEmpty() }
-            })
-        }
+        RecordContextMenu(this).applyOn(table)
     }
 
     private fun readConfigurations() {
