@@ -27,6 +27,7 @@ import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.record.dock.Dock
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.binding.IntegerBinding
@@ -116,14 +117,22 @@ class RecordsView(
     }
 
     fun refresh() {
-        loadRecords()
+        refresh { }
+    }
+
+    fun refresh(onSucceeded: () -> Unit) {
+        loadRecords(onSucceeded)
     }
 
     private fun loadRecords() {
-        CachedExecutor.submit(buildRecordsLoadTask())
+        loadRecords { }
     }
 
-    private fun buildRecordsLoadTask() =
+    private fun loadRecords(onSucceeded: () -> Unit) {
+        CachedExecutor.submit(buildRecordsLoadTask(onSucceeded))
+    }
+
+    private fun buildRecordsLoadTask(onSucceeded: () -> Unit) =
         TableRecordsGetTask(
             context,
             table,
@@ -131,6 +140,7 @@ class RecordsView(
         ).apply {
             addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED) {
                 baseItems.setAll(this.value)
+                onSucceeded()
             }
         }
 
@@ -170,7 +180,7 @@ class RecordsView(
     }
 
     private fun buildPasteAction(items: List<Record>) =
-        object : Task<Unit>() {
+        object : Task<List<Record>>() {
             init {
                 setOnFailed { e ->
                     //TODO: error dialog
@@ -180,107 +190,112 @@ class RecordsView(
                 setOnRunning { context.showIndeterminateProgress() }
                 setOnSucceeded {
                     context.stopProgress()
-                    refresh()
-                    table.items.addAll(items)
-                }
-            }
-
-            override fun call() {
-                synchronized(RecordClipboard) {
-                    logger.debug("Performing paste action....")
-                    items.stream()
-                        .map(Record::copy)
-                        .peek { it.id = null }
-                        .forEach(database::insertRecord)
-                }
+                    refresh {
+                        value.takeIf { it.isNotEmpty() }
+                            ?.also { table.selectionModel.clearSelection() } // clearing previous selections
+                            ?.onEach { Platform.runLater { table.selectionModel.select(it) } }
+                            ?.let { table.scrollTo(it[0]) }
+                    }
             }
         }
 
-    fun removeSelectedItems() {
-        //TODO: showing confirmation dialog
-        removeItems(ArrayList(table.selectionModel.selectedItems))
+    override fun call(): List<Record> {
+        synchronized(RecordClipboard) {
+            logger.debug("Performing paste action....")
+            return items.stream()
+                .map(Record::copy)
+                .peek { it.id = null }
+                .toList()
+                .onEach(database::insertRecord)
+        }
     }
+}
 
-    fun insertNewRecord(record: Record = Record.Builder(Record.Type.BOOK).build()) {
-        CachedExecutor.submit(buildInsertAction(record))
-    }
+fun removeSelectedItems() {
+    //TODO: showing confirmation dialog
+    removeItems(ArrayList(table.selectionModel.selectedItems))
+}
 
-    private fun buildInsertAction(record: Record): Task<Unit> =
-        object : Task<Unit>() {
+fun insertNewRecord(record: Record = Record.Builder(Record.Type.BOOK).build()) {
+    CachedExecutor.submit(buildInsertAction(record))
+}
 
-            init {
-                setOnRunning {
-                    context.showIndeterminateProgress()
-                }
+private fun buildInsertAction(record: Record): Task<Unit> =
+    object : Task<Unit>() {
 
-                setOnFailed {
-                    context.stopProgress()
-                    context.showErrorDialog(
-                        I18N.getValue("record.add.error.title"),
-                        I18N.getValue("record.add.error.msg"),
-                        it.source.exception as Exception?
-                    )
-                }
-
-                setOnSucceeded {
-                    context.stopProgress()
-                    baseItems.add(record)
-                    table.selectionModel.clearSelection()
-                    table.selectionModel.select(record)
-                    table.scrollTo(record)
-                }
+        init {
+            setOnRunning {
+                context.showIndeterminateProgress()
             }
 
-            override fun call() {
-                database.insertRecord(record)
+            setOnFailed {
+                context.stopProgress()
+                context.showErrorDialog(
+                    I18N.getValue("record.add.error.title"),
+                    I18N.getValue("record.add.error.msg"),
+                    it.source.exception as Exception?
+                )
+            }
+
+            setOnSucceeded {
+                context.stopProgress()
+                baseItems.add(record)
+                table.selectionModel.clearSelection()
+                table.selectionModel.select(record)
+                table.scrollTo(record)
             }
         }
 
-    private fun removeItems(items: List<Record>) {
-        CachedExecutor.submit(buildRemoveAction(items))
+        override fun call() {
+            database.insertRecord(record)
+        }
     }
 
-    private fun buildRemoveAction(items: List<Record>): Task<Unit> =
-        object : Task<Unit>() {
-            init {
-                setOnRunning { context.showIndeterminateProgress() }
-                setOnSucceeded {
-                    context.stopProgress()
-                    baseItems.removeAll(items)
-                }
-                setOnFailed { context.stopProgress() }
-            }
+private fun removeItems(items: List<Record>) {
+    CachedExecutor.submit(buildRemoveAction(items))
+}
 
-            override fun call() {
-                synchronized(RecordClipboard) {
-                    logger.debug("Performing remove action...")
-                    items.forEach(database::removeRecord)
-                }
+private fun buildRemoveAction(items: List<Record>): Task<Unit> =
+    object : Task<Unit>() {
+        init {
+            setOnRunning { context.showIndeterminateProgress() }
+            setOnSucceeded {
+                context.stopProgress()
+                baseItems.removeAll(items)
             }
+            setOnFailed { context.stopProgress() }
         }
 
-    companion object {
-        private val logger = LoggerFactory.getLogger(RecordsView::class.java)
-
-        private val colConfigKey =
-            PreferenceKey(
-                "books.view.table.columns",
-                RecordsViewBase.TableColumnsInfo::class.java,
-                RecordsViewBase.TableColumnsInfo.Companion::byDefault
-            )
-
-        private val docksConfigKey =
-            PreferenceKey(
-                "books.view.dock.info",
-                RecordsViewBase.DockInfo::class.java,
-                RecordsViewBase.DockInfo.Companion::defaultInfo
-            )
-
-        private val abcConfigKey =
-            PreferenceKey(
-                "books.view.module.table.abcsort",
-                Locale::class.java,
-                Locale::getDefault
-            )
+        override fun call() {
+            synchronized(RecordClipboard) {
+                logger.debug("Performing remove action...")
+                items.forEach(database::removeRecord)
+            }
+        }
     }
+
+companion object {
+    private val logger = LoggerFactory.getLogger(RecordsView::class.java)
+
+    private val colConfigKey =
+        PreferenceKey(
+            "books.view.table.columns",
+            RecordsViewBase.TableColumnsInfo::class.java,
+            RecordsViewBase.TableColumnsInfo.Companion::byDefault
+        )
+
+    private val docksConfigKey =
+        PreferenceKey(
+            "books.view.dock.info",
+            RecordsViewBase.DockInfo::class.java,
+            RecordsViewBase.DockInfo.Companion::defaultInfo
+        )
+
+    private val abcConfigKey =
+        PreferenceKey(
+            "books.view.module.table.abcsort",
+            Locale::class.java,
+            Locale::getDefault
+        )
+}
 }

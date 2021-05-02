@@ -96,6 +96,14 @@ class Record(
         *authors?.toTypedArray() ?: emptyArray()
     )
 
+    override fun equals(other: Any?): Boolean {
+        return when {
+            other === this -> true
+            other !is Record -> false
+            else -> other.id == this.id
+        }
+    }
+
     enum class Type {
         BOOK, MAGAZINE
     }
