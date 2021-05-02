@@ -1,11 +1,11 @@
-.google-book-dock .remove-button, .record-editor .remove-button {
+.record-editor .remove-button {
     -fx-background-color: #b70202;
     -fx-font-weight: bold;
     -fx-text-fill: #dddddd;
 }
 
-.google-book-dock .remove-button .glyph-icon, .record-editor .remove-button .glyph-icon {
-    -fx-fill: #f3f3f3;
+.google-book-dock .remove-button .glyph-icon {
+    -fx-fill: red;
 }
 
 .google-book-dock .remove-button:hover, .record-editor .remove-button:hover {
