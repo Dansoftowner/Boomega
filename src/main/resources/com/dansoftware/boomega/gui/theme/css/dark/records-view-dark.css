@@ -1,10 +1,5 @@
-.record-editor .remove-button {
-    -fx-background-color: #960101;
-    -fx-font-weight: bold;
-}
-
 .google-book-dock .remove-button .glyph-icon {
-    -fx-fill: #ff6c6c;
+    -fx-fill: #f84545;
 }
 
 .google-book-dock .place-holder-label, .record-editor .place-holder-label {
