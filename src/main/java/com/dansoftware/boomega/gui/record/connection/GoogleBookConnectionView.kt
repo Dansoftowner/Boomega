@@ -36,6 +36,8 @@ import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.binding.BooleanBinding
+import javafx.beans.value.ObservableBooleanValue
 import javafx.concurrent.Task
 import javafx.scene.Group
 import javafx.scene.Node
@@ -88,10 +90,26 @@ class GoogleBookConnectionView(
         }
 
     init {
-        styleClass.add("google-book-dock")
+
         buildUI()
         this.items = items
     }
+
+    fun removeConnectionRequest() {
+        context.showDialog(
+            I18N.getValue("google.books.dock.remove.confirmation.title", items.size),
+            buildPreviewTable(items),
+            {
+                if (it.typeEquals(ButtonType.YES)) {
+                    CachedExecutor.submit(ConnectionRemoveTask())
+                }
+            },
+            I18NButtonTypes.CANCEL,
+            I18NButtonTypes.YES
+        )
+    }
+
+    fun isEmpty(): ObservableBooleanValue = detailsPane.parentProperty().isNull
 
     private fun buildVBox() = VBox().apply { minHeight = 0.0 }
 
@@ -126,7 +144,7 @@ class GoogleBookConnectionView(
     }
 
     private fun normalUI() {
-        vBox.children.setAll(detailsPane, buildRemoveButton())
+        vBox.children.setAll(detailsPane)
     }
 
     private fun noConnectionUI() {
@@ -144,26 +162,6 @@ class GoogleBookConnectionView(
     private fun errorUI() {
         vBox.children.setAll(ErrorPlaceHolder())
     }
-
-    private fun buildRemoveButton() =
-        Button(I18N.getValue("google.books.dock.remove_connection")).apply {
-            styleClass.add("remove-button")
-            maxWidth = Double.MAX_VALUE
-            VBox.setVgrow(this, Priority.ALWAYS)
-            setOnAction {
-                context.showDialog(
-                    I18N.getValue("google.books.dock.remove.confirmation.title", items.size),
-                    buildPreviewTable(items),
-                    {
-                        if (it.typeEquals(ButtonType.YES)) {
-                            CachedExecutor.submit(ConnectionRemoveTask())
-                        }
-                    },
-                    I18NButtonTypes.CANCEL,
-                    I18NButtonTypes.YES
-                )
-            }
-        }
 
     private fun buildPreviewTable(records: List<Record>) =
         RecordTable(0).apply {

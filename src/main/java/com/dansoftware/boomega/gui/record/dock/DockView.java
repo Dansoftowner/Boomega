@@ -13,13 +13,16 @@ import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class DockView<T extends Node> extends VBox {
+
     private final T content;
+    private final HBox buttonBar;
 
     public DockView(@NotNull SplitPane parent,
                @NotNull Node icon,
                @NotNull String title,
                @NotNull T content) {
         this.content = content;
+        this.buttonBar = buildButtonBar(parent);
         this.buildUI(parent, icon, title);
     }
 
@@ -32,11 +35,14 @@ public abstract class DockView<T extends Node> extends VBox {
     }
 
     private Node buildTitleBar(SplitPane parent, Node icon, String title) {
-        var buttonBar = new HBox(5.0, buildLeftButton(parent), buildRightButton(parent));
         var iconTitleBar = new HBox(10.0, new StackPane(icon), new StackPane(new Label(title)));
         var titleBar = new BorderPane(null, null, buttonBar, null, iconTitleBar);
         titleBar.getStyleClass().add("dock-title-bar");
         return titleBar;
+    }
+
+    private HBox buildButtonBar(SplitPane parent) {
+        return new HBox(5.0, buildLeftButton(parent), buildRightButton(parent));
     }
 
     private Button buildLeftButton(SplitPane parent) {
@@ -70,5 +76,13 @@ public abstract class DockView<T extends Node> extends VBox {
         btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         btn.setPadding(new Insets(0));
         return btn;
+    }
+
+    protected T getContent() {
+        return content;
+    }
+
+    protected HBox getButtonBar() {
+        return buttonBar;
     }
 }
