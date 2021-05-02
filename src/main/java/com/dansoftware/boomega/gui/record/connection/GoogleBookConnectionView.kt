@@ -120,6 +120,11 @@ class GoogleBookConnectionView(
         VolumePullTask(handle).also { lastTask = it }.start()
     }
 
+    private fun refresh() {
+        items = items
+        onRefreshed?.run()
+    }
+
     private fun normalUI() {
         vBox.children.setAll(detailsPane, buildRemoveButton())
     }
@@ -403,7 +408,7 @@ class GoogleBookConnectionView(
                     }
                     setOnSucceeded {
                         context.stopProgress()
-                        onRefreshed?.run()
+                        refresh()
                         normalUI()
                         context.showInformationNotification(
                             I18N.getValue("google.books.dock.success_join.title"),
