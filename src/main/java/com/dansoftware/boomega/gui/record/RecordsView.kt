@@ -196,106 +196,106 @@ class RecordsView(
                             ?.onEach { Platform.runLater { table.selectionModel.select(it) } }
                             ?.let { table.scrollTo(it[0]) }
                     }
+                }
+            }
+
+            override fun call(): List<Record> {
+                synchronized(RecordClipboard) {
+                    logger.debug("Performing paste action....")
+                    return items.stream()
+                        .map(Record::copy)
+                        .peek { it.id = null }
+                        .toList()
+                        .onEach(database::insertRecord)
+                }
             }
         }
 
-    override fun call(): List<Record> {
-        synchronized(RecordClipboard) {
-            logger.debug("Performing paste action....")
-            return items.stream()
-                .map(Record::copy)
-                .peek { it.id = null }
-                .toList()
-                .onEach(database::insertRecord)
-        }
-    }
-}
-
-fun removeSelectedItems() {
-    //TODO: showing confirmation dialog
-    removeItems(ArrayList(table.selectionModel.selectedItems))
-}
-
-fun insertNewRecord(record: Record = Record.Builder(Record.Type.BOOK).build()) {
-    CachedExecutor.submit(buildInsertAction(record))
-}
-
-private fun buildInsertAction(record: Record): Task<Unit> =
-    object : Task<Unit>() {
-
-        init {
-            setOnRunning {
-                context.showIndeterminateProgress()
-            }
-
-            setOnFailed {
-                context.stopProgress()
-                context.showErrorDialog(
-                    I18N.getValue("record.add.error.title"),
-                    I18N.getValue("record.add.error.msg"),
-                    it.source.exception as Exception?
-                )
-            }
-
-            setOnSucceeded {
-                context.stopProgress()
-                baseItems.add(record)
-                table.selectionModel.clearSelection()
-                table.selectionModel.select(record)
-                table.scrollTo(record)
-            }
-        }
-
-        override fun call() {
-            database.insertRecord(record)
-        }
+    fun removeSelectedItems() {
+        //TODO: showing confirmation dialog
+        removeItems(ArrayList(table.selectionModel.selectedItems))
     }
 
-private fun removeItems(items: List<Record>) {
-    CachedExecutor.submit(buildRemoveAction(items))
-}
-
-private fun buildRemoveAction(items: List<Record>): Task<Unit> =
-    object : Task<Unit>() {
-        init {
-            setOnRunning { context.showIndeterminateProgress() }
-            setOnSucceeded {
-                context.stopProgress()
-                baseItems.removeAll(items)
-            }
-            setOnFailed { context.stopProgress() }
-        }
-
-        override fun call() {
-            synchronized(RecordClipboard) {
-                logger.debug("Performing remove action...")
-                items.forEach(database::removeRecord)
-            }
-        }
+    fun insertNewRecord(record: Record = Record.Builder(Record.Type.BOOK).build()) {
+        CachedExecutor.submit(buildInsertAction(record))
     }
 
-companion object {
-    private val logger = LoggerFactory.getLogger(RecordsView::class.java)
+    private fun buildInsertAction(record: Record): Task<Unit> =
+        object : Task<Unit>() {
 
-    private val colConfigKey =
-        PreferenceKey(
-            "books.view.table.columns",
-            RecordsViewBase.TableColumnsInfo::class.java,
-            RecordsViewBase.TableColumnsInfo.Companion::byDefault
-        )
+            init {
+                setOnRunning {
+                    context.showIndeterminateProgress()
+                }
 
-    private val docksConfigKey =
-        PreferenceKey(
-            "books.view.dock.info",
-            RecordsViewBase.DockInfo::class.java,
-            RecordsViewBase.DockInfo.Companion::defaultInfo
-        )
+                setOnFailed {
+                    context.stopProgress()
+                    context.showErrorDialog(
+                        I18N.getValue("record.add.error.title"),
+                        I18N.getValue("record.add.error.msg"),
+                        it.source.exception as Exception?
+                    )
+                }
 
-    private val abcConfigKey =
-        PreferenceKey(
-            "books.view.module.table.abcsort",
-            Locale::class.java,
-            Locale::getDefault
-        )
-}
+                setOnSucceeded {
+                    context.stopProgress()
+                    baseItems.add(record)
+                    table.selectionModel.clearSelection()
+                    table.selectionModel.select(record)
+                    table.scrollTo(record)
+                }
+            }
+
+            override fun call() {
+                database.insertRecord(record)
+            }
+        }
+
+    private fun removeItems(items: List<Record>) {
+        CachedExecutor.submit(buildRemoveAction(items))
+    }
+
+    private fun buildRemoveAction(items: List<Record>): Task<Unit> =
+        object : Task<Unit>() {
+            init {
+                setOnRunning { context.showIndeterminateProgress() }
+                setOnSucceeded {
+                    context.stopProgress()
+                    baseItems.removeAll(items)
+                }
+                setOnFailed { context.stopProgress() }
+            }
+
+            override fun call() {
+                synchronized(RecordClipboard) {
+                    logger.debug("Performing remove action...")
+                    items.forEach(database::removeRecord)
+                }
+            }
+        }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(RecordsView::class.java)
+
+        private val colConfigKey =
+            PreferenceKey(
+                "books.view.table.columns",
+                RecordsViewBase.TableColumnsInfo::class.java,
+                RecordsViewBase.TableColumnsInfo.Companion::byDefault
+            )
+
+        private val docksConfigKey =
+            PreferenceKey(
+                "books.view.dock.info",
+                RecordsViewBase.DockInfo::class.java,
+                RecordsViewBase.DockInfo.Companion::defaultInfo
+            )
+
+        private val abcConfigKey =
+            PreferenceKey(
+                "books.view.module.table.abcsort",
+                Locale::class.java,
+                Locale::getDefault
+            )
+    }
 }
