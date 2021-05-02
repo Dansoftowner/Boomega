@@ -30,7 +30,6 @@ import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.geometry.Orientation
-import javafx.scene.Node
 import javafx.scene.control.SplitPane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
@@ -47,7 +46,7 @@ class RecordsViewBase(
 
     private val dockSplitPane: SplitPane = buildDockSplitPane()
 
-    val booksTable: RecordTable = buildBooksTable()
+    val table: RecordTable = buildBooksTable()
     val docks: ObservableList<Dock> = buildDocksList()
 
     private val findDialogVisible: BooleanProperty = object : SimpleBooleanProperty() {
@@ -56,7 +55,7 @@ class RecordsViewBase(
                 get() -> showFindDialog()
                 else -> {
                     hideFindDialog()
-                    booksTable.items = baseItems
+                    table.items = baseItems
                 }
             }
         }
@@ -75,9 +74,9 @@ class RecordsViewBase(
         }
 
     var columnsInfo: TableColumnsInfo
-        get() = TableColumnsInfo(booksTable.showingColumns)
+        get() = TableColumnsInfo(table.showingColumns)
         set(value) {
-            value.columnTypes.forEach(booksTable::addColumn)
+            value.columnTypes.forEach(table::addColumn)
         }
 
     init {
@@ -87,7 +86,7 @@ class RecordsViewBase(
     }
 
     private fun buildUI() {
-        items.add(VBox(booksTable))
+        items.add(VBox(table))
     }
 
     private fun buildBooksTable(): RecordTable =
@@ -105,17 +104,17 @@ class RecordsViewBase(
     private fun buildRecordFindControl() =
         RecordFindControl(baseItems).apply {
             setOnCloseRequest { isFindDialogVisible = false }
-            setOnNewResults { list -> booksTable.items = FXCollections.observableArrayList(list) }
+            setOnNewResults { list -> table.items = FXCollections.observableArrayList(list) }
         }
 
     private fun showFindDialog() {
         logger.debug("Showing find dialog...")
-        (booksTable.parent as VBox).children.add(0, buildRecordFindControl())
+        (table.parent as VBox).children.add(0, buildRecordFindControl())
     }
 
     private fun hideFindDialog() {
         logger.debug("Hiding find dialog...")
-        val iterator = (booksTable.parent as VBox).children.iterator()
+        val iterator = (table.parent as VBox).children.iterator()
         while (iterator.hasNext()) {
             val element = iterator.next()
             if (element is RecordFindControl) {
@@ -134,7 +133,7 @@ class RecordsViewBase(
                     it.align(
                         context,
                         database,
-                        booksTable,
+                        table,
                         dockSplitPane
                     )
                 }

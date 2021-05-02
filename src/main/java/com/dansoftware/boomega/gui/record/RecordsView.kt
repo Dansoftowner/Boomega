@@ -31,7 +31,6 @@ import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.binding.IntegerBinding
 import javafx.collections.FXCollections
-import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.concurrent.WorkerStateEvent
@@ -53,7 +52,7 @@ class RecordsView(
     private val toolbar = RecordsViewToolbar(this)
 
     val table: RecordTable
-        get() = recordsViewBase.booksTable
+        get() = recordsViewBase.table
     val docks: ObservableList<Dock>
         get() = recordsViewBase.docks
 
