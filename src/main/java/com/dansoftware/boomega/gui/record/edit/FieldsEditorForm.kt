@@ -7,17 +7,13 @@ import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl
 import com.dansoftware.boomega.gui.control.formsfx.SimpleRatingControl
 import com.dansoftware.boomega.gui.record.RecordValues
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.structure.Group
 import com.dlsc.formsfx.model.util.ResourceBundleService
 import com.dlsc.formsfx.view.controls.SimpleTextControl
 import com.dlsc.formsfx.view.renderer.FormRenderer
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
-import javafx.concurrent.Task
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.Priority
@@ -27,7 +23,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.function.Consumer
 
 class FieldsEditorForm(
     private val context: Context,
@@ -43,8 +38,6 @@ class FieldsEditorForm(
     private val recordType: ObjectProperty<Record.Type> = object : SimpleObjectProperty<Record.Type>() {
         override fun invalidated() = buildForm(get())
     }
-
-    val onItemsModified: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
 
     private val changed: BooleanProperty = SimpleBooleanProperty(false)
 
@@ -84,30 +77,34 @@ class FieldsEditorForm(
 
         this.setValues(buildRecordValues(items))
         this.itemsCount.set(items.size)
-        this.buildChangedBinding()
+        this.updateChangedProperty()
     }
 
-    private fun buildChangedBinding() {
-        this.currentForm.get()
-            .changedProperty()
-            .or(rating.isNotEqualTo(rating.get()))
-            .let(this.changed::bind)
+    fun showProgress() {
+        ProgressBar(ProgressIndicator.INDETERMINATE_PROGRESS).let {
+            children.add(0, it)
+        }
+    }
+
+    fun stopProgress() {
+        children.removeIf { it is ProgressBar }
+    }
+
+    /**
+     * Should be executed after saving the modifications or after new items are set
+     */
+    fun updateChangedProperty() {
+        changed.bind(
+            this.currentForm.get()
+                .changedProperty()
+                .or(rating.isNotEqualTo(rating.get()))
+        )
     }
 
     private fun buildScrollPane() = ScrollPane().also {
         setVgrow(it, Priority.ALWAYS)
         it.isFitToWidth = true
         children.add(0, it)
-    }
-
-    private fun showProgress() {
-        ProgressBar(ProgressIndicator.INDETERMINATE_PROGRESS).let {
-            children.add(0, it)
-        }
-    }
-
-    private fun stopProgress() {
-        children.removeIf { it is ProgressBar }
     }
 
     private fun buildForm(recordType: Record.Type) {
@@ -123,7 +120,6 @@ class FieldsEditorForm(
     private fun buildFormUI() {
         renderForm()?.let {
             content = it
-            bottom = ControlBottom()
         }
     }
 
@@ -266,72 +262,41 @@ class FieldsEditorForm(
     ).i18n(ResourceBundleService(I18N.getValues()))
 
     fun saveChanges() {
-        changed.takeIf { it.get() }?.let {
-            //TODO: preview dialog about what items will be changed
-            currentForm.get()?.persist()
-            CachedExecutor.submit(buildSaveAction())
-        }
-    }
-
-    private fun buildSaveAction() = object : Task<Unit>() {
-        init {
-            setOnRunning { showProgress() }
-            setOnSucceeded {
-                stopProgress()
-                onItemsModified.get()?.accept(items)
-                buildChangedBinding()
-                //TODO: showing success notification
-            }
-            setOnFailed {
-                stopProgress()
-                logger.error("Something went wrong", it.source.exception)
-                //TODO: ALERT DIALOG
-            }
-        }
-
-        @Suppress("DuplicatedCode")
-        override fun call() {
-            items.forEach { record ->
-                this@FieldsEditorForm.apply {
-                    StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
-                    StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
-                    StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
-                    StringUtils.getIfBlank(magazineName.get(), null)?.run { record.magazineName = this }
-                    StringUtils.getIfBlank(authors.get(), null)?.run { record.authors = this.split(",") }
-                    StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
-                    StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
-                    StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
-                    numberOfCopies.value?.run { record.numberOfCopies = this }
-                    rating.value?.run { record.rating = this }
-                    publishedDate.get()
-                        ?.run {
-                            try {
-                                record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                            } catch (e : RuntimeException) {
-                                logger.error("Couldn't parse date ", e)
-                            }
+        items.forEach { record ->
+            this@FieldsEditorForm.apply {
+                StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
+                StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
+                StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
+                StringUtils.getIfBlank(magazineName.get(), null)?.run { record.magazineName = this }
+                StringUtils.getIfBlank(authors.get(), null)?.run { record.authors = this.split(",") }
+                StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
+                StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
+                StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
+                numberOfCopies.value?.run { record.numberOfCopies = this }
+                rating.value?.run { record.rating = this }
+                publishedDate.get()
+                    ?.run {
+                        try {
+                            record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        } catch (e: RuntimeException) {
+                            logger.error("Couldn't parse date ", e)
                         }
-                }
+                    }
             }
-            logger.debug("Updating ({}) records in database...", items.size)
-            items.forEach(database::updateRecord)
         }
-
+        logger.debug("Updating ({}) records in database...", items.size)
+        items.forEach(database::updateRecord)
     }
 
-    private inner class ControlBottom() : VBox(5.0) {
-        init {
-            this.children.apply { add(buildSaveChangesButton()) }
-        }
-
-        private fun buildSaveChangesButton() = Button(I18N.getValue("save.changes")).apply {
-            graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE)
-            prefWidthProperty().bind(this@FieldsEditorForm.widthProperty())
-            disableProperty().bind(this@FieldsEditorForm.changed.not())
-            setOnAction { saveChanges() }
-        }
+    /**
+     * Action that should be executed before saving the modifications
+     */
+    fun persist() {
+        currentForm.get()?.persist()
     }
-    
+
+    fun changedProperty(): BooleanProperty = changed
+
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(FieldsEditorForm::class.java)
     }

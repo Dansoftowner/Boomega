@@ -29,28 +29,32 @@ class FieldsEditor(
             }
         }
 
-    var onItemsModified: Consumer<List<Record>>
-        get() = recordEditorForm.onItemsModified.get()
-        set(value) {
-            recordEditorForm.onItemsModified.set(value)
-        }
-
     init {
         this.styleClass.add("record-base-editor")
         this.items = items
-        this.initKeyPressedPolicy()
     }
 
-    private fun initKeyPressedPolicy() {
-        KeyBindings.saveChangesKeyBinding.also { keyBinding ->
-            this.setOnKeyPressed {
-                if (keyBinding.match(it)) {
-                    logger.debug("Save changes key combination detected")
-                    recordEditorForm.saveChanges()
-                }
-            }
-        }
+    fun saveChanges() {
+        recordEditorForm.saveChanges()
     }
+
+    fun updateChangedProperty() {
+        recordEditorForm.updateChangedProperty()
+    }
+
+    fun persist() {
+        recordEditorForm.persist()
+    }
+
+    fun showProgress() {
+        recordEditorForm.showProgress()
+    }
+
+    fun stopProgress() {
+        recordEditorForm.stopProgress()
+    }
+
+    fun changedProperty() = recordEditorForm.changedProperty()
 
     private fun getPreferredType(items: List<Record>) = items.map(Record::recordType).distinct().singleOrNull()
 
@@ -62,10 +66,9 @@ class FieldsEditor(
         }
     }
 
-
     private class MultipleRecordTypePlaceHolder : StackPane() {
         init {
-            buildLabel().let(children::add)
+            children.add(buildLabel())
         }
 
         private fun buildLabel() = Label(I18N.getValue("record.editor.placeholder.multiple_types")).apply {
@@ -75,7 +78,7 @@ class FieldsEditor(
 
     private class EmptyPlaceHolder : StackPane() {
         init {
-            buildLabel().let(children::add)
+            children.add(buildLabel())
         }
 
         private fun buildLabel() = Label(I18N.getValue("google.books.dock.placeholder.noselection")).apply {

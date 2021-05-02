@@ -26,8 +26,14 @@ import com.dansoftware.boomega.gui.record.RecordTable;
 import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.collections.ListChangeListener;
-import javafx.scene.control.SplitPane;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.scene.control.*;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 public class RecordEditorDock extends DockView<RecordEditor> {
@@ -41,6 +47,23 @@ public class RecordEditorDock extends DockView<RecordEditor> {
                 I18N.getValue("record.editor.dock.title"),
                 buildContent(context, database, table)
         );
+        buildCustomItems();
+    }
+
+    private void buildCustomItems() {
+        getButtonBar().getChildren().add(0, buildSaveButton());
+        getButtonBar().getChildren().add(1, new Separator(Orientation.VERTICAL));
+    }
+
+    private Button buildSaveButton() {
+        var button = new Button();
+        button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        button.disableProperty().bind(getContent().changedProperty().not());
+        button.setPadding(new Insets(0));
+        button.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE));
+        button.setTooltip(new Tooltip(I18N.getValue("save.changes")));
+        button.setOnAction(event -> getContent().saveChanges());
+        return button;
     }
 
     private static RecordEditor buildContent(Context context,
