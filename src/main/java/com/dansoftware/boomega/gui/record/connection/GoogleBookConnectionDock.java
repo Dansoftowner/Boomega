@@ -68,7 +68,6 @@ public class GoogleBookConnectionDock extends DockView<GoogleBookConnectionView>
         button.setTooltip(new Tooltip(I18N.getValue("google.books.dock.remove_connection")));
         button.getStyleClass().add("remove-button");
         button.setOnAction(event -> getContent().removeConnectionRequest());
-        VBox.setVgrow(button, Priority.ALWAYS);
         return button;
     }
 
