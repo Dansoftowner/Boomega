@@ -24,7 +24,7 @@ import com.dansoftware.boomega.googlebooks.GoogleBooksQueryBuilder
 import com.dansoftware.boomega.googlebooks.SingleGoogleBookQuery
 import com.dansoftware.boomega.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.googlebooks.GoogleBookDetailsPane
+import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsPane
 import com.dansoftware.boomega.gui.googlebooks.SearchParameters
 import com.dansoftware.boomega.gui.googlebooks.join.GoogleBookJoinerOverlay
 import com.dansoftware.boomega.gui.record.RecordTable
@@ -36,7 +36,6 @@ import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
-import javafx.beans.binding.BooleanBinding
 import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
@@ -49,7 +48,6 @@ import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import javafx.util.Duration
 import jfxtras.styles.jmetro.JMetroStyleClass
-import org.reactfx.collection.ListChange
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit

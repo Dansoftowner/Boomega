@@ -1,8 +1,25 @@
-package com.dansoftware.boomega.gui.googlebooks
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.dansoftware.boomega.gui.googlebooks.details
 
 import com.dansoftware.boomega.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.context.TitledOverlayBox
 import com.dansoftware.boomega.gui.control.*
 import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewActivity
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
@@ -23,7 +40,6 @@ import javafx.concurrent.Task
 import javafx.geometry.NodeOrientation
 import javafx.geometry.Side
 import javafx.scene.Cursor
-import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.image.Image
@@ -36,38 +52,12 @@ import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.*
 import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
-
-/**
- * Used for displaying a [GoogleBookDetailsPane] as an overlay
- *
- * @author Daniel Gyorffy
- */
-class GoogleBookDetailsOverlay(context: Context, volume: Volume) :
-    TitledOverlayBox(
-        I18N.getValue("google.books.detail.title"),
-        ImageView("/com/dansoftware/boomega/image/util/google_12px.png"),
-        GoogleBookDetailsPane(context, volume)
-    )
 
 class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
 
     private val volume: ObjectProperty<Volume> = object : SimpleObjectProperty<Volume>() {
         override fun invalidated() {
-            get().let {
-                title.set(it?.volumeInfo?.title)
-                subtitle.set(it?.volumeInfo?.subtitle)
-                authors.set(it?.volumeInfo?.authors?.joinToString(", "))
-                publisher.set(it?.volumeInfo?.publisher)
-                date.set(it?.volumeInfo?.publishedDate)
-                language.set(it?.volumeInfo?.language?.let(Locale::forLanguageTag)?.displayLanguage)
-                previewLink.set(it?.volumeInfo?.previewLink)
-                averageRating.value = it?.volumeInfo?.averageRating
-                industryIdentifiers.set(it?.volumeInfo?.industryIdentifiers?.map(Volume.VolumeInfo.IndustryIdentifier::toString))
-                categories.set(it?.volumeInfo?.categories)
-                retrieveThumbnail(it) { value -> thumbnail.set(value) }
-                retrieveDescription(it) { value -> description.set(value) }
-            }
+            handleNewVolume(get())
         }
     }
 
@@ -104,6 +94,21 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
 
     constructor(context: Context, volume: Volume) : this(context) {
         this.volume.set(volume)
+    }
+
+    private fun handleNewVolume(volume: Volume?) {
+        title.set(volume?.volumeInfo?.title)
+        subtitle.set(volume?.volumeInfo?.subtitle)
+        authors.set(volume?.volumeInfo?.authors?.joinToString(", "))
+        publisher.set(volume?.volumeInfo?.publisher)
+        date.set(volume?.volumeInfo?.publishedDate)
+        language.set(volume?.volumeInfo?.language?.let(Locale::forLanguageTag)?.displayLanguage)
+        previewLink.set(volume?.volumeInfo?.previewLink)
+        averageRating.value = volume?.volumeInfo?.averageRating
+        industryIdentifiers.set(volume?.volumeInfo?.industryIdentifiers?.map(Volume.VolumeInfo.IndustryIdentifier::toString))
+        categories.set(volume?.volumeInfo?.categories)
+        retrieveThumbnail(volume) { value -> thumbnail.set(value) }
+        retrieveDescription(volume) { value -> description.set(value) }
     }
 
     private fun retrieveThumbnail(volume: Volume?, onAvailable: (Image?) -> Unit) {
