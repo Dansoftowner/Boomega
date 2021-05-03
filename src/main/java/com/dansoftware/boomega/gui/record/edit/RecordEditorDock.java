@@ -71,8 +71,6 @@ public class RecordEditorDock extends DockView<RecordEditor> {
                                              RecordTable table) {
         var recordEditor = new RecordEditor(context, database, table.getSelectionModel().getSelectedItems());
         recordEditor.setOnItemsModified(items -> table.refresh());
-        table.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change ->
-                recordEditor.setItems(table.getSelectionModel().getSelectedItems()));
         return recordEditor;
     }
 }

@@ -16,8 +16,7 @@ import org.slf4j.LoggerFactory
 
 class NotesEditor(
     private val context: Context,
-    private val database: Database,
-    items: List<Record>
+    private val database: Database
 ) : StackPane() {
 
     var items: List<Record> = emptyList()
@@ -39,8 +38,8 @@ class NotesEditor(
 
     init {
         this.styleClass.add("notes-editor")
-        this.items = items
         this.minHeight = 0.0
+        content = NoSelectionPlaceHolder()
     }
 
     fun showProgress() {

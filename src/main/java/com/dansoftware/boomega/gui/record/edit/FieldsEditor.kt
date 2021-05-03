@@ -3,21 +3,25 @@ package com.dansoftware.boomega.gui.record.edit
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N
+import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.function.Consumer
 
 class FieldsEditor(
     context: Context,
-    database: Database,
-    items: List<Record>
+    database: Database
 ) : StackPane() {
 
     private val recordEditorForm = FieldsEditorForm(context, database)
+
+    private var content: Node
+        get() = children[0]
+        set(value) {
+            children.setAll(value)
+        }
 
     var items: List<Record> = emptyList()
         set(value) {
@@ -31,7 +35,7 @@ class FieldsEditor(
 
     init {
         this.styleClass.add("record-base-editor")
-        this.items = items
+        content = NoSelectionPlaceHolder()
     }
 
     fun saveChanges() {
@@ -59,10 +63,10 @@ class FieldsEditor(
     private fun getPreferredType(items: List<Record>) = items.map(Record::recordType).distinct().singleOrNull()
 
     private fun buildBaseUI(items: List<Record>, type: Record.Type?) {
-        when {
-            items.isEmpty() -> children.setAll(EmptyPlaceHolder())
-            type == null -> children.setAll(MultipleRecordTypePlaceHolder())
-            else -> children.setAll(recordEditorForm)
+        content = when {
+            items.isEmpty() -> NoSelectionPlaceHolder()
+            type == null -> MultipleRecordTypePlaceHolder()
+            else -> recordEditorForm
         }
     }
 
@@ -76,7 +80,7 @@ class FieldsEditor(
         }
     }
 
-    private class EmptyPlaceHolder : StackPane() {
+    private class NoSelectionPlaceHolder : StackPane() {
         init {
             children.add(buildLabel())
         }

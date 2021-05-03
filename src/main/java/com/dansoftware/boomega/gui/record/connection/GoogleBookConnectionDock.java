@@ -74,8 +74,6 @@ public class GoogleBookConnectionDock extends DockView<GoogleBookConnectionView>
     private static GoogleBookConnectionView buildContent(Context context, Database database, RecordTable table) {
         var dockContent = new GoogleBookConnectionView(context, database, table.getSelectionModel().getSelectedItems());
         dockContent.setOnRefreshed(table::refresh);
-        table.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Record>) change ->
-                dockContent.setItems(table.getSelectionModel().getSelectedItems()));
         return dockContent;
     }
 }

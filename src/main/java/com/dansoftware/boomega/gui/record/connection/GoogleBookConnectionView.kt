@@ -38,6 +38,8 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.value.ObservableBooleanValue
+import javafx.collections.ListChangeListener
+import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.scene.Group
 import javafx.scene.Node
@@ -47,6 +49,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import javafx.util.Duration
 import jfxtras.styles.jmetro.JMetroStyleClass
+import org.reactfx.collection.ListChange
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
@@ -61,20 +64,20 @@ import java.util.concurrent.TimeUnit
 class GoogleBookConnectionView(
     private val context: Context,
     private val database: Database,
-    items: List<Record>
+    selectedItems: ObservableList<Record>
 ) : StackPane() {
 
     private val vBox: VBox = buildVBox()
     private val detailsPane: GoogleBookDetailsPane = GoogleBookDetailsPane(context)
     private val volumeCache: Cache<String, Volume> = buildCache()
 
-    var items: List<Record> = emptyList()
+    var onRefreshed: Runnable? = null
+
+    private var items: List<Record> = emptyList()
         set(value) {
             field = value
             handleNewItems(value)
         }
-
-    var onRefreshed: Runnable? = null
 
     private var currentGoogleHandle: String? = null
     private var currentVolume: Volume?
@@ -90,9 +93,12 @@ class GoogleBookConnectionView(
         }
 
     init {
-
+        initListObserver(selectedItems)
         buildUI()
-        this.items = items
+    }
+
+    private fun initListObserver(selectedItems: ObservableList<Record>) {
+        selectedItems.addListener(ListChangeListener { items = selectedItems })
     }
 
     fun removeConnectionRequest() {

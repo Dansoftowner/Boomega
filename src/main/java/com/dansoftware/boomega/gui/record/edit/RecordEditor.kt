@@ -8,6 +8,8 @@ import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.value.ObservableBooleanValue
+import javafx.collections.ListChangeListener
+import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.scene.Node
 import javafx.scene.control.Tab
@@ -20,11 +22,11 @@ import java.util.function.Consumer
 class RecordEditor(
     context: Context,
     database: Database,
-    items: List<Record>
+    selectedItems: ObservableList<Record>
 ) : TabPane() {
 
-    private val fieldsEditor: FieldsEditor = FieldsEditor(context, database, items)
-    private val notesEditor: NotesEditor = NotesEditor(context, database, items)
+    private val fieldsEditor: FieldsEditor = FieldsEditor(context, database)
+    private val notesEditor: NotesEditor = NotesEditor(context, database)
 
     private val baseEditorTab: Tab = TabImpl("record.editor.tab.fields", fieldsEditor).apply {
         selectedProperty().addListener { _, _, selected ->
@@ -42,7 +44,7 @@ class RecordEditor(
         }
     }
 
-    var items: List<Record> = emptyList()
+    private var items: List<Record> = emptyList()
         set(value) {
             field = ArrayList(value).also {
                 fieldsEditor.takeIf { baseEditorTab.isSelected }?.items = it
@@ -53,11 +55,15 @@ class RecordEditor(
     var onItemsModified: Consumer<List<Record>>? = null
 
     init {
-        this.items = items
         this.styleClass.add(JMetroStyleClass.UNDERLINE_TAB_PANE)
         this.styleClass.add("record-editor")
+        initListObserver(selectedItems)
         initSaveKeyCombination()
         buildUI()
+    }
+
+    private fun initListObserver(selectedItems: ObservableList<Record>) {
+        selectedItems.addListener(ListChangeListener { items = selectedItems })
     }
 
     private fun initSaveKeyCombination() {
