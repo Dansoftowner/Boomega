@@ -48,8 +48,8 @@ class RecordEditor(
     private var items: List<Record> = emptyList()
         set(value) {
             field = ArrayList(value).also {
-                fieldsEditor.takeIf { baseEditorTab.isSelected || value.isEmpty() }?.items = it
-                notesEditor.takeIf { notesEditorTab.isSelected || value.isEmpty() }?.items = it
+                fieldsEditor.takeIf { baseEditorTab.isSelected }?.items = it
+                notesEditor.takeIf { notesEditorTab.isSelected }?.items = it
             }
         }
 
@@ -120,8 +120,8 @@ class RecordEditor(
         }
 
         override fun call() {
-            fieldsEditor.saveChanges()
-            notesEditor.saveChanges()
+            fieldsEditor.takeIf { it.changedProperty().get() }?.saveChanges()
+            notesEditor.takeIf { it.changedProperty().get() }?.saveChanges()
         }
     }
 
