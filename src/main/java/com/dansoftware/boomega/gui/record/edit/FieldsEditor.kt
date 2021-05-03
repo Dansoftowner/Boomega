@@ -27,9 +27,7 @@ class FieldsEditor(
         set(value) {
             if (field !== value) {
                 field = value
-                buildBaseUI(value, this.getPreferredType(value)?.also {
-                    this.recordEditorForm.setItems(it, value)
-                })
+                handleNewItems(value)
             }
         }
 
@@ -59,6 +57,12 @@ class FieldsEditor(
     }
 
     fun changedProperty() = recordEditorForm.changedProperty()
+
+    private fun handleNewItems(items: List<Record>) {
+        buildBaseUI(items, this.getPreferredType(items)?.also {
+            this.recordEditorForm.setItems(it, items)
+        })
+    }
 
     private fun getPreferredType(items: List<Record>) = items.map(Record::recordType).distinct().singleOrNull()
 

@@ -6,6 +6,7 @@ import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ListChangeListener
@@ -22,7 +23,7 @@ import java.util.function.Consumer
 class RecordEditor(
     context: Context,
     database: Database,
-    selectedItems: ObservableList<Record>
+    private val selectedItems: ObservableList<Record>
 ) : TabPane() {
 
     private val fieldsEditor: FieldsEditor = FieldsEditor(context, database)
@@ -47,8 +48,8 @@ class RecordEditor(
     private var items: List<Record> = emptyList()
         set(value) {
             field = ArrayList(value).also {
-                fieldsEditor.takeIf { baseEditorTab.isSelected }?.items = it
-                notesEditor.takeIf { notesEditorTab.isSelected }?.items = it
+                fieldsEditor.takeIf { baseEditorTab.isSelected || value.isEmpty() }?.items = it
+                notesEditor.takeIf { notesEditorTab.isSelected || value.isEmpty() }?.items = it
             }
         }
 
@@ -63,24 +64,19 @@ class RecordEditor(
     }
 
     private fun initListObserver(selectedItems: ObservableList<Record>) {
-        selectedItems.addListener(ListChangeListener { items = selectedItems })
+        selectedItems.addListener(ListChangeListener {
+            items = selectedItems
+        })
     }
 
     private fun initSaveKeyCombination() {
         KeyBindings.saveChangesKeyBinding.also { keyBinding ->
             this.setOnKeyPressed {
                 if (keyBinding.match(it)) {
-                    FieldsEditor.logger.debug("Save changes key combination detected")
+                    logger.debug("Save changes key combination detected")
                     saveChanges()
                 }
             }
-        }
-    }
-
-    fun saveChanges() {
-        if (changedProperty().get()) {
-            fieldsEditor.persist()
-            CachedExecutor.submit(SaveTask())
         }
     }
 
@@ -91,8 +87,15 @@ class RecordEditor(
         }
     }
 
+    fun saveChanges() {
+        if (changedProperty().get()) {
+            fieldsEditor.persist()
+            CachedExecutor.submit(SaveTask())
+        }
+    }
+
     fun changedProperty(): BooleanBinding =
-        fieldsEditor.changedProperty().or(notesEditor.changedProperty())
+        fieldsEditor.changedProperty().or(notesEditor.changedProperty()).and(Bindings.isNotEmpty(selectedItems))
 
     private inner class SaveTask : Task<Unit>() {
         init {
