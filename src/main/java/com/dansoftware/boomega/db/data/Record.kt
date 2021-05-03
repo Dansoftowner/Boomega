@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.db.data
 
+import com.dansoftware.boomega.i18n.I18N
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
 import java.time.LocalDate
@@ -104,8 +105,12 @@ class Record(
         }
     }
 
-    enum class Type {
-        BOOK, MAGAZINE
+    enum class Type(private val i18N: String) {
+        BOOK("record.type.book"), MAGAZINE("record.type.magazine");
+
+        override fun toString(): String {
+            return I18N.getValue(i18N)
+        }
     }
 
     class Builder(var recordType: Type) {

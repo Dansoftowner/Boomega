@@ -191,6 +191,9 @@ class FieldsEditorForm(
 
     private fun buildBookForm() = Form.of(
         Group.of(
+            Field.ofSingleSelectionType(Record.Type.values().asList(), 0)
+                .apply { recordType.bindBidirectional(selectionProperty()) }
+                .label("record.form.type"),
             Field.ofStringType(authors)
                 .label("record.add.form.authors")
                 .placeholder("record.add.form.authors.prompt"),
@@ -235,6 +238,9 @@ class FieldsEditorForm(
 
     private fun buildMagazineForm() = Form.of(
         Group.of(
+            Field.ofSingleSelectionType(Record.Type.values().asList(), 1)
+                .apply { recordType.bindBidirectional(selectionProperty()) }
+                .label("record.form.type"),
             Field.ofStringType(magazineName)
                 .label("record.add.form.magazinename")
                 .placeholder("record.add.form.magazinename.prompt"),
@@ -263,26 +269,25 @@ class FieldsEditorForm(
 
     fun saveChanges() {
         items.forEach { record ->
-            this@FieldsEditorForm.apply {
-                StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
-                StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
-                StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
-                StringUtils.getIfBlank(magazineName.get(), null)?.run { record.magazineName = this }
-                StringUtils.getIfBlank(authors.get(), null)?.run { record.authors = this.split(",") }
-                StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
-                StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
-                StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
-                numberOfCopies.value?.run { record.numberOfCopies = this }
-                rating.value?.run { record.rating = this }
-                publishedDate.get()
-                    ?.run {
-                        try {
-                            record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                        } catch (e: RuntimeException) {
-                            logger.error("Couldn't parse date ", e)
-                        }
+            record.recordType = recordType.get()
+            StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
+            StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
+            StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
+            StringUtils.getIfBlank(magazineName.get(), null)?.run { record.magazineName = this }
+            StringUtils.getIfBlank(authors.get(), null)?.run { record.authors = this.split(",") }
+            StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
+            StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
+            StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
+            numberOfCopies.value?.run { record.numberOfCopies = this }
+            rating.value?.run { record.rating = this }
+            publishedDate.get()
+                ?.run {
+                    try {
+                        record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    } catch (e: RuntimeException) {
+                        logger.error("Couldn't parse date ", e)
                     }
-            }
+                }
         }
         logger.debug("Updating ({}) records in database...", items.size)
         items.forEach(database::updateRecord)
