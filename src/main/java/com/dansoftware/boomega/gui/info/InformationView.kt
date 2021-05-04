@@ -56,16 +56,18 @@ class InformationView(val context: Context) : VBox(5.0) {
     init {
         styleClass.add("information-view")
         styleClass.add(JMetroStyleClass.BACKGROUND)
-        buildProgramInfo()
-        separator()
-        buildJavaInfo()
-        separator()
-        buildLogInfo()
-        separator()
-        buildBottom()
+        buildUI()
     }
 
-    private fun separator() = children.add(Separator())
+    private fun buildUI() {
+        buildProgramInfo()
+        children.add(Separator())
+        buildJavaInfo()
+        children.add(Separator())
+        buildLogInfo()
+        children.add(Separator())
+        buildBottom()
+    }
 
     private fun buildProgramInfo() {
         children.add(buildVersionLabel())
