@@ -258,11 +258,6 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
 
             })
         }
-
-        private fun wrapToScrollPane(element: Node) = ScrollPane().apply {
-            content = element
-            isFitToWidth = true
-        }
     }
 
     private inner class InfoPane : ScrollPane() {
