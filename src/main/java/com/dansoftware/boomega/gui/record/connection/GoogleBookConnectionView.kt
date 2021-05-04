@@ -20,12 +20,10 @@ package com.dansoftware.boomega.gui.record.connection
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.googlebooks.GoogleBooksQueryBuilder
 import com.dansoftware.boomega.googlebooks.SingleGoogleBookQuery
 import com.dansoftware.boomega.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsPane
-import com.dansoftware.boomega.gui.googlebooks.SearchParameters
 import com.dansoftware.boomega.gui.googlebooks.join.GoogleBookJoinerOverlay
 import com.dansoftware.boomega.gui.record.RecordTable
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
@@ -376,26 +374,12 @@ class GoogleBookConnectionView(
 
         fun showGoogleBookJoiner() {
             context.showOverlay(
-                GoogleBookJoinerOverlay(context, buildSearchParameters(items[0])) { volume ->
+                GoogleBookJoinerOverlay(context) { volume ->
                     CachedExecutor.submit(
                         buildJoinActionTask(volume)
                     )
                 }
             )
-        }
-
-        private fun buildSearchParameters(record: Record): SearchParameters {
-            return SearchParameters()
-                .printType(
-                    if (record.recordType === Record.Type.BOOK)
-                        GoogleBooksQueryBuilder.PrintType.BOOKS
-                    else GoogleBooksQueryBuilder.PrintType.MAGAZINES
-                )
-                .isbn(record.isbn)
-                .authors((record.authors ?: emptyList()).joinToString(","))
-                .publisher(record.publisher)
-                .title(record.title)
-                .language(record.language)
         }
 
         private fun buildJoinActionTask(volume: Volume) =

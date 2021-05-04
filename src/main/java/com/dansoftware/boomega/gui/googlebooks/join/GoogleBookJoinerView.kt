@@ -19,69 +19,66 @@
 package com.dansoftware.boomega.gui.googlebooks.join
 
 import com.dansoftware.boomega.googlebooks.Volume
+import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.context.TitledOverlayBox
-import com.dansoftware.boomega.gui.googlebooks.*
+import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPagination
+import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPaginationSearchTask
+import com.dansoftware.boomega.gui.googlebooks.GoogleBooksTable
+import com.dansoftware.boomega.gui.googlebooks.SearchParameters
 import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsOverlay
-import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import javafx.beans.binding.BooleanBinding
-import javafx.beans.property.BooleanProperty
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.property.ObjectProperty
-import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleObjectProperty
-import javafx.geometry.Insets
-import javafx.scene.control.CheckBox
-import javafx.scene.control.Label
-import javafx.scene.control.Spinner
-import javafx.scene.image.Image
-import javafx.scene.image.ImageView
-import javafx.scene.layout.*
+import javafx.scene.control.*
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
+import org.controlsfx.control.textfield.CustomTextField
 import java.util.function.Consumer
-
-class GoogleBookJoinerOverlay(
-    context: Context,
-    searchParameters: SearchParameters,
-    onVolumeSelected: Consumer<Volume>
-) : TitledOverlayBox(
-    I18N.getValue("google.books.joiner.titlebar"),
-    ImageView(Image("/com/dansoftware/boomega/image/util/google_12px.png")),
-    GoogleBookJoinerView(
-        context,
-        searchParameters
-    ) { context.hideOverlay(it.parent?.parent?.parent?.parent as Region?) } //TODO: not so good solution
-        .also { it.setOnVolumeSelected(onVolumeSelected) }
-)
 
 class GoogleBookJoinerView(
     private val context: Context,
-    private val searchParameters: SearchParameters,
     private val hideMethod: (GoogleBookJoinerView) -> Unit
 ) : VBox(5.0) {
 
     private val onVolumeSelected: ObjectProperty<Consumer<Volume>> = SimpleObjectProperty()
 
-    private val allParameters: SearchParameters = searchParameters.copy()
-
-    private val propertyChooserPane: PropertyChooserPane
-    private val tablePagination: GoogleBooksPagination
+    private val searchField: TextField = buildSearchField()
+    private val tablePagination: GoogleBooksPagination = buildTable()
 
     init {
-        setVgrow(this, Priority.ALWAYS)
         styleClass.add("google-books-joiner-panel")
         styleClass.add(JMetroStyleClass.BACKGROUND)
-        propertyChooserPane = buildPropertyChooserPane()
-        tablePagination = buildTable()
-        children.add(StackPane(propertyChooserPane))
-        children.add(tablePagination)
-        propertyChooserPane.monitor()
+        setVgrow(this, Priority.ALWAYS)
+        buildUI()
     }
 
-    private fun buildPropertyChooserPane() = PropertyChooserPane(allParameters, searchParameters) {
-        CachedExecutor.submit(
-            GoogleBooksPaginationSearchTask(context, tablePagination, true, searchParameters)
-        )
+    private fun buildUI() {
+        children.add(buildSearchBox())
+        children.add(tablePagination)
+    }
+
+    private fun buildSearchBox() = HBox().apply {
+        children.add(searchField)
+        children.add(buildSearchButton())
+    }
+
+    private fun buildSearchField() = TextField().apply {
+        prefHeight = 32.0
+        HBox.setHgrow(this, Priority.ALWAYS)
+        //TODO: prompt text
+    }
+
+    private fun buildSearchButton() = Button().apply {
+        contentDisplay = ContentDisplay.GRAPHIC_ONLY
+        graphic = FontAwesomeIconView(FontAwesomeIcon.SEARCH)
+        prefHeight = 32.0
+        isDefaultButton = true
+        setOnAction { search() }
+        //todo: TOOLTIP
     }
 
     private fun buildTable() =
@@ -108,110 +105,14 @@ class GoogleBookJoinerView(
             )
         }
 
-    fun setOnVolumeSelected(onVolumeSelected: Consumer<Volume>) {
-        this.onVolumeSelected.set(onVolumeSelected)
+    private fun search() {
+        CachedExecutor.submit(
+            GoogleBooksPaginationSearchTask(context, tablePagination, true, SearchParameters().inText(searchField.text))
+        )
     }
 
-    private class PropertyChooserPane(
-        private val allParameters: SearchParameters,
-        private val searchParameters: SearchParameters,
-        val monitor: () -> Unit
-    ) : HBox(5.0) {
-
-        private lateinit var titleSelected: BooleanProperty
-        private lateinit var authorsSelected: BooleanProperty
-        private lateinit var publisherSelected: BooleanProperty
-        private lateinit var isbnSelected: BooleanProperty
-        private lateinit var languageSelected: BooleanProperty
-
-        private lateinit var maxResults: ReadOnlyObjectProperty<Int>
-        private lateinit var validProperty: BooleanBinding
-
-        init {
-            this.buildUI()
-            this.buildMonitoringPolicy()
-        }
-
-        private fun buildMonitoringPolicy() =
-            listOf(titleSelected, authorsSelected, publisherSelected, isbnSelected, languageSelected, maxResults)
-                .forEach {
-                    it.addListener { _, _, _ -> monitor() }
-                }
-
-
-        private fun buildValidProperty() = titleSelected
-            .or(authorsSelected)
-            .or(publisherSelected)
-            .or(isbnSelected)
-
-        private fun buildUI() {
-            padding = Insets(5.0)
-            children.add(buildLeftBox())
-            validProperty = buildValidProperty()
-            children.add(buildRightBox())
-        }
-
-        private fun buildLeftBox(): VBox =
-            VBox(3.0).also { vBox ->
-                setHgrow(vBox, Priority.ALWAYS)
-                vBox.children.add(CheckBox(I18N.getValue("google.books.joiner.isbn")).also { checkBox ->
-                    checkBox.isSelected = true
-                    this.isbnSelected = checkBox.selectedProperty().also {
-                        it.addListener { _, _, yes ->
-                            searchParameters.isbn(if (yes) allParameters.isbn else null)
-                        }
-                    }
-                })
-
-                vBox.children.add(CheckBox(I18N.getValue("google.books.joiner.title")).also { checkBox ->
-                    checkBox.isSelected = true
-                    this.titleSelected = checkBox.selectedProperty().also {
-                        it.addListener { _, _, yes ->
-                            searchParameters.title(if (yes) allParameters.title else null)
-                        }
-                    }
-                })
-
-                vBox.children.add(CheckBox(I18N.getValue("google.books.joiner.authors")).also {
-                    it.isSelected = true
-                    this.authorsSelected = it.selectedProperty().also { checkBox ->
-                        checkBox.addListener { _, _, yes ->
-                            searchParameters.authors(if (yes) allParameters.authors else null)
-                        }
-                    }
-                })
-
-                vBox.children.add(CheckBox(I18N.getValue("google.books.joiner.publisher")).also { checkBox ->
-                    this.publisherSelected = checkBox.selectedProperty().also {
-                        it.addListener { _, _, yes ->
-                            searchParameters.publisher(if (yes) allParameters.publisher else null)
-                        }
-                    }
-                })
-            }
-
-        private fun buildRightBox(): VBox =
-            VBox(3.0).also { vBox ->
-                setHgrow(vBox, Priority.ALWAYS)
-                vBox.children.add(CheckBox(I18N.getValue("google.books.joiner.language")).also { checkBox ->
-                    this.languageSelected = checkBox.selectedProperty().also {
-                        it.addListener { _, _, yes ->
-                            searchParameters.language(if (yes) allParameters.language else null)
-                        }
-                    }
-                    checkBox.disableProperty().bind(this.validProperty.not())
-                })
-
-                vBox.children.add(Label(I18N.getValue("google.books.joiner.maxresults")))
-                vBox.children.add(Spinner<Int>(1, 40, 10).also { spinner ->
-                    this.maxResults = spinner.valueProperty().also {
-                        it.addListener { _, _, newValue ->
-                            searchParameters.maxResults(newValue)
-                        }
-                    }
-                })
-            }
-
+    fun setOnVolumeSelected(onVolumeSelected: Consumer<Volume>) {
+        this.onVolumeSelected.set(onVolumeSelected)
     }
 }
 
