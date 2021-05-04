@@ -24,27 +24,6 @@ import jfxtras.styles.jmetro.JMetroStyleClass
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
-class InformationViewOverlay(context: Context) :
-    TitledOverlayBox(
-        I18N.getValues().getString("info.view.title"),
-        MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
-        InformationView(context),
-        resizableH = true,
-        resizableV = false,
-        Button().also {
-            it.contentDisplay = ContentDisplay.GRAPHIC_ONLY
-            it.graphic = MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY)
-            it.tooltip = Tooltip(I18N.getValues().getString("info.copy"))
-            it.setOnAction {
-                ClipboardContent().also { clipboardContent ->
-                    clipboardContent.putString(getApplicationInfoCopy())
-                    Clipboard.getSystemClipboard().setContent(clipboardContent)
-                }
-            }
-            it.padding = Insets(0.0)
-        }
-    )
-
 class InformationView(val context: Context) : VBox(5.0) {
 
     companion object {
