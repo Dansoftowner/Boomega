@@ -62,6 +62,8 @@ class InformationView(val context: Context) : VBox(5.0) {
     private fun buildUI() {
         buildProgramInfo()
         children.add(Separator())
+        buildLanguageInfo()
+        children.add(Separator())
         buildJavaInfo()
         children.add(Separator())
         buildLogInfo()
@@ -73,6 +75,9 @@ class InformationView(val context: Context) : VBox(5.0) {
         children.add(buildVersionLabel())
         children.add(buildDeveloperLabel())
         children.add(buildLicenseLabel())
+    }
+
+    private fun buildLanguageInfo() {
         children.add(buildLangLabel())
         children.add(buildLangTranslatorLabel())
     }
