@@ -112,7 +112,7 @@ dependencies {
     implementation 'org.jfxtras:jmetro:11.6.14'
     implementation 'org.controlsfx:controlsfx:11.1.0'
     implementation 'com.dlsc.formsfx:formsfx-core:11.4.2'
-    implementation 'com.github.tom91136.GestureFX:gesturefx:gesturefx-parent-0.6.0'
+    implementation 'net.kurobako:gesturefx:0.7.1'
     //Modified WorkBenchFX, Original: 'com.dlsc.workbenchfx:workbenchfx-core:x.x.x'
     implementation 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
     implementation 'de.jensd:fontawesomefx-commons:11.0'
