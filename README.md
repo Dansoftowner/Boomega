@@ -46,9 +46,8 @@
 ### Platform support
 |                    | Windows           | Linux   | MacOS
 | ---                |   ---             | ---     | ---   
-| Installer (64-bit) |  **exe**, **msi** | **deb** | _Help wanted_
-| Portable (64-bit)  |  **zip**          | **tar.gz** | _Help wanted_ 
-|Jar                 | ✔                 | ✔         | ✔ 
+| Installer (64-bit) |  [exe](https://github.com/Dansoftowner/Boomega/releases/download/v0.5.0/Boomega-0.5.0-Windows.exe), [msi]() | [deb]() | _Help wanted_
+| Portable (64-bit)  |  [zip](https://github.com/Dansoftowner/Boomega/releases/download/v0.5.0/Boomega-0.5.0-Windows.zip)          | [tar.gz]() | _Help wanted_ 
 
 Jump to [releases](https://github.com/Dansoftowner/Boomega/releases). <br/>
 Or [build it yourself](#build)
