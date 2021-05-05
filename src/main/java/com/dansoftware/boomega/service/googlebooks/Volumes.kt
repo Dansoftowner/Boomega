@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.googlebooks
+package com.dansoftware.boomega.service.googlebooks
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

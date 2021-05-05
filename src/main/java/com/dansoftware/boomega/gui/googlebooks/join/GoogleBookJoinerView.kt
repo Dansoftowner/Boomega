@@ -18,8 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks.join
 
-import com.dansoftware.boomega.googlebooks.Volume
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPagination
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPaginationSearchTask
@@ -36,7 +35,6 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
-import org.controlsfx.control.textfield.CustomTextField
 import java.util.function.Consumer
 
 class GoogleBookJoinerView(

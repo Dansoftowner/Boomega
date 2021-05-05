@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks;
 
-import com.dansoftware.boomega.googlebooks.Volume;
+import com.dansoftware.boomega.service.googlebooks.Volume;
 import com.dansoftware.boomega.gui.control.ImagePlaceHolder;
 import com.dansoftware.boomega.gui.control.ReadOnlyRating;
 import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;

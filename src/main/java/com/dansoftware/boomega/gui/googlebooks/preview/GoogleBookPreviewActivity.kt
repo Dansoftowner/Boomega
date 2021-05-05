@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.googlebooks.preview
 
-import com.dansoftware.boomega.googlebooks.Volume
+import com.dansoftware.boomega.service.googlebooks.Volume
 import javafx.stage.Window
 
 /**

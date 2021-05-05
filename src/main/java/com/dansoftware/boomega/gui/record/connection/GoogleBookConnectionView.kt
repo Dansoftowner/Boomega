@@ -20,8 +20,8 @@ package com.dansoftware.boomega.gui.record.connection
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.googlebooks.SingleGoogleBookQuery
-import com.dansoftware.boomega.googlebooks.Volume
+import com.dansoftware.boomega.service.googlebooks.GoogleBooksQueryBuilder
+import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsPane
 import com.dansoftware.boomega.gui.googlebooks.join.GoogleBookJoinerOverlay
@@ -215,7 +215,7 @@ class GoogleBookConnectionView(
 
         override fun call(): Volume {
             logger.debug("Starting pull task...")
-            return SingleGoogleBookQuery(googleHandle).load()
+            return GoogleBooksQueryBuilder.byId(googleHandle).load()
         }
 
         fun start() {
@@ -405,7 +405,7 @@ class GoogleBookConnectionView(
                 }
 
                 override fun call() {
-                    items[0].serviceConnection?.googleBookHandle = volume.selfLink
+                    items[0].serviceConnection?.googleBookHandle = volume.id
                     database.updateRecord(items[0])
                 }
             }

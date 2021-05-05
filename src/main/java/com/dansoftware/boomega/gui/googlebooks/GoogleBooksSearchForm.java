@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks;
 
-import com.dansoftware.boomega.googlebooks.GoogleBooksQueryBuilder;
+import com.dansoftware.boomega.service.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl;
 import com.dansoftware.boomega.i18n.I18N;
@@ -170,7 +170,7 @@ class GoogleBooksSearchForm extends TitledPane {
         private final ObjectProperty<Filter> filter = new SimpleObjectProperty<>(selectableFilters.get(0));
 
         private final ObservableList<SortType> selectableSorts = FXCollections.observableArrayList(
-                new SortType(GoogleBooksQueryBuilder.SortType.REVELANCE, I18N.getValues(), "google.books.add.form.sort.relevance"),
+                new SortType(GoogleBooksQueryBuilder.SortType.RELEVANCE, I18N.getValues(), "google.books.add.form.sort.relevance"),
                 new SortType(GoogleBooksQueryBuilder.SortType.NEWEST, I18N.getValues(), "google.books.add.form.sort.newest")
         );
         private final ObjectProperty<SortType> sort = new SimpleObjectProperty<>(selectableSorts.get(0));

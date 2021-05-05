@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks.details
 
-import com.dansoftware.boomega.googlebooks.Volume
+import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.control.*
 import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewActivity
