@@ -82,12 +82,10 @@ public class Preloader extends javafx.application.Preloader {
 
     @Override
     public void handleApplicationNotification(PreloaderNotification info) {
-        if (!messageProperty.isBound() && info instanceof FixedMessageNotification) {
-            MessageNotification messageNotification = (MessageNotification) info;
-            messageProperty.bind(new SimpleStringProperty(messageNotification.message));
-        } else if (!messageProperty.isBound() && info instanceof MessageNotification) {
-            MessageNotification messageNotification = (MessageNotification) info;
-            messageProperty.set(messageNotification.message);
+        if (!messageProperty.isBound() && info instanceof FixedMessageNotification msgNotification) {
+            messageProperty.bind(new SimpleStringProperty(msgNotification.message));
+        } else if (!messageProperty.isBound() && info instanceof MessageNotification msgNotification) {
+            messageProperty.set(msgNotification.message);
         } else if (info instanceof HideNotification) {
             contentStage.hide();
         } else if (info instanceof ShowNotification) {
@@ -113,7 +111,7 @@ public class Preloader extends javafx.application.Preloader {
      */
     public static class MessageNotification implements PreloaderNotification {
 
-        private final String message;
+        protected final String message;
 
         public MessageNotification(@NotNull String i18n, Object... args) {
             this(true, i18n, args);
