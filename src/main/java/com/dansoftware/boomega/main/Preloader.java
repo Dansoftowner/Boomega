@@ -38,6 +38,7 @@ public class Preloader extends javafx.application.Preloader {
 
     @Override
     public void start(Stage primaryStage) {
+        initApplicationName();
         try {
             backingStage = new BackingStage();
             //Building the gui
@@ -59,6 +60,12 @@ public class Preloader extends javafx.application.Preloader {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void initApplicationName() {
+        // Fixes the wrong app name on the top bar issue on Gnome systems
+        // See more details: https://github.com/Dansoftowner/Boomega/issues/111
+        com.sun.glass.ui.Application.GetApplication().setName(System.getProperty("app.name"));
     }
 
     @Override
