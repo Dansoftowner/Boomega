@@ -161,8 +161,8 @@ class GoogleBookConnectionView(
         vBox.children.setAll(MultipleSelectionPlaceHolder())
     }
 
-    private fun errorUI() {
-        vBox.children.setAll(ErrorPlaceHolder())
+    private fun errorUI(e: Throwable) {
+        vBox.children.setAll(ErrorPlaceHolder(e))
     }
 
     private fun buildPreviewTable(records: List<Record>) =
@@ -209,7 +209,7 @@ class GoogleBookConnectionView(
             this.setOnFailed {
                 logger.error("Pull task failed.", it.source.exception)
                 stopProgress()
-                errorUI()
+                errorUI(it.source.exception)
             }
         }
 
@@ -299,7 +299,7 @@ class GoogleBookConnectionView(
             }
     }
 
-    private inner class ErrorPlaceHolder : StackPane() {
+    private inner class ErrorPlaceHolder(private val exception: Throwable) : StackPane() {
         init {
             styleClass.add(JMetroStyleClass.BACKGROUND)
             VBox.setVgrow(this, Priority.ALWAYS)
@@ -332,7 +332,7 @@ class GoogleBookConnectionView(
                     context.showErrorDialog(
                         "",
                         "",
-                        it.source as Exception
+                        exception as Exception?
                     )
                 }
             }
