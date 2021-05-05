@@ -1,4 +1,22 @@
-package com.dansoftware.boomega.gui.mainview
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.dansoftware.boomega.gui.menubar
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
@@ -11,6 +29,7 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.info.contact.ContactActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.mainview.MainView
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.theme.Theme
@@ -104,7 +123,12 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
          * Menu item that allows the user to show a new entry point (LoginActivity)
          */
         private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getValue("menubar.menu.file.new"))
-            .action { startActivityLauncher { RuntimeBasicActivityLauncher(preferences, databaseTracker) } }
+            .action {
+                startActivityLauncher {
+                    // basically launches an entry-activity
+                    ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker)
+                }
+            }
             .keyCombination(KeyBindings.newEntryKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.DATABASE)
 
@@ -114,13 +138,8 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         private fun openMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.open"))
             .action {
                 DatabaseOpener().showOpenDialog(context.contextWindow)?.also {
-                    startActivityLauncher {
-                        RuntimeOpenActivityLauncher(
-                            preferences,
-                            databaseTracker,
-                            it
-                        )
-                    }
+                    // launches the database
+                    startActivityLauncher { ActivityLauncher(LauncherMode.INTERNAL, it, preferences, databaseTracker) }
                 }
             }
             .keyCombination(KeyBindings.openDatabaseKeyBinding.keyCombinationProperty)
@@ -128,8 +147,9 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
 
         private fun databaseCreatorMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbcreate"))
             .action {
-                DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent { db ->
-                    startActivityLauncher { RuntimeOpenActivityLauncher(preferences, databaseTracker, db) }
+                DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
+                    // launches the database
+                    startActivityLauncher { ActivityLauncher(LauncherMode.INTERNAL, it, preferences, databaseTracker) }
                 }
             }
             .keyCombination(KeyBindings.createDatabaseKeyBinding.keyCombinationProperty)
@@ -149,7 +169,14 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                 private val menuItemFactory: (DatabaseMeta) -> MenuItem = { db ->
                     MenuItem(db.toString()).also { menuItem ->
                         menuItem.setOnAction {
-                            startActivityLauncher { RuntimeOpenActivityLauncher(preferences, databaseTracker, db) }
+                            startActivityLauncher {
+                                ActivityLauncher(
+                                    LauncherMode.INTERNAL,
+                                    db,
+                                    preferences,
+                                    databaseTracker
+                                )
+                            }
                         }
                         menuItem.userData = db
                     }
@@ -187,8 +214,8 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                     ?.onKeyPressed
                     ?.handle(
                         KeyBindings.restartApplicationKeyBinding
-                        .keyCombination.let { it as KeyCodeCombination }
-                        .asKeyEvent()
+                            .keyCombination.let { it as KeyCodeCombination }
+                            .asKeyEvent()
                     )
             }
             .keyCombination(KeyBindings.restartApplicationKeyBinding.keyCombinationProperty)
@@ -405,18 +432,3 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             .graphic(MaterialDesignIcon.INFORMATION)
     }
 }
-
-/**
- * Used for launching a database at runtime
- */
-private class RuntimeOpenActivityLauncher(
-    preferences: Preferences,
-    tracker: DatabaseTracker,
-    databaseMeta: DatabaseMeta,
-) : ActivityLauncher(LauncherMode.INTERNAL, databaseMeta, preferences, tracker)
-
-/**
- * Used for launching an EntryActivity at runtime
- */
-private class RuntimeBasicActivityLauncher(preferences: Preferences, databaseTracker: DatabaseTracker) :
-    ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker)

@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.gui.mainview
 
+import com.dansoftware.boomega.gui.menubar.AppMenuBar
 import com.dansoftware.boomega.gui.window.BaseWindow
 
 private class MainWindow(view: MainView, menuBar: AppMenuBar) :

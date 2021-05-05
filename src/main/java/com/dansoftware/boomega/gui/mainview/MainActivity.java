@@ -6,6 +6,7 @@ import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
+import com.dansoftware.boomega.gui.menubar.AppMenuBar;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
