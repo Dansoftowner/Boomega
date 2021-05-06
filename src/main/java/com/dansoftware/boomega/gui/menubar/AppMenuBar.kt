@@ -235,7 +235,6 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
 
                 override fun call() {
                     getActivityLauncher().launch()
-                    databaseTracker.savedDatabases.forEach { println(it) }
                 }
             })
         }
