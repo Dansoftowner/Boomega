@@ -56,7 +56,7 @@ class KeyBindingActions(
         listKeyBindActions().forEach { action ->
             scene.addEventHandler(KeyEvent.KEY_PRESSED) {
                 if (action.keyBinding.match(it)) {
-                    action.action(context, preferences, databaseTracker)
+                    invoke(action)
                 }
             }
         }
