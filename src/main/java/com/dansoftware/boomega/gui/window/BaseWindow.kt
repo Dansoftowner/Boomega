@@ -155,17 +155,6 @@ abstract class BaseWindow : Stage, Themeable {
     }
 
     /**
-     * Sets the full screen key combination.
-     */
-    protected fun setFullScreenKeyCombination(value: KeyCombination) {
-        this.addEventHandler(KeyEvent.KEY_RELEASED) { event: KeyEvent ->
-            if (value.match(event)) {
-                isFullScreen = isFullScreen.not()
-            }
-        }
-    }
-
-    /**
      * A [TitleProperty] is a utility for creating dynamically changing window title
      */
     private class TitleProperty(i18n: String, separator: String, changingString: ObservableStringValue) :
