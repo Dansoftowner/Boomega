@@ -45,7 +45,6 @@ abstract class BaseWindow : Stage, Themeable {
 
     init {
         setupIconPack()
-        buildRestartKeyCombination()
         buildExitDialogEvent()
         buildFullScreenExitHint()
         addEventHandler(WindowEvent.WINDOW_SHOWING) { Theme.registerThemeable(this) }
@@ -151,16 +150,6 @@ abstract class BaseWindow : Stage, Themeable {
         this.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, WindowCloseRequestHandler())
     }
 
-    private fun buildRestartKeyCombination() {
-        sceneProperty().addListener(object : ChangeListener<Scene> {
-            override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
-                newValue?.onKeyPressed = RestartKeyCombinationPressedHandler().also {
-                    observable.removeListener(this)
-                }
-            }
-        })
-    }
-
     private fun buildFullScreenExitHint() {
         fullScreenExitHint = I18N.getValue("window.fullscreen.hint")
     }
@@ -208,28 +197,6 @@ abstract class BaseWindow : Stage, Themeable {
                 override fun changed(observable: ObservableValue<out String>, oldValue: String, newValue: String) =
                     copyValue(separator, newValue)
             }
-    }
-
-    /**
-     * Key event handler for detecting the restart key combination and showing a restart dialog for the user.
-     */
-    private inner class RestartKeyCombinationPressedHandler : EventHandler<KeyEvent> {
-        private var dialogShowing: Boolean = false
-
-        override fun handle(keyEvent: KeyEvent) {
-            if (dialogShowing.not() && KeyBindings.restartApplicationKeyBinding.match(keyEvent)) {
-                dialogShowing = true
-                this@BaseWindow.getContext()?.showConfirmationDialog(
-                    I18N.getValue("app.restart.dialog.title"),
-                    I18N.getValue("app.restart.dialog.msg")
-                ) {
-                    when {
-                        it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
-                    }
-                    dialogShowing = false
-                }
-            }
-        }
     }
 
     private inner class WindowCloseRequestHandler : EventHandler<WindowEvent> {

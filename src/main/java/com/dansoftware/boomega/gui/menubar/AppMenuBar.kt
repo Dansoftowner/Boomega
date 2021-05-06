@@ -22,16 +22,14 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
-import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
-import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.info.contact.ContactActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.keybinding.action.KeyBindingActions
+import com.dansoftware.boomega.gui.keybinding.keyBinding
 import com.dansoftware.boomega.gui.mainview.MainView
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
-import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
@@ -52,7 +50,6 @@ import javafx.beans.binding.BooleanBinding
 import javafx.collections.ListChangeListener
 import javafx.concurrent.Task
 import javafx.scene.control.*
-import javafx.scene.input.KeyCodeCombination
 import javafx.stage.Stage
 import javafx.stage.Window
 import org.slf4j.Logger
@@ -69,16 +66,17 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         val logger: Logger = LoggerFactory.getLogger(AppMenuBar::class.java)
     }
 
+    private val actions = KeyBindingActions(context, preferences, tracker)
     private lateinit var overlayNotShowing: BooleanBinding
 
     init {
         initDisablePolicy(mainView)
         this.menus.addAll(
-            FileMenu(context, mainView.openedDatabase, preferences, tracker),
+            FileMenu(context, mainView.openedDatabase, preferences, tracker, actions),
             ModuleMenu(mainView),
-            PreferencesMenu(context, preferences),
-            WindowMenu(context),
-            PluginMenu(context),
+            PreferencesMenu(context, preferences, actions),
+            WindowMenu(context, actions),
+            PluginMenu(context, actions),
             HelpMenu(context)
         )
     }
@@ -102,7 +100,8 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         val context: Context,
         val databaseMeta: DatabaseMeta,
         val preferences: Preferences,
-        val databaseTracker: DatabaseTracker
+        val databaseTracker: DatabaseTracker,
+        val actions: KeyBindingActions
     ) : Menu(I18N.getValue("menubar.menu.file")) {
 
         init {
@@ -123,41 +122,26 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
          * Menu item that allows the user to show a new entry point (LoginActivity)
          */
         private fun newEntryMenuItem(): MenuItem = MenuItem(I18N.getValue("menubar.menu.file.new"))
-            .action {
-                startActivityLauncher {
-                    // basically launches an entry-activity
-                    ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker)
-                }
-            }
-            .keyCombination(KeyBindings.newEntryKeyBinding.keyCombinationProperty)
+            .action { actions.invoke(KeyBindingActions.NEW_ENTRY) }
+            .keyBinding(KeyBindings.newEntryKeyBinding)
             .graphic(MaterialDesignIcon.DATABASE)
 
         /**
          * Menu item that allows the user to open a database file from the file system
          */
         private fun openMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.open"))
-            .action {
-                DatabaseOpener().showOpenDialog(context.contextWindow)?.also {
-                    // launches the database
-                    startActivityLauncher { ActivityLauncher(LauncherMode.INTERNAL, it, preferences, databaseTracker) }
-                }
-            }
-            .keyCombination(KeyBindings.openDatabaseKeyBinding.keyCombinationProperty)
+            .action { actions.invoke(KeyBindingActions.OPEN_DATABASE) }
+            .keyBinding(KeyBindings.openDatabaseKeyBinding)
             .graphic(MaterialDesignIcon.FILE)
 
         private fun databaseCreatorMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbcreate"))
-            .action {
-                DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
-                    // launches the database
-                    startActivityLauncher { ActivityLauncher(LauncherMode.INTERNAL, it, preferences, databaseTracker) }
-                }
-            }
-            .keyCombination(KeyBindings.createDatabaseKeyBinding.keyCombinationProperty)
+            .action { actions.invoke(KeyBindingActions.CREATE_DATABASE) }
+            .keyBinding(KeyBindings.createDatabaseKeyBinding)
             .graphic(MaterialDesignIcon.DATABASE_PLUS)
 
         private fun databaseManagerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbmanager"))
-            .action { DatabaseManagerActivity().show(databaseTracker, context.contextWindow) }
-            .keyCombination(KeyBindings.openDatabaseManagerKeyBinding.keyCombinationProperty)
+            .action { actions.invoke(KeyBindingActions.OPEN_DATABASE_MANAGER) }
+            .keyBinding(KeyBindings.openDatabaseManagerKeyBinding)
             .graphic(MaterialDesignIcon.DATABASE)
 
         /**
@@ -209,16 +193,8 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
             .graphic(MaterialDesignIcon.CLOSE)
 
         private fun restartMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.restart"))
-            .action {
-                context.contextScene
-                    ?.onKeyPressed
-                    ?.handle(
-                        KeyBindings.restartApplicationKeyBinding
-                            .keyCombination.let { it as KeyCodeCombination }
-                            .asKeyEvent()
-                    )
-            }
-            .keyCombination(KeyBindings.restartApplicationKeyBinding.keyCombinationProperty)
+            .action { actions.invoke(KeyBindingActions.RESTART_APPLICATION) }
+            .keyBinding(KeyBindings.restartApplicationKeyBinding)
             .graphic(MaterialDesignIcon.UPDATE)
 
         private fun quitMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.quit"))
@@ -251,7 +227,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
     /**
      * The Preferences/Settings menu
      */
-    private class PreferencesMenu(val context: Context, val preferences: Preferences) :
+    private class PreferencesMenu(val context: Context, val preferences: Preferences, val actions: KeyBindingActions) :
         Menu(I18N.getValue("menubar.menu.preferences")) {
         init {
             this.menuItem(settingsMenu())
@@ -261,8 +237,8 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         }
 
         private fun settingsMenu() = MenuItem(I18N.getValue("menubar.menu.preferences.settings"))
-            .action { PreferencesActivity(preferences).show(context.contextWindow) }
-            .keyCombination(KeyBindings.openSettingsKeyBinding.keyCombinationProperty)
+            .action { actions.invoke(KeyBindingActions.OPEN_SETTINGS) }
+            .keyBinding(KeyBindings.openSettingsKeyBinding)
             .graphic(MaterialDesignIcon.SETTINGS)
 
         private fun themeMenu() = object : Menu(I18N.getValue("menubar.menu.preferences.theme")) {
@@ -328,7 +304,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
     /**
      * The 'Window' menu
      */
-    private class WindowMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.window")) {
+    private class WindowMenu(val context: Context, val actions: KeyBindingActions) : Menu(I18N.getValue("menubar.menu.window")) {
 
         private val windowsChangeOperator = object {
             fun onWindowsAdded(windows: List<Window>) {
@@ -389,12 +365,12 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
 
         private fun fullScreenMenuItem() = MenuItem(I18N.getValue("menubar.menu.window.fullscreen"))
             .also { context.contextWindow }
-            .action { context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() } }
-            .keyCombination(KeyBindings.fullScreenKeyBinding.keyCombinationProperty)
+            .action { actions.invoke(KeyBindingActions.FULL_SCREEN) }
+            .keyBinding(KeyBindings.fullScreenKeyBinding)
             .graphic(MaterialDesignIcon.FULLSCREEN)
     }
 
-    private class PluginMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.plugin")) {
+    private class PluginMenu(val context: Context, val actions: KeyBindingActions) : Menu(I18N.getValue("menubar.menu.plugin")) {
 
         init {
             this.menuItem(pluginManagerMenuItem())
