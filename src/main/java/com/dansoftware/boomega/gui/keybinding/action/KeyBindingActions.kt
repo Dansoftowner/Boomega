@@ -54,6 +54,7 @@ class KeyBindingActions(
 
     fun applyOnScene(scene: Scene) {
         listKeyBindActions().forEach { action ->
+
             scene.addEventHandler(KeyEvent.KEY_PRESSED) {
                 if (action.keyBinding.match(it)) {
                     invoke(action)
@@ -63,8 +64,8 @@ class KeyBindingActions(
     }
 
     private fun listKeyBindActions(): List<KeyBindingAction> {
-        return Companion::class.java.declaredFields.map { it.get(Companion) }
-            .filterIsInstance(KeyBindingAction::class.java)
+        return javaClass.fields.map { it.get(null) }
+            .filterIsInstance<KeyBindingAction>()
     }
 
 

@@ -28,6 +28,7 @@ public class LoginActivity implements ContextTransformable {
     private static final List<WeakReference<LoginActivity>> instances = new LinkedList<>();
 
     private final Preferences preferences;
+    private final DatabaseTracker databaseTracker;
     private final BooleanProperty showing;
     private LoginView loginView;
 
@@ -37,6 +38,7 @@ public class LoginActivity implements ContextTransformable {
                          @NotNull DatabaseTracker tracker) {
         this.showing = new SimpleBooleanProperty();
         this.preferences = Objects.requireNonNull(preferences);
+        this.databaseTracker = Objects.requireNonNull(tracker);
         this.loginView = new LoginView(preferences, tracker, loginData, databaseLoginListener);
         instances.add(new WeakReference<>(this));
     }
@@ -53,7 +55,7 @@ public class LoginActivity implements ContextTransformable {
     }
 
     private LoginWindow buildWindow() {
-        final var loginWindow = new LoginWindow(loginView, preferences);
+        final var loginWindow = new LoginWindow(loginView, preferences, databaseTracker);
         loginWindow.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> {
             this.loginView = null;
             this.showing.unbind();

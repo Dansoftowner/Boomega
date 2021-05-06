@@ -2,7 +2,9 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.keybinding.action.KeyBindingActions
 import com.dansoftware.boomega.gui.window.BaseWindow
 import javafx.event.EventHandler
 import javafx.stage.WindowEvent
@@ -18,8 +20,11 @@ import java.util.*
  * Also, when a user closes the LoginWindow, it will save the [com.dansoftware.boomega.config.logindata.LoginData] to the
  * configurations.
  */
-private class LoginWindow(private val root: LoginView, private val preferences: Preferences) :
-    BaseWindow("window.login.title", " - ", root.titleProperty(), root, { root.context }),
+private class LoginWindow(
+    private val root: LoginView,
+    private val preferences: Preferences,
+    private val databaseTracker: DatabaseTracker
+) : BaseWindow("window.login.title", " - ", root.titleProperty(), root, { root.context }),
     EventHandler<WindowEvent> {
 
     init {
@@ -30,6 +35,11 @@ private class LoginWindow(private val root: LoginView, private val preferences: 
         this.isMaximized = true
         this.minWidth = 530.0
         this.minHeight = 530.0
+        initKeyBindings()
+    }
+
+    private fun initKeyBindings() {
+        KeyBindingActions(root.context, preferences, databaseTracker).applyOnScene(scene)
     }
 
     override fun handle(event: WindowEvent) {
