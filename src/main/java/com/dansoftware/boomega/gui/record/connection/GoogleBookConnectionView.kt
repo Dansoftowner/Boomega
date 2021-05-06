@@ -91,6 +91,7 @@ class GoogleBookConnectionView(
     init {
         initListObserver(selectedItems)
         buildUI()
+        items = selectedItems
     }
 
     private fun initListObserver(selectedItems: ObservableList<Record>) {

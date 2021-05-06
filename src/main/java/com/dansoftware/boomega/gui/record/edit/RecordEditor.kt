@@ -61,6 +61,7 @@ class RecordEditor(
         initListObserver(selectedItems)
         initSaveKeyCombination()
         buildUI()
+        items = selectedItems
     }
 
     private fun initListObserver(selectedItems: ObservableList<Record>) {
