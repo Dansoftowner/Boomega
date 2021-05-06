@@ -56,7 +56,7 @@ repositories {
 
     //repository for markdown-javafx-renderer
     maven {
-        url "https://sandec.bintray.com/repo"
+        url "https://sandec.jfrog.io/artifactory/repo"
     }
 
     //repository for JUnique
@@ -118,7 +118,7 @@ dependencies {
     implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
     implementation 'de.jensd:fontawesomefx-materialdesignfont:2.0.26-9.1.2'
     implementation 'io.github.typhon0:AnimateFX:1.2.2'
-    implementation "com.sandec:mdfx:0.1.9"
+    implementation "com.sandec:mdfx:0.2.0"
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation "de.jangassen:nsmenufx:3.1.0"
