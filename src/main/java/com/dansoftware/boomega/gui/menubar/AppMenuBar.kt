@@ -157,7 +157,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
 
         private fun databaseManagerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbmanager"))
             .action { DatabaseManagerActivity().show(databaseTracker, context.contextWindow) }
-            .keyCombination(KeyBindings.openDatabaseKeyBinding.keyCombinationProperty)
+            .keyCombination(KeyBindings.openDatabaseManagerKeyBinding.keyCombinationProperty)
             .graphic(MaterialDesignIcon.DATABASE)
 
         /**
