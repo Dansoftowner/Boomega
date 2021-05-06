@@ -178,16 +178,11 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
     private fun buildDockSelectionItem() =
         MenuButton(null, MaterialDesignIconView(MaterialDesignIcon.DIVISION)).apply {
             //TODO: Tooltip
-            Stream.of(*Dock.values())
-                .map(::DockMenuItem)
-                .collect(Collectors.toList())
-                .let(items::addAll)
-            /*view.docks.addListener { _: Observable ->
-                view.docks.forEach { dck ->
-                    items.map { it as DockMenuItem }
-                        .forEach { it.isSelected = it.dock == dck }
-                }
-            }*/
+            items.addAll(
+                Stream.of(*Dock.values())
+                    .map(::DockMenuItem)
+                    .toList()
+            )
         }
 
     private fun buildSeparator() = Separator(Orientation.VERTICAL)

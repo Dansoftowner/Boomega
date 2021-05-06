@@ -54,7 +54,6 @@ class KeyBindingActions(
 
     fun applyOnScene(scene: Scene) {
         listKeyBindActions().forEach { action ->
-
             scene.addEventHandler(KeyEvent.KEY_PRESSED) {
                 if (action.keyBinding.match(it)) {
                     invoke(action)
