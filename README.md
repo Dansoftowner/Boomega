@@ -49,18 +49,25 @@
 
 <tr>
   <td>
-    <img style="float: left" src="readme/windows.png" alt="">
-    <p><b>Windows (7 or later) 64-bit</b></p>
+    <p>
+        <img style="float: left" src="readme/windows.png" alt="">
+        <b>Windows (7 or later) 64-bit</b>
+    </p>
   </td>
 
   <td>
-    <img style="float: left" src="readme/linux.png" alt="">
-    <p><b>Linux 64-bit</b></p>
+    <p>
+      <img style="float: left" src="readme/linux.png" alt="">
+      <b>Linux 64-bit</b>
+    </p>
+    
   </td>
 
   <td>
-    <img style="float: left" src="readme/mac.png" alt="">
-    <p><b>MacOS 64-bit</b></p>
+    <p>    
+      <img style="float: left" src="readme/mac.png" alt="">
+      <b>MacOS 64-bit</b>
+    </p>
   </td>
 
 </tr>
