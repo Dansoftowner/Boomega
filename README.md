@@ -83,17 +83,17 @@
   <td>
 
 <b>
-  <h3>
+  <h4>
     <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.exe">Exe installer (.exe)</a>
-  </h3>
+  </h4>
 
-  <h3>
+  <h4>
     <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.msi">MSI installer package (.msi)</a>
-  </h3>
+  </h4>
 
-  <h3>
+  <h4>
     <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.zip">Portable (.zip)</a>
-  </h3>
+  </h4>
 
 </b>
   </td>
