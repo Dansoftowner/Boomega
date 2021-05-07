@@ -48,7 +48,7 @@
 <tr>
   <td style="text-align: center">
         <b>
-          <h1 style="text-align: center;">
+          <h1>
             <img style="margin-right: 10px" src="readme/windows.png" alt="">
             Windows
           </h1>
@@ -56,13 +56,21 @@
   </td>
 
   <td style="text-align: center"> 
-      <img style="margin-right: 10px" src="readme/linux.png" alt="">
-      <b><h3>Linux 64-bit</h3></b>
+      <b>
+          <h1>
+            <img style="margin-right: 10px" src="readme/linux.png" alt="">
+            Linux
+          </h1>
+        </b>
   </td>
 
   <td style="text-align: center">
-      <img style="margin-right: 10px" src="readme/mac.png" alt="">
-      <b><h3>MacOS 64-bit</h3></b>
+        <b>
+          <h1>
+            <img style="margin-right: 10px" src="readme/mac.png" alt="">
+            MacOS 
+          </h1>
+        </b>
   </td>
 
 </tr>
