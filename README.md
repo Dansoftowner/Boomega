@@ -43,24 +43,22 @@
 [![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 [![GitHub Release Date](https://img.shields.io/github/release-date/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 
-### Platform support
-
 <table>
 
 <tr>
   <td style="text-align: center">
-        <img style="float: left; vertical-align: middle;" src="readme/windows.png" alt="" id="winimg">
-        <b><label align="center" for="winimg" style="vertical-align: middle;">Windows (7 or later) 64-bit</label></b>
+        <img src="readme/windows.png" alt="">
+        <b><label>Windows (7 or later) 64-bit</label></b>
   </td>
 
   <td style="text-align: center"> 
-      <img style="float: left; vertical-align: middle;" src="readme/linux.png" alt="" id="linimg">
-      <b><label align="center" for="linimg" style="vertical-align: middle;">Linux 64-bit</label></b>
+      <img src="readme/linux.png" alt="">
+      <b><label>Linux 64-bit</label></b>
   </td>
 
   <td style="text-align: center">
-      <img style="float: left" src="readme/mac.png" alt="" id="macimg">
-      <b><label align="center" for="macimg" style="vertical-align: middle;">MacOS 64-bit</label></b>
+      <img src="readme/mac.png" alt="">
+      <b><label>MacOS 64-bit</label></b>
   </td>
 
 </tr>
