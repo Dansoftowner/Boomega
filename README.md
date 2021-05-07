@@ -47,8 +47,12 @@
 
 <tr>
   <td style="text-align: center">
-        <img style="margin-right: 10px" src="readme/windows.png" alt="">
-        <b><h3>Windows (7 or later) 64-bit</h3></b>
+        <b>
+          <h3>
+            <img style="margin-right: 10px" src="readme/windows.png" alt="">
+            Windows (7 or later) 64-bit
+          </h3>
+        </b>
   </td>
 
   <td style="text-align: center"> 
