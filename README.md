@@ -48,10 +48,23 @@
 <table>
 
 <tr>
-
   <td>
     <img src="readme/windows.png" alt="Windows">
   </td>
+
+  <td>
+    <img src="readme/linux.png" alt="Linux">
+  </td>
+
+  <td>
+    <img src="readme/mac.png" alt="MacOS">
+  </td>
+
+</tr>
+
+<tr>
+
+  
 
   <td>
 
@@ -63,14 +76,6 @@
 
   </td>
 
-</tr>
-
-<tr>
-
-  <td>
-    <img src="readme/linux.png" alt="Linux">
-  </td>
-
   <td>
 
    <ul>
@@ -80,14 +85,6 @@
 
   </td>
 
-</tr>
-
-<tr>
-
-  <td>
-    <img src="readme/mac.png" alt="MacOS">
-  </td>
-
   <td>
 
   <p><i>Help wanted</i></p>
@@ -95,7 +92,6 @@
   </td>
 
 </tr>
-
 </table>
 
 Jump to [releases](https://github.com/Dansoftowner/Boomega/releases). <br/>
