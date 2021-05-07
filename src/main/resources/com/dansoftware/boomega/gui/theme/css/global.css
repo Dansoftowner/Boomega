@@ -137,3 +137,8 @@
 .check-menu-item:focused:checked > .left-container {
     -fx-background-color: transparent;
 }
+
+.text-field .right-button {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
