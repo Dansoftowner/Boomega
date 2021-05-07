@@ -46,7 +46,7 @@
 <table>
 
 <tr>
-  <td style="text-align: center">
+  <td align="center">
         <b>
           <h1>
             <img style="margin-right: 10px" src="readme/windows.png" alt="">
@@ -55,7 +55,7 @@
         </b>
   </td>
 
-  <td style="text-align: center"> 
+  <td align="center"> 
       <b>
           <h1>
             <img style="margin-right: 10px" src="readme/linux.png" alt="">
@@ -64,7 +64,7 @@
         </b>
   </td>
 
-  <td style="text-align: center">
+  <td align="center">
         <b>
           <h1>
             <img style="margin-right: 10px" src="readme/mac.png" alt="">
