@@ -12,7 +12,7 @@ import java.io.File
  *
  * @author Daniel Gyorffy
  */
-object PropertiesResponsible {
+object PropertiesSetup {
 
     /* ****** Keys ****** */
 
