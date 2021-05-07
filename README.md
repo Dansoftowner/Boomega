@@ -48,7 +48,7 @@
 <tr>
   <td style="text-align: center">
         <b>
-          <label>
+          <label style="text-align: center;">
             <img style="margin-right: 10px" src="readme/windows.png" alt="">
             Windows (7 or later) 64-bit
           </label>
