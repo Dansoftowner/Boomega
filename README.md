@@ -50,15 +50,15 @@
 <tr>
   <td>
     <div style="display: flex; align-items: center;">
-        <img style="float: left" src="readme/windows.png" alt="">
-        <b><label style="margin: 10px;">Windows (7 or later) 64-bit</label></b>
+        <img style="float: left; vertical-align: middle;" src="readme/windows.png" alt="">
+        <b><label style="vertical-align: middle;">Windows (7 or later) 64-bit</label></b>
     </div>
   </td>
 
   <td>
     <div style="display: flex; align-items: center;">
-      <img style="float: left" src="readme/linux.png" alt="">
-      <b ><label>Linux 64-bit</label></b>
+      <img style="float: left; vertical-align: middle;" src="readme/linux.png" alt="">
+      <b ><label style="vertical-align: middle;">Linux 64-bit</label></b>
     </div>
     
   </td>
@@ -66,7 +66,7 @@
   <td>
     <div style="display: flex; align-items: center;">    
       <img style="float: left" src="readme/mac.png" alt="">
-      <b><label style="alignment: center;">MacOS 64-bit</label></b>
+      <b><label style="vertical-align: middle;">MacOS 64-bit</label></b>
     </div>
   </td>
 
