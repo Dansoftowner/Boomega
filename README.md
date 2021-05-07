@@ -129,6 +129,14 @@
   </td>
 
 </tr>
+
+<tr>
+
+  <td align="center" colspan="3">
+    <p><b><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-all.jar">Java archive (.jar)</a></b></p>
+  </td>
+
+</tr>
 </table>
 
 Jump to [releases](https://github.com/Dansoftowner/Boomega/releases). <br/>
