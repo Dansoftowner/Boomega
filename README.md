@@ -46,8 +46,8 @@
 ### Platform support
 |                    | Windows           | Linux   | MacOS
 | ---                |   ---             | ---     | ---   
-| Installer (64-bit) |  [exe](), [msi]() | [deb](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/boomega_0.6.0-1_amd64.deb) | _Help wanted_
-| Portable (64-bit)  |  [zip]()          | [tar.xz](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-linux.tar.xz) | _Help wanted_ 
+| Installer (64-bit) |  [exe](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.exe), [msi](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.msi) | [deb](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/boomega_0.6.0-1_amd64.deb)     | _Help wanted_
+| Portable (64-bit)  |  [zip](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.zip)                                                                                                | [tar.xz](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-linux.tar.xz) | _Help wanted_ 
 
 Jump to [releases](https://github.com/Dansoftowner/Boomega/releases). <br/>
 Or [build it yourself](#build)
