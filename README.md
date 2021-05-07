@@ -48,17 +48,17 @@
 <tr>
   <td style="text-align: center">
         <img src="readme/windows.png" alt="">
-        <b><label>Windows (7 or later) 64-bit</label></b>
+        <b><label style="padding: 60px;">Windows (7 or later) 64-bit</label></b>
   </td>
 
   <td style="text-align: center"> 
       <img src="readme/linux.png" alt="">
-      <b><label>Linux 64-bit</label></b>
+      <b><label style="padding: 60px;">Linux 64-bit</label></b>
   </td>
 
   <td style="text-align: center">
       <img src="readme/mac.png" alt="">
-      <b><label>MacOS 64-bit</label></b>
+      <b><label style="padding: 60px;">MacOS 64-bit</label></b>
   </td>
 
 </tr>
