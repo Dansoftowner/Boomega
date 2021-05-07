@@ -1,3 +1,5 @@
+import org.gradle.internal.jvm.Jvm
+
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -141,31 +143,40 @@ shadowJar {
 
 /* -------------------------- Distribution -------------------------- */
 
+def distributionDir = new File(projectDir, "distribution")
+def distributionInputDir = new File(distributionDir, "input")
+def distributionBuildDir = new File(distributionDir, "build")
+def distributionTempDir = new File(distributionDir, "temp")
+def distributionRuntimeDir = new File(distributionDir, "java-runtime")
+def distributionIconDir = new File(distributionDir, "icon")
+def distributionFileAssociationsDir = new File(distributionDir, "file-associations")
+
+def jlinkExecutable = new File(Jvm.current().getJavaHome(), "bin${File.separator}jlink")
+
 
 task cleanDistributionTemp(type: Delete) {
     doFirst {
-        delete "distribution/temp"
+        delete distributionTempDir
     }
 
     doLast {
-        Files.createDirectory(Paths.get(projectDir.toString(), "distribution", "temp"))
+        distributionTempDir.mkdir()
     }
 }
 
 task cleanDistributionBuild(type: Delete) {
     doFirst {
-        delete "distribution/build"
+        delete distributionBuildDir
     }
 }
 
-
 task cleanDistributionInput(type: Delete) {
     doFirst {
-        delete "distribution/input"
+        delete distributionInputDir
     }
 
     doLast {
-        Files.createDirectory(Paths.get(projectDir.toString(), "distribution", "input"))
+        distributionInputDir.mkdir()
     }
 }
 
@@ -175,15 +186,41 @@ task buildDistributionInput {
     doLast {
         Files.copy(
                 tasks.shadowJar.archiveFile.get().asFile.toPath(),
-                Paths.get(projectDir.toString(), "distribution", "input", tasks.shadowJar.archiveFileName.get())
+                new File(distributionInputDir, tasks.shadowJar.archiveFileName.get()).toPath()
         )
     }
+}
+
+task cleanDistributionRuntime {
+    doFirst {
+        delete distributionRuntimeDir
+    }
+}
+
+// builds a java-runtime using jlink
+task buildRuntime(type: Exec) {
+    dependsOn cleanDistributionRuntime
+    workingDir = distributionDir.toString()
+    executable = jlinkExecutable.toString()
+    args = [
+            '--output',
+            distributionRuntimeDir,
+            // reducing the file sizes
+            '--strip-debug',
+            '--compress', '2',
+            '--no-header-files',
+            '--no-man-pages',
+            '--add-modules',
+            // required modules
+            'java.se,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.web'
+    ]
 }
 
 task preparteDistribution {
     dependsOn cleanDistributionTemp
     dependsOn cleanDistributionBuild
     dependsOn buildDistributionInput
+    dependsOn buildRuntime
 }
 
 jpackage {
@@ -194,10 +231,11 @@ jpackage {
     vendor = 'Dansoftware'
     javaOptions = applicationDefaultJvmArgs
 
-    input = String.join(File.separator, projectDir.toString(), "distribution", "input")
-    destination = String.join(File.separator, "distribution", "build")
-    temp = String.join(File.separator, "distribution", "temp")
+    input = distributionInputDir.toString()
+    destination = distributionBuildDir.toString()
+    temp = distributionTempDir.toString()
     mainJar = shadowJar.archiveFileName.get().toString()
+    runtimeImage = distributionRuntimeDir.toString()
 
     licenseFile = "LICENSE"
 
@@ -210,18 +248,18 @@ jpackage {
     linuxShortcut = true
 
     windows {
-        icon = "${projectDir}/distribution/icon/Boomega.ico"
-        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-win.properties"]
+        icon = "${distributionIconDir}/Boomega.ico"
+        fileAssociations = ["${distributionFileAssociationsDir}/file-associations-win.properties"]
     }
 
     linux {
-        icon = "${projectDir}/distribution/icon/Boomega.png"
-        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-linux.properties"]
+        icon = "${distributionIconDir}/Boomega.png"
+        fileAssociations = ["${distributionFileAssociationsDir}/file-associations-linux.properties"]
     }
 
     mac {
-        icon = "${projectDir}/distribution/icon/Boomega.icns"
-        fileAssociations = ["${projectDir}/distribution/file-associations/file-associations-mac.properties"]
+        icon = "${distributionIconDir}/Boomega.icns"
+        fileAssociations = ["${distributionFileAssociationsDir}/file-associations-mac.properties"]
     }
 }
 
