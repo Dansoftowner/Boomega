@@ -48,10 +48,10 @@
 <tr>
   <td style="text-align: center">
         <b>
-          <label style="text-align: center;">
+          <h1 style="text-align: center;">
             <img style="margin-right: 10px" src="readme/windows.png" alt="">
             Windows (7 or later) 64-bit
-          </label>
+          </h1>
         </b>
   </td>
 
