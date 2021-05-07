@@ -49,24 +49,24 @@
 
 <tr>
   <td>
-    <div style="float: left;">
+    <div style="float: left; text-align: center;">
         <img style="float: left" src="readme/windows.png" alt="">
-        <p>Windows (7 or later) 64-bit</p>
+        <b>Windows (7 or later) 64-bit</b>
     </div>
   </td>
 
   <td>
-    <div style="float: left;">
+    <div style="float: left; text-align: center;">
       <img style="float: left" src="readme/linux.png" alt="">
-      <p>Linux 64-bit</p>
+      <b>Linux 64-bit</b>
     </div>
     
   </td>
 
   <td>
-    <div style="float: left;">    
+    <div style="float: left; text-align: center;">    
       <img style="float: left" src="readme/mac.png" alt="">
-      <p>MacOS 64-bit</p>
+      <b>MacOS 64-bit</b>
     </div>
   </td>
 
