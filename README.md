@@ -48,19 +48,19 @@
 <table>
 
 <tr>
-  <td align="center">
+  <td style="text-align: center">
         <img style="float: left; vertical-align: middle;" src="readme/windows.png" alt="" id="winimg">
-        <b><label for="winimg" style="vertical-align: middle;">Windows (7 or later) 64-bit</label></b>
+        <b><label align="center" for="winimg" style="vertical-align: middle;">Windows (7 or later) 64-bit</label></b>
   </td>
 
-  <td align="center">
+  <td style="text-align: center"> 
       <img style="float: left; vertical-align: middle;" src="readme/linux.png" alt="" id="linimg">
-      <b><label for="linimg" style="vertical-align: middle;">Linux 64-bit</label></b>
+      <b><label align="center" for="linimg" style="vertical-align: middle;">Linux 64-bit</label></b>
   </td>
 
-  <td align="center">
+  <td style="text-align: center">
       <img style="float: left" src="readme/mac.png" alt="" id="macimg">
-      <b><label for="macimg" style="vertical-align: middle;">MacOS 64-bit</label></b>
+      <b><label align="center" for="macimg" style="vertical-align: middle;">MacOS 64-bit</label></b>
   </td>
 
 </tr>
