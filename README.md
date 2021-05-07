@@ -53,6 +53,7 @@
             Windows
           </h1>
         </b>
+        <p>(64-bit)</p>
   </td>
 
   <td align="center"> 
@@ -62,6 +63,7 @@
             Linux
           </h1>
         </b>
+      <p>(64-bit)</p>
   </td>
 
   <td align="center">
@@ -71,6 +73,7 @@
             MacOS 
           </h1>
         </b>
+        <p>(64-bit)</p>
   </td>
 
 </tr>
