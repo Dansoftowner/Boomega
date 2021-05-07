@@ -5,7 +5,7 @@ import com.dansoftware.boomega.config.Preferences;
 public class FirstTimeSimulation {
 
     static {
-        PropertiesResponsible.setupSystemProperties();
+        PropertiesSetup.setupSystemProperties();
         Preferences.setDefault(Preferences.empty());
     }
 

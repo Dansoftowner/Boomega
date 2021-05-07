@@ -47,7 +47,7 @@ public class Main extends BaseApplication {
         //object for synchronizing the JavaFX Launcher Thread
         initThreadLock = Main.class;
 
-        PropertiesResponsible.setupSystemProperties();
+        PropertiesSetup.setupSystemProperties();
         //we create the logger after the necessary system-properties are put
         logger = LoggerFactory.getLogger(Main.class);
         //Set the default uncaught exception handler

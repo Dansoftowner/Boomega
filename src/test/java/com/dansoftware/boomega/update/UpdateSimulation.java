@@ -3,7 +3,7 @@ package com.dansoftware.boomega.update;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.source.InMemorySource;
 import com.dansoftware.boomega.main.Main;
-import com.dansoftware.boomega.main.PropertiesResponsible;
+import com.dansoftware.boomega.main.PropertiesSetup;
 import com.dansoftware.boomega.util.adapter.VersionInteger;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class UpdateSimulation {
 
     static {
-        PropertiesResponsible.setupSystemProperties();
+        PropertiesSetup.setupSystemProperties();
         UpdateSearcher.setInstanceFactory(FakeUpdateSearcher::new);
         initPreferences();
     }
