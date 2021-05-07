@@ -51,14 +51,14 @@
   <td>
     <div style="float: left;">
         <img style="float: left" src="readme/windows.png" alt="">
-        <b>Windows (7 or later) 64-bit</b>
+        <p>Windows (7 or later) 64-bit</p>
     </div>
   </td>
 
   <td>
     <div style="float: left;">
       <img style="float: left" src="readme/linux.png" alt="">
-      <b>Linux 64-bit</b>
+      <p>Linux 64-bit</p>
     </div>
     
   </td>
@@ -66,7 +66,7 @@
   <td>
     <div style="float: left;">    
       <img style="float: left" src="readme/mac.png" alt="">
-      <b>MacOS 64-bit</b>
+      <p>MacOS 64-bit</p>
     </div>
   </td>
 
