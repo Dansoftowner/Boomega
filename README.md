@@ -51,7 +51,7 @@
   <td>
     <div style="display: flex; align-items: center;">
         <img style="float: left" src="readme/windows.png" alt="">
-        <b><label>Windows (7 or later) 64-bit</label></b>
+        <b><label style="alignment: center;">Windows (7 or later) 64-bit</label></b>
     </div>
   </td>
 
@@ -66,7 +66,7 @@
   <td>
     <div style="display: flex; align-items: center;">    
       <img style="float: left" src="readme/mac.png" alt="">
-      <b><label>MacOS 64-bit</label></b>
+      <b><label style="alignment: center;">MacOS 64-bit</label></b>
     </div>
   </td>
 
