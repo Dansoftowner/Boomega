@@ -53,7 +53,7 @@
             Windows
           </h1>
         </b>
-        <p>(64-bit)</p>
+        <p><b>(64-bit)</b></p>
   </td>
 
   <td align="center"> 
@@ -63,7 +63,7 @@
             Linux
           </h1>
         </b>
-      <p>(64-bit)</p>
+      <p><b>(64-bit)</b></p>
   </td>
 
   <td align="center">
@@ -73,7 +73,7 @@
             MacOS 
           </h1>
         </b>
-        <p>(64-bit)</p>
+        <p><b>(64-bit)</b></p>
   </td>
 
 </tr>
@@ -108,15 +108,23 @@
   <td>
 <b>
    <ul>
-        <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/boomega_0.6.0-1_amd64.deb">Debian Software Package (.deb)</a></li>
-        <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-linux.tar.xz">Tar.xz archive (.tar.xz)</a></li>
+        <li>
+          <h4>
+            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/boomega_0.6.0-1_amd64.deb">Debian Software Package (.deb)</a>
+          </h4>
+        </li>
+        <li>
+          <h4>
+             <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-linux.tar.xz">Portable (.tar.xz)</a>
+          </h4>
+        </li>
    </ul>
 </b>
   </td>
 
   <td>
 
-  <p><i>Help wanted</i></p>
+  <p><b><i>Help wanted</i></b></p>
 
   </td>
 
