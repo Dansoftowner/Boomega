@@ -198,7 +198,7 @@ task cleanDistributionRuntime {
 }
 
 // builds a java-runtime using jlink
-task buildRuntime(type: Exec) {
+task jlink(type: Exec) {
     dependsOn cleanDistributionRuntime
     workingDir = distributionDir.toString()
     executable = jlinkExecutable.toString()
@@ -220,7 +220,7 @@ task preparteDistribution {
     dependsOn cleanDistributionTemp
     dependsOn cleanDistributionBuild
     dependsOn buildDistributionInput
-    dependsOn buildRuntime
+    dependsOn jlink
 }
 
 jpackage {
