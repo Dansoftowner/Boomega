@@ -210,8 +210,8 @@ task buildRuntime(type: Exec) {
             '--compress', '2',
             '--no-header-files',
             '--no-man-pages',
-            '--add-modules',
             // required modules
+            '--add-modules',
             'java.se,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.web'
     ]
 }
