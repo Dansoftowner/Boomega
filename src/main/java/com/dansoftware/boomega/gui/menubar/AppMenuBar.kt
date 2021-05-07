@@ -110,6 +110,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                 .menuItem(databaseCreatorMenuItem())
                 .menuItem(databaseManagerMenuItem())
                 .menuItem(recentDatabasesMenuItem())
+                .menuItem(databaseCloseMenuItem())
                 .separator()
                 .menuItem(revealInExplorerMenuItem())
                 .separator()
@@ -183,6 +184,18 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
                     this.graphic(MaterialDesignIcon.BOOK_OPEN_VARIANT)
                 }
             }
+
+        private fun databaseCloseMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbclose"))
+            .action {
+                preferences.editor()
+                    .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
+                        isAutoLogin = false
+                        autoLoginCredentials = null
+                    }).tryCommit()
+                context.close()
+                actions.invoke(KeyBindingActions.NEW_ENTRY)
+            }
+            .graphic(MaterialDesignIcon.LOGOUT_VARIANT)
 
         private fun revealInExplorerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.reveal"))
             .action { databaseMeta.file.revealInExplorer() }
