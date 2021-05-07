@@ -44,10 +44,59 @@
 [![GitHub Release Date](https://img.shields.io/github/release-date/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 
 ### Platform support
-|                    | Windows           | Linux   | MacOS
-| ---                |   ---             | ---     | ---   
-| Installer (64-bit) |  [exe](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.exe), [msi](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.msi) | [deb](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/boomega_0.6.0-1_amd64.deb)     | _Help wanted_
-| Portable (64-bit)  |  [zip](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.zip)                                                                                                | [tar.xz](https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-linux.tar.xz) | _Help wanted_ 
+
+<table>
+
+<tr>
+
+  <td>
+    <img src="readme/windows.png" alt="Windows">
+  </td>
+
+  <td>
+
+   <ul>
+        <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.exe">Exe installer (.exe)</a></li>
+        <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.msi">MSI installer package (.msi)</a></li>
+        <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.zip">Zip archive (.zip)</a></li>
+   </ul>
+
+  </td>
+
+</tr>
+
+<tr>
+
+  <td>
+    <img src="readme/linux.png" alt="Linux">
+  </td>
+
+  <td>
+
+   <ul>
+        <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/boomega_0.6.0-1_amd64.deb">Debian Software Package (.deb)</a></li>
+        <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-linux.tar.xz">Tar.xz archive (.tar.xz)</a></li>
+   </ul>
+
+  </td>
+
+</tr>
+
+<tr>
+
+  <td>
+    <img src="readme/mac.png" alt="MacOS">
+  </td>
+
+  <td>
+
+  <p><i>Help wanted</i></p>
+
+  </td>
+
+</tr>
+
+</table>
 
 Jump to [releases](https://github.com/Dansoftowner/Boomega/releases). <br/>
 Or [build it yourself](#build)
