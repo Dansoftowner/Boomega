@@ -82,21 +82,22 @@
 
   <td>
 
+<b>
    <ul>
         <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.exe">Exe installer (.exe)</a></li>
         <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.msi">MSI installer package (.msi)</a></li>
         <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.zip">Zip archive (.zip)</a></li>
    </ul>
-
+</b>
   </td>
 
   <td>
-
+<b>
    <ul>
         <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/boomega_0.6.0-1_amd64.deb">Debian Software Package (.deb)</a></li>
         <li><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-linux.tar.xz">Tar.xz archive (.tar.xz)</a></li>
    </ul>
-
+</b>
   </td>
 
   <td>
