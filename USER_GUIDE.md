@@ -1,5 +1,7 @@
 # Boomega User Guide
 
+#### List of contents
+
 * [Overview](#overview)
 * [Getting Boomega](#getting-boomega)
     * [Platform support](#platform-support)
