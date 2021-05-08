@@ -12,6 +12,7 @@
   *
   * [Key Bindings](#key-bindings)
   * [User interface themes](#user-interface-themes)
+  * [User interface language](#user-interface-languages)
     
 
 ## Overview
@@ -90,16 +91,28 @@ When Boomega runs for the first time, it will show a customization/configuration
 
 #### Select the user interface theme
 
-Select whether you want to use the **light**, **dark** or **os-synchronized** theme
+Select whether you want to use the **light**, **dark** or **os-synchronized** theme.
 
 ![Selecting themes in the customization dialog](readme/userguide/firsttime/FirstTimeTheme.png)
 
 For more information, see [user interface themes](#user-interface-themes).
+
+#### Select the default language
+
+Select your preferred language from the available language list.
+
+![Selecting languages in the customization dialog](readme/userguide/firsttime/FirstTimeLanguage.png)
+
+For more information, see [user interface languages](#user-interface-languages)
 
 ### Key bindings
 
 TODO
 
 ### User interface themes
+
+TODO
+
+### User interface languages
 
 TODO
