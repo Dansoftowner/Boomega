@@ -5,6 +5,9 @@
     * [Platform support](#platform-support)
     * [Running it as a JAR](#running-it-as-a-jar)
     * [Updates](#updates)
+* [Using Boomega]()
+  *
+  *
     
 
 ## Overview
@@ -51,7 +54,7 @@ java --add-exports javafx.base/com.sun.javafx=ALL-UNNAMED   --add-exports javafx
 
 ### Updates
 
-Boomega will notify you if a new version is available and allows you to download them immediately.
+Boomega will notify you if a new version is available and will allow you to download them immediately.
 
 <table>
 <tr>
