@@ -89,7 +89,7 @@ You will be allowed to download the binary you want immediately.
 
 When Boomega runs for the first time, it will show a customization/configuration dialog.
 
-#### Select the user interface theme
+#### 1. Select the user interface theme
 
 Select whether you want to use the **light**, **dark** or **os-synchronized** theme.
 
@@ -97,7 +97,7 @@ Select whether you want to use the **light**, **dark** or **os-synchronized** th
 
 For more information, see [user interface themes](#user-interface-themes).
 
-#### Select the default language
+#### 2. Select the default language
 
 Select your preferred language from the available language list.
 
