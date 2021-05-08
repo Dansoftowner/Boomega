@@ -7,9 +7,11 @@
     * [Platform support](#platform-support)
     * [Running it as a JAR](#running-it-as-a-jar)
     * [Updates](#updates)
-* [Using Boomega]()
+* [Using Boomega](#using-boomega)
+  * [Run Boomega for the first time]()
   *
-  *
+  * [Key Bindings](#key-bindings)
+  * [User interface themes](#user-interface-themes)
     
 
 ## Overview
@@ -48,7 +50,8 @@ MacOS-specific binaries are currently not available (help wanted), but you can s
 
 You can run the cross-platform jar file with a **Java 16+** runtime that has JavaFX binaries bundled inside it (like [Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/)).
 
-You also have to pass the [necessary JVM options](JVM_OPTIONS.md) when running it.  
+You also have to pass the [necessary JVM options](JVM_OPTIONS.md) when you invoke `java` in the command line/terminal.  
+
 Example:
 ```
 java --add-exports javafx.base/com.sun.javafx=ALL-UNNAMED   --add-exports javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED  --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.text=ALL-UNNAMED  --add-exports javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED  --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens javafx.graphics/javafx.scene.text=ALL-UNNAMED  --add-opens javafx.graphics/com.sun.javafx.text=ALL-UNNAMED -jar Boomega_x.x.x-all.jar
@@ -56,7 +59,10 @@ java --add-exports javafx.base/com.sun.javafx=ALL-UNNAMED   --add-exports javafx
 
 ### Updates
 
-Boomega will notify you if a new version is available and will allow you to download them immediately.
+By default, Boomega is configured to check for updates automatically and notify you when a new version is available.
+You will be allowed to download the binary you want immediately.
+
+> Note: you can configure the update-searching settings at `Preferences/Settings (Ctrl+Alt+S) -> Updates`
 
 <table>
 <tr>
@@ -75,3 +81,25 @@ Boomega will notify you if a new version is available and will allow you to down
 
 </tr>
 </table>
+
+## Using Boomega
+
+### Running Boomega for the first time
+
+When Boomega runs for the first time, it will show a customization/configuration dialog.
+
+#### Select the user interface theme
+
+Select whether you want to use the **light**, **dark** or **os-synchronized** theme
+
+![Selecting themes in the customization dialog](readme/userguide/firsttime/FirstTimeTheme.png)
+
+For more information, see [user interface themes](#user-interface-themes).
+
+### Key bindings
+
+TODO
+
+### User interface themes
+
+TODO
