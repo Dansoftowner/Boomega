@@ -148,10 +148,8 @@
 </p>
 
 ## Documentation
-<!---
-TODO: adding website/docs link
--->
-The detailed documentation is available [here]().
+
+The detailed user guide is available [here](USER_GUIDE.md).
 
 ## Source code
 [![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)]()
