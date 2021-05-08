@@ -139,8 +139,13 @@
 </tr>
 </table>
 
-Jump to [releases](https://github.com/Dansoftowner/Boomega/releases). <br/>
-Or [build it yourself](#build)
+<p align="center">
+    <i><a href="https://github.com/Dansoftowner/Boomega/releases">Jump to releases</a></i>
+</p>
+
+<p align="center">
+    <b>Or <a href="#build">build it yourself</a></b>
+</p>
 
 ## Documentation
 <!---
@@ -162,7 +167,7 @@ The detailed documentation is available [here]().
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
 * The app targets `Java 16+` but the code is `unmodularized`
-* The build tool used for this project is `Gradle`
+* The build tool used for this project is [Gradle](https://gradle.org/)
 
 ## Build
 The recommended IDE for building this project is `IntelliJ Idea`.
@@ -173,8 +178,7 @@ The recommended IDE for building this project is `IntelliJ Idea`.
 ### Build manually (without using an IDE)
 If you want to run the project, simply use `gradlew run`. <br/>
 To build a fat jar, use `gradlew shadowJar`. <br/>
-To build executable binaries, use `gradlew jpackage` ([more info here](distribution/DISTRIBUTION_GUIDELINE.md))
-
+To build executable binaries, use `gradlew jpackage` ([see distribution guideline](distribution/DISTRIBUTION_GUIDELINE.md))
 
 ## Used libraries
 * [Jump to list](USED_LIBRARIES.md)
