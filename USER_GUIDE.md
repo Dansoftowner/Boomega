@@ -8,7 +8,7 @@
     * [Running it as a JAR](#running-it-as-a-jar)
     * [Updates](#updates)
 * [Using Boomega](#using-boomega)
-  * [Run Boomega for the first time]()
+  * [Run Boomega for the first time](#running-boomega-for-the-first-time)
   *
   * [Key Bindings](#key-bindings)
   * [User interface themes](#user-interface-themes)
