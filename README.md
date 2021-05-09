@@ -43,7 +43,7 @@
 [![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 [![GitHub Release Date](https://img.shields.io/github/release-date/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 
-<table>
+<table align="center">
 
 <tr>
   <td align="center">
