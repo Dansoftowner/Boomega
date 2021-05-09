@@ -17,7 +17,7 @@
   * [User interface themes](#user-interface-themes)
   * [User interface language](#user-interface-languages)
   *
-  *
+  * [Boomega info]()
     
 
 ## Overview
