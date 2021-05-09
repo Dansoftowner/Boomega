@@ -42,6 +42,12 @@ public class I18N {
         return loadedLanguagePacks.keySet();
     }
 
+    public static Locale defaultLocale() {
+         Set<Locale> available = getAvailableLocales();
+        Locale systemDefault = Locale.getDefault();
+        return available.contains(systemDefault) ? systemDefault : Locale.ENGLISH;
+    }
+
     public static Map<Locale, Supplier<Collator>> getAvailableCollators() {
         var map = new HashMap<Locale, Supplier<Collator>>();
         loadedLanguagePacks.forEach((locale, languagePacks) ->

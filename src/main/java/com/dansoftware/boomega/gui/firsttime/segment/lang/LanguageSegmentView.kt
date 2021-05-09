@@ -31,7 +31,7 @@ class LanguageSegmentView(private val preferences: Preferences) : StackPane() {
 
     private fun ListView<LanguageEntry>.fillListView() {
         val availableLocales = ArrayList(I18N.getAvailableLocales())
-        val defaultLocaleIndex = availableLocales.indexOf(Locale.getDefault())
+        val defaultLocaleIndex = availableLocales.indexOf(I18N.defaultLocale())
         items.addAll(availableLocales.map(::LanguageEntry))
         selectionModel.select(defaultLocaleIndex)
         scrollTo(defaultLocaleIndex)
