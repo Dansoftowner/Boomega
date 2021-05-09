@@ -8,11 +8,16 @@
     * [Running it as a JAR](#running-it-as-a-jar)
     * [Updates](#updates)
 * [Using Boomega](#using-boomega)
+  * [Database files](#database-files)
   * [Run Boomega for the first time](#running-boomega-for-the-first-time)
   *
+  *
+  * 
   * [Key Bindings](#key-bindings)
   * [User interface themes](#user-interface-themes)
   * [User interface language](#user-interface-languages)
+  *
+  *
     
 
 ## Overview
@@ -58,6 +63,16 @@ Example:
 java --add-exports javafx.base/com.sun.javafx=ALL-UNNAMED   --add-exports javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED  --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.text=ALL-UNNAMED  --add-exports javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED  --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens javafx.graphics/javafx.scene.text=ALL-UNNAMED  --add-opens javafx.graphics/com.sun.javafx.text=ALL-UNNAMED -jar Boomega_x.x.x-all.jar
 ```
 
+#### Parameters
+
+If you want to launch a database file, you can pass the file location as a program argument:
+
+```
+java <VM Options> -jar Boomega_x.x.x-all.jar "<Path To your File>"
+```
+
+For more information, see [Database files](#database-files).
+
 ### Updates
 
 By default, Boomega is configured to check for updates automatically and notify you when a new version is available.
@@ -85,6 +100,16 @@ You will be allowed to download the binary you want immediately.
 
 ## Using Boomega
 
+### Database files
+
+Boomega stores your saved books into a particular `.bmdb` database file.
+You can create `bmdb` files any time you want (see: [Creating databases](TODO)) and **open existing ones** (see: [Opening databases](TODO)).
+
+If Boomega is installed by an installation file as a native application, the `.bmdb` files are associated with 
+the app, so you can launch them from your file explorer.
+
+You can have multiple database files opened at the same time in the app.
+
 ### Running Boomega for the first time
 
 When Boomega runs for the first time, it will show a customization/configuration dialog.
@@ -103,7 +128,7 @@ Select your preferred language from the available language list.
 
 ![Selecting languages in the customization dialog](readme/userguide/firsttime/FirstTimeLanguage.png)
 
-For more information, see [user interface languages](#user-interface-languages)
+For more information, see [user interface languages](#user-interface-languages).
 
 ### Key bindings
 
