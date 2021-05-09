@@ -54,7 +54,9 @@ MacOS-specific binaries are currently not available (help wanted), but you can s
 
 ### Running it as a jar
 
-You can run the cross-platform jar file with a **Java 16+** runtime that has JavaFX binaries bundled inside it (like [Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/)).
+You can run the cross-platform jar file with a **Java 16+** 
+runtime that has JavaFX binaries bundled inside it (e.g a custom runtime built with `jlink`, [Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) \ [Liberica](https://bell-sw.com/pages/libericajdk/)) or you have to 
+put the javafx modules to the `module-path` (see: [openjfx docs](https://openjfx.io/openjfx-docs/#install-javafx)).
 
 You also have to pass the [necessary JVM options](JVM_OPTIONS.md) when you invoke `java` in the command line/terminal.  
 
