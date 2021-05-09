@@ -36,6 +36,9 @@
 * Customizable key-bindings
 * ...and more!
 
+## Documentation
+
+The detailed user guide is available [here](USER_GUIDE.md).
 
 ## Download
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)]()
@@ -141,10 +144,6 @@
 
 <i><a href="https://github.com/Dansoftowner/Boomega/releases">Jump to releases</a></i><br>
 <b>Or <a href="#build">build it yourself</a></b>
-
-## Documentation
-
-The detailed user guide is available [here](USER_GUIDE.md).
 
 ## Source code
 [![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)]()
