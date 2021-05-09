@@ -6,8 +6,8 @@ import com.dansoftware.boomega.util.os.OsInfo
  * Returns the string that contains the valuable information about the application
  */
 internal fun getApplicationInfoCopy(): String =
-    """Version: ${System.getProperty("libraryapp.version")}
-       |${System.getProperty("libraryapp.build.info")} 
+    """Version: ${System.getProperty("boomega.version")}
+       |${System.getProperty("boomega.build.info")} 
        ------
        |OS: ${OsInfo.getName()}
        |OS Version: ${OsInfo.getVersion()}
