@@ -139,13 +139,8 @@
 </tr>
 </table>
 
-<p align="center">
-    <i><a href="https://github.com/Dansoftowner/Boomega/releases">Jump to releases</a></i>
-</p>
-
-<p align="center">
-    <b>Or <a href="#build">build it yourself</a></b>
-</p>
+<i><a href="https://github.com/Dansoftowner/Boomega/releases">Jump to releases</a></i><br>
+<b>Or <a href="#build">build it yourself</a></b>
 
 ## Documentation
 
