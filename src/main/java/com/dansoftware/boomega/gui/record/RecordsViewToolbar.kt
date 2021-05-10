@@ -181,7 +181,7 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
             items.addAll(
                 Stream.of(*Dock.values())
                     .map(::DockMenuItem)
-                    .toList()
+                    .collect(Collectors.toList())
             )
         }
 
