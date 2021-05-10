@@ -76,7 +76,7 @@ class NotesEditor(
     }
 
     fun saveChanges() {
-        items[0].also {
+        items.takeIf { it.isNotEmpty() }?.get(0)?.also {
             it.notes = markdownEditor.markdown
             database.updateRecord(it)
         }

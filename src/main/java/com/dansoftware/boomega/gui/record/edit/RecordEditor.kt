@@ -90,6 +90,7 @@ class RecordEditor(
 
     fun saveChanges() {
         if (changedProperty().get()) {
+            logger.debug("RecordEditor.saveChanges() performs a save")
             fieldsEditor.persist()
             CachedExecutor.submit(SaveTask())
         }
@@ -121,8 +122,8 @@ class RecordEditor(
         }
 
         override fun call() {
-            fieldsEditor.takeIf { it.changedProperty().get() }?.saveChanges()
-            notesEditor.takeIf { it.changedProperty().get() }?.saveChanges()
+            fieldsEditor.saveChanges()
+            notesEditor.saveChanges()
         }
     }
 

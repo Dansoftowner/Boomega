@@ -268,22 +268,25 @@ class FieldsEditorForm(
     ).i18n(ResourceBundleService(I18N.getValues()))
 
     fun saveChanges() {
+        logger.debug("FieldsEditorForm.saveChanges() invoked")
+        logger.debug("Count of items that will be modified: {}", items.size)
         items.forEach { record ->
+            logger.debug("Item will be modified: ${record.id}")
             record.recordType = recordType.get()
-            StringUtils.getIfBlank(title.get(), null)?.run { record.title = this }
-            StringUtils.getIfBlank(subtitle.get(), null)?.run { record.subtitle = this }
-            StringUtils.getIfBlank(publisher.get(), null)?.run { record.publisher = this }
-            StringUtils.getIfBlank(magazineName.get(), null)?.run { record.magazineName = this }
-            StringUtils.getIfBlank(authors.get(), null)?.run { record.authors = this.split(",") }
-            StringUtils.getIfBlank(language.get(), null)?.run { record.language = this }
-            StringUtils.getIfBlank(isbn.get(), null)?.run { record.isbn = this }
-            StringUtils.getIfBlank(subject.get(), null)?.run { record.subject = this }
-            numberOfCopies.value?.run { record.numberOfCopies = this }
-            rating.value?.run { record.rating = this }
+            StringUtils.getIfBlank(title.get(), null)?.let { record.title = it }
+            StringUtils.getIfBlank(subtitle.get(), null)?.let { record.subtitle = it }
+            StringUtils.getIfBlank(publisher.get(), null)?.let { record.publisher = it }
+            StringUtils.getIfBlank(magazineName.get(), null)?.let { record.magazineName = it }
+            StringUtils.getIfBlank(authors.get(), null)?.let { record.authors = it.split(",") }
+            StringUtils.getIfBlank(language.get(), null)?.let { record.language = it }
+            StringUtils.getIfBlank(isbn.get(), null)?.let { record.isbn = it }
+            StringUtils.getIfBlank(subject.get(), null)?.let { record.subject = it }
+            numberOfCopies.value?.let { record.numberOfCopies = it }
+            rating.value?.let { record.rating = it }
             publishedDate.get()
-                ?.run {
+                ?.let {
                     try {
-                        record.publishedDate = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        record.publishedDate = it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                     } catch (e: RuntimeException) {
                         logger.error("Couldn't parse date ", e)
                     }
