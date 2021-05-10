@@ -7,6 +7,7 @@ import com.dansoftware.boomega.exception.UncaughtExceptionHandler;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity;
+import com.dansoftware.boomega.gui.font.CustomFontsLoader;
 import com.dansoftware.boomega.gui.keybinding.KeyBindings;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity;
@@ -69,6 +70,7 @@ public class Main extends BaseApplication {
      */
     public static void main(String[] args) {
         ApplicationInstanceService.open(args);
+        CustomFontsLoader.loadFonts();
         BaseApplication.launchApp(Main.class, args);
     }
 
