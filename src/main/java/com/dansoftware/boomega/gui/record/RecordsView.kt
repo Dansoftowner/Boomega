@@ -39,6 +39,7 @@ import javafx.scene.layout.BorderPane
 import org.slf4j.LoggerFactory
 import java.lang.Exception
 import java.util.*
+import java.util.stream.Collectors
 
 class RecordsView(
     private val context: Context,
@@ -205,7 +206,7 @@ class RecordsView(
                     return items.stream()
                         .map(Record::copy)
                         .peek { it.id = null }
-                        .toList()
+                        .collect(Collectors.toList())
                         .onEach(database::insertRecord)
                 }
             }

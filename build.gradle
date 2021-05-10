@@ -1,7 +1,6 @@
 import org.gradle.internal.jvm.Jvm
 
 import java.nio.file.Files
-import java.nio.file.Paths
 
 plugins {
     id 'java'
@@ -51,9 +50,6 @@ repositories {
 
     //JitPack repository
     maven { url "https://jitpack.io" }
-
-    //repository for FontawesomeFX
-    maven { url "https://dl.bintray.com/jerady/maven" }
 
     //repository for markdown-javafx-renderer
     maven {
@@ -115,15 +111,17 @@ dependencies {
     implementation 'net.kurobako:gesturefx:0.7.1'
     //Modified WorkBenchFX, Original: 'com.dlsc.workbenchfx:workbenchfx-core:x.x.x'
     implementation 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
-    implementation 'de.jensd:fontawesomefx-commons:11.0'
-    implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
-    implementation 'de.jensd:fontawesomefx-materialdesignfont:2.0.26-9.1.2'
+    //implementation 'de.jensd:fontawesomefx-commons:11.0'
+    //implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
+    //implementation 'de.jensd:fontawesomefx-materialdesignfont:2.0.26-9.1.2'
     implementation 'io.github.typhon0:AnimateFX:1.2.2'
     implementation "com.sandec:mdfx:0.2.0"
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation "de.jangassen:nsmenufx:3.1.0"
-    implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.4'
+    implementation ('com.github.Dansoftowner:MarkdownEditorControlFX:0.6.4') {
+        exclude group: 'de.jensd'
+    }
     implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
 
     //implementation from the local file system
