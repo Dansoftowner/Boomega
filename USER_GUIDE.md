@@ -104,11 +104,13 @@ You will be allowed to download the binary you want immediately.
 
 ### Database files
 
-Boomega stores your saved books into a particular `.bmdb` database file.
+Boomega stores your saved books into a particular Boomega (`.bmdb`) database file.
+A `Boomega Database` can be secured with username & password pair, but it can be an open-database accessible for everyone.
+
 You can create `bmdb` files any time you want (see: [Creating databases](TODO)) and **open existing ones** (see: [Opening databases](TODO)).
 
 If Boomega is installed by an installation file as a native application, the `.bmdb` files are associated with 
-the app, so you can launch them from your file explorer.
+the app, so you can launch them from your file explorer too.
 
 You can have multiple database files opened at the same time in the app.
 
