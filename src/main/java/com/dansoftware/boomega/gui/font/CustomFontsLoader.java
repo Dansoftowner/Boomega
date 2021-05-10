@@ -30,7 +30,7 @@ import java.util.List;
  * It's used because loading fonts in JavaFX CSS is not working
  * if the paths have spaces.
  * See:
- * <a href="https://stackoverflow.com/questions/33973921/javafx-font-face-css-error-loadstylesheetunprivileged/41753098"></a>
+ * <a href="https://stackoverflow.com/questions/33973921/javafx-font-face-css-error-loadstylesheetunprivileged/41753098">javafx @font-face css error “loadStyleSheetUnprivileged”</a>
  *
  * @author Daniel Gyorffy
  */
