@@ -28,3 +28,4 @@ Examples:
 `:sparkless: New record editor structure`  
 `:lipstick: Update styles`  
 `:bug: Fixed incorrect configuration saving policy`  
+`:memo: Update README`
