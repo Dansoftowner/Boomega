@@ -1,3 +1,5 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 # Boomega User Guide
 
 #### List of contents
@@ -10,14 +12,17 @@
 * [Using Boomega](#using-boomega)
   * [Database files](#database-files)
   * [Run Boomega for the first time](#running-boomega-for-the-first-time)
+  * [Login view](#login-view)
+  * [Opening existing database](#opening-existing-database)
+  * [Creating database](#creating-database) 
+  * [Database manager](#database-manager) 
   *
   *
-  * 
   * [Key Bindings](#key-bindings)
   * [User interface themes](#user-interface-themes)
   * [User interface language](#user-interface-languages)
   *
-  * [Boomega info]()
+  * [Viewing Boomega info](#viewing-boomega-info)
     
 
 ## Overview
@@ -107,7 +112,7 @@ You will be allowed to download the binary you want immediately.
 Boomega stores your saved books into a particular Boomega (`.bmdb`) database file.
 A `Boomega Database` can be secured with username & password pair, but it can be an open-database accessible for everyone.
 
-You can create `bmdb` files any time you want (see: [Creating databases](TODO)) and **open existing ones** (see: [Opening databases](TODO)).
+You can create `bmdb` files any time you want (see: [Creating database](#creating-database)) and **open existing ones** (see: [Opening existing database](#opening-existing-database)).
 
 If Boomega is installed by an installation file as a native application, the `.bmdb` files are associated with 
 the app, so you can launch them from your file explorer too.
@@ -134,6 +139,22 @@ Select your preferred language from the available language list.
 
 For more information, see [user interface languages](#user-interface-languages).
 
+### Login view
+
+TODO
+
+### Opening existing database
+
+TODO
+
+### Creating database
+
+TODO
+
+### Database manager
+
+TODO
+
 ### Key bindings
 
 TODO
@@ -145,3 +166,14 @@ TODO
 ### User interface languages
 
 TODO
+
+### Viewing Boomega info
+
+You can view all the information about your Boomega release in the `Boomega info` dialog:
+
+![Boomega info dialog](readme/userguide/BoomegaInfo.png)
+
+You can copy all this data to the clipboard by clicking on the <span class="material-icons">content_copy</span> icon.
+
+This dialog can be launched by clicking on the <span class="material-icons">info</span> icon in the [login view](#login-view) 
+or by clicking on the `File > Help > About` item in the [database view](#database-view).
