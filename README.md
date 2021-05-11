@@ -142,8 +142,10 @@ The detailed user guide is available [here](USER_GUIDE.md).
 </tr>
 </table>
 
-<i><a href="https://github.com/Dansoftowner/Boomega/releases">Jump to releases</a></i><br>
-<b>Or <a href="#build">build it yourself</a></b>
+<p align="center">
+  <i><a href="https://github.com/Dansoftowner/Boomega/releases">Jump to releases page</a></i> <br>
+  <b>Or <a href="#build">build it yourself</a></b>
+</p>
 
 ## Source code
 [![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)]()
@@ -172,7 +174,7 @@ If you want to run the project, simply use `gradlew run`. <br/>
 To build a fat jar, use `gradlew shadowJar`. <br/>
 To build executable binaries, use `gradlew jpackage` ([see distribution guideline](distribution/DISTRIBUTION_GUIDELINE.md))
 
-## Used libraries
+## Used third-party libraries
 * [Jump to list](USED_LIBRARIES.md)
 * ...or you can view them in the `Boomega Info`:<br>
 ![Viewing third-party libraries in the app](readme/BoomegaThirdPartyInfo.png)
