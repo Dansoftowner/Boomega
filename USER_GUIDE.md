@@ -1,7 +1,3 @@
-<head>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-</head>
-
 # Boomega User Guide
 
 #### List of contents
@@ -175,7 +171,7 @@ You can view all the information about your Boomega release in the `Boomega info
 
 ![Boomega info dialog](readme/userguide/BoomegaInfo.png)
 
-You can copy all this data to the clipboard by clicking on the <span class="material-icons">content_copy</span> icon.
+You can copy all this data to the clipboard by clicking on the top-right copy icon.
 
-This dialog can be launched by clicking on the <span class="material-icons">info</span> icon in the [login view](#login-view) 
+This dialog can be launched by clicking on the top-right info icon in the [login view](#login-view) 
 or by clicking on the `File > Help > About` item in the [database view](#database-view).
