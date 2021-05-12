@@ -173,5 +173,5 @@ You can view all the information about your Boomega release in the `Boomega info
 
 You can copy all this data to the clipboard by clicking on the ![copy](readme/userguide/icon/content-copy.png) icon.
 
-This dialog can be launched by clicking on the top-right info icon in the [login view](#login-view) 
+This dialog can be launched by clicking on the top-right ![info](readme/userguide/icon/information.png) icon in the [login view](#login-view) 
 or by clicking on the `File > Help > About` item in the [database view](#database-view).
