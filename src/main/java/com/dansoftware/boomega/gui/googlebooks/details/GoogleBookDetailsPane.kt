@@ -30,7 +30,7 @@ import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.pnikosis.html2markdown.HTML2Md
-import com.sandec.mdfx.MDFXNode
+import com.sandec.mdfx.MarkdownView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
@@ -399,7 +399,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
     }
 
     private inner class DescriptionPane : ScrollPane() {
-        private val mdfxNode = object : MDFXNode() {
+        private val mdfxNode = object : MarkdownView() {
             init {
                 mdStringProperty().bind(description)
                 maxWidthProperty().bind(this@GoogleBookDetailsPane.prefWidthProperty())

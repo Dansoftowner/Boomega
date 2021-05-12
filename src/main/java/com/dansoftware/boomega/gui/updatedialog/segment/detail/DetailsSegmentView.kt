@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.updatedialog.segment.detail
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.update.UpdateInformation
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import com.sandec.mdfx.MDFXNode
+import com.sandec.mdfx.MarkdownView
 import javafx.geometry.Insets
 import javafx.scene.control.ProgressBar
 import javafx.scene.control.ProgressIndicator
@@ -68,7 +68,7 @@ class DetailsSegmentView(private val context: Context, private val updateInforma
         //if the task succeeded, we render it as a markdown-text into a javaFX node
         setOnSucceeded {
             previewScrollPane.apply {
-                content = MDFXNode(value)
+                content = MarkdownView(value)
                 isFitToHeight = false
                 isFitToWidth = true
             }

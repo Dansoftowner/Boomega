@@ -19,30 +19,14 @@
 package com.dansoftware.boomega.gui.updatedialog.segment.detail;
 
 import com.dansoftware.boomega.update.UpdateInformation;
-import com.sandec.mdfx.MDFXNode;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 
 /**
  * A PreviewTextDownloaderTask defines a process to download the markdown-text that describes the
- * new features of the update from the internet by the specified URL. While the download is in progress
- * it will display a progressbar for the user. If the task failed then it will display an error message
- * for the user (by the help of {@link PreviewErrorPlaceHolder}). When the download is completed successfully,
- * it will display it in a javaFX node ({@link MDFXNode}) that renders the Markdown-text graphically.
- * <p>
- * It should be executed on a background-thread to get it work properly.
- *
- * <pre>{@code
- * String url = ...; // with the http(s) protocol
- * var task = new RawTextDownloaderTask(url);
- * new Thread(task).start();
- * }</pre>
- * <p>
- * We can handle the result by using the methods defined in {@link Task}
- * ({@link Task#setOnSucceeded(EventHandler)}, {@link Task#setOnFailed(EventHandler)} etc...)
+ * new features of the update from the internet by the specified URL.
  *
  * @see Task
  */
