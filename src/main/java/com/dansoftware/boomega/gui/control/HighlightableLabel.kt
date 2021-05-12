@@ -12,5 +12,6 @@ class HighlightableLabel(text: String? = null) : TextField(text) {
         this.prefColumnCount = 15
         this.styleClass.add("label")
         this.isEditable = false
+        this.setOnContextMenuRequested { it.consume() }
     }
 }
