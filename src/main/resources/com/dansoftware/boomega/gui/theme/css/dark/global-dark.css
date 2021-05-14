@@ -67,3 +67,7 @@
     -fx-border-color: transparent transparent #4e4d4d transparent;
     -fx-border-width: 0 0 0.5 0;
 }
+
+.glyph-icon {
+    -fx-fill: white;
+}
