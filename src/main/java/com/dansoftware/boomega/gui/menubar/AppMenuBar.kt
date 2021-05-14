@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.menubar
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
@@ -75,6 +76,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
             FileMenu(context, databaseView.openedDatabase, preferences, tracker, actions),
             ModuleMenu(databaseView),
             PreferencesMenu(context, preferences, actions),
+            ClipboardMenu(context),
             WindowMenu(context, actions),
             PluginMenu(context, actions),
             HelpMenu(context)
@@ -314,10 +316,21 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
     }
 
 
+    private class ClipboardMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.clipboard")) {
+            init {
+                this.menuItem(clipboardViewItem())
+            }
+
+        private fun clipboardViewItem() = MenuItem(I18N.getValue("menubar.menu.clipboard.openview"))
+            .action { ClipboardViewActivity.show(context.contextWindow) }
+            .graphic(MaterialDesignIcon.CLIPBOARD)
+    }
+
     /**
      * The 'Window' menu
      */
-    private class WindowMenu(val context: Context, val actions: KeyBindingActions) : Menu(I18N.getValue("menubar.menu.window")) {
+    private class WindowMenu(val context: Context, val actions: KeyBindingActions) :
+        Menu(I18N.getValue("menubar.menu.window")) {
 
         private val windowsChangeOperator = object {
             fun onWindowsAdded(windows: List<Window>) {
@@ -383,7 +396,8 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
             .graphic(MaterialDesignIcon.FULLSCREEN)
     }
 
-    private class PluginMenu(val context: Context, val actions: KeyBindingActions) : Menu(I18N.getValue("menubar.menu.plugin")) {
+    private class PluginMenu(val context: Context, val actions: KeyBindingActions) :
+        Menu(I18N.getValue("menubar.menu.plugin")) {
 
         init {
             this.menuItem(pluginManagerMenuItem())

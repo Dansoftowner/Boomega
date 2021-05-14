@@ -1,4 +1,22 @@
-package com.dansoftware.boomega.gui.recordview
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.dansoftware.boomega.gui.clipboard
 
 import com.dansoftware.boomega.db.data.Record
 import javafx.beans.binding.Bindings
@@ -18,28 +36,28 @@ object RecordClipboard {
 
     @JvmStatic
     fun pushItems(identifier: Any, action: Action, items: List<Record>): ClipboardPush =
-        items.let(::ArrayList).let { records ->
+        ArrayList(items).let { records ->
             ClipboardPushImpl(identifier, records, action).also { push ->
-                this.identifier.get()?.let {
-                    this.callback.get()?.let {
+                RecordClipboard.identifier.get()?.let {
+                    callback.get()?.let {
                         it.onOverridden?.accept(it)
                     }
                 }
-                this.identifier.set(identifier)
-                this.action.set(action)
-                this.items.setAll(records)
-                this.callback.set(push)
+                RecordClipboard.identifier.set(identifier)
+                RecordClipboard.action.set(action)
+                RecordClipboard.items.setAll(records)
+                callback.set(push)
             }
         }
 
     @JvmStatic
     fun pullContent(): ClipboardContent =
-        ClipboardContent(identifier.get(), ArrayList(this.items).let(Collections::unmodifiableList).also {
-            this.callback.get()?.let { it.onPulled?.accept(it) }
+        ClipboardContent(identifier.get(), Collections.unmodifiableList(ArrayList(items)).also {
+            callback.get()?.let { it.onPulled?.accept(it) }
             if (action.get() == Action.CUT) {
-                this.items.clear()
-                this.callback.set(null)
-                this.identifier.set(null)
+                items.clear()
+                callback.set(null)
+                identifier.set(null)
             }
         })
 
@@ -48,7 +66,13 @@ object RecordClipboard {
     fun emptyProperty(): ReadOnlyBooleanProperty = empty
 
     @JvmStatic
+    fun actionProperty(): ReadOnlyObjectProperty<Action?> = action
+
+    @JvmStatic
     fun identifierProperty(): ReadOnlyObjectProperty<Any> = identifier
+
+    @JvmStatic
+    fun items(): ObservableList<Record> = items
 
     enum class Action {
         CUT, COPY

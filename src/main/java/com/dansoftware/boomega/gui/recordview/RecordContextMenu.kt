@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.recordview
 
+import com.dansoftware.boomega.gui.clipboard.RecordClipboard
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.keyCombination
