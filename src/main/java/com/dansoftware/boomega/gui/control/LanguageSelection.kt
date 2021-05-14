@@ -12,10 +12,7 @@ import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.control.ListCell
-import javafx.scene.control.ListView
-import javafx.scene.control.Skin
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import javafx.scene.control.skin.TextFieldSkin
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
@@ -57,12 +54,17 @@ class TextFieldLanguageSelectorControl(context: Context, textField: TextField) :
          */
         @JvmStatic
         fun applyOnTextField(context: Context, textField: TextField) {
-            textField.skinProperty().addListener(object : ChangeListener<Skin<*>> {
-                override fun changed(observable: ObservableValue<out Skin<*>>, oldValue: Skin<*>?, newSkin: Skin<*>?) {
-                    newSkin?.let { it as TextFieldSkin }?.children?.add(TextFieldLanguageSelectorControl(context, textField))
-                    observable.removeListener(this)
+            textField.apply {
+                skinProperty().addListener(object : ChangeListener<Skin<*>> {
+                    override fun changed(observable: ObservableValue<out Skin<*>>, oldValue: Skin<*>?, newSkin: Skin<*>?) {
+                        newSkin?.let { it as TextFieldSkin }?.children?.add(TextFieldLanguageSelectorControl(context, textField))
+                        observable.removeListener(this)
+                    }
+                })
+                textProperty().addListener { _, _, newText ->
+                    tooltip = newText?.let { Locale.forLanguageTag(it) }?.displayLanguage?.let(::Tooltip)
                 }
-            })
+            }
         }
     }
 }
