@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.record.edit
+package com.dansoftware.boomega.gui.recordview.edit
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
@@ -8,7 +8,6 @@ import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
-import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.concurrent.Task

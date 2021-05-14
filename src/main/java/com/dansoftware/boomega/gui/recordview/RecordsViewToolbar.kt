@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.record
+package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.gui.control.TwoSideToolBar
-import com.dansoftware.boomega.gui.record.dock.Dock
+import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView

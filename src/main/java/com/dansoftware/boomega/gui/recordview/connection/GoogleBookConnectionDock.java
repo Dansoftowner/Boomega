@@ -16,24 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.record.connection;
+package com.dansoftware.boomega.gui.recordview.connection;
 
 import com.dansoftware.boomega.db.Database;
-import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.record.dock.DockView;
-import com.dansoftware.boomega.gui.record.RecordTable;
+import com.dansoftware.boomega.gui.recordview.dock.DockView;
+import com.dansoftware.boomega.gui.recordview.RecordTable;
 import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 public class GoogleBookConnectionDock extends DockView<GoogleBookConnectionView> {

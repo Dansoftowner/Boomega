@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.record.edit
+package com.dansoftware.boomega.gui.recordview.edit
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
@@ -12,9 +12,7 @@ import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.effect.BoxBlur
-import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
-import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

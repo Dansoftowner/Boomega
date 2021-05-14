@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.record
+package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.control.RecordFindControl
-import com.dansoftware.boomega.gui.record.dock.Dock
-import com.dansoftware.boomega.gui.record.dock.DockView
+import com.dansoftware.boomega.gui.recordview.dock.Dock
+import com.dansoftware.boomega.gui.recordview.dock.DockView
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections

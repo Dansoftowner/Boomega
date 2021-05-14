@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.record.edit
+package com.dansoftware.boomega.gui.recordview.edit
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.record;
+package com.dansoftware.boomega.gui.recordview;
 
 import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.db.data.ServiceConnection;

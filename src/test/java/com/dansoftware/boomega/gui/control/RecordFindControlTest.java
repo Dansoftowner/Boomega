@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.control;
 
 import com.dansoftware.boomega.db.data.Record;
-import com.dansoftware.boomega.gui.record.RecordTable;
+import com.dansoftware.boomega.gui.recordview.RecordTable;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

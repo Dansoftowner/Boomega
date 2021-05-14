@@ -1,10 +1,10 @@
-package com.dansoftware.boomega.gui.record.dock;
+package com.dansoftware.boomega.gui.recordview.dock;
 
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.record.connection.GoogleBookConnectionDock;
-import com.dansoftware.boomega.gui.record.edit.RecordEditorDock;
-import com.dansoftware.boomega.gui.record.RecordTable;
+import com.dansoftware.boomega.gui.recordview.connection.GoogleBookConnectionDock;
+import com.dansoftware.boomega.gui.recordview.edit.RecordEditorDock;
+import com.dansoftware.boomega.gui.recordview.RecordTable;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;

@@ -22,7 +22,7 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.service.googlebooks.asRecord
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.record.RecordsViewModule
+import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import com.dansoftware.boomega.i18n.I18N
 import javafx.beans.property.SimpleStringProperty
 import javafx.event.ActionEvent

@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.record
+package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.db.data.Record
 import javafx.beans.binding.Bindings
