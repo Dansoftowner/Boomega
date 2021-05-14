@@ -80,16 +80,6 @@ class FieldsEditorForm(
         this.updateChangedProperty()
     }
 
-    fun showProgress() {
-        ProgressBar(ProgressIndicator.INDETERMINATE_PROGRESS).let {
-            children.add(0, it)
-        }
-    }
-
-    fun stopProgress() {
-        children.removeIf { it is ProgressBar }
-    }
-
     /**
      * Should be executed after saving the modifications or after new items are set
      */

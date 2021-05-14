@@ -8,9 +8,13 @@ import com.dansoftware.boomega.util.SystemBrowser
 import com.dansoftware.mdeditor.MarkdownEditorControl
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.scene.effect.BoxBlur
+import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
+import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -43,11 +47,15 @@ class NotesEditor(
     }
 
     fun showProgress() {
-        this.children.add(ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS))
+        content.effect = BoxBlur()
+        children.add(ProgressBar(ProgressIndicator.INDETERMINATE_PROGRESS).also {
+            setAlignment(it, Pos.CENTER)
+        })
     }
 
     fun stopProgress() {
-        this.children.removeIf { it is ProgressIndicator }
+        content.effect = null
+        children.removeIf { it is ProgressBar }
     }
 
     private fun handleItemsChanged(items: List<Record>) {

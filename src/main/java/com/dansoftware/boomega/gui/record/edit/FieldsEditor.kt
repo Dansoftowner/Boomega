@@ -4,8 +4,12 @@ import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.i18n.I18N
+import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Label
+import javafx.scene.control.ProgressBar
+import javafx.scene.control.ProgressIndicator
+import javafx.scene.effect.BoxBlur
 import javafx.scene.layout.StackPane
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -49,11 +53,15 @@ class FieldsEditor(
     }
 
     fun showProgress() {
-        recordEditorForm.showProgress()
+        content.effect = BoxBlur()
+        children.add(ProgressBar(ProgressIndicator.INDETERMINATE_PROGRESS).also {
+            setAlignment(it, Pos.CENTER)
+        })
     }
 
     fun stopProgress() {
-        recordEditorForm.stopProgress()
+        content.effect = null
+        children.removeIf { it is ProgressBar }
     }
 
     fun changedProperty() = recordEditorForm.changedProperty()
