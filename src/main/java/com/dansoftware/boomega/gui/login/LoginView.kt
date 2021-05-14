@@ -1,3 +1,21 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.PreferenceKey
@@ -14,7 +32,7 @@ import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
-import com.dansoftware.boomega.gui.mainview.MainActivity
+import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
@@ -161,8 +179,8 @@ class LoginView(
         override fun login(databaseMeta: DatabaseMeta, credentials: Credentials, remember: Boolean) {
             when {
                 databaseTracker.isDatabaseUsed(databaseMeta) ->
-                    MainActivity.getByDatabase(databaseMeta)
-                        .map(MainActivity::getContext)
+                    DatabaseActivity.getByDatabase(databaseMeta)
+                        .map(DatabaseActivity::getContext)
                         .ifPresent(Context::toFront)
                 else -> {
                     loginData.isAutoLogin = remember

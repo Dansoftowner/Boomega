@@ -28,7 +28,7 @@ import com.dansoftware.boomega.gui.info.contact.ContactActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.keybinding.action.KeyBindingActions
 import com.dansoftware.boomega.gui.keybinding.keyBinding
-import com.dansoftware.boomega.gui.mainview.MainView
+import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
@@ -58,7 +58,7 @@ import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
 
-class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences, tracker: DatabaseTracker) :
+class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) :
     javafx.scene.control.MenuBar() {
 
     companion object {
@@ -70,10 +70,10 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
     private lateinit var overlayNotShowing: BooleanBinding
 
     init {
-        initDisablePolicy(mainView)
+        initDisablePolicy(databaseView)
         this.menus.addAll(
-            FileMenu(context, mainView.openedDatabase, preferences, tracker, actions),
-            ModuleMenu(mainView),
+            FileMenu(context, databaseView.openedDatabase, preferences, tracker, actions),
+            ModuleMenu(databaseView),
             PreferencesMenu(context, preferences, actions),
             WindowMenu(context, actions),
             PluginMenu(context, actions),
@@ -81,8 +81,8 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         )
     }
 
-    private fun initDisablePolicy(mainView: MainView) {
-        mainView.let {
+    private fun initDisablePolicy(databaseView: DatabaseView) {
+        databaseView.let {
             this.overlayNotShowing =
                 Bindings.isEmpty(it.blockingOverlaysShown).and(Bindings.isEmpty(it.nonBlockingOverlaysShown))
                     .also { observable ->
@@ -229,7 +229,7 @@ class AppMenuBar(context: Context, mainView: MainView, preferences: Preferences,
         }
     }
 
-    private class ModuleMenu(val view: MainView) : Menu(I18N.getValue("menubar.menu.modules")) {
+    private class ModuleMenu(val view: DatabaseView) : Menu(I18N.getValue("menubar.menu.modules")) {
         init {
             view.modules.forEach {
                 this.menuItem(MenuItem(it.name, it.icon).action { _ -> view.openModule(it) })

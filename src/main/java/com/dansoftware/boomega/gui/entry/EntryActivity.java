@@ -1,3 +1,21 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.gui.entry;
 
 import com.dansoftware.boomega.config.Preferences;
@@ -7,7 +25,7 @@ import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener;
 import com.dansoftware.boomega.gui.login.LoginActivity;
-import com.dansoftware.boomega.gui.mainview.MainActivity;
+import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
@@ -18,15 +36,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * An {@link EntryActivity} puts the {@link LoginActivity} and {@link MainActivity} activity together.
+ * An {@link EntryActivity} puts the {@link LoginActivity} and {@link DatabaseActivity} activity together.
  *
  * <p>
  * When an {@link EntryActivity} is started, it creates a {@link LoginActivity} and shows that and after the {@link LoginActivity} exited,
- * it launches a {@link MainActivity}.
+ * it launches a {@link DatabaseActivity}.
  *
  * <p>
  * Implements the {@link Context} interface so we can send message-requests to the backing activity whether it's a {@link LoginActivity}
- * or a {@link MainActivity}.
+ * or a {@link DatabaseActivity}.
  *
  * <p>
  * The active {@link EntryActivity} objects are tracked so they are accessible through the {@link #getShowingEntries()}.
@@ -60,7 +78,7 @@ public class EntryActivity implements ContextTransformable, DatabaseLoginListene
 
     @Override
     public void onDatabaseOpened(@NotNull Database database) {
-        var mainActivity = new MainActivity(database, preferences, databaseTracker);
+        var mainActivity = new DatabaseActivity(database, preferences, databaseTracker);
         this.subContext = mainActivity.getContext();
         mainActivity.show();
     }

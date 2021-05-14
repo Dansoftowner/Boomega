@@ -1,4 +1,22 @@
-package com.dansoftware.boomega.gui.mainview;
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.dansoftware.boomega.gui.databaseview;
 
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.db.Database;
@@ -16,38 +34,38 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-public class MainActivity implements ContextTransformable {
+public class DatabaseActivity implements ContextTransformable {
 
-    private static final Set<WeakReference<MainActivity>> instances = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<WeakReference<DatabaseActivity>> instances = Collections.synchronizedSet(new HashSet<>());
 
     private final BooleanProperty showing;
     private final Preferences preferences;
     private final DatabaseTracker databaseTracker;
-    private final MainView mainView;
+    private final DatabaseView databaseView;
     private Database database;
 
-    public MainActivity(@NotNull Database database, @NotNull Preferences preferences, @NotNull DatabaseTracker databaseTracker) {
+    public DatabaseActivity(@NotNull Database database, @NotNull Preferences preferences, @NotNull DatabaseTracker databaseTracker) {
         this.database = Objects.requireNonNull(database, "The database mustn't be null");
         this.preferences = Objects.requireNonNull(preferences);
         this.databaseTracker = Objects.requireNonNull(databaseTracker);
         this.showing = new SimpleBooleanProperty();
-        this.mainView = new MainView(preferences, database);
+        this.databaseView = new DatabaseView(preferences, database);
         instances.add(new WeakReference<>(this));
         databaseTracker.usingDatabase(database.getMeta());
     }
 
     public boolean show() {
-        final MainWindow mainWindow = new MainWindow(
-                mainView,
+        final DatabaseWindow databaseWindow = new DatabaseWindow(
+                databaseView,
                 new AppMenuBar(
-                        mainView.getContext(),
-                        mainView,
+                        databaseView.getContext(),
+                        databaseView,
                         preferences,
                         databaseTracker
                 )
         );
-        mainWindow.show();
-        mainWindow.addEventHandler(
+        databaseWindow.show();
+        databaseWindow.addEventHandler(
                 WindowEvent.WINDOW_HIDDEN,
                 event -> {
                     database.close();
@@ -66,10 +84,10 @@ public class MainActivity implements ContextTransformable {
 
     @Override
     public @NotNull Context getContext() {
-        return mainView.getContext();
+        return databaseView.getContext();
     }
 
-    public static Optional<MainActivity> getByDatabase(DatabaseMeta databaseMeta) {
+    public static Optional<DatabaseActivity> getByDatabase(DatabaseMeta databaseMeta) {
         return instances.stream()
                 .map(WeakReference::get)
                 .filter(Objects::nonNull)

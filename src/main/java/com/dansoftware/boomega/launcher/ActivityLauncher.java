@@ -1,3 +1,21 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.launcher;
 
 import com.dansoftware.boomega.config.PreferenceKey;
@@ -12,7 +30,7 @@ import com.dansoftware.boomega.gui.entry.EntryActivity;
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener;
 import com.dansoftware.boomega.gui.login.LoginActivity;
 import com.dansoftware.boomega.gui.login.quick.QuickLoginActivity;
-import com.dansoftware.boomega.gui.mainview.MainActivity;
+import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import com.dansoftware.boomega.main.ArgumentTransformer;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +43,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
- * An ActivityLauncher can launch the right "activity" ({@link EntryActivity}, {@link MainActivity}) depending
+ * An ActivityLauncher can launch the right "activity" ({@link EntryActivity}, {@link DatabaseActivity}) depending
  * on the program-arguments and other factors.
  *
  * <p>
@@ -210,16 +228,16 @@ public class ActivityLauncher implements Runnable {
     private void handleArgumentAlreadyRunning(DatabaseMeta argument) {
         //if there is an Activity opened with the database we focus on that,
         // otherwise we open a new activity for it
-        MainActivity.getByDatabase(argument)
-                .map(MainActivity::getContext)
+        DatabaseActivity.getByDatabase(argument)
+                .map(DatabaseActivity::getContext)
                 .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> {
                     handleArgumentInit(argument);
                 });
     }
 
     private void handleArgumentInternal(DatabaseMeta argument) {
-        MainActivity.getByDatabase(argument)
-                .map(MainActivity::getContext)
+        DatabaseActivity.getByDatabase(argument)
+                .map(DatabaseActivity::getContext)
                 .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> {
                     onNewDatabaseAdded(argument);
                     final DatabaseLoginListener onDatabaseLogin = db -> onActivityLaunched(showMainActivity(db).getContext(), argument);
@@ -339,10 +357,10 @@ public class ActivityLauncher implements Runnable {
         return entryActivity;
     }
 
-    private MainActivity showMainActivity(Database database) {
-        MainActivity mainActivity = new MainActivity(database, preferences, databaseTracker);
-        mainActivity.show();
-        return mainActivity;
+    private DatabaseActivity showMainActivity(Database database) {
+        DatabaseActivity databaseActivity = new DatabaseActivity(database, preferences, databaseTracker);
+        databaseActivity.show();
+        return databaseActivity;
     }
 
     private QuickLoginActivity showQuickLoginActivity(DatabaseMeta databaseMeta, DatabaseLoginListener databaseLoginListener) {
