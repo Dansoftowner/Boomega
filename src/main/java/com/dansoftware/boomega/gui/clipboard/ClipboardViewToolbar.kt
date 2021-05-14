@@ -109,7 +109,7 @@ class ClipboardViewToolbar(private val view: ClipboardView) : HBox() {
         disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
         //TODO: tooltip
         setOnAction {
-            RecordClipboard.items().removeAll(view.table.items)
+            RecordClipboard.items().removeAll(view.table.selectionModel.selectedItems)
         }
     }
 }
