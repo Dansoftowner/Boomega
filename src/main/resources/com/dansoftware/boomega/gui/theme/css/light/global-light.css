@@ -45,3 +45,8 @@
     -fx-border-color: #c4c3c3;
     -fx-background-color: #c4c3c3;
 }
+
+.table-view .table-row-cell:filled {
+    -fx-border-color: transparent transparent #c4c4c4 transparent;
+    -fx-border-width: 0 0 0.5 0;
+}
