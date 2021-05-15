@@ -70,7 +70,7 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
         MenuItem(I18N.getValue("record.paste"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE))
             .action {  recordsView.pasteItemsFromClipboard() }
             .keyCombination(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
-            .apply { disableProperty().bind(RecordClipboard.emptyProperty()) }
+            .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }
 
     fun applyOn(table: RecordTable) {
         table.rowContextMenu = this
