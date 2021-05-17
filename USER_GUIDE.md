@@ -89,15 +89,15 @@ You will be allowed to download the binary you want immediately.
 <tr>
 
 <td>
-<img src="readme/userguide/update/Update1.png" alt="Update message">
+<img src="img/userguide/update/Update1.png" alt="Update message">
 </td>
 
 <td>
-<img src="readme/userguide/update/Update2.png" alt="Update details">
+<img src="img/userguide/update/Update2.png" alt="Update details">
 </td>
 
 <td>
-<img src="readme/userguide/update/Update3.png" alt="Downloading binaries">
+<img src="img/userguide/update/Update3.png" alt="Downloading binaries">
 </td>
 
 </tr>
@@ -125,7 +125,7 @@ When Boomega runs for the first time, it will show a customization/configuration
 
 Select whether you want to use the **light**, **dark** or **os-synchronized** theme.
 
-![Selecting themes in the customization dialog](readme/userguide/firsttime/FirstTimeTheme.png)
+![Selecting themes in the customization dialog](img/userguide/firsttime/FirstTimeTheme.png)
 
 For more information, see [user interface themes](#user-interface-themes).
 
@@ -133,7 +133,7 @@ For more information, see [user interface themes](#user-interface-themes).
 
 Select your preferred language from the available language list.
 
-![Selecting languages in the customization dialog](readme/userguide/firsttime/FirstTimeLanguage.png)
+![Selecting languages in the customization dialog](img/userguide/firsttime/FirstTimeLanguage.png)
 
 For more information, see [user interface languages](#user-interface-languages).
 
@@ -169,9 +169,9 @@ TODO
 
 You can view all the information about your Boomega release in the `Boomega info` dialog:
 
-![Boomega info dialog](readme/userguide/BoomegaInfo.png)
+![Boomega info dialog](img/userguide/BoomegaInfo.png)
 
-You can copy all this data to the clipboard by clicking on the ![copy](readme/userguide/icon/content-copy.png) icon.
+You can copy all this data to the clipboard by clicking on the ![copy](img/userguide/icon/content-copy.png) icon.
 
-This dialog can be launched by clicking on the top-right ![info](readme/userguide/icon/information.png) icon in the [login view](#login-view) 
+This dialog can be launched by clicking on the top-right ![info](img/userguide/icon/information.png) icon in the [login view](#login-view) 
 or by clicking on the `File > Help > About` item in the [database view](#database-view).

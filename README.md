@@ -1,5 +1,5 @@
 <p align="center">
-  <img align="center" src="readme/logo.png" alt="Boomega icon">
+  <img align="center" src="img/logo.png" alt="Boomega icon">
   <h1 align="center">Boomega</h1>
 </p>
 
@@ -14,11 +14,11 @@
 <table style="width: 100%; border: none;">
 <tr>
 <td>
-    <img src="readme/login-activity-preview.png">
+    <img src="img/login-activity-preview.png">
 </td>
 
 <td>
-    <img src="readme/main-activity-preview.png">
+    <img src="img/main-activity-preview.png">
 </td>
 </tr>
 </table>
@@ -52,7 +52,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
   <td align="center">
         <b>
           <h1>
-            <img style="margin-right: 10px" src="readme/windows.png" alt="">
+            <img style="margin-right: 10px" src="img/windows.png" alt="">
             Windows
           </h1>
         </b>
@@ -62,7 +62,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
   <td align="center"> 
       <b>
           <h1>
-            <img style="margin-right: 10px" src="readme/linux.png" alt="">
+            <img style="margin-right: 10px" src="img/linux.png" alt="">
             Linux
           </h1>
         </b>
@@ -72,7 +72,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
   <td align="center">
         <b>
           <h1>
-            <img style="margin-right: 10px" src="readme/mac.png" alt="">
+            <img style="margin-right: 10px" src="img/mac.png" alt="">
             MacOS 
           </h1>
         </b>
@@ -177,7 +177,7 @@ To build executable binaries, use `gradlew jpackage` ([see distribution guidelin
 ## Used third-party libraries
 * [Jump to list](USED_LIBRARIES.md)
 * ...or you can view them in the `Boomega Info`:<br>
-![Viewing third-party libraries in the app](readme/BoomegaThirdPartyInfo.png)
+![Viewing third-party libraries in the app](img/BoomegaThirdPartyInfo.png)
 
 
 ## License
