@@ -22,6 +22,7 @@ import com.dansoftware.boomega.config.PreferenceKey;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -114,7 +115,7 @@ public class InMemorySource implements ConfigSource {
 
     @Override
     public void reset() throws IOException {
-        this.map.keySet().forEach(map::remove);
+        new HashSet<>(map.keySet()).forEach(map::remove);
     }
 
     @Override
