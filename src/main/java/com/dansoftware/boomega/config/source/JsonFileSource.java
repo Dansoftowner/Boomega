@@ -104,4 +104,10 @@ public class JsonFileSource extends JsonSource {
     protected JsonObject getJsonBase() {
         return jsonBase;
     }
+
+    @Override
+    public void reset() throws IOException {
+        super.reset();
+        file.deleteOnExit();
+    }
 }

@@ -153,6 +153,5 @@ public abstract class JsonSource implements ConfigSource {
         JsonObject json = getJsonBase();
         var keys = new HashSet<>(json.keySet());
         keys.forEach(json::remove);
-        commit();
     }
 }
