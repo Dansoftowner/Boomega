@@ -123,6 +123,7 @@ class KeyBindingActions(
                 PreferencesActivity(preferences).show(context.contextWindow)
             }
 
+        @JvmField
         val FULL_SCREEN =
             KeyBindingAction(KeyBindings.fullScreenKeyBinding) { context, _, _ ->
                 context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() }
