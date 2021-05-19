@@ -47,7 +47,6 @@ public class JMetroThemeApplier implements ThemeApplier {
     private static Stream<Field> getJMetroStyleSheetFields() throws ReflectiveOperationException {
         return Stream.of(
                 JMetro.class.getDeclaredField("BASE_STYLESHEET_URL"),
-                JMetro.class.getDeclaredField("PANES_STYLESHEET_URL"),
                 JMetro.class.getDeclaredField("BASE_EXTRAS_STYLESHEET_URL"),
                 JMetro.class.getDeclaredField("BASE_OTHER_LIBRARIES_STYLESHEET_URL"),
                 Style.class.getDeclaredField("DARK_STYLE_SHEET_URL"),
