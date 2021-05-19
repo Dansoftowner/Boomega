@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -145,4 +146,12 @@ public abstract class JsonSource implements ConfigSource {
      * @return the object
      */
     protected abstract JsonObject getJsonBase();
+
+    @Override
+    public void reset() throws IOException {
+        JsonObject json = getJsonBase();
+        var keys = json.keySet();
+        keys.forEach(json::remove);
+        commit();
+    }
 }

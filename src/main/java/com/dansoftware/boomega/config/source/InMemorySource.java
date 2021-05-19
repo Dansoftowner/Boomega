@@ -113,6 +113,11 @@ public class InMemorySource implements ConfigSource {
     }
 
     @Override
+    public void reset() throws IOException {
+        this.map.keySet().forEach(map::remove);
+    }
+
+    @Override
     public void commit() throws IOException {
     }
 }

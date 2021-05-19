@@ -176,6 +176,10 @@ public class Preferences {
             return this;
         }
 
+        public void reset() throws IOException {
+            Preferences.this.source.reset();
+        }
+
         /**
          * Writes all data into the config-file.
          *

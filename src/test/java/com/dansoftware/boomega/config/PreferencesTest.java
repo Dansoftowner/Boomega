@@ -160,6 +160,16 @@ public class PreferencesTest {
     }
 
     @Test
+    void itShouldReset() throws IOException {
+        //given
+        //when
+        preferences.editor().reset();
+
+        //then
+        verify(configSource).reset();
+    }
+
+    @Test
     void itShouldCommit() throws IOException {
         //given
         //when

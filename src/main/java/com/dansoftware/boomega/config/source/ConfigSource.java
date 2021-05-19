@@ -47,5 +47,6 @@ public interface ConfigSource {
     boolean isCreated();
     boolean isOpened();
 
+    void reset() throws IOException;
     void commit() throws IOException;
 }
