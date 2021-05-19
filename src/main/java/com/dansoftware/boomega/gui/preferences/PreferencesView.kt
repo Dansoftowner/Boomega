@@ -37,7 +37,7 @@ class PreferencesView(private val preferences: Preferences) : Workbench() {
             KeyBindingPane(preferences),
             LanguagePane(asContext, preferences),
             UpdatePane(preferences),
-            AdvancedPane(preferences)
+            AdvancedPane(asContext, preferences)
         ).forEach(this::addPane)
     }
 
