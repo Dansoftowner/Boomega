@@ -24,6 +24,8 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Node
 import javafx.scene.control.Button
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class AdvancedPane(preferences: Preferences) : PreferencesPane(preferences) {
 
@@ -33,19 +35,31 @@ class AdvancedPane(preferences: Preferences) : PreferencesPane(preferences) {
     override fun buildContent(): Content =
         object : Content() {
             init {
-                initEntries()
+                buildItems()
             }
 
-            private fun initEntries() {
-                addEntry(I18N.getValue("preferences.advanced.gc"), I18N.getValue("preferences.advanced.gc.desc"), buildGCButton())
-
+            private fun buildItems() {
+                items.add(
+                    PairControl(
+                        I18N.getValue("preferences.advanced.gc"),
+                        I18N.getValue("preferences.advanced.gc.desc"),
+                        buildGCButton()
+                    )
+                )
             }
 
 
             private fun buildGCButton() = Button("System.gc()").apply {
-                setOnAction { System.gc() }
+                setOnAction {
+                    System.gc()
+                    logger.debug("Garbage collection request made.")
+                }
             }
 
         }
 
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(AdvancedPane::class.java)
+    }
 }

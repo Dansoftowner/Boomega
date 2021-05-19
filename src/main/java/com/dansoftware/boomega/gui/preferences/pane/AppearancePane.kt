@@ -22,16 +22,16 @@ class AppearancePane(preferences: Preferences) : PreferencesPane(preferences) {
 
     override fun buildContent(): Content = object : Content() {
         init {
-            initEntries()
+            buildItems()
         }
 
-        private fun initEntries() {
-            buildThemeSelect()
-            buildWindowOpacitySlider()
+        private fun buildItems() {
+            items.add(buildThemeSelect())
+            items.add(buildWindowOpacitySlider())
         }
 
-        private fun buildWindowOpacitySlider() {
-            Slider(20.0, 100.0, BaseWindow.globalOpacity.value * 100).apply {
+        private fun buildWindowOpacitySlider(): PreferencesControl {
+            return Slider(20.0, 100.0, BaseWindow.globalOpacity.value * 100).run {
                 valueProperty().addListener { _, _, value ->
                     value.toDouble().div(100)
                         .let(BaseWindow.globalOpacity::set)
@@ -42,17 +42,17 @@ class AppearancePane(preferences: Preferences) : PreferencesPane(preferences) {
                         preferences.editor().put(BaseWindow.GLOBAL_OPACITY_CONFIG_KEY, value.div(100))
                     }
                 }
-            }.also {
-                addEntry(
+
+                PairControl(
                     I18N.getValue("preferences.appearance.window_opacity"),
                     I18N.getValue("preferences.appearance.window_opacity.desc"),
-                    it
+                    this
                 )
             }
         }
 
-        private fun buildThemeSelect() {
-            ChoiceBox<ThemeMeta<*>>().apply {
+        private fun buildThemeSelect(): PreferencesControl {
+            return ChoiceBox<ThemeMeta<*>>().run {
 
                 this.converter = object : StringConverter<ThemeMeta<*>?>() {
                     override fun toString(themeMeta: ThemeMeta<*>?): String {
@@ -82,11 +82,11 @@ class AppearancePane(preferences: Preferences) : PreferencesPane(preferences) {
                         // TODO: error dialog
                     }
                 }
-            }.let {
-                addEntry(
+
+                PairControl(
                     I18N.getValue("preferences.appearance.theme"),
                     I18N.getValue("preferences.appearance.theme.desc"),
-                    it
+                    this
                 )
             }
         }

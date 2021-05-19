@@ -21,22 +21,16 @@ class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
 
     override fun buildContent(): Content = object : Content() {
         init {
-            initEntries()
+            buildItems()
         }
 
-        private fun initEntries() {
-            KeyBindings.allKeyBindings().forEach {
-                addKeyDetectionField(
-                    it.i18nTitle,
-                    it.i18nDescription,
-                    it
-                )
-            }
-            addRestoreButton()
+        private fun buildItems() {
+            KeyBindings.allKeyBindings().forEach { items.add(buildKeyBindDetectionControl(it)) }
+            items.add(buildRestoreButton())
         }
 
-        private fun addRestoreButton() {
-            Button(I18N.getValue("preferences.keybindings.restore_defaults")).apply {
+        private fun buildRestoreButton(): PreferencesControl =
+            Button(I18N.getValue("preferences.keybindings.restore_defaults")).run {
                 setOnAction {
                     //TODO: confirmation dialog
                     KeyBindings.allKeyBindings().forEach {
@@ -46,13 +40,14 @@ class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
 
                 //just for adding default button styles
                 pseudoClassStateChanged(PseudoClass.getPseudoClass("default"), true)
-            }.let { StackPane(it) }.let(::addSimpleControl)
-        }
 
-        private fun addKeyDetectionField(title: String, description: String, keyBinding: KeyBinding) {
-            addEntry(
-                I18N.getValue(title),
-                I18N.getValue(description),
+                SimpleControl(StackPane(this))
+            }
+
+        private fun buildKeyBindDetectionControl(keyBinding: KeyBinding): PreferencesControl =
+            PairControl(
+                I18N.getValue(keyBinding.i18nTitle),
+                I18N.getValue(keyBinding.i18nDescription),
                 KeyBindDetectionField(keyBinding.keyCombination).apply {
                     this.keyCombinationProperty().addListener { _, _, combination ->
                         keyBinding.keyCombinationProperty.set(combination)
@@ -63,7 +58,7 @@ class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
                     //keyBinding.keyCombinationProperty.bindBidirectional(this.keyCombinationProperty())
                 }
             )
-        }
+
     }
 
     companion object {

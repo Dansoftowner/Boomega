@@ -10,29 +10,34 @@ import javafx.scene.Node
 import javafx.scene.layout.StackPane
 import org.controlsfx.control.ToggleSwitch
 
-class UpdatePane(preferences: Preferences): PreferencesPane(preferences) {
+class UpdatePane(preferences: Preferences) : PreferencesPane(preferences) {
 
     override val title: String = I18N.getValue("preferences.tab.update")
     override val graphic: Node = MaterialDesignIconView(MaterialDesignIcon.UPDATE)
 
     override fun buildContent(): Content = object : Content() {
         init {
-            initEntries()
+            buildItems()
         }
 
-        private fun initEntries() {
-            ToggleSwitch().apply {
+        private fun buildItems() {
+            items.add(buildAutoSearchToggle())
+        }
+
+        private fun buildAutoSearchToggle(): PreferencesControl =
+            ToggleSwitch().run {
                 isSelected = preferences.get(PreferenceKey.SEARCH_UPDATES)
                 selectedProperty().addListener { _, _, selected ->
                     preferences.editor().put(PreferenceKey.SEARCH_UPDATES, selected)
                 }
-            }.also { StackPane.setAlignment(it, Pos.CENTER_RIGHT)}.let { StackPane(it) }.let {
-                addEntry(
+
+                // adding to the content
+                StackPane.setAlignment(this, Pos.CENTER_RIGHT)
+                PairControl(
                     I18N.getValue("preferences.update.automatic"),
                     I18N.getValue("preferences.update.automatic.desc"),
-                    it
+                    StackPane(this)
                 )
             }
-        }
     }
 }

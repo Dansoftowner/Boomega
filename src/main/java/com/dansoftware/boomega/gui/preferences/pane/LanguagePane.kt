@@ -25,15 +25,15 @@ class LanguagePane(
     override fun buildContent(): Content = object : Content() {
 
         init {
-            initEntries()
+            buildItems()
         }
 
-        private fun initEntries() {
-            buildLanguageSelect()
+        private fun buildItems() {
+            items.add(buildLanguageSelectControl())
         }
 
-        private fun buildLanguageSelect() {
-            ChoiceBox<Locale>().apply {
+        private fun buildLanguageSelectControl(): PreferencesControl =
+            ChoiceBox<Locale>().run {
                 this.converter = object : StringConverter<Locale>() {
                     override fun toString(locale: Locale?): String = locale?.displayLanguage ?: ""
                     override fun fromString(string: String?): Locale = Locale.forLanguageTag(string)
@@ -56,14 +56,13 @@ class LanguagePane(
                         }
                     }
                 }
-            }.let {
-                addEntry(
+
+                PairControl(
                     I18N.getValue("preferences.language.lang"),
                     I18N.getValue("preferences.language.lang.desc"),
-                    it
+                    this
                 )
             }
 
-        }
     }
 }
