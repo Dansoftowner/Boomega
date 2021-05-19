@@ -20,13 +20,13 @@ class LanguageSegmentView(private val preferences: Preferences) : StackPane() {
     }
 
     private fun buildListView() = ListView<LanguageEntry>().apply {
-        fillListView()
         selectionModel.selectedItemProperty().addListener { _, oldItem, newItem ->
             newItem?.let {
                 preferences.editor().put(PreferenceKey.LOCALE, it.locale)
                 Locale.setDefault(it.locale)
             } ?: selectionModel.select(oldItem) //we don't allow the user to choose no items
         }
+        fillListView()
     }
 
     private fun ListView<LanguageEntry>.fillListView() {
