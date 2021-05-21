@@ -34,8 +34,18 @@
 
 .tile-box {
     -fx-border-radius: 0;
-    -fx-background-radius: 0 5 0 5;
-    -fx-border-width: 0.35;
+    -fx-background-radius: 0;
+    /*-fx-background-radius: 0 5 0 5;*/
+    /*-fx-border-radius: 0 5 0 5;*/
+    -fx-border-width: 0.5; /*1.5*/
+}
+
+.tile-box:hover {
+    -fx-border-color: rgb(122, 122, 122);
+}
+
+.tile-box:pressed {
+    -fx-background-color: rgb(153, 153, 153);
 }
 
 .tab-control {
