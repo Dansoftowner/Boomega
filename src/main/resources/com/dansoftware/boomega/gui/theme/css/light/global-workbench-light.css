@@ -37,7 +37,7 @@
     -fx-background-radius: 0;
     /*-fx-background-radius: 0 5 0 5;*/
     /*-fx-border-radius: 0 5 0 5;*/
-    -fx-border-width: 0.5; /*1.5*/
+    -fx-border-width: 1.5; /*1.5*/
 }
 
 .tile-box:hover {
