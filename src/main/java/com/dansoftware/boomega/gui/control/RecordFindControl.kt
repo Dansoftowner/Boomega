@@ -254,11 +254,11 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
     ) : Filter(baseText, caseSensitive) {
 
         override val userInputFactory: (String) -> String = {
-            it.let { if (caseSensitive.get().not()) it.toLowerCase() else it }.trim()
+            it.let { if (caseSensitive.get().not()) it.lowercase() else it }.trim()
         }
 
         override val valueFactory: (String) -> String = {
-            if (caseSensitive.get().not()) it.toLowerCase() else it
+            if (caseSensitive.get().not()) it.lowercase() else it
         }
 
         override fun checkMatch(
