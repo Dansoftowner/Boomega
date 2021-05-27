@@ -1,6 +1,5 @@
 package com.dansoftware.boomega.util;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -36,22 +35,6 @@ public final class ReflectionUtils {
         }
     }
 
-    /**
-     * Sets the reflected field accessible and removes the 'final' modifier from it.
-     *
-     * @param field the {@link Field} to operate on
-     * @return the {@link Field} object itself
-     */
-    @NotNull
-    public static Field modifiableField(@NotNull Field field) {
-        setFieldModifiable(field);
-        return field;
-    }
-
-    public static void setFieldModifiable(@NotNull Field field) {
-        field.setAccessible(Boolean.TRUE);
-        FieldUtils.removeFinalModifier(field);
-    }
 
     /**
      * Creates an object through reflection: with a class-reference and the
