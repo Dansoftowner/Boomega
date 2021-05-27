@@ -6,6 +6,7 @@ import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.geometry.Pos
+import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.layout.StackPane
 import org.controlsfx.control.ToggleSwitch
@@ -25,19 +26,14 @@ class UpdatePane(preferences: Preferences) : PreferencesPane(preferences) {
         }
 
         private fun buildAutoSearchToggle(): PreferencesControl =
-            ToggleSwitch().run {
+            ToggleControl(
+                I18N.getValue("preferences.update.automatic"),
+                I18N.getValue("preferences.update.automatic.desc")
+            ).apply {
                 isSelected = preferences.get(PreferenceKey.SEARCH_UPDATES)
                 selectedProperty().addListener { _, _, selected ->
                     preferences.editor().put(PreferenceKey.SEARCH_UPDATES, selected)
                 }
-
-                // adding to the content
-                StackPane.setAlignment(this, Pos.CENTER_RIGHT)
-                PairControl(
-                    I18N.getValue("preferences.update.automatic"),
-                    I18N.getValue("preferences.update.automatic.desc"),
-                    StackPane(this)
-                )
             }
     }
 }
