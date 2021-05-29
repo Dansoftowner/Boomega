@@ -24,6 +24,11 @@ import com.dansoftware.boomega.gui.util.graphic
 import com.dansoftware.boomega.i18n.I18N
 import javafx.scene.control.MenuItem
 
+fun Action.buildMenuItem(actionInvoker: ActionInvoker) =
+    MenuItem(I18N.getValue(i18nName))
+        .action { actionInvoker.invoke(this) }
+        .graphic(icon)
+
 fun KeyBindingAction.buildMenuItem(actionInvoker: ActionInvoker) =
     MenuItem(I18N.getValue(i18nName))
         .action { actionInvoker.invoke(this) }

@@ -19,29 +19,34 @@
 package com.dansoftware.boomega.gui.action
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.info.InformationActivity
+import com.dansoftware.boomega.gui.info.contact.ContactActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
+import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.LauncherMode
 import com.dansoftware.boomega.main.ApplicationRestart
+import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.jfilegoodies.explorer.FileExplorers
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.concurrent.Task
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
 import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
+import java.io.File
 
-/**
- * Encapsulates general actions that are paired with key bindings
- */
 object GlobalActions {
 
     /* --------------------------------------------------------------------> */
@@ -132,6 +137,42 @@ object GlobalActions {
             KeyBindings.fullScreenKeyBinding
         ) { context, _, _ ->
             context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() }
+        }
+
+    @JvmField
+    val OPEN_CLIPBOARD_VIEWER =
+        Action("menubar.menu.clipboard.openview", MaterialDesignIcon.CLIPBOARD) { context, _, _ ->
+            ClipboardViewActivity.show(context.contextWindow)
+        }
+
+    @JvmField
+    val OPEN_PLUGIN_MANAGER =
+        Action("menubar.menu.file.pluginmanager", MaterialDesignIcon.POWER_PLUG) { context, _, _ ->
+            PluginManagerActivity().show(context.contextWindow)
+        }
+
+    @JvmField
+    val OPEN_PLUGIN_DIR =
+        Action("menubar.menu.plugin.opendir", MaterialDesignIcon.FOLDER) { context, _, _ ->
+            FileExplorers.get().openDir(File(System.getProperty("boomega.plugin.dir")))
+        }
+
+    @JvmField
+    val SEARCH_FOR_UPDATES =
+        Action("menubar.menu.help.update", MaterialDesignIcon.UPDATE) { context, _, _ ->
+            UpdateActivity(context, UpdateSearcher.defaultInstance().search()).show(true)
+        }
+
+    @JvmField
+    val OPEN_CONTACT_INFO =
+        Action("menubar.menu.help.contact", MaterialDesignIcon.CONTACT_MAIL) { context, _, _ ->
+            ContactActivity(context).show()
+        }
+
+    @JvmField
+    val OPEN_APP_INFO =
+        Action("menubar.menu.help.about", MaterialDesignIcon.INFORMATION) { context, _, _ ->
+            InformationActivity(context).show()
         }
 
     /* <-------------------------------------------------------------------- */

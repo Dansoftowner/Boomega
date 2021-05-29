@@ -22,30 +22,23 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.action.ActionInvoker
-import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.info.InformationActivity
-import com.dansoftware.boomega.gui.info.contact.ContactActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.action.buildMenuItem
 import com.dansoftware.boomega.gui.keybinding.keyBinding
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
-import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
-import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.LauncherMode
 import com.dansoftware.boomega.main.ApplicationRestart
-import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.ReflectionUtils
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import com.dansoftware.boomega.util.revealInExplorer
-import com.jfilegoodies.explorer.FileExplorers
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
@@ -57,7 +50,6 @@ import javafx.stage.Stage
 import javafx.stage.Window
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -78,10 +70,10 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
             FileMenu(context, databaseView.openedDatabase, preferences, tracker, actionInvoker),
             ModuleMenu(databaseView),
             PreferencesMenu(context, preferences, actionInvoker),
-            ClipboardMenu(context),
+            ClipboardMenu(context, actionInvoker),
             WindowMenu(context, actionInvoker),
-            PluginMenu(context),
-            HelpMenu(context)
+            PluginMenu(context, actionInvoker),
+            HelpMenu(actionInvoker)
         )
     }
 
@@ -197,10 +189,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
             .action { context.close() }
             .graphic(MaterialDesignIcon.CLOSE)
 
-        private fun restartMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.restart"))
-            .action { actionInvoker.invoke(GlobalActions.RESTART_APPLICATION) }
-            .keyBinding(KeyBindings.restartApplicationKeyBinding)
-            .graphic(MaterialDesignIcon.UPDATE)
+        private fun restartMenuItem() = GlobalActions.RESTART_APPLICATION.buildMenuItem(actionInvoker)
 
         private fun quitMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.quit"))
             .action { Platform.exit() }
@@ -306,14 +295,13 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
     }
 
 
-    private class ClipboardMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.clipboard")) {
-            init {
-                this.menuItem(clipboardViewItem())
-            }
+    private class ClipboardMenu(val context: Context, val actionInvoker: ActionInvoker) :
+        Menu(I18N.getValue("menubar.menu.clipboard")) {
+        init {
+            this.menuItem(clipboardViewItem())
+        }
 
-        private fun clipboardViewItem() = MenuItem(I18N.getValue("menubar.menu.clipboard.openview"))
-            .action { ClipboardViewActivity.show(context.contextWindow) }
-            .graphic(MaterialDesignIcon.CLIPBOARD)
+        private fun clipboardViewItem() = GlobalActions.OPEN_CLIPBOARD_VIEWER.buildMenuItem(actionInvoker)
     }
 
     /**
@@ -382,7 +370,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         private fun fullScreenMenuItem() = GlobalActions.FULL_SCREEN.buildMenuItem(actionInvoker)
     }
 
-    private class PluginMenu(val context: Context) :
+    private class PluginMenu(val context: Context, val actionInvoker: ActionInvoker) :
         Menu(I18N.getValue("menubar.menu.plugin")) {
 
         init {
@@ -390,16 +378,13 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
                 .menuItem(pluginDirectoryItem())
         }
 
-        private fun pluginManagerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.pluginmanager"))
-            .action { PluginManagerActivity().show(context.contextWindow) }
-            .graphic(MaterialDesignIcon.POWER_PLUG)
+        private fun pluginManagerMenuItem() = GlobalActions.OPEN_PLUGIN_MANAGER.buildMenuItem(actionInvoker)
 
-        private fun pluginDirectoryItem() = MenuItem(I18N.getValue("menubar.menu.plugin.opendir"))
-            .action { FileExplorers.get().openDir(File(System.getProperty("boomega.plugin.dir"))) }
-            .graphic(MaterialDesignIcon.FOLDER)
+        private fun pluginDirectoryItem() = GlobalActions.OPEN_PLUGIN_DIR.buildMenuItem(actionInvoker)
     }
 
-    private class HelpMenu(val context: Context) : Menu(I18N.getValue("menubar.menu.help")) {
+    private class HelpMenu(val actionInvoker: ActionInvoker) :
+        Menu(I18N.getValue("menubar.menu.help")) {
 
         init {
             this.menuItem(updateSearcherMenuItem())
@@ -407,16 +392,8 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
                 .menuItem(infoMenuItem())
         }
 
-        private fun updateSearcherMenuItem() = MenuItem(I18N.getValue("menubar.menu.help.update"))
-            .action { UpdateActivity(context, UpdateSearcher.defaultInstance().search()).show(true) }
-            .graphic(MaterialDesignIcon.UPDATE)
-
-        private fun contactMenuItem() = MenuItem(I18N.getValue("menubar.menu.help.contact"))
-            .action { ContactActivity(context).show() }
-            .graphic(MaterialDesignIcon.CONTACT_MAIL)
-
-        private fun infoMenuItem() = MenuItem(I18N.getValue("menubar.menu.help.about"))
-            .action { InformationActivity(context).show() }
-            .graphic(MaterialDesignIcon.INFORMATION)
+        private fun updateSearcherMenuItem() = GlobalActions.SEARCH_FOR_UPDATES.buildMenuItem(actionInvoker)
+        private fun contactMenuItem() = GlobalActions.OPEN_CONTACT_INFO.buildMenuItem(actionInvoker)
+        private fun infoMenuItem() = GlobalActions.OPEN_APP_INFO.buildMenuItem(actionInvoker)
     }
 }
