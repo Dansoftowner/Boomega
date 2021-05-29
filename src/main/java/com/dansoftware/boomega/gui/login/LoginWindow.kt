@@ -3,8 +3,7 @@ package com.dansoftware.boomega.gui.login
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
-import com.dansoftware.boomega.gui.keybinding.action.KeyBindingActions
+import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.window.BaseWindow
 import javafx.event.EventHandler
 import javafx.stage.WindowEvent
@@ -39,7 +38,7 @@ private class LoginWindow(
     }
 
     private fun initKeyBindings() {
-        KeyBindingActions(root.context, preferences, databaseTracker).applyOnScene(scene)
+        GlobalActions.applyOnScene(scene, root.context, preferences, databaseTracker)
     }
 
     override fun handle(event: WindowEvent) {

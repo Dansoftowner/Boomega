@@ -16,14 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.keybinding.action
+package com.dansoftware.boomega.gui.action
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.keybinding.KeyBinding
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 
-/**
- * Represents an action that is paired with a key binding
- */
-class KeyBindingAction(val keyBinding: KeyBinding, val action: (Context, Preferences, DatabaseTracker) -> Unit)
+open class Action(
+    val i18nName: String,
+    val icon: MaterialDesignIcon,
+    private val operation: (Context, Preferences, DatabaseTracker) -> Unit
+) {
+    fun execute(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+        operation(context, preferences, databaseTracker)
+    }
+}
