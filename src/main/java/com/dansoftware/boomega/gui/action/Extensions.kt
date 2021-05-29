@@ -28,12 +28,12 @@ import com.dansoftware.boomega.i18n.I18N
 import javafx.scene.control.MenuItem
 
 fun Action.buildMenuItem(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) =
-    MenuItem(I18N.getValue(i18nName))
+    MenuItem(displayName)
         .action { invoke(context, preferences, databaseTracker) }
         .graphic(icon)
 
 fun KeyBindingAction.buildMenuItem(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) =
-    MenuItem(I18N.getValue(i18nName))
+    MenuItem(displayName)
         .action { invoke(context, preferences, databaseTracker) }
         .keyBinding(keyBinding)
         .graphic(icon)

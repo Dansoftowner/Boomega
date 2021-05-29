@@ -21,13 +21,20 @@ package com.dansoftware.boomega.gui.action
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 
 open class Action(
-    val i18nName: String,
+    private val i18nName: String,
     val icon: MaterialDesignIcon,
     private val operation: (Context, Preferences, DatabaseTracker) -> Unit
 ) {
+
+    private var displayNameBacking: String? = null
+
+    val displayName: String
+        get() = displayNameBacking ?: I18N.getValue(i18nName).also { displayNameBacking = it }
+
     fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
         operation(context, preferences, databaseTracker)
     }
