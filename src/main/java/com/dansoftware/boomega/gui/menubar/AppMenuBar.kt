@@ -21,13 +21,10 @@ package com.dansoftware.boomega.gui.menubar
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.gui.action.ActionInvoker
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.action.buildMenuItem
-import com.dansoftware.boomega.gui.keybinding.keyBinding
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
@@ -56,24 +53,18 @@ import java.util.*
 class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) :
     javafx.scene.control.MenuBar() {
 
-    companion object {
-        @JvmStatic
-        val logger: Logger = LoggerFactory.getLogger(AppMenuBar::class.java)
-    }
-
-    private val actionInvoker = ActionInvoker(context, preferences, tracker)
     private lateinit var overlayNotShowing: BooleanBinding
 
     init {
         initDisablePolicy(databaseView)
         this.menus.addAll(
-            FileMenu(context, databaseView.openedDatabase, preferences, tracker, actionInvoker),
+            FileMenu(context, databaseView.openedDatabase, preferences, tracker),
             ModuleMenu(databaseView),
-            PreferencesMenu(context, preferences, actionInvoker),
-            ClipboardMenu(context, actionInvoker),
-            WindowMenu(context, actionInvoker),
-            PluginMenu(context, actionInvoker),
-            HelpMenu(actionInvoker)
+            PreferencesMenu(context, preferences, tracker),
+            ClipboardMenu(context, preferences, tracker),
+            WindowMenu(context, preferences, tracker),
+            PluginMenu(context, preferences, tracker),
+            HelpMenu(context, preferences, tracker)
         )
     }
 
@@ -89,6 +80,11 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         }
     }
 
+    companion object {
+        @JvmStatic
+        val logger: Logger = LoggerFactory.getLogger(AppMenuBar::class.java)
+    }
+
     /**
      * The file menu.
      */
@@ -96,8 +92,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         val context: Context,
         val databaseMeta: DatabaseMeta,
         val preferences: Preferences,
-        val databaseTracker: DatabaseTracker,
-        val actionInvoker: ActionInvoker
+        val databaseTracker: DatabaseTracker
     ) : Menu(I18N.getValue("menubar.menu.file")) {
 
         init {
@@ -118,16 +113,19 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         /**
          * Menu item that allows the user to show a new entry point (LoginActivity)
          */
-        private fun newEntryMenuItem(): MenuItem = GlobalActions.NEW_ENTRY.buildMenuItem(actionInvoker)
+        private fun newEntryMenuItem(): MenuItem =
+            GlobalActions.NEW_ENTRY.buildMenuItem(context, preferences, databaseTracker)
 
         /**
          * Menu item that allows the user to open a database file from the file system
          */
-        private fun openMenuItem() = GlobalActions.OPEN_DATABASE.buildMenuItem(actionInvoker)
+        private fun openMenuItem() = GlobalActions.OPEN_DATABASE.buildMenuItem(context, preferences, databaseTracker)
 
-        private fun databaseCreatorMenuItem() = GlobalActions.CREATE_DATABASE.buildMenuItem(actionInvoker)
+        private fun databaseCreatorMenuItem() =
+            GlobalActions.CREATE_DATABASE.buildMenuItem(context, preferences, databaseTracker)
 
-        private fun databaseManagerMenuItem() = GlobalActions.OPEN_DATABASE_MANAGER.buildMenuItem(actionInvoker)
+        private fun databaseManagerMenuItem() =
+            GlobalActions.OPEN_DATABASE_MANAGER.buildMenuItem(context, preferences, databaseTracker)
 
         /**
          * Menu that allows the user to access the recent databases
@@ -177,7 +175,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
                         autoLoginCredentials = null
                     }).tryCommit()
                 context.close()
-                actionInvoker.invoke(GlobalActions.NEW_ENTRY)
+                GlobalActions.NEW_ENTRY.invoke(context, preferences, databaseTracker)
             }
             .graphic(MaterialDesignIcon.LOGOUT_VARIANT)
 
@@ -189,7 +187,8 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
             .action { context.close() }
             .graphic(MaterialDesignIcon.CLOSE)
 
-        private fun restartMenuItem() = GlobalActions.RESTART_APPLICATION.buildMenuItem(actionInvoker)
+        private fun restartMenuItem() =
+            GlobalActions.RESTART_APPLICATION.buildMenuItem(context, preferences, databaseTracker)
 
         private fun quitMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.quit"))
             .action { Platform.exit() }
@@ -224,7 +223,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
     private class PreferencesMenu(
         val context: Context,
         val preferences: Preferences,
-        val actionInvoker: ActionInvoker
+        val databaseTracker: DatabaseTracker
     ) : Menu(I18N.getValue("menubar.menu.preferences")) {
         init {
             this.menuItem(settingsMenu())
@@ -233,7 +232,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
                 .menuItem(langMenu())
         }
 
-        private fun settingsMenu() = GlobalActions.OPEN_SETTINGS.buildMenuItem(actionInvoker)
+        private fun settingsMenu() = GlobalActions.OPEN_SETTINGS.buildMenuItem(context, preferences, databaseTracker)
 
         private fun themeMenu() = object : Menu(I18N.getValue("menubar.menu.preferences.theme")) {
 
@@ -295,19 +294,23 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
     }
 
 
-    private class ClipboardMenu(val context: Context, val actionInvoker: ActionInvoker) :
-        Menu(I18N.getValue("menubar.menu.clipboard")) {
+    private class ClipboardMenu(
+        val context: Context,
+        val preferences: Preferences,
+        val databaseTracker: DatabaseTracker
+    ) : Menu(I18N.getValue("menubar.menu.clipboard")) {
         init {
             this.menuItem(clipboardViewItem())
         }
 
-        private fun clipboardViewItem() = GlobalActions.OPEN_CLIPBOARD_VIEWER.buildMenuItem(actionInvoker)
+        private fun clipboardViewItem() =
+            GlobalActions.OPEN_CLIPBOARD_VIEWER.buildMenuItem(context, preferences, databaseTracker)
     }
 
     /**
      * The 'Window' menu
      */
-    private class WindowMenu(val context: Context, val actionInvoker: ActionInvoker) :
+    private class WindowMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
         Menu(I18N.getValue("menubar.menu.window")) {
 
         private val windowsChangeOperator = object {
@@ -367,10 +370,11 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
             WeakWindowsChangeListener(WeakReference(windowListChangeListener))
         }
 
-        private fun fullScreenMenuItem() = GlobalActions.FULL_SCREEN.buildMenuItem(actionInvoker)
+        private fun fullScreenMenuItem() =
+            GlobalActions.FULL_SCREEN.buildMenuItem(context, preferences, databaseTracker)
     }
 
-    private class PluginMenu(val context: Context, val actionInvoker: ActionInvoker) :
+    private class PluginMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
         Menu(I18N.getValue("menubar.menu.plugin")) {
 
         init {
@@ -378,12 +382,13 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
                 .menuItem(pluginDirectoryItem())
         }
 
-        private fun pluginManagerMenuItem() = GlobalActions.OPEN_PLUGIN_MANAGER.buildMenuItem(actionInvoker)
+        private fun pluginManagerMenuItem() =
+            GlobalActions.OPEN_PLUGIN_MANAGER.buildMenuItem(context, preferences, databaseTracker)
 
-        private fun pluginDirectoryItem() = GlobalActions.OPEN_PLUGIN_DIR.buildMenuItem(actionInvoker)
+        private fun pluginDirectoryItem() = GlobalActions.OPEN_PLUGIN_DIR.buildMenuItem(context, preferences, databaseTracker)
     }
 
-    private class HelpMenu(val actionInvoker: ActionInvoker) :
+    private class HelpMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
         Menu(I18N.getValue("menubar.menu.help")) {
 
         init {
@@ -392,8 +397,12 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
                 .menuItem(infoMenuItem())
         }
 
-        private fun updateSearcherMenuItem() = GlobalActions.SEARCH_FOR_UPDATES.buildMenuItem(actionInvoker)
-        private fun contactMenuItem() = GlobalActions.OPEN_CONTACT_INFO.buildMenuItem(actionInvoker)
-        private fun infoMenuItem() = GlobalActions.OPEN_APP_INFO.buildMenuItem(actionInvoker)
+        private fun updateSearcherMenuItem() =
+            GlobalActions.SEARCH_FOR_UPDATES.buildMenuItem(context, preferences, databaseTracker)
+
+        private fun contactMenuItem() =
+            GlobalActions.OPEN_CONTACT_INFO.buildMenuItem(context, preferences, databaseTracker)
+
+        private fun infoMenuItem() = GlobalActions.OPEN_APP_INFO.buildMenuItem(context, preferences, databaseTracker)
     }
 }

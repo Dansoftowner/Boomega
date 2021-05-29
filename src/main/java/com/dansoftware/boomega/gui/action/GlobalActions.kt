@@ -193,7 +193,7 @@ object GlobalActions {
         listKeyBindActions().forEach { action ->
             scene.addEventHandler(KeyEvent.KEY_PRESSED) {
                 if (action.keyBinding.match(it)) {
-                    action.execute(context, preferences, databaseTracker)
+                    action.invoke(context, preferences, databaseTracker)
                 }
             }
         }

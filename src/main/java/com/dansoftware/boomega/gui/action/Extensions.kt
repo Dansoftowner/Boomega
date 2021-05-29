@@ -18,19 +18,22 @@
 
 package com.dansoftware.boomega.gui.action
 
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.keybinding.keyBinding
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.graphic
 import com.dansoftware.boomega.i18n.I18N
 import javafx.scene.control.MenuItem
 
-fun Action.buildMenuItem(actionInvoker: ActionInvoker) =
+fun Action.buildMenuItem(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) =
     MenuItem(I18N.getValue(i18nName))
-        .action { actionInvoker.invoke(this) }
+        .action { invoke(context, preferences, databaseTracker) }
         .graphic(icon)
 
-fun KeyBindingAction.buildMenuItem(actionInvoker: ActionInvoker) =
+fun KeyBindingAction.buildMenuItem(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) =
     MenuItem(I18N.getValue(i18nName))
-        .action { actionInvoker.invoke(this) }
+        .action { invoke(context, preferences, databaseTracker) }
         .keyBinding(keyBinding)
         .graphic(icon)

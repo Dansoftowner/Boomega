@@ -28,7 +28,7 @@ open class Action(
     val icon: MaterialDesignIcon,
     private val operation: (Context, Preferences, DatabaseTracker) -> Unit
 ) {
-    fun execute(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+    fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
         operation(context, preferences, databaseTracker)
     }
 }
