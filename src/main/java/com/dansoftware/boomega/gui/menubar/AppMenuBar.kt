@@ -24,7 +24,6 @@ import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
-import com.dansoftware.boomega.gui.action.buildMenuItem
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
@@ -114,18 +113,19 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
          * Menu item that allows the user to show a new entry point (LoginActivity)
          */
         private fun newEntryMenuItem(): MenuItem =
-            GlobalActions.NEW_ENTRY.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.NEW_ENTRY, context, preferences, databaseTracker)
 
         /**
          * Menu item that allows the user to open a database file from the file system
          */
-        private fun openMenuItem() = GlobalActions.OPEN_DATABASE.buildMenuItem(context, preferences, databaseTracker)
+        private fun openMenuItem() =
+            MenuItems.of(GlobalActions.OPEN_DATABASE, context, preferences, databaseTracker)
 
         private fun databaseCreatorMenuItem() =
-            GlobalActions.CREATE_DATABASE.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.CREATE_DATABASE, context, preferences, databaseTracker)
 
         private fun databaseManagerMenuItem() =
-            GlobalActions.OPEN_DATABASE_MANAGER.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.OPEN_DATABASE_MANAGER, context, preferences, databaseTracker)
 
         /**
          * Menu that allows the user to access the recent databases
@@ -188,7 +188,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
             .graphic(MaterialDesignIcon.CLOSE)
 
         private fun restartMenuItem() =
-            GlobalActions.RESTART_APPLICATION.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.RESTART_APPLICATION, context, preferences, databaseTracker)
 
         private fun quitMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.quit"))
             .action { Platform.exit() }
@@ -232,7 +232,8 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
                 .menuItem(langMenu())
         }
 
-        private fun settingsMenu() = GlobalActions.OPEN_SETTINGS.buildMenuItem(context, preferences, databaseTracker)
+        private fun settingsMenu() =
+            MenuItems.of(GlobalActions.OPEN_SETTINGS, context, preferences, databaseTracker)
 
         private fun themeMenu() = object : Menu(I18N.getValue("menubar.menu.preferences.theme")) {
 
@@ -304,7 +305,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         }
 
         private fun clipboardViewItem() =
-            GlobalActions.OPEN_CLIPBOARD_VIEWER.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.OPEN_CLIPBOARD_VIEWER, context, preferences, databaseTracker)
     }
 
     /**
@@ -371,7 +372,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         }
 
         private fun fullScreenMenuItem() =
-            GlobalActions.FULL_SCREEN.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.FULL_SCREEN, context, preferences, databaseTracker)
     }
 
     private class PluginMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
@@ -383,9 +384,10 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         }
 
         private fun pluginManagerMenuItem() =
-            GlobalActions.OPEN_PLUGIN_MANAGER.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.OPEN_PLUGIN_MANAGER, context, preferences, databaseTracker)
 
-        private fun pluginDirectoryItem() = GlobalActions.OPEN_PLUGIN_DIR.buildMenuItem(context, preferences, databaseTracker)
+        private fun pluginDirectoryItem() =
+            MenuItems.of(GlobalActions.OPEN_PLUGIN_DIR, context, preferences, databaseTracker)
     }
 
     private class HelpMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
@@ -398,11 +400,12 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         }
 
         private fun updateSearcherMenuItem() =
-            GlobalActions.SEARCH_FOR_UPDATES.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
 
         private fun contactMenuItem() =
-            GlobalActions.OPEN_CONTACT_INFO.buildMenuItem(context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.OPEN_CONTACT_INFO, context, preferences, databaseTracker)
 
-        private fun infoMenuItem() = GlobalActions.OPEN_APP_INFO.buildMenuItem(context, preferences, databaseTracker)
+        private fun infoMenuItem() =
+            MenuItems.of(GlobalActions.OPEN_APP_INFO, context, preferences, databaseTracker)
     }
 }
