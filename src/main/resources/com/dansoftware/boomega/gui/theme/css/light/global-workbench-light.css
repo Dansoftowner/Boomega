@@ -33,19 +33,24 @@
 }
 
 .tile-box {
-    -fx-border-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 2;
+
     -fx-background-radius: 0;
-    /*-fx-background-radius: 0 5 0 5;*/
-    /*-fx-border-radius: 0 5 0 5;*/
-    -fx-border-width: 1.5; /*1.5*/
+    -fx-border-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: #e3e3e3;
+    -fx-effect: null;
+    -fx-cursor: NORMAL;
 }
 
 .tile-box:hover {
-    -fx-border-color: rgb(122, 122, 122);
+    -fx-border-color: #7a7a7a;
 }
 
 .tile-box:pressed {
-    -fx-background-color: rgb(153, 153, 153);
+    -fx-border-color: #999999;
+    -fx-background-color: #999999;
 }
 
 .tab-control {
