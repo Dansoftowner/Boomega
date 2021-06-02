@@ -16,106 +16,117 @@ object KeyBindings {
 
     val newEntryKeyBinding: KeyBinding =
         KeyBinding(
-            "newEntryKeyBinding",
-            "preferences.keybindings.new_entry",
-            "preferences.keybindings.new_entry.desc",
-            KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN)
+            id = "newEntryKeyBinding",
+            i18nTitle = "preferences.keybindings.new_entry",
+            i18nDescription = "preferences.keybindings.new_entry.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN)
         )
 
     val restartApplicationKeyBinding: KeyBinding =
         KeyBinding(
-            "restartApplicationKeyBinding",
-            "preferences.keybindings.restart",
-            "preferences.keybindings.restart.desc",
-            KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN)
+            id = "restartApplicationKeyBinding",
+            i18nTitle = "preferences.keybindings.restart",
+            i18nDescription = "preferences.keybindings.restart.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN),
         )
 
     val openDatabaseKeyBinding: KeyBinding =
         KeyBinding(
-            "openDatabaseKeyBinding",
-            "preferences.keybindings.open_database",
-            "preferences.keybindings.open_database.desc",
-            KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN)
+            id = "openDatabaseKeyBinding",
+            i18nTitle = "preferences.keybindings.open_database",
+            i18nDescription = "preferences.keybindings.open_database.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 
     val createDatabaseKeyBinding: KeyBinding =
         KeyBinding(
-            "createDatabaseKeyBinding",
-            "preferences.keybindings.create_database",
-            "preferences.keybindings.create_database.desc",
-            KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN)
+            id = "createDatabaseKeyBinding",
+            i18nTitle = "preferences.keybindings.create_database",
+            i18nDescription = "preferences.keybindings.create_database.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 
     val openDatabaseManagerKeyBinding: KeyBinding =
         KeyBinding(
-            "openDatabaseManagerKeyBinding",
-            "preferences.keybindings.open_database_manager",
-            "preferences.keybindings.open_database_manager.desc",
-            KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN)
+            id = "openDatabaseManagerKeyBinding",
+            i18nTitle = "preferences.keybindings.open_database_manager",
+            i18nDescription = "preferences.keybindings.open_database_manager.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN),
         )
 
     val fullScreenKeyBinding: KeyBinding =
         KeyBinding(
-            "fullScreenKeyBinding",
-            "preferences.keybindings.full_screen",
-            "preferences.keybindings.full_screen.desc",
-            KeyCodeCombination(KeyCode.F11)
+            id = "fullScreenKeyBinding",
+            i18nTitle = "preferences.keybindings.full_screen",
+            i18nDescription = "preferences.keybindings.full_screen.desc",
+            defaultKeyCombination = KeyCodeCombination(KeyCode.F11)
         )
 
     val saveChangesKeyBinding: KeyBinding =
         KeyBinding(
-            "saveChangesKeyBinding",
-            "preferences.keybindings.save_changes",
-            "preferences.keybindings.save_changes.desc",
-            KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN)
+            id = "saveChangesKeyBinding",
+            i18nTitle = "preferences.keybindings.save_changes",
+            i18nDescription = "preferences.keybindings.save_changes.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN)
         )
 
     val deleteRecordKeyBinding: KeyBinding =
         KeyBinding(
-            "deleteRecordKeyBinding",
-            "preferences.keybindings.delete_record",
-            "preferences.keybindings.delete_record.desc",
-            KeyCodeCombination(KeyCode.DELETE)
+            id = "deleteRecordKeyBinding",
+            i18nTitle = "preferences.keybindings.delete_record",
+            i18nDescription = "preferences.keybindings.delete_record.desc",
+            defaultKeyCombination = KeyCodeCombination(KeyCode.DELETE)
         )
 
     val copyRecordKeyBinding: KeyBinding =
         KeyBinding(
-            "copyRecordKeyBinding",
-            "preferences.keybindings.copy_record",
-            "preferences.keybindings.copy_record.desc",
-            KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN)
+            id = "copyRecordKeyBinding",
+            i18nTitle = "preferences.keybindings.copy_record",
+            i18nDescription = "preferences.keybindings.copy_record.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.META_DOWN)
         )
 
     val cutRecordKeyBinding: KeyBinding =
         KeyBinding(
-            "cutRecordKeyBinding",
-            "preferences.keybindings.cut_record",
-            "preferences.keybindings.cut_record.desc",
-            KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN)
+            id = "cutRecordKeyBinding",
+            i18nTitle = "preferences.keybindings.cut_record",
+            i18nDescription = "preferences.keybindings.cut_record.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.X, KeyCombination.META_DOWN)
         )
 
     val pasteRecordKeyBinding: KeyBinding =
         KeyBinding(
-            "pasteRecordKeyBinding",
-            "preferences.keybindings.paste_record",
-            "preferences.keybindings.paste_record.desc",
-            KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN)
+            id = "pasteRecordKeyBinding",
+            i18nTitle = "preferences.keybindings.paste_record",
+            i18nDescription = "preferences.keybindings.paste_record.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.V, KeyCombination.META_DOWN)
         )
 
     val findRecordKeyBinding: KeyBinding =
         KeyBinding(
-            "findRecordKeyBinding",
-            "preferences.keybindings.find_record",
-            "preferences.keybindings.find_record.desc",
-            KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN)
+            id = "findRecordKeyBinding",
+            i18nTitle = "preferences.keybindings.find_record",
+            i18nDescription = "preferences.keybindings.find_record.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.F, KeyCombination.META_DOWN)
         )
 
     val openSettingsKeyBinding: KeyBinding =
         KeyBinding(
-            "openSettingsKeyBinding",
-            "preferences.keybindings.open_settings",
-            "preferences.keybindings.open_settings.desc",
-            KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN)
+            id = "openSettingsKeyBinding",
+            i18nTitle = "preferences.keybindings.open_settings",
+            i18nDescription = "preferences.keybindings.open_settings.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 
 
