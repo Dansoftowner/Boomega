@@ -15,25 +15,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package com.dansoftware.boomega.gui.action
+package com.dansoftware.boomega.gui.util
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.action.Action
+import com.dansoftware.boomega.gui.action.KeyBindingAction
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.keybinding.keyBinding
-import com.dansoftware.boomega.gui.util.action
-import com.dansoftware.boomega.gui.util.graphic
-import com.dansoftware.boomega.i18n.I18N
 import javafx.scene.control.MenuItem
 
-fun Action.buildMenuItem(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) =
-    MenuItem(displayName)
-        .action { invoke(context, preferences, databaseTracker) }
-        .graphic(icon)
+object MenuItems {
+    fun of(
+        action: Action,
+        context: Context,
+        preferences: Preferences,
+        databaseTracker: DatabaseTracker
+    ): MenuItem {
+        return MenuItem(action.displayName)
+            .action { action.invoke(context, preferences, databaseTracker) }
+            .graphic(action.icon)
+    }
 
-fun KeyBindingAction.buildMenuItem(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) =
-    MenuItem(displayName)
-        .action { invoke(context, preferences, databaseTracker) }
-        .keyBinding(keyBinding)
-        .graphic(icon)
+    fun of(
+        action: KeyBindingAction,
+        context: Context,
+        preferences: Preferences,
+        databaseTracker: DatabaseTracker
+    ): MenuItem {
+        return MenuItem(action.displayName)
+            .action { action.invoke(context, preferences, databaseTracker) }
+            .keyBinding(action.keyBinding)
+            .graphic(action.icon)
+    }
+}
