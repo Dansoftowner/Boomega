@@ -71,3 +71,15 @@
 .glyph-icon {
     -fx-fill: white;
 }
+
+.menu-bar > .container > .menu-button,
+.menu-bar > .container > .menu-button {
+    -fx-padding: 5 12 5 8;
+    -fx-border-width: 2;
+    -fx-border-color: transparent;
+}
+
+.menu-bar > .container > .menu-button:showing,
+.menu-bar > .container > .menu-button:focused {
+    -fx-border-color: rgb(0, 120, 215) transparent transparent transparent;
+}
