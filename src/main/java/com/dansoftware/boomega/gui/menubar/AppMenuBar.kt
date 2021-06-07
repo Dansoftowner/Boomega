@@ -24,6 +24,7 @@ import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
+import com.dansoftware.boomega.gui.action.MenuItems
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable

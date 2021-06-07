@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.dansoftware.boomega.gui.util
+package com.dansoftware.boomega.gui.action
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.action.Action
-import com.dansoftware.boomega.gui.action.KeyBindingAction
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.keybinding.keyBinding
+import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.graphic
 import javafx.scene.control.MenuItem
 
 object MenuItems {
@@ -31,21 +31,17 @@ object MenuItems {
         context: Context,
         preferences: Preferences,
         databaseTracker: DatabaseTracker
-    ): MenuItem {
-        return MenuItem(action.displayName)
-            .action { action.invoke(context, preferences, databaseTracker) }
-            .graphic(action.icon)
-    }
+    ) = MenuItem(action.displayName)
+        .action { action.invoke(context, preferences, databaseTracker) }
+        .graphic(action.icon)
 
     fun of(
         action: KeyBindingAction,
         context: Context,
         preferences: Preferences,
         databaseTracker: DatabaseTracker
-    ): MenuItem {
-        return MenuItem(action.displayName)
-            .action { action.invoke(context, preferences, databaseTracker) }
-            .keyBinding(action.keyBinding)
-            .graphic(action.icon)
-    }
+    ) = MenuItem(action.displayName)
+        .action { action.invoke(context, preferences, databaseTracker) }
+        .keyBinding(action.keyBinding)
+        .graphic(action.icon)
 }
