@@ -57,6 +57,7 @@
 .tab-control {
     -fx-background-radius: 0px;
     -fx-border-radius: 0px;
+    -fx-border-width: 2 0 0 0;
 }
 
 .tab-control:hover {
@@ -65,6 +66,7 @@
 
 .tab-control:selected, .tab-control:selected:hover {
     -fx-background-color: #282828;
+    -fx-border-color: rgb(0, 120, 215);
 }
 
 .tab-box .button:hover, .tab-box .button:focused {
