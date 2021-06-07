@@ -4,7 +4,7 @@ For creating installers/native application images, run `gradlew jpackage`.
 
 ## Requirements
 
-- Running Gradle on a JDK 16+ (usually by pointing the `JAVA_HOME` environmental variable to it)
+- Running Gradle on a JDK 16+ runtime (usually by pointing the `JAVA_HOME` environmental variable to it)
 - The JDK should include the JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
 
 Required third-party software (by the `jpackage tool`):
