@@ -192,6 +192,18 @@ public abstract class BoomegaTable<S> extends TableView<S> {
             this.options = List.of(options);
         }
 
+        @SuppressWarnings("unchecked")
+        public <T extends BoomegaTable<?>> ColumnType(@NotNull String text,
+                                                      @NotNull Class<C> tableColumnClass,
+                                                      @NotNull Class<T> tableClass,
+                                                      @NotNull Function<T, ? extends C> columnFactory,
+                                                      Option... options) {
+            this.text = Objects.requireNonNull(text);
+            this.tableColumnClass = Objects.requireNonNull(tableColumnClass);
+            this.columnFactory = (Function<BoomegaTable<?>, ? extends C>) columnFactory;
+            this.options = List.of(options);
+        }
+
         public String getText() {
             return text;
         }
