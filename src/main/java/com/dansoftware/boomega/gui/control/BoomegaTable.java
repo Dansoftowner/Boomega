@@ -21,6 +21,8 @@ package com.dansoftware.boomega.gui.control;
 import com.dansoftware.boomega.i18n.I18N;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -32,6 +34,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -42,6 +45,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
     private final ObjectProperty<Consumer<S>> onItemDoubleClicked;
     private final ObjectProperty<Consumer<S>> onItemSecondaryDoubleClicked;
     private final ObjectProperty<ContextMenu> rowContextMenu;
+    private final ObjectProperty<Comparator<String>> sortingComparator;
 
     private final ObservableList<ColumnType<? extends Column<?, ?>>> columnTypes;
 
@@ -49,6 +53,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         this.onItemDoubleClicked = new SimpleObjectProperty<>();
         this.onItemSecondaryDoubleClicked = new SimpleObjectProperty<>();
         this.rowContextMenu = new SimpleObjectProperty<>();
+        this.sortingComparator = new SimpleObjectProperty<>();
         this.columnTypes = buildColumnTypeList();
         this.buildClickHandlingPolicy();
     }
@@ -104,6 +109,18 @@ public abstract class BoomegaTable<S> extends TableView<S> {
 
     public void removeAllColumns() {
         this.getColumns().clear();
+    }
+
+    public Comparator<String> getSortingComparator() {
+        return sortingComparator.get();
+    }
+
+    public ObjectProperty<Comparator<String>> sortingComparatorProperty() {
+        return sortingComparator;
+    }
+
+    public void setSortingComparator(Comparator<String> sortingComparator) {
+        this.sortingComparator.set(sortingComparator);
     }
 
     public ContextMenu getRowContextMenu() {
@@ -230,6 +247,19 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         public SortableColumn(@NotNull ColumnType<? extends Column<S, String>> columnType) {
             super(columnType);
             setSortable(true);
+            bindToTableSoringComparator();
+        }
+
+        private void bindToTableSoringComparator() {
+            tableViewProperty().addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends TableView<S>> observable, TableView<S> oldValue, TableView<S> table) {
+                    if (table instanceof BoomegaTable<S> boomegaTable) {
+                        comparatorProperty().bind(boomegaTable.sortingComparator);
+                        observable.removeListener(this);
+                    }
+                }
+            });
         }
     }
 }
