@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.control;
 
+import com.dansoftware.boomega.gui.recordview.RecordTable;
 import com.dansoftware.boomega.i18n.I18N;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -67,19 +68,19 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         final ObservableList<ColumnType<? extends Column<?, ?>>> list = FXCollections.observableArrayList();
         list.addListener((ListChangeListener<ColumnType<? extends Column<?, ?>>>) c -> {
             while (c.next()) {
-                if (c.wasAdded())
+                if (c.wasAdded()) {
                     c.getAddedSubList().forEach(it -> {
                         boolean contains =
                                 getColumns().stream()
                                         .map(Column.class::cast)
                                         .filter(col -> col.columnType.equals(it))
                                         .findAny()
-                                        .orElse(null) == null;
+                                        .orElse(null) != null;
                         if (!contains) {
                             getColumns().add((TableColumn<S, ?>) it.getColumnFactory().apply(this));
                         }
                     });
-                else if (c.wasRemoved() || c.wasReplaced())
+                } else if (c.wasRemoved() || c.wasReplaced())
                     c.getRemoved().forEach(it -> getColumns().removeIf(column -> ((Column<S, ?>) column).columnType.equals(it)));
             }
         });
@@ -177,15 +178,18 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         public static final Option TEXT_GUI_VISIBLE = new Option();
         public static final Option INTERNATIONALIZED = new Option();
 
+        private final String id;
         private final String text;
         private final Class<C> tableColumnClass;
         private final Function<BoomegaTable<?>, ? extends C> columnFactory;
         private final List<Option> options;
 
-        public ColumnType(@NotNull String text,
+        public ColumnType(@NotNull String id,
+                          @NotNull String text,
                           @NotNull Class<C> tableColumnClass,
                           @NotNull Function<BoomegaTable<?>, ? extends C> columnFactory,
                           Option... options) {
+            this.id = Objects.requireNonNull(id);
             this.text = Objects.requireNonNull(text);
             this.tableColumnClass = Objects.requireNonNull(tableColumnClass);
             this.columnFactory = columnFactory;
@@ -193,15 +197,21 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         }
 
         @SuppressWarnings("unchecked")
-        public <T extends BoomegaTable<?>> ColumnType(@NotNull String text,
+        public <T extends BoomegaTable<?>> ColumnType(@NotNull String id,
+                                                      @NotNull String text,
                                                       @NotNull Class<C> tableColumnClass,
                                                       @NotNull Class<T> tableClass,
                                                       @NotNull Function<T, ? extends C> columnFactory,
                                                       Option... options) {
+            this.id = Objects.requireNonNull(id);
             this.text = Objects.requireNonNull(text);
             this.tableColumnClass = Objects.requireNonNull(tableColumnClass);
             this.columnFactory = (Function<BoomegaTable<?>, ? extends C>) columnFactory;
             this.options = List.of(options);
+        }
+
+        public String getId() {
+            return id;
         }
 
         public String getText() {
