@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.control;
 
-import com.dansoftware.boomega.gui.recordview.RecordTable;
 import com.dansoftware.boomega.i18n.I18N;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -176,7 +175,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
 
         public static final Option DEFAULT_VISIBLE = new Option();
         public static final Option TEXT_GUI_VISIBLE = new Option();
-        public static final Option I18N = new Option();
+        public static final Option INTERNATIONALIZED = new Option();
 
         private final String text;
         private final Class<C> tableColumnClass;
@@ -214,7 +213,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         }
 
         public boolean isI18N() {
-            return options.contains(I18N);
+            return options.contains(INTERNATIONALIZED);
         }
 
         /**

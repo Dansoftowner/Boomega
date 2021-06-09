@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.recordview;
 
 import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.db.data.ServiceConnection;
+import com.dansoftware.boomega.gui.control.BoomegaTable;
 import com.dansoftware.boomega.gui.control.ReadOnlyRating;
 import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;
 import com.dansoftware.boomega.i18n.I18N;
@@ -47,50 +48,121 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class RecordTable extends TableView<Record> {
+import static com.dansoftware.boomega.gui.control.BoomegaTable.ColumnType.*;
 
-    public enum ColumnType {
-        INDEX_COLUMN("record.table.column.index", IndexColumn.class, true, table -> new IndexColumn(table.startIndex)),
-        TYPE_INDICATOR_COLUMN("record.table.column.typeindicator", TypeIndicatorColumn.class, true, table -> new TypeIndicatorColumn()),
-        AUTHOR_COLUMN("record.table.column.author", AuthorColumn.class, true, table -> new AuthorColumn()),
-        MAGAZINE_NAME_COLUMN("record.table.column.magazinename", MagazineNameColumn.class, false, table -> new MagazineNameColumn()),
-        TITLE_COLUMN("record.table.column.title", TitleColumn.class, true, table -> new TitleColumn()),
-        SUB_TITLE_COLUMN("record.table.column.subtitle", SubtitleColumn.class, false, table -> new SubtitleColumn()),
-        ISBN_COLUMN("record.table.column.isbn", ISBNColumn.class, true, table -> new ISBNColumn()),
-        PUBLISHER_COLUMN("record.table.column.publisher", PublisherColumn.class, true, table -> new PublisherColumn()),
-        DATE_COLUMN("record.table.column.date", DateColumn.class, true, table -> new DateColumn()),
-        COPY_COUNT_COLUMN("record.table.column.copycount", CopyCountColumn.class, false, table -> new CopyCountColumn()),
-        LANG_COLUMN("record.table.column.lang", LangColumn.class, true, table -> new LangColumn()),
-        RANK_COLUMN("record.table.column.rank", RankColumn.class, true, table -> new RankColumn()),
-        SERVICE_CONNECTION_COLUMN("record.table.column.service", ServiceConnectionColumn.class, true, table -> new ServiceConnectionColumn());
+public class RecordTable extends BoomegaTable<Record> {
 
-        private final String i18n;
-        private final Class<? extends Column<?>> tableColumnClass;
-        private final boolean defaultVisible;
-        private final Function<RecordTable, ? extends Column<?>> createPolicy;
+    public static final ColumnType<IndexColumn> INDEX_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.index",
+                    IndexColumn.class,
+                    table -> new IndexColumn(table.startIndex),
+                    DEFAULT_VISIBLE
+            );
 
-        <T extends Column<?>> ColumnType(String i18n,
-                                         Class<T> tableColumnClass,
-                                         boolean defaultVisible,
-                                         Function<RecordTable, T> createPolicy) {
-            this.i18n = i18n;
-            this.tableColumnClass = tableColumnClass;
-            this.defaultVisible = defaultVisible;
-            this.createPolicy = createPolicy;
-        }
+    public static final ColumnType<TypeIndicatorColumn> TYPE_INDICATOR_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.typeindicator",
+                    TypeIndicatorColumn.class,
+                    table -> new TypeIndicatorColumn(),
+                    DEFAULT_VISIBLE
+            );
 
-        public boolean isDefaultVisible() {
-            return defaultVisible;
-        }
+    public static final ColumnType<AuthorColumn> AUTHOR_COLUMN = new ColumnType<>(
+            "record.table.column.author",
+            AuthorColumn.class,
+            table -> new AuthorColumn(),
+            DEFAULT_VISIBLE,
+            TEXT_GUI_VISIBLE,
+            INTERNATIONALIZED
+    );
 
-        public String getI18Nkey() {
-            return i18n;
-        }
-    }
+    public static final ColumnType<MagazineNameColumn> MAGAZINE_NAME_COLUMN = new ColumnType<>(
+            "record.table.column.magazinename",
+            MagazineNameColumn.class,
+            table -> new MagazineNameColumn(),
+            TEXT_GUI_VISIBLE,
+            INTERNATIONALIZED
+    );
+
+    public static final ColumnType<TitleColumn> TITLE_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.title",
+                    TitleColumn.class,
+                    table -> new TitleColumn(),
+                    DEFAULT_VISIBLE,
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
+            );
+
+    public static final ColumnType<SubtitleColumn> SUB_TITLE_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.subtitle",
+                    SubtitleColumn.class,
+                    table -> new SubtitleColumn(),
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
+            );
+
+    public static final ColumnType<ISBNColumn> ISBN_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.isbn",
+                    ISBNColumn.class,
+                    table -> new ISBNColumn(),
+                    DEFAULT_VISIBLE,
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
+            );
+
+    public static final ColumnType<PublisherColumn> PUBLISHER_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.publisher",
+                    PublisherColumn.class,
+                    table -> new PublisherColumn(),
+                    DEFAULT_VISIBLE,
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
+            );
+
+    // ------------->
+    public static final ColumnType<DateColumn> DATE_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.date",
+                    DateColumn.class,
+                    table -> new DateColumn()
+            );
+
+    public static final ColumnType<CopyCountColumn> COPY_COUNT_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.copycount",
+                    CopyCountColumn.class,
+                    table -> new CopyCountColumn()
+            );
+
+    public static final ColumnType<LangColumn> LANG_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.lang",
+                    LangColumn.class,
+                    table -> new LangColumn()
+            );
+
+    public static final ColumnType<RankColumn> RANK_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.rank",
+                    RankColumn.class,
+                    table -> new RankColumn()
+            );
+
+    public static final ColumnType<ServiceConnectionColumn> SERVICE_CONNECTION_COLUMN =
+            new ColumnType<>(
+                    "record.table.column.service",
+                    ServiceConnectionColumn.class,
+                    table -> new ServiceConnectionColumn()
+            );
+
 
     private static final String STYLE_CLASS = "books-table";
 
-    private final ObjectProperty<ContextMenu> rowContextMenu = new SimpleObjectProperty<>();
     private final IntegerProperty startIndex;
 
     public RecordTable(int startIndex) {
@@ -102,7 +174,6 @@ public class RecordTable extends TableView<Record> {
         this.getStyleClass().add(STYLE_CLASS);
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
-        this.initRowFactory();
         this.setPlaceholder(
                 new TableViewPlaceHolder(
                         this,
@@ -112,39 +183,6 @@ public class RecordTable extends TableView<Record> {
         );
     }
 
-    private void initRowFactory() {
-        this.setRowFactory(p -> {
-            var row = new TableRow<Record>();
-            row.contextMenuProperty().bind(rowContextMenu);
-            row.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event -> {
-                if (row.isEmpty())
-                    event.consume();
-            });
-            return row;
-        });
-    }
-
-    public List<ColumnType> getShowingColumns() {
-        return getColumns().stream()
-                .map(col -> (Column<?>) col)
-                .map(col -> col.columnType)
-                .collect(Collectors.toList());
-    }
-
-    public boolean isColumnShown(@Nullable ColumnType columnType) {
-        return getColumns().stream()
-                .map(col -> (Column<?>) col)
-                .map(col -> col.columnType)
-                .anyMatch(col -> col.equals(columnType));
-    }
-
-    public void setSortingComparator(@NotNull Comparator<String> comparator) {
-        this.getColumns().stream()
-                .filter(col -> col instanceof AbcSortableColumn)
-                .map(col -> (AbcSortableColumn) col)
-                .forEach(col -> col.setComparator(comparator));
-    }
-
     public void buildDefaultColumns() {
         this.getColumns().clear();
         Arrays.stream(ColumnType.values())
@@ -152,57 +190,8 @@ public class RecordTable extends TableView<Record> {
                 .forEach(this::addColumn);
     }
 
-    public void removeAllColumns() {
-        this.getColumns().clear();
-    }
-
-    public void removeColumn(@NotNull ColumnType columnType) {
-        this.getColumns().removeIf(col -> ((Column<?>) col).columnType.equals(columnType));
-    }
-
-    public void addColumns(ColumnType... columnTypes) {
-        for (ColumnType columnType : columnTypes) {
-            addColumn(columnType);
-        }
-    }
-
-    public void addColumn(@NotNull ColumnType columnType) {
-        addColumn(columnType.tableColumnClass, columnType.createPolicy);
-    }
-
-    private void addColumn(Class<? extends Column<?>> tableColumnClass,
-                           Function<RecordTable, ? extends Column<?>> createAction) {
-        this.getColumns().add(createAction.apply(this));
-    }
-
     public IntegerProperty startIndexProperty() {
         return startIndex;
-    }
-
-    public ContextMenu getRowContextMenu() {
-        return rowContextMenu.get();
-    }
-
-    public ObjectProperty<ContextMenu> rowContextMenuProperty() {
-        return rowContextMenu;
-    }
-
-    public void setRowContextMenu(ContextMenu rowContextMenu) {
-        this.rowContextMenu.set(rowContextMenu);
-    }
-
-    private static class Column<T> extends TableColumn<Record, T> {
-        private final ColumnType columnType;
-
-        Column(@NotNull ColumnType columnType, boolean i18n) {
-            this.columnType = Objects.requireNonNull(columnType);
-            this.setReorderable(false);
-            if (i18n) setText(I18N.getValue(columnType.getI18Nkey()));
-        }
-
-        public Column(@NotNull ColumnType columnType) {
-            this(columnType, true);
-        }
     }
 
     private static class RecordTableCell<T> extends TableCell<Record, T> {
@@ -222,25 +211,14 @@ public class RecordTable extends TableView<Record> {
 
     }
 
-    private static abstract class AbcSortableColumn extends Column<String> {
-        AbcSortableColumn(@NotNull ColumnType columnType) {
-            this(columnType, true);
-        }
-
-        AbcSortableColumn(@NotNull ColumnType columnType, boolean i18n) {
-            super(columnType, i18n);
-            setSortable(true);
-        }
-    }
-
-    private static final class IndexColumn extends Column<Integer>
+    private static final class IndexColumn extends Column<Record, Integer>
             implements Callback<TableColumn.CellDataFeatures<Record, Integer>, ObservableValue<Integer>> {
         private static final int COLUMN_WIDTH_UNIT = 60;
 
         private final IntegerProperty startIndexProperty;
 
         IndexColumn(IntegerProperty startIndexProperty) {
-            super(ColumnType.INDEX_COLUMN, false);
+            super(INDEX_COLUMN);
             this.startIndexProperty = startIndexProperty;
             setSortable(false);
             setMinWidth(COLUMN_WIDTH_UNIT);
@@ -260,9 +238,10 @@ public class RecordTable extends TableView<Record> {
         }
     }
 
-    private static final class TypeIndicatorColumn extends Column<String> implements Callback<TableColumn<Record, String>, TableCell<Record, String>> {
+    private static final class TypeIndicatorColumn extends Column<Record, String>
+            implements Callback<TableColumn<Record, String>, TableCell<Record, String>> {
         TypeIndicatorColumn() {
-            super(ColumnType.TYPE_INDICATOR_COLUMN, false);
+            super(TYPE_INDICATOR_COLUMN);
             setCellFactory(this);
             setMinWidth(50);
             setMaxWidth(60);
@@ -285,10 +264,10 @@ public class RecordTable extends TableView<Record> {
         }
     }
 
-    private static final class AuthorColumn extends AbcSortableColumn
+    private static final class AuthorColumn extends SortableColumn<Record>
             implements Callback<TableColumn.CellDataFeatures<Record, String>, ObservableValue<String>> {
         AuthorColumn() {
-            super(ColumnType.AUTHOR_COLUMN);
+            super(AUTHOR_COLUMN);
             setCellValueFactory(this);
         }
 
@@ -306,38 +285,38 @@ public class RecordTable extends TableView<Record> {
         }
     }
 
-    private static final class MagazineNameColumn extends AbcSortableColumn {
+    private static final class MagazineNameColumn extends SortableColumn<Record> {
         MagazineNameColumn() {
-            super(ColumnType.MAGAZINE_NAME_COLUMN);
+            super(MAGAZINE_NAME_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("magazineName"));
         }
     }
 
-    private static final class TitleColumn extends AbcSortableColumn {
+    private static final class TitleColumn extends SortableColumn<Record> {
         TitleColumn() {
-            super(ColumnType.TITLE_COLUMN);
+            super(TITLE_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("title"));
         }
     }
 
-    private static final class SubtitleColumn extends AbcSortableColumn {
+    private static final class SubtitleColumn extends SortableColumn<Record> {
         SubtitleColumn() {
-            super(ColumnType.SUB_TITLE_COLUMN);
+            super(SUB_TITLE_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("subtitle"));
         }
     }
 
-    private static final class PublisherColumn extends AbcSortableColumn {
+    private static final class PublisherColumn extends SortableColumn<Record> {
         PublisherColumn() {
-            super(ColumnType.PUBLISHER_COLUMN);
+            super(PUBLISHER_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("publisher"));
         }
     }
 
-    private static final class LangColumn extends Column<String>
+    private static final class LangColumn extends Column<Record, String>
             implements Callback<TableColumn.CellDataFeatures<Record, String>, ObservableValue<String>> {
         LangColumn() {
-            super(ColumnType.LANG_COLUMN);
+            super(LANG_COLUMN);
             setCellValueFactory(this);
         }
 
@@ -355,31 +334,31 @@ public class RecordTable extends TableView<Record> {
         }
     }
 
-    private static final class DateColumn extends Column<String> {
+    private static final class DateColumn extends Column<Record, String> {
         DateColumn() {
-            super(ColumnType.DATE_COLUMN);
+            super(DATE_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("publishedDate"));
         }
     }
 
-    private static final class ISBNColumn extends Column<String> {
+    private static final class ISBNColumn extends Column<Record, String> {
         ISBNColumn() {
-            super(ColumnType.ISBN_COLUMN);
+            super(ISBN_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("isbn"));
         }
     }
 
-    private static final class CopyCountColumn extends Column<Integer> {
+    private static final class CopyCountColumn extends Column<Record, Integer> {
         CopyCountColumn() {
-            super(ColumnType.COPY_COUNT_COLUMN);
+            super(COPY_COUNT_COLUMN);
             setCellValueFactory(new PropertyValueFactory<>("numberOfCopies"));
         }
     }
 
-    private static final class RankColumn extends Column<String>
+    private static final class RankColumn extends Column<Record, String>
             implements Callback<TableColumn<Record, String>, TableCell<Record, String>> {
         RankColumn() {
-            super(ColumnType.RANK_COLUMN);
+            super(RANK_COLUMN);
             setCellFactory(this);
             setMinWidth(25);
         }
@@ -405,13 +384,13 @@ public class RecordTable extends TableView<Record> {
         }
     }
 
-    private static final class ServiceConnectionColumn extends Column<String>
+    private static final class ServiceConnectionColumn extends Column<Record, String>
             implements Callback<TableColumn<Record, String>, TableCell<Record, String>> {
 
         private static final double WIDTH = 60;
 
         ServiceConnectionColumn() {
-            super(ColumnType.SERVICE_CONNECTION_COLUMN, false);
+            super(SERVICE_CONNECTION_COLUMN);
             this.setCellFactory(this);
             this.setMinWidth(WIDTH);
             this.setMaxWidth(WIDTH);
