@@ -69,6 +69,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
                     c.getRemoved().forEach(it -> getColumns().removeIf(column -> ((Column<S, ?>) column).columnType.equals(it)));
             }
         });
+        return list;
     }
 
     private TableRow<S> buildTableRow() {
