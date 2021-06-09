@@ -32,9 +32,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -64,8 +62,18 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         list.addListener((ListChangeListener<ColumnType<? extends Column<?, ?>>>) c -> {
             while (c.next()) {
                 if (c.wasAdded())
-                    c.getAddedSubList().forEach(it -> getColumns().add((TableColumn<S, ?>) it.getColumnFactory().apply(this)));
-                else if(c.wasRemoved() || c.wasReplaced())
+                    c.getAddedSubList().forEach(it -> {
+                        boolean contains =
+                                getColumns().stream()
+                                        .map(Column.class::cast)
+                                        .filter(col -> col.columnType.equals(it))
+                                        .findAny()
+                                        .orElse(null) == null;
+                        if (!contains) {
+                            getColumns().add((TableColumn<S, ?>) it.getColumnFactory().apply(this));
+                        }
+                    });
+                else if (c.wasRemoved() || c.wasReplaced())
                     c.getRemoved().forEach(it -> getColumns().removeIf(column -> ((Column<S, ?>) column).columnType.equals(it)));
             }
         });
