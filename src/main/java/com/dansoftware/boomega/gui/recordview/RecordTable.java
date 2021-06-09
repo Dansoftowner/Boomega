@@ -54,21 +54,26 @@ public class RecordTable extends BoomegaTable<Record> {
 
     public static final ColumnType<IndexColumn> INDEX_COLUMN =
             new ColumnType<>(
+                    "index",
                     "record.table.column.index",
                     IndexColumn.class,
+                    RecordTable.class,
                     table -> new IndexColumn(table.startIndex),
                     DEFAULT_VISIBLE
             );
 
     public static final ColumnType<TypeIndicatorColumn> TYPE_INDICATOR_COLUMN =
             new ColumnType<>(
+                    "type_indicator",
                     "record.table.column.typeindicator",
                     TypeIndicatorColumn.class,
                     table -> new TypeIndicatorColumn(),
-                    DEFAULT_VISIBLE
+                    DEFAULT_VISIBLE,
+                    INTERNATIONALIZED
             );
 
     public static final ColumnType<AuthorColumn> AUTHOR_COLUMN = new ColumnType<>(
+            "author",
             "record.table.column.author",
             AuthorColumn.class,
             table -> new AuthorColumn(),
@@ -78,6 +83,7 @@ public class RecordTable extends BoomegaTable<Record> {
     );
 
     public static final ColumnType<MagazineNameColumn> MAGAZINE_NAME_COLUMN = new ColumnType<>(
+            "magazine_name",
             "record.table.column.magazinename",
             MagazineNameColumn.class,
             table -> new MagazineNameColumn(),
@@ -87,6 +93,7 @@ public class RecordTable extends BoomegaTable<Record> {
 
     public static final ColumnType<TitleColumn> TITLE_COLUMN =
             new ColumnType<>(
+                    "title",
                     "record.table.column.title",
                     TitleColumn.class,
                     table -> new TitleColumn(),
@@ -97,6 +104,7 @@ public class RecordTable extends BoomegaTable<Record> {
 
     public static final ColumnType<SubtitleColumn> SUB_TITLE_COLUMN =
             new ColumnType<>(
+                    "subtitle",
                     "record.table.column.subtitle",
                     SubtitleColumn.class,
                     table -> new SubtitleColumn(),
@@ -106,6 +114,7 @@ public class RecordTable extends BoomegaTable<Record> {
 
     public static final ColumnType<ISBNColumn> ISBN_COLUMN =
             new ColumnType<>(
+                    "isbn",
                     "record.table.column.isbn",
                     ISBNColumn.class,
                     table -> new ISBNColumn(),
@@ -116,6 +125,7 @@ public class RecordTable extends BoomegaTable<Record> {
 
     public static final ColumnType<PublisherColumn> PUBLISHER_COLUMN =
             new ColumnType<>(
+                    "publisher",
                     "record.table.column.publisher",
                     PublisherColumn.class,
                     table -> new PublisherColumn(),
@@ -124,42 +134,79 @@ public class RecordTable extends BoomegaTable<Record> {
                     INTERNATIONALIZED
             );
 
-    // ------------->
     public static final ColumnType<DateColumn> DATE_COLUMN =
             new ColumnType<>(
+                    "date",
                     "record.table.column.date",
                     DateColumn.class,
-                    table -> new DateColumn()
+                    table -> new DateColumn(),
+                    DEFAULT_VISIBLE,
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
             );
 
     public static final ColumnType<CopyCountColumn> COPY_COUNT_COLUMN =
             new ColumnType<>(
+                    "copy_count",
                     "record.table.column.copycount",
                     CopyCountColumn.class,
-                    table -> new CopyCountColumn()
+                    table -> new CopyCountColumn(),
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
             );
 
     public static final ColumnType<LangColumn> LANG_COLUMN =
             new ColumnType<>(
+                    "lang",
                     "record.table.column.lang",
                     LangColumn.class,
-                    table -> new LangColumn()
+                    table -> new LangColumn(),
+                    DEFAULT_VISIBLE,
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
             );
 
     public static final ColumnType<RankColumn> RANK_COLUMN =
             new ColumnType<>(
+                    "rank",
                     "record.table.column.rank",
                     RankColumn.class,
-                    table -> new RankColumn()
+                    table -> new RankColumn(),
+                    DEFAULT_VISIBLE,
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
             );
 
     public static final ColumnType<ServiceConnectionColumn> SERVICE_CONNECTION_COLUMN =
             new ColumnType<>(
+                    "service_connection",
                     "record.table.column.service",
                     ServiceConnectionColumn.class,
-                    table -> new ServiceConnectionColumn()
+                    table -> new ServiceConnectionColumn(),
+                    DEFAULT_VISIBLE,
+                    INTERNATIONALIZED
             );
 
+    public static List<ColumnType<? extends Column<Record, ?>>> columns() {
+        return List.of(
+                INDEX_COLUMN,
+                TYPE_INDICATOR_COLUMN,
+                MAGAZINE_NAME_COLUMN,
+                TITLE_COLUMN,
+                SUB_TITLE_COLUMN,
+                ISBN_COLUMN,
+                PUBLISHER_COLUMN,
+                DATE_COLUMN,
+                COPY_COUNT_COLUMN,
+                LANG_COLUMN,
+                RANK_COLUMN,
+                SERVICE_CONNECTION_COLUMN
+        );
+    }
+
+    public static Optional<ColumnType<? extends Column<Record, ?>>> columnById(@NotNull String id) {
+        return columns().stream().filter(it -> it.getId().equals(id)).findAny();
+    }
 
     private static final String STYLE_CLASS = "books-table";
 
@@ -185,9 +232,9 @@ public class RecordTable extends BoomegaTable<Record> {
 
     public void buildDefaultColumns() {
         this.getColumns().clear();
-        Arrays.stream(ColumnType.values())
+        columns().stream()
                 .filter(ColumnType::isDefaultVisible)
-                .forEach(this::addColumn);
+                .forEach(this.getColumnTypes()::add);
     }
 
     public IntegerProperty startIndexProperty() {
@@ -220,6 +267,7 @@ public class RecordTable extends BoomegaTable<Record> {
         IndexColumn(IntegerProperty startIndexProperty) {
             super(INDEX_COLUMN);
             this.startIndexProperty = startIndexProperty;
+            setReorderable(false);
             setSortable(false);
             setMinWidth(COLUMN_WIDTH_UNIT);
             setMaxWidth(COLUMN_WIDTH_UNIT);
@@ -242,6 +290,7 @@ public class RecordTable extends BoomegaTable<Record> {
             implements Callback<TableColumn<Record, String>, TableCell<Record, String>> {
         TypeIndicatorColumn() {
             super(TYPE_INDICATOR_COLUMN);
+            setReorderable(false);
             setCellFactory(this);
             setMinWidth(50);
             setMaxWidth(60);
@@ -391,6 +440,7 @@ public class RecordTable extends BoomegaTable<Record> {
 
         ServiceConnectionColumn() {
             super(SERVICE_CONNECTION_COLUMN);
+            this.setReorderable(false);
             this.setCellFactory(this);
             this.setMinWidth(WIDTH);
             this.setMaxWidth(WIDTH);

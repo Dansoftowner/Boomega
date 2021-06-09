@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.recordview
 
+import com.dansoftware.boomega.gui.control.BoomegaTable
 import com.dansoftware.boomega.gui.control.TwoSideToolBar
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.i18n.I18N
@@ -153,7 +154,7 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
             I18N.getValue("record.table.preferred.columns"),
             FontAwesomeIconView(FontAwesomeIcon.COLUMNS)
         ).apply {
-            Stream.of(*RecordTable.ColumnType.values())
+            RecordTable.columns()
                 .map(::TableColumnMenuItem)
                 .forEach(this.items::add)
         }
@@ -238,20 +239,20 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
         }
     }
 
-    private inner class TableColumnMenuItem(val columnType: RecordTable.ColumnType) :
-        CheckMenuItem(I18N.getValue(columnType.i18Nkey)) {
+    private inner class TableColumnMenuItem(val columnType: BoomegaTable.ColumnType<*>) :
+        CheckMenuItem(if(columnType.isI18N) I18N.getValue(columnType.text) else columnType.text) {
 
         init {
             setOnAction {
                 when {
-                    this.isSelected.not() -> view.table.removeColumn(columnType)
+                    this.isSelected.not() -> view.table.columnTypes.remove(columnType)
                     else -> {
                         view.table.removeAllColumns()
                         columnChooserItem.items.stream()
                             .map { it as TableColumnMenuItem }
                             .filter(TableColumnMenuItem::isSelected)
                             .map(TableColumnMenuItem::columnType)
-                            .forEach(view.table::addColumn)
+                            .forEach(view.table.columnTypes::add)
                     }
                 }
             }
@@ -274,6 +275,4 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
             setToggleGroup(toggleGroup)
         }
     }
-
-
 }

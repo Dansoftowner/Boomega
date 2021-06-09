@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.recordview
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.control.BoomegaTable
 import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.recordview.dock.DockView
@@ -74,9 +75,9 @@ class RecordsViewBase(
         }
 
     var columnsInfo: TableColumnsInfo
-        get() = TableColumnsInfo(table.showingColumns)
+        get() = TableColumnsInfo(table.columnTypes)
         set(value) {
-            value.columnTypes.forEach(table::addColumn)
+            value.columnTypes.forEach(table.columnTypes::add)
         }
 
     init {
@@ -150,12 +151,12 @@ class RecordsViewBase(
     /**
      * Used for storing the preferred table columns in the configurations.
      */
-    class TableColumnsInfo(val columnTypes: List<RecordTable.ColumnType>) {
+    class TableColumnsInfo(val columnTypes: List<BoomegaTable.ColumnType<*>>) {
         companion object {
             fun byDefault() =
                 TableColumnsInfo(
-                    Arrays.stream(RecordTable.ColumnType.values())
-                        .filter(RecordTable.ColumnType::isDefaultVisible)
+                    RecordTable.columns().stream()
+                        .filter(BoomegaTable.ColumnType<*>::isDefaultVisible)
                         .collect(Collectors.toList())
                 )
         }

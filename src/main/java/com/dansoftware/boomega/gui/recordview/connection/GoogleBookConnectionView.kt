@@ -168,10 +168,10 @@ class GoogleBookConnectionView(
 
     private fun buildPreviewTable(records: List<Record>) =
         RecordTable(0).apply {
-            addColumn(RecordTable.ColumnType.INDEX_COLUMN)
-            addColumn(RecordTable.ColumnType.TYPE_INDICATOR_COLUMN)
-            addColumn(RecordTable.ColumnType.AUTHOR_COLUMN)
-            addColumn(RecordTable.ColumnType.TITLE_COLUMN)
+            columnTypes.add(RecordTable.INDEX_COLUMN)
+            columnTypes.add(RecordTable.TYPE_INDICATOR_COLUMN)
+            columnTypes.add(RecordTable.AUTHOR_COLUMN)
+            columnTypes.add(RecordTable.TITLE_COLUMN)
             items.setAll(records)
             prefHeight = 200.0
         }

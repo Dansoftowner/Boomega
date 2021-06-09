@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.recordview
 
+import com.dansoftware.boomega.config.ConfigAdapter
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
@@ -28,6 +29,10 @@ import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.google.gson.JsonArray
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
@@ -39,6 +44,7 @@ import javafx.concurrent.WorkerStateEvent
 import javafx.scene.layout.BorderPane
 import org.slf4j.LoggerFactory
 import java.lang.Exception
+import java.lang.reflect.Type
 import java.util.*
 import java.util.stream.Collectors
 
@@ -276,6 +282,30 @@ class RecordsView(
             }
         }
 
+    private class ColumnsInfoAdapter : ConfigAdapter<RecordsViewBase.TableColumnsInfo> {
+        override fun serialize(
+            src: RecordsViewBase.TableColumnsInfo,
+            typeOfSrc: Type?,
+            context: JsonSerializationContext?
+        ): JsonElement =
+            JsonArray().also { jsonArray ->
+                src.columnTypes
+                    .map { it.id }
+                    .distinct()
+                    .forEach(jsonArray::add)
+            }
+
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+        ): RecordsViewBase.TableColumnsInfo =
+            RecordsViewBase.TableColumnsInfo(
+                json.asJsonArray
+                    .mapNotNull { RecordTable.columnById(it.asString).orElse(null) }
+            )
+    }
+
     companion object {
         private val logger = LoggerFactory.getLogger(RecordsView::class.java)
 
@@ -283,6 +313,7 @@ class RecordsView(
             PreferenceKey(
                 "books.view.table.columns",
                 RecordsViewBase.TableColumnsInfo::class.java,
+                ColumnsInfoAdapter(),
                 RecordsViewBase.TableColumnsInfo.Companion::byDefault
             )
 
