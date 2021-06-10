@@ -25,6 +25,7 @@ import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.action.MenuItems
+import com.dansoftware.boomega.gui.control.MnemonicMenu
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
@@ -93,7 +94,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         val databaseMeta: DatabaseMeta,
         val preferences: Preferences,
         val databaseTracker: DatabaseTracker
-    ) : Menu(I18N.getValue("menubar.menu.file")) {
+    ) : MnemonicMenu(I18N.getValue("menubar.menu.file")) {
 
         init {
             this.menuItem(newEntryMenuItem())
@@ -210,7 +211,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         }
     }
 
-    private class ModuleMenu(val view: DatabaseView) : Menu(I18N.getValue("menubar.menu.modules")) {
+    private class ModuleMenu(val view: DatabaseView) : MnemonicMenu(I18N.getValue("menubar.menu.modules")) {
         init {
             view.modules.forEach {
                 this.menuItem(MenuItem(it.name, it.icon).action { _ -> view.openModule(it) })
@@ -225,7 +226,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         val context: Context,
         val preferences: Preferences,
         val databaseTracker: DatabaseTracker
-    ) : Menu(I18N.getValue("menubar.menu.preferences")) {
+    ) : MnemonicMenu(I18N.getValue("menubar.menu.preferences")) {
         init {
             this.menuItem(settingsMenu())
                 .separator()
@@ -300,7 +301,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         val context: Context,
         val preferences: Preferences,
         val databaseTracker: DatabaseTracker
-    ) : Menu(I18N.getValue("menubar.menu.clipboard")) {
+    ) : MnemonicMenu(I18N.getValue("menubar.menu.clipboard")) {
         init {
             this.menuItem(clipboardViewItem())
         }
@@ -313,7 +314,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
      * The 'Window' menu
      */
     private class WindowMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-        Menu(I18N.getValue("menubar.menu.window")) {
+        MnemonicMenu(I18N.getValue("menubar.menu.window")) {
 
         private val windowsChangeOperator = object {
             fun onWindowsAdded(windows: List<Window>) {
@@ -377,7 +378,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
     }
 
     private class PluginMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-        Menu(I18N.getValue("menubar.menu.plugin")) {
+        MnemonicMenu(I18N.getValue("menubar.menu.plugin")) {
 
         init {
             this.menuItem(pluginManagerMenuItem())
@@ -392,7 +393,7 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
     }
 
     private class HelpMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-        Menu(I18N.getValue("menubar.menu.help")) {
+        MnemonicMenu(I18N.getValue("menubar.menu.help")) {
 
         init {
             this.menuItem(updateSearcherMenuItem())
