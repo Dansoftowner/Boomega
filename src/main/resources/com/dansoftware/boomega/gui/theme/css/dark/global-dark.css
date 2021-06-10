@@ -83,3 +83,7 @@
 .menu-bar > .container > .menu-button:focused {
     -fx-border-color: rgb(0, 120, 215) transparent transparent transparent;
 }
+
+.menu-bar .label:show-mnemonics > .mnemonic-underline {
+    -fx-stroke: #cecece;
+}
