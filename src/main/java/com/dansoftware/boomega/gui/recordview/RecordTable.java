@@ -52,142 +52,130 @@ import static com.dansoftware.boomega.gui.control.BoomegaTable.ColumnType.*;
 
 public class RecordTable extends BoomegaTable<Record> {
 
-    public static final ColumnType<IndexColumn> INDEX_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType INDEX_COLUMN =
+            new ColumnType(
                     "index",
                     "record.table.column.index",
-                    IndexColumn.class,
                     RecordTable.class,
                     table -> new IndexColumn(table.startIndex),
-                    DEFAULT_VISIBLE
+                    DEFAULT_VISIBLE,
+                    INTERNATIONALIZED
             );
 
-    public static final ColumnType<TypeIndicatorColumn> TYPE_INDICATOR_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType TYPE_INDICATOR_COLUMN =
+            new ColumnType(
                     "type_indicator",
                     "record.table.column.typeindicator",
-                    TypeIndicatorColumn.class,
                     table -> new TypeIndicatorColumn(),
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<AuthorColumn> AUTHOR_COLUMN = new ColumnType<>(
+    public static final ColumnType AUTHOR_COLUMN = new ColumnType(
             "author",
             "record.table.column.author",
-            AuthorColumn.class,
             table -> new AuthorColumn(),
             DEFAULT_VISIBLE,
             TEXT_GUI_VISIBLE,
             INTERNATIONALIZED
     );
 
-    public static final ColumnType<MagazineNameColumn> MAGAZINE_NAME_COLUMN = new ColumnType<>(
+    public static final ColumnType MAGAZINE_NAME_COLUMN = new ColumnType(
             "magazine_name",
             "record.table.column.magazinename",
-            MagazineNameColumn.class,
             table -> new MagazineNameColumn(),
             TEXT_GUI_VISIBLE,
             INTERNATIONALIZED
     );
 
-    public static final ColumnType<TitleColumn> TITLE_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType TITLE_COLUMN =
+            new ColumnType(
                     "title",
                     "record.table.column.title",
-                    TitleColumn.class,
                     table -> new TitleColumn(),
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<SubtitleColumn> SUB_TITLE_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType SUB_TITLE_COLUMN =
+            new ColumnType(
                     "subtitle",
                     "record.table.column.subtitle",
-                    SubtitleColumn.class,
                     table -> new SubtitleColumn(),
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<ISBNColumn> ISBN_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType ISBN_COLUMN =
+            new ColumnType(
                     "isbn",
                     "record.table.column.isbn",
-                    ISBNColumn.class,
                     table -> new ISBNColumn(),
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<PublisherColumn> PUBLISHER_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType PUBLISHER_COLUMN =
+            new ColumnType(
                     "publisher",
                     "record.table.column.publisher",
-                    PublisherColumn.class,
                     table -> new PublisherColumn(),
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<DateColumn> DATE_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType DATE_COLUMN =
+            new ColumnType(
                     "date",
                     "record.table.column.date",
-                    DateColumn.class,
                     table -> new DateColumn(),
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<CopyCountColumn> COPY_COUNT_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType COPY_COUNT_COLUMN =
+            new ColumnType(
                     "copy_count",
                     "record.table.column.copycount",
-                    CopyCountColumn.class,
                     table -> new CopyCountColumn(),
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<LangColumn> LANG_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType LANG_COLUMN =
+            new ColumnType(
                     "lang",
                     "record.table.column.lang",
-                    LangColumn.class,
                     table -> new LangColumn(),
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<RankColumn> RANK_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType RANK_COLUMN =
+            new ColumnType(
                     "rank",
                     "record.table.column.rank",
-                    RankColumn.class,
                     table -> new RankColumn(),
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType<ServiceConnectionColumn> SERVICE_CONNECTION_COLUMN =
-            new ColumnType<>(
+    public static final ColumnType SERVICE_CONNECTION_COLUMN =
+            new ColumnType(
                     "service_connection",
                     "record.table.column.service",
-                    ServiceConnectionColumn.class,
                     table -> new ServiceConnectionColumn(),
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED
             );
 
-    public static List<ColumnType<? extends Column<Record, ?>>> columns() {
+    public static List<ColumnType> columns() {
         return List.of(
                 INDEX_COLUMN,
                 TYPE_INDICATOR_COLUMN,
@@ -204,7 +192,7 @@ public class RecordTable extends BoomegaTable<Record> {
         );
     }
 
-    public static Optional<ColumnType<? extends Column<Record, ?>>> columnById(@NotNull String id) {
+    public static Optional<ColumnType> columnById(@NotNull String id) {
         return columns().stream().filter(it -> it.getId().equals(id)).findAny();
     }
 
@@ -234,7 +222,7 @@ public class RecordTable extends BoomegaTable<Record> {
         this.getColumns().clear();
         columns().stream()
                 .filter(ColumnType::isDefaultVisible)
-                .forEach(this.getColumnTypes()::add);
+                .forEach(this::addColumnType);
     }
 
     public IntegerProperty startIndexProperty() {

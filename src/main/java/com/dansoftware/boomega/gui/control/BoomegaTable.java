@@ -18,15 +18,11 @@
 
 package com.dansoftware.boomega.gui.control;
 
-import com.dansoftware.boomega.gui.recordview.RecordTable;
 import com.dansoftware.boomega.i18n.I18N;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -36,6 +32,7 @@ import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -49,42 +46,16 @@ public abstract class BoomegaTable<S> extends TableView<S> {
     private final ObjectProperty<ContextMenu> rowContextMenu;
     private final ObjectProperty<Comparator<String>> sortingComparator;
 
-    private final ObservableList<ColumnType<? extends Column<?, ?>>> columnTypes;
-
     public BoomegaTable() {
         this.onItemDoubleClicked = new SimpleObjectProperty<>();
         this.onItemSecondaryDoubleClicked = new SimpleObjectProperty<>();
         this.rowContextMenu = new SimpleObjectProperty<>();
         this.sortingComparator = new SimpleObjectProperty<>();
-        this.columnTypes = buildColumnTypeList();
         this.buildClickHandlingPolicy();
     }
 
     private void buildClickHandlingPolicy() {
         this.setRowFactory(table -> buildTableRow());
-    }
-
-    private ObservableList<ColumnType<? extends Column<?, ?>>> buildColumnTypeList() {
-        final ObservableList<ColumnType<? extends Column<?, ?>>> list = FXCollections.observableArrayList();
-        list.addListener((ListChangeListener<ColumnType<? extends Column<?, ?>>>) c -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    c.getAddedSubList().forEach(it -> {
-                        boolean contains =
-                                getColumns().stream()
-                                        .map(Column.class::cast)
-                                        .filter(col -> col.columnType.equals(it))
-                                        .findAny()
-                                        .orElse(null) != null;
-                        if (!contains) {
-                            getColumns().add((TableColumn<S, ?>) it.getColumnFactory().apply(this));
-                        }
-                    });
-                } else if (c.wasRemoved() || c.wasReplaced())
-                    c.getRemoved().forEach(it -> getColumns().removeIf(column -> ((Column<S, ?>) column).columnType.equals(it)));
-            }
-        });
-        return list;
     }
 
     private TableRow<S> buildTableRow() {
@@ -109,11 +80,32 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         return tableRow;
     }
 
-    public boolean isColumnShown(@Nullable ColumnType<?> columnType) {
+    public boolean isColumnShown(@Nullable ColumnType columnType) {
         return getColumns().stream()
                 .map(Column.class::cast)
                 .map(col -> col.columnType)
                 .anyMatch(col -> col.equals(columnType));
+    }
+
+    public List<ColumnType> getShowingColumnTypes() {
+        return getColumns().stream()
+                .map(Column.class::cast)
+                .map(col -> col.columnType)
+                .toList();
+    }
+
+    @SuppressWarnings("unchecked")
+    public void addColumnType(@NotNull ColumnType columnType) {
+        getColumns().add((TableColumn<S, ?>) columnType.columnFactory.apply(this));
+    }
+
+    public void addColumnTypes(ColumnType... columnTypes) {
+        Arrays.stream(columnTypes).forEach(this::addColumnType);
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean removeColumnType(@Nullable ColumnType columnType) {
+        return getColumns().removeIf(it -> ((Column<S, ?>) it).columnType.equals(columnType));
     }
 
     public void removeAllColumns() {
@@ -144,10 +136,6 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         this.rowContextMenu.set(rowContextMenu);
     }
 
-    public ObservableList<ColumnType<? extends Column<?, ?>>> getColumnTypes() {
-        return columnTypes;
-    }
-
     public Consumer<S> getOnItemDoubleClicked() {
         return onItemDoubleClicked.get();
     }
@@ -172,7 +160,10 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         this.onItemSecondaryDoubleClicked.set(onItemSecondaryDoubleClicked);
     }
 
-    public static class ColumnType<C extends Column<?, ?>> {
+    /**
+     * Represents a column in the particular {@link BoomegaTable}.
+     */
+    public static class ColumnType {
 
         public static final Option DEFAULT_VISIBLE = new Option();
         public static final Option TEXT_GUI_VISIBLE = new Option();
@@ -180,18 +171,15 @@ public abstract class BoomegaTable<S> extends TableView<S> {
 
         private final String id;
         private final String text;
-        private final Class<C> tableColumnClass;
-        private final Function<BoomegaTable<?>, ? extends C> columnFactory;
+        private final Function<BoomegaTable<?>, ? extends Column<?, ?>> columnFactory;
         private final List<Option> options;
 
         public ColumnType(@NotNull String id,
                           @NotNull String text,
-                          @NotNull Class<C> tableColumnClass,
-                          @NotNull Function<BoomegaTable<?>, ? extends C> columnFactory,
+                          @NotNull Function<BoomegaTable<?>, ? extends Column<?, ?>> columnFactory,
                           Option... options) {
             this.id = Objects.requireNonNull(id);
             this.text = Objects.requireNonNull(text);
-            this.tableColumnClass = Objects.requireNonNull(tableColumnClass);
             this.columnFactory = columnFactory;
             this.options = List.of(options);
         }
@@ -199,14 +187,12 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         @SuppressWarnings("unchecked")
         public <T extends BoomegaTable<?>> ColumnType(@NotNull String id,
                                                       @NotNull String text,
-                                                      @NotNull Class<C> tableColumnClass,
-                                                      @NotNull Class<T> tableClass,
-                                                      @NotNull Function<T, ? extends C> columnFactory,
+                                                      @SuppressWarnings("unused") @NotNull Class<T> tableClass,
+                                                      @NotNull Function<T, ? extends Column<?, ?>> columnFactory,
                                                       Option... options) {
             this.id = Objects.requireNonNull(id);
             this.text = Objects.requireNonNull(text);
-            this.tableColumnClass = Objects.requireNonNull(tableColumnClass);
-            this.columnFactory = (Function<BoomegaTable<?>, ? extends C>) columnFactory;
+            this.columnFactory = (Function<BoomegaTable<?>, ? extends Column<?, ?>>) columnFactory;
             this.options = List.of(options);
         }
 
@@ -218,11 +204,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
             return text;
         }
 
-        public Class<C> getTableColumnClass() {
-            return tableColumnClass;
-        }
-
-        public Function<BoomegaTable<?>, ? extends C> getColumnFactory() {
+        public Function<BoomegaTable<?>, ? extends Column<?, ?>> getColumnFactory() {
             return columnFactory;
         }
 
@@ -254,18 +236,19 @@ public abstract class BoomegaTable<S> extends TableView<S> {
      */
     public static class Column<S, T> extends TableColumn<S, T> {
 
-        private final ColumnType<? extends Column<S, T>> columnType;
+        private final ColumnType columnType;
 
-        public Column(@NotNull ColumnType<? extends Column<S, T>> columnType) {
+        public Column(@NotNull ColumnType columnType) {
             this.columnType = columnType;
+            this.setSortable(false);
             this.initToColumnType(columnType);
         }
 
-        private void initToColumnType(ColumnType<? extends Column<S, T>> columnType) {
+        private void initToColumnType(ColumnType columnType) {
             setText(getTextFor(columnType));
         }
 
-        private String getTextFor(ColumnType<? extends Column<S, T>> columnType) {
+        private String getTextFor(ColumnType columnType) {
             return columnType.isTextOnUIVisible() ?
                     (columnType.isI18N() ? I18N.getValue(columnType.text) : columnType.text) : null;
         }
@@ -274,7 +257,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
 
     public static abstract class SortableColumn<S> extends Column<S, String> {
 
-        public SortableColumn(@NotNull ColumnType<? extends Column<S, String>> columnType) {
+        public SortableColumn(@NotNull ColumnType columnType) {
             super(columnType);
             setSortable(true);
             bindToTableSoringComparator();

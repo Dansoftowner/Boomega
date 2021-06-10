@@ -75,9 +75,9 @@ class RecordsViewBase(
         }
 
     var columnsInfo: TableColumnsInfo
-        get() = TableColumnsInfo(table.columnTypes)
+        get() = TableColumnsInfo(table.showingColumnTypes)
         set(value) {
-            value.columnTypes.forEach(table.columnTypes::add)
+            value.columnTypes.forEach(table::addColumnType)
         }
 
     init {
@@ -151,12 +151,12 @@ class RecordsViewBase(
     /**
      * Used for storing the preferred table columns in the configurations.
      */
-    class TableColumnsInfo(val columnTypes: List<BoomegaTable.ColumnType<*>>) {
+    class TableColumnsInfo(val columnTypes: List<BoomegaTable.ColumnType>) {
         companion object {
             fun byDefault() =
                 TableColumnsInfo(
                     RecordTable.columns().stream()
-                        .filter(BoomegaTable.ColumnType<*>::isDefaultVisible)
+                        .filter(BoomegaTable.ColumnType::isDefaultVisible)
                         .collect(Collectors.toList())
                 )
         }

@@ -239,20 +239,20 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
         }
     }
 
-    private inner class TableColumnMenuItem(val columnType: BoomegaTable.ColumnType<*>) :
+    private inner class TableColumnMenuItem(val columnType: BoomegaTable.ColumnType) :
         CheckMenuItem(if(columnType.isI18N) I18N.getValue(columnType.text) else columnType.text) {
 
         init {
             setOnAction {
                 when {
-                    this.isSelected.not() -> view.table.columnTypes.remove(columnType)
+                    this.isSelected.not() -> view.table.removeColumnType(columnType)
                     else -> {
                         view.table.removeAllColumns()
                         columnChooserItem.items.stream()
                             .map { it as TableColumnMenuItem }
                             .filter(TableColumnMenuItem::isSelected)
                             .map(TableColumnMenuItem::columnType)
-                            .forEach(view.table.columnTypes::add)
+                            .forEach(view.table::addColumnType)
                     }
                 }
             }

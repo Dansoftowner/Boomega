@@ -35,7 +35,7 @@ class ClipboardTable : RecordTable(0) {
     }
 
     private fun buildColumns() {
-        columnTypes.addAll(
+        addColumnTypes(
             TYPE_INDICATOR_COLUMN,
             AUTHOR_COLUMN,
             TITLE_COLUMN,
