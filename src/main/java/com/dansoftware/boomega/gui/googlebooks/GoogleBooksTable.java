@@ -28,6 +28,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -87,13 +88,13 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             );
 
     public static final ColumnType ISBN_COLUMN =
-        new ColumnType(
-                "isbn",
-                "google.books.table.column.isbn",
-                table -> new ISBNColumn(),
-                INTERNATIONALIZED,
-                TEXT_GUI_VISIBLE
-        );
+            new ColumnType(
+                    "isbn",
+                    "google.books.table.column.isbn",
+                    table -> new ISBNColumn(),
+                    INTERNATIONALIZED,
+                    TEXT_GUI_VISIBLE
+            );
 
     public static final ColumnType ISBN_10_COLUMN =
             new ColumnType(
@@ -115,14 +116,14 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             );
 
     public static final ColumnType AUTHOR_COLUMN =
-        new ColumnType(
-                "author",
-                "google.books.table.column.author",
-                table -> new AuthorColumn(),
-                DEFAULT_VISIBLE,
-                INTERNATIONALIZED,
-                TEXT_GUI_VISIBLE
-        );
+            new ColumnType(
+                    "author",
+                    "google.books.table.column.author",
+                    table -> new AuthorColumn(),
+                    DEFAULT_VISIBLE,
+                    INTERNATIONALIZED,
+                    TEXT_GUI_VISIBLE
+            );
 
     public static final ColumnType TITLE_COLUMN =
             new ColumnType(
@@ -255,36 +256,22 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
     }
 
     private static abstract class SimpleVolumeInfoColumn extends SortableColumn<Volume>
-            implements Callback<TableColumn<Volume, String>, TableCell<Volume, String>> {
+            implements Callback<TableColumn.CellDataFeatures<Volume, String>, ObservableValue<String>> {
 
         public SimpleVolumeInfoColumn(@NotNull ColumnType columnType) {
             super(columnType);
-            setCellValueFactory(cellData ->
-                    BaseFXUtils.constantObservable(() ->
-                            Optional.ofNullable(getValue(cellData.getValue().getVolumeInfo()))
-                                    .map(Object::toString)
-                                    .orElse("-"))
-            );
-            setCellFactory(this);
+            setCellValueFactory(this);
         }
 
         protected abstract Object getValue(Volume.VolumeInfo volumeInfo);
 
         @Override
-        public TableCell<Volume, String> call(TableColumn<Volume, String> param) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        Object value = getValue(getTableView().getItems().get(getIndex()).getVolumeInfo());
-                        setText(value == null ? " - " : value.toString());
-                    }
-                }
-            };
+        public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
+            return BaseFXUtils.constantObservable(() ->
+                    Optional.ofNullable(getValue(cellData.getValue().getVolumeInfo()))
+                            .map(Object::toString)
+                            .orElse("-"));
+
         }
     }
 
@@ -368,7 +355,9 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
                         Optional.ofNullable(volume.getImageLinks())
                                 .map(Volume.VolumeInfo.ImageLinks::getThumbnail)
                                 .ifPresentOrElse(thumbnail -> {
-                                    setGraphic(new ImagePlaceHolder(80) {{ setHeight(PREF_HEIGHT); }});
+                                    setGraphic(new ImagePlaceHolder(80) {{
+                                        setHeight(PREF_HEIGHT);
+                                    }});
                                     BaseFXUtils.loadImage(thumbnail, image -> {
                                         if (volume.equals(getCurrentVolumeInfo())) {
                                             setGraphic(new ImageView(image));
@@ -413,32 +402,41 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
     }
 
     @SuppressWarnings("DuplicatedCode")
-    private static final class ISBN13Column extends Column<Volume, String> {
+    private static final class ISBN13Column extends Column<Volume, String>
+            implements Callback<TableColumn.CellDataFeatures<Volume, String>, ObservableValue<String>> {
         ISBN13Column() {
             super(ISBN_13_COLUMN);
             setSortable(false);
-            setCellValueFactory(cellData -> BaseFXUtils.constantObservable(() ->
+            setCellValueFactory(this);
+        }
+
+        @Override
+        public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
+            return BaseFXUtils.constantObservable(() ->
                     Optional.ofNullable(cellData.getValue())
                             .map(Volume::getVolumeInfo)
                             .map(Volume.VolumeInfo::getIndustryIdentifiers)
                             .flatMap(identifiers -> identifiers.stream()
                                     .filter(Volume.VolumeInfo.IndustryIdentifier::isIsbn13)
                                     .map(Volume.VolumeInfo.IndustryIdentifier::getIdentifier)
-                                    .findAny()).orElse("-"))
-            );
+                                    .findAny()).orElse("-"));
         }
     }
 
-    private static final class ISBNColumn extends Column<Volume, String> {
+    private static final class ISBNColumn extends Column<Volume, String>
+            implements Callback<TableColumn.CellDataFeatures<Volume, String>, ObservableValue<String>> {
         ISBNColumn() {
             super(ISBN_COLUMN);
             setSortable(false);
-            setCellValueFactory(cellData ->
-                    BaseFXUtils.constantObservable(() ->
-                            Optional.ofNullable(cellData.getValue().getVolumeInfo())
-                                    .map(Volume.VolumeInfo::getIndustryIdentifiersAsString)
-                                    .orElse("-"))
-            );
+            setCellValueFactory(this);
+        }
+
+        @Override
+        public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
+            return BaseFXUtils.constantObservable(() ->
+                    Optional.ofNullable(cellData.getValue().getVolumeInfo())
+                            .map(Volume.VolumeInfo::getIndustryIdentifiersAsString)
+                            .orElse("-"));
         }
     }
 
@@ -488,17 +486,21 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
         }
     }
 
-    private static final class LangColumn extends Column<Volume, String> {
+    private static final class LangColumn extends Column<Volume, String>
+            implements Callback<TableColumn.CellDataFeatures<Volume, String>, ObservableValue<String>> {
         LangColumn() {
             super(LANG_COLUMN);
-            setCellValueFactory(cellData ->
-                    BaseFXUtils.constantObservable(() ->
-                            Optional.ofNullable(cellData.getValue().getVolumeInfo())
-                                    .map(Volume.VolumeInfo::getLanguage)
-                                    .map(Locale::forLanguageTag)
-                                    .map(Locale::getDisplayLanguage)
-                                    .orElse("-"))
-            );
+            setCellValueFactory(this);
+        }
+
+        @Override
+        public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
+            return BaseFXUtils.constantObservable(() ->
+                    Optional.ofNullable(cellData.getValue().getVolumeInfo())
+                            .map(Volume.VolumeInfo::getLanguage)
+                            .map(Locale::forLanguageTag)
+                            .map(Locale::getDisplayLanguage)
+                            .orElse("-"));
         }
     }
 
