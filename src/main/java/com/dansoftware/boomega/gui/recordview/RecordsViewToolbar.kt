@@ -26,6 +26,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
@@ -248,11 +249,13 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
                     this.isSelected.not() -> view.table.removeColumnType(columnType)
                     else -> {
                         view.table.removeAllColumns()
-                        columnChooserItem.items.stream()
-                            .map { it as TableColumnMenuItem }
-                            .filter(TableColumnMenuItem::isSelected)
-                            .map(TableColumnMenuItem::columnType)
-                            .forEach(view.table::addColumnType)
+                        Platform.runLater {
+                            columnChooserItem.items.stream()
+                                .map { it as TableColumnMenuItem }
+                                .filter(TableColumnMenuItem::isSelected)
+                                .map(TableColumnMenuItem::columnType)
+                                .forEach(view.table::addColumnType)
+                        }
                     }
                 }
             }
