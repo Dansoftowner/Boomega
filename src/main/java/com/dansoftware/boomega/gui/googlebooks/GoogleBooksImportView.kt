@@ -18,18 +18,27 @@
 
 package com.dansoftware.boomega.gui.googlebooks
 
+import com.dansoftware.boomega.config.ConfigAdapter
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.service.googlebooks.asRecord
 import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.control.BoomegaTable
+import com.dansoftware.boomega.gui.recordview.RecordTable
+import com.dansoftware.boomega.gui.recordview.RecordsViewBase
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import com.dansoftware.boomega.i18n.I18N
+import com.google.gson.JsonArray
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import javafx.beans.property.SimpleStringProperty
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.control.Button
 import javafx.scene.layout.BorderPane
 import org.apache.commons.lang3.StringUtils
+import java.lang.reflect.Type
 import java.util.*
 import java.util.stream.Collectors
 
@@ -43,21 +52,6 @@ class GoogleBooksImportView(
     private val context: Context,
     private val preferences: Preferences
 ) : BorderPane() {
-
-    companion object {
-        private val colConfigKey =
-            PreferenceKey(
-                "google.books.module.table.columns",
-                TableColumnsInfo::class.java,
-                TableColumnsInfo::byDefault
-            )
-        private val abcConfigKey =
-            PreferenceKey(
-                "google.books.module.table.abcsort",
-                Locale::class.java,
-                Locale::getDefault
-            )
-    }
 
     private val toolBar = buildToolBar()
     private val searchView: GoogleBooksSearchView = buildContent()
@@ -77,14 +71,13 @@ class GoogleBooksImportView(
     fun clear() = searchView.clear()
 
     fun writeConfig() {
-        preferences.editor().apply {
-            put(colConfigKey, TableColumnsInfo(table.showingColumns))
-            put(abcConfigKey, toolBar.abcLocaleProperty().get())
-        }
+        preferences.editor()
+            .put(colConfigKey, TableColumnsInfo(table.showingColumnTypes))
+            .put(abcConfigKey, toolBar.abcLocaleProperty().get())
     }
 
     private fun readColumnConfigurations() {
-        preferences[colConfigKey].columnTypes.forEach(searchView.table::addColumn)
+        preferences[colConfigKey].columnTypes.forEach(searchView.table::addColumnType)
         toolBar.updateColumnChooser()
     }
 
@@ -132,15 +125,54 @@ class GoogleBooksImportView(
     /**
      * Used for storing the preferred table columns in the configurations.
      */
-    class TableColumnsInfo(val columnTypes: List<GoogleBooksTable.ColumnType>) {
+    class TableColumnsInfo(val columnTypes: List<BoomegaTable.ColumnType>) {
         companion object {
             fun byDefault(): TableColumnsInfo {
                 return TableColumnsInfo(
-                    Arrays.stream(GoogleBooksTable.ColumnType.values())
+                    GoogleBooksTable.columns()
                         .filter { it.isDefaultVisible }
-                        .collect(Collectors.toList())
                 )
             }
         }
+    }
+
+    private class ColumnsInfoAdapter : ConfigAdapter<TableColumnsInfo> {
+        override fun serialize(
+            src: TableColumnsInfo,
+            typeOfSrc: Type?,
+            context: JsonSerializationContext?
+        ): JsonElement =
+            JsonArray().also { jsonArray ->
+                src.columnTypes
+                    .map { it.id }
+                    .distinct()
+                    .forEach(jsonArray::add)
+            }
+
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+        ): TableColumnsInfo =
+            TableColumnsInfo(
+                json.asJsonArray
+                    .mapNotNull { GoogleBooksTable.columnById(it.asString).orElse(null) }
+            )
+    }
+
+    companion object {
+        private val colConfigKey =
+            PreferenceKey(
+                "google.books.module.table.columns_",
+                TableColumnsInfo::class.java,
+                ColumnsInfoAdapter(),
+                TableColumnsInfo::byDefault
+            )
+        private val abcConfigKey =
+            PreferenceKey(
+                "google.books.module.table.abcsort",
+                Locale::class.java,
+                Locale::getDefault
+            )
     }
 }

@@ -94,12 +94,12 @@ class GoogleBookJoinerView(
                     )
                 )
             }
-            it.table.addColumns(
-                GoogleBooksTable.ColumnType.INDEX_COLUMN,
-                GoogleBooksTable.ColumnType.TYPE_INDICATOR_COLUMN,
-                GoogleBooksTable.ColumnType.THUMBNAIL_COLUMN,
-                GoogleBooksTable.ColumnType.AUTHOR_COLUMN,
-                GoogleBooksTable.ColumnType.TITLE_COLUMN,
+            it.table.addColumnTypes(
+                GoogleBooksTable.INDEX_COLUMN,
+                GoogleBooksTable.TYPE_INDICATOR_COLUMN,
+                GoogleBooksTable.THUMBNAIL_COLUMN,
+                GoogleBooksTable.AUTHOR_COLUMN,
+                GoogleBooksTable.TITLE_COLUMN,
             )
         }
 

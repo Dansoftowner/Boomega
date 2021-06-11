@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks
 
+import com.dansoftware.boomega.gui.control.BoomegaTable
 import com.dansoftware.boomega.gui.control.TwoSideToolBar
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.SystemBrowser
@@ -25,6 +26,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.application.Platform
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.event.EventHandler
@@ -113,7 +115,7 @@ class GoogleBooksImportToolBar(
             I18N.getValue("google.books.toolbar.columns"),
             FontAwesomeIconView(FontAwesomeIcon.COLUMNS)
         ).also { toolbarItem ->
-            GoogleBooksTable.ColumnType.values()
+            GoogleBooksTable.columns()
                 .map(::TableColumnMenuItem)
                 .forEach { toolbarItem.items.add(it) }
         }
@@ -168,19 +170,21 @@ class GoogleBooksImportToolBar(
         }
     }
 
-    private inner class TableColumnMenuItem(val columnType: GoogleBooksTable.ColumnType) :
-        CheckMenuItem(I18N.getValue(columnType.i18Nkey)) {
+    private inner class TableColumnMenuItem(val columnType: BoomegaTable.ColumnType) :
+        CheckMenuItem(if (columnType.isI18N) I18N.getValue(columnType.text) else columnType.text) {
         init {
             setOnAction {
                 when {
-                    this.isSelected.not() -> view.table.removeColumn(columnType)
+                    this.isSelected.not() -> view.table.removeColumnType(columnType)
                     else -> {
                         view.table.removeAllColumns()
-                        columnChooserItem.items.stream()
-                            .map { it as TableColumnMenuItem }
-                            .filter { it.isSelected }
-                            .map { it.columnType }
-                            .forEach(view.table::addColumn)
+                        Platform.runLater {
+                            columnChooserItem.items.stream()
+                                .map { it as TableColumnMenuItem }
+                                .filter { it.isSelected }
+                                .map { it.columnType }
+                                .forEach(view.table::addColumnType)
+                        }
                     }
                 }
             }
