@@ -191,23 +191,26 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
                     TEXT_GUI_VISIBLE
             );
 
+    private static final List<ColumnType> columnsList =
+            List.of(
+                    INDEX_COLUMN,
+                    TYPE_INDICATOR_COLUMN,
+                    THUMBNAIL_COLUMN,
+                    ISBN_COLUMN,
+                    ISBN_10_COLUMN,
+                    ISBN_13_COLUMN,
+                    AUTHOR_COLUMN,
+                    TITLE_COLUMN,
+                    SUB_TITLE_COLUMN,
+                    PUBLISHER_COLUMN,
+                    LANG_COLUMN,
+                    DATE_COLUMN,
+                    RANK_COLUMN,
+                    BROWSER_COLUMN
+            );
+
     public static List<ColumnType> columns() {
-        return List.of(
-                INDEX_COLUMN,
-                TYPE_INDICATOR_COLUMN,
-                THUMBNAIL_COLUMN,
-                ISBN_COLUMN,
-                ISBN_10_COLUMN,
-                ISBN_13_COLUMN,
-                AUTHOR_COLUMN,
-                TITLE_COLUMN,
-                SUB_TITLE_COLUMN,
-                PUBLISHER_COLUMN,
-                LANG_COLUMN,
-                DATE_COLUMN,
-                RANK_COLUMN,
-                BROWSER_COLUMN
-        );
+        return columnsList;
     }
 
     public static Optional<ColumnType> columnById(@NotNull String id) {

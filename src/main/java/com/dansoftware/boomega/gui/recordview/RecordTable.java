@@ -174,21 +174,24 @@ public class RecordTable extends BoomegaTable<Record> {
                     INTERNATIONALIZED
             );
 
+    private static final List<ColumnType> columnsList =
+            List.of(
+                    INDEX_COLUMN,
+                    TYPE_INDICATOR_COLUMN,
+                    MAGAZINE_NAME_COLUMN,
+                    TITLE_COLUMN,
+                    SUB_TITLE_COLUMN,
+                    ISBN_COLUMN,
+                    PUBLISHER_COLUMN,
+                    DATE_COLUMN,
+                    COPY_COUNT_COLUMN,
+                    LANG_COLUMN,
+                    RANK_COLUMN,
+                    SERVICE_CONNECTION_COLUMN
+            );
+
     public static List<ColumnType> columns() {
-        return List.of(
-                INDEX_COLUMN,
-                TYPE_INDICATOR_COLUMN,
-                MAGAZINE_NAME_COLUMN,
-                TITLE_COLUMN,
-                SUB_TITLE_COLUMN,
-                ISBN_COLUMN,
-                PUBLISHER_COLUMN,
-                DATE_COLUMN,
-                COPY_COUNT_COLUMN,
-                LANG_COLUMN,
-                RANK_COLUMN,
-                SERVICE_CONNECTION_COLUMN
-        );
+        return columnsList;
     }
 
     public static Optional<ColumnType> columnById(@NotNull String id) {
