@@ -51,8 +51,6 @@ import static com.dansoftware.boomega.gui.control.BoomegaTable.ColumnType.*;
 
 /**
  * A {@link GoogleBooksTable} is a table-view that used for showing Google Books.
- * <p>
- * It's columns are represented by the {@link ColumnType} enum.
  *
  * @author Daniel Gyorffy
  */
