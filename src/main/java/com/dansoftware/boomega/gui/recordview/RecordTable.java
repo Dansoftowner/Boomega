@@ -70,22 +70,24 @@ public class RecordTable extends BoomegaTable<Record> {
                     INTERNATIONALIZED
             );
 
-    public static final ColumnType AUTHOR_COLUMN = new ColumnType(
-            "author",
-            "record.table.column.author",
-            table -> new AuthorColumn(),
-            DEFAULT_VISIBLE,
-            TEXT_GUI_VISIBLE,
-            INTERNATIONALIZED
-    );
+    public static final ColumnType AUTHOR_COLUMN =
+            new ColumnType(
+                    "author",
+                    "record.table.column.author",
+                    table -> new AuthorColumn(),
+                    DEFAULT_VISIBLE,
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
+            );
 
-    public static final ColumnType MAGAZINE_NAME_COLUMN = new ColumnType(
-            "magazine_name",
-            "record.table.column.magazinename",
-            table -> new MagazineNameColumn(),
-            TEXT_GUI_VISIBLE,
-            INTERNATIONALIZED
-    );
+    public static final ColumnType MAGAZINE_NAME_COLUMN =
+            new ColumnType(
+                    "magazine_name",
+                    "record.table.column.magazinename",
+                    table -> new MagazineNameColumn(),
+                    TEXT_GUI_VISIBLE,
+                    INTERNATIONALIZED
+            );
 
     public static final ColumnType TITLE_COLUMN =
             new ColumnType(
