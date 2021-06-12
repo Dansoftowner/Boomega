@@ -14,6 +14,9 @@
     -mdfx-bg-color-3: #eee;
 
     -mdfx-link-color: blue;
+
+    -mdfx-bq-color-border: #4488cc;
+    -mdfx-bq-color-background: #0000ff0c;
 }
 
 .markdown-italic {
