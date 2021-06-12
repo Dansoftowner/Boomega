@@ -92,9 +92,9 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-collections:commons-collections:3.2.2'
     implementation 'com.github.Dansoftowner:jFileGoodies:1.2.6'
-    implementation 'com.github.oshi:oshi-core:5.7.3'
+    implementation 'com.github.oshi:oshi-core:5.7.5'
     implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.7'
-    implementation 'com.github.Dansoftowner:Restart4j:1.4.6'
+    implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.2'
@@ -115,11 +115,11 @@ dependencies {
     //implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
     //implementation 'de.jensd:fontawesomefx-materialdesignfont:2.0.26-9.1.2'
     implementation 'io.github.typhon0:AnimateFX:1.2.2'
-    implementation 'com.sandec:mdfx:0.2.1'
+    implementation 'com.sandec:mdfx:0.2.3'
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation "de.jangassen:nsmenufx:3.1.0"
-    implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.1'
+    implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
     implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
 
     //implementation from the local file system
