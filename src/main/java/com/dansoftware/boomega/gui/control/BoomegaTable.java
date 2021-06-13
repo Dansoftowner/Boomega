@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class BoomegaTable<S> extends TableView<S> {
 
@@ -176,11 +177,11 @@ public abstract class BoomegaTable<S> extends TableView<S> {
 
         public ColumnType(@NotNull String id,
                           @NotNull String text,
-                          @NotNull Function<BoomegaTable<?>, ? extends Column<?, ?>> columnFactory,
+                          @NotNull Supplier<Column<?, ?>> columnFactory,
                           Option... options) {
             this.id = Objects.requireNonNull(id);
             this.text = Objects.requireNonNull(text);
-            this.columnFactory = columnFactory;
+            this.columnFactory = table -> columnFactory.get();
             this.options = List.of(options);
         }
 

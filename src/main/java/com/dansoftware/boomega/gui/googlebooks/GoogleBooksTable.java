@@ -70,7 +70,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "type_indicator",
                     "google.books.table.column.typeindicator",
-                    table -> new TypeIndicatorColumn(),
+                    TypeIndicatorColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED
             );
@@ -79,7 +79,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "thumbnail",
                     "google.books.table.column.thumbnail",
-                    table -> new ThumbnailColumn(),
+                    ThumbnailColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
@@ -89,7 +89,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "isbn",
                     "google.books.table.column.isbn",
-                    table -> new ISBNColumn(),
+                    ISBNColumn::new,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
@@ -98,7 +98,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "isbn10",
                     "google.books.table.column.isbn10",
-                    table -> new ISBN10Column(),
+                    ISBN10Column::new,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
@@ -107,7 +107,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "isbn13",
                     "google.books.table.column.isbn13",
-                    table -> new ISBN13Column(),
+                    ISBN13Column::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
@@ -117,7 +117,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "author",
                     "google.books.table.column.author",
-                    table -> new AuthorColumn(),
+                    AuthorColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
@@ -127,7 +127,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "title",
                     "google.books.table.column.title",
-                    table -> new TitleColumn(),
+                    TitleColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
@@ -137,7 +137,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "subtitle",
                     "google.books.table.column.subtitle",
-                    table -> new SubtitleColumn(),
+                    SubtitleColumn::new,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
@@ -146,7 +146,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "publisher",
                     "google.books.table.column.subtitle",
-                    table -> new PublisherColumn(),
+                    PublisherColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
@@ -156,7 +156,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "lang",
                     "google.books.table.column.lang",
-                    table -> new LangColumn(),
+                    LangColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
@@ -166,7 +166,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "date",
                     "google.books.table.column.date",
-                    table -> new DateColumn(),
+                    DateColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
@@ -176,7 +176,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "rank",
                     "google.books.table.column.rank",
-                    table -> new RankColumn(),
+                    RankColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
@@ -186,7 +186,7 @@ public class GoogleBooksTable extends BoomegaTable<Volume> {
             new ColumnType(
                     "browse",
                     "google.books.table.column.browse",
-                    table -> new BrowserColumn(),
+                    BrowserColumn::new,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );

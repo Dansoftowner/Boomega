@@ -65,7 +65,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "type_indicator",
                     "record.table.column.typeindicator",
-                    table -> new TypeIndicatorColumn(),
+                    TypeIndicatorColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED
             );
@@ -74,7 +74,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "author",
                     "record.table.column.author",
-                    table -> new AuthorColumn(),
+                    AuthorColumn::new,
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
@@ -84,7 +84,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "magazine_name",
                     "record.table.column.magazinename",
-                    table -> new MagazineNameColumn(),
+                    MagazineNameColumn::new,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
@@ -93,7 +93,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "title",
                     "record.table.column.title",
-                    table -> new TitleColumn(),
+                    TitleColumn::new,
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
@@ -103,7 +103,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "subtitle",
                     "record.table.column.subtitle",
-                    table -> new SubtitleColumn(),
+                    SubtitleColumn::new,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
@@ -112,7 +112,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "isbn",
                     "record.table.column.isbn",
-                    table -> new ISBNColumn(),
+                    ISBNColumn::new,
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
@@ -122,7 +122,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "publisher",
                     "record.table.column.publisher",
-                    table -> new PublisherColumn(),
+                    PublisherColumn::new,
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
@@ -132,7 +132,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "date",
                     "record.table.column.date",
-                    table -> new DateColumn(),
+                    DateColumn::new,
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
@@ -142,7 +142,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "copy_count",
                     "record.table.column.copycount",
-                    table -> new CopyCountColumn(),
+                    CopyCountColumn::new,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
@@ -151,7 +151,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "lang",
                     "record.table.column.lang",
-                    table -> new LangColumn(),
+                    LangColumn::new,
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
@@ -161,7 +161,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "rank",
                     "record.table.column.rank",
-                    table -> new RankColumn(),
+                    RankColumn::new,
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
@@ -171,7 +171,7 @@ public class RecordTable extends BoomegaTable<Record> {
             new ColumnType(
                     "service_connection",
                     "record.table.column.service",
-                    table -> new ServiceConnectionColumn(),
+                    ServiceConnectionColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED
             );
