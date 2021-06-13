@@ -20,5 +20,9 @@ package com.dansoftware.boomega.gui.keybinding
 
 import javafx.scene.control.MenuItem
 
-fun MenuItem.keyBinding(keyBinding: KeyBinding) =
-    apply { acceleratorProperty().bind(keyBinding.keyCombinationProperty) }
+fun <M : MenuItem> M.keyBinding(keyBinding: KeyBinding?) =
+    apply {
+        keyBinding?.let {
+            acceleratorProperty().bind(it.keyCombinationProperty)
+        }
+    }

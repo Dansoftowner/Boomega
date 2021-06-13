@@ -74,54 +74,53 @@ fun loadImage(resource: String, onImageReady: Consumer<Image>) {
 
 fun Node.onWindowPresent(action: Consumer<Window>) {
     this.scene?.window?.also { action.accept(it) }
-    this.sceneProperty().addListener(object : ChangeListener<Scene> {
-        override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
-            if (newValue != null) {
-                scene.windowProperty().addListener(object : ChangeListener<Window> {
-                    override fun changed(
-                        observable: ObservableValue<out Window>,
-                        oldValue: Window?,
-                        newValue: Window?
-                    ) {
-                        if (newValue != null) {
-                            action.accept(newValue)
-                            observable.removeListener(this)
+        ?: this.sceneProperty().addListener(object : ChangeListener<Scene> {
+            override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
+                if (newValue != null) {
+                    scene.windowProperty().addListener(object : ChangeListener<Window> {
+                        override fun changed(
+                            observable: ObservableValue<out Window>,
+                            oldValue: Window?,
+                            newValue: Window?
+                        ) {
+                            if (newValue != null) {
+                                action.accept(newValue)
+                                observable.removeListener(this)
+                            }
                         }
-                    }
 
-                })
-                observable.removeListener(this)
+                    })
+                    observable.removeListener(this)
+                }
             }
-        }
-    })
-
+        })
 }
 
 /**
  * Sets the action of the [MenuItem] and then returns the object itself
  */
-fun MenuItem.action(onAction: EventHandler<ActionEvent>): MenuItem = this.also { this.onAction = onAction }
+fun <M : MenuItem> M.action(onAction: EventHandler<ActionEvent>): M = this.also { this.onAction = onAction }
 
 /**
  * Sets the key combination of the [MenuItem] and then returns the object itself
  */
-fun MenuItem.keyCombination(combination: KeyCombination): MenuItem = this.also { it.accelerator = combination }
+fun <M : MenuItem> M.keyCombination(combination: KeyCombination): M = this.also { it.accelerator = combination }
 
 /**
  * Binds the key combination property of the [MenuItem] to the given property and then returns the object itself
  */
-fun <T : KeyCombination> MenuItem.keyCombination(combination: ObjectProperty<T>) =
+fun <M : MenuItem, T : KeyCombination> M.keyCombination(combination: ObjectProperty<T>) =
     this.apply { acceleratorProperty().bind(combination) }
 
 /**
  * Sets the icon of the [MenuItem] and then returns the object itself
  */
-fun MenuItem.graphic(icon: MaterialDesignIcon): MenuItem = this.also { it.graphic = MaterialDesignIconView(icon) }
+fun <M : MenuItem> M.graphic(icon: MaterialDesignIcon): M = this.also { it.graphic = MaterialDesignIconView(icon) }
 
 /**
  * Adds a sub menu item into the [Menu] and then returns the object itself
  */
-fun Menu.menuItem(item: MenuItem): Menu = this.also { this.items.add(item) }
+fun <M : Menu> M.menuItem(item: MenuItem): M = this.also { items.add(item) }
 
 /**
  * Adds a [SeparatorMenuItem] into the [Menu] and then returns the object itself

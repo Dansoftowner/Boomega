@@ -21,12 +21,14 @@ package com.dansoftware.boomega.gui.action
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 
 open class Action(
     private val i18nName: String,
     val icon: MaterialDesignIcon,
+    val keyBinding: KeyBinding?,
     private val operation: (Context, Preferences, DatabaseTracker) -> Unit
 ) {
 
@@ -35,7 +37,13 @@ open class Action(
     val displayName: String
         get() = displayNameBacking ?: I18N.getValue(i18nName).also { displayNameBacking = it }
 
-    fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+    constructor(
+        i18nName: String,
+        icon: MaterialDesignIcon,
+        operation: (Context, Preferences, DatabaseTracker) -> Unit
+    ) : this(i18nName, icon, null, operation)
+
+    open fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
         operation(context, preferences, databaseTracker)
     }
 }

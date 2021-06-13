@@ -40,6 +40,7 @@ import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.jfilegoodies.explorer.FileExplorers
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.concurrent.Task
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
@@ -52,7 +53,7 @@ object GlobalActions {
     /* --------------------------------------------------------------------> */
 
     @JvmField
-    val NEW_ENTRY = KeyBindingAction(
+    val NEW_ENTRY = Action(
         "preferences.keybindings.new_entry",
         MaterialDesignIcon.DATABASE,
         KeyBindings.newEntryKeyBinding
@@ -62,7 +63,7 @@ object GlobalActions {
 
     @JvmField
     val OPEN_DATABASE =
-        KeyBindingAction(
+        Action(
             "preferences.keybindings.open_database",
             MaterialDesignIcon.FILE,
             KeyBindings.openDatabaseKeyBinding
@@ -75,7 +76,7 @@ object GlobalActions {
 
     @JvmField
     val CREATE_DATABASE =
-        KeyBindingAction(
+        Action(
             "preferences.keybindings.create_database",
             MaterialDesignIcon.DATABASE_PLUS,
             KeyBindings.createDatabaseKeyBinding
@@ -88,7 +89,7 @@ object GlobalActions {
 
     @JvmField
     val OPEN_DATABASE_MANAGER =
-        KeyBindingAction(
+        Action(
             "preferences.keybindings.open_database_manager",
             MaterialDesignIcon.DATABASE,
             KeyBindings.openDatabaseManagerKeyBinding
@@ -99,7 +100,7 @@ object GlobalActions {
     @JvmField
     val RESTART_APPLICATION = run {
         val dialogShownContexts: MutableSet<Context> = HashSet()
-        KeyBindingAction(
+        Action(
             "preferences.keybindings.restart",
             MaterialDesignIcon.UPDATE,
             KeyBindings.restartApplicationKeyBinding
@@ -121,7 +122,7 @@ object GlobalActions {
 
     @JvmField
     val OPEN_SETTINGS =
-        KeyBindingAction(
+        Action(
             "preferences.keybindings.open_settings",
             MaterialDesignIcon.SETTINGS,
             KeyBindings.openSettingsKeyBinding
@@ -131,7 +132,7 @@ object GlobalActions {
 
     @JvmField
     val FULL_SCREEN =
-        KeyBindingAction(
+        Action(
             "preferences.keybindings.full_screen",
             MaterialDesignIcon.FULLSCREEN,
             KeyBindings.fullScreenKeyBinding
@@ -192,15 +193,15 @@ object GlobalActions {
     ) {
         listKeyBindActions().forEach { action ->
             scene.addEventHandler(KeyEvent.KEY_PRESSED) {
-                if (action.keyBinding.match(it)) {
+                if (action.keyBinding!!.match(it)) {
                     action.invoke(context, preferences, databaseTracker)
                 }
             }
         }
     }
 
-    private fun listKeyBindActions(): List<KeyBindingAction> {
-        return allActions.filterIsInstance<KeyBindingAction>()
+    private fun listKeyBindActions(): List<Action> {
+        return allActions.filter { it.keyBinding !== null }
     }
 
     private fun submitTask(context: Context, runnable: Runnable) {

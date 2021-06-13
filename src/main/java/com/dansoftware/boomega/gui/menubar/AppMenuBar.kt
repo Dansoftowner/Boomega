@@ -40,6 +40,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.ListChangeListener
 import javafx.concurrent.Task
 import javafx.scene.control.*
@@ -373,7 +374,15 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         }
 
         private fun fullScreenMenuItem() =
-            MenuItems.of(GlobalActions.FULL_SCREEN, context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.FULL_SCREEN, context, preferences, databaseTracker, ::CheckMenuItem)
+                .apply {
+                    context.onWindowPresent { window ->
+                        if (window is Stage)
+                            window.fullScreenProperty().addListener { _, _, isFullScreen ->
+                                selectedProperty().set(isFullScreen)
+                            }
+                    }
+                }
     }
 
     private class PluginMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
