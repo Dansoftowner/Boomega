@@ -124,7 +124,7 @@ fun <M : Menu> M.menuItem(item: MenuItem): M = this.also { items.add(item) }
 /**
  * Adds a [SeparatorMenuItem] into the [Menu] and then returns the object itself
  */
-fun Menu.separator(): Menu = this.also { this.items.add(SeparatorMenuItem()) }
+fun <M : Menu> M.separator(): M = this.also { this.items.add(SeparatorMenuItem()) }
 
 /**
  * Utility function that converts a [KeyCodeCombination] into a [KeyEvent] object,
@@ -193,4 +193,3 @@ fun KClass<*>.loadImageResource(resource: String): Image {
         return Image(it)
     }
 }
-
