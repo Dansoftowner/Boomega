@@ -65,7 +65,7 @@
 }
 
 .tab-control:selected, .tab-control:selected:hover {
-    -fx-background-color: #282828;
+    -fx-background-color: #252424;
     -fx-border-color: rgb(0, 120, 215);
 }
 
