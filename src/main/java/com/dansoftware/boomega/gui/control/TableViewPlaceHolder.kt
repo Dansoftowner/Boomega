@@ -11,15 +11,23 @@ import javafx.scene.layout.VBox
 import java.util.function.Consumer
 import java.util.function.Supplier
 
-class TableViewPlaceHolder(tableView: TableView<*>, valueIfEmpty: Supplier<Node>, valueIfNoColumns: Supplier<Node>) :
+open class TableViewPlaceHolder(private val tableView: TableView<*>) :
     StackPane() {
+
+    private var valueIfEmpty: Supplier<Node>? = null
+    private var valueIfNoColumns: Supplier<Node>? = null
 
     @Suppress("JoinDeclarationAndAssignment")
     private val noColumns: BooleanBinding
 
     init {
         this.noColumns = Bindings.isEmpty(tableView.columns)
-        this.buildUI(valueIfEmpty, valueIfNoColumns)
+        this.buildUI()
+    }
+
+    constructor(tableView: TableView<*>, valueIfEmpty: Supplier<Node>, valueIfNoColumns: Supplier<Node>) : this(tableView) {
+        this.valueIfEmpty = valueIfEmpty
+        this.valueIfNoColumns = valueIfNoColumns
     }
 
     constructor(tableView: TableView<*>, valueIfEmpty: () -> String, valueIfNoColumns: () -> String) : this(
@@ -28,12 +36,20 @@ class TableViewPlaceHolder(tableView: TableView<*>, valueIfEmpty: Supplier<Node>
         Supplier { Label(valueIfNoColumns()) }
     )
 
-    private fun buildUI(valueIfEmpty: Supplier<Node>, valueIfNoColumns: Supplier<Node>) {
+    private fun buildUI() {
         noColumns.addListener { _, _, noColumns ->
             when {
-                noColumns -> children.setAll(Group(valueIfNoColumns.get()))
-                else -> children.setAll(Group(valueIfEmpty.get()))
+                noColumns -> children.setAll(Group(contentIfNoColumns()))
+                else -> children.setAll(Group(contentIfEmpty()))
             }
         }
+    }
+
+    protected open fun contentIfEmpty(): Node? {
+        return valueIfEmpty?.get()
+    }
+
+    protected open fun contentIfNoColumns(): Node? {
+        return valueIfNoColumns?.get()
     }
 }

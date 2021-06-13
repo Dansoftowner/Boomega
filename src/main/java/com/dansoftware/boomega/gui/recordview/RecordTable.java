@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.recordview;
 import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.db.data.ServiceConnection;
 import com.dansoftware.boomega.gui.control.BoomegaTable;
+import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView;
 import com.dansoftware.boomega.gui.control.ReadOnlyRating;
 import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;
 import com.dansoftware.boomega.i18n.I18N;
@@ -31,12 +32,15 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.Rating;
@@ -206,20 +210,10 @@ public class RecordTable extends BoomegaTable<Record> {
 
     public RecordTable(int startIndex) {
         this.startIndex = new SimpleIntegerProperty(startIndex);
-        this.init();
-    }
-
-    private void init() {
         this.getStyleClass().add(STYLE_CLASS);
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
-        this.setPlaceholder(
-                new TableViewPlaceHolder(
-                        this,
-                        () -> I18N.getValue("record.table.place.holder"),
-                        () -> I18N.getValue("record.table.place.holder.nocolumn")
-                )
-        );
+        this.setPlaceholder(new PlaceHolder(this));
     }
 
     public void buildDefaultColumns() {
@@ -231,6 +225,29 @@ public class RecordTable extends BoomegaTable<Record> {
 
     public IntegerProperty startIndexProperty() {
         return startIndex;
+    }
+
+    private static class PlaceHolder extends TableViewPlaceHolder {
+        PlaceHolder(@NotNull RecordTable table) {
+            super(table);
+            setMinHeight(0);
+        }
+
+        @Nullable
+        @Override
+        protected Node contentIfEmpty() {
+            VBox vBox = new VBox(5.0);
+            vBox.getStyleClass().add("record-table-place-holder");
+            vBox.getChildren().add(new StackPane(new ImageView()));
+            vBox.getChildren().add(new StackPane(new Label(I18N.getValue("record.table.place.holder"))));
+            return vBox;
+        }
+
+        @Nullable
+        @Override
+        protected Node contentIfNoColumns() {
+            return new Label(I18N.getValue("record.table.place.holder.nocolumn"));
+        }
     }
 
     private static class RecordTableCell<T> extends TableCell<Record, T> {

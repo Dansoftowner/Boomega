@@ -55,3 +55,13 @@
 .record-find-control .error-label {
     -fx-text-fill: red;
 }
+
+.record-table-place-holder .image-view {
+    -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_128_white.png");
+    -fx-opacity: 0.25;
+}
+
+.record-table-place-holder .label {
+    -fx-font-size: 18;
+    -fx-opacity: 0.25;
+}
