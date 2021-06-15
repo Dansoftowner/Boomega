@@ -140,7 +140,7 @@ For more information, see [user interface languages](#user-interface-languages).
 ### Login view
 
 The first important `view` you'll see is the `login view`. 
-Here, you are able to enter into a particular database and also, you can access some
+Here, you are able to enter into a particular database, and you can access some
 basic tools/functions the app provides like: [opening existing databases](#opening-existing-database),
 [creating database](#creating-database), [database manager](#database-manager) and the [preferences dialog](#preferences-dialog).
 
