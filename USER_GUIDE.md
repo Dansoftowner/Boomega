@@ -139,7 +139,10 @@ For more information, see [user interface languages](#user-interface-languages).
 
 ### Login view
 
-TODO
+The first important `view` you'll see is the `login view`. 
+Here, you are able to enter into a particular database.
+
+![Login view](img/userguide/loginview/LoginView_Dark.png)
 
 ### Opening existing database
 
