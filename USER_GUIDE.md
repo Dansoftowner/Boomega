@@ -148,7 +148,7 @@ basic tools/functions the app provides like: [Opening existing databases](#openi
 
 ![Login view](img/userguide/loginview/LoginView_Light.png)
 
-By clicking on the ![info](img/userguide/icon/information.png) icon, you can view the [Boomega info](#viewing-boomega-info)
+By clicking on the ![info](img/userguide/icon/information.png) icon on the top-right, you can view the [Boomega info](#viewing-boomega-info).
 
 ### Opening existing database
 
