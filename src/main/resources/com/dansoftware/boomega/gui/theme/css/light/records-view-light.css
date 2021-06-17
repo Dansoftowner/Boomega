@@ -54,3 +54,7 @@
     -fx-opacity: 0.35;
     -fx-font-size: 18;
 }
+
+.books-table .table-row-cell {
+    -fx-cell-size: 57;
+}

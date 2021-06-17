@@ -1,6 +1,7 @@
 @font-face {
     src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-Bold.ttf');
 }
+
 @font-face {
     src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-BoldItalic.ttf');
 }
@@ -117,9 +118,11 @@
 .markdown-text {
     /*-fx-font-family: ARIAL;*/
 }
+
 .markdown-italic {
     -fx-font-style: italic;
 }
+
 .markdown-bold {
     -fx-font-weight: bold;
 }
@@ -141,4 +144,22 @@
 .text-field .right-button {
     -fx-background-color: transparent;
     -fx-padding: 5;
+}
+
+/* Rounded corners */
+.button, .button:focused,
+.toggle-button, .toggle-button:focused,
+.text-input,
+.check-box > .box,
+.combo-box, .combo-box:focused,
+.menu-button, .menu-button:focused,
+.choice-box, .choice-box:focused,
+.tooltip {
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.menu-bar .menu-button {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
 }
