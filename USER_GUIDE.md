@@ -14,8 +14,8 @@
   * [Opening existing database](#opening-existing-database)
   * [Creating database](#creating-database) 
   * [Database manager](#database-manager) 
-  *
-  *
+  * [Preferences dialog](#preferences-dialog)
+  * 
   * [Key Bindings](#key-bindings)
   * [User interface themes](#user-interface-themes)
   * [User interface language](#user-interface-languages)
@@ -107,8 +107,10 @@ You will be allowed to download the binary you want immediately.
 
 ### Database files
 
-Boomega stores your saved books into a particular Boomega (`.bmdb`) database file.
+Boomega stores your saved records/books into a particular Boomega (`.bmdb`) database file.
 A `Boomega Database` can be secured with username & password pair, but it can be an open-database accessible for everyone.
+
+> Note: multiple users per database are not supported!
 
 You can create `bmdb` files any time you want (see: [Creating database](#creating-database)) and **open existing ones** (see: [Opening existing database](#opening-existing-database)).
 
@@ -139,7 +141,14 @@ For more information, see [user interface languages](#user-interface-languages).
 
 ### Login view
 
-TODO
+The first important `view` you'll see is the `login view`. 
+Here, you are able to enter into a particular database, and you can access some
+basic tools/functions the app provides like: [Opening existing databases](#opening-existing-database),
+[Creating database](#creating-database), [Database manager](#database-manager) and the [Preferences dialog](#preferences-dialog).
+
+![Login view](img/userguide/loginview/LoginView_Light.png)
+
+By clicking on the ![info](img/userguide/icon/information.png) icon on the top-right, you can view the [Boomega info](#viewing-boomega-info).
 
 ### Opening existing database
 
@@ -150,6 +159,10 @@ TODO
 TODO
 
 ### Database manager
+
+TODO
+
+### Preferences dialog
 
 TODO
 
