@@ -1,6 +1,5 @@
 package com.dansoftware.boomega.gui.control
 
-import com.dansoftware.boomega.util.adapter.ThrowableString
 import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.TitledPane
@@ -15,7 +14,7 @@ class ExceptionDisplayPane(exception: Exception?) : TitledPane() {
     }
 
     private fun buildCodeArea(exception: Exception?): Node =
-        CodeArea(ThrowableString(exception).toString()).run {
+        CodeArea(exception?.stackTraceToString()).run {
             padding = Insets(5.0)
             isEditable = false
             prefHeight = 200.0
