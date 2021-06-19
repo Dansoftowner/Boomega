@@ -8,6 +8,7 @@ import com.dansoftware.boomega.i18n.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,25 +36,10 @@ public class LightTheme extends Theme {
         return applier;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     private List<String> getStyleSheets() {
-        return List.of(
-                "/com/dansoftware/boomega/gui/theme/css/global.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/database-manager-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/first-time-dialog-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/global-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/global-workbench-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/info-view-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/login-view-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/notification-node-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/plugin-manager-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/update-dialog-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/google-books-module-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/dock-system-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/records-view-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/preferences-light.css",
-                "/com/dansoftware/boomega/gui/theme/css/light/markdown-light.css"
-        );
+        return Collections.singletonList(getClass().getResource("light.css").toExternalForm());
     }
 
     public static ThemeMeta<LightTheme> getMeta() {

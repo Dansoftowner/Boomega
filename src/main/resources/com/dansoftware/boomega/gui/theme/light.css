@@ -1,0 +1,287 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import url("base.css");
+
+/*******************************************************************************
+ *                                                                             *
+ *                              FontAwesome icons                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.button .glyph-icon {
+    -fx-fill: black;
+}
+
+.button:default .glyph-icon {
+    -fx-fill: white;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  SplitPane                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.split-pane > .split-pane-divider {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #959595;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-border-width: 0 0.5 0 0.5;
+}
+
+/* vertical the two nodes are placed on top of each other. */
+.split-pane:vertical > .split-pane-divider {
+    -fx-border-width: 0.5 0 0.5 0;
+}
+
+.split-pane > .split-pane-divider:hover, .split-pane > .split-pane-divider:pressed {
+    -fx-border-color: #c4c3c3;
+    -fx-background-color: #c4c3c3;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  TableView                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.table-view .table-row-cell:filled {
+    -fx-border-color: transparent transparent #c4c4c4 transparent;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  WorkbenchFX                                *
+ *                                                                             *
+ ******************************************************************************/
+
+* {
+    -primary-color: #e5e5e5;
+    -primary-variant-color: #9f9f9f;
+    -secondary-color: #6300ff;
+    -secondary-variant-color: #1e005f;
+    -background-color: #FFFFFF;
+    -surface-color: #FFFFFF;
+    -error-color: #B00020;
+    -on-primary-color: black;
+    -on-secondary-color: #FFFFFF;
+    -on-background-color: #000000;
+    -on-surface-color: #000000;
+    -on-error-color: #FFFFFF;
+}
+
+#add-button:focused:hover {
+    -fx-border-color: gray;
+}
+
+.tile-box {
+    -fx-background-color: #e3e3e3;
+    -fx-effect: null;
+}
+
+.tile-box:hover {
+    -fx-border-color: #7a7a7a;
+}
+
+.tile-box:pressed {
+    -fx-border-color: #999999;
+    -fx-background-color: #999999;
+}
+
+.tab-control:hover {
+    -fx-background-color: #cfcfcf;
+}
+
+.tab-control:selected, .tab-control:selected:hover {
+    -fx-background-color: #f2f3f2;
+}
+
+.overlay-box .title-bar {
+    -fx-background-color: #d9d9d9;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                MarkdownView                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+* {
+    -mdfx-font-color: #3b3b3b;
+    -mdfx-border-color-1: #888;
+
+    -mdfx-bg-color-1: #ccc;
+    -mdfx-bg-color-2: #ddd;
+    -mdfx-bg-color-3: #eee;
+
+    -mdfx-link-color: blue;
+
+    -mdfx-bq-color-border: #4488cc;
+    -mdfx-bq-color-background: #0000ff0c;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                              MarkdownEditorControl                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.markdown-edit-area .code-area {
+    -fx-background-color: #f5f3f3;
+}
+
+.markdown-edit-area * {
+    -fx-highlight-fill: #4370c6;
+}
+
+.markdown-edit-area .caret {
+    -fx-stroke: #222222;
+}
+
+/* https://github.com/FXMisc/RichTextFX/issues/737 */
+
+.markdown-edit-area .styled-text-area .text {
+    -fx-fill: #101010;
+}
+
+.markdown-editor-toolbar .toggle-button > .glyph-icon, .markdown-editor-toolbar .button > .glyph-icon {
+    -fx-fill: black;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                           Language selection control                        *
+ *                                                                             *
+ ******************************************************************************/
+
+.text-field .langSelectorControl {
+    -fx-fill: black;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 NotificationNode                            *
+ *                                                                             *
+ ******************************************************************************/
+
+.notification-node {
+    -fx-background-color: #e5e5e5;
+    -fx-border-color: #565656;
+}
+
+.notification-node .glyph-icon {
+    -fx-fill: #565656;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                               First time dialog                             *
+ *                                                                             *
+ ******************************************************************************/
+
+.firstTimeDialog .radio-button:hover {
+    -fx-background-color: #b8d5ea;
+}
+
+.firstTimeDialog .radio-button:selected {
+    -fx-background-color: #a5c4d9;
+}
+
+.segmentLabel:focused {
+    -fx-border-color: #356ec8;
+}
+
+.segmentLabelSeparator .graphic {
+    -fx-image: url("/com/dansoftware/boomega/image/firsttime/right-arrow.png");
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  Login view                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.login-form {
+    -fx-background-image: url("/com/dansoftware/boomega/image/backgrounds/background-light.jpg");
+}
+
+.login-box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
+}
+
+.login-box .header * {
+    -fx-text-fill: #797979;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 Plugin manager                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.pluginAdderPane .draggingLabel {
+    -fx-text-fill: black;
+}
+
+.restartWarningLabel {
+    -fx-background-color: lightgray;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  Records view                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.record-editor .remove-button {
+    -fx-background-color: #b70202;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dddddd;
+}
+
+.google-book-dock .remove-button .glyph-icon {
+    -fx-fill: red;
+}
+
+.google-book-dock .remove-button:hover, .record-editor .remove-button:hover {
+    -fx-border-color: #323232;
+}
+
+.record-table-place-holder .image-view {
+    -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_128_black.png");
+    -fx-opacity: 0.35;
+}
+
+.record-table-place-holder .label {
+    -fx-opacity: 0.35;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                    Docks                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+.dock-title-bar {
+    -fx-background-color: #D9D9D9;
+    -fx-border-color: #D1D1D1;
+}

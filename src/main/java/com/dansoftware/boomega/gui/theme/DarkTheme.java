@@ -8,6 +8,7 @@ import com.dansoftware.boomega.i18n.I18N;
 import jfxtras.styles.jmetro.Style;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,25 +34,10 @@ public class DarkTheme extends Theme {
         return applier;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     private List<String> getStyleSheets() {
-        return List.of(
-                "/com/dansoftware/boomega/gui/theme/css/global.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/database-manager-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/first-time-dialog-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/global-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/global-workbench-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/info-view-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/login-view-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/notification-node-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/plugin-manager-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/update-dialog-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/google-books-module-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/dock-system-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/records-view-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/preferences-dark.css",
-                "/com/dansoftware/boomega/gui/theme/css/dark/markdown-dark.css"
-        );
+        return Collections.singletonList(getClass().getResource("dark.css").toExternalForm());
     }
 
     public static ThemeMeta<DarkTheme> getMeta() {

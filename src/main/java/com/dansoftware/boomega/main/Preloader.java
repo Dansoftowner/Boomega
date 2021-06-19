@@ -26,7 +26,7 @@ public class Preloader extends javafx.application.Preloader {
 
     private static final Logger logger = LoggerFactory.getLogger(Preloader.class);
 
-    private static final String STYLESHEET = "/com/dansoftware/boomega/gui/theme/css/preloader.css";
+    private static final String STYLESHEET = "/com/dansoftware/boomega/gui/theme/preloader.css";
 
     private BackingStage backingStage;
     private Stage contentStage;

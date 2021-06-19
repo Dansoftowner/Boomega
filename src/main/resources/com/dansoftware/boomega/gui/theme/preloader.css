@@ -1,4 +1,4 @@
-@import url("/com/dansoftware/boomega/gui/theme/css/global.css");
+@import url("/com/dansoftware/boomega/gui/theme/base.css");
 
 .root {
     -fx-background-image: url(/com/dansoftware/boomega/image/backgrounds/preloader-background.jpg);

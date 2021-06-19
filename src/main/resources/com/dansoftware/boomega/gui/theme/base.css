@@ -1,0 +1,638 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-Bold.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-BoldItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-ExtraBold.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-ExtraBoldItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-ExtraLight.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-ExtraLightItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-Italic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-Light.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-LightItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-Medium.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-MediumItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-Regular.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-Thin.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMono-ThinItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Bold.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-BoldItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ExtraBold.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ExtraBoldItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ExtraLight.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ExtraLightItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Italic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Light.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-LightItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Medium.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-MediumItalic.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Regular.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Thin.ttf');
+}
+
+@font-face {
+    src: url('/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ThinItalic.ttf');
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Rounded corners (modifying default JMetro style)                            *
+ *                                                                             *
+ ******************************************************************************/
+
+.button, .button:focused,
+.toggle-button, .toggle-button:focused,
+.text-input,
+.check-box > .box,
+.combo-box, .combo-box:focused,
+.menu-button, .menu-button:focused,
+.choice-box, .choice-box:focused,
+.tooltip {
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+/* On the menu bar, we don't want rounded corners on the menu buttons */
+.menu-bar .menu-button {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                    TabPane                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.tab .tab-close-button:hover {
+    -fx-background-color: red;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  SplitPane                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.split-pane > .split-pane-divider {
+    -fx-pref-width: 4;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-insets: 0, 0 1 0 1;
+}
+
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-insets: 0, 1 0 1 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  TableView                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.table-view .table-row-cell:filled {
+    -fx-border-width: 0 0 0.5 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  MenuBar                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+.menu-bar > .container > .menu-button,
+.menu-bar > .container > .menu-button {
+    -fx-padding: 5 12 5 8;
+    -fx-border-width: 2;
+    -fx-border-color: transparent;
+}
+
+.menu-bar > .container > .menu-button:showing,
+.menu-bar > .container > .menu-button:focused {
+    -fx-border-color: rgb(0, 120, 215) transparent transparent transparent;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                MarkdownView                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.medium-font {
+    -fx-font-size: 16px;
+}
+
+.markdown-text {
+    -fx-font-family: "Jetbrains Mono";
+}
+
+.markdown-italic {
+    -fx-font-style: italic;
+}
+
+.markdown-bold {
+    -fx-font-weight: bold;
+}
+
+.markdown-link-hover {
+    -fx-underline: true;
+}
+
+.markdown-strikethrough {
+    -fx-strikethrough: true;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                              MarkdownEditorControl                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.markdown-preview-area .mdfx-node {
+    -fx-padding: 5;
+}
+
+.markdown-edit-area .code-area {
+    -fx-padding: 5;
+}
+
+.markdown-edit-area .styled-text-area .text {
+    -fx-font-family: "Jetbrains Mono";
+    -fx-font-size: 15px;
+}
+
+.markdown-editor-toolbar .toggle-button, .markdown-editor-toolbar .button {
+    -fx-padding: 1;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 TextField                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.text-field:readonly {
+    -right-button-visible: false;
+}
+
+.text-field .right-button {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  WorkbenchFX                                *
+ *                                                                             *
+ ******************************************************************************/
+
+#add-button {
+    -fx-background-radius: 5 5 0 0;
+    -fx-border-radius: 5 5 0 0;
+}
+
+#add-button:focused {
+    -fx-border-color: transparent;
+    -fx-border-style: solid;
+}
+
+#add-button:focused:hover {
+    -fx-border-width: 2px;
+}
+
+.tile-box {
+    -fx-border-color: transparent;
+    -fx-border-width: 2;
+    -fx-background-insets: 0;
+    -fx-cursor: NORMAL;
+}
+
+.tab-control {
+    -fx-background-radius: 0px;
+    -fx-border-radius: 0px;
+    -fx-border-width: 2 0 0 0;
+}
+
+.tab-control:selected, .tab-control:selected:hover {
+    -fx-border-color: rgb(0, 120, 215);
+}
+
+.tab-box .button:hover, .tab-box .button:focused {
+    -fx-border-color: transparent;
+}
+
+.overlay-box {
+    -fx-effect: -drop-shadow-3;
+}
+
+.overlay-box .title-bar {
+    -fx-padding: 5;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.alertDialog .button {
+    -fx-padding: 5;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                           Language selection control                        *
+ *                                                                             *
+ ******************************************************************************/
+
+.languageSelector .text-field {
+    -right-button-visible: false;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 NotificationNode                            *
+ *                                                                             *
+ ******************************************************************************/
+
+.notification-node {
+    -fx-border-width: 0.5;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-padding: 10;
+}
+
+.notification-node .content-panel {
+    -fx-padding: 0 25 0 0;
+}
+
+.notification-node .content-panel .title {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.notification-node .content-panel .message {
+    -fx-font-size: 10px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                               First time dialog                             *
+ *                                                                             *
+ ******************************************************************************/
+
+.segmentLabelArea {
+    -fx-padding: 5 5 10 5;
+}
+
+.segmentDialogBottom {
+    -fx-padding: 10;
+}
+
+.segmentLabel:focused {
+    -fx-font-weight: bold;
+    -fx-border-width: 0 0 2.5 0;
+}
+
+.segmentTitleLabel {
+    -fx-padding: 10;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 Update dialog                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.update-view-available-label {
+    -fx-font-size: 32px;
+}
+
+.no-binary-available-place-holder .label {
+    -fx-text-fill: red;
+}
+
+.updateDialog {
+    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
+    -fx-background-radius: 5 5 0 0;
+}
+
+.progress-bar.paused .bar {
+    -fx-background-color: #e5c405;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 Information view                            *
+ *                                                                             *
+ ******************************************************************************/
+
+.info-logo-view {
+    -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_32.png");
+}
+
+.information-view {
+    -fx-padding: 10;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  Login view                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.login-form {
+    -fx-background-size: stretch;
+}
+
+.login-box {
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.login-box .source-adder {
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.login-box .header * {
+    -fx-font-family: "JetBrains Mono Bold";
+    -fx-font-size: 35px;
+}
+
+.login-box .header .logo {
+    -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_64px.png");
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  Database manager                           *
+ *                                                                             *
+ ******************************************************************************/
+
+.state-indicator-file-not-exists {
+    -fx-fill: #B00020;
+}
+
+.state-indicator-used {
+    -fx-fill: green;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 Preferences view                            *
+ *                                                                             *
+ ******************************************************************************/
+
+.preferences-view .entry-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.preferences-view .entry-description {
+    -fx-font-size: 10pt;
+    -fx-opacity: 0.75;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 Plugin manager                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.pluginAdderPane {
+    -fx-min-width: 0;
+}
+
+.pluginAdderPane .draggingArea {
+    -fx-cursor: hand;
+    -fx-stroke-dash-array: 12 12 12 2;
+    -fx-stroke-dash-offset: 1;
+    -fx-stroke-line-cap: butt;
+    -fx-stroke-width: 5px;
+    -fx-stroke: gray;
+}
+
+.pluginAdderPane .draggingArea:hover {
+    -fx-stroke-dash-array: 12 2 4 2;
+    -fx-stroke-dash-offset: 10;
+}
+
+.pluginAdderPane .draggingLabel {
+    -fx-cursor: hand;
+    -fx-text-alignment: center;
+    -fx-font-size: 17;
+    -fx-max-width: 490;
+    -fx-max-height: 390;
+}
+
+.restartWarningLabel {
+    -fx-text-fill: red;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                           Google book details pane                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.google-book-details-pane {
+    -fx-padding: 10;
+}
+
+.google-book-details-pane .description-area {
+    -fx-padding: 2px;
+}
+
+.google-book-details-pane .description-area .markdown-normal-flow {
+    -fx-text-alignment: justify;
+}
+
+.google-book-details-pane .header-area .label {
+    -fx-font-size: 17px;
+}
+
+.google-book-details-pane .info-panel .label {
+    -fx-font-size: 16px;
+}
+
+.google-book-details-pane .property-mark-label {
+    -fx-font-weight: bold;
+}
+
+.google-book-details-pane .header-area .main-header-area {
+    -fx-padding: 5;
+}
+
+.google-book-details-pane .hyperlink {
+    -fx-padding: 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                           Google book import view                           *
+ *                                                                             *
+ ******************************************************************************/
+
+.google-books-import-view .google-books-import-btn {
+    -fx-pref-height: 40px;
+    -fx-font-weight: bold;
+}
+
+.google-books-import-form .text-field {
+    -fx-padding: 5 10 5 5;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                  Records view                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.record-base-editor .formsfx-group {
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+.records-view .tab-pane > .tab-header-area {
+    -fx-padding: 0;
+}
+
+.records-view .tab-pane {
+    -fx-tab-min-height: 2.2em;
+    -fx-tab-max-height: 2.2em;
+}
+
+.record-find-control .text-field {
+    -fx-padding: 5px;
+}
+
+.record-find-control .error-label {
+    -fx-text-fill: red;
+}
+
+.record-table-place-holder .label {
+    -fx-font-size: 18;
+}
+
+.books-table .table-row-cell {
+    -fx-cell-size: 57;
+}
+
+.google-book-dock .place-holder-label, .record-editor .place-holder-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-text-alignment: justify;
+    -fx-wrap-text: true;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                    Docks                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+.dock-title-bar {
+    -fx-pref-height: 28px;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 5px;
+}
+
+.dock-title-bar .label {
+    -fx-font-size: 15px;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
