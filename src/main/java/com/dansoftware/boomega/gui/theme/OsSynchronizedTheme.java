@@ -1,9 +1,10 @@
 package com.dansoftware.boomega.gui.theme;
 
-import com.dansoftware.boomega.gui.theme.applier.ThemeApplier;
 import com.dansoftware.boomega.i18n.I18N;
 import com.jthemedetecor.OsThemeDetector;
 import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +37,6 @@ public class OsSynchronizedTheme extends Theme {
         this.currentTheme = getCurrentTheme();
     }
 
-    @NotNull
-    @Override
-    protected ThemeApplier getApplier() {
-        return currentTheme.getApplier();
-    }
-
     private Theme getCurrentTheme() {
         return this.osThemeDetector.isDark() ? darkTheme : lightTheme;
     }
@@ -51,6 +46,26 @@ public class OsSynchronizedTheme extends Theme {
         logger.debug("OsSynchronizedTheme dropped!");
         logger.debug("Removing os theme listener...");
         osThemeDetector.removeListener(osThemeListener);
+    }
+
+    @Override
+    public void applyBack(@NotNull Scene scene) {
+        currentTheme.applyBack(scene);
+    }
+
+    @Override
+    public void applyBack(@NotNull Parent parent) {
+        currentTheme.applyBack(parent);
+    }
+
+    @Override
+    public void apply(@NotNull Scene scene) {
+        currentTheme.apply(scene);
+    }
+
+    @Override
+    public void apply(@NotNull Parent parent) {
+        currentTheme.apply(parent);
     }
 
     public static ThemeMeta<OsSynchronizedTheme> getMeta() {
