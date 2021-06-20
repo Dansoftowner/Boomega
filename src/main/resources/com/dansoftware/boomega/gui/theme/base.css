@@ -141,9 +141,14 @@
 .combo-box, .combo-box:focused,
 .menu-button, .menu-button:focused,
 .choice-box, .choice-box:focused,
-.tooltip {
+.tooltip,
+.context-menu, .combo-box-popup .list-view {
     -fx-border-radius: 3;
     -fx-background-radius: 3;
+}
+
+.combo-box-popup .list-view {
+    -fx-padding: 3 0 3 0;
 }
 
 /* On the menu bar, we don't want rounded corners on the menu buttons */
@@ -324,6 +329,10 @@
 .overlay-box .title-bar {
     -fx-padding: 5;
     -fx-background-radius: 5 5 0 0;
+}
+
+.overlay-box .content {
+    -fx-background-radius: 0 0 5 5;
 }
 
 .alertDialog .button {
