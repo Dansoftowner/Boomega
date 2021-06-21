@@ -117,7 +117,7 @@ public class InMemorySource implements ConfigSource {
 
     @Override
     public void reset() throws IOException {
-        new HashSet<>(map.keySet()).forEach(map::remove);
+        map.clear();
     }
 
     @Override
