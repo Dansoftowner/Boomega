@@ -394,7 +394,9 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
         }
 
         private fun pluginManagerMenuItem() =
-            MenuItems.of(GlobalActions.OPEN_PLUGIN_MANAGER, context, preferences, databaseTracker)
+            MenuItems.of(GlobalActions.OPEN_PLUGIN_MANAGER, context, preferences, databaseTracker).apply {
+                isDisable = true // TODO: unlock plugin manager
+            }
 
         private fun pluginDirectoryItem() =
             MenuItems.of(GlobalActions.OPEN_PLUGIN_DIR, context, preferences, databaseTracker)

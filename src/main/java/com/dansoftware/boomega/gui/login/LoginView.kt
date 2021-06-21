@@ -124,7 +124,7 @@ class LoginView(
 
             MenuItem(I18N.getValue("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)).action {
                 PluginManagerActivity().show(context.contextWindow)
-            },
+            }.apply { isDisable = true  }, // TODO: unlock plugin manager
 
             MenuItem(I18N.getValue("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).action {
                 PreferencesActivity(preferences).show(context.contextWindow)
