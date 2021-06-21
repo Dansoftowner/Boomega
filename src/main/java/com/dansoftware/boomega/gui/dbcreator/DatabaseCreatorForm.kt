@@ -17,6 +17,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
+import javafx.scene.layout.StackPane
 import javafx.stage.DirectoryChooser
 import org.apache.commons.lang3.StringUtils
 import java.io.File
@@ -51,8 +52,16 @@ class DatabaseCreatorForm(
     fun createdDatabaseProperty() = createdDatabase
 
     private fun buildUI() {
-        center = ScrollPane(buildGrid()).apply { isFitToWidth = true }
-        bottom = buildCreateButton()
+        center = buildCenter()
+        bottom = buildBottom()
+    }
+
+    private fun buildCenter() = ScrollPane(buildGrid()).apply {
+        isFitToWidth = true
+    }
+
+    private fun buildBottom() = StackPane(buildCreateButton()).apply {
+        padding = Insets(10.0)
     }
 
     private fun openDirectory() {
@@ -129,8 +138,9 @@ class DatabaseCreatorForm(
         private fun buildFullPathField() = TextField().apply {
             setConstraints(this, 0, 3)
             setColumnSpan(this, 3)
-            minHeight = 35.0
             textProperty().bind(fullPath)
+            minHeight = 35.0
+            isEditable = false
         }
 
         private fun buildAuthenticationCheck() = CheckBox(I18N.getValue("data.source.adder.db.auth")).apply {
@@ -142,6 +152,7 @@ class DatabaseCreatorForm(
         }
 
         private fun buildUsernameInput() = TextField().apply {
+            setMargin(this, Insets(5.0, 0.0, 0.0, 0.0))
             setConstraints(this, 0, 6)
             setColumnSpan(this, 3)
             minHeight = 35.0
