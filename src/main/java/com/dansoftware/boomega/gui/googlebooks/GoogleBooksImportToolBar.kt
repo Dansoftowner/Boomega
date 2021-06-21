@@ -73,10 +73,10 @@ class GoogleBooksImportToolBar(
     }
 
     private fun buildUI() {
-        this.rightItems.add(buildRefreshItem())
-        this.rightItems.add(buildScrollToTopItem())
-        this.rightItems.add(buildClearItem())
         this.rightItems.add(buildBrowserItem())
+        this.rightItems.add(buildClearItem())
+        this.rightItems.add(buildScrollToTopItem())
+        this.rightItems.add(buildRefreshItem())
         this.leftItems.add(buildGoogleLogoItem())
         this.leftItems.add(buildColumnChooserItem().also { columnChooserItem = it })
         this.leftItems.add(buildColumnResetItem())

@@ -5,6 +5,7 @@ import javafx.geometry.NodeOrientation
 import javafx.scene.Node
 import javafx.scene.control.ToolBar
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 
 open class TwoSideToolBar : HBox() {
@@ -20,15 +21,22 @@ open class TwoSideToolBar : HBox() {
 
     init {
         children.add(leftToolBar)
+        children.add(SeparatorPane())
         children.add(rightToolBar)
     }
 
     private fun buildLeftToolBar() = ToolBar().apply {
-        HBox.setHgrow(this, Priority.ALWAYS)
+        setHgrow(this, Priority.SOMETIMES)
     }
 
     private fun buildRightToolBar() = ToolBar().apply {
-        HBox.setHgrow(this, Priority.ALWAYS)
-        nodeOrientation = NodeOrientation.RIGHT_TO_LEFT
+        setHgrow(this, Priority.SOMETIMES)
+    }
+
+    private class SeparatorPane : Pane() {
+        init {
+            styleClass.add("tool-bar")
+            setHgrow(this, Priority.ALWAYS)
+        }
     }
 }

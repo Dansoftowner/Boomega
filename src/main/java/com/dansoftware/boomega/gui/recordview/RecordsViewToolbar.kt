@@ -73,19 +73,19 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
     }
 
     private fun buildRightSide() {
-        rightItems.add(buildRefreshItem())
-        rightItems.add(buildScrollToTopItem())
+        rightItems.add(buildSearchItem())
+        rightItems.add(buildSeparator())
+        rightItems.add(buildInsertItem())
+        rightItems.add(buildDeleteItem())
+        rightItems.add(buildSeparator())
+        rightItems.add(buildPasteItem())
+        rightItems.add(buildCutItem())
+        rightItems.add(buildCopyItem())
         rightItems.add(buildSeparator())
         rightItems.add(buildCountItem())
         rightItems.add(buildSeparator())
-        rightItems.add(buildCopyItem())
-        rightItems.add(buildCutItem())
-        rightItems.add(buildPasteItem())
-        rightItems.add(buildSeparator())
-        rightItems.add(buildDeleteItem())
-        rightItems.add(buildInsertItem())
-        rightItems.add(buildSeparator())
-        rightItems.add(buildSearchItem())
+        rightItems.add(buildScrollToTopItem())
+        rightItems.add(buildRefreshItem())
     }
 
     private fun buildLeftSide() {
