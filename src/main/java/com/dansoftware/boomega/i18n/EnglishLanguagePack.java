@@ -1,5 +1,7 @@
 package com.dansoftware.boomega.i18n;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.Collator;
 import java.util.Locale;
 
@@ -12,11 +14,6 @@ public class EnglishLanguagePack extends InternalLanguagePack {
 
     public EnglishLanguagePack() {
         super(Locale.ENGLISH);
-    }
-
-    @Override
-    protected Collator getABCCollator() {
-        return Collator.getInstance(getLocale());
     }
 
     @Override
