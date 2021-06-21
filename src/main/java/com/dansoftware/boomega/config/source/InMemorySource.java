@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.config.source;
 
 import com.dansoftware.boomega.config.PreferenceKey;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import java.util.Map;
  * An {@link InMemorySource} is a {@link ConfigSource} that stores data
  * only in the memory.
  */
+@TestOnly
 public class InMemorySource implements ConfigSource {
 
     private final Map<String, Object> map;
