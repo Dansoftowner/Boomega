@@ -1,3 +1,21 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.gui.info
 
 import com.dansoftware.boomega.gui.context.Context
@@ -5,6 +23,7 @@ import com.dansoftware.boomega.gui.context.TitledOverlayBox
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.info.dependency.DependencyViewerActivity
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.getDisplayName
 import com.dansoftware.boomega.util.SystemBrowser
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
@@ -61,9 +80,11 @@ class InformationView(val context: Context) : VBox(5.0) {
         children.add(buildLangTranslatorLabel())
     }
 
-    private fun buildVersionLabel() = KeyValuePair("info.version", System.getProperty("libraryapp.version"))
+    private fun buildVersionLabel() =
+        KeyValuePair("info.version", System.getProperty("libraryapp.version"))
 
-    private fun buildDeveloperLabel() = KeyValuePair("info.developer", "Györffy Dániel")
+    private fun buildDeveloperLabel() =
+        KeyValuePair("info.developer", I18N.getLanguagePack().displayPersonName("Dániel", "Györffy"));
 
     private fun buildLicenseLabel() = KeyValuePair(
         "info.license",
@@ -78,12 +99,14 @@ class InformationView(val context: Context) : VBox(5.0) {
         }
     )
 
-    private fun buildLangLabel() = KeyValuePair("info.lang", Locale.getDefault().displayLanguage)
+    private fun buildLangLabel() =
+        KeyValuePair("info.lang", Locale.getDefault().displayLanguage)
 
-    private fun buildLangTranslatorLabel() = KeyValuePair(
-        "info.lang.translator",
-        I18N.getLanguagePack().translator?.getDisplayName(Locale.getDefault())
-    )
+    private fun buildLangTranslatorLabel() =
+        KeyValuePair(
+            "info.lang.translator",
+            I18N.getLanguagePack().translator?.getDisplayName()
+        )
 
     private fun buildJavaInfo() {
         children.add(KeyValuePair("java.home", System.getProperty("java.home")))
@@ -102,10 +125,15 @@ class InformationView(val context: Context) : VBox(5.0) {
         children.add(KeyValuePair("info.logs.loc", System.getProperty("log.file.path.full")))
     }
 
-    private fun buildBottom() = StackPane(Group(HBox(10.0).also {
-        it.children.add(buildGithubButton())
-        it.children.add(buildDependencyButton())
-    })).also { children.add(it) }
+    private fun buildBottom() =
+        StackPane(
+            Group(
+                HBox(10.0).apply {
+                    children.add(buildGithubButton())
+                    children.add(buildDependencyButton())
+                }
+            )
+        ).also { children.add(it) }
 
     private fun buildDependencyButton() =
         Button(
@@ -126,7 +154,6 @@ class InformationView(val context: Context) : VBox(5.0) {
                 SystemBrowser.browse(GITHUB_REPO_URL)
             }
         }
-
 
     private class KeyValuePair(i18n: String, value: Node) : HBox() {
 
