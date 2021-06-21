@@ -151,8 +151,8 @@
     -fx-padding: 3 0 3 0;
 }
 
-/* On the menu bar, we don't want rounded corners on the menu buttons */
-.menu-bar .menu-button {
+/* In the menu bar, we don't want rounded corners */
+.menu-bar .menu-button, .menu-bar .context-menu {
     -fx-border-radius: 0;
     -fx-background-radius: 0;
 }
