@@ -4,7 +4,7 @@ import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.source.InMemorySource;
 import com.dansoftware.boomega.main.Main;
 import com.dansoftware.boomega.main.PropertiesSetup;
-import com.dansoftware.boomega.util.adapter.VersionInteger;
+import io.github.g00fy2.versioncompare.Version;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -42,7 +42,7 @@ public class UpdateSimulation {
 
     private static final class FakeUpdateSearcher extends UpdateSearcher {
 
-        FakeUpdateSearcher(@NotNull VersionInteger base) {
+        FakeUpdateSearcher(@NotNull Version base) {
         }
 
         private String newVersion() {

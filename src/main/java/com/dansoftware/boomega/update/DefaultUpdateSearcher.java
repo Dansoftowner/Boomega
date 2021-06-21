@@ -1,8 +1,8 @@
 package com.dansoftware.boomega.update;
 
-import com.dansoftware.boomega.util.adapter.VersionInteger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.github.g00fy2.versioncompare.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +25,7 @@ class DefaultUpdateSearcher extends UpdateSearcher {
      */
     private static final String LOCATION = "https://update-server-ed6c3.firebaseio.com/boomega.json";
 
-    private final VersionInteger base;
+    private final Version base;
 
     /**
      * Creates a basic update searcher object;
@@ -33,7 +33,7 @@ class DefaultUpdateSearcher extends UpdateSearcher {
      * @param base the base version that the object should compare to; mustn't be null
      * @throws NullPointerException if base is null.
      */
-    public DefaultUpdateSearcher(@NotNull VersionInteger base) {
+    public DefaultUpdateSearcher(@NotNull Version base) {
         this.base = Objects.requireNonNull(base, "The base mustn't be null");
     }
 
@@ -43,8 +43,8 @@ class DefaultUpdateSearcher extends UpdateSearcher {
         try {
             var information = loadInfo();
             if (information != null) {
-                VersionInteger newVersion = new VersionInteger(information.getVersion());
-                if (base.isOlderThan(newVersion)) {
+                Version newVersion = new Version(information.getVersion());
+                if (base.isLowerThan(newVersion)) {
                     result.setNewUpdate(true);
                     result.setInformation(information);
                 }

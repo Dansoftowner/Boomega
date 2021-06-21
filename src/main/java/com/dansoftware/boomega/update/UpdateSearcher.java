@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.update;
 
-import com.dansoftware.boomega.util.adapter.VersionInteger;
+import io.github.g00fy2.versioncompare.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +14,7 @@ import java.util.function.Function;
  *
  * <p>
  * Also, this class should be used when we want to create an {@link UpdateSearcher} object.
- * We use the static {@link #newInstance(VersionInteger)} method for creating the particular instance,
+ * We use the static {@link #newInstance(Version)} method for creating the particular instance,
  * because it provides testability.
  * <p>
  * Example:
@@ -28,8 +28,8 @@ import java.util.function.Function;
 @SuppressWarnings("StaticInitializerReferencesSubClass")
 public abstract class UpdateSearcher {
 
-    private static final Function<@NotNull VersionInteger, @NotNull UpdateSearcher> DEFAULT_INSTANCE_FACTORY;
-    private static Function<@NotNull VersionInteger, @NotNull UpdateSearcher> instanceFactory;
+    private static final Function<@NotNull Version, @NotNull UpdateSearcher> DEFAULT_INSTANCE_FACTORY;
+    private static Function<@NotNull Version, @NotNull UpdateSearcher> instanceFactory;
 
     static {
         DEFAULT_INSTANCE_FACTORY = DefaultUpdateSearcher::new;
@@ -60,15 +60,15 @@ public abstract class UpdateSearcher {
      * @param base the base version that the object should compare to; mustn't be null
      * @return the object instance
      */
-    public static UpdateSearcher newInstance(@NotNull VersionInteger base) {
+    public static UpdateSearcher newInstance(@NotNull Version base) {
         return instanceFactory.apply(base);
     }
 
     public static UpdateSearcher defaultInstance() {
-        return instanceFactory.apply(new VersionInteger(System.getProperty("libraryapp.version")));
+        return instanceFactory.apply(new Version(System.getProperty("libraryapp.version")));
     }
 
-    static void setInstanceFactory(@NotNull Function<@NotNull VersionInteger, @NotNull UpdateSearcher> instanceFactory) {
+    static void setInstanceFactory(@NotNull Function<@NotNull Version, @NotNull UpdateSearcher> instanceFactory) {
         Objects.requireNonNull(instanceFactory);
         UpdateSearcher.instanceFactory = instanceFactory;
     }
