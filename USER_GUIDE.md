@@ -108,7 +108,7 @@ You will be allowed to download the binary you want immediately.
 ### Database files
 
 Boomega stores your saved records/books into a particular Boomega (`.bmdb`) database file.
-A `Boomega Database` can be secured with username & password pair, but it can be an open-database accessible for everyone.
+A `Boomega Database` can be secured with credentials (username & password), or it can be an open-database accessible for everyone.
 
 > Note: multiple users per database are not supported!
 
@@ -129,7 +129,7 @@ Select whether you want to use the **light**, **dark** or **os-synchronized** th
 
 ![Selecting themes in the customization dialog](img/userguide/firsttime/FirstTimeTheme.png)
 
-For more information, see [user interface themes](#user-interface-themes).
+Read more about user interface themes [here](#user-interface-themes).
 
 #### 2. Select the default language
 
@@ -137,7 +137,7 @@ Select your preferred language from the available language list.
 
 ![Selecting languages in the customization dialog](img/userguide/firsttime/FirstTimeLanguage.png)
 
-For more information, see [user interface languages](#user-interface-languages).
+Read more about user interface languages [here](#user-interface-languages).
 
 ### Login view
 
@@ -180,9 +180,19 @@ TODO
 
 ### Viewing Boomega info
 
-You can view all the information about your Boomega release in the `Boomega info` dialog:
+If you would like to know some basic info of your application like what version you use,
+you can view all the information about your Boomega release in the `Boomega info` dialog:
 
 ![Boomega info dialog](img/userguide/BoomegaInfo.png)
+
+- **Version** - the current version you use
+- **Software developer**
+- **License**  
+- **Language**  
+- **Java home** - the path to the Java Runtime Environment the app is running on
+- **Java VM** - the name and the vendor of the Java Virtual Machine
+- **Java version** - the version of the Java environment
+- **Default log file** - the path to the log file
 
 You can copy all this data to the clipboard by clicking on the ![copy](img/userguide/icon/content-copy.png) icon.
 
