@@ -176,15 +176,9 @@ public class ActivityLauncher implements Runnable {
     private void handleArgument(@NotNull LauncherMode launcherMode,
                                 @NotNull DatabaseMeta argument) {
         switch (launcherMode) {
-            case INIT:
-                handleArgumentInit(argument);
-                break;
-            case ALREADY_RUNNING:
-                handleArgumentAlreadyRunning(argument);
-                break;
-            case INTERNAL:
-                handleArgumentInternal(argument);
-                break;
+            case INIT -> handleArgumentInit(argument);
+            case ALREADY_RUNNING -> handleArgumentAlreadyRunning(argument);
+            case INTERNAL -> handleArgumentInternal(argument);
         }
     }
 
@@ -230,15 +224,17 @@ public class ActivityLauncher implements Runnable {
         // otherwise we open a new activity for it
         DatabaseActivity.getByDatabase(argument)
                 .map(DatabaseActivity::getContext)
-                .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> {
-                    handleArgumentInit(argument);
-                });
+                .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> handleArgumentInit(argument));
     }
 
     private void handleArgumentInternal(DatabaseMeta argument) {
         DatabaseActivity.getByDatabase(argument)
                 .map(DatabaseActivity::getContext)
-                .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> {
+                .ifPresentOrElse(context -> {
+                    logger.debug("Found gui-context for database: '{}'", argument.getFile());
+                    Platform.runLater(context::toFront);
+                }, () -> {
+                    logger.debug("Didn't found GUI for database: '{}'", argument.getFile());
                     onNewDatabaseAdded(argument);
                     final DatabaseLoginListener onDatabaseLogin = db -> onActivityLaunched(showMainActivity(db).getContext(), argument);
                     Database database = NitriteDatabase.getAuthenticator()
@@ -265,15 +261,9 @@ public class ActivityLauncher implements Runnable {
      */
     private void handleNoArgument(LauncherMode launcherMode) {
         switch (launcherMode) {
-            case INTERNAL:
-                handleNoArgumentInternal();
-                break;
-            case INIT:
-                handleNoArgumentInit();
-                break;
-            case ALREADY_RUNNING:
-                handleNoArgumentAlreadyRunning();
-                break;
+            case INTERNAL -> handleNoArgumentInternal();
+            case INIT -> handleNoArgumentInit();
+            case ALREADY_RUNNING -> handleNoArgumentAlreadyRunning();
         }
     }
 

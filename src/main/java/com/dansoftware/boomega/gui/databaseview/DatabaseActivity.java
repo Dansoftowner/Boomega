@@ -70,6 +70,7 @@ public class DatabaseActivity implements ContextTransformable {
                 event -> {
                     database.close();
                     databaseTracker.closingDatabase(database.getMeta());
+                    database = null;
                 });
         return true;
     }
@@ -91,7 +92,7 @@ public class DatabaseActivity implements ContextTransformable {
         return instances.stream()
                 .map(WeakReference::get)
                 .filter(Objects::nonNull)
-                .filter(activity -> activity.database.getMeta().equals(databaseMeta))
+                .filter(activity -> activity.database != null && activity.database.getMeta().equals(databaseMeta))
                 .findAny();
     }
 }
