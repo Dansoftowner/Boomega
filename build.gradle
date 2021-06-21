@@ -100,6 +100,7 @@ dependencies {
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.2'
     implementation 'org.dizitart:nitrite:3.4.3'
     implementation 'it.sauronsoftware:junique:1.0.4'
+    implementation 'io.github.g00fy2:versioncompare:1.4.1'
 
     implementation 'net.java.dev.jna:jna:5.8.0'
     implementation 'net.java.dev.jna:jna-platform:5.8.0'

@@ -179,6 +179,11 @@ object DependencyLister {
             LicenseInfo.mitLicense()
         ),
         DependencyInfo(
+            "Version Compare",
+            "https://github.com/G00fY2/version-compare",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
             "WorkbenchFX (+ with patches)",
             "https://github.com/dlsc-software-consulting-gmbh/WorkbenchFX",
             LicenseInfo.apache20License()
