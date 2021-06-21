@@ -23,9 +23,7 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.service.googlebooks.asRecord
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.control.BoomegaTable
-import com.dansoftware.boomega.gui.recordview.RecordTable
-import com.dansoftware.boomega.gui.recordview.RecordsViewBase
+import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import com.dansoftware.boomega.i18n.I18N
 import com.google.gson.JsonArray
@@ -40,7 +38,6 @@ import javafx.scene.layout.BorderPane
 import org.apache.commons.lang3.StringUtils
 import java.lang.reflect.Type
 import java.util.*
-import java.util.stream.Collectors
 
 /**
  * A [GoogleBooksImportView] is a [GoogleBooksSearchView] that has an additional button
@@ -125,7 +122,7 @@ class GoogleBooksImportView(
     /**
      * Used for storing the preferred table columns in the configurations.
      */
-    class TableColumnsInfo(val columnTypes: List<BoomegaTable.ColumnType>) {
+    class TableColumnsInfo(val columnTypes: List<BaseTable.ColumnType>) {
         companion object {
             fun byDefault(): TableColumnsInfo {
                 return TableColumnsInfo(

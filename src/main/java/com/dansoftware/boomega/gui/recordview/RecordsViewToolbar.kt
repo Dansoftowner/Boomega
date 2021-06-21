@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.recordview
 
-import com.dansoftware.boomega.gui.control.BoomegaTable
+import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.TwoSideToolBar
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.i18n.I18N
@@ -240,7 +240,7 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
         }
     }
 
-    private inner class TableColumnMenuItem(val columnType: BoomegaTable.ColumnType) :
+    private inner class TableColumnMenuItem(val columnType: BaseTable.ColumnType) :
         CheckMenuItem(if(columnType.isI18N) I18N.getValue(columnType.text) else columnType.text) {
 
         init {

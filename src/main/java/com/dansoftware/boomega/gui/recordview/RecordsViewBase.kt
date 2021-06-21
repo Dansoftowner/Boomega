@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.recordview
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.control.BoomegaTable
+import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.recordview.dock.DockView
@@ -36,7 +36,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.*
 import java.util.stream.Collectors
 
 class RecordsViewBase(
@@ -151,12 +150,12 @@ class RecordsViewBase(
     /**
      * Used for storing the preferred table columns in the configurations.
      */
-    class TableColumnsInfo(val columnTypes: List<BoomegaTable.ColumnType>) {
+    class TableColumnsInfo(val columnTypes: List<BaseTable.ColumnType>) {
         companion object {
             fun byDefault() =
                 TableColumnsInfo(
                     RecordTable.columns().stream()
-                        .filter(BoomegaTable.ColumnType::isDefaultVisible)
+                        .filter(BaseTable.ColumnType::isDefaultVisible)
                         .collect(Collectors.toList())
                 )
         }

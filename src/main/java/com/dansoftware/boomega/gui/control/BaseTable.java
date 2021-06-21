@@ -40,14 +40,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class BoomegaTable<S> extends TableView<S> {
+public abstract class BaseTable<S> extends TableView<S> {
 
     private final ObjectProperty<Consumer<S>> onItemDoubleClicked;
     private final ObjectProperty<Consumer<S>> onItemSecondaryDoubleClicked;
     private final ObjectProperty<ContextMenu> rowContextMenu;
     private final ObjectProperty<Comparator<String>> sortingComparator;
 
-    public BoomegaTable() {
+    public BaseTable() {
         this.onItemDoubleClicked = new SimpleObjectProperty<>();
         this.onItemSecondaryDoubleClicked = new SimpleObjectProperty<>();
         this.rowContextMenu = new SimpleObjectProperty<>();
@@ -162,7 +162,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
     }
 
     /**
-     * Represents a column in the particular {@link BoomegaTable}.
+     * Represents a column in the particular {@link BaseTable}.
      */
     public static class ColumnType {
 
@@ -172,7 +172,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
 
         private final String id;
         private final String text;
-        private final Function<BoomegaTable<?>, ? extends Column<?, ?>> columnFactory;
+        private final Function<BaseTable<?>, ? extends Column<?, ?>> columnFactory;
         private final List<Option> options;
 
         public ColumnType(@NotNull String id,
@@ -186,14 +186,14 @@ public abstract class BoomegaTable<S> extends TableView<S> {
         }
 
         @SuppressWarnings("unchecked")
-        public <T extends BoomegaTable<?>> ColumnType(@NotNull String id,
-                                                      @NotNull String text,
-                                                      @SuppressWarnings("unused") @NotNull Class<T> tableClass,
-                                                      @NotNull Function<T, ? extends Column<?, ?>> columnFactory,
-                                                      Option... options) {
+        public <T extends BaseTable<?>> ColumnType(@NotNull String id,
+                                                   @NotNull String text,
+                                                   @SuppressWarnings("unused") @NotNull Class<T> tableClass,
+                                                   @NotNull Function<T, ? extends Column<?, ?>> columnFactory,
+                                                   Option... options) {
             this.id = Objects.requireNonNull(id);
             this.text = Objects.requireNonNull(text);
-            this.columnFactory = (Function<BoomegaTable<?>, ? extends Column<?, ?>>) columnFactory;
+            this.columnFactory = (Function<BaseTable<?>, ? extends Column<?, ?>>) columnFactory;
             this.options = List.of(options);
         }
 
@@ -205,7 +205,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
             return text;
         }
 
-        public Function<BoomegaTable<?>, ? extends Column<?, ?>> getColumnFactory() {
+        public Function<BaseTable<?>, ? extends Column<?, ?>> getColumnFactory() {
             return columnFactory;
         }
 
@@ -231,7 +231,7 @@ public abstract class BoomegaTable<S> extends TableView<S> {
     }
 
     /**
-     * A {@link TableColumn} implementation that should be used with a {@link BoomegaTable}.
+     * A {@link TableColumn} implementation that should be used with a {@link BaseTable}.
      *
      * @see javafx.scene.control.TableColumn
      */
@@ -268,8 +268,8 @@ public abstract class BoomegaTable<S> extends TableView<S> {
             tableViewProperty().addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends TableView<S>> observable, TableView<S> oldValue, TableView<S> table) {
-                    if (table instanceof BoomegaTable<S> boomegaTable) {
-                        comparatorProperty().bind(boomegaTable.sortingComparator);
+                    if (table instanceof BaseTable<S> baseTable) {
+                        comparatorProperty().bind(baseTable.sortingComparator);
                         observable.removeListener(this);
                     }
                 }

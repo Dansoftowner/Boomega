@@ -25,36 +25,29 @@ import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static com.dansoftware.boomega.gui.control.BoomegaTable.ColumnType.*;
+import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
 
 /**
  * A {@link GoogleBooksTable} is a table-view that used for showing Google Books.
  *
  * @author Daniel Gyorffy
  */
-public class GoogleBooksTable extends BoomegaTable<Volume> {
+public class GoogleBooksTable extends BaseTable<Volume> {
 
     public static final ColumnType INDEX_COLUMN =
             new ColumnType(

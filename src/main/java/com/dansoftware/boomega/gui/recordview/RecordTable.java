@@ -20,8 +20,7 @@ package com.dansoftware.boomega.gui.recordview;
 
 import com.dansoftware.boomega.db.data.Record;
 import com.dansoftware.boomega.db.data.ServiceConnection;
-import com.dansoftware.boomega.gui.control.BoomegaTable;
-import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView;
+import com.dansoftware.boomega.gui.control.BaseTable;
 import com.dansoftware.boomega.gui.control.ReadOnlyRating;
 import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;
 import com.dansoftware.boomega.i18n.I18N;
@@ -51,9 +50,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.dansoftware.boomega.gui.control.BoomegaTable.ColumnType.*;
+import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
 
-public class RecordTable extends BoomegaTable<Record> {
+public class RecordTable extends BaseTable<Record> {
 
     public static final ColumnType INDEX_COLUMN =
             new ColumnType(
