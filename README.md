@@ -113,7 +113,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
    <ul>
         <li>
           <h4>
-            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/boomega_0.6.5-1_amd64.deb">Debian Software Package (.deb)</a>
+            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/boomega_0.6.5-1_amd64-linux.deb">Debian Software Package (.deb)</a>
           </h4>
         </li>
         <li>
