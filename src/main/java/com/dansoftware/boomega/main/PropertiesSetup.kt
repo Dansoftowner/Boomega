@@ -45,7 +45,7 @@ object PropertiesSetup {
     /**
      * the app's version
      */
-    private const val BOOMEGA_VERSION_VALUE = "0.6.0"
+    private const val BOOMEGA_VERSION_VALUE = "0.6.5"
 
     /**
      * the app's build information (build date)
