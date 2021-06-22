@@ -124,8 +124,8 @@ class DownloaderTaskFactory(
         logger.error("DownloaderTask failed with an exception: {}", exception)
 
         context.showErrorDialog(
-            I18N.getValue("update.view.download.failed.title"),
-            I18N.getValue("update.view.download.failed.msg"),
+            I18N.getValue("update.dialog.download.failed.title"),
+            I18N.getValue("update.dialog.download.failed.msg"),
             exception as Exception
         ) { context.stopProgress() }
     }

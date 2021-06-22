@@ -9,8 +9,8 @@ import java.lang.reflect.Type;
 
 public class CredentialsSerializer implements JsonSerializer<Credentials> {
 
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
+    private static final String USERNAME = "credentials.username";
+    private static final String PASSWORD = "credentials.password";
     private static final String ENCRYPTION_PASSWORD = "encp";
 
     @Override

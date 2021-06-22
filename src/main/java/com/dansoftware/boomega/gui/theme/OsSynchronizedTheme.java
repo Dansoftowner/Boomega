@@ -69,7 +69,7 @@ public class OsSynchronizedTheme extends Theme {
     }
 
     public static ThemeMeta<OsSynchronizedTheme> getMeta() {
-        return new ThemeMeta<>(OsSynchronizedTheme.class, () -> I18N.getValue("theme.sync"), InternalThemeDesigner.INSTANCE);
+        return new ThemeMeta<>(OsSynchronizedTheme.class, () -> I18N.getValue("app.ui.theme.sync"), InternalThemeDesigner.INSTANCE);
     }
 
     private static final class SyncFunction implements Consumer<Boolean> {

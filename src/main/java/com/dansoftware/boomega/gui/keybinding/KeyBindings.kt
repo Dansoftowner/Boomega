@@ -17,7 +17,7 @@ object KeyBindings {
     val newEntryKeyBinding: KeyBinding =
         KeyBinding(
             id = "newEntryKeyBinding",
-            i18nTitle = "preferences.keybindings.new_entry",
+            i18nTitle = "action.new_entry",
             i18nDescription = "preferences.keybindings.new_entry.desc",
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN)
@@ -26,7 +26,7 @@ object KeyBindings {
     val restartApplicationKeyBinding: KeyBinding =
         KeyBinding(
             id = "restartApplicationKeyBinding",
-            i18nTitle = "preferences.keybindings.restart",
+            i18nTitle = "action.restart",
             i18nDescription = "preferences.keybindings.restart.desc",
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN),
@@ -35,7 +35,7 @@ object KeyBindings {
     val openDatabaseKeyBinding: KeyBinding =
         KeyBinding(
             id = "openDatabaseKeyBinding",
-            i18nTitle = "preferences.keybindings.open_database",
+            i18nTitle = "action.open_database",
             i18nDescription = "preferences.keybindings.open_database.desc",
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
@@ -44,7 +44,7 @@ object KeyBindings {
     val createDatabaseKeyBinding: KeyBinding =
         KeyBinding(
             id = "createDatabaseKeyBinding",
-            i18nTitle = "preferences.keybindings.create_database",
+            i18nTitle = "action.create_database",
             i18nDescription = "preferences.keybindings.create_database.desc",
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
@@ -53,7 +53,7 @@ object KeyBindings {
     val openDatabaseManagerKeyBinding: KeyBinding =
         KeyBinding(
             id = "openDatabaseManagerKeyBinding",
-            i18nTitle = "preferences.keybindings.open_database_manager",
+            i18nTitle = "action.open_database_manager",
             i18nDescription = "preferences.keybindings.open_database_manager.desc",
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN),
@@ -62,7 +62,7 @@ object KeyBindings {
     val fullScreenKeyBinding: KeyBinding =
         KeyBinding(
             id = "fullScreenKeyBinding",
-            i18nTitle = "preferences.keybindings.full_screen",
+            i18nTitle = "action.full_screen",
             i18nDescription = "preferences.keybindings.full_screen.desc",
             defaultKeyCombination = KeyCodeCombination(KeyCode.F11)
         )
@@ -70,7 +70,7 @@ object KeyBindings {
     val saveChangesKeyBinding: KeyBinding =
         KeyBinding(
             id = "saveChangesKeyBinding",
-            i18nTitle = "preferences.keybindings.save_changes",
+            i18nTitle = "action.save_changes",
             i18nDescription = "preferences.keybindings.save_changes.desc",
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN)
@@ -123,7 +123,7 @@ object KeyBindings {
     val openSettingsKeyBinding: KeyBinding =
         KeyBinding(
             id = "openSettingsKeyBinding",
-            i18nTitle = "preferences.keybindings.open_settings",
+            i18nTitle = "action.settings",
             i18nDescription = "preferences.keybindings.open_settings.desc",
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)

@@ -167,7 +167,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     private fun buildUsernameInput() = TextField().apply {
         minHeight = 35.0
         prefColumnCount = 10
-        promptText = I18N.getValue("login.form.username.prompt")
+        promptText = I18N.getValue("credentials.username")
         usernameInput.bindBidirectional(textProperty())
         textProperty().bindBidirectional(usernameInput)
     }
@@ -175,7 +175,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     private fun buildPasswordInput() = PasswordField().apply {
         minHeight = 35.0
         prefColumnCount = 10
-        promptText = I18N.getValue("login.form.password.prompt")
+        promptText = I18N.getValue("credentials.password")
         passwordInput.bindBidirectional(textProperty())
         textProperty().bindBidirectional(passwordInput)
     }

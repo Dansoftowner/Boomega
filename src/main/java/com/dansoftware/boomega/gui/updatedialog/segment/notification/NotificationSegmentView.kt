@@ -56,7 +56,7 @@ class NotificationSegmentView(
             children.add(buildLabel())
         }
 
-        private fun buildLabel() = Label(I18N.getValue("update.view.available")).apply {
+        private fun buildLabel() = Label(I18N.getValue("update.available")).apply {
             styleClass.add("update-view-available-label")
             padding = Insets(10.0)
             font = Font.font(32.0)
@@ -75,10 +75,10 @@ class NotificationSegmentView(
         private fun buildGroup() = Group(buildHBox())
 
         private fun buildHBox() = HBox(10.0).apply {
-            children.add(buildDescriptionLabel("update.view.current.version"))
+            children.add(buildDescriptionLabel("update.dialog.current_version"))
             children.add(buildCurrentVersionLabel())
             children.add(Separator(Orientation.VERTICAL))
-            children.add(buildDescriptionLabel("update.view.next.version"))
+            children.add(buildDescriptionLabel("update.dialog.next_version"))
             children.add(buildNextVersionLabel())
         }
 

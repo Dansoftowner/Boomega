@@ -107,7 +107,7 @@ class LoginView(
 
     private fun buildOptionsItem() = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).apply {
         items.addAll(
-            MenuItem(I18N.getValue("update.search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)).action {
+            MenuItem(I18N.getValue("action.update_search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)).action {
                 val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
                     init {
                         setOnSucceeded {
@@ -122,11 +122,11 @@ class LoginView(
                 CachedExecutor.submit(task)
             },
 
-            MenuItem(I18N.getValue("plugin.manager.open"), FontAwesomeIconView(FontAwesomeIcon.PLUG)).action {
+            MenuItem(I18N.getValue("action.open_plugin_manager"), FontAwesomeIconView(FontAwesomeIcon.PLUG)).action {
                 PluginManagerActivity().show(context.contextWindow)
             }.apply { isDisable = true  }, // TODO: unlock plugin manager
 
-            MenuItem(I18N.getValue("app.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).action {
+            MenuItem(I18N.getValue("action.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).action {
                 PreferencesActivity(preferences).show(context.contextWindow)
             }
         )

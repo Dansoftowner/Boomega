@@ -25,6 +25,6 @@ public class LightTheme extends JMetroTheme {
     }
 
     public static ThemeMeta<LightTheme> getMeta() {
-        return new ThemeMeta<>(LightTheme.class, () -> I18N.getValue("theme.light"), InternalThemeDesigner.INSTANCE);
+        return new ThemeMeta<>(LightTheme.class, () -> I18N.getValue("app.ui.theme.light"), InternalThemeDesigner.INSTANCE);
     }
 }

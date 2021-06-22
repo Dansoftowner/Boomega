@@ -72,7 +72,7 @@ public class UpdateDialog extends SegmentDialog {
 
     private final class LaterButton extends Button implements EventHandler<ActionEvent> {
         LaterButton() {
-            super(I18N.getValues().getString("segment.dialog.button.later"));
+            super(I18N.getValues().getString("update.dialog.button.later"));
             setOnAction(this);
             HBox.setMargin(this, new Insets(0, 10, 0, 0));
         }

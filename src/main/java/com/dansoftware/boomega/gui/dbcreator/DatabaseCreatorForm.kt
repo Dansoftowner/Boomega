@@ -20,6 +20,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.stage.DirectoryChooser
 import org.apache.commons.lang3.StringUtils
+import org.jetbrains.annotations.Nls
 import java.io.File
 
 class DatabaseCreatorForm(
@@ -73,7 +74,7 @@ class DatabaseCreatorForm(
     private fun buildCreateButton() = Button().apply {
         maxWidth = Double.MAX_VALUE
         minHeight = 35.0
-        text = I18N.getValue("data.source.adder.create")
+        text = I18N.getValue("database.creator.create")
         isDefaultButton = true
         setOnAction { create() }
     }
@@ -88,12 +89,12 @@ class DatabaseCreatorForm(
         }
 
         private fun buildUI() {
-            children.add(buildLabel("data.source.adder.db.name", 0, 0))
+            children.add(buildLabel("database.creator.db_name", 0, 0))
             children.add(buildNameField())
-            children.add(buildLabel("data.source.adder.db.dir", 1, 0))
+            children.add(buildLabel("database.creator.db_dir", 1, 0))
             children.add(buildDirField())
             children.add(buildDirOpenButton())
-            children.add(buildLabel("data.source.adder.db.full.path", 0, 2))
+            children.add(buildLabel("database.creator.full_path", 0, 2))
             children.add(buildFullPathField())
             children.add(buildAuthenticationCheck())
             children.add(buildUsernameInput())
@@ -132,6 +133,7 @@ class DatabaseCreatorForm(
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
             graphic = FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN)
             minHeight = 35.0
+            tooltip = Tooltip(I18N.getValue("data.source.adder.choose.dir"))
             setOnAction { openDirectory() }
         }
 
@@ -143,7 +145,7 @@ class DatabaseCreatorForm(
             isEditable = false
         }
 
-        private fun buildAuthenticationCheck() = CheckBox(I18N.getValue("data.source.adder.db.auth")).apply {
+        private fun buildAuthenticationCheck() = CheckBox(I18N.getValue("database.creator.db_auth")).apply {
             setConstraints(this, 0, 5)
             setColumnSpan(this, 3)
             setHgrow(this, Priority.SOMETIMES)
@@ -156,7 +158,7 @@ class DatabaseCreatorForm(
             setConstraints(this, 0, 6)
             setColumnSpan(this, 3)
             minHeight = 35.0
-            promptText = I18N.getValue("login.form.username.prompt")
+            promptText = I18N.getValue("credentials.username")
             textFormatter = SpaceValidator()
             visibleProperty().bind(authentication)
             managedProperty().bind(authentication)
@@ -167,7 +169,7 @@ class DatabaseCreatorForm(
             setConstraints(this, 0, 7)
             setColumnSpan(this, 3)
             minHeight = 35.0
-            promptText = I18N.getValue("login.form.password.prompt")
+            promptText = I18N.getValue("credentials.password")
             textFormatter = SpaceValidator()
             visibleProperty().bind(authentication)
             managedProperty().bind(authentication)
@@ -178,7 +180,7 @@ class DatabaseCreatorForm(
             setConstraints(this, 0, 8)
             setColumnSpan(this, 3)
             minHeight = 35.0
-            promptText = I18N.getValue("login.form.password_repeat.prompt")
+            promptText = I18N.getValue("database.creator.password.repeat")
             textFormatter = SpaceValidator()
             visibleProperty().bind(authentication)
             managedProperty().bind(authentication)
@@ -206,59 +208,59 @@ class DatabaseCreatorForm(
         when {
             StringUtils.isBlank(databaseName.get()) -> {
                 showErrorDialog(
-                    "db.creator.form.invalid.missing.name.title",
-                    "db.creator.form.invalid.missing.name.msg"
+                    "database.creator.missing_name.title",
+                    "database.creator.missing_name.msg"
                 )
                 false
             }
             StringUtils.isBlank(databaseDir.get()) -> {
                 showErrorDialog(
-                    "db.creator.form.invalid.missing.dir.title",
-                    "db.creator.form.invalid.missing.dir.msg"
+                    "database.creator.missing_dir.title",
+                    "database.creator.missing_dir.msg"
                 )
                 false
             }
             FileGoodies.hasNotValidPath(databaseDirFile) -> {
                 showErrorDialog(
-                    "db.creator.form.invalid.dir.title",
-                    "db.creator.form.invalid.dir.msg",
+                    "database.creator.invalid_dir.title",
+                    "database.creator.invalid_dir.msg",
                     databaseDirFile
                 )
                 false
             }
             databaseFile.exists() -> {
                 showErrorDialog(
-                    "db.creater.form.invalid.file.already.exists.title",
-                    "db.creater.form.invalid.file.already.exists.msg",
+                    "database.creator.file_already_exists.title",
+                    "database.creator.file_already_exists.msg",
                     FileGoodies.shortenedFilePath(databaseFile, 1)
                 )
                 false
             }
             authentication.get() && StringUtils.isBlank(username.get()) -> {
                 showErrorDialog(
-                    "db.creator.form.invalid.empty.user.name.title",
-                    "db.creator.form.invalid.empty.user.name.msg"
+                    "database.creator.empty_user_name.title",
+                    "database.creator.empty_user_name.msg"
                 )
                 false
             }
             authentication.get() && StringUtils.isBlank(password.get()) -> {
                 showErrorDialog(
-                    "db.creator.form.invalid.empty.password.title",
-                    "db.creator.form.invalid.empty.password.msg"
+                    "database.creator.empty_password.title",
+                    "database.creator.empty_password.msg"
                 )
                 false
             }
             authentication.get() && password.get().equals(passwordRepeat.get()).not() -> {
                 showErrorDialog(
-                    "db.creator.form.invalid.password_match.title",
-                    "db.creator.form.invalid.password_match.msg"
+                    "database.creator.passwords_not_match.title",
+                    "database.creator.passwords_not_match.msg"
                 )
                 false
             }
             databaseDirFile.exists().not() -> {
                 showInfoDialog(
-                    "db.creator.form.confirm.dir.not.exist.title",
-                    "db.creator.form.confirm.dir.not.exist.msg",
+                    "database.creator.dir_not_exist.title",
+                    "database.creator.dir_not_exist.msg",
                     databaseDirFile.name
                 )
                 try {
@@ -277,10 +279,10 @@ class DatabaseCreatorForm(
         }
     }
 
-    private fun showInfoDialog(title: String, msg: String, vararg args: Any?): ButtonType? =
+    private fun showInfoDialog(@Nls title: String, @Nls msg: String, vararg args: Any?): ButtonType? =
         context.showInformationDialogAndWait(I18N.getValue(title, *args), I18N.getValue(msg))
 
-    private fun showErrorDialog(title: String, msg: String, vararg args: Any?): ButtonType? =
+    private fun showErrorDialog(@Nls title: String, @Nls msg: String, vararg args: Any?): ButtonType? =
         context.showErrorDialogAndWait(I18N.getValue(title), I18N.getValue(msg, *args))
 
 }

@@ -40,7 +40,6 @@ import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.jfilegoodies.explorer.FileExplorers
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.concurrent.Task
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
@@ -54,7 +53,7 @@ object GlobalActions {
 
     @JvmField
     val NEW_ENTRY = Action(
-        "preferences.keybindings.new_entry",
+        "action.new_entry",
         MaterialDesignIcon.DATABASE,
         KeyBindings.newEntryKeyBinding
     ) { context, preferences, databaseTracker ->
@@ -64,7 +63,7 @@ object GlobalActions {
     @JvmField
     val OPEN_DATABASE =
         Action(
-            "preferences.keybindings.open_database",
+            "action.open_database",
             MaterialDesignIcon.FILE,
             KeyBindings.openDatabaseKeyBinding
         ) { context, preferences, databaseTracker ->
@@ -77,7 +76,7 @@ object GlobalActions {
     @JvmField
     val CREATE_DATABASE =
         Action(
-            "preferences.keybindings.create_database",
+            "action.create_database",
             MaterialDesignIcon.DATABASE_PLUS,
             KeyBindings.createDatabaseKeyBinding
         ) { context, preferences, databaseTracker ->
@@ -90,7 +89,7 @@ object GlobalActions {
     @JvmField
     val OPEN_DATABASE_MANAGER =
         Action(
-            "preferences.keybindings.open_database_manager",
+            "action.open_database_manager",
             MaterialDesignIcon.DATABASE,
             KeyBindings.openDatabaseManagerKeyBinding
         ) { context, _, databaseTracker ->
@@ -101,7 +100,7 @@ object GlobalActions {
     val RESTART_APPLICATION = run {
         val dialogShownContexts: MutableSet<Context> = HashSet()
         Action(
-            "preferences.keybindings.restart",
+            "action.restart",
             MaterialDesignIcon.UPDATE,
             KeyBindings.restartApplicationKeyBinding
         ) { context, _, _ ->
@@ -123,7 +122,7 @@ object GlobalActions {
     @JvmField
     val OPEN_SETTINGS =
         Action(
-            "preferences.keybindings.open_settings",
+            "action.settings",
             MaterialDesignIcon.SETTINGS,
             KeyBindings.openSettingsKeyBinding
         ) { context, preferences, _ ->
@@ -133,7 +132,7 @@ object GlobalActions {
     @JvmField
     val FULL_SCREEN =
         Action(
-            "preferences.keybindings.full_screen",
+            "action.full_screen",
             MaterialDesignIcon.FULLSCREEN,
             KeyBindings.fullScreenKeyBinding
         ) { context, _, _ ->
@@ -142,37 +141,37 @@ object GlobalActions {
 
     @JvmField
     val OPEN_CLIPBOARD_VIEWER =
-        Action("menubar.menu.clipboard.openview", MaterialDesignIcon.CLIPBOARD) { context, _, _ ->
+        Action("action.open_clipboard_view", MaterialDesignIcon.CLIPBOARD) { context, _, _ ->
             ClipboardViewActivity.show(context.contextWindow)
         }
 
     @JvmField
     val OPEN_PLUGIN_MANAGER =
-        Action("menubar.menu.file.pluginmanager", MaterialDesignIcon.POWER_PLUG) { context, _, _ ->
+        Action("action.open_plugin_manager", MaterialDesignIcon.POWER_PLUG) { context, _, _ ->
             PluginManagerActivity().show(context.contextWindow)
         }
 
     @JvmField
     val OPEN_PLUGIN_DIR =
-        Action("menubar.menu.plugin.opendir", MaterialDesignIcon.FOLDER) { context, _, _ ->
+        Action("action.open_plugin_dir", MaterialDesignIcon.FOLDER) { context, _, _ ->
             FileExplorers.get().openDir(File(System.getProperty("boomega.plugin.dir")))
         }
 
     @JvmField
     val SEARCH_FOR_UPDATES =
-        Action("menubar.menu.help.update", MaterialDesignIcon.UPDATE) { context, _, _ ->
+        Action("action.update_search", MaterialDesignIcon.UPDATE) { context, _, _ ->
             UpdateActivity(context, UpdateSearcher.defaultInstance().search()).show(true)
         }
 
     @JvmField
     val OPEN_CONTACT_INFO =
-        Action("menubar.menu.help.contact", MaterialDesignIcon.CONTACT_MAIL) { context, _, _ ->
+        Action("action.open_contact_info", MaterialDesignIcon.CONTACT_MAIL) { context, _, _ ->
             ContactActivity(context).show()
         }
 
     @JvmField
     val OPEN_APP_INFO =
-        Action("menubar.menu.help.about", MaterialDesignIcon.INFORMATION) { context, _, _ ->
+        Action("action.open_app_info", MaterialDesignIcon.INFORMATION) { context, _, _ ->
             InformationActivity(context).show()
         }
 

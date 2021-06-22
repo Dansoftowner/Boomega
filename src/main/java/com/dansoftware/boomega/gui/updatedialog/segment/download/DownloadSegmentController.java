@@ -146,8 +146,8 @@ public class DownloadSegmentController implements Initializable {
             }
         } catch (IOException e) {
             context.showErrorDialog(
-                    I18N.getValue("update.view.downloaded.run.failed.title"),
-                    I18N.getValue("update.view.downloaded.run.failed.msg", result.getName()),
+                    I18N.getValue("update.dialog.download.install.failed.title"),
+                    I18N.getValue("update.dialog.download.install.failed.msg", result.getName()),
                     e,
                     buttonType -> {}
             );
@@ -167,7 +167,7 @@ public class DownloadSegmentController implements Initializable {
         root.getChildren().add(
                 new StackPane(
                         new WebsiteHyperLink(
-                                I18N.getValue("update.view.website.open"),
+                                I18N.getValue("website.open"),
                                 updateInformation.getWebsite()
                         )
                 )
@@ -220,7 +220,7 @@ public class DownloadSegmentController implements Initializable {
         downloadPauseBtn.disableProperty().bind(taskFactory.getRunningProperty().not());
         taskFactory.getPausedProperty().addListener((observable, oldValue, isPaused) -> {
             downloadPauseBtn.setGraphic(new MaterialDesignIconView(isPaused ? MaterialDesignIcon.PLAY : MaterialDesignIcon.PAUSE));
-            downloadPauseBtn.setTooltip(new Tooltip(I18N.getValue(taskFactory.isPaused() ? "update.view.download.resume" : "update.view.download.pause")));
+            downloadPauseBtn.setTooltip(new Tooltip(I18N.getValue(taskFactory.isPaused() ? "update.dialog.download.resume" : "update.dialog.download.pause")));
         });
     }
 

@@ -17,8 +17,8 @@ class DownloadSegment(
     private val context: Context,
     private val updateInformation: UpdateInformation
 ) : TitledSegment(
-    I18N.getValue("segment.download.name"),
-    I18N.getValue("segment.download.title")
+    I18N.getValue("update.segment.download.name"),
+    I18N.getValue("update.segment.download.title")
 ) {
     override fun getCenterContent(): Node =
         FXMLLoader(javaClass.getResource("DownloadSegment.fxml"), I18N.getValues(), null) {

@@ -310,7 +310,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
         public void show(@NotNull ObservableList<DatabaseMeta> itemsToRemove) {
             DatabaseManagerTable.this.context.showDialog(
-                    I18N.getValue("db.manager.table.confirm.delete.title", itemsToRemove.size()),
+                    I18N.getValue("database.manager.confirm_delete.title", itemsToRemove.size()),
                     new ListView<>(itemsToRemove),
                     buttonType -> {
                         if (Objects.equals(buttonType, I18NButtonTypes.YES)) {

@@ -15,7 +15,7 @@ public class NotificationSegment extends FixedContentSegment {
     private final UpdateInformation updateInformation;
 
     public NotificationSegment(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
-        super(I18N.getValues().getString("segment.dialog.start.name"));
+        super(I18N.getValues().getString("update.segment.start.name"));
         this.context = Objects.requireNonNull(context);
         this.updateInformation = updateInformation;
     }

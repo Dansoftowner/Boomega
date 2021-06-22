@@ -40,13 +40,13 @@ class QuickForm(
 
     private fun buildUsernameInputField() = TextField().apply {
         minHeight = 35.0
-        promptText = I18N.getValue("login.form.username.prompt")
+        promptText = I18N.getValue("credentials.username")
         usernameInput.bind(textProperty())
     }
 
     private fun buildPasswordInputField() = PasswordField().apply {
         minHeight = 35.0
-        promptText = I18N.getValue("login.form.password.prompt")
+        promptText = I18N.getValue("credentials.password")
         passwordInput.bind(textProperty())
     }
 

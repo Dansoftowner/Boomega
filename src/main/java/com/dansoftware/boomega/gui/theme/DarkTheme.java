@@ -25,6 +25,6 @@ public class DarkTheme extends JMetroTheme {
     }
 
     public static ThemeMeta<DarkTheme> getMeta() {
-        return new ThemeMeta<>(DarkTheme.class, () -> I18N.getValue("theme.dark"), InternalThemeDesigner.INSTANCE);
+        return new ThemeMeta<>(DarkTheme.class, () -> I18N.getValue("app.ui.theme.dark"), InternalThemeDesigner.INSTANCE);
     }
 }

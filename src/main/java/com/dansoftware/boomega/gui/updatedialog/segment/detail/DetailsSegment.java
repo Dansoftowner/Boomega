@@ -19,7 +19,7 @@ public class DetailsSegment extends FixedContentSegment {
     private final UpdateInformation updateInformation;
 
     public DetailsSegment(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
-        super(I18N.getValues().getString("segment.details.name"));
+        super(I18N.getValues().getString("update.segment.details.name"));
         this.context = context;
         this.updateInformation = updateInformation;
     }

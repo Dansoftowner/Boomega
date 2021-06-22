@@ -71,8 +71,8 @@ public class UpdateActivity {
         updateSearchResult.ifFailed(exception -> {
             if (showFeedbackDialog) {
                 context.showErrorDialog(
-                        I18N.getValue("update.activity.failed.title"),
-                        I18N.getValue("update.activity.failed.msg"),
+                        I18N.getValue("update.failed.title"),
+                        I18N.getValue("update.failed.msg"),
                         exception, buttonType -> {
                             //empty
                         });
@@ -84,8 +84,8 @@ public class UpdateActivity {
         }).ifNoUpdateAvailable(updateInformation -> {
             if (showFeedbackDialog) {
                 context.showInformationDialog(
-                        I18N.getValue("update.activity.up.to.date.title"),
-                        I18N.getValue("update.activity.up.to.date.msg"),
+                        I18N.getValue("update.up_to_date.title"),
+                        I18N.getValue("update.up_to_date.msg"),
                         buttonType -> {
                             //empty
                         });
