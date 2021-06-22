@@ -12,7 +12,7 @@ plugins {
 }
 
 sourceCompatibility = '16'
-version '0.6.0'
+version '0.6.5'
 
 mainClassName = 'com.dansoftware.boomega.main.Main'
 applicationDefaultJvmArgs = [
