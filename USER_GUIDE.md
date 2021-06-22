@@ -1,5 +1,7 @@
 # Boomega User Guide
 
+> At this point the user guide is incomplete and not reliable!
+
 #### List of contents
 
 * [Overview](#overview)
