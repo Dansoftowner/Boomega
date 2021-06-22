@@ -16,6 +16,7 @@ version '0.6.5'
 
 mainClassName = 'com.dansoftware.boomega.main.Main'
 applicationDefaultJvmArgs = [
+        '-Dhttps.protocols=TLSv1.2,TLSv1.1,TLSv1', // See #144: https://github.com/Dansoftowner/Boomega/issues/144
         '--add-exports', 'javafx.base/com.sun.javafx=ALL-UNNAMED',
         '--add-exports', 'javafx.base/com.sun.javafx.runtime=ALL-UNNAMED',
         '--add-exports', 'javafx.graphics/com.sun.javafx.application=ALL-UNNAMED',
@@ -28,7 +29,7 @@ applicationDefaultJvmArgs = [
         '--add-exports', 'javafx.graphics/com.sun.javafx.text=ALL-UNNAMED',
         '--add-opens', 'javafx.graphics/com.sun.javafx.text=ALL-UNNAMED',
         '--add-exports', 'javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED',
-        '--add-exports', 'javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED',
+        '--add-exports', 'javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED'
 ]
 
 compileKotlin {
