@@ -90,17 +90,17 @@ The detailed user guide is available [here](USER_GUIDE.md).
   <ul>
       <li>
         <h4>
-           <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.exe">Exe installer (.exe)</a>
+           <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega_0.6.5-win.exe">Exe installer (.exe)</a>
         </h4>
       </li>
       <li>
           <h4>
-            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.msi">MSI installer package (.msi)</a>
+            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega_0.6.5-win.msi">MSI installer package (.msi)</a>
           </h4>
       </li>
       <li>
         <h4>
-           <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-win.zip">Portable (.zip)</a>
+           <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega_0.6.5-win.zip">Portable (.zip)</a>
         </h4>
       </li>
   </ul>
@@ -113,12 +113,12 @@ The detailed user guide is available [here](USER_GUIDE.md).
    <ul>
         <li>
           <h4>
-            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/boomega_0.6.0-1_amd64.deb">Debian Software Package (.deb)</a>
+            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/boomega_0.6.5-1_amd64.deb">Debian Software Package (.deb)</a>
           </h4>
         </li>
         <li>
           <h4>
-             <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-linux.tar.xz">Portable (.tar.xz)</a>
+             <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega_0.6.5-linux.tar.xz">Portable (.tar.xz)</a>
           </h4>
         </li>
    </ul>
