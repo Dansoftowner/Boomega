@@ -149,11 +149,11 @@ The detailed user guide is available [here](USER_GUIDE.md).
 </p>
 
 ## Source code
-[![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)]()
-[![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)]()
-[![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)]()
-[![Languages](https://img.shields.io/badge/languages-java%20%7C%20kotlin-orange)]()
-[![Java version](https://img.shields.io/badge/java-16-orange)]()
+[![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
+[![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
+[![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)](https://github.com/Dansoftowner/Boomega)
+[![Java version](https://img.shields.io/badge/java-16-orange)](https://jdk.java.net/16/)
+[![Kotlin version](https://img.shields.io/badge/kotlin-1.5.0-purple)](https://kotlinlang.org/)
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 
 * The repo has two important branches:
