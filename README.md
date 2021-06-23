@@ -25,6 +25,7 @@
 </table>
 
 ## Features
+
 * Cross-platform
 * Multiple databases
 * Quick file launch support
@@ -34,6 +35,7 @@
 * Plugin support
 * Easy transportation between databases
 * Multiple record-types like "Book" and "Magazine"
+* Custom notes with Markdown support 
 * Customizable key-bindings
 * ...and more!
 
