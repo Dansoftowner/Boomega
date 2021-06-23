@@ -136,7 +136,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
 <tr>
 
   <td align="center" colspan="3">
-    <b><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.0/Boomega_0.6.0-all.jar">Java archive (.jar)</a></b>
+    <b><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega-0.6.0-all.jar">Java archive (.jar)</a></b>
   </td>
 
 </tr>
