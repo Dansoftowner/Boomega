@@ -27,16 +27,15 @@
 ## Features
 
 * Cross-platform
-* Multiple databases
-* Quick file launch support
-* Importing from Google Books
 * Dark/Light theme, modern UI
-* Localization into multiple languages
-* Plugin support
+* Multiple languages
+* Multiple database support
 * Easy transportation between databases
 * Multiple record-types like "Book" and "Magazine"
-* Custom notes with Markdown support 
+* Custom notes with Markdown support
+* Importing from Google Books
 * Customizable key-bindings
+* Plugin support
 * ...and more!
 
 ## Documentation
