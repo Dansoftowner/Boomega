@@ -1,9 +1,9 @@
+<img align="right" src="img/logo.png" alt="Boomega icon">
+
 [![License](https://img.shields.io/github/license/DansoftOwner/Boomega)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/issues)
 [![Issues closed](https://img.shields.io/github/issues-closed/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/issues)
 [![Last commit](https://img.shields.io/github/last-commit/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/commits/dev)
-
-<img align="right" src="img/logo.png" alt="Boomega icon">
 
 # Boomega
 
