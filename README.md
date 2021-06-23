@@ -1,13 +1,16 @@
-<img align="left" src="img/logo.png" alt="Boomega icon">
+<p align="center">
+  <img align="center" src="img/logo.png" alt="Boomega icon">
+  <h1 align="center">Boomega</h1>
+</p>
 
-[![License](https://img.shields.io/github/license/DansoftOwner/Boomega)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/issues)
-[![Issues closed](https://img.shields.io/github/issues-closed/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/issues)
-[![Last commit](https://img.shields.io/github/last-commit/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/commits/dev)
+<p align="center">
+    <a href="LICENSE"><img align="center" alt="License" src="https://img.shields.io/github/license/DansoftOwner/Boomega"></a>
+    <a href="https://github.com/Dansoftowner/Boomega/issues"><img align="center" alt="Issues" src="https://img.shields.io/github/issues/DansoftOwner/Boomega"></a>
+    <a href="https://github.com/Dansoftowner/Boomega/issues"><img align="center" alt="Issues closed" src="https://img.shields.io/github/issues-closed/Dansoftowner/Boomega"></a>
+    <a href="https://github.com/Dansoftowner/Boomega/commits/dev"><img align="center" alt="Last commit" src="https://img.shields.io/github/last-commit/Dansoftowner/Boomega"></a>
+</p>
 
-# Boomega
-
-### An advanced book explorer/catalog application written in Java and Kotlin.
+<h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
 
 <table style="width: 100%; border: none;">
 <tr>
@@ -24,7 +27,7 @@
 ## Features
 * Cross-platform
 * Multiple databases
-* Quick file launch support  
+* Quick file launch support
 * Importing from Google Books
 * Dark/Light theme, modern UI
 * Localization into multiple languages
@@ -154,8 +157,8 @@ The detailed user guide is available [here](USER_GUIDE.md).
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 
 * The repo has two important branches:
-    * `master` - for stable versions
-    * `dev` - for developing the app further
+  * `master` - for stable versions
+  * `dev` - for developing the app further
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
 * The app targets `Java 16+` but the code is `unmodularized`
@@ -175,7 +178,7 @@ To build executable binaries, use `gradlew jpackage` ([see distribution guidelin
 ## Used third-party libraries
 * [Jump to list](USED_LIBRARIES.md)
 * ...or you can view them in the `Boomega Info`:<br>
-![Viewing third-party libraries in the app](img/BoomegaThirdPartyInfo.png)
+  ![Viewing third-party libraries in the app](img/BoomegaThirdPartyInfo.png)
 
 
 ## License
