@@ -1,16 +1,13 @@
-<p align="center">
-  <img align="center" src="img/logo.png" alt="Boomega icon">
-  <h1 align="center">Boomega</h1>
-</p>
+[![License](https://img.shields.io/github/license/DansoftOwner/Boomega)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/issues)
+[![Issues closed](https://img.shields.io/github/issues-closed/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/issues)
+[![Last commit](https://img.shields.io/github/last-commit/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/commits/dev)
 
-<p align="center">
-    <a href="LICENSE"><img align="center" alt="License" src="https://img.shields.io/github/license/DansoftOwner/Boomega"></a>
-    <a href="https://github.com/Dansoftowner/Boomega/issues"><img align="center" alt="Issues" src="https://img.shields.io/github/issues/DansoftOwner/Boomega"></a>
-    <a href="https://github.com/Dansoftowner/Boomega/issues"><img align="center" alt="Issues closed" src="https://img.shields.io/github/issues-closed/Dansoftowner/Boomega"></a>
-    <a href="https://github.com/Dansoftowner/Boomega/commits/dev"><img align="center" alt="Last commit" src="https://img.shields.io/github/last-commit/Dansoftowner/Boomega"></a>
-</p>
+<img align="right" src="img/logo.png" alt="Boomega icon">
 
-<h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
+# Boomega
+
+### An advanced book explorer/catalog application written in Java and Kotlin.
 
 <table style="width: 100%; border: none;">
 <tr>
