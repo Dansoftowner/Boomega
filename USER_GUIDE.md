@@ -17,11 +17,10 @@
   * [Creating database](#creating-database) 
   * [Database manager](#database-manager) 
   * [Preferences dialog](#preferences-dialog)
-  * 
   * [Key Bindings](#key-bindings)
   * [User interface themes](#user-interface-themes)
   * [User interface language](#user-interface-languages)
-  *
+  * [Plugin Manager](#plugin-manager)
   * [Viewing Boomega info](#viewing-boomega-info)
     
 
