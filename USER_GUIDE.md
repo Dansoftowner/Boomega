@@ -150,7 +150,33 @@ basic tools/functions the app provides like: [Opening existing databases](#openi
 
 ![Login view](img/userguide/loginview/LoginView_Light.png)
 
-By clicking on the ![info](img/userguide/icon/information.png) icon on the top-right, you can view the [Boomega info](#viewing-boomega-info).
+#### The top toolbar (on the top)
+
+- By clicking on the ![info](img/userguide/icon/information.png) icon, you can view the [Boomega info](#viewing-boomega-info).
+- You can access the `quick menu` by clicking on the ![option](img/userguide/icon/options.png) icon:  
+  ![Quick options menu](img/userguide/loginview/quick-options-menu.png)  
+  Here you are able to:
+    - Search for software updates
+    - Open the plugin manager (read more about the Plugin Manager [here](#plugin-manager))
+    - Open the application settings (see [Preferences dialog](#preferences-dialog))
+
+#### The login box (in the center)
+
+![Login box](img/userguide/loginview/login-box.png)
+
+- By clicking on the ![database](img/userguide/icon/database.png) icon you can open the [Database manager](#database-manager)
+- By clicking on the ![folder](img/userguide/icon/folder-open.png) icon you can open an existing database from your file-system
+  (see [Opening existing database](#opening-existing-database))
+- By clicking on the ![database-plus](img/userguide/icon/database-plus.png) icon on the bottom you can create a new database (see [Creating database](#creating-database))
+
+If you created/opened some database files, you can choose a data source in the combo-box:
+![Combo-box list](img/userguide/loginview/database-list.png)
+
+After you selected a database, you can specify the credentials and sign in into the database:
+
+![Login box with selected database](img/userguide/loginview/login-box-selected.png)
+
+...
 
 ### Opening existing database
 
@@ -177,6 +203,10 @@ TODO
 TODO
 
 ### User interface languages
+
+TODO
+
+### Plugin Manager
 
 TODO
 
