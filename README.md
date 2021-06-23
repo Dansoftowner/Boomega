@@ -1,4 +1,4 @@
-<img align="right" src="img/logo.png" alt="Boomega icon">
+<img align="left" src="img/logo.png" alt="Boomega icon">
 
 [![License](https://img.shields.io/github/license/DansoftOwner/Boomega)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/issues)
