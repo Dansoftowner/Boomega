@@ -43,8 +43,8 @@ The detailed user guide is available [here](USER_GUIDE.md).
 ## Download
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)]()
 [![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)](https://github.com/Dansoftowner/Boomega/releases)
-[![Version](https://img.shields.io/github/v/release/DansoftOwner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
-[![GitHub Release Date](https://img.shields.io/github/release-date/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
+[![Version](https://img.shields.io/github/v/release/Dansoftowner/Boomega?include_prereleases)](https://github.com/Dansoftowner/Boomega/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date-pre/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 
 <table align="center">
 
