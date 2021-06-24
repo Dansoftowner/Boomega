@@ -21,9 +21,9 @@ import java.util.Objects;
 class DefaultUpdateSearcher extends UpdateSearcher {
 
     /**
-     * The updater server-address
+     * The location that points to the update-info resource
      */
-    private static final String LOCATION = "https://update-server-ed6c3.firebaseio.com/boomega.json";
+    private static final String LOCATION = "https://raw.githubusercontent.com/Dansoftowner/Boomega/master/update.json";
 
     private final Version base;
 
