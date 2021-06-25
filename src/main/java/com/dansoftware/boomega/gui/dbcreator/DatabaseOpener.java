@@ -26,7 +26,7 @@ public class DatabaseOpener {
     @NotNull
     private List<FileChooser.ExtensionFilter> getExtensionFilters() {
         return List.of(
-                new FileChooser.ExtensionFilter("LibraryApp database files", "*." + System.getProperty("libraryapp.file.extension")),
+                new FileChooser.ExtensionFilter("LibraryApp database files", "*." + System.getProperty("boomega.file.extension")),
                 new FileChooser.ExtensionFilter("All files", "*")
         );
     }

@@ -18,7 +18,7 @@ object PluginDirectory {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val JAR_EXTENSION_PATTERN = Pattern.compile(".*\\.jar", Pattern.CASE_INSENSITIVE)
 
-    private val directory = File(System.getProperty("libraryapp.plugin.dir"))
+    private val directory = File(System.getProperty("boomega.plugin.dir"))
     private val registrationFile: File
     private val registeredFiles: MutableList<String>
 

@@ -26,6 +26,6 @@ import java.io.File;
  */
 public class DefaultSource extends JsonFileSource {
     public DefaultSource() {
-        super(new File(System.getProperty("libraryapp.config.file.path")));
+        super(new File(System.getProperty("boomega.config.file.path")));
     }
 }

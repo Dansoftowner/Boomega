@@ -65,7 +65,7 @@ public abstract class UpdateSearcher {
     }
 
     public static UpdateSearcher defaultInstance() {
-        return instanceFactory.apply(new Version(System.getProperty("libraryapp.version")));
+        return instanceFactory.apply(new Version(System.getProperty("boomega.version")));
     }
 
     static void setInstanceFactory(@NotNull Function<@NotNull Version, @NotNull UpdateSearcher> instanceFactory) {

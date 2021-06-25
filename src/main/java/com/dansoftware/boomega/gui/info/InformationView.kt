@@ -81,7 +81,7 @@ class InformationView(val context: Context) : VBox(5.0) {
     }
 
     private fun buildVersionLabel() =
-        KeyValuePair("info.version", System.getProperty("libraryapp.version"))
+        KeyValuePair("info.version", System.getProperty("boomega.version"))
 
     private fun buildDeveloperLabel() =
         KeyValuePair("info.developer", I18N.getLanguagePack().displayPersonName("Dániel", "Györffy"));

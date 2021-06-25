@@ -3,7 +3,6 @@ package com.dansoftware.boomega.main
 import com.dansoftware.boomega.util.CommonDirectories
 import com.dansoftware.boomega.util.os.OsInfo
 import org.apache.commons.io.FileUtils
-import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 
@@ -14,64 +13,31 @@ import java.io.File
  */
 object PropertiesSetup {
 
-    /* ****** Keys ****** */
-
     private const val APP_NAME = "app.name"
-
     private const val BOOMEGA_VERSION = "boomega.version"
-    @Deprecated("") private const val BOOMEGA_VERSION_DEPRECATED = "libraryapp.version"
-
     private const val BOOMEGA_BUILD_INFO = "boomega.build.info"
-
     private const val BOOMEGA_FILE_EXTENSION = "boomega.file.extension"
-    @Deprecated("") private const val BOOMEGA_FILE_EXTENSION_DEPRECATED = "libraryapp.file.extension"
-
     private const val LOG_FILE_PATH = "log.file.path"
     private const val LOG_FILE_FULL_PATH = "log.file.path.full"
-
     private const val PLUGIN_DIRECTORY_PATH = "boomega.plugin.dir"
-    @Deprecated("") private const val PLUGIN_DIRECTORY_PATH_DEPRECATED = "libraryapp.plugin.dir"
-
     private const val CONFIG_FILE_PATH = "boomega.config.file.path"
-    @Deprecated("") private const val CONFIG_FILE_PATH_DEPRECATED = "libraryapp.config.file.path"
-
     private const val DEFAULT_DIRECTORY_PATH = "boomega.dir.default.path"
-    @Deprecated("") private const val DEFAULT_DIRECTORY_PATH_DEPRECATED = "libraryapp.dir.default.path"
-
-    /* **** VALUES **** */
 
     private const val APP_NAME_VALUE = "Boomega"
-
-    /**
-     * the app's version
-     */
     private const val BOOMEGA_VERSION_VALUE = "0.6.51"
-
-    /**
-     * the app's build information (build date)
-     */
     private const val BOOMEGA_BUILD_INFO_VALUE = "Built on 2021 May 19th"
-
-    /**
-     * the libraryapp database file-extension
-     */
     private const val BOOMEGA_FILE_EXTENSION_VALUE = "bmdb"
-
-    /**
-     * The name of the default Boomega documents folder
-     */
     private const val BOOMEGA_DOCUMENTS_FOLDER = "BoomegaDocuments"
 
     /**
-     * The log-file's path without the extension
+     * The log-file's path without the extension (for the logback configuration)
      */
     private val LOG_FILE_PATH_VALUE = FileUtils.getFile(FileUtils.getTempDirectory(), "boomega").toString()
 
     /**
      * The log-file's path with the extension
      */
-    private val LOG_FILE_FULL_PATH_VALUE: String =
-        listOf(LOG_FILE_PATH_VALUE, "log").joinToString(FilenameUtils.EXTENSION_SEPARATOR_STR)
+    private val LOG_FILE_FULL_PATH_VALUE: String = "$LOG_FILE_PATH_VALUE.log"
 
     /**
      * Puts all the necessary system-properties that the application needs.
@@ -120,29 +86,12 @@ object PropertiesSetup {
      */
     private fun putAppSpecificProperties() {
         System.setProperty(APP_NAME, APP_NAME_VALUE)
-        BOOMEGA_VERSION_VALUE.let {
-            System.setProperty(BOOMEGA_VERSION, it)
-            System.setProperty(BOOMEGA_VERSION_DEPRECATED, it)
-        }
-        BOOMEGA_BUILD_INFO_VALUE.let {
-            System.setProperty(BOOMEGA_BUILD_INFO, it)
-        }
-        BOOMEGA_FILE_EXTENSION_VALUE.let {
-            System.setProperty(BOOMEGA_FILE_EXTENSION, it)
-            System.setProperty(BOOMEGA_FILE_EXTENSION_DEPRECATED, it)
-        }
-        getPluginDirPath().let {
-            System.setProperty(PLUGIN_DIRECTORY_PATH, it)
-            System.setProperty(PLUGIN_DIRECTORY_PATH_DEPRECATED, it)
-        }
-        getConfigFilePath().let {
-            System.setProperty(CONFIG_FILE_PATH, it)
-            System.setProperty(CONFIG_FILE_PATH_DEPRECATED, it)
-        }
-        getDefaultDirectoryFilePath().let {
-            System.setProperty(DEFAULT_DIRECTORY_PATH, it)
-            System.setProperty(DEFAULT_DIRECTORY_PATH_DEPRECATED, it)
-        }
+        System.setProperty(BOOMEGA_VERSION, BOOMEGA_VERSION_VALUE)
+        System.setProperty(BOOMEGA_BUILD_INFO, BOOMEGA_BUILD_INFO_VALUE)
+        System.setProperty(BOOMEGA_FILE_EXTENSION, BOOMEGA_FILE_EXTENSION_VALUE)
+        System.setProperty(PLUGIN_DIRECTORY_PATH, getPluginDirPath())
+        System.setProperty(CONFIG_FILE_PATH, getConfigFilePath())
+        System.setProperty(DEFAULT_DIRECTORY_PATH, getDefaultDirectoryFilePath())
     }
 
     private fun getDefaultDirectoryFilePath() =

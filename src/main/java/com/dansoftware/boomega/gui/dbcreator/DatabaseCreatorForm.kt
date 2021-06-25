@@ -41,7 +41,7 @@ class DatabaseCreatorForm(
         bind(databaseDir.concat(File.separator)
             .concat(databaseName)
             .concat(".")
-            .concat(System.getProperty("libraryapp.file.extension")))
+            .concat(System.getProperty("boomega.file.extension")))
     }
 
     private val directoryChooser = DirectoryChooser()
@@ -123,7 +123,7 @@ class DatabaseCreatorForm(
             setConstraints(this, 1, 1)
             setHgrow(this, Priority.ALWAYS)
             minHeight = 35.0
-            text = System.getProperty("libraryapp.dir.default.path");
+            text = System.getProperty("boomega.dir.default.path");
             databaseDir.bindBidirectional(textProperty())
             textProperty().bindBidirectional(databaseDir)
         }
