@@ -3,6 +3,7 @@ package com.dansoftware.boomega.main;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public abstract class BaseApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
     }
 
-    protected void notifyPreloader(String i18n) {
+    protected void notifyPreloader(@Nls String i18n) {
         notifyPreloader(new Preloader.MessageNotification(i18n));
     }
 

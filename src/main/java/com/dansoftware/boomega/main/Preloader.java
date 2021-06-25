@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,7 +118,7 @@ public class Preloader extends javafx.application.Preloader {
             this(true, i18n, args);
         }
 
-        public MessageNotification(@NotNull String i18n) {
+        public MessageNotification(@NotNull @Nls String i18n) {
             this(true, i18n);
         }
 
@@ -141,11 +142,11 @@ public class Preloader extends javafx.application.Preloader {
      */
     public static class FixedMessageNotification extends MessageNotification {
 
-        public FixedMessageNotification(@NotNull String i18n, Object... args) {
+        public FixedMessageNotification(@NotNull @Nls String i18n, Object... args) {
             super(i18n, args);
         }
 
-        public FixedMessageNotification(@NotNull String i18n) {
+        public FixedMessageNotification(@NotNull @Nls String i18n) {
             super(i18n);
         }
     }
