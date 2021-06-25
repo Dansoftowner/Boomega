@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.firsttime
 
 import com.dansoftware.boomega.gui.window.BaseWindow
+import com.dansoftware.boomega.i18n.I18N
 import javafx.stage.Modality
 
 /**
@@ -27,7 +28,7 @@ import javafx.stage.Modality
  * @author Daniel Gyorffy
  */
 class FirstTimeDialogWindow(firstTimeDialog: FirstTimeDialog) :
-    BaseWindow("window.firsttime.title", firstTimeDialog, { firstTimeDialog.context }) {
+    BaseWindow(I18N.getValue("window.firsttime.title"), firstTimeDialog, { firstTimeDialog.context }) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         isAlwaysOnTop = true

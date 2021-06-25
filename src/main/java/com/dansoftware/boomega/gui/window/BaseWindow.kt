@@ -40,7 +40,6 @@ import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 import org.apache.commons.lang3.StringUtils
-import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -72,33 +71,20 @@ abstract class BaseWindow : Stage, Themeable {
     /**
      * Creates a BaseWindow with an initial title.
      *
-     * @param i18n the resource bundle key for the title
+     * @param title the title
      */
-    private constructor(@Nls i18n: String) : this() {
-        title = I18N.getValues().getString(i18n)
+    private constructor(title: String) : this() {
+        this.title = title
     }
 
     /**
      * Creates a BaseWindow with an initial title and content.
      *
-     * @param i18n the resource bundle key for the title
+     * @param title the title
      * @param content the graphic content
      * @param getContext the supplier for getting the [Context]
      */
-    protected constructor(i18n: String, content: Parent, getContext: () -> Context?) : this(i18n) {
-        this.scene = Scene(content)
-        this.getContext = getContext
-    }
-
-
-    protected constructor(
-        baseTitle: String,
-        separator: String,
-        additionalTitleValue: String,
-        content: Parent,
-        getContext: () -> Context?
-    ) {
-        this.title = "$baseTitle $separator $additionalTitleValue"
+    protected constructor(title: String, content: Parent, getContext: () -> Context?) : this(title) {
         this.scene = Scene(content)
         this.getContext = getContext
     }
@@ -117,15 +103,20 @@ abstract class BaseWindow : Stage, Themeable {
         this.getContext = getContext
     }
 
+    /**
+     * Creates a BaseWindow with a title-property and content.
+     *
+     * @param title the string property to bind the window's title to
+     * @param content the gui-content
+     * @param getContext supplier for getting the [Context]
+     */
     protected constructor(
-        i18n: String,
-        separator: String,
-        changingString: ObservableStringValue,
+        title: StringProperty,
         content: Parent,
         getContext: () -> Context?
     ) {
         this.scene = Scene(content)
-        this.titleProperty().bind(TitleProperty(i18n, separator, changingString))
+        this.titleProperty().bind(title)
         this.getContext = getContext
     }
 
@@ -169,40 +160,6 @@ abstract class BaseWindow : Stage, Themeable {
 
     private fun buildFullScreenExitHint() {
         fullScreenExitHint = I18N.getValue("window.fullscreen.hint")
-    }
-
-    /**
-     * A [TitleProperty] is a utility for creating dynamically changing window title
-     */
-    private class TitleProperty(i18n: String, separator: String, changingString: ObservableStringValue) :
-        SimpleStringProperty() {
-
-        init {
-            val baseTitle = SimpleStringProperty(I18N.getValues().getString(i18n))
-            val separatorAndChangingObservable = buildSeparatorAndChangingObservable(separator, changingString)
-            this.bind(baseTitle.concat(separatorAndChangingObservable))
-        }
-
-        private fun buildSeparatorAndChangingObservable(
-            separator: String,
-            changingString: ObservableStringValue
-        ): ObservableStringValue =
-            object : SimpleStringProperty(), ChangeListener<String> {
-                init {
-                    copyValue(separator, changingString.value)
-                    changingString.addListener(this)
-                }
-
-                private fun copyValue(separator: String, newValue: String) {
-                    when (newValue) {
-                        "null" -> this.set(StringUtils.EMPTY)
-                        else -> this.set(separator.plus(newValue))
-                    }
-                }
-
-                override fun changed(observable: ObservableValue<out String>, oldValue: String, newValue: String) =
-                    copyValue(separator, newValue)
-            }
     }
 
     private inner class WindowCloseRequestHandler : EventHandler<WindowEvent> {
