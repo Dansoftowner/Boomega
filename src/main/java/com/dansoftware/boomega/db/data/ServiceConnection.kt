@@ -10,13 +10,6 @@ class ServiceConnection {
 
     private val infoMap: MutableMap<String, Any?> = HashMap()
 
-    @Deprecated("Use the new googleBookHandle instead")
-    var googleBookLink: String?
-        get() = this.googleBookHandle
-        set(value) {
-            this.googleBookHandle = value
-        }
-
     var googleBookHandle: String?
         get() = infoMap[GOOGLE_BOOK_HANDLE]?.toString()
         set(value) {
@@ -24,11 +17,6 @@ class ServiceConnection {
         }
 
     constructor()
-
-    @Deprecated("")
-    constructor(googleBookLink: String?) {
-        googleBookLink?.let { this.googleBookLink = it }
-    }
 
     constructor(info: Map<String, Any?>) {
         infoMap.putAll(info)
