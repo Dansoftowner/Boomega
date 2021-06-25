@@ -1,14 +1,30 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.gui.window
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.util.loadImageResource
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.main.ApplicationRestart
 import com.dansoftware.boomega.util.os.OsInfo
 import de.jangassen.MenuToolkit
 import javafx.beans.property.*
@@ -20,18 +36,18 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
 import javafx.scene.control.MenuBar
-import javafx.scene.input.KeyCombination
-import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 import org.apache.commons.lang3.StringUtils
+import org.jetbrains.annotations.Nls
+import org.jetbrains.annotations.NonNls
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
  * A [BaseWindow] is a [Stage] implementation that
- * supports internationalized titles and automatically adds the libraryapp icon-bundle.
+ * supports internationalized titles and automatically adds the Boomega icon-bundle.
  *
  * Also, it provides support for dialogs on restart key combination, and on window close event.
  *
@@ -51,25 +67,23 @@ abstract class BaseWindow : Stage, Themeable {
         opacityProperty().bind(globalOpacity)
     }
 
-    /**
-     * Creates a normal LibraryAppStage.
-     */
     constructor() : super()
 
     /**
-     * Creates a LibraryAppStage and sets the title of it.
+     * Creates a BaseWindow with an initial title.
      *
      * @param i18n the resource bundle key for the title
      */
-    private constructor(i18n: String) : this() {
+    private constructor(@Nls i18n: String) : this() {
         title = I18N.getValues().getString(i18n)
     }
 
     /**
-     * Creates a LibraryAppStage and sets the title and the content of it.
+     * Creates a BaseWindow with an initial title and content.
      *
      * @param i18n the resource bundle key for the title
      * @param content the graphic content
+     * @param getContext the supplier for getting the [Context]
      */
     protected constructor(i18n: String, content: Parent, getContext: () -> Context?) : this(i18n) {
         this.scene = Scene(content)
@@ -89,8 +103,11 @@ abstract class BaseWindow : Stage, Themeable {
         this.getContext = getContext
     }
 
+    /**
+     * Creates a BaseWindow with an initial title, [MenuBar] on the top and content.
+     */
     protected constructor(
-        title: String,
+        @NonNls title: String,
         menuBar: MenuBar,
         content: Parent,
         getContext: () -> Context?
@@ -231,27 +248,27 @@ abstract class BaseWindow : Stage, Themeable {
         val globalOpacity: DoubleProperty = SimpleDoubleProperty(1.0)
 
         /**
-         * The 16px libraryapp icon's path.
+         * The 16px icon's path.
          */
         private const val LOGO_16 = "/com/dansoftware/boomega/image/logo/bookshelf_16.png"
 
         /**
-         * The 32px libraryapp icon's path.
+         * The 32px icon's path.
          */
         private const val LOGO_32 = "/com/dansoftware/boomega/image/logo/bookshelf_32.png"
 
         /**
-         * The 128px libraryapp icon's path.
+         * The 128px icon's path.
          */
         private const val LOGO_128 = "/com/dansoftware/boomega/image/logo/bookshelf_128.png"
 
         /**
-         * The 256px libraryapp icon's path.
+         * The 256px icon's path.
          */
         private const val LOGO_256 = "/com/dansoftware/boomega/image/logo/bookshelf_256.png"
 
         /**
-         * The 512px libraryapp icon's path.
+         * The 512px icon's path.
          */
         private const val LOGO_512 = "/com/dansoftware/boomega/image/logo/bookshelf_512.png"
     }

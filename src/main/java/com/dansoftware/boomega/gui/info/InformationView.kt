@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.info
 
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.context.TitledOverlayBox
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.info.dependency.DependencyViewerActivity
 import com.dansoftware.boomega.i18n.I18N
@@ -32,8 +31,6 @@ import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.*
-import javafx.scene.input.Clipboard
-import javafx.scene.input.ClipboardContent
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -46,7 +43,7 @@ import java.util.*
 class InformationView(val context: Context) : VBox(5.0) {
 
     companion object {
-        const val GITHUB_REPO_URL = "https://github.com/Dansoftowner/LibraryApp2020"
+        const val GITHUB_REPO_URL = "https://github.com/Dansoftowner/Boomega"
         const val LICENSE_URL = "https://github.com/Dansoftowner/Boomega/blob/master/LICENSE"
         const val LICENSE_NAME = "GNU General Public License v3.0"
     }
