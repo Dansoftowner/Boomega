@@ -154,7 +154,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
 [![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
 [![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)](https://github.com/Dansoftowner/Boomega)
 [![Java version](https://img.shields.io/badge/java-16-orange)](https://jdk.java.net/16/)
-[![Kotlin version](https://img.shields.io/badge/kotlin-1.5.10-purple)](https://kotlinlang.org/)
+[![Kotlin version](https://img.shields.io/badge/kotlin-1.5.20-purple)](https://kotlinlang.org/)
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 
 * The repo has two important branches:
