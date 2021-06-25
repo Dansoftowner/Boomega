@@ -45,7 +45,7 @@ object PropertiesSetup {
     /**
      * the app's version
      */
-    private const val BOOMEGA_VERSION_VALUE = "0.6.5"
+    private const val BOOMEGA_VERSION_VALUE = "0.6.51"
 
     /**
      * the app's build information (build date)
@@ -78,9 +78,28 @@ object PropertiesSetup {
      */
     @JvmStatic
     fun setupSystemProperties() {
+        adjustJavaLibraryPath()
         putLogFileProperties()
         putJFXProperties()
         putAppSpecificProperties()
+    }
+
+    /**
+     * Adjusts the *java library path* by prefixing it with the current java runtimes bin folder
+     * to make sure that later the JavaFX platform loads the native *.dll* libraries from the right
+     * place. **Windows only**. It has meaning only if the program runs as a native app.
+     * See [**#146**](https://github.com/Dansoftowner/Boomega/issues/146).
+     */
+    private fun adjustJavaLibraryPath() {
+        if (OsInfo.isWindows()) {
+            val javaLibraryPath = System.getProperty("java.library.path")
+            val javaRuntime = System.getProperty("java.home")
+
+            System.setProperty(
+                "java.library.path",
+                "$javaRuntime\\bin;$javaLibraryPath"
+            )
+        }
     }
 
     /**
