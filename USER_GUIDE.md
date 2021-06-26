@@ -149,10 +149,10 @@ basic tools/functions the app provides like: [Opening existing databases](#openi
 
 ![Login view](img/userguide/loginview/LoginView_Light.png)
 
-#### The top toolbar (on the top)
+#### The top toolbar
 
 - By clicking on the ![info](img/userguide/icon/information.png) icon, you can view the [Boomega info](#viewing-boomega-info).
-- You can access the `quick menu` by clicking on the ![option](img/userguide/icon/options.png) icon:  
+- By clicking on the ![option](img/userguide/icon/options.png) icon, you can access the `quick menu`:  
   ![Quick options menu](img/userguide/loginview/quick-options-menu.png)  
   Here you are able to:
   - Search for software updates
