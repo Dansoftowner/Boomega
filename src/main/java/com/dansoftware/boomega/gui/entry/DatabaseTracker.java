@@ -101,6 +101,7 @@ public class DatabaseTracker {
     /**
      * @deprecated use {@link #registerUsedDatabase(DatabaseMeta)} instead
      */
+    @Deprecated
     public void usingDatabase(@NotNull DatabaseMeta databaseMeta) {
         registerUsedDatabase(databaseMeta);
     }
