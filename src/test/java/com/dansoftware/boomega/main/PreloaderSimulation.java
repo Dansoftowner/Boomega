@@ -4,10 +4,10 @@ import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class PreloaderTest extends Application {
+public class PreloaderSimulation extends Application {
     public static void main(String[] args) {
         PropertiesSetup.setupSystemProperties();
-        LauncherImpl.launchApplication(PreloaderTest.class, Preloader.class, args);
+        LauncherImpl.launchApplication(PreloaderSimulation.class, Preloader.class, args);
     }
 
     @Override
