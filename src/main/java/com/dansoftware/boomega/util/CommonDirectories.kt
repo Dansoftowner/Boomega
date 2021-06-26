@@ -27,6 +27,7 @@ import javax.swing.filechooser.FileSystemView
 /**
  * Used for retrieving some common directory paths (like 'Documents', 'Downloads' etc..)
  */
+@Deprecated("")
 object CommonDirectories {
     @JvmStatic
     val documentsDir: File?

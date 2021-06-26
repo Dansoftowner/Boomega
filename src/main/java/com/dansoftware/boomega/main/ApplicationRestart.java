@@ -31,12 +31,22 @@ import javafx.application.Platform;
  */
 public class ApplicationRestart {
 
+    @Deprecated
+    public ApplicationRestart() {
+    }
+
     /**
      * Restarts the application.
      *
      * @throws RestartException if the restart process doesn't proceeds for some reason
+     * @deprecated use the static method {@link #restart()} instead
      */
+    @Deprecated
     public void restartApp() throws RestartException {
+        restart();
+    }
+
+    public static void restart() throws RestartException {
         com.restart4j.ApplicationRestart.builder()
                 .beforeNewProcessCreated(ApplicationInstanceService::release)
                 .terminationPolicy(Platform::exit)

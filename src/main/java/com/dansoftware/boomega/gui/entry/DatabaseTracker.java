@@ -1,9 +1,28 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.gui.entry;
 
 import com.dansoftware.boomega.db.DatabaseMeta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,14 +80,37 @@ public class DatabaseTracker {
                 .forEach(safeConsumer);
     }
 
-    public void closingDatabase(DatabaseMeta databaseMeta) {
-        usingDatabases.remove(databaseMeta);
-
-        if (databaseMeta != null)
-            iterateObservers(observer -> observer.onClosingDatabase(databaseMeta));
+    /**
+     * @deprecated use {@link #registerClosedDatabase(DatabaseMeta)} instead
+     */
+    @Deprecated
+    public void closingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        registerClosedDatabase(databaseMeta);
     }
 
+    /**
+     * Marks the database as closed.
+     *
+     * @param databaseMeta the meta database
+     */
+    public void registerClosedDatabase(@NotNull DatabaseMeta databaseMeta) {
+        usingDatabases.remove(databaseMeta);
+        iterateObservers(observer -> observer.onClosingDatabase(databaseMeta));
+    }
+
+    /**
+     * @deprecated use {@link #registerUsedDatabase(DatabaseMeta)} instead
+     */
     public void usingDatabase(@NotNull DatabaseMeta databaseMeta) {
+        registerUsedDatabase(databaseMeta);
+    }
+
+    /**
+     * Marks the database as used.
+     *
+     * @param databaseMeta the meta database
+     */
+    public void registerUsedDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
 
         if (usingDatabases.add(databaseMeta)) {
@@ -76,7 +118,20 @@ public class DatabaseTracker {
         }
     }
 
+    /**
+     * @deprecated use {@link #saveDatabase(DatabaseMeta)} instead
+     */
+    @Deprecated
     public void addDatabase(@NotNull DatabaseMeta databaseMeta) {
+        saveDatabase(databaseMeta);
+    }
+
+    /**
+     * Registers a database.
+     *
+     * @param databaseMeta the meta database
+     */
+    public void saveDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
 
         if (savedDatabases.add(databaseMeta)) {
@@ -84,7 +139,12 @@ public class DatabaseTracker {
         }
     }
 
-    public void removeDatabase(DatabaseMeta databaseMeta) {
+    /**
+     * Unregisters a database.
+     *
+     * @param databaseMeta the meta database
+     */
+    public void removeDatabase(@Nullable DatabaseMeta databaseMeta) {
         if (savedDatabases.remove(databaseMeta))
             logger.debug("Removed from DatabaseTracker '{}'", databaseMeta);
         else
@@ -94,12 +154,27 @@ public class DatabaseTracker {
             iterateObservers(observer -> observer.onDatabaseRemoved(databaseMeta));
     }
 
-    public void registerObserver(Observer observer) {
-        if (observer != null && findWeakReference(observer).isEmpty())
+    /**
+     * Registers an {@link Observer} that will be notified on every change.
+     * <p>
+     *     Note: the observer will be registered as a <b>weak</b> reference, so if there is no
+     *     other reference that points to the observer object, the observer will be removed by the GC
+     * </p>
+     *
+     * @param observer the observer object; shouldn't be null
+     */
+    public void registerObserver(@NotNull Observer observer) {
+        Objects.requireNonNull(observer);
+        if (findWeakReference(observer).isEmpty())
             observers.add(new WeakReference<>(observer));
     }
 
-    public void unregisterObserver(Observer observer) {
+    /**
+     * Unregisters an {@link Observer}
+     *
+     * @param observer the observer object to be removed
+     */
+    public void unregisterObserver(@Nullable Observer observer) {
         if (observer != null) findWeakReference(observer).ifPresent(observers::remove);
     }
 
