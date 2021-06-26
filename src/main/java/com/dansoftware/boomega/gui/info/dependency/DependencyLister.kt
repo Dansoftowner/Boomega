@@ -93,6 +93,11 @@ object DependencyLister {
             LicenseInfo.mitLicense()
         ),
         DependencyInfo(
+            "jUserDirectories",
+            "https://github.com/Dansoftowner/jUserDirectories",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
             "jUnit 5",
             "https://junit.org/junit5/",
             LicenseInfo(

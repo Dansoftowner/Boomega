@@ -76,6 +76,10 @@
         <td><a href="https://opensource.org/licenses/MIT">MIT License</a></td>
     </tr>
     <tr>
+        <td><a href="https://github.com/Dansoftowner/jUserDirectories">jUserDirectories</a></td>
+        <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
+    </tr>
+    <tr>
         <td><a href="https://github.com/Dansoftowner/jFileGoodies">jFileGoodies</a></td>
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>

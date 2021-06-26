@@ -87,15 +87,20 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.10.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:3.10.0'
 
+    implementation 'net.java.dev.jna:jna:5.8.0'
+    implementation 'net.java.dev.jna:jna-platform:5.8.0'
+
+    implementation 'com.github.Dansoftowner:jFileGoodies:1.2.6'
+    implementation 'com.github.Dansoftowner:jUserDirectories:1.0'
+    implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.7'
+    implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
+
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'org.jetbrains:annotations:21.0.1'
     implementation 'commons-io:commons-io:2.8.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-collections:commons-collections:3.2.2'
-    implementation 'com.github.Dansoftowner:jFileGoodies:1.2.6'
     implementation 'com.github.oshi:oshi-core:5.7.5'
-    implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.7'
-    implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.2'
@@ -103,26 +108,25 @@ dependencies {
     implementation 'it.sauronsoftware:junique:1.0.4'
     implementation 'io.github.g00fy2:versioncompare:1.4.1'
 
-    implementation 'net.java.dev.jna:jna:5.8.0'
-    implementation 'net.java.dev.jna:jna-platform:5.8.0'
-
     implementation 'com.jfoenix:jfoenix:9.0.10'
     implementation 'org.jfxtras:jmetro:11.6.15'
     implementation 'org.controlsfx:controlsfx:11.1.0'
     implementation 'com.dlsc.formsfx:formsfx-core:11.4.2'
     implementation 'net.kurobako:gesturefx:0.7.1'
-    //Modified WorkBenchFX, Original: 'com.dlsc.workbenchfx:workbenchfx-core:x.x.x'
-    implementation 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
+    implementation 'io.github.typhon0:AnimateFX:1.2.2'
+    implementation 'com.sandec:mdfx:0.2.3'
+    implementation "de.jangassen:nsmenufx:3.1.0"
+    implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
+
     //implementation 'de.jensd:fontawesomefx-commons:11.0'
     //implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
     //implementation 'de.jensd:fontawesomefx-materialdesignfont:2.0.26-9.1.2'
-    implementation 'io.github.typhon0:AnimateFX:1.2.2'
-    implementation 'com.sandec:mdfx:0.2.3'
+
+    //Modified WorkBenchFX, Original: 'com.dlsc.workbenchfx:workbenchfx-core:x.x.x'
+    implementation 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
-    implementation "de.jangassen:nsmenufx:3.1.0"
     implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
-    implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
 
     //implementation from the local file system
     implementation fileTree(dir: 'external-libraries', include: '*.jar')
