@@ -175,7 +175,13 @@ After you selected a database, you can specify the credentials and sign in into 
 
 ![Login box with selected database](img/userguide/loginview/login-box-selected.png)
 
-...
+If you check the `remember it` box before you log in to the database, the next time you launch the app, the program
+will log in to that database automatically.
+
+![](img/userguide/loginview/login-box-typed.png)
+
+> Note: if you did not add authentication for the particular database, you can just click the login
+> button without typing the username & password.
 
 ### Opening existing database
 
