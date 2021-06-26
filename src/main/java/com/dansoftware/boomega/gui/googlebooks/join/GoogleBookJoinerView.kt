@@ -18,19 +18,21 @@
 
 package com.dansoftware.boomega.gui.googlebooks.join
 
-import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPagination
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPaginationSearchTask
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksTable
 import com.dansoftware.boomega.gui.googlebooks.SearchParameters
 import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsOverlay
+import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.ContentDisplay
+import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox

@@ -23,7 +23,6 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.keybinding.keyBinding
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.graphic
-import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.MenuItem
 
 object MenuItems {

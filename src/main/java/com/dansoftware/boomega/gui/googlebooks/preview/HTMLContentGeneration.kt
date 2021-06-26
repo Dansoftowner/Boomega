@@ -2,8 +2,8 @@
 
 package com.dansoftware.boomega.gui.googlebooks.preview
 
-import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.service.googlebooks.Volume
 
 fun generateHTMLContent(volume: Volume?) =
     """

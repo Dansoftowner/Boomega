@@ -18,10 +18,10 @@
 
 package com.dansoftware.boomega.gui.googlebooks;
 
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQueryBuilder;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl;
 import com.dansoftware.boomega.i18n.I18N;
+import com.dansoftware.boomega.service.googlebooks.GoogleBooksQueryBuilder;
 import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.model.structure.Group;

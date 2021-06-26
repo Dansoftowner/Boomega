@@ -18,8 +18,8 @@
 
 package com.dansoftware.boomega.gui.googlebooks;
 
-import com.dansoftware.boomega.service.googlebooks.Volume;
 import com.dansoftware.boomega.i18n.I18N;
+import com.dansoftware.boomega.service.googlebooks.Volume;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;

@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * Utility for loading the custom javaFX fonts.
- *
+ * <p>
  * It's used because loading fonts in JavaFX CSS is not working
  * if the paths have spaces.
  * See:

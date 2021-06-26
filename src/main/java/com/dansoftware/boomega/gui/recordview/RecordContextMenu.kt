@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.recordview
 
-import com.dansoftware.boomega.gui.clipboard.RecordClipboard
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.keyCombination
@@ -68,7 +67,7 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
 
     private fun buildPasteItem() =
         MenuItem(I18N.getValue("record.paste"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE))
-            .action {  recordsView.pasteItemsFromClipboard() }
+            .action { recordsView.pasteItemsFromClipboard() }
             .keyCombination(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }
 

@@ -2,9 +2,9 @@ package com.dansoftware.boomega.gui.recordview.dock;
 
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.recordview.RecordTable;
 import com.dansoftware.boomega.gui.recordview.connection.GoogleBookConnectionDock;
 import com.dansoftware.boomega.gui.recordview.edit.RecordEditorDock;
-import com.dansoftware.boomega.gui.recordview.RecordTable;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -33,7 +33,7 @@ public enum Dock {
         }
     },
 
-    GOOGLE_BOOK_CONNECTION(GoogleBookConnectionDock.class,"google.books.dock.title") {
+    GOOGLE_BOOK_CONNECTION(GoogleBookConnectionDock.class, "google.books.dock.title") {
         @Override
         protected DockView<?> buildView(@NotNull Context context,
                                         @NotNull Database database,
@@ -69,9 +69,9 @@ public enum Dock {
     );
 
     public final void align(@NotNull Context context,
-                      @NotNull Database database,
-                      @NotNull RecordTable table,
-                      @NotNull SplitPane splitPane) {
+                            @NotNull Database database,
+                            @NotNull RecordTable table,
+                            @NotNull SplitPane splitPane) {
         if (splitPane.getItems().stream().noneMatch(dockViewClass::isInstance)) {
             splitPane.getItems().add(buildView(context, database, table, splitPane));
         }

@@ -28,9 +28,6 @@ import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.os.OsInfo
 import de.jangassen.MenuToolkit
 import javafx.beans.property.*
-import javafx.beans.value.ChangeListener
-import javafx.beans.value.ObservableStringValue
-import javafx.beans.value.ObservableValue
 import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
@@ -39,7 +36,6 @@ import javafx.scene.control.MenuBar
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
-import org.apache.commons.lang3.StringUtils
 import org.jetbrains.annotations.NonNls
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -201,6 +197,7 @@ abstract class BaseWindow : Stage, Themeable {
             "basewindow.global.opacity",
             Double::class.java
         ) { 1.0 }
+
         @JvmField
         val globalOpacity: DoubleProperty = SimpleDoubleProperty(1.0)
 

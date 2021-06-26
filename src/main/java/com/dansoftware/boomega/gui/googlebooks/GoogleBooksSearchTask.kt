@@ -18,12 +18,12 @@
 
 package com.dansoftware.boomega.gui.googlebooks
 
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQueryBuilder
-import com.dansoftware.boomega.service.googlebooks.Volume
-import com.dansoftware.boomega.service.googlebooks.Volumes
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.service.googlebooks.GoogleBooksQueryBuilder
+import com.dansoftware.boomega.service.googlebooks.Volume
+import com.dansoftware.boomega.service.googlebooks.Volumes
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty

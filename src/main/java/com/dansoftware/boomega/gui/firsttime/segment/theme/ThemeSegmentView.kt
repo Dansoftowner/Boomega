@@ -62,20 +62,21 @@ class ThemeSegmentView(private val preferences: Preferences) : StackPane() {
         themeClass: KClass<T>,
         themeFactory: () -> T
     ) = ThemeToggle(
-            I18N.getValue(i18n),
-            ImageView(thumbnailPath).apply {
-                fitHeight = 245.0
-                fitWidth = 233.0
-            },
-            themeClass.java,
-            themeFactory
+        I18N.getValue(i18n),
+        ImageView(thumbnailPath).apply {
+            fitHeight = 245.0
+            fitWidth = 233.0
+        },
+        themeClass.java,
+        themeFactory
     ).apply { toggleGroup = group }
 
     private fun buildRadioGroup() = ToggleGroup().apply {
         selectedToggleProperty().addListener { _, _, newItem ->
             newItem?.let {
                 if (it is ThemeToggle<*>) {
-                    val theme = if (Theme.getDefault().javaClass == it.themeClass) Theme.getDefault() else it.themeFactory()
+                    val theme =
+                        if (Theme.getDefault().javaClass == it.themeClass) Theme.getDefault() else it.themeFactory()
                     preferences.editor().put(PreferenceKey.THEME, theme).tryCommit()
                     Theme.setDefault(theme)
                     logger.debug("Theme selected: {}", Theme.getDefault().javaClass.name)

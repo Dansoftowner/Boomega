@@ -97,7 +97,7 @@ public abstract class LanguagePack {
      * language.
      *
      * @param firstName the first name
-     * @param lastName the last name
+     * @param lastName  the last name
      * @return the concatenated name
      */
     @NotNull

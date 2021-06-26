@@ -158,8 +158,8 @@ public class DatabaseTracker {
     /**
      * Registers an {@link Observer} that will be notified on every change.
      * <p>
-     *     Note: the observer will be registered as a <b>weak</b> reference, so if there is no
-     *     other reference that points to the observer object, the observer will be removed by the GC
+     * Note: the observer will be registered as a <b>weak</b> reference, so if there is no
+     * other reference that points to the observer object, the observer will be removed by the GC
      * </p>
      *
      * @param observer the observer object; shouldn't be null

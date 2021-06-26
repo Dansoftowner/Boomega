@@ -18,13 +18,16 @@
 
 package com.dansoftware.boomega.gui.googlebooks.details
 
-import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.control.*
+import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView
+import com.dansoftware.boomega.gui.control.HighlightableLabel
+import com.dansoftware.boomega.gui.control.ReadOnlyRating
+import com.dansoftware.boomega.gui.control.WebsiteHyperLink
 import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewActivity
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.SystemBrowser
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.github.benmanes.caffeine.cache.Cache

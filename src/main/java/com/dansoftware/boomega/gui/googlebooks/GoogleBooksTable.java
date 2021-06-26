@@ -19,9 +19,9 @@
 package com.dansoftware.boomega.gui.googlebooks;
 
 import com.dansoftware.boomega.gui.control.*;
-import com.dansoftware.boomega.service.googlebooks.Volume;
 import com.dansoftware.boomega.gui.util.BaseFXUtils;
 import com.dansoftware.boomega.i18n.I18N;
+import com.dansoftware.boomega.service.googlebooks.Volume;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
@@ -38,7 +38,9 @@ import javafx.util.Callback;
 import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
 

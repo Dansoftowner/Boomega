@@ -241,7 +241,7 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
     }
 
     private inner class TableColumnMenuItem(val columnType: BaseTable.ColumnType) :
-        CheckMenuItem(if(columnType.isI18N) I18N.getValue(columnType.text) else columnType.text) {
+        CheckMenuItem(if (columnType.isI18N) I18N.getValue(columnType.text) else columnType.text) {
 
         init {
             setOnAction {

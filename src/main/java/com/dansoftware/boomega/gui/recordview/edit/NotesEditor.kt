@@ -10,7 +10,9 @@ import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Pos
 import javafx.scene.Node
-import javafx.scene.control.*
+import javafx.scene.control.Label
+import javafx.scene.control.ProgressBar
+import javafx.scene.control.ProgressIndicator
 import javafx.scene.effect.BoxBlur
 import javafx.scene.layout.StackPane
 import org.slf4j.Logger
@@ -60,7 +62,7 @@ class NotesEditor(
         when {
             items.isEmpty() -> content = NoSelectionPlaceHolder()
             items.size > 1 -> content = MultipleSelectionPlaceHolder()
-            else ->  {
+            else -> {
                 content = markdownEditor.also { markdownEditor.markdown = items[0].notes ?: "" }
                 updateChangedProperty()
             }

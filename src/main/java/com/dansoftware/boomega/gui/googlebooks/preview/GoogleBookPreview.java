@@ -1,8 +1,8 @@
 package com.dansoftware.boomega.gui.googlebooks.preview;
 
-import com.dansoftware.boomega.service.googlebooks.Volume;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.service.googlebooks.Volume;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;

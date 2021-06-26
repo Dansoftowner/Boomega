@@ -25,7 +25,12 @@ import com.dansoftware.boomega.db.data.ServiceConnection
  * Converts a [Volume] to a Boomega-record.
  */
 fun Volume.asRecord(): Record {
-    return Record.Builder(when { volumeInfo?.isMagazine ?: false -> Record.Type.MAGAZINE else -> Record.Type.BOOK })
+    return Record.Builder(
+        when {
+            volumeInfo?.isMagazine ?: false -> Record.Type.MAGAZINE
+            else -> Record.Type.BOOK
+        }
+    )
         .authors(volumeInfo?.authors)
         .publishedDate(volumeInfo?.getPublishedDateObject())
         .isbn(volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier)

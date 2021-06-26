@@ -30,23 +30,34 @@ import java.io.IOException;
 public interface ConfigSource {
 
     double getDouble(@NotNull String key, double defValue);
+
     int getInteger(@NotNull String key, int defValue);
+
     boolean getBoolean(@NotNull String key, boolean defValue);
+
     String getString(@NotNull String key, String defValue);
+
     <T> T get(@NotNull PreferenceKey<T> key);
 
     void remove(@NotNull String key);
+
     void remove(@NotNull PreferenceKey<?> key);
 
     void putBoolean(@NotNull String key, boolean value);
+
     void putString(@NotNull String key, String value);
+
     void putInteger(@NotNull String key, int value);
+
     void putDouble(@NotNull String key, double value);
+
     <T> void put(@NotNull PreferenceKey<T> key, T value);
 
     boolean isCreated();
+
     boolean isOpened();
 
     void reset() throws IOException;
+
     void commit() throws IOException;
 }

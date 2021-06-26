@@ -20,8 +20,6 @@ package com.dansoftware.boomega.gui.recordview.connection
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQueryBuilder
-import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsPane
 import com.dansoftware.boomega.gui.googlebooks.join.GoogleBookJoinerOverlay
@@ -29,6 +27,8 @@ import com.dansoftware.boomega.gui.recordview.RecordTable
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.service.googlebooks.GoogleBooksQueryBuilder
+import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
@@ -341,7 +341,7 @@ class GoogleBookConnectionView(
 
     private inner class NoConnectionPlaceHolder() : StackPane() {
 
-       init {
+        init {
             styleClass.add(JMetroStyleClass.BACKGROUND)
             VBox.setVgrow(this, Priority.ALWAYS)
             buildUI()

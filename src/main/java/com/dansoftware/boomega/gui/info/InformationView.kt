@@ -30,7 +30,10 @@ import javafx.geometry.Insets
 import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.Label
+import javafx.scene.control.Separator
+import javafx.scene.control.Tooltip
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority

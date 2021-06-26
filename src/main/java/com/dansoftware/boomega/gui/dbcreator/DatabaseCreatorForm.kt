@@ -56,10 +56,12 @@ class DatabaseCreatorForm(
     private val passwordRepeat: StringProperty = SimpleStringProperty()
 
     private val fullPath: StringProperty = SimpleStringProperty().apply {
-        bind(databaseDir.concat(File.separator)
-            .concat(databaseName)
-            .concat(".")
-            .concat(System.getProperty("boomega.file.extension")))
+        bind(
+            databaseDir.concat(File.separator)
+                .concat(databaseName)
+                .concat(".")
+                .concat(System.getProperty("boomega.file.extension"))
+        )
     }
 
     private val directoryChooser = DirectoryChooser()

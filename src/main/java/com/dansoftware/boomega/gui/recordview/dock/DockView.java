@@ -18,9 +18,9 @@ public abstract class DockView<T extends Node> extends VBox {
     private final HBox buttonBar;
 
     public DockView(@NotNull SplitPane parent,
-               @NotNull Node icon,
-               @NotNull String title,
-               @NotNull T content) {
+                    @NotNull Node icon,
+                    @NotNull String title,
+                    @NotNull T content) {
         this.content = content;
         this.buttonBar = buildButtonBar(parent);
         this.buildUI(parent, icon, title);
@@ -53,7 +53,7 @@ public abstract class DockView<T extends Node> extends VBox {
         btn.setOnAction(e -> {
             int index = parent.getItems().indexOf(this);
             parent.getItems().remove(this);
-            parent.getItems().add(index -1, this);
+            parent.getItems().add(index - 1, this);
         });
         return btn;
     }
@@ -61,7 +61,7 @@ public abstract class DockView<T extends Node> extends VBox {
     private Button buildRightButton(SplitPane parent) {
         Button btn = buildRearrangeButton(MaterialDesignIcon.ARROW_RIGHT);
         parent.getItems().addListener((ListChangeListener<? super Node>) modification -> {
-            btn.setDisable(parent.getItems().size() < 2 || parent.getItems().indexOf(this) == parent.getItems().size() -1);
+            btn.setDisable(parent.getItems().size() < 2 || parent.getItems().indexOf(this) == parent.getItems().size() - 1);
         });
         btn.setOnAction(e -> {
             int index = parent.getItems().indexOf(this);

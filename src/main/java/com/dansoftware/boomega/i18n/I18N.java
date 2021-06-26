@@ -1,3 +1,21 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.i18n;
 
 import com.dansoftware.boomega.plugin.Plugins;
@@ -20,7 +38,7 @@ public class I18N {
 
     private static final Logger logger = LoggerFactory.getLogger(I18N.class);
 
-    private static Map<Locale, List<LanguagePack>> loadedLanguagePacks = new LinkedHashMap<>();
+    private static final Map<Locale, List<LanguagePack>> loadedLanguagePacks = new LinkedHashMap<>();
 
     /**
      * The backing language-pack
@@ -43,7 +61,7 @@ public class I18N {
     }
 
     public static Locale defaultLocale() {
-         Set<Locale> available = getAvailableLocales();
+        Set<Locale> available = getAvailableLocales();
         Locale systemDefault = Locale.getDefault();
         return available.contains(systemDefault) ? systemDefault : Locale.ENGLISH;
     }
@@ -112,6 +130,8 @@ public class I18N {
     }
 
     private static Optional<LanguagePack> getLanguagePackForLocale(Locale locale) {
-         return Optional.ofNullable(loadedLanguagePacks.getOrDefault(locale, new ArrayList<>() {{ add(null); }}).get(0));
+        return Optional.ofNullable(loadedLanguagePacks.getOrDefault(locale, new ArrayList<>() {{
+            add(null);
+        }}).get(0));
     }
 }

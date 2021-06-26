@@ -1,3 +1,21 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.gui.keybinding
 
 import com.dansoftware.boomega.config.PreferenceKey
@@ -19,7 +37,11 @@ object KeyBindings {
             id = "newEntryKeyBinding",
             i18nTitle = "action.new_entry",
             i18nDescription = "preferences.keybindings.new_entry.desc",
-            winLinuxKeyCombination = KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN),
+            winLinuxKeyCombination = KeyCodeCombination(
+                KeyCode.N,
+                KeyCombination.SHIFT_DOWN,
+                KeyCombination.CONTROL_DOWN
+            ),
             macKeyCombination = KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN)
         )
 
@@ -28,7 +50,11 @@ object KeyBindings {
             id = "restartApplicationKeyBinding",
             i18nTitle = "action.restart",
             i18nDescription = "preferences.keybindings.restart.desc",
-            winLinuxKeyCombination = KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN),
+            winLinuxKeyCombination = KeyCodeCombination(
+                KeyCode.R,
+                KeyCombination.SHIFT_DOWN,
+                KeyCombination.CONTROL_DOWN
+            ),
             macKeyCombination = KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN),
         )
 
@@ -37,7 +63,11 @@ object KeyBindings {
             id = "openDatabaseKeyBinding",
             i18nTitle = "action.open_database",
             i18nDescription = "preferences.keybindings.open_database.desc",
-            winLinuxKeyCombination = KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
+            winLinuxKeyCombination = KeyCodeCombination(
+                KeyCode.O,
+                KeyCombination.ALT_DOWN,
+                KeyCombination.CONTROL_DOWN
+            ),
             macKeyCombination = KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 
@@ -46,7 +76,11 @@ object KeyBindings {
             id = "createDatabaseKeyBinding",
             i18nTitle = "action.create_database",
             i18nDescription = "preferences.keybindings.create_database.desc",
-            winLinuxKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
+            winLinuxKeyCombination = KeyCodeCombination(
+                KeyCode.C,
+                KeyCombination.ALT_DOWN,
+                KeyCombination.CONTROL_DOWN
+            ),
             macKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 
@@ -55,7 +89,11 @@ object KeyBindings {
             id = "openDatabaseManagerKeyBinding",
             i18nTitle = "action.open_database_manager",
             i18nDescription = "preferences.keybindings.open_database_manager.desc",
-            winLinuxKeyCombination = KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
+            winLinuxKeyCombination = KeyCodeCombination(
+                KeyCode.M,
+                KeyCombination.ALT_DOWN,
+                KeyCombination.CONTROL_DOWN
+            ),
             macKeyCombination = KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN),
         )
 
@@ -125,7 +163,11 @@ object KeyBindings {
             id = "openSettingsKeyBinding",
             i18nTitle = "action.settings",
             i18nDescription = "preferences.keybindings.open_settings.desc",
-            winLinuxKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.CONTROL_DOWN),
+            winLinuxKeyCombination = KeyCodeCombination(
+                KeyCode.S,
+                KeyCombination.ALT_DOWN,
+                KeyCombination.CONTROL_DOWN
+            ),
             macKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 

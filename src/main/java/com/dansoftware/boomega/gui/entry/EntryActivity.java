@@ -23,9 +23,9 @@ import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.gui.context.Context;
 import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener;
 import com.dansoftware.boomega.gui.login.LoginActivity;
-import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;

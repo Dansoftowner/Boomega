@@ -21,11 +21,11 @@ package com.dansoftware.boomega.gui.googlebooks
 import com.dansoftware.boomega.config.ConfigAdapter
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.service.googlebooks.asRecord
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.service.googlebooks.asRecord
 import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement

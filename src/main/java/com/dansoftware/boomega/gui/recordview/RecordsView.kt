@@ -43,7 +43,6 @@ import javafx.concurrent.Task
 import javafx.concurrent.WorkerStateEvent
 import javafx.scene.layout.BorderPane
 import org.slf4j.LoggerFactory
-import java.lang.Exception
 import java.lang.reflect.Type
 import java.util.*
 import java.util.stream.Collectors

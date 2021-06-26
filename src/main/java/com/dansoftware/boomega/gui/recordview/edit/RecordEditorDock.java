@@ -20,8 +20,8 @@ package com.dansoftware.boomega.gui.recordview.edit;
 
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.recordview.dock.DockView;
 import com.dansoftware.boomega.gui.recordview.RecordTable;
+import com.dansoftware.boomega.gui.recordview.dock.DockView;
 import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;

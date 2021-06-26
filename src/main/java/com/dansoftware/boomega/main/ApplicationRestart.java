@@ -20,7 +20,6 @@ package com.dansoftware.boomega.main;
 
 import com.dansoftware.boomega.instance.ApplicationInstanceService;
 import com.restart4j.RestartException;
-import javafx.application.Application;
 import javafx.application.Platform;
 
 /**

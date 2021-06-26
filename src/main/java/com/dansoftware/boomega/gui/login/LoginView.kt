@@ -27,12 +27,12 @@ import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.db.NitriteDatabase
 import com.dansoftware.boomega.gui.context.Context
 import com.dansoftware.boomega.gui.context.ContextTransformable
+import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
-import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
@@ -124,7 +124,7 @@ class LoginView(
 
             MenuItem(I18N.getValue("action.open_plugin_manager"), FontAwesomeIconView(FontAwesomeIcon.PLUG)).action {
                 PluginManagerActivity().show(context.contextWindow)
-            }.apply { isDisable = true  }, // TODO: unlock plugin manager
+            }.apply { isDisable = true }, // TODO: unlock plugin manager
 
             MenuItem(I18N.getValue("action.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).action {
                 PreferencesActivity(preferences).show(context.contextWindow)

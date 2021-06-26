@@ -15,7 +15,8 @@ import com.dlsc.formsfx.view.controls.SimpleTextControl
 import com.dlsc.formsfx.view.renderer.FormRenderer
 import javafx.beans.property.*
 import javafx.scene.Node
-import javafx.scene.control.*
+import javafx.scene.control.ScrollPane
+import javafx.scene.control.TextField
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.apache.commons.lang3.StringUtils
