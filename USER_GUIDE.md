@@ -50,7 +50,7 @@ Available binaries:
 
 Available binaries:
 * **Debian Software package (.deb)** - for Debian based systems
-* **Portable (.tar.xz)**
+* **Portable (.tar.xz)** - After extracting, you can find the launcher script in the `bin` folder 
 
 #### MacOS
 
@@ -185,15 +185,15 @@ After you logged in, a `database view` shows up (read about database view [here]
 > Note: if you did not add authentication for the particular database, you can just click the login
 > button without typing the username & password.
 
-##### Markers
+##### Special marks
 
-- If you see the ![play](img/userguide/icon/play.png) icon next to a database list item:
+- If you see the ![play](img/userguide/icon/play.png) icon next to a database list item:  
+  ![](img/userguide/loginview/running-database-icon.png)  
+  that means **the database is already opened** in a `database view`.
 
-  ![](img/userguide/loginview/running-database-icon.png)
-
-  that means the database is already opened in a `database view`.
-
-...
+- If you see the ![alert](img/userguide/icon/alert.png) icon next to a database list item:  
+  ![](img/userguide/loginview/missing-database-icon.png)  
+  that means **the database file does not exist**
 
 ### Opening existing database
 
@@ -201,7 +201,7 @@ You can open an existing database from both the [login view](#login-view) and th
 
 ![Opening database from the file chooser](img/userguide/open_existing_database/file-chooser.png)
 
-If you open a database from the `database view` (by `File > Open`) and the database is not protected by username & password 
+If you open a database from the `database view` (by `File > Open`), and the database is protected by username & password 
 , a `quick login dialog` will show up:
 
 ![Quick login dialog](img/userguide/open_existing_database/quick-login.png)
