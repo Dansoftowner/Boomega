@@ -5,9 +5,9 @@ import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import com.dansoftware.boomega.gui.updatedialog.UpdateDialog;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.update.UpdateInformation;
-import com.dansoftware.boomega.util.CommonDirectories;
 import com.jfilegoodies.FileGoodies;
 import com.jfilegoodies.explorer.FileExplorers;
+import com.juserdirs.UserDirectories;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
@@ -283,7 +283,7 @@ public class DownloadSegmentController implements Initializable {
     }
 
     private void setDefaults() {
-        this.downloadPathField.setText(CommonDirectories.getDownloadsDirPath());
+        this.downloadPathField.setText(UserDirectories.get().downloadsDirectoryPath());
     }
 
     @Override
