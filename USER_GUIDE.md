@@ -180,12 +180,32 @@ will log in to that database automatically.
 
 ![](img/userguide/loginview/login-box-typed.png)
 
+After you logged in, a `database view` shows up (read about database view [here](#database-view)).
+
 > Note: if you did not add authentication for the particular database, you can just click the login
 > button without typing the username & password.
 
+##### Markers
+
+- If you see the ![play](img/userguide/icon/play.png) icon next to a database list item:
+
+  ![](img/userguide/loginview/running-database-icon.png)
+
+  that means the database is already opened in a `database view`.
+
+...
+
 ### Opening existing database
 
-TODO
+You can open an existing database from both the [login view](#login-view) and the [database view](#database-view)'s menubar:
+
+![Opening database from the file chooser](img/userguide/open_existing_database/file-chooser.png)
+
+If you open a database from the `database view` (by `File > Open`) and the database is not protected by username & password 
+, a `quick login dialog` will show up:
+
+![Quick login dialog](img/userguide/open_existing_database/quick-login.png)
+
 
 ### Creating database
 
@@ -200,6 +220,10 @@ TODO
 TODO
 
 ### Key bindings
+
+TODO
+
+### Database view
 
 TODO
 
