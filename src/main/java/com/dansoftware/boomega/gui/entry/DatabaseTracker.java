@@ -179,6 +179,10 @@ public class DatabaseTracker {
         if (observer != null) findWeakReference(observer).ifPresent(observers::remove);
     }
 
+    public boolean hasObserver(@Nullable Observer observer) {
+        return findWeakReference(observer).isPresent();
+    }
+
     private Optional<WeakReference<Observer>> findWeakReference(Observer observer) {
         return observers.stream()
                 .filter(ref -> ref.get() == observer)
