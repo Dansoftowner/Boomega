@@ -201,6 +201,8 @@ You can open an existing database from both the [login view](#login-view) and th
 
 ![Opening database from the file chooser](img/userguide/open_existing_database/file-chooser.png)
 
+If you open a database from the `login view`, the selected database will appear in the combo-box's list.  
+
 If you open a database from the `database view` (by `File > Open`), and the database is protected by username & password 
 , a `quick login dialog` will show up:
 
@@ -217,7 +219,12 @@ You can open the `database creator` from both the [Login View](#login-view) and 
 Firstly, you have to give a name for the database and choose a directory where the database file will be saved.  
 The `full path` field just shows what will be the full path of the created database file, **it's not editable**.
 
-...
+By checking the `authenticatin` box, you can add authentication to the database and specify the credentials.
+
+If you create a database from the `login view`, the new database will appear in the combo-box's list.
+
+If you create a database from the `database view`, the new database will be opened, or if it has credentials, 
+a `quick login dialog` will show up.
 
 ### Database manager
 
