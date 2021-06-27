@@ -209,7 +209,15 @@ If you open a database from the `database view` (by `File > Open`), and the data
 
 ### Creating database
 
-TODO
+You can open the `database creator` from both the [Login View](#login-view) and the [Database View](#database-view) 
+(by `File > Creating new database`).
+
+![Database creator window](img/userguide/creating_database/database_creator_auth.png)
+
+Firstly, you have to give a name for the database and choose a directory where the database file will be saved.  
+The `full path` field just shows what will be the full path of the created database file, **it's not editable**.
+
+...
 
 ### Database manager
 
