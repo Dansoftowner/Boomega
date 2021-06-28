@@ -48,7 +48,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
 [![Version](https://img.shields.io/github/v/release/Dansoftowner/Boomega?include_prereleases)](https://github.com/Dansoftowner/Boomega/releases)
 [![GitHub Release Date](https://img.shields.io/github/release-date-pre/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
 
-<table align="left">
+<table>
 
 <tr>
   <td align="center">
@@ -142,7 +142,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
   </td>
 
 </tr>
-</table><br>
+</table>
 
 ## Source code
 [![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
