@@ -159,6 +159,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
 * The app targets `Java 16+` but the code is `unmodularized`
 * The build tool used for this project is [Gradle](https://gradle.org/)
+* _Want to contribute?_ See the [contribution guideline](CONTRIBUTING.md).
 
 ## Build
 The recommended IDE for building this project is `IntelliJ Idea`.
