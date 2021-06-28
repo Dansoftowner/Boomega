@@ -142,7 +142,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
   </td>
 
 </tr>
-</table>
+</table><br>
 
 ## Source code
 [![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
