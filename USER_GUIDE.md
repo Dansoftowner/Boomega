@@ -6,23 +6,23 @@
 
 * [Overview](#overview)
 * [Getting Boomega](#getting-boomega)
-    * [Platform support](#platform-support)
-    * [Running it as a JAR](#running-it-as-a-jar)
-    * [Updates](#updates)
+  * [Platform support](#platform-support)
+  * [Running it as a JAR](#running-it-as-a-jar)
+  * [Updates](#updates)
 * [Using Boomega](#using-boomega)
   * [Database files](#database-files)
   * [Run Boomega for the first time](#running-boomega-for-the-first-time)
   * [Login view](#login-view)
   * [Opening existing database](#opening-existing-database)
-  * [Creating database](#creating-database) 
-  * [Database manager](#database-manager) 
+  * [Creating database](#creating-database)
+  * [Database manager](#database-manager)
   * [Preferences dialog](#preferences-dialog)
   * [Key Bindings](#key-bindings)
   * [User interface themes](#user-interface-themes)
   * [User interface language](#user-interface-languages)
   * [Plugin Manager](#plugin-manager)
   * [Viewing Boomega info](#viewing-boomega-info)
-    
+
 
 ## Overview
 
@@ -50,7 +50,7 @@ Available binaries:
 
 Available binaries:
 * **Debian Software package (.deb)** - for Debian based systems
-* **Portable (.tar.xz)**
+* **Portable (.tar.xz)** - After extracting, you can find the launcher script in the `bin` folder 
 
 #### MacOS
 
@@ -58,11 +58,11 @@ MacOS-specific binaries are currently not available (help wanted), but you can s
 
 ### Running it as a jar
 
-You can run the cross-platform jar file with a **Java 16+** 
-runtime that has JavaFX binaries bundled inside it (e.g a custom runtime built with `jlink`, [Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) \ [Liberica](https://bell-sw.com/pages/libericajdk/)) or you have to 
+You can run the cross-platform jar file with a **Java 16+**
+runtime that has JavaFX binaries bundled inside it (e.g a custom runtime built with `jlink`, [Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) \ [Liberica](https://bell-sw.com/pages/libericajdk/)) or you have to
 put the javafx modules to the `module-path` (see: [openjfx docs](https://openjfx.io/openjfx-docs/#install-javafx)).
 
-You also have to pass the [necessary JVM options](JVM_OPTIONS.md) when you invoke `java` in the command line/terminal.  
+You also have to pass the [necessary JVM options](JVM_OPTIONS.md) when you invoke `java` in the command line/terminal.
 
 Example:
 ```
@@ -115,7 +115,7 @@ A `Boomega Database` can be secured with credentials (username & password), or i
 
 You can create `bmdb` files any time you want (see: [Creating database](#creating-database)) and **open existing ones** (see: [Opening existing database](#opening-existing-database)).
 
-If Boomega is installed by an installation file as a native application, the `.bmdb` files are associated with 
+If Boomega is installed by an installation file as a native application, the `.bmdb` files are associated with
 the app, so you can launch them from your file explorer too.
 
 You can have multiple database files opened at the same time in the app.
@@ -142,22 +142,22 @@ Read more about user interface languages [here](#user-interface-languages).
 
 ### Login view
 
-The first important `view` you'll see is the `login view`. 
+The first important `view` you'll see is the `login view`.
 Here, you are able to enter into a particular database, and you can access some
 basic tools/functions the app provides like: [Opening existing databases](#opening-existing-database),
 [Creating database](#creating-database), [Database manager](#database-manager) and the [Preferences dialog](#preferences-dialog).
 
 ![Login view](img/userguide/loginview/LoginView_Light.png)
 
-#### The top toolbar (on the top)
+#### The top toolbar
 
 - By clicking on the ![info](img/userguide/icon/information.png) icon, you can view the [Boomega info](#viewing-boomega-info).
-- You can access the `quick menu` by clicking on the ![option](img/userguide/icon/options.png) icon:  
+- By clicking on the ![option](img/userguide/icon/options.png) icon, you can access the `quick menu`:  
   ![Quick options menu](img/userguide/loginview/quick-options-menu.png)  
   Here you are able to:
-    - Search for software updates
-    - Open the plugin manager (read more about the Plugin Manager [here](#plugin-manager))
-    - Open the application settings (see [Preferences dialog](#preferences-dialog))
+  - Search for software updates
+  - Open the plugin manager (read more about the Plugin Manager [here](#plugin-manager))
+  - Open the application settings (see [Preferences dialog](#preferences-dialog))
 
 #### The login box (in the center)
 
@@ -180,16 +180,51 @@ will log in to that database automatically.
 
 ![](img/userguide/loginview/login-box-typed.png)
 
+After you logged in, a `database view` shows up (read about database view [here](#database-view)).
+
 > Note: if you did not add authentication for the particular database, you can just click the login
 > button without typing the username & password.
 
+##### Special marks
+
+- If you see the ![play](img/userguide/icon/play.png) icon next to a database list item:  
+  ![](img/userguide/loginview/running-database-icon.png)  
+  that means **the database is already opened** in a `database view`.
+
+- If you see the ![alert](img/userguide/icon/alert.png) icon next to a database list item:  
+  ![](img/userguide/loginview/missing-database-icon.png)  
+  that means **the database file does not exist**
+
 ### Opening existing database
 
-TODO
+You can open an existing database from both the [login view](#login-view) and the [database view](#database-view)'s menubar:
+
+![Opening database from the file chooser](img/userguide/open_existing_database/file-chooser.png)
+
+If you open a database from the `login view`, the selected database will appear in the combo-box's list.  
+
+If you open a database from the `database view` (by `File > Open`), and the database is protected by username & password 
+, a `quick login dialog` will show up:
+
+![Quick login dialog](img/userguide/open_existing_database/quick-login.png)
+
 
 ### Creating database
 
-TODO
+You can open the `database creator` from both the [Login View](#login-view) and the [Database View](#database-view) 
+(by `File > Creating new database`).
+
+![Database creator window](img/userguide/creating_database/database_creator_auth.png)
+
+Firstly, you have to give a name for the database and choose a directory where the database file will be saved.  
+The `full path` field just shows what will be the full path of the created database file, **it's not editable**.
+
+By checking the `authenticatin` box, you can add authentication to the database and specify the credentials.
+
+If you create a database from the `login view`, the new database will appear in the combo-box's list.
+
+If you create a database from the `database view`, the new database will be opened, or if it has credentials, 
+a `quick login dialog` will show up.
 
 ### Database manager
 
@@ -200,6 +235,10 @@ TODO
 TODO
 
 ### Key bindings
+
+TODO
+
+### Database view
 
 TODO
 
@@ -224,8 +263,8 @@ you can view all the information about your Boomega release in the `Boomega info
 
 - **Version** - the current version you use
 - **Software developer**
-- **License**  
-- **Language**  
+- **License**
+- **Language**
 - **Java home** - the path to the Java Runtime Environment the app is running on
 - **Java VM** - the name and the vendor of the Java Virtual Machine
 - **Java version** - the version of the Java environment
@@ -233,5 +272,5 @@ you can view all the information about your Boomega release in the `Boomega info
 
 You can copy all this data to the clipboard by clicking on the ![copy](img/userguide/icon/content-copy.png) icon.
 
-This dialog can be launched by clicking on the top-right ![info](img/userguide/icon/information.png) icon in the [login view](#login-view) 
+This dialog can be launched by clicking on the top-right ![info](img/userguide/icon/information.png) icon in the [login view](#login-view)
 or by clicking on the `File > Help > About` item in the [database view](#database-view).
