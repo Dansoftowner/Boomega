@@ -23,6 +23,11 @@ Also, check out:
 * [Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html)
 * [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html)
 
+### Adding dependencies
+
+If you add new dependencies to the project, please also mention that in the [used libraries](USED_LIBRARIES.md) page,
+and in the [DependencyLister.kt](src/main/java/com/dansoftware/boomega/gui/info/dependency/DependencyLister.kt).
+
 ## Commit messages
 
 Use appropriate [gitmojies](https://gitmoji.dev/) in your commit messages.

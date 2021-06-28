@@ -208,7 +208,6 @@ If you open a database from the `database view` (by `File > Open`), and the data
 
 ![Quick login dialog](img/userguide/open_existing_database/quick-login.png)
 
-
 ### Creating database
 
 You can open the `database creator` from both the [Login View](#login-view) and the [Database View](#database-view) 
@@ -228,7 +227,30 @@ a `quick login dialog` will show up.
 
 ### Database manager
 
-TODO
+Database manager is used for viewing/managing the registered databases.
+
+You can open the `database manager` from both the [Login View](#login-view) and the [Database View](#database-view) (`File > Open database manager`).
+
+![Database manager window](img/userguide/database_manager/database-manager-no-selection.png)
+
+Also, you are able to open database file(s) in your system's file explorer by clicking on the ![folder](img/userguide/icon/folder.png) icon.
+
+#### Deleting database(s)
+
+For deleting databases, select the particular items (hold the `ctrl` or `shift` key if necessary) and use the ![database minus](img/userguide/icon/database-minus.png) symbol:
+
+![Deleting database(s)](img/userguide/database_manager/deleting-items.gif)
+
+**Note: removing a database here will not delete the database-file from your file system!**
+
+#### Special marks
+
+Just like in the [login view](#the-login-box-in-the-center) there are special indicators:
+
+- ![play](img/userguide/icon/play.png) - means the database is opened at the moment
+- ![alert](img/userguide/icon/alert.png) - means the database file does not exist
+
+![Special marks in database manager](img/userguide/database_manager/database-manager-markers.png)
 
 ### Preferences dialog
 
