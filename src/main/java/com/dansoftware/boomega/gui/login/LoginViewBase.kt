@@ -22,10 +22,12 @@ import com.dansoftware.boomega.db.DatabaseMeta
 import javafx.beans.value.ObservableStringValue
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
+import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
+import javafx.scene.layout.VBox
 import java.io.File
 
-class LoginViewBase(private val controller: LoginBox.Controller) : StackPane() {
+class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
 
     private val loginBox = LoginBox(controller)
 
@@ -38,7 +40,8 @@ class LoginViewBase(private val controller: LoginBox.Controller) : StackPane() {
     fun titleProperty(): ObservableStringValue = loginBox.titleProperty()
 
     private fun buildUI() {
-        children.add(Group(loginBox))
+        children.add(LoginToolbar(controller.context, controller.preferences))
+        children.add(StackPane(Group(loginBox)).also { VBox.setVgrow(it, Priority.ALWAYS) })
     }
 
     private fun enableDragSupport() {

@@ -32,27 +32,15 @@ import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.info.InformationActivity
-import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
-import com.dansoftware.boomega.gui.preferences.PreferencesActivity
-import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
-import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.runOnUiThread
-import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.update.UpdateSearcher
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import com.dlsc.workbenchfx.SimpleHeaderView
-import com.dlsc.workbenchfx.view.controls.ToolbarItem
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import com.dlsc.workbenchfx.Workbench
+import com.dlsc.workbenchfx.model.WorkbenchModule
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ObservableStringValue
-import javafx.concurrent.Task
-import javafx.scene.control.MenuItem
+import javafx.scene.Node
+import javafx.scene.image.Image
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -63,31 +51,29 @@ import org.slf4j.LoggerFactory
  * @author Daniel Gyorffy
  */
 class LoginView(
-    private val preferences: Preferences,
+    preferences: Preferences,
     tracker: DatabaseTracker,
     loginData: LoginData,
     databaseLoginListener: DatabaseLoginListener
-) : SimpleHeaderView<LoginViewBase>(
-    I18N.getValue("database.auth"),
-    MaterialDesignIconView(MaterialDesignIcon.LOGIN)
-), ContextTransformable {
+) : Workbench(), ContextTransformable {
 
     private val asContext: Context = Context.from(this)
     private val loginBoxController = LoginBoxController(context, tracker, loginData, preferences, databaseLoginListener)
     private val createdDatabase: ObjectProperty<Database> = SimpleObjectProperty()
 
-    init {
-        content = LoginViewBase(loginBoxController)
-        buildToolbar()
-    }
-
-    private fun buildToolbar() {
-        toolbarControlsRight.add(buildOptionsItem())
-        toolbarControlsRight.add(buildInfoItem())
-    }
-
     val loginData: LoginData
         get() = loginBoxController.loginData
+
+    init {
+        buildUI()
+    }
+
+    private fun buildUI() {
+        val loginViewBase = LoginViewBase(loginBoxController)
+        modules.add(object : WorkbenchModule("", null as Image?) {
+            override fun activate(): Node = loginViewBase
+        })
+    }
 
     fun createdDatabaseProperty(): ReadOnlyObjectProperty<Database> {
         return createdDatabase
@@ -101,42 +87,11 @@ class LoginView(
         return loginBoxController.titleProperty()!!
     }
 
-    private fun buildInfoItem(): ToolbarItem = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.INFORMATION)) {
-        InformationActivity(context).show()
-    }
-
-    private fun buildOptionsItem() = ToolbarItem(MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).apply {
-        items.addAll(
-            MenuItem(I18N.getValue("action.update_search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)).action {
-                val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
-                    init {
-                        setOnSucceeded {
-                            context.stopProgress()
-                            UpdateActivity(context, it.source.value as UpdateSearcher.UpdateSearchResult).show()
-                        }
-                        setOnRunning { context.showIndeterminateProgress() }
-                    }
-
-                    override fun call() = UpdateSearcher.defaultInstance().search()
-                }
-                CachedExecutor.submit(task)
-            },
-
-            MenuItem(I18N.getValue("action.open_plugin_manager"), FontAwesomeIconView(FontAwesomeIcon.PLUG)).action {
-                PluginManagerActivity().show(context.contextWindow)
-            }.apply { isDisable = true }, // TODO: unlock plugin manager
-
-            MenuItem(I18N.getValue("action.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).action {
-                PreferencesActivity(preferences).show(context.contextWindow)
-            }
-        )
-    }
-
     private class LoginBoxController(
         override val context: Context,
         override val databaseTracker: DatabaseTracker,
         override val loginData: LoginData,
-        private val preferences: Preferences,
+        override val preferences: Preferences,
         private val databaseLoginListener: DatabaseLoginListener
     ) : LoginBox.Controller, DatabaseTracker.Observer {
 

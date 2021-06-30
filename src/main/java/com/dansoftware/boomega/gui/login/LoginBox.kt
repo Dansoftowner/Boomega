@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.login
 
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.DatabaseMeta
@@ -283,6 +284,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         var loginBox: LoginBox?
 
         val context: Context
+        val preferences: Preferences
         val databaseTracker: DatabaseTracker
         val loginData: LoginData
 
