@@ -44,10 +44,12 @@ open class TwoSideToolBar : HBox() {
 
     private fun buildLeftToolBar() = ToolBar().apply {
         setHgrow(this, Priority.SOMETIMES)
+        prefHeightProperty().bind(this@TwoSideToolBar.heightProperty())
     }
 
     private fun buildRightToolBar() = ToolBar().apply {
         setHgrow(this, Priority.SOMETIMES)
+        prefHeightProperty().bind(this@TwoSideToolBar.heightProperty())
     }
 
     private class SeparatorPane : Pane() {
