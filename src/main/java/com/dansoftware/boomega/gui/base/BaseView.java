@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.context;
+package com.dansoftware.boomega.gui.base;
 
+import com.dansoftware.boomega.gui.api.Context;
+import com.dansoftware.boomega.gui.api.ContextDialog;
+import com.dansoftware.boomega.gui.api.NotifiableModule;
 import com.dansoftware.boomega.gui.control.ExceptionDisplayPane;
 import com.dansoftware.boomega.gui.keybinding.KeyBinding;
 import com.dansoftware.boomega.gui.util.BaseFXUtils;
@@ -31,9 +34,11 @@ import com.dlsc.workbenchfx.view.WorkbenchView;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,6 +48,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
@@ -58,35 +64,51 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * Encapsulates a {@link Workbench} into a {@link Context} implementation.
- * <p>
- * Used by {@link Context#from(Workbench)}.
+ * A {@link BaseView} wraps a UI element and adds extra functionality (like showing dialogs, overlays etc...)
+ * to it by implementing the {@link Context} interface.
  *
- * @author Daniel Gyorffy
+ * @see Context
  */
-final class WorkbenchContextAdapter implements Context {
+public class BaseView extends StackPane implements Context {
 
-    private static final Logger logger = LoggerFactory.getLogger(WorkbenchContextAdapter.class);
+    private static final Logger logger = LoggerFactory.getLogger(BaseView.class);
 
     private final Workbench workbench;
     private final NotificationsBox notificationsBox;
-
+    private final ObjectProperty<Node> content = new SimpleObjectProperty<>();
     private TaskbarProgressbar taskbarProgressbarCache;
 
-
-    WorkbenchContextAdapter(@NotNull Workbench workbench) {
-        this.workbench = workbench;
+    public BaseView() {
         this.notificationsBox = new NotificationsBox();
-        initToWorkbenchView(workbench, notificationsBox);
+        this.workbench = buildWorkbench();
+        this.getChildren().add(workbench);
     }
 
-    private void initToWorkbenchView(Workbench workbench, Node child) {
-        final ObjectProperty<Skin<?>> skinProperty = workbench.skinProperty();
-        skinProperty.addListener(new ChangeListener<>() {
+    public BaseView(@Nullable Node content) {
+        this();
+        this.setContent(content);
+    }
+
+    private Workbench buildWorkbench() {
+        return initWorkbench(
+                Workbench.builder(
+                        new WorkbenchModule(null, (Image) null) {
+                            @Override
+                            public Node activate() {
+                                return content.get();
+                            }
+                        }
+                ).build()
+        );
+    }
+
+    private Workbench initWorkbench(Workbench workbench) {
+        workbench.skinProperty().addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> skin) {
                 if (skin != null) {
@@ -96,7 +118,10 @@ final class WorkbenchContextAdapter implements Context {
                         Field workbenchViewField = workbenchSkinClass.getDeclaredField("workbenchView");
                         workbenchViewField.setAccessible(true);
                         final var workbenchView = (WorkbenchView) workbenchViewField.get(skin);
-                        workbenchView.getChildren().add(child);
+                        workbenchView.getChildren().add(notificationsBox);
+                        Node toolbar = skin.getNode().lookup("#toolbar");
+                        toolbar.setVisible(false);
+                        toolbar.setManaged(false);
                     } catch (RuntimeException | ReflectiveOperationException e) {
                         logger.error("Couldn't retrieve WorkbenchView", e);
                     }
@@ -104,8 +129,28 @@ final class WorkbenchContextAdapter implements Context {
                 }
             }
         });
+        return workbench;
     }
 
+    public Node getContent() {
+        return content.get();
+    }
+
+    public ObjectProperty<Node> contentProperty() {
+        return content;
+    }
+
+    public void setContent(Node content) {
+        this.content.set(content);
+    }
+
+    public ObservableList<Region> getBlockingOverlaysShown() {
+        return workbench.getBlockingOverlaysShown();
+    }
+
+    public ObservableList<Region> getNonBlockingOverlaysShown() {
+        return workbench.getNonBlockingOverlaysShown();
+    }
 
     @Override
     public void showOverlay(Region region, boolean blocking) {
@@ -124,22 +169,22 @@ final class WorkbenchContextAdapter implements Context {
 
     @Override
     public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(workbench.showDialog(buildErrorDialog(title, message, exception, onResult)), ContextDialog.Type.ERROR);
+        return new WorkbenchDialogContextDialog(workbench.showDialog(buildErrorDialog(title, message, exception, onResult)), ContextDialog.Type.ERROR);
     }
 
     @Override
     public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(workbench.showDialog(buildInformationDialog(title, message, onResult)), ContextDialog.Type.INFORMATION);
+        return new WorkbenchDialogContextDialog(workbench.showDialog(buildInformationDialog(title, message, onResult)), ContextDialog.Type.INFORMATION);
     }
 
     @Override
     public ContextDialog showConfirmationDialog(String title, String message, Consumer<ButtonType> onResult) {
-        return ContextDialog.from(workbench.showDialog(buildConfirmationDialog(title, message, onResult)), ContextDialog.Type.CONFIRMATION);
+        return new WorkbenchDialogContextDialog(workbench.showDialog(buildConfirmationDialog(title, message, onResult)), ContextDialog.Type.CONFIRMATION);
     }
 
     @Override
     public @NotNull ContextDialog showDialog(String title, Node content, Consumer<ButtonType> onResult, ButtonType... buttonTypes) {
-        return ContextDialog.from(workbench.showDialog(WorkbenchDialog.builder(title, content, buttonTypes).onResult(onResult).build()));
+        return new WorkbenchDialogContextDialog(workbench.showDialog(WorkbenchDialog.builder(title, content, buttonTypes).onResult(onResult).build()));
     }
 
     @Override
@@ -333,20 +378,20 @@ final class WorkbenchContextAdapter implements Context {
     }
 
     @Override
-    public Window getContextWindow() {
+    public javafx.stage.Window getContextWindow() {
         return WindowUtils.getWindowOf(workbench);
     }
 
     @Override
-    public void requestFocus() {
-        final Window contextWindow = getContextWindow();
+    public void focusRequest() {
+        final javafx.stage.Window contextWindow = getContextWindow();
         if (contextWindow != null)
             contextWindow.requestFocus();
     }
 
     @Override
-    public void toFront() {
-        Window contextWindow = getContextWindow();
+    public void toFrontRequest() {
+        javafx.stage.Window contextWindow = getContextWindow();
         if (contextWindow instanceof Stage) {
             Stage stage = (Stage) contextWindow;
             stage.setIconified(false);
@@ -356,19 +401,19 @@ final class WorkbenchContextAdapter implements Context {
 
     @Override
     public boolean isShowing() {
-        final Window contextWindow = getContextWindow();
+        final javafx.stage.Window contextWindow = getContextWindow();
         return contextWindow != null && contextWindow.isShowing();
     }
 
     @Override
     public void showIndeterminateProgress() {
-        workbench.setCursor(Cursor.WAIT);
+        workbench.setCursor(javafx.scene.Cursor.WAIT);
         getTaskbarProgressbar().showIndeterminateProgress();
     }
 
     @Override
-    public void showProgress(long done, long max, @NotNull ProgressType type) {
-        workbench.setCursor(Cursor.DEFAULT);
+    public void showProgress(long done, long max, @NotNull Context.ProgressType type) {
+        workbench.setCursor(javafx.scene.Cursor.DEFAULT);
         getTaskbarProgressbar().showCustomProgress(done, max, TaskbarProgressbar.Type.valueOf(type.name()));
     }
 
@@ -421,4 +466,188 @@ final class WorkbenchContextAdapter implements Context {
                                                            @NotNull Consumer<ButtonType> onResult) {
         return WorkbenchDialog.builder(title, message, I18NButtonTypes.NO, I18NButtonTypes.YES).onResult(onResult).build();
     }
+
+    /**
+     * Wraps a {@link WorkbenchDialog} into a {@link ContextDialog} implementation.
+     *
+     * @author Daniel Gyorffy
+     */
+    private static class WorkbenchDialogContextDialog implements ContextDialog {
+
+        private static final String DIALOG_STYLE_CLASS = "alertDialog";
+
+        private final WorkbenchDialog workbenchDialog;
+        private final Type type;
+
+        WorkbenchDialogContextDialog(@NotNull WorkbenchDialog workbenchDialog, @Nullable Type type) {
+            this.workbenchDialog = Objects.requireNonNull(workbenchDialog);
+            this.workbenchDialog.getStyleClass().add(DIALOG_STYLE_CLASS);
+            this.type = workbenchDialog.getType() != null ? Type.valueOf(workbenchDialog.getType().toString()) : type;
+        }
+
+        WorkbenchDialogContextDialog(@NotNull WorkbenchDialog workbenchDialog) {
+            this(workbenchDialog, null);
+        }
+
+        @Override
+        public ObjectProperty<EventHandler<javafx.event.Event>> onShownProperty() {
+            return workbenchDialog.onShownProperty();
+        }
+
+        @Override
+        public void setOnShown(EventHandler<javafx.event.Event> value) {
+            workbenchDialog.setOnShown(value);
+        }
+
+        @Override
+        public EventHandler<javafx.event.Event> getOnShown() {
+            return workbenchDialog.getOnShown();
+        }
+
+        @Override
+        public ObjectProperty<EventHandler<javafx.event.Event>> onHiddenProperty() {
+            return workbenchDialog.onHiddenProperty();
+        }
+
+        @Override
+        public void setOnHidden(EventHandler<javafx.event.Event> value) {
+            workbenchDialog.setOnHidden(value);
+        }
+
+        @Override
+        public EventHandler<Event> getOnHidden() {
+            return workbenchDialog.getOnHidden();
+        }
+
+        @Override
+        public Type getType() {
+            return type;
+        }
+
+        @Override
+        public ObservableList<ButtonType> getButtonTypes() {
+            return workbenchDialog.getButtonTypes();
+        }
+
+        @Override
+        public BooleanProperty maximizedProperty() {
+            return workbenchDialog.maximizedProperty();
+        }
+
+        @Override
+        public void setMaximized(boolean max) {
+            workbenchDialog.setMaximized(max);
+        }
+
+        @Override
+        public boolean isMaximized() {
+            return workbenchDialog.isMaximized();
+        }
+
+        @Override
+        public ObjectProperty<Node> contentProperty() {
+            return workbenchDialog.contentProperty();
+        }
+
+        @Override
+        public void setContent(Node content) {
+            workbenchDialog.setContent(content);
+        }
+
+        @Override
+        public Node getContent() {
+            return workbenchDialog.getContent();
+        }
+
+        @Override
+        public StringProperty titleProperty() {
+            return workbenchDialog.titleProperty();
+        }
+
+        @Override
+        public String getTitle() {
+            return workbenchDialog.getTitle();
+        }
+
+        @Override
+        public void setTitle(String title) {
+            workbenchDialog.setTitle(title);
+        }
+
+        @Override
+        public ObservableList<String> getStyleClass() {
+            return workbenchDialog.getStyleClass();
+        }
+
+        @Override
+        public ObjectProperty<Exception> exceptionProperty() {
+            return workbenchDialog.exceptionProperty();
+        }
+
+        @Override
+        public void setException(Exception ex) {
+            workbenchDialog.setException(ex);
+        }
+
+        @Override
+        public Exception getException() {
+            return workbenchDialog.getException();
+        }
+
+        @Override
+        public String getDetails() {
+            return workbenchDialog.getDetails();
+        }
+
+        @Override
+        public StringProperty detailsProperty() {
+            return workbenchDialog.detailsProperty();
+        }
+
+        @Override
+        public void setDetails(String details) {
+            workbenchDialog.setDetails(details);
+        }
+
+        @Override
+        public BooleanProperty blockingProperty() {
+            return workbenchDialog.blockingProperty();
+        }
+
+        @Override
+        public void setBlocking(boolean blocking) {
+            workbenchDialog.setBlocking(blocking);
+        }
+
+        @Override
+        public boolean isBlocking() {
+            return workbenchDialog.isBlocking();
+        }
+
+        @Override
+        public Consumer<ButtonType> getOnResult() {
+            return workbenchDialog.getOnResult();
+        }
+
+        @Override
+        public ObjectProperty<Consumer<ButtonType>> onResultProperty() {
+            return workbenchDialog.onResultProperty();
+        }
+
+        @Override
+        public void setOnResult(Consumer<ButtonType> onResult) {
+            workbenchDialog.setOnResult(onResult);
+        }
+
+        @Override
+        public ReadOnlyBooleanProperty showingProperty() {
+            return workbenchDialog.showingProperty();
+        }
+
+        @Override
+        public boolean isShowing() {
+            return workbenchDialog.isShowing();
+        }
+    }
+
 }
