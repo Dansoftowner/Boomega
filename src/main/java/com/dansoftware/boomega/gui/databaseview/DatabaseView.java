@@ -23,6 +23,7 @@ import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.base.BaseView;
 import com.dansoftware.boomega.gui.api.Context;
+import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksImportModule;
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule;
 import com.dlsc.workbenchfx.Workbench;
@@ -34,6 +35,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,11 +44,15 @@ public class DatabaseView extends BaseView {
 
     private final Preferences preferences;
     private final Database database;
+    private final Content content;
 
-    DatabaseView(@NotNull Preferences preferences, @NotNull Database database) {
+    DatabaseView(@NotNull Preferences preferences, @NotNull Database database, @NotNull DatabaseTracker databaseTracker) {
         this.preferences = preferences;
         this.database = database;
-        this.setContent(new Content(this, preferences, database));
+        this.content = new Content(this, preferences, database);
+        VBox.setVgrow(content, Priority.ALWAYS);
+        this.setContent(new VBox(new DatabaseViewToolbar(this, preferences, databaseTracker), content));
+
     }
 
     public DatabaseMeta getOpenedDatabase() {
@@ -53,11 +60,11 @@ public class DatabaseView extends BaseView {
     }
 
     public void openModule(WorkbenchModule module) {
-        ((Content) getContent()).openModule(module);
+        content.openModule(module);
     }
 
     public ObservableList<WorkbenchModule> getModules() {
-        return ((Content) getContent()).getModules();
+        return content.getModules();
     }
 
     private static class Content extends Workbench {

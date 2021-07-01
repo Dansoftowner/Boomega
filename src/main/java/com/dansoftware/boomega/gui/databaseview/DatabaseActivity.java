@@ -48,9 +48,9 @@ public class DatabaseActivity {
         this.preferences = Objects.requireNonNull(preferences);
         this.databaseTracker = Objects.requireNonNull(databaseTracker);
         this.showing = new SimpleBooleanProperty();
-        this.databaseView = new DatabaseView(preferences, database);
+        this.databaseView = new DatabaseView(preferences, database, databaseTracker);
         instances.add(new WeakReference<>(this));
-        databaseTracker.usingDatabase(database.getMeta());
+        databaseTracker.registerUsedDatabase(database.getMeta());
     }
 
     public boolean show() {
