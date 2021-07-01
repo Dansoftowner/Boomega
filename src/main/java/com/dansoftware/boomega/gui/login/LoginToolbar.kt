@@ -43,7 +43,7 @@ import javafx.scene.control.*
 class LoginToolbar(private val context: Context, private val preferences: Preferences) : TwoSideToolBar() {
 
     init {
-        leftToolBar.padding = Insets(0.0, 0.0, 0.0, 10.0)
+        leftToolBar.padding = Insets(0.0, 10.0, 0.0, 10.0)
         buildUI()
     }
 
