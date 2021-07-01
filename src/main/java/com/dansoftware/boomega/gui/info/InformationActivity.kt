@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.info
 
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 
 /**
  * An InformationActivity is used for showing the information of the application.

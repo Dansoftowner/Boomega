@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.updatedialog;
 
-import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.updatedialog.segment.detail.DetailsSegment;
 import com.dansoftware.boomega.gui.updatedialog.segment.download.DownloadSegment;
 import com.dansoftware.boomega.gui.updatedialog.segment.notification.NotificationSegment;

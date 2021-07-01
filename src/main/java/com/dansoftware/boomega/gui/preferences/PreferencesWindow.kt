@@ -24,7 +24,8 @@ import javafx.stage.Modality
 import javafx.stage.Window
 
 class PreferencesWindow(view: PreferencesView, owner: Window?) :
-    BaseWindow(I18N.getValue("window.preferences.title"), view, { null }) {
+    BaseWindow<PreferencesView>(I18N.getValue("window.preferences.title"), view) {
+
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)

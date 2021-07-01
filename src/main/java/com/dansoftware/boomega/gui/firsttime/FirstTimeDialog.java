@@ -19,8 +19,7 @@
 package com.dansoftware.boomega.gui.firsttime;
 
 import com.dansoftware.boomega.config.Preferences;
-import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.api.*;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.sgmdialog.SegmentDialog;
 import javafx.event.ActionEvent;
@@ -36,7 +35,7 @@ import java.util.Collections;
  *
  * @author Daniel Gyorffy
  */
-public class FirstTimeDialog extends SegmentDialog implements ContextTransformable {
+public class FirstTimeDialog extends SegmentDialog implements EmptyContext {
 
     private static final String STYLE_CLASS = "firstTimeDialog";
 
@@ -45,11 +44,6 @@ public class FirstTimeDialog extends SegmentDialog implements ContextTransformab
         setCustomButtons(Collections.singletonList(new SkipButton()));
         getStyleClass().add(JMetroStyleClass.BACKGROUND);
         getStyleClass().add(STYLE_CLASS);
-    }
-
-    @Override
-    public @NotNull Context getContext() {
-        return Context.empty();
     }
 
     private class SkipButton extends Button implements EventHandler<ActionEvent> {

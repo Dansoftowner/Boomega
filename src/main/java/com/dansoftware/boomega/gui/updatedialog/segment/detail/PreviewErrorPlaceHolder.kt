@@ -17,7 +17,7 @@
  */
 package com.dansoftware.boomega.gui.updatedialog.segment.detail
 
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.I18N
 import javafx.scene.Group
 import javafx.scene.control.Button

@@ -20,8 +20,7 @@ package com.dansoftware.boomega.gui.login;
 
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
-import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -41,7 +40,7 @@ import java.util.stream.Collectors;
  * <p>
  * It can be started by the {@link LoginActivity#show()}.
  */
-public class LoginActivity implements ContextTransformable {
+public class LoginActivity {
 
     private static final List<WeakReference<LoginActivity>> instances = new LinkedList<>();
 
@@ -90,9 +89,8 @@ public class LoginActivity implements ContextTransformable {
         return showing.get();
     }
 
-    @Override
     public @NotNull Context getContext() {
-        return loginView.getContext();
+        return loginView;
     }
 
     public static List<LoginActivity> getActiveLoginActivities() {

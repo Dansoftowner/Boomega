@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.updatedialog.segment.detail
 
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.update.UpdateInformation
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.sandec.mdfx.MarkdownView

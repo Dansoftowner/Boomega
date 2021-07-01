@@ -16,25 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.pluginmngr
+package com.dansoftware.boomega.gui.dbcreator
 
-import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
-import javafx.stage.Modality
-import javafx.stage.Window
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.scene.control.Label
+import javafx.scene.control.ToolBar
 
-/**
- * A [javafx.stage.Stage] for showing a [PluginManager]
- *
- * @author Daniel Gyorffy
- */
-internal class PluginManagerWindow(owner: Window?, view: PluginManager) :
-    BaseWindow(I18N.getValue("window.pluginmanager.title"), view, { view.context }) {
+class DatabaseCreatorToolbar : ToolBar() {
 
     init {
-        initOwner(owner)
-        initModality(Modality.APPLICATION_MODAL)
-        width = 750.0
-        height = 550.0
+        styleClass.add("header-toolbar")
+        buildUI()
     }
+
+    private fun buildUI() {
+        items.add(buildIcon())
+        items.add(buildLabel())
+    }
+
+    private fun buildIcon() =
+        MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS)
+
+    private fun buildLabel() =
+        Label(I18N.getValue("database.creator.title"))
 }

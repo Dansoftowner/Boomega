@@ -24,7 +24,7 @@ import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.db.NitriteDatabase;
-import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.entry.EntryActivity;
@@ -224,7 +224,7 @@ public class ActivityLauncher implements Runnable {
         // otherwise we open a new activity for it
         DatabaseActivity.getByDatabase(argument)
                 .map(DatabaseActivity::getContext)
-                .ifPresentOrElse(context -> Platform.runLater(context::toFront), () -> handleArgumentInit(argument));
+                .ifPresentOrElse(context -> Platform.runLater(context::toFrontRequest), () -> handleArgumentInit(argument));
     }
 
     private void handleArgumentInternal(DatabaseMeta argument) {
@@ -232,7 +232,7 @@ public class ActivityLauncher implements Runnable {
                 .map(DatabaseActivity::getContext)
                 .ifPresentOrElse(context -> {
                     logger.debug("Found gui-context for database: '{}'", argument.getFile());
-                    Platform.runLater(context::toFront);
+                    Platform.runLater(context::toFrontRequest);
                 }, () -> {
                     logger.debug("Didn't found GUI for database: '{}'", argument.getFile());
                     onNewDatabaseAdded(argument);
@@ -301,7 +301,7 @@ public class ActivityLauncher implements Runnable {
                     .limit(1)
                     .findAny()
                     .map(EntryActivity::getContext)
-                    .ifPresent(Context::toFront);
+                    .ifPresent(Context::toFrontRequest);
         });
     }
 
@@ -311,7 +311,7 @@ public class ActivityLauncher implements Runnable {
                     .map(LoginActivity::getContext)
                     .findAny()
                     .ifPresentOrElse(loginActivityContext -> {
-                        loginActivityContext.toFront();
+                        loginActivityContext.toFrontRequest();
                         onActivityLaunched(loginActivityContext, null);
                     }, () -> onActivityLaunched(showEntryActivity().getContext(), null));
         });

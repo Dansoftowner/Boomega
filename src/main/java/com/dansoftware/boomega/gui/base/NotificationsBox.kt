@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.context
+package com.dansoftware.boomega.gui.base
 
 import javafx.geometry.Insets
 import javafx.geometry.Pos

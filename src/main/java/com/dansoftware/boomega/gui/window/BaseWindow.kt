@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.window
 
 import com.dansoftware.boomega.config.PreferenceKey
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.util.loadImageResource
@@ -49,9 +49,10 @@ import org.slf4j.LoggerFactory
  * @param C the type of the content that is shown in the Window's scene
  * @author Daniel Gyorffy
  */
-abstract class BaseWindow : Stage, Themeable {
+abstract class BaseWindow<C> : Stage, Themeable
+        where C : Parent, C : Context {
 
-    lateinit var getContext: () -> Context?
+    private var content: C? = null
     protected var exitDialog: Boolean = false
 
     init {
@@ -80,9 +81,9 @@ abstract class BaseWindow : Stage, Themeable {
      * @param content the graphic content
      * @param getContext the supplier for getting the [Context]
      */
-    protected constructor(title: String, content: Parent, getContext: () -> Context?) : this(title) {
+    protected constructor(title: String, content: C) : this(title) {
+        this.content = content
         this.scene = Scene(content)
-        this.getContext = getContext
     }
 
     /**
@@ -91,12 +92,11 @@ abstract class BaseWindow : Stage, Themeable {
     protected constructor(
         @NonNls title: String,
         menuBar: MenuBar,
-        content: Parent,
-        getContext: () -> Context?
+        content: C,
     ) {
         this.title = title
+        this.content = content
         this.scene = Scene(buildMenuBarContent(content, menuBar))
-        this.getContext = getContext
     }
 
     /**
@@ -108,12 +108,11 @@ abstract class BaseWindow : Stage, Themeable {
      */
     protected constructor(
         title: StringProperty,
-        content: Parent,
-        getContext: () -> Context?
+        content: C
     ) {
+        this.content = content
         this.scene = Scene(content)
         this.titleProperty().bind(title)
-        this.getContext = getContext
     }
 
     override fun handleThemeApply(oldTheme: Theme, newTheme: Theme) {
@@ -163,7 +162,7 @@ abstract class BaseWindow : Stage, Themeable {
         private var dialogShowing: Boolean = false
 
         override fun handle(event: WindowEvent) {
-            this@BaseWindow.getContext()?.also { context ->
+            this@BaseWindow.content?.also { context ->
                 if (this@BaseWindow.exitDialog) {
                     this@BaseWindow.makeFocused()
                     when {

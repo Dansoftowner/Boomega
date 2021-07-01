@@ -28,7 +28,8 @@ import javafx.stage.Window
  * used to display [DatabaseCreatorView] gui-objects.
  */
 class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) :
-    BaseWindow(I18N.getValue("window.dbcreator.title"), view, { view.context }) {
+    BaseWindow<DatabaseCreatorView>(I18N.getValue("window.dbcreator.title"), view) {
+
     init {
         initModality(Modality.APPLICATION_MODAL)
         initOwner(owner)

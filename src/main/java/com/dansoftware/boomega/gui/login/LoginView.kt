@@ -25,22 +25,18 @@ import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.db.NitriteDatabase
-import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.context.ContextTransformable
+import com.dansoftware.boomega.gui.base.BaseView
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.runOnUiThread
-import com.dlsc.workbenchfx.Workbench
-import com.dlsc.workbenchfx.model.WorkbenchModule
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ObservableStringValue
-import javafx.scene.Node
-import javafx.scene.image.Image
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -55,33 +51,23 @@ class LoginView(
     tracker: DatabaseTracker,
     loginData: LoginData,
     databaseLoginListener: DatabaseLoginListener
-) : Workbench(), ContextTransformable {
+) : BaseView() {
 
-    private val asContext: Context = Context.from(this)
-    private val loginBoxController = LoginBoxController(context, tracker, loginData, preferences, databaseLoginListener)
+    private val loginBoxController = LoginBoxController(this, tracker, loginData, preferences, databaseLoginListener)
     private val createdDatabase: ObjectProperty<Database> = SimpleObjectProperty()
 
     val loginData: LoginData
         get() = loginBoxController.loginData
 
     init {
-        buildUI()
-    }
-
-    private fun buildUI() {
-        val loginViewBase = LoginViewBase(loginBoxController)
-        modules.add(object : WorkbenchModule("", null as Image?) {
-            override fun activate(): Node = loginViewBase
-        })
+        content = LoginViewBase(loginBoxController)
     }
 
     fun createdDatabaseProperty(): ReadOnlyObjectProperty<Database> {
         return createdDatabase
     }
 
-    override fun getContext(): Context {
-        return asContext
-    }
+    //override fun getContext(): Context = this
 
     fun titleProperty(): ObservableStringValue {
         return loginBoxController.titleProperty()!!
@@ -136,7 +122,7 @@ class LoginView(
                 databaseTracker.isDatabaseUsed(databaseMeta) ->
                     DatabaseActivity.getByDatabase(databaseMeta)
                         .map(DatabaseActivity::getContext)
-                        .ifPresent(Context::toFront)
+                        .ifPresent(Context::toFrontRequest)
                 else -> {
                     loginData.isAutoLogin = remember
                     loginData.autoLoginCredentials = credentials.takeIf { remember }

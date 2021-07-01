@@ -19,14 +19,9 @@
 package com.dansoftware.boomega.gui.dbcreator;
 
 import com.dansoftware.boomega.db.DatabaseMeta;
-import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.base.BaseView;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
-import com.dansoftware.boomega.i18n.I18N;
-import com.dlsc.workbenchfx.SimpleHeaderView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.scene.Node;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -36,24 +31,16 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseCreatorView extends SimpleHeaderView<Node> implements ContextTransformable {
+public class DatabaseCreatorView extends BaseView {
 
     private final DatabaseCreatorForm form;
-    private final Context asContext;
 
     public DatabaseCreatorView(@NotNull DatabaseTracker databaseTracker) {
-        super(I18N.getValue("database.creator.title"),
-                new MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS));
-        this.asContext = Context.from(this);
-        this.setContent(this.form = new DatabaseCreatorForm(asContext, databaseTracker));
+        this.form = new DatabaseCreatorForm(this, databaseTracker);
+        this.setContent(new VBox(new DatabaseCreatorToolbar(), form));
     }
 
     public DatabaseMeta getCreatedDatabase() {
         return this.form.createdDatabaseProperty().get();
-    }
-
-    @Override
-    public @NotNull Context getContext() {
-        return asContext;
     }
 }

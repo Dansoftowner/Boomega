@@ -20,7 +20,7 @@
 
 package com.dansoftware.boomega.gui.control
 
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.util.surrounding
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView

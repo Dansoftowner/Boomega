@@ -22,7 +22,7 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.refresh
 import com.dansoftware.boomega.i18n.I18N

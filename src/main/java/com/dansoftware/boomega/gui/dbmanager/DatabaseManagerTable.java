@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.dbmanager;
 
 import com.dansoftware.boomega.db.DatabaseMeta;
-import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.util.BaseFXUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;

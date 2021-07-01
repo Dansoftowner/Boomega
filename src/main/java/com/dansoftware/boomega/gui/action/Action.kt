@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.action
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import com.dansoftware.boomega.i18n.I18N

@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.login.quick
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.db.NitriteDatabase
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
 import com.dansoftware.boomega.i18n.I18N
 import javafx.beans.property.SimpleStringProperty
@@ -30,6 +30,7 @@ import javafx.geometry.Insets
 import javafx.scene.control.Button
 import javafx.scene.control.PasswordField
 import javafx.scene.control.TextField
+import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
@@ -45,8 +46,8 @@ class QuickForm(
     private val passwordInput: StringProperty = SimpleStringProperty()
 
     init {
-        padding = Insets(10.0)
-        setMargin(this, Insets(0.0, 20.0, 20.0, 20.0))
+        setMargin(this, Insets(10.0))
+        setVgrow(this, Priority.ALWAYS)
         buildUI()
     }
 

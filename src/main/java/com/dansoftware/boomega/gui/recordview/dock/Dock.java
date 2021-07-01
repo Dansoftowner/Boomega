@@ -1,7 +1,7 @@
 package com.dansoftware.boomega.gui.recordview.dock;
 
 import com.dansoftware.boomega.db.Database;
-import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.recordview.RecordTable;
 import com.dansoftware.boomega.gui.recordview.connection.GoogleBookConnectionDock;
 import com.dansoftware.boomega.gui.recordview.edit.RecordEditorDock;

@@ -19,43 +19,36 @@
 package com.dansoftware.boomega.gui.preferences
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.preferences.pane.*
-import com.dlsc.workbenchfx.Workbench
-import com.dlsc.workbenchfx.model.WorkbenchModule
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
-import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.Tab
 import javafx.scene.control.TabPane
-import javafx.scene.image.Image
 
-class PreferencesView(private val preferences: Preferences) : Workbench() {
+class PreferencesView(private val preferences: Preferences) : BaseView() {
 
-    private val asContext: Context = Context.from(this)
     private lateinit var tabPane: TabPane
 
     init {
         styleClass.add("preferences-view")
-        initUI()
+        buildUI()
         initPanes()
     }
 
-    private fun initUI() {
+    private fun buildUI() {
         tabPane = TabPane()
-        modules.add(object : WorkbenchModule("", null as Image?) {
-            override fun activate(): Node = tabPane
-        })
+        content = tabPane
     }
 
     private fun initPanes() {
         listOf(
             AppearancePane(preferences),
             KeyBindingPane(preferences),
-            LanguagePane(asContext, preferences),
+            LanguagePane(this, preferences),
             UpdatePane(preferences),
-            AdvancedPane(asContext, preferences)
+            AdvancedPane(this, preferences)
         ).forEach(this::addPane)
     }
 

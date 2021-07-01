@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks.join
 
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPagination
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPaginationSearchTask
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksTable

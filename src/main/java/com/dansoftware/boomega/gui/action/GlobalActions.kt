@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.action
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity

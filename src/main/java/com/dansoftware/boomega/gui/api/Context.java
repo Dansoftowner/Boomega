@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.context;
+package com.dansoftware.boomega.gui.api;
 
 import com.dansoftware.boomega.gui.keybinding.KeyBinding;
-import com.dlsc.workbenchfx.Workbench;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -159,6 +158,7 @@ public interface Context {
      *
      * @param classRef the class reference
      */
+    @Deprecated
     void showModule(@NotNull Class<?> classRef);
 
     /**
@@ -168,6 +168,7 @@ public interface Context {
      * @param classRef the class reference
      * @param data     the object that holds data
      */
+    @Deprecated
     <D> void showModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data);
 
     /**
@@ -178,6 +179,7 @@ public interface Context {
      * @param data     the concrete message
      * @param <D>      the type of the message
      */
+    @Deprecated
     <D> void notifyModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data);
 
 
@@ -196,12 +198,12 @@ public interface Context {
     /**
      * Requests focus on the particular GUI environment (usually on a {@link javafx.stage.Window}).
      */
-    void requestFocus();
+    void focusRequest();
 
     /**
      * Brings the particular GUI environment to front (usually with the {@link javafx.stage.Stage#toFront()})
      */
-    void toFront();
+    void toFrontRequest();
 
     boolean isShowing();
 
@@ -239,11 +241,7 @@ public interface Context {
     }
 
     static Context empty() {
-        return new EmptyContext();
-    }
-
-    static Context from(@NotNull Workbench workbench) {
-        return new WorkbenchContextAdapter(workbench);
+        return new NullContext();
     }
 
     enum ProgressType {

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.context
+package com.dansoftware.boomega.gui.api
 
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import javafx.event.EventHandler
@@ -29,7 +29,7 @@ import javafx.stage.Window
 import javafx.util.Duration
 import java.util.function.Consumer
 
-private class EmptyContext : Context {
+private class NullContext : Context {
 
     override fun showOverlay(region: Region?, blocking: Boolean) {}
 
@@ -132,9 +132,9 @@ private class EmptyContext : Context {
 
     override fun getContextWindow(): Window? = null
 
-    override fun requestFocus() {}
+    override fun focusRequest() {}
 
-    override fun toFront() {}
+    override fun toFrontRequest() {}
 
     override fun isShowing(): Boolean = false
 

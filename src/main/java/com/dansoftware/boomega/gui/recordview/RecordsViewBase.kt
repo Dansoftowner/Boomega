@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.recordview.dock.Dock

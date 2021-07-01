@@ -47,7 +47,7 @@ private class LoginWindow(
     private val root: LoginView,
     private val preferences: Preferences,
     private val databaseTracker: DatabaseTracker
-) : BaseWindow(TitleProperty("window.login.title", " - ", root.titleProperty()), root, { root.context }),
+) : BaseWindow<LoginView>(TitleProperty("window.login.title", " - ", root.titleProperty()), root),
     EventHandler<WindowEvent> {
 
     init {
@@ -62,7 +62,7 @@ private class LoginWindow(
     }
 
     private fun initKeyBindings() {
-        GlobalActions.applyOnScene(scene, root.context, preferences, databaseTracker)
+        GlobalActions.applyOnScene(scene, root, preferences, databaseTracker)
     }
 
     override fun handle(event: WindowEvent) {

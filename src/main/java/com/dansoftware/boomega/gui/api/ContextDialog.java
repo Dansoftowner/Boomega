@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.context;
+package com.dansoftware.boomega.gui.api;
 
-import com.dlsc.workbenchfx.model.WorkbenchDialog;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -28,8 +27,6 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -136,20 +133,4 @@ public interface ContextDialog {
     ReadOnlyBooleanProperty showingProperty();
 
     boolean isShowing();
-
-    /**
-     * Wraps a {@link WorkbenchDialog} into a {@link ContextDialog}.
-     *
-     * @param workbenchDialog the workbench-dialog to wrap
-     * @return the {@link ContextDialog} object.
-     */
-    @NotNull
-    static ContextDialog from(@NotNull WorkbenchDialog workbenchDialog) {
-        return from(workbenchDialog, null);
-    }
-
-    @NotNull
-    static ContextDialog from(@NotNull WorkbenchDialog workbenchDialog, @Nullable Type type) {
-        return new WorkbenchDialogContextDialogAdapter(workbenchDialog, type);
-    }
 }

@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.preferences.pane
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.main.ApplicationRestart

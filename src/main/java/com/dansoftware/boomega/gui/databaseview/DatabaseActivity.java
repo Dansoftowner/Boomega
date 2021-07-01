@@ -21,8 +21,7 @@ package com.dansoftware.boomega.gui.databaseview;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.db.DatabaseMeta;
-import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.menubar.AppMenuBar;
 import javafx.beans.property.BooleanProperty;
@@ -34,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-public class DatabaseActivity implements ContextTransformable {
+public class DatabaseActivity {
 
     private static final Set<WeakReference<DatabaseActivity>> instances = Collections.synchronizedSet(new HashSet<>());
 
@@ -58,7 +57,6 @@ public class DatabaseActivity implements ContextTransformable {
         final DatabaseWindow databaseWindow = new DatabaseWindow(
                 databaseView,
                 new AppMenuBar(
-                        databaseView.getContext(),
                         databaseView,
                         preferences,
                         databaseTracker
@@ -83,9 +81,8 @@ public class DatabaseActivity implements ContextTransformable {
         return showing;
     }
 
-    @Override
-    public @NotNull Context getContext() {
-        return databaseView.getContext();
+    public Context getContext() {
+        return databaseView;
     }
 
     public static Optional<DatabaseActivity> getByDatabase(DatabaseMeta databaseMeta) {

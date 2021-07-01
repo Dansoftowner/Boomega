@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.recordview.connection
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsPane
 import com.dansoftware.boomega.gui.googlebooks.join.GoogleBookJoinerOverlay
 import com.dansoftware.boomega.gui.recordview.RecordTable

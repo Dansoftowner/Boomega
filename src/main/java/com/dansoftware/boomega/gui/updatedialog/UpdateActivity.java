@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.updatedialog;
 
-import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.update.UpdateSearcher;
 import javafx.scene.Group;

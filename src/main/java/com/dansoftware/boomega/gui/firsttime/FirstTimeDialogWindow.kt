@@ -28,7 +28,7 @@ import javafx.stage.Modality
  * @author Daniel Gyorffy
  */
 class FirstTimeDialogWindow(firstTimeDialog: FirstTimeDialog) :
-    BaseWindow(I18N.getValue("window.firsttime.title"), firstTimeDialog, { firstTimeDialog.context }) {
+    BaseWindow<FirstTimeDialog>(I18N.getValue("window.firsttime.title"), firstTimeDialog) {
     init {
         initModality(Modality.APPLICATION_MODAL)
         isAlwaysOnTop = true

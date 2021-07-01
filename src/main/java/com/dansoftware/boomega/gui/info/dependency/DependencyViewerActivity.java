@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.info.dependency;
 
-import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.api.Context;
 import org.jetbrains.annotations.NotNull;
 
 /**

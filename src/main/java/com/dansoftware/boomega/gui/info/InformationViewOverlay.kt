@@ -18,8 +18,8 @@
 
 package com.dansoftware.boomega.gui.info
 
-import com.dansoftware.boomega.gui.context.Context
-import com.dansoftware.boomega.gui.context.TitledOverlayBox
+import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.base.TitledOverlayBox
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView

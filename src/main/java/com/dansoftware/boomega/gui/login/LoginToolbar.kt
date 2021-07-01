@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.TwoSideToolBar
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity

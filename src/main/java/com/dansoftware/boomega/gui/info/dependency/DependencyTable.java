@@ -18,8 +18,7 @@
 
 package com.dansoftware.boomega.gui.info.dependency;
 
-import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.api.EmptyContext;
 import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import com.dansoftware.boomega.gui.info.dependency.meta.DependencyInfo;
 import com.dansoftware.boomega.gui.info.dependency.meta.LicenseInfo;
@@ -40,7 +39,7 @@ import java.util.List;
  * @link Daniel Gyorffy
  */
 public class DependencyTable extends TableView<DependencyInfo>
-        implements ContextTransformable {
+        implements EmptyContext {
 
     private static final Logger logger = LoggerFactory.getLogger(DependencyTable.class);
 
@@ -48,11 +47,6 @@ public class DependencyTable extends TableView<DependencyInfo>
         getColumns().add(new NameColumn());
         getColumns().add(new LicenseColumn());
         getItems().addAll(dependencies);
-    }
-
-    @Override
-    public @NotNull Context getContext() {
-        return Context.empty();
     }
 
     /**

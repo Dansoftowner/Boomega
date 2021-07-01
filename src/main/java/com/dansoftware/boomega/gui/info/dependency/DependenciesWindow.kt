@@ -29,7 +29,7 @@ import javafx.stage.Window
  * @author Daniel Gyorffy
  */
 class DependenciesWindow(dependencyTable: DependencyTable, owner: Window?) :
-    BaseWindow(I18N.getValue("window.dependencies.title"), dependencyTable, { dependencyTable.context }) {
+    BaseWindow<DependencyTable>(I18N.getValue("window.dependencies.title"), dependencyTable) {
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)

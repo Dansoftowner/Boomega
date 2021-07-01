@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.context;
+package com.dansoftware.boomega.gui.api;
 
 /**
  * A {@link NotifiableModule} represents a GUI module part of a {@link Context}.
@@ -25,6 +25,7 @@ package com.dansoftware.boomega.gui.context;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public interface NotifiableModule<D> {
     void commitData(D data);
 }

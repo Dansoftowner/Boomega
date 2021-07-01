@@ -19,19 +19,31 @@
 package com.dansoftware.boomega.gui.login.quick
 
 import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
-import javafx.stage.Modality
-import javafx.stage.Window
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.scene.control.Label
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 
-class QuickLoginWindow(content: QuickLoginView, db: DatabaseMeta, owner: Window? = null) :
-    BaseWindow<QuickLoginView>(I18N.getValue("window.login.quick.title", db), content) {
+class QuickLoginToolbar(private val databaseMeta: DatabaseMeta) : HBox() {
 
     init {
-        this.centerOnScreen()
-        this.initOwner(owner)
-        this.initModality(Modality.APPLICATION_MODAL)
-        this.height = 230.0
-        this.width = 460.0
+        styleClass.add("header-toolbar")
+        spacing = 10.0
+        buildUI()
     }
+
+    private fun buildUI() {
+        children.add(buildIcon())
+        children.add(buildLabel())
+    }
+
+    private fun buildIcon() =
+        MaterialDesignIconView(MaterialDesignIcon.LOGIN)
+
+    private fun buildLabel() =
+        Label("${I18N.getValue("login.quick.title")} - $databaseMeta").also {
+            setHgrow(it, Priority.ALWAYS)
+        }
 }

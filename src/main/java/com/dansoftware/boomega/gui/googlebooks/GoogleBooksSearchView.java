@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks;
 
-import com.dansoftware.boomega.gui.context.Context;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsOverlay;
 import com.dansoftware.boomega.util.concurrent.CachedExecutor;
 import javafx.scene.layout.Priority;

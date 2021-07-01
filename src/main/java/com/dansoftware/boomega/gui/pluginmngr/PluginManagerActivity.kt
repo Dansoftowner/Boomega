@@ -22,11 +22,8 @@ import com.dansoftware.boomega.plugin.PluginDirectory
 import javafx.stage.Window
 import java.io.File
 
-/**
- * For showing a [PluginManager] with a [PluginManagerWindow].
- *
- * @author Daniel Gyorffy
- */
+
+@Deprecated("")
 class PluginManagerActivity {
 
     fun show() = show(null)
@@ -36,6 +33,6 @@ class PluginManagerActivity {
     }
 
     fun show(ownerWindow: Window?, pluginFiles: List<File>?) {
-        PluginManagerWindow(ownerWindow, PluginManager(pluginFiles ?: emptyList())).show()
+       // PluginManagerWindow(ownerWindow, PluginManager(pluginFiles ?: emptyList())).show()
     }
 }

@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.dbcreator
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.db.NitriteDatabase
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.SpaceValidator
 import com.dansoftware.boomega.gui.util.WindowUtils

@@ -19,15 +19,15 @@
 package com.dansoftware.boomega.gui.login.quick
 
 import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.gui.context.ContextTransformable
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
 
-class QuickLoginActivity(private val databaseMeta: DatabaseMeta, loginListener: DatabaseLoginListener) :
-    ContextTransformable {
+class QuickLoginActivity(private val databaseMeta: DatabaseMeta, loginListener: DatabaseLoginListener) {
 
     private val quickLoginView: QuickLoginView = QuickLoginView(databaseMeta, loginListener)
 
-    fun show() = QuickLoginWindow(quickLoginView, databaseMeta).show()
+    val context: Context
+        get() = quickLoginView
 
-    override fun getContext() = quickLoginView.context
+    fun show() = QuickLoginWindow(quickLoginView, databaseMeta).show()
 }

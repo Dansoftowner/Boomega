@@ -18,11 +18,12 @@
 
 package com.dansoftware.boomega.gui.clipboard
 
+import com.dansoftware.boomega.gui.api.EmptyContext
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 
-class ClipboardView : VBox() {
+class ClipboardView : VBox(), EmptyContext {
 
     val table = buildTable()
     val toolbar = ClipboardViewToolbar(this)

@@ -19,9 +19,10 @@
 package com.dansoftware.boomega.gui.clipboard
 
 import com.dansoftware.boomega.gui.window.BaseWindow
+import com.dansoftware.boomega.i18n.I18N
 import javafx.stage.Window
 
-class ClipboardWindow(owner: Window?, view: ClipboardView) : BaseWindow("window.clipboard.title", view, { null }) {
+class ClipboardWindow(owner: Window?, view: ClipboardView) : BaseWindow<ClipboardView>(I18N.getValue("window.clipboard.title"), view) {
     init {
         width = 1200.0
         initOwner(owner)

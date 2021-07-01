@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.info.contact
 
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 
 class ContactActivity(private val context: Context) {
     fun show() {

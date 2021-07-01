@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.context;
+package com.dansoftware.boomega.gui.api;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public interface ContextTransformable {
     @NotNull Context getContext();
 }

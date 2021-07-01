@@ -19,15 +19,15 @@
 package com.dansoftware.boomega.gui.dbmanager;
 
 import com.dansoftware.boomega.db.DatabaseMeta;
-import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.base.BaseView;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.i18n.I18N;
-import com.dlsc.workbenchfx.SimpleHeaderView;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.StringExpression;
+import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,9 +40,9 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> implements ContextTransformable {
+public class DatabaseManagerView extends BaseView {
 
-    private final Context asContext;
+    private final DatabaseManagerTable table;
 
     /**
      * Creates a {@link DatabaseManagerView} with a list of database-information ({@link DatabaseMeta}) objects.
@@ -50,34 +50,28 @@ public class DatabaseManagerView extends SimpleHeaderView<DatabaseManagerTable> 
      * @param databaseTracker the database-tracker
      */
     public DatabaseManagerView(@NotNull DatabaseTracker databaseTracker) {
-        super(I18N.getValue("database.manager.title"), new MaterialDesignIconView(MaterialDesignIcon.DATABASE));
-        this.asContext = Context.from(this);
-        this.setContent(new DatabaseManagerTable(asContext, databaseTracker));
-        this.createToolbarControls();
+        this.table = new DatabaseManagerTable(this, databaseTracker);
+        buildUI();
     }
 
-    private void createToolbarControls() {
-        //Toolbar item that shows how many items are selected from the table
-        DatabaseManagerTable table = getContent();
-        var selectedItemsIndicator = new ToolbarItem();
-        StringExpression allItemsSlashSelected = table.itemsCount().asString()
-                .concat("/")
-                .concat(table.selectedItemsCount())
-                .concat(StringUtils.SPACE)
-                .concat(I18N.getValue("database.manager.selected"));
-        selectedItemsIndicator.textProperty().bind(allItemsSlashSelected);
-        this.getToolbarControlsRight().add(selectedItemsIndicator);
-
-        //Toolbar item that can refresh the table
-        this.getToolbarControlsRight().add(new ToolbarItem(new MaterialDesignIconView(MaterialDesignIcon.RELOAD), event -> {
-            ToolbarItem source = (ToolbarItem) event.getSource();
-            this.getContent().refresh();
-            new animatefx.animation.RotateIn(source.getGraphic()).play();
-        }));
+    private void buildUI() {
+        this.setContent(
+                new VBox(
+                        new DatabaseManagerToolbar(this),
+                        table
+                )
+        );
     }
 
-    @Override
-    public @NotNull Context getContext() {
-        return asContext;
+    public void refresh() {
+        table.refresh();
+    }
+
+    public IntegerBinding tableItemsCount() {
+        return table.itemsCount();
+    }
+
+    public IntegerBinding selectedTableItemsCount() {
+        return table.selectedItemsCount();
     }
 }

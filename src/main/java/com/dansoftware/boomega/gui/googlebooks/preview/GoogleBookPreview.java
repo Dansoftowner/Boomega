@@ -1,7 +1,6 @@
 package com.dansoftware.boomega.gui.googlebooks.preview;
 
-import com.dansoftware.boomega.gui.context.Context;
-import com.dansoftware.boomega.gui.context.ContextTransformable;
+import com.dansoftware.boomega.gui.api.EmptyContext;
 import com.dansoftware.boomega.service.googlebooks.Volume;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -15,7 +14,7 @@ import java.util.Objects;
  *
  * @author Daniel Gyorffy
  */
-public class GoogleBookPreview extends StackPane implements ContextTransformable {
+public class GoogleBookPreview extends StackPane implements EmptyContext {
 
     private final Volume volume;
 
@@ -44,10 +43,5 @@ public class GoogleBookPreview extends StackPane implements ContextTransformable
         this.getChildren().clear();
         this.webView = null;
         this.webEngine = null;
-    }
-
-    @Override
-    public @NotNull Context getContext() {
-        return Context.empty();
     }
 }

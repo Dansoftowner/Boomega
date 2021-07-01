@@ -2,7 +2,7 @@ package com.dansoftware.boomega.gui.recordview.edit
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl
 import com.dansoftware.boomega.gui.control.formsfx.SimpleRatingControl
 import com.dansoftware.boomega.gui.recordview.RecordValues

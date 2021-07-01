@@ -29,7 +29,7 @@ import javafx.stage.Window
  * @author Daniel Gyorffy
  */
 class ImageViewerWindow(owner: Window?, content: ImageViewer) :
-    BaseWindow(I18N.getValue("window.image.viewer"), content, { content.context }) {
+    BaseWindow<ImageViewer>(I18N.getValue("window.image.viewer"), content) {
 
     init {
         initOwner(owner)

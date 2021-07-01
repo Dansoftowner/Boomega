@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.googlebooks
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.I18N
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon

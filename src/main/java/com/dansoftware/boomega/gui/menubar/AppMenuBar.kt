@@ -23,7 +23,7 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.action.MenuItems
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.theme.Theme
@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
 import java.util.*
 
-class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) :
+class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) :
     javafx.scene.control.MenuBar() {
 
     private lateinit var overlayNotShowing: BooleanBinding
@@ -58,13 +58,13 @@ class AppMenuBar(context: Context, databaseView: DatabaseView, preferences: Pref
     init {
         initDisablePolicy(databaseView)
         this.menus.addAll(
-            FileMenu(context, databaseView.openedDatabase, preferences, tracker),
+            FileMenu(databaseView, databaseView.openedDatabase, preferences, tracker),
             ModuleMenu(databaseView),
-            PreferencesMenu(context, preferences, tracker),
-            ClipboardMenu(context, preferences, tracker),
-            WindowMenu(context, preferences, tracker),
-            PluginMenu(context, preferences, tracker),
-            HelpMenu(context, preferences, tracker)
+            PreferencesMenu(databaseView, preferences, tracker),
+            ClipboardMenu(databaseView, preferences, tracker),
+            WindowMenu(databaseView, preferences, tracker),
+            PluginMenu(databaseView, preferences, tracker),
+            HelpMenu(databaseView, preferences, tracker)
         )
     }
 

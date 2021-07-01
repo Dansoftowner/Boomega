@@ -2,7 +2,7 @@ package com.dansoftware.boomega.gui.recordview.edit
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.SystemBrowser
 import com.dansoftware.mdeditor.MarkdownEditorControl

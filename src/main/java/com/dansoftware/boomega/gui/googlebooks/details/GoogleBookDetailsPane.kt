@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks.details
 
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.control.ReadOnlyRating

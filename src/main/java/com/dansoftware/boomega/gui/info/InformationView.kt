@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.info
 
-import com.dansoftware.boomega.gui.context.Context
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.info.dependency.DependencyViewerActivity
 import com.dansoftware.boomega.i18n.I18N
