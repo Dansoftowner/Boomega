@@ -27,8 +27,8 @@ import javafx.scene.layout.Priority
 
 open class TwoSideToolBar : HBox() {
 
-    private val leftToolBar: ToolBar = buildLeftToolBar()
-    private val rightToolBar: ToolBar = buildRightToolBar()
+    val leftToolBar: ToolBar = buildLeftToolBar()
+    val rightToolBar: ToolBar = buildRightToolBar()
 
     val leftItems: ObservableList<Node>
         get() = leftToolBar.items

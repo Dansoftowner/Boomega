@@ -34,6 +34,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.concurrent.Task
+import javafx.geometry.Insets
 import javafx.scene.control.*
 
 /**
@@ -42,6 +43,7 @@ import javafx.scene.control.*
 class LoginToolbar(private val context: Context, private val preferences: Preferences) : TwoSideToolBar() {
 
     init {
+        leftToolBar.padding = Insets(0.0, 0.0, 0.0, 10.0)
         buildUI()
     }
 
