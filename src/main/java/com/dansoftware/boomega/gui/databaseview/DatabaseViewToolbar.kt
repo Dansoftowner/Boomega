@@ -23,14 +23,13 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.control.TwoSideToolBar
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.util.revealInExplorer
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.geometry.Orientation
 import javafx.scene.Group
-import javafx.scene.control.Button
-import javafx.scene.control.ContentDisplay
-import javafx.scene.control.Label
-import javafx.scene.control.Separator
+import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 
@@ -49,6 +48,8 @@ class DatabaseViewToolbar(
         leftItems.add(buildHomeButton())
         leftItems.add(buildSeparator())
         leftItems.add(buildDatabaseNameControl())
+        rightItems.add(buildFileOpenerButton())
+        rightItems.add(buildSeparator())
         rightItems.add(buildCloseButton())
     }
 
@@ -77,6 +78,7 @@ class DatabaseViewToolbar(
     private fun buildCloseButton() = Button().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
         graphic = MaterialDesignIconView(MaterialDesignIcon.LOGOUT)
+        tooltip = Tooltip(I18N.getValue("menubar.menu.file.dbclose"))
         setOnAction {
             preferences.editor()
                 .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
@@ -85,6 +87,15 @@ class DatabaseViewToolbar(
                 }).tryCommit()
             view.close()
             GlobalActions.NEW_ENTRY.invoke(view, preferences, databaseTracker)
+        }
+    }
+
+    private fun buildFileOpenerButton() = Button().apply {
+        contentDisplay = ContentDisplay.GRAPHIC_ONLY
+        graphic = MaterialDesignIconView(MaterialDesignIcon.FOLDER_OPEN)
+        tooltip = Tooltip(I18N.getValue("menubar.menu.file.reveal"))
+        setOnAction {
+            view.openedDatabase.file.revealInExplorer()
         }
     }
 }
