@@ -82,8 +82,10 @@ class DatabaseViewToolbar(
         setOnAction {
             preferences.editor()
                 .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
-                    isAutoLogin = false
-                    autoLoginCredentials = null
+                    if (autoLoginDatabase.equals(view.openedDatabase)) {
+                        isAutoLogin = false
+                        autoLoginCredentials = null
+                    }
                 }).tryCommit()
             view.close()
             GlobalActions.NEW_ENTRY.invoke(view, preferences, databaseTracker)
