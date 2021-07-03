@@ -23,9 +23,10 @@ import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.api.NotifiableModule
+import com.dansoftware.boomega.gui.databaseview.Module
 import com.dansoftware.boomega.i18n.I18N
-import com.dlsc.workbenchfx.model.WorkbenchModule
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
@@ -34,15 +35,22 @@ class RecordsViewModule(
     private val context: Context,
     private val preferences: Preferences,
     private val database: Database
-) : WorkbenchModule(I18N.getValue("record.book.view.module.name"), MaterialDesignIcon.LIBRARY),
+) : Module,
     NotifiableModule<RecordsViewModule.Message?> {
+
+    override val name: String
+        get() = I18N.getValue("record.book.view.module.name")
+    override val icon: Node
+        get() = MaterialDesignIconView(MaterialDesignIcon.LIBRARY)
+    override val id: String
+        get() = "records-view-module"
 
     private val content: ObjectProperty<RecordsView> = SimpleObjectProperty()
 
     override fun activate(): Node =
         content.get() ?: RecordsView(context, database, preferences).also(content::set)
 
-    override fun destroy(): Boolean = true.also {
+    override fun close(): Boolean = true.also {
         content.get()?.writeConfig()
         content.set(null)
     }

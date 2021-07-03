@@ -58,7 +58,7 @@ class DatabaseViewToolbar(
         graphic = MaterialDesignIconView(MaterialDesignIcon.HOME)
         // TODO: tooltip
         setOnAction {
-            // TODO
+            view.openModuleTab()
         }
     }
 

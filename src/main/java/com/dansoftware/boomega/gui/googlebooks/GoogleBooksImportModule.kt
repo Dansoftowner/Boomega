@@ -20,9 +20,11 @@ package com.dansoftware.boomega.gui.googlebooks
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.databaseview.Module
 import com.dansoftware.boomega.i18n.I18N
 import com.dlsc.workbenchfx.model.WorkbenchModule
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
@@ -37,7 +39,14 @@ import javafx.scene.Node
 class GoogleBooksImportModule(
     private val context: Context,
     private val preferences: Preferences
-) : WorkbenchModule(I18N.getValue("google.books.import.module.title"), MaterialDesignIcon.GOOGLE) {
+) : Module {
+
+    override val name: String
+        get() = I18N.getValue("google.books.import.module.title")
+    override val icon: Node
+        get() = MaterialDesignIconView(MaterialDesignIcon.GOOGLE)
+    override val id: String
+        get() = "google-books-import"
 
     private val content: ObjectProperty<GoogleBooksImportView> = SimpleObjectProperty()
 
@@ -47,7 +56,7 @@ class GoogleBooksImportModule(
         return content.get()
     }
 
-    override fun destroy(): Boolean {
+    override fun close(): Boolean {
         content.get().writeConfig()
         content.set(null)
         return true
