@@ -323,7 +323,7 @@
 }
 
 .overlay-box {
-    -fx-effect: -drop-shadow-3;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.26), 20, 0.19, -1, 6);
 }
 
 .overlay-box .title-bar {
@@ -652,9 +652,53 @@
  *                                                                             *
  ******************************************************************************/
 
+.database-view {
+    -fx-font-size: 14px;
+}
+
 .database-view-toolbar {
     -fx-border-width: 1 0 1 0;
     -fx-pref-height: 25;
+    -fx-font-size: 12px;
+}
+
+.database-view .tab-view > .tab-pane {
+    -fx-tab-min-height: 2.4em;
+    -fx-tab-max-height: 2.4em;
+}
+
+.database-view .tab-view > .tab-pane > .tab-header-area  {
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em 0.166667em 0.0em 0.3em;
+}
+
+.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region  {
+    -fx-padding: 4 5 5 4;
+}
+
+.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-padding: 0.083333em 0.8em 0.0769em 0.8em;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-background-color: transparent;
+}
+
+.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-padding: 0 5 0 0;
+}
+
+.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab .tab-close-button {
+    -fx-opacity: 0.65;
+}
+
+.tile {
+    -fx-padding: 1em;
+    -fx-pref-width: 13.5em;
+    -fx-pref-height: 8.3434588481230382312016806204436em;
+}
+
+.tile .glyph-icon {
+    -fx-font-size: 20 !important;
 }
 
 /*******************************************************************************
