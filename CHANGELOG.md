@@ -4,8 +4,9 @@
 
 ### Enhancements/features:
 
-* [#147](https://github.com/Dansoftowner/Boomega/issues/147): Global toolbar in database view
 * New UI styles
+* [#147](https://github.com/Dansoftowner/Boomega/issues/147): Global toolbar in database view
+* Showing dialogs for uncaught exceptions  
 
 ### Bug fixes/improvements
 
