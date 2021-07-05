@@ -18,27 +18,13 @@
 
 package com.dansoftware.boomega.exception
 
-import javafx.application.Platform
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import java.lang.IllegalStateException
+import com.dansoftware.boomega.i18n.I18N
+import org.controlsfx.dialog.ExceptionDialog
 
-class UncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
-    companion object {
-        private val logger: Logger = LoggerFactory.getLogger(UncaughtExceptionHandler::class.java)
-    }
-
-    override fun uncaughtException(t: Thread, e: Throwable) {
-        logger.error("Uncaught exception occurred", e)
-        showGuiMessage(e)
-    }
-
-    private fun showGuiMessage(e: Throwable) {
-        try {
-            Platform.runLater {
-                UncaughtExceptionDialog(e).show()
-            }
-        } catch (ignored: IllegalStateException) {
-        }
+class UncaughtExceptionDialog(e: Throwable) : ExceptionDialog(e) {
+    init {
+        title = I18N.getValue("dialog.uncaught.title")
+        headerText = I18N.getValue("dialog.uncaught.header_text")
+        contentText = I18N.getValue("dialog.uncaught.content_text")
     }
 }
