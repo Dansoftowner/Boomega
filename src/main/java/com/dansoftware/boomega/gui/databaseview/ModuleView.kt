@@ -21,25 +21,44 @@ package com.dansoftware.boomega.gui.databaseview
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
+import javafx.css.PseudoClass
 import javafx.scene.Group
 import javafx.scene.Node
+import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
+import javafx.scene.control.Pagination
 import javafx.scene.layout.GridPane
+import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * The [ModuleView] is a panel that allows the user to open the basic modules.
  *
  * @see Module
  */
-class ModuleView(
-    private val view: DatabaseView
-) : StackPane() {
+class ModuleView(private val view: DatabaseView) : StackPane() {
 
     init {
         buildUI()
+        playAnimation()
+    }
+
+    private fun playAnimation() {
+        sceneProperty().addListener(object : ChangeListener<Scene?> {
+            override fun changed(observable: ObservableValue<out Scene?>, oldValue: Scene?, newValue: Scene?) {
+                newValue?.let {
+                    logger.debug("Scene detected!")
+                    animatefx.animation.FadeInUp(this@ModuleView).play()
+                    observable.removeListener(this)
+                }
+            }
+        })
     }
 
     private fun buildUI() {
@@ -49,17 +68,35 @@ class ModuleView(
     private fun buildCenterBox() = Group(
         VBox(
             10.0,
-            buildGridPane()
+            buildPagination()
         )
     )
 
-    private fun buildGridPane() = GridPane().apply {
-        hgap = 10.0
-        vgap = 10.0
+    private fun buildPagination() = Pagination().apply {
+        VBox.setVgrow(this, Priority.ALWAYS)
+        styleClass.add(Pagination.STYLE_CLASS_BULLET)
+        styleClass.add("tile-pagination")
+        pageCountProperty().addListener { _, _, count ->
+            // adding the "one-page" pseudo-class if the pagination has only one page
+            pseudoClassStateChanged(PseudoClass.getPseudoClass("one-page"), count == 1)
+        }
+        val gridPanes = buildGridPanes()
+        pageCount = gridPanes.size
+        setPageFactory { gridPanes[it] }
+    }
+
+    private fun buildGridPanes(): List<GridPane> =
         buildTiles()
             .chunked(TILES_PER_ROW)
-            .forEach { addRow(rowCount, *it.toTypedArray()) }
-    }
+            .chunked(ROWS_PER_PAGE)
+            .map { rowsPerGrid ->
+                GridPane().apply {
+                    styleClass.add("tile-grid")
+                    rowsPerGrid.forEach {
+                        addRow(rowCount, *it.toTypedArray())
+                    }
+                }
+            }
 
     private fun buildTiles(): List<Node> = view.modules.map(this::buildTile)
 
@@ -73,13 +110,19 @@ class ModuleView(
 
     companion object {
 
+        private val logger: Logger = LoggerFactory.getLogger(ModuleView::class.java)
+
         private const val TILES_PER_ROW = 3
+        private const val ROWS_PER_PAGE = 3
 
         /**
          * Gives a [TabItem] that can show a [ModuleView]
          */
         fun asTabItem(context: DatabaseView) =
-            TabItem("moduleview", I18N.getValue("database_view.tab.modules"), { MaterialDesignIconView(MaterialDesignIcon.HOME) }) {
+            TabItem(
+                "moduleview",
+                I18N.getValue("database_view.tab.modules"),
+                { MaterialDesignIconView(MaterialDesignIcon.HOME) }) {
                 ModuleView(context)
             }
     }
