@@ -30,12 +30,14 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class RecordsViewModule(
     private val context: Context,
     private val preferences: Preferences,
     private val database: Database
-) : Module,
+) : Module(),
     NotifiableModule<RecordsViewModule.Message?> {
 
     override val name: String
@@ -47,10 +49,11 @@ class RecordsViewModule(
 
     private val content: ObjectProperty<RecordsView> = SimpleObjectProperty()
 
-    override fun activate(): Node =
+    override fun buildContent(): Node =
         content.get() ?: RecordsView(context, database, preferences).also(content::set)
 
-    override fun close(): Boolean = true.also {
+    override fun destroy(): Boolean = true.also {
+        logger.debug("Module closed. Writing configurations...")
         content.get()?.writeConfig()
         content.set(null)
     }
@@ -67,6 +70,10 @@ class RecordsViewModule(
                 }
             }
         }
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(RecordsViewModule::class.java)
     }
 
     interface Message

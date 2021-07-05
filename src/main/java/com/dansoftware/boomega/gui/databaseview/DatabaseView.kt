@@ -24,6 +24,9 @@ import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksImportModule
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
+import javafx.stage.WindowEvent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class DatabaseView(
     private val preferences: Preferences,
@@ -39,6 +42,7 @@ class DatabaseView(
     init {
         styleClass.add("database-view")
         content = DatabaseViewBase(this, preferences, databaseTracker)
+        initSafetyModuleClosePolicy()
     }
 
     fun openTab(tabItem: TabItem) {
@@ -53,11 +57,48 @@ class DatabaseView(
         openTab(module.asTabItem())
     }
 
+    private fun initSafetyModuleClosePolicy() {
+        val shutdownHook = ShutdownHook()
+        Runtime.getRuntime().addShutdownHook(shutdownHook)
+        onWindowPresent {
+            logger.debug("Window found! Adding event handler for WINDOW_HIDDEN event.")
+            it.addEventHandler(WindowEvent.WINDOW_HIDDEN) {
+                logger.debug("Closing modules forcefully...")
+                closeModulesForcefully()
+                Runtime.getRuntime().removeShutdownHook(shutdownHook)
+            }
+        }
+    }
+
+    private fun closeModulesForcefully() {
+        modules.filter(Module::isOpened).forEach {
+            try {
+                it.close()
+            } catch (e: Exception) {
+                logger.error("Received exception when trying to close the module with the id: '{}'", it.id, e)
+            }
+        }
+    }
+
     private fun listModules(): List<Module> {
         //TODO: plugin modules
         return listOf(
             RecordsViewModule(this, preferences, database),
             GoogleBooksImportModule(this, preferences)
         )
+    }
+
+    private inner class ShutdownHook : Thread() {
+        override fun run() {
+            logger.debug("Shutdown hook: closing modules forcefully...")
+            closeModulesForcefully()
+
+            // make sure that preferences are committed
+            preferences.editor().commit()
+        }
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(DatabaseView::class.java)
     }
 }

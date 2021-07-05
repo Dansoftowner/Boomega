@@ -23,12 +23,53 @@ import javafx.scene.Node
 /**
  * Represents a module that can be displayed in the [DatabaseView]'s tab-view.
  */
-interface Module {
+abstract class Module {
 
-    val name: String
-    val icon: Node
-    val id: String
+    abstract val name: String
+    abstract val icon: Node
+    abstract val id: String
 
-    fun activate(): Node
-    fun close(): Boolean
+    /**
+     * Returns true if the module is opened.
+     */
+    var isOpened: Boolean = false
+        private set
+
+    /**
+     * Gets called when the modules is not opened yet and updates the [isOpened] value.
+     *
+     * @return the content to be displayed
+     */
+    fun activate(): Node =
+        buildContent().also {
+            isOpened = true
+        }
+
+    /**
+     * Gets called when the module receives a close-request.
+     *
+     * @return **true** if the module should be closed; **false** if the module should not be closed
+     */
+    fun close(): Boolean =
+        destroy().also {
+            isOpened = !it
+        }
+
+    /**
+     * Gets called when the module is not opened yet.
+     *
+     * _Note: It does not update the [isOpened] value. Should be only used by sub-classes!_
+     *
+     * @return the content do be displayed
+     */
+    protected abstract fun buildContent(): Node
+
+    /**
+     * Gets called when the module receives a close-request
+     *
+     * _Note: It does not update the [isOpened] value. Should be only used by sub-classes!_
+     *
+     * @return **true** if the module should be closed, **false** if the module should not be closed
+     */
+    protected abstract fun destroy(): Boolean
 }
