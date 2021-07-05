@@ -5,7 +5,7 @@
 ### Enhancements/features:
 
 * [#147](https://github.com/Dansoftowner/Boomega/issues/147): Global toolbar in database view
-* :lipstick: Updated UI styles
+* :lipstick: Updated look and feel
 * :sparkles: Showing dialogs for uncaught exceptions
 
 ### Bug fixes/improvements
