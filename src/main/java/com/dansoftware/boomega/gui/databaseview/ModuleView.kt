@@ -29,11 +29,9 @@ import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
+import javafx.scene.control.Label
 import javafx.scene.control.Pagination
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.Priority
-import javafx.scene.layout.StackPane
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -45,11 +43,13 @@ import org.slf4j.LoggerFactory
 class ModuleView(private val view: DatabaseView) : StackPane() {
 
     init {
+        styleClass.add("module-view")
         buildUI()
         playAnimation()
     }
 
     private fun playAnimation() {
+        // we play the animation after the view put into a scene
         sceneProperty().addListener(object : ChangeListener<Scene?> {
             override fun changed(observable: ObservableValue<out Scene?>, oldValue: Scene?, newValue: Scene?) {
                 newValue?.let {
@@ -66,11 +66,22 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
     }
 
     private fun buildCenterBox() = Group(
-        VBox(
-            10.0,
+        VBox(20.0,
+            buildLabelArea(),
             buildPagination()
         )
     )
+
+    private fun buildLabelArea() =
+        StackPane(
+            Group(
+                HBox(10.0).apply {
+                    styleClass.add("label-area")
+                    children.add(StackPane(MaterialDesignIconView(MaterialDesignIcon.VIEW_MODULE)))
+                    children.add(StackPane(Label(I18N.getValue("database_view.modules"))))
+                }
+            )
+        )
 
     private fun buildPagination() = Pagination().apply {
         VBox.setVgrow(this, Priority.ALWAYS)
@@ -98,7 +109,8 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
                 }
             }
 
-    private fun buildTiles(): List<Node> = view.modules.map(this::buildTile)
+    private fun buildTiles(): List<Node> =
+        view.modules.map(this::buildTile)
 
     private fun buildTile(module: Module) =
         Button(module.name, module.icon).apply {
@@ -121,8 +133,8 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
         fun asTabItem(context: DatabaseView) =
             TabItem(
                 "moduleview",
-                I18N.getValue("database_view.tab.modules"),
-                { MaterialDesignIconView(MaterialDesignIcon.HOME) }) {
+                I18N.getValue("database_view.modules"),
+                { MaterialDesignIconView(MaterialDesignIcon.VIEW_MODULE) }) {
                 ModuleView(context)
             }
     }
