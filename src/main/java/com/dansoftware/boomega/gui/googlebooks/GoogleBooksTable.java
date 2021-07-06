@@ -543,7 +543,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
                 }
 
                 private Node buildGraphic(int rating, int ratingsCount) {
-                    Rating ratingGraphic = new ReadOnlyRating(5, rating);
+                    var ratingGraphic = new ReadOnlyRating(5, rating);
                     return new Group(new VBox(3, ratingGraphic, new StackPane(new Label("(" + ratingsCount + ")"))));
                 }
             };

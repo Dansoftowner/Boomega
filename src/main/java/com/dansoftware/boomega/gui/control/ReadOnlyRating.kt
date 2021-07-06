@@ -18,11 +18,43 @@
 
 package com.dansoftware.boomega.gui.control
 
-import javafx.scene.input.MouseEvent
-import org.controlsfx.control.Rating
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import javafx.beans.property.IntegerProperty
+import javafx.beans.property.SimpleIntegerProperty
+import javafx.scene.text.Font
+import javafx.scene.text.Text
 
-class ReadOnlyRating(max: Int, value: Int) : Rating(max, value) {
+class ReadOnlyRating(max: Int, value: Int) : Text() {
+
+    private val maxProperty: IntegerProperty = object : SimpleIntegerProperty(max) {
+        override fun invalidated() {
+            update()
+        }
+    }
+
+    private val ratingProperty: IntegerProperty = object : SimpleIntegerProperty(value) {
+        override fun invalidated() {
+            update()
+        }
+    }
+
     init {
-        this.addEventFilter(MouseEvent.MOUSE_CLICKED) { it.consume() }
+        require(max >= value)
+        styleClass.add("read-only-rating")
+        style = "-fx-font-family: 'Material Design Icons' !important;"
+        update()
+    }
+
+    private fun update() {
+        text = MaterialDesignIcon.STAR.unicode().repeat(ratingProperty.value) +
+                MaterialDesignIcon.STAR_OUTLINE.unicode().repeat(maxProperty.value - ratingProperty.value)
+    }
+
+    fun maxProperty(): IntegerProperty {
+        return maxProperty
+    }
+
+    fun ratingProperty(): IntegerProperty {
+        return ratingProperty
     }
 }

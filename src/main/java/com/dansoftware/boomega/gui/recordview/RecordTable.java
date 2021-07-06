@@ -417,8 +417,6 @@ public class RecordTable extends BaseTable<Record> {
         RankColumn() {
             super(RANK_COLUMN);
             setCellFactory(this);
-            setMinWidth(250);
-            setMaxWidth(250);
         }
 
         @Override
@@ -430,12 +428,12 @@ public class RecordTable extends BaseTable<Record> {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        Rating graphic = buildGraphic(Optional.ofNullable(item.getRating()).orElse(0));
+                        ReadOnlyRating graphic = buildGraphic(Optional.ofNullable(item.getRating()).orElse(0));
                         setGraphic(graphic);
                     }
                 }
 
-                private Rating buildGraphic(int rating) {
+                private ReadOnlyRating buildGraphic(int rating) {
                     return new ReadOnlyRating(5, rating);
                 }
             };
