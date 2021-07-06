@@ -38,7 +38,10 @@ class UncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
             Platform.runLater {
                 UncaughtExceptionDialog(e).show()
             }
-        } catch (ignored: IllegalStateException) {
+        } catch (illegalStateException: IllegalStateException) {
+            Platform.startup {
+                UncaughtExceptionDialog(e).show()
+            }
         }
     }
 }
