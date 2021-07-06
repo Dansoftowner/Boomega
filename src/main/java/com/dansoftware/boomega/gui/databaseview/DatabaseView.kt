@@ -50,11 +50,11 @@ class DatabaseView(
     }
 
     fun openModuleTab() {
-        (content as DatabaseViewBase).openModuleTab()
+        openTab(ModuleView.getTabItem(this))
     }
 
     fun openModule(module: Module) {
-        openTab(module.asTabItem())
+        openTab(module.getTabItem())
     }
 
     private fun initSafetyModuleClosePolicy() {

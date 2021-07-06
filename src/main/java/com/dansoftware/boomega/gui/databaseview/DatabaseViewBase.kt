@@ -32,7 +32,7 @@ class DatabaseViewBase(
 ) : VBox() {
 
     private val toolbar = DatabaseViewToolbar(view, preferences, databaseTracker)
-    private val tabView = TabView(view)
+    private val tabView = TabView(ModuleView.getTabItem(view))
 
     init {
         buildUI()
@@ -44,6 +44,4 @@ class DatabaseViewBase(
     }
 
     fun openTab(tabItem: TabItem) = tabView.openTab(tabItem)
-
-    fun openModuleTab() = tabView.openModuleTab()
 }

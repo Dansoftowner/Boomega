@@ -30,11 +30,12 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * The [TabView] is the tab-area in the [DatabaseView].
- * Allows to open tabs represented as [TabItem]s, and also allows the user to
- * access the [ModuleView].
+ * The [TabView] is a tab-area used by the [DatabaseView].
+ * Allows to open tabs represented as [TabItem]s.
+ *
+ * @param baseTabItem the tab item that will be shown initially and if other tabs are closed
  */
-class TabView(private val context: DatabaseView) : StackPane() {
+class TabView(private val baseTabItem: TabItem) : StackPane() {
 
     private val idsWithItems: MutableMap<String, TabItem> = HashMap()
     private val tabPane: TabPane = buildTabPane()
@@ -56,16 +57,12 @@ class TabView(private val context: DatabaseView) : StackPane() {
     }
 
     private fun initModuleTab() {
-        openModuleTab()
+        openTab(baseTabItem)
         tabPane.tabs.addListener(ListChangeListener {
             if (tabPane.tabs.isEmpty()) {
-                openModuleTab()
+                openTab(baseTabItem)
             }
         })
-    }
-
-    fun openModuleTab() {
-        openTab(ModuleView.asTabItem(context))
     }
 
     fun openTab(item: TabItem) {

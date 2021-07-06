@@ -21,5 +21,5 @@ package com.dansoftware.boomega.gui.databaseview
 /**
  * Gives a [TabItem] that represents the [Module]
  */
-internal fun Module.asTabItem() =
+internal fun Module.getTabItem() =
     TabItem(this.id, this.name, { this.icon }, { this.activate() }) { this.close() }

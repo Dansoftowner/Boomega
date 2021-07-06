@@ -117,7 +117,7 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
             contentDisplay = ContentDisplay.TOP
             styleClass.add("tile")
             id = "tile-${module.id}"
-            setOnAction { view.openTab(module.asTabItem()) }
+            setOnAction { view.openTab(module.getTabItem()) }
         }
 
     companion object {
@@ -130,7 +130,7 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
         /**
          * Gives a [TabItem] that can show a [ModuleView]
          */
-        fun asTabItem(context: DatabaseView) =
+        fun getTabItem(context: DatabaseView) =
             TabItem(
                 "moduleview",
                 I18N.getValue("database_view.modules"),
