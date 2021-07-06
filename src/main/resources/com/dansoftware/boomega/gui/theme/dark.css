@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import url("base.css");
+@import "base.css";
 
 /*******************************************************************************
  *                                                                             *
@@ -40,7 +40,7 @@
 
 /*******************************************************************************
  *                                                                             *
- *                              FontAwesome icons                              *
+ *                                  Glyph icons                                *
  *                                                                             *
  ******************************************************************************/
 
@@ -57,6 +57,10 @@
 }
 
 .context-menu .menu-item .glyph-icon {
+    -fx-fill: white;
+}
+
+.read-only-rating {
     -fx-fill: white;
 }
 
