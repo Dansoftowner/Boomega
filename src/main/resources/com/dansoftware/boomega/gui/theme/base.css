@@ -691,6 +691,19 @@
     -fx-opacity: 0.65;
 }
 
+.database-view .tab-view .module-view .label-area {
+    -fx-opacity: .6;
+}
+
+.database-view .tab-view .module-view .label-area .label {
+    -fx-font-family: "JetBrains Mono";
+    -fx-font-size: 40;
+}
+
+.database-view .tab-view .module-view .label-area .glyph-icon {
+    -fx-font-size: 80 !important;
+}
+
 .tile-pagination {
     -fx-padding: 0 0 4em 0;
     -fx-arrows-visible: false;
