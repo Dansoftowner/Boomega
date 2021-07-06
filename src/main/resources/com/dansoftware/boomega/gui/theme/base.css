@@ -183,44 +183,9 @@
 
 /*******************************************************************************
  *                                                                             *
- *                                  WorkbenchFX                                *
+ *                                  Base View                                  *
  *                                                                             *
  ******************************************************************************/
-
-#add-button {
-    -fx-background-radius: 5 5 0 0;
-    -fx-border-radius: 5 5 0 0;
-}
-
-#add-button:focused {
-    -fx-border-color: transparent;
-    -fx-border-style: solid;
-}
-
-#add-button:focused:hover {
-    -fx-border-width: 2px;
-}
-
-.tile-box {
-    -fx-border-color: transparent;
-    -fx-border-width: 2;
-    -fx-background-insets: 0;
-    -fx-cursor: NORMAL;
-}
-
-.tab-control {
-    -fx-background-radius: 0px;
-    -fx-border-radius: 0px;
-    -fx-border-width: 2 0 0 0;
-}
-
-.tab-control:selected, .tab-control:selected:hover {
-    -fx-border-color: rgb(0, 120, 215);
-}
-
-.tab-box .button:hover, .tab-box .button:focused {
-    -fx-border-color: transparent;
-}
 
 .overlay-box {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.26), 20, 0.19, -1, 6);

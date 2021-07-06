@@ -83,11 +83,12 @@
 
 /*******************************************************************************
  *                                                                             *
- *                                  WorkbenchFX                                *
+ *                                  Base View                                  *
  *                                                                             *
  ******************************************************************************/
 
 * {
+    /* WorkbenchFX styles */
     -primary-color: #e5e5e5;
     -primary-variant-color: #9f9f9f;
     -secondary-color: #6300ff;
@@ -100,32 +101,6 @@
     -on-background-color: #000000;
     -on-surface-color: #000000;
     -on-error-color: #FFFFFF;
-}
-
-#add-button:focused:hover {
-    -fx-border-color: gray;
-}
-
-.tile-box {
-    -fx-background-color: #e3e3e3;
-    -fx-effect: null;
-}
-
-.tile-box:hover {
-    -fx-border-color: #7a7a7a;
-}
-
-.tile-box:pressed {
-    -fx-border-color: #999999;
-    -fx-background-color: #999999;
-}
-
-.tab-control:hover {
-    -fx-background-color: #cfcfcf;
-}
-
-.tab-control:selected, .tab-control:selected:hover {
-    -fx-background-color: #f2f3f2;
 }
 
 .overlay-box .title-bar {
