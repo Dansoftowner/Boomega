@@ -7,6 +7,7 @@
 * [#147](https://github.com/Dansoftowner/Boomega/issues/147): Global toolbar in database view
 * :lipstick: Updated look and feel
 * :sparkles: Showing dialogs for uncaught exceptions
+* :sparkles: Google Book Preview can be displayed in a new tab
 
 ### Bug fixes/improvements
 
