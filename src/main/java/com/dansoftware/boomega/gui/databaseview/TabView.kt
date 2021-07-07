@@ -74,7 +74,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
             idsWithItems[item.id] = item
             makeTab(item) {
                 idsWithItems.remove(item.id)
-                logger.debug("Tab with id '{}' removed")
+                logger.debug("Tab with id '{}' removed", item.id)
             }
         }
     }
@@ -89,7 +89,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
         val tab = TabImpl(item).apply {
             setOnCloseRequest { event ->
                 when {
-                    item.onCloseRequest?.invoke(this.content) ?: true -> onClose.handle(event)
+                    item.onClose(this.content) -> onClose.handle(event)
                     else -> event.consume()
                 }
             }
@@ -105,8 +105,8 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
     private class TabImpl(val tabItem: TabItem) : Tab() {
         init {
             this.text = tabItem.title
-            this.graphic = tabItem.graphicFactory()
-            this.content = tabItem.contentFactory()
+            this.graphic = tabItem.graphic
+            this.content = tabItem.content
         }
     }
 }

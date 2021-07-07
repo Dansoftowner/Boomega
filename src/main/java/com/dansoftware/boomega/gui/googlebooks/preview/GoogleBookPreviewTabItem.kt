@@ -23,17 +23,31 @@ import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.service.googlebooks.Volume
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.scene.Node
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * The [TabItem] for the Google Book preview page.
  */
-class GoogleBookPreviewTabItem(val volume: Volume) :
-    TabItem("google_book_preview${volume.id}",
-        I18N.getValue("google.book.preview.tab.title", volume.volumeInfo?.title?.let { "- $it"} ?: ""),
-        graphicFactory = { MaterialDesignIconView(MaterialDesignIcon.BOOK_OPEN_VARIANT) },
-        contentFactory = { GoogleBookPreview(volume) },
-        onCloseRequest = { content ->
-            (content as GoogleBookPreview).clean()
-            true
-        }
-    )
+class GoogleBookPreviewTabItem(val volume: Volume) : TabItem(
+    "google_book_preview${volume.id}",
+    I18N.getValue("google.book.preview.tab.title", volume.volumeInfo?.title?.let { "- $it" } ?: "")
+) {
+
+    override val graphic: Node
+        get() = MaterialDesignIconView(MaterialDesignIcon.BOOK_OPEN_VARIANT)
+
+    override val content: Node
+        get() = GoogleBookPreview(volume)
+
+    override fun onClose(content: Node): Boolean {
+        logger.debug("Closing google book preview tab...")
+        (content as GoogleBookPreview).clean()
+        return true
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(GoogleBookPreviewTabItem::class.java)
+    }
+}

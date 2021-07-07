@@ -21,10 +21,23 @@ package com.dansoftware.boomega.gui.databaseview
 import javafx.scene.Node
 
 /**
- * A basic representation of a tab in the [TabView].
+ * Represents a tab in the [TabView].
  */
-open class TabItem(val id: String, val title: String, val graphicFactory: () -> Node?, val contentFactory: () -> Node) {
-    var onCloseRequest: ((Node) -> Boolean)? = null
+open class TabItem(val id: String, val title: String) {
+
+    private var graphicFactory: (() -> Node?)? = null
+    private var contentFactory: (() -> Node)? = null
+    private var onCloseRequest: ((Node) -> Boolean)? = null
+
+    constructor(
+        id: String,
+        title: String,
+        graphicFactory: () -> Node?,
+        contentFactory: () -> Node
+    ) : this(id, title) {
+        this.graphicFactory = graphicFactory
+        this.contentFactory = contentFactory
+    }
 
     constructor(
         id: String,
@@ -34,5 +47,15 @@ open class TabItem(val id: String, val title: String, val graphicFactory: () -> 
         onCloseRequest: (Node) -> Boolean
     ) : this(id, title, graphicFactory, contentFactory) {
         this.onCloseRequest = onCloseRequest
+    }
+
+    open val graphic: Node?
+        get() = graphicFactory?.invoke()
+
+    open val content: Node
+        get() = requireNotNull(contentFactory?.invoke()) { "Content of TabItem should not be null" }
+
+    open fun onClose(content: Node): Boolean {
+        return onCloseRequest?.invoke(content) ?: true
     }
 }

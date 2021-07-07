@@ -18,8 +18,20 @@
 
 package com.dansoftware.boomega.gui.databaseview
 
+import javafx.scene.Node
+
 /**
  * Gives a [TabItem] that represents the [Module]
  */
 internal fun Module.getTabItem() =
-    TabItem(this.id, this.name, { this.icon }, { this.activate() }) { this.close() }
+    object : TabItem(this.id, this.name) {
+        override val graphic: Node
+            get() = this@getTabItem.icon
+
+        override val content: Node
+            get() = this@getTabItem.activate()
+
+        override fun onClose(content: Node): Boolean {
+            return this@getTabItem.close()
+        }
+    }
