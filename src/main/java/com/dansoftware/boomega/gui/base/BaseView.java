@@ -20,7 +20,6 @@ package com.dansoftware.boomega.gui.base;
 
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.api.ContextDialog;
-import com.dansoftware.boomega.gui.api.NotifiableModule;
 import com.dansoftware.boomega.gui.control.ExceptionDisplayPane;
 import com.dansoftware.boomega.gui.keybinding.KeyBinding;
 import com.dansoftware.boomega.gui.util.BaseFXUtils;
@@ -313,37 +312,6 @@ public class BaseView extends StackPane implements Context {
     @Override
     public void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.INFO, title, message, duration, onClicked);
-    }
-
-    @Override
-    public void showModule(@NotNull Class<?> classRef) {
-        workbench.getModules().stream()
-                .filter(module -> module.getClass().equals(classRef))
-                .findFirst()
-                .ifPresent(workbench::openModule);
-    }
-
-    @SuppressWarnings({"unchecked", "RedundantSuppression"})
-    @Override
-    public <D> void showModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data) {
-        workbench.getModules().stream()
-                .filter(module -> module.getClass().equals(classRef))
-                .map(module -> (WorkbenchModule & NotifiableModule<D>) module)
-                .findFirst()
-                .ifPresent(module -> {
-                    workbench.openModule(module);
-                    module.commitData(data);
-                });
-    }
-
-    @Override
-    @SuppressWarnings({"unchecked", "RedundantSuppression"})
-    public <D> void notifyModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data) {
-        workbench.getModules().stream()
-                .filter(module -> module.getClass().equals(classRef))
-                .map(module -> (WorkbenchModule & NotifiableModule<D>) module)
-                .findFirst()
-                .ifPresent(module -> module.commitData(data));
     }
 
     @Override

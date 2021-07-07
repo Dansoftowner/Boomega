@@ -158,21 +158,6 @@ public interface EmptyContext extends Context {
     }
 
     @Override
-    default void showModule(@NotNull Class<?> classRef) {
-
-    }
-
-    @Override
-    default <D> void showModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data) {
-
-    }
-
-    @Override
-    default <D> void notifyModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data) {
-
-    }
-
-    @Override
     default void addKeyBindingDetection(@NotNull KeyBinding keyBinding, Consumer<KeyBinding> onDetected) {
 
     }

@@ -22,7 +22,6 @@ import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.gui.api.Context;
-import com.dansoftware.boomega.gui.api.ContextTransformable;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener;
 import com.dansoftware.boomega.gui.login.LoginActivity;
@@ -51,7 +50,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Gyorffy
  */
-public class EntryActivity implements ContextTransformable, DatabaseLoginListener {
+public class EntryActivity implements DatabaseLoginListener {
 
     private static final List<WeakReference<EntryActivity>> instances =
             Collections.synchronizedList(new LinkedList<>());
@@ -98,7 +97,6 @@ public class EntryActivity implements ContextTransformable, DatabaseLoginListene
         return subContext != null && subContext.isShowing();
     }
 
-    @Override
     public @NotNull Context getContext() {
         return subContext;
     }

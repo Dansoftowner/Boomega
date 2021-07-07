@@ -22,7 +22,6 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.api.NotifiableModule
 import com.dansoftware.boomega.gui.databaseview.Module
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -37,8 +36,7 @@ class RecordsViewModule(
     private val context: Context,
     private val preferences: Preferences,
     private val database: Database
-) : Module(),
-    NotifiableModule<RecordsViewModule.Message?> {
+) : Module() {
 
     override val name: String
         get() = I18N.getValue("record.book.view.module.name")
@@ -58,25 +56,18 @@ class RecordsViewModule(
         content.set(null)
     }
 
-    override fun commitData(data: Message?) {
+    override fun sendMessage(message: Message) {
         content.get()?.let { view ->
-            data?.let {
-                when (it) {
-                    is InsertionRequest ->
-                        view.insertNewRecord(it.record)
-                    else -> {
-
-                    }
-                }
+            when (message) {
+                is InsertionRequest ->
+                    view.insertNewRecord(message.record)
             }
         }
     }
 
+    class InsertionRequest(val record: Record) : Message
+
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(RecordsViewModule::class.java)
     }
-
-    interface Message
-
-    class InsertionRequest(val record: Record) : Message
 }

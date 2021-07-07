@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.databaseview
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksImportModule
@@ -55,6 +56,20 @@ class DatabaseView(
 
     fun openModule(module: Module) {
         openTab(module.getTabItem())
+    }
+
+    override fun sendRequest(request: Context.Request) {
+        when(request) {
+            is ModuleShowRequest<*> ->
+                modules.find { it.javaClass == request.classRef }?.let {
+                    openModule(it)
+                    request.moduleMessage?.let { msg ->
+                        it.sendMessage(msg)
+                    }
+                }
+            is TabItemShowRequest ->
+                openTab(request.tabItem)
+        }
     }
 
     private fun initSafetyModuleClosePolicy() {
@@ -96,6 +111,18 @@ class DatabaseView(
             // make sure that preferences are committed
             preferences.editor().commit()
         }
+    }
+
+    class TabItemShowRequest(val tabItem: TabItem) : Context.Request
+
+    class ModuleShowRequest<M : Module>(val classRef: Class<M>) : Context.Request {
+
+        var moduleMessage: Module.Message? = null
+
+        constructor(classRef: Class<M>, moduleMessage: Module.Message) : this(classRef) {
+            this.moduleMessage = moduleMessage
+        }
+
     }
 
     companion object {

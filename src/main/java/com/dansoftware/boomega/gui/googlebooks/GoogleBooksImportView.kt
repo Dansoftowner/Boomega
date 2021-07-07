@@ -23,6 +23,7 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BaseTable
+import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.service.googlebooks.asRecord
@@ -114,7 +115,12 @@ class GoogleBooksImportView(
 
         private fun buildButtonAction() = EventHandler<ActionEvent> {
             table.selectionModel.selectedItem.also { volume ->
-                context.showModule(RecordsViewModule::class.java, RecordsViewModule.InsertionRequest(volume.asRecord()))
+                context.sendRequest(
+                    DatabaseView.ModuleShowRequest(
+                        RecordsViewModule::class.java,
+                        RecordsViewModule.InsertionRequest(volume.asRecord())
+                    )
+                )
             }
         }
     }

@@ -72,4 +72,9 @@ abstract class Module {
      * @return **true** if the module should be closed, **false** if the module should not be closed
      */
     protected abstract fun destroy(): Boolean
+
+    open fun sendMessage(message: Message) {
+    }
+
+    interface Message
 }

@@ -151,39 +151,10 @@ public interface Context {
 
     void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked);
 
-    /* SHOWING MODULES */
-
-    /**
-     * Shows the module that is identifiable by the given class
-     *
-     * @param classRef the class reference
-     */
-    @Deprecated
-    void showModule(@NotNull Class<?> classRef);
-
-    /**
-     * Shows the module and commits the given object to
-     * her.
-     *
-     * @param classRef the class reference
-     * @param data     the object that holds data
-     */
-    @Deprecated
-    <D> void showModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data);
-
-    /**
-     * Sends the given to the particular module.
-     * It does not show the module, just sends a message to her.
-     *
-     * @param classRef the class reference to the module
-     * @param data     the concrete message
-     * @param <D>      the type of the message
-     */
-    @Deprecated
-    <D> void notifyModule(@NotNull Class<? extends NotifiableModule<D>> classRef, D data);
-
-
     /* *** */
+
+    default void sendRequest(@NotNull Request request) {
+    }
 
     void addKeyBindingDetection(@NotNull KeyBinding keyBinding, Consumer<KeyBinding> onDetected);
 
@@ -224,8 +195,8 @@ public interface Context {
 
     default void close() {
         Window window = getContextWindow();
-        if (window instanceof Stage)
-            ((Stage) window).close();
+        if (window instanceof Stage asStage)
+            asStage.close();
         else if (window != null)
             window.hide();
     }
@@ -241,12 +212,16 @@ public interface Context {
     }
 
     static Context empty() {
-        return new NullContext();
+        return new EmptyContext() {
+        };
     }
 
     enum ProgressType {
         ERROR,
         NORMAL,
         PAUSED
+    }
+
+    interface Request {
     }
 }
