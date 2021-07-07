@@ -23,7 +23,8 @@ import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.control.ReadOnlyRating
 import com.dansoftware.boomega.gui.control.WebsiteHyperLink
-import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewActivity
+import com.dansoftware.boomega.gui.databaseview.DatabaseView
+import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewTabItem
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.i18n.I18N
@@ -187,7 +188,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                     .action { volume.get()?.volumeInfo?.previewLink?.let(SystemBrowser::browse) }
             )
             setOnAction {
-                GoogleBookPreviewActivity(volume.get()).show()
+                context.sendRequest(DatabaseView.TabItemShowRequest(GoogleBookPreviewTabItem(volume.get())))
             }
         }
 

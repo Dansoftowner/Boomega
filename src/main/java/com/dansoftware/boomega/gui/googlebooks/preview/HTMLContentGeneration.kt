@@ -1,10 +1,13 @@
-@file:JvmName("HTMLContentGeneration")
+@file:JvmName("VolumePreviewHTML")
 
 package com.dansoftware.boomega.gui.googlebooks.preview
 
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.service.googlebooks.Volume
 
+/**
+ * See [google books developer's guide](https://developers.google.com/books/docs/viewer/developers_guide)
+ */
 fun generateHTMLContent(volume: Volume?) =
     """
 <!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN"

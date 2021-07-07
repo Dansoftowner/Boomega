@@ -34,7 +34,7 @@ public class GoogleBookPreview extends StackPane implements EmptyContext {
     }
 
     private void loadContent() {
-        this.webEngine.loadContent(HTMLContentGeneration.generateHTMLContent(volume), "text/html");
+        this.webEngine.loadContent(VolumePreviewHTML.generateHTMLContent(volume), "text/html");
     }
 
     void clean() {

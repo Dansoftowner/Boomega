@@ -89,7 +89,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
         val tab = TabImpl(item).apply {
             setOnCloseRequest { event ->
                 when {
-                    item.onCloseRequest?.invoke() ?: true -> onClose.handle(event)
+                    item.onCloseRequest?.invoke(this.content) ?: true -> onClose.handle(event)
                     else -> event.consume()
                 }
             }

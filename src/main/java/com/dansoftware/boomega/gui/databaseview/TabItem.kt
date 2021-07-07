@@ -23,15 +23,15 @@ import javafx.scene.Node
 /**
  * A basic representation of a tab in the [TabView].
  */
-class TabItem(val id: String, val title: String, val graphicFactory: () -> Node?, val contentFactory: () -> Node) {
-    var onCloseRequest: (() -> Boolean)? = null
+open class TabItem(val id: String, val title: String, val graphicFactory: () -> Node?, val contentFactory: () -> Node) {
+    var onCloseRequest: ((Node) -> Boolean)? = null
 
     constructor(
         id: String,
         title: String,
         graphicFactory: () -> Node?,
         contentFactory: () -> Node,
-        onCloseRequest: () -> Boolean
+        onCloseRequest: (Node) -> Boolean
     ) : this(id, title, graphicFactory, contentFactory) {
         this.onCloseRequest = onCloseRequest
     }
