@@ -20,6 +20,9 @@ package com.dansoftware.boomega.util
 
 import com.jfilegoodies.explorer.FileExplorers
 import java.io.File
+import java.io.IOException
+import java.net.MalformedURLException
+import java.net.URL
 
 fun File.revealInExplorer() {
     FileExplorers.get().openSelect(this)
@@ -38,3 +41,13 @@ fun String.surrounding(prefix: String, suffix: String) = (prefix + this + suffix
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 fun String.equalsIgnoreCase(other: String): Boolean =
     (this as java.lang.String).equalsIgnoreCase(other)
+
+fun isServerReachable(url: String) =
+    try {
+        URL("http://www.google.com").openConnection().connect()
+        true
+    } catch (e: MalformedURLException) {
+        false
+    } catch (e: IOException) {
+        false
+    }

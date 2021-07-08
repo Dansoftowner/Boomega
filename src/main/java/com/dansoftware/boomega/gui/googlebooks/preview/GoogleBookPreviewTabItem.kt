@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.googlebooks.preview
 
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.TabItem
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.service.googlebooks.Volume
@@ -30,7 +31,7 @@ import org.slf4j.LoggerFactory
 /**
  * The [TabItem] for the Google Book preview page.
  */
-class GoogleBookPreviewTabItem(val volume: Volume) : TabItem(
+class GoogleBookPreviewTabItem(val context: Context, val volume: Volume) : TabItem(
     "google_book_preview${volume.id}",
     I18N.getValue("google.book.preview.tab.title", volume.volumeInfo?.title?.let { "- $it" } ?: "")
 ) {
@@ -39,7 +40,7 @@ class GoogleBookPreviewTabItem(val volume: Volume) : TabItem(
         get() = MaterialDesignIconView(MaterialDesignIcon.BOOK_OPEN_VARIANT)
 
     override val content: Node
-        get() = GoogleBookPreview(volume)
+        get() = GoogleBookPreview(context, volume)
 
     override fun onClose(content: Node): Boolean {
         logger.debug("Closing google book preview tab...")

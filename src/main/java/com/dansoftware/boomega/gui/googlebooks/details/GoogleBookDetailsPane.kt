@@ -188,7 +188,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                     .action { volume.get()?.volumeInfo?.previewLink?.let(SystemBrowser::browse) }
             )
             setOnAction {
-                context.sendRequest(DatabaseView.TabItemShowRequest(GoogleBookPreviewTabItem(volume.get())))
+                context.sendRequest(DatabaseView.TabItemShowRequest(GoogleBookPreviewTabItem(context, volume.get())))
             }
         }
 
