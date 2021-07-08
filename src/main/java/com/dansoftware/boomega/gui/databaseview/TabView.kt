@@ -18,11 +18,13 @@
 
 package com.dansoftware.boomega.gui.databaseview
 
+import com.dansoftware.boomega.i18n.I18N
+import javafx.beans.binding.Bindings
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ListChangeListener
 import javafx.event.Event
 import javafx.event.EventHandler
-import javafx.scene.control.Tab
-import javafx.scene.control.TabPane
+import javafx.scene.control.*
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
@@ -86,7 +88,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
 
     @Suppress("NullableBooleanElvis")
     private fun makeTab(item: TabItem, onClose: EventHandler<Event>) {
-        val tab = TabImpl(item).apply {
+        val tab = TabImpl(this, item).apply {
             setOnCloseRequest { event ->
                 when {
                     item.onClose(this.content) -> onClose.handle(event)
@@ -102,11 +104,113 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
         val logger: Logger = LoggerFactory.getLogger(TabView::class.java)
     }
 
-    private class TabImpl(val tabItem: TabItem) : Tab() {
+    private class TabImpl(val tabView: TabView, val tabItem: TabItem) : Tab() {
+
+        private val indexProperty = SimpleIntegerProperty().also { property ->
+            val tabs = tabView.tabPane.tabs
+            tabs.addListener(object : ListChangeListener<Tab> {
+                override fun onChanged(c: ListChangeListener.Change<out Tab>?) {
+                    when {
+                        tabs.contains(this@TabImpl) ->
+                            property.set(tabs.indexOf(this@TabImpl))
+                        else ->
+                            tabs.removeListener(this)
+                    }
+                }
+            })
+        }
+
         init {
             this.text = tabItem.title
             this.graphic = tabItem.graphic
             this.content = tabItem.content
+            this.tooltip = buildTooltip()
+            this.contextMenu = buildContextMenu()
+            this.isClosable = (tabView.baseTabItem != tabItem)
+        }
+
+        private fun buildTooltip() =
+            Tooltip().apply {
+                textProperty().bind(this@TabImpl.textProperty())
+            }
+
+        private fun buildContextMenu() =
+            ContextMenu(
+                buildCloseItem(),
+                buildCloseOtherTabsItem(),
+                buildCloseAllTabsItem(),
+                buildCloseTabsToTheLeft(),
+                buildCloseTabsToTheRight()
+            )
+
+        private fun buildCloseItem() =
+            MenuItem(I18N.getValue("database_view.tab_menu.close")).apply {
+                isDisable = (tabView.baseTabItem == tabItem)
+                setOnAction {
+                    closeTab(this@TabImpl)
+                }
+            }
+
+        private fun buildCloseOtherTabsItem() =
+            MenuItem(I18N.getValue("database_view.tab_menu.close_other")).apply {
+                disableProperty().bind(
+                    Bindings.size(tabView.tabPane.tabs)
+                        .greaterThanOrEqualTo(if (tabItem == tabView.baseTabItem) 2 else 3)
+                        .not()
+                )
+                setOnAction {
+                    tabView.tabPane.tabs
+                        .filterIsInstance<TabImpl>()
+                        .filter { it != this@TabImpl }
+                        .forEach(::closeTab)
+                }
+            }
+
+        private fun buildCloseAllTabsItem() =
+            MenuItem(I18N.getValue("database_view.tab_menu.close_all")).apply {
+                disableProperty().bind(
+                    Bindings.size(tabView.tabPane.tabs)
+                        .greaterThanOrEqualTo(if (tabItem == tabView.baseTabItem) 2 else 1)
+                        .not()
+                )
+                setOnAction {
+                    tabView.tabPane.tabs
+                        .filterIsInstance<TabImpl>()
+                        .forEach(::closeTab)
+                }
+            }
+
+        @Suppress("UsePropertyAccessSyntax")
+        private fun buildCloseTabsToTheLeft() =
+            MenuItem(I18N.getValue("database_view.tab_menu.close_left")).apply {
+                disableProperty().bind(indexProperty.greaterThan(0).not())
+                setOnAction {
+                    val tabs = tabView.tabPane.tabs.filterIsInstance<TabImpl>()
+                    val currentIndex = tabs.indexOf(this@TabImpl)
+                    tabs.dropLast(tabs.size - currentIndex).forEach(::closeTab)
+                }
+            }
+
+        private fun buildCloseTabsToTheRight() =
+            MenuItem(I18N.getValue("database_view.tab_menu.close_right")).apply {
+                disableProperty().bind(
+                    Bindings.valueAt(tabView.tabPane.tabs, indexProperty.add(1)).isNull
+                )
+                setOnAction {
+                    val tabs = tabView.tabPane.tabs.filterIsInstance<TabImpl>()
+                    val currentIndex = tabs.indexOf(this@TabImpl)
+                    tabs.drop(currentIndex + 1).forEach(::closeTab)
+                }
+            }
+
+        private fun closeTab(tab: TabImpl) {
+            if (tab.tabItem != tabView.baseTabItem) {
+                val event = Event(Tab.TAB_CLOSE_REQUEST_EVENT)
+                tab.onCloseRequest.handle(event)
+                if (!event.isConsumed) {
+                    tabView.tabPane.tabs.remove(tab)
+                }
+            }
         }
     }
 }
