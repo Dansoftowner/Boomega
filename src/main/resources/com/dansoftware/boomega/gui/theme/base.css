@@ -32,6 +32,9 @@
 .menu-button, .menu-button:focused,
 .choice-box, .choice-box:focused,
 .tooltip,
+.date-picker.combo-box-base, .date-picker.combo-box-base:focused, .date-picker.combo-box-base:hover,
+.spinner, .spinner .text-field,
+.spinner .increment-arrow-button, .spinner .decrement-arrow-button,
 .context-menu, .combo-box-popup .list-view {
     -fx-border-radius: 3;
     -fx-background-radius: 3;
@@ -530,6 +533,7 @@
 .database-view .tab-view > .tab-pane {
     -fx-tab-min-height: 2.4em;
     -fx-tab-max-height: 2.4em;
+    -fx-tab-max-width: 17em;
 }
 
 .database-view .tab-view > .tab-pane > .tab-header-area  {
