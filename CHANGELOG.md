@@ -8,6 +8,7 @@
 * :lipstick: Updated look and feel
 * :sparkles: Showing dialogs for uncaught exceptions
 * :sparkles: Google Book Preview can be displayed in a new tab
+* :sparkles: Context menu for `database view` tabs that allows to access some basic tab-operation utility (like closing all tabs etc...)
 
 ### Bug fixes/improvements
 
