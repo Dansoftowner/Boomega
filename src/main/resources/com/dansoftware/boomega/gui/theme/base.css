@@ -517,15 +517,18 @@
  ******************************************************************************/
 
 .dock-title-bar {
-    -fx-pref-height: 28px;
+    -fx-pref-height: 1.7em;
     -fx-border-width: 0 0 1 0;
-    -fx-padding: 5px;
+    -fx-padding: 3 3 3 5;
+}
+
+.dock-title-bar .h-box {
+    -fx-spacing: 5px;
 }
 
 .dock-title-bar .label {
-    -fx-font-size: 15px;
     -fx-text-alignment: center;
-    -fx-alignment: center;
+    -fx-alignment: center-left;
 }
 
 /*******************************************************************************

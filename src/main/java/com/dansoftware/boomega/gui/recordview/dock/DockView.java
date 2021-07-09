@@ -35,7 +35,8 @@ public abstract class DockView<T extends Node> extends VBox {
     }
 
     private Node buildTitleBar(SplitPane parent, Node icon, String title) {
-        var iconTitleBar = new HBox(10.0, new StackPane(icon), new StackPane(new Label(title)));
+        var iconTitleBar = new HBox(new StackPane(icon), new StackPane(new Label(title)));
+        iconTitleBar.getStyleClass().add("h-box");
         var titleBar = new BorderPane(null, null, buttonBar, null, iconTitleBar);
         titleBar.getStyleClass().add("dock-title-bar");
         return titleBar;
