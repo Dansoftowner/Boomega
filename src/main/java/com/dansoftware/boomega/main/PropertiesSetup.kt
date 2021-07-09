@@ -62,8 +62,8 @@ object PropertiesSetup {
      */
     @JvmStatic
     fun setupSystemProperties() {
-        adjustJavaLibraryPath()
         putLogFileProperties()
+        adjustJavaLibraryPath()
         putJFXProperties()
         putAppSpecificProperties()
     }
