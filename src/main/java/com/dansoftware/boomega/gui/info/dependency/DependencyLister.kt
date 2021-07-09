@@ -207,7 +207,7 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
-            "WorkbenchFX (+ with patches)",
+            "WorkbenchFX",
             "https://github.com/dlsc-software-consulting-gmbh/WorkbenchFX",
             LicenseInfo.apache20License()
         )

@@ -140,7 +140,7 @@
         <td><a href="https://github.com/G00fY2/version-compare/blob/master/LICENSE">Apache 2.0</a></td>
     </tr>
     <tr>
-        <td><a href="https://github.com/dlsc-software-consulting-gmbh/WorkbenchFX">WorkbenchFX (with <a href="https://github.com/Dansoftowner/workbenchfx-fork">patches</a>)</a></td>
+        <td><a href="https://github.com/dlsc-software-consulting-gmbh/WorkbenchFX">WorkbenchFX</a></td>
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
 </table>

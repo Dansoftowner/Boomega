@@ -122,8 +122,7 @@ dependencies {
     //implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-11'
     //implementation 'de.jensd:fontawesomefx-materialdesignfont:2.0.26-9.1.2'
 
-    //Modified WorkBenchFX, Original: 'com.dlsc.workbenchfx:workbenchfx-core:x.x.x'
-    implementation 'com.github.Dansoftowner:workbenchfx-fork:11.1.7'
+    implementation 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
