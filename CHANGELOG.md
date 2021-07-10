@@ -6,7 +6,8 @@
 
 * ✨ [#147](https://github.com/Dansoftowner/Boomega/issues/147): Global toolbar in database view
 * ✨ [#14](https://github.com/Dansoftowner/Boomega/issues/14): Google Book preview panel tells the user if the preview is not available
-* ✨ Google Book Preview now displayed in a tab
+* ✨ [#149](https://github.com/Dansoftowner/Boomega/issues/149): Google Book Preview toolbar
+* ✨ Google Book Preview is now displayed in a tab
 * 💄 Updated look and feel
 * ✨ Showing dialogs for uncaught exceptions
 * ✨ Context menu for `database view` tabs that allows to access some basic tab-operation utility (like closing all tabs etc...)
