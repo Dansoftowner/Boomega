@@ -467,6 +467,14 @@
     -fx-font-size: 1.5em;
 }
 
+.google-book-preview-toolbar .label {
+    -fx-font-size: 1.05em;
+}
+
+.google-book-preview-toolbar .google-icon {
+    -fx-font-size: 1.4em !important;
+}
+
 /*******************************************************************************
  *                                                                             *
  *                                  Records view                               *
@@ -624,6 +632,10 @@
 
 .tile .glyph-icon {
     -fx-font-size: 20 !important;
+}
+
+.database-view .context-menu {
+    -fx-font-size: 0.998em;
 }
 
 /*******************************************************************************
