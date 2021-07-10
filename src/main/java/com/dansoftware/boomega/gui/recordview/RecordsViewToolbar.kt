@@ -143,7 +143,7 @@ class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
         }
 
     private fun buildRefreshItem() =
-        buildToolbarItem(MaterialDesignIcon.REFRESH, "record.toolbar.refresh") { view.refresh() }
+        buildToolbarItem(MaterialDesignIcon.REFRESH, "page.reload") { view.refresh() }
 
 
     private fun buildScrollToTopItem() =

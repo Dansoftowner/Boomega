@@ -18,4 +18,8 @@
 
 package com.dansoftware.boomega.i18n
 
+import org.jetbrains.annotations.Nls
+
+fun i18n(@Nls key: String, vararg args: Any?) = I18N.getValue(key, args)
+
 fun LanguageTranslator.getDisplayName() = I18N.getLanguagePack().displayPersonName(firstName, lastName)

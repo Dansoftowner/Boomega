@@ -33,7 +33,7 @@ public enum Dock {
         }
     },
 
-    GOOGLE_BOOK_CONNECTION(GoogleBookConnectionDock.class, "google.books.dock.title") {
+    GOOGLE_BOOK_CONNECTION(GoogleBookConnectionDock.class, "google.books.volume_information") {
         @Override
         protected DockView<?> buildView(@NotNull Context context,
                                         @NotNull Database database,

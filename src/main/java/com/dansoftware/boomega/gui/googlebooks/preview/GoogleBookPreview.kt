@@ -1,16 +1,15 @@
 package com.dansoftware.boomega.gui.googlebooks.preview
 
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.api.EmptyContext
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.service.googlebooks.Volume
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Group
 import javafx.scene.control.Label
+import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
-import javafx.scene.web.WebEngine
 import javafx.scene.web.WebView
 import org.jetbrains.annotations.Nls
 import org.slf4j.Logger
@@ -19,47 +18,49 @@ import java.net.CookieHandler
 import java.net.CookieManager
 import java.util.*
 
-
 /**
  * Used for showing a Google Book's preview content.
  *
  * @author Daniel Gyorffy
  */
-class GoogleBookPreview(private val context: Context, private val volume: Volume) : StackPane(), EmptyContext {
+class GoogleBookPreview(private val context: Context, val volume: Volume) : BorderPane() {
 
-    private var webView: WebView?
-    private var webEngine: WebEngine?
+    private val webView: WebView
 
     init {
         styleClass.add("google-book-preview")
+        top = GoogleBookPreviewToolbar(context, this)
         webView = buildWebView()
-        webEngine = webView!!.engine
-        buildUI()
         loadContent()
     }
 
-    private fun buildUI() {
-        when {
-            isServerReachable() -> children.add(webView)
-            else -> children.add(buildOfflinePlaceHolder())
-        }
-    }
-
     private fun buildWebView() = WebView().apply {
+        engine.setOnError {
+            logger.error("Web error detected", it.exception)
+        }
         engine.setOnAlert {
             when (it.data) {
-                ON_NOT_FOUND_ALERT -> {
-                    clean()
-                    children.setAll(buildVolumeNotFoundPlaceHolder())
-                }
-                else ->
-                    context.showInformationDialog("", it.data) {}
+                ON_NOT_FOUND_ALERT -> center = buildVolumeNotFoundPlaceHolder()
+                else -> context.showInformationDialog("", it.data) {}
             }
         }
     }
 
+    fun reload() {
+        center = null
+        loadContent()
+    }
+
     private fun loadContent() {
-        webEngine!!.loadContent(generateHTMLContent(volume), "text/html")
+        if (center !is WebView) {
+            center = when {
+                isServerReachable() ->
+                    webView.apply {
+                        engine.loadContent(generateHTMLContent(volume), "text/html")
+                    }
+                else -> buildOfflinePlaceHolder()
+            }
+        }
     }
 
     private fun buildVolumeNotFoundPlaceHolder() =
@@ -83,10 +84,8 @@ class GoogleBookPreview(private val context: Context, private val volume: Volume
         }
 
     fun clean() {
-        webEngine?.load("about:blank")
+        webView.engine.load("about:blank")
         children.clear()
-        webView = null
-        webEngine = null
         CookieHandler.setDefault(CookieManager())
     }
 

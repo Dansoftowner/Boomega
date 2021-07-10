@@ -43,7 +43,7 @@ public class GoogleBookConnectionDock extends DockView<GoogleBookConnectionView>
         super(
                 parent,
                 new ImageView(new Image("/com/dansoftware/boomega/image/util/google_12px.png")),
-                I18N.getValue("google.books.dock.title"),
+                I18N.getValue("google.books.volume_information"),
                 buildContent(context, database, table)
         );
         getStyleClass().add(STYLE_CLASS);

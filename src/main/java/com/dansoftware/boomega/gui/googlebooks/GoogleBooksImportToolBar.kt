@@ -97,7 +97,7 @@ class GoogleBooksImportToolBar(
         )
 
     private fun buildRefreshItem() =
-        buildToolbarItem(MaterialDesignIcon.REFRESH, "google.books.toolbar.refresh") { view.refresh() }
+        buildToolbarItem(MaterialDesignIcon.REFRESH, "page.reload") { view.refresh() }
 
     private fun buildScrollToTopItem() =
         buildToolbarItem(MaterialDesignIcon.BORDER_TOP, "google.books.toolbar.scrolltop") { view.scrollToTop() }
