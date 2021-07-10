@@ -24,27 +24,21 @@ import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
 
-fun File.revealInExplorer() {
-    FileExplorers.get().openSelect(this)
-}
-
-fun <I, T : Collection<I>> T.ifNotEmpty(block: (T) -> Unit): T {
-    if (this.isNotEmpty())
-        block(this)
-    return this
-}
-
 fun String.surrounding(prefixSuffix: String) = this.surrounding(prefixSuffix, prefixSuffix)
 
-fun String.surrounding(prefix: String, suffix: String) = (prefix + this + suffix)
+fun String.surrounding(prefix: String, suffix: String) = "$prefix$this$suffix"
 
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 fun String.equalsIgnoreCase(other: String): Boolean =
     (this as java.lang.String).equalsIgnoreCase(other)
 
+fun File.revealInExplorer() {
+    FileExplorers.get().openSelect(this)
+}
+
 fun isServerReachable(url: String) =
     try {
-        URL("http://www.google.com").openConnection().connect()
+        URL(url).openConnection().connect()
         true
     } catch (e: MalformedURLException) {
         false
