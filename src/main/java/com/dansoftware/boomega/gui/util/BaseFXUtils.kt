@@ -91,22 +91,28 @@ fun loadImage(resource: String, onImageReady: Consumer<Image>) {
 
 fun Node.onWindowPresent(action: Consumer<Window>) {
     this.scene?.window?.also { action.accept(it) }
-        ?: this.sceneProperty().addListener(object : ChangeListener<Scene> {
-            override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
-                if (newValue != null) {
-                    scene.windowProperty().addListener(object : ChangeListener<Window> {
-                        override fun changed(
-                            observable: ObservableValue<out Window>,
-                            oldValue: Window?,
-                            newValue: Window?
-                        ) {
-                            if (newValue != null) {
-                                action.accept(newValue)
-                                observable.removeListener(this)
-                            }
-                        }
+        ?: onScenePresent {
+            it.windowProperty().addListener(object : ChangeListener<Window> {
+                override fun changed(
+                    observable: ObservableValue<out Window>,
+                    oldValue: Window?,
+                    newValue: Window?
+                ) {
+                    newValue?.let {
+                        action.accept(newValue)
+                        observable.removeListener(this)
+                    }
+                }
+            })
+        }
+}
 
-                    })
+fun Node.onScenePresent(action: (Scene) -> Unit) {
+    this.scene?.also { action(it) }
+        ?: sceneProperty().addListener(object : ChangeListener<Scene> {
+            override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
+                newValue?.let {
+                    action(it)
                     observable.removeListener(this)
                 }
             }

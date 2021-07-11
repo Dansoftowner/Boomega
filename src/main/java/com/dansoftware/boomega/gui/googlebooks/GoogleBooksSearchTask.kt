@@ -153,14 +153,13 @@ open class GoogleBooksSearchTask(private val searchParameters: SearchParameters)
     }
 }
 
-/**
+/*
  * A [GoogleBooksSearchTask] that is used for loading into a [GoogleBooksPagination].
  *
  * @param context the [Context] object
  * @param tablePagination the [GoogleBooksPagination]
  * @param isInitSearch boolean value that indicates that the task is used for an initial search, or
  * for a reload search
- */
 class GoogleBooksPaginationSearchTask(
     private val context: Context,
     private val tablePagination: GoogleBooksPagination,
@@ -247,4 +246,4 @@ class GoogleBooksPaginationSearchTask(
     fun setOnNewContentRequestCreated(action: Consumer<Runnable>) {
         this.onNewContentRequestCreated.set(action)
     }
-}
+}*/
