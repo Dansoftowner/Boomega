@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.databaseview
 
+import com.dansoftware.boomega.gui.util.onScenePresent
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
@@ -49,16 +50,9 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
     }
 
     private fun playAnimation() {
-        // we play the animation after the view put into a scene
-        sceneProperty().addListener(object : ChangeListener<Scene?> {
-            override fun changed(observable: ObservableValue<out Scene?>, oldValue: Scene?, newValue: Scene?) {
-                newValue?.let {
-                    logger.debug("Scene detected!")
-                    animatefx.animation.FadeInUp(this@ModuleView).play()
-                    observable.removeListener(this)
-                }
-            }
-        })
+        onScenePresent {
+            animatefx.animation.FadeInUp(this).play()
+        }
     }
 
     private fun buildUI() {

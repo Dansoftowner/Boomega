@@ -107,10 +107,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         children.add(buildCloseButton())
     }
 
-    private fun buildField(): TextField = CustomTextField().apply {
-        left = StackPane(FontAwesomeIconView(FontAwesomeIcon.SEARCH)).apply {
-            padding = Insets(5.0)
-        }
+    private fun buildField(): TextField = SearchTextField().apply {
         baseText.bind(textProperty())
         prefHeight = 32.0
     }
