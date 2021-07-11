@@ -444,6 +444,33 @@
  *                                                                             *
  ******************************************************************************/
 
+.google-book-search-form .title-label {
+    -fx-font-size: 2em;
+    -fx-opacity: .7;
+}
+
+.google-book-search-form .formsfx-group {
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+.google-book-search-form .details-pane:collapsed .title {
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.google-book-search-form .details-pane:expanded .title {
+    -fx-border-radius: 3 3 0 0;
+    -fx-background-radius: 3 3 0 0;
+}
+
+
+.google-book-search-form .details-pane .content {
+    -fx-padding: 0;
+    -fx-border-radius: 0 0 3 3;
+    -fx-background-radius: 0 0 3 3;
+}
+
 .google-books-import-view .google-books-import-btn {
     -fx-pref-height: 40px;
     -fx-font-weight: bold;

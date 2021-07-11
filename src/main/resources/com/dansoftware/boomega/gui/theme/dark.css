@@ -64,6 +64,16 @@
     -fx-fill: white;
 }
 
+.search-text-field .glyph-icon {
+    -fx-padding: 2;
+    -fx-fill: #e3e3e3;
+}
+
+.search-text-field:focused .glyph-icon {
+    -fx-padding: 2;
+    -fx-fill: #181818;
+}
+
 /*******************************************************************************
  *                                                                             *
  *                                  SplitPane                                  *
@@ -338,16 +348,6 @@
 
 .records-view .table-view {
     -fx-border-width: 0;
-}
-
-.record-find-control .text-field .glyph-icon {
-    -fx-padding: 2;
-    -fx-fill: #e3e3e3;
-}
-
-.record-find-control .text-field:focused .glyph-icon {
-    -fx-padding: 2;
-    -fx-fill: #181818;
 }
 
 .record-table-place-holder .image-view {
