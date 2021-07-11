@@ -140,7 +140,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
     public static final ColumnType PUBLISHER_COLUMN =
             new ColumnType(
                     "publisher",
-                    "google.books.table.column.subtitle",
+                    "google.books.table.column.publisher",
                     PublisherColumn::new,
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
