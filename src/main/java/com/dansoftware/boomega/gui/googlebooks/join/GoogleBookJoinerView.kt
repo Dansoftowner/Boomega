@@ -20,12 +20,9 @@ package com.dansoftware.boomega.gui.googlebooks.join
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPagination
-import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPaginationSearchTask
 import com.dansoftware.boomega.gui.googlebooks.GoogleBooksTable
-import com.dansoftware.boomega.gui.googlebooks.SearchParameters
 import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsOverlay
 import com.dansoftware.boomega.service.googlebooks.Volume
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.property.ObjectProperty
@@ -39,6 +36,7 @@ import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.function.Consumer
 
+@Deprecated("")
 class GoogleBookJoinerView(
     private val context: Context,
     private val hideMethod: (GoogleBookJoinerView) -> Unit
@@ -106,9 +104,10 @@ class GoogleBookJoinerView(
         }
 
     private fun search() {
-        CachedExecutor.submit(
+        TODO()
+        /*CachedExecutor.submit(
             GoogleBooksPaginationSearchTask(context, tablePagination, true, SearchParameters().inText(searchField.text))
-        )
+        )*/
     }
 
     fun setOnVolumeSelected(onVolumeSelected: Consumer<Volume>) {
