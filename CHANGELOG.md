@@ -17,6 +17,8 @@
 * 🐛 [#146](https://github.com/Dansoftowner/Boomega/issues/146): UnsatisfiedLinkError when running the program as a native app on Windows
 * 🐛 Database view module configurations are not saved when restarting the program
 * 🐛 Closing a non auto-login database removes the auto-login database as well
+* 🐛 Google Books Table: "publisher" column called "subtitle"
+* 🐛 Record Table: missing "author" column
 
 # Boomega v0.6.5 (pre-release)
 
