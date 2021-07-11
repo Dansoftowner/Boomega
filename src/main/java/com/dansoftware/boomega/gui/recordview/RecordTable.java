@@ -183,6 +183,7 @@ public class RecordTable extends BaseTable<Record> {
             List.of(
                     INDEX_COLUMN,
                     TYPE_INDICATOR_COLUMN,
+                    AUTHOR_COLUMN,
                     MAGAZINE_NAME_COLUMN,
                     TITLE_COLUMN,
                     SUB_TITLE_COLUMN,
