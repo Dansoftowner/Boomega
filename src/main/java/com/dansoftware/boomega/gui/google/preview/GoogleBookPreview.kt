@@ -1,4 +1,4 @@
-package com.dansoftware.boomega.gui.googlebooks.preview
+package com.dansoftware.boomega.gui.google.preview
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.I18N

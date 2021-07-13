@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.googlebooks
+package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.SearchTextField
@@ -24,6 +24,7 @@ import com.dansoftware.boomega.gui.control.formsfx.LanguageSelectionControl
 import com.dansoftware.boomega.gui.util.onScenePresent
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.util.BindingMode
@@ -43,21 +44,24 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 
-class GoogleBookSearchForm(
+/**
+ * The [GoogleBooksSearchForm] is where the user can start the Google Books search.
+ */
+class GoogleBooksSearchForm(
     private val context: Context,
-    private val onSearchRequest: (GoogleBookSearchForm) -> Unit
+    private val onSearchRequest: (GoogleBooksQuery) -> Unit
 ) : StackPane() {
 
-    val generalText: StringProperty = SimpleStringProperty("")
-    val author: StringProperty = SimpleStringProperty("")
-    val title: StringProperty = SimpleStringProperty("")
-    val publisher: StringProperty = SimpleStringProperty("")
-    val subject: StringProperty = SimpleStringProperty("")
-    val isbn: StringProperty = SimpleStringProperty("")
-    val language: StringProperty = SimpleStringProperty("")
+    private val generalText: StringProperty = SimpleStringProperty("")
+    private val author: StringProperty = SimpleStringProperty("")
+    private val title: StringProperty = SimpleStringProperty("")
+    private val publisher: StringProperty = SimpleStringProperty("")
+    private val subject: StringProperty = SimpleStringProperty("")
+    private val isbn: StringProperty = SimpleStringProperty("")
+    private val language: StringProperty = SimpleStringProperty("")
 
     init {
-        styleClass.add("google-book-search-form")
+        styleClass.add("google-books-search-form")
         buildUI()
         playAnimation()
     }
@@ -137,6 +141,7 @@ class GoogleBookSearchForm(
                             .render(LanguageSelectionControl(context))
                             .span(ColSpan.HALF),
                         //TODO: sort type
+                        //TODO: print type
                     )
                 ).title("google.books.add.form.ftitle")
                     .binding(BindingMode.CONTINUOUS)
@@ -153,7 +158,17 @@ class GoogleBookSearchForm(
     }
 
     private fun search() {
-        onSearchRequest(this)
+        onSearchRequest(buildGoogleBooksQuery())
     }
+
+    private fun buildGoogleBooksQuery() =
+        GoogleBooksQuery()
+            .inText(generalText.get())
+            .inAuthor(author.get())
+            .inPublisher(publisher.get())
+            .inTitle(title.get())
+            .isbn(isbn.get())
+            .language(language.get())
+            .subject(subject.get())
 
 }

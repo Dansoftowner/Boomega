@@ -16,13 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.googlebooks
+package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import javafx.scene.Node
 import javafx.scene.layout.StackPane
 
-class GoogleBookSearchView(private val context: Context) : StackPane() {
+/**
+ * The [GoogleBooksSearchView] allows to use the [GoogleBooksSearchForm] and then to view
+ * the search results in a [GoogleBooksSearchResultView].
+ */
+open class GoogleBooksSearchView(private val context: Context) : StackPane() {
+
+    private val searchForm: GoogleBooksSearchForm = buildSearchForm()
 
     private var content: Node?
         get() = children[0]
@@ -36,8 +43,18 @@ class GoogleBookSearchView(private val context: Context) : StackPane() {
     }
 
     private fun buildUI() {
-        content = GoogleBookSearchForm(context) {
+        content = searchForm
+    }
 
-        }
+    private fun buildSearchForm() = GoogleBooksSearchForm(context) {
+        content = buildSearchResultView(it)
+    }
+
+    protected fun home() {
+        content = searchForm
+    }
+
+    open fun buildSearchResultView(query: GoogleBooksQuery): GoogleBooksSearchResultView {
+        return GoogleBooksSearchResultView(context, query) { home() }
     }
 }

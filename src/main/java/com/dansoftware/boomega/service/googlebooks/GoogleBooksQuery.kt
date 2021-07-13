@@ -31,7 +31,98 @@ import java.util.*
  *
  * @author Daniel Gyorffy
  */
-class GoogleBooksQueryBuilder {
+class GoogleBooksQuery {
+
+    var inText: String? = null
+        private set
+
+    var inTitle: String? = null
+        private set
+
+    var inAuthor: String? = null
+        private set
+
+    var inPublisher: String? = null
+        private set
+
+    var subject: String? = null
+        private set
+
+    var isbn: String? = null
+        private set
+
+    var lang: String? = null
+        private set
+
+    var startIndex = 0
+        private set
+
+    var maxResults = 10
+        private set
+
+    var printType: PrintType? = null
+        private set
+
+    var sortType: SortType? = null
+
+    fun inText(inText: String?) = apply { this.inText = StringUtils.getIfBlank(inText, null) }
+
+    fun inTitle(inTitle: String?) = apply { this.inTitle = StringUtils.getIfBlank(inTitle, null) }
+
+    fun inAuthor(inAuthor: String?) = apply { this.inAuthor = StringUtils.getIfBlank(inAuthor, null) }
+
+    fun inPublisher(inPublisher: String?) = apply { this.inPublisher = StringUtils.getIfBlank(inPublisher, null) }
+
+    fun subject(subject: String?) = apply { this.subject = StringUtils.getIfBlank(subject, null) }
+
+    fun isbn(isbn: String?) = apply { this.isbn = StringUtils.getIfBlank(isbn, null) }
+
+    fun startIndex(startIndex: Int) = apply {
+        require(startIndex >= 0) { "Start index can't be less than 0!" }
+        this.startIndex = startIndex
+    }
+
+    fun maxResults(maxResults: Int) = apply {
+        require(maxResults <= 40) { "MaxResults can't be greater than 40!" }
+        this.maxResults = maxResults
+    }
+
+    fun printType(printType: PrintType?) = apply { this.printType = printType }
+
+    fun sortType(sortType: SortType?) = apply { this.sortType = sortType }
+
+    fun language(lang: String?) = apply { this.lang = StringUtils.getIfBlank(lang, null) }
+
+    private fun buildQueryString(): String {
+        return LinkedList<String>().also { members ->
+            inText?.let { members.add(it) }
+            inTitle?.let { members.add(TITLE_FLAG + it.surrounding("\"")) }
+            inAuthor?.let { members.add(AUTHOR_FLAG + it.surrounding("\"")) }
+            inPublisher?.let { members.add(PUBLISHER_FLAG + it.surrounding("\"")) }
+            isbn?.let { members.add(ISBN_FLAG + it) }
+            subject?.let { members.add(SUBJECT_FLAG + it.surrounding("\"")) }
+        }.joinToString(" ")
+    }
+
+    fun build(): GoogleBooksRequest {
+        return try {
+            GoogleBooksRequest(
+                HttpUrl.Builder()
+                    .scheme(PROTOCOL)
+                    .host(HOST)
+                    .addPathSegments(PATH_SEGMENTS)
+                    .addQueryParameter("q", buildQueryString())
+                    .addQueryParameter(START_INDEX, startIndex.toString())
+                    .addQueryParameter(MAX_RESULTS, maxResults.toString())
+                    .addQueryParameter(PRINT_TYPE, (printType ?: PRINT_TYPE_DEFAULT).toString())
+                    .addQueryParameter(ORDER_BY, (sortType ?: SORT_TYPE_DEFAULT).toString())
+                    .addQueryParameter(LANG_RESTRICT, lang)
+                    .build().toUrl()
+            )
+        } catch (e: URISyntaxException) {
+            throw RuntimeException(e)
+        }
+    }
 
     companion object {
         private const val PROTOCOL = "https"
@@ -91,82 +182,11 @@ class GoogleBooksQueryBuilder {
         }
     }
 
-    private var inText: String? = null
-    private var inTitle: String? = null
-    private var inAuthor: String? = null
-    private var inPublisher: String? = null
-    private var subject: String? = null
-    private var isbn: String? = null
-    private var lang: String? = null
-    private var startIndex = 0
-    private var maxResults = 10
-    private var printType: PrintType? = null
-    private var sortType: SortType? = null
-
-    fun inText(inText: String?) = apply { this.inText = StringUtils.getIfBlank(inText, null) }
-
-    fun inTitle(inTitle: String?) = apply { this.inTitle = StringUtils.getIfBlank(inTitle, null) }
-
-    fun inAuthor(inAuthor: String?) = apply { this.inAuthor = StringUtils.getIfBlank(inAuthor, null) }
-
-    fun inPublisher(inPublisher: String?) = apply { this.inPublisher = StringUtils.getIfBlank(inPublisher, null) }
-
-    fun subject(subject: String?) = apply { this.subject = StringUtils.getIfBlank(subject, null) }
-
-    fun isbn(isbn: String?) = apply { this.isbn = StringUtils.getIfBlank(isbn, null) }
-
-    fun startIndex(startIndex: Int) = apply {
-        require(startIndex >= 0) { "Start index can't be less than 0!" }
-        this.startIndex = startIndex
-    }
-
-    fun maxResults(maxResults: Int) = apply {
-        require(maxResults <= 40) { "MaxResults can't be greater than 40!" }
-        this.maxResults = maxResults
-    }
-
-    fun printType(printType: PrintType?) = apply { this.printType = printType }
-
-    fun sortType(sortType: SortType?) = apply { this.sortType = sortType }
-
-    fun language(lang: String?) = apply { this.lang = StringUtils.getIfBlank(lang, null) }
-
-    private fun buildQueryString(): String {
-        return LinkedList<String>().also { members ->
-            inText?.let { members.add(it) }
-            inTitle?.let { members.add(TITLE_FLAG + it.surrounding("\"")) }
-            inAuthor?.let { members.add(AUTHOR_FLAG + it.surrounding("\"")) }
-            inPublisher?.let { members.add(PUBLISHER_FLAG + it.surrounding("\"")) }
-            isbn?.let { members.add(ISBN_FLAG + it) }
-            subject?.let { members.add(SUBJECT_FLAG + it.surrounding("\"")) }
-        }.joinToString(" ")
-    }
-
-    fun build(): GoogleBooksQuery {
-        return try {
-            GoogleBooksQuery(
-                HttpUrl.Builder()
-                    .scheme(PROTOCOL)
-                    .host(HOST)
-                    .addPathSegments(PATH_SEGMENTS)
-                    .addQueryParameter("q", buildQueryString())
-                    .addQueryParameter(START_INDEX, startIndex.toString())
-                    .addQueryParameter(MAX_RESULTS, maxResults.toString())
-                    .addQueryParameter(PRINT_TYPE, (printType ?: PRINT_TYPE_DEFAULT).toString())
-                    .addQueryParameter(ORDER_BY, (sortType ?: SORT_TYPE_DEFAULT).toString())
-                    .addQueryParameter(LANG_RESTRICT, lang)
-                    .build().toUrl()
-            )
-        } catch (e: URISyntaxException) {
-            throw RuntimeException(e)
-        }
-    }
-
     enum class PrintType(val value: String) {
-        ALL(GoogleBooksQueryBuilder.ALL), BOOKS(GoogleBooksQueryBuilder.BOOKS), MAGAZINES(GoogleBooksQueryBuilder.MAGAZINES);
+        ALL(GoogleBooksQuery.ALL), BOOKS(GoogleBooksQuery.BOOKS), MAGAZINES(GoogleBooksQuery.MAGAZINES);
     }
 
     enum class SortType(val value: String) {
-        RELEVANCE(GoogleBooksQueryBuilder.RELEVANCE), NEWEST(GoogleBooksQueryBuilder.NEWEST);
+        RELEVANCE(GoogleBooksQuery.RELEVANCE), NEWEST(GoogleBooksQuery.NEWEST);
     }
 }

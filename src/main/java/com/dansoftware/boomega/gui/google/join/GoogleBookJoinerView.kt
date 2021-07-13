@@ -16,12 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.googlebooks.join
+package com.dansoftware.boomega.gui.google.join
 
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.googlebooks.GoogleBooksPagination
-import com.dansoftware.boomega.gui.googlebooks.GoogleBooksTable
-import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsOverlay
+import com.dansoftware.boomega.gui.google.GoogleBooksPagination
 import com.dansoftware.boomega.service.googlebooks.Volume
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
@@ -79,8 +77,8 @@ class GoogleBookJoinerView(
         //todo: TOOLTIP
     }
 
-    private fun buildTable() =
-        GoogleBooksPagination().also {
+    private fun buildTable(): GoogleBooksPagination = TODO()
+        /*GoogleBooksPagination().also {
             VBox.setVgrow(it, Priority.ALWAYS)
             it.table.setOnItemDoubleClicked { volume ->
                 onVolumeSelected.get()?.accept(volume)
@@ -101,7 +99,7 @@ class GoogleBookJoinerView(
                 GoogleBooksTable.AUTHOR_COLUMN,
                 GoogleBooksTable.TITLE_COLUMN,
             )
-        }
+        }*/
 
     private fun search() {
         TODO()

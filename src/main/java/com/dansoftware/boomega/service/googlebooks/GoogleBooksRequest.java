@@ -33,11 +33,11 @@ import java.util.regex.Pattern;
  * @author Daniel Gyorffy
  */
 @SuppressWarnings("ClassCanBeRecord")
-public class GoogleBooksQuery {
+public class GoogleBooksRequest {
 
     private final URL url;
 
-    GoogleBooksQuery(URL url) {
+    GoogleBooksRequest(URL url) {
         this.url = url;
     }
 

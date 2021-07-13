@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.googlebooks.details
+package com.dansoftware.boomega.gui.google.details
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView
@@ -24,7 +24,7 @@ import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.control.ReadOnlyRating
 import com.dansoftware.boomega.gui.control.WebsiteHyperLink
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
-import com.dansoftware.boomega.gui.googlebooks.preview.GoogleBookPreviewTabItem
+import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.i18n.I18N

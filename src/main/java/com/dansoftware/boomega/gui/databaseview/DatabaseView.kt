@@ -23,7 +23,7 @@ import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.googlebooks.GoogleBooksImportModule
+import com.dansoftware.boomega.gui.google.GoogleBooksImportModule
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import javafx.stage.WindowEvent
 import org.slf4j.Logger

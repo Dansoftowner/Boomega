@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.googlebooks;
+package com.dansoftware.boomega.gui.google;
 
 import com.dansoftware.boomega.gui.control.*;
 import com.dansoftware.boomega.gui.util.BaseFXUtils;
@@ -35,7 +35,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -45,7 +44,7 @@ import java.util.Optional;
 import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
 
 /**
- * A {@link GoogleBooksTable} is a table-view that used for showing Google Books.
+ * A {@link GoogleBooksTable} is a table-view that used for displaying {@link Volume} objects.
  *
  * @author Daniel Gyorffy
  */
@@ -172,7 +171,6 @@ public class GoogleBooksTable extends BaseTable<Volume> {
                     "rank",
                     "google.books.table.column.rank",
                     RankColumn::new,
-                    DEFAULT_VISIBLE,
                     INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );

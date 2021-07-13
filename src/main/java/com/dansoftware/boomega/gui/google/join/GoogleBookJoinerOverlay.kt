@@ -16,22 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.googlebooks.details
+package com.dansoftware.boomega.gui.google.join
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.TitledOverlayBox
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.service.googlebooks.Volume
+import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import javafx.scene.layout.Region
+import java.util.function.Consumer
 
-/**
- * Used for displaying a [GoogleBookDetailsPane] as an overlay
- *
- * @author Daniel Gyorffy
- */
-class GoogleBookDetailsOverlay(context: Context, volume: Volume) :
-    TitledOverlayBox(
-        I18N.getValue("google.books.detail.title"),
-        ImageView("/com/dansoftware/boomega/image/util/google_12px.png"),
-        GoogleBookDetailsPane(context, volume)
-    )
+class GoogleBookJoinerOverlay(
+    context: Context,
+    onVolumeSelected: Consumer<Volume>
+) : TitledOverlayBox(
+    I18N.getValue("google.books.joiner.titlebar"),
+    ImageView(Image("/com/dansoftware/boomega/image/util/google_12px.png")),
+    GoogleBookJoinerView(context) { context.hideOverlay(it.parent?.parent?.parent?.parent as Region?) } //TODO: not so good solution
+        .apply { setOnVolumeSelected(onVolumeSelected) }
+)

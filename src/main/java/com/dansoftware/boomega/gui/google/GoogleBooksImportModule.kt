@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.googlebooks
+package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
@@ -49,18 +49,16 @@ class GoogleBooksImportModule(
     override val id: String
         get() = "google-books-import"
 
-    //private val content: ObjectProperty<GoogleBooksImportView> = SimpleObjectProperty()
-    private val content: ObjectProperty<GoogleBookSearchView> = SimpleObjectProperty()
+    private val content: ObjectProperty<GoogleBooksImportView> = SimpleObjectProperty()
 
     override fun buildContent(): Node {
         if (content.get() == null)
-            content.set(GoogleBookSearchView(context))
+            content.set(GoogleBooksImportView(context))
         return content.get()
     }
 
     override fun destroy(): Boolean {
-        logger.debug("Module closed. Writing configurations...")
-        //content.get().writeConfig()
+        logger.debug("Module closed.")
         content.set(null)
         return true
     }

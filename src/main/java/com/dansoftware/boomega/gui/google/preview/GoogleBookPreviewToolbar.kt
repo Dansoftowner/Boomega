@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.googlebooks.preview
+package com.dansoftware.boomega.gui.google.preview
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.TwoSideToolBar
-import com.dansoftware.boomega.gui.googlebooks.details.GoogleBookDetailsOverlay
+import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsOverlay
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.surrounding
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.control.*
-import javafx.scene.image.Image
-import javafx.scene.image.ImageView
 
 class GoogleBookPreviewToolbar(private val context: Context, private val view: GoogleBookPreview) : TwoSideToolBar() {
 
