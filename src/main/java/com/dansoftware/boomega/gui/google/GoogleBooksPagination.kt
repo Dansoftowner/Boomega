@@ -87,6 +87,7 @@ class GoogleBooksPagination(private val context: Context, private val query: Goo
         private fun onSucceeded(volumes: Volumes) {
             context.stopProgress()
             table.items.setAll(volumes.items ?: emptyList())
+            table.refresh()
             when (pageCount) {
                 Int.MAX_VALUE -> {
                     pageCount = ceil(volumes.totalItems.toDouble() / query.maxResults).toInt()
