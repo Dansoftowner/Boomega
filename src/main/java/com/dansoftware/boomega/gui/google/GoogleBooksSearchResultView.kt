@@ -51,4 +51,8 @@ class GoogleBooksSearchResultView(context: Context, query: GoogleBooksQuery, onP
         pagination.refresh()
     }
 
+    fun showSelectedVolumeInfo() {
+        pagination.showSelectedVolumeInfo()
+    }
+
 }

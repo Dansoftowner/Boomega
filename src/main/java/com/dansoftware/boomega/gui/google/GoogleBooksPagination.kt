@@ -21,13 +21,17 @@ package com.dansoftware.boomega.gui.google
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsOverlay
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
-import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
+import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.service.googlebooks.Volumes
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.scene.control.ContextMenu
+import javafx.scene.control.MenuItem
 import javafx.scene.control.Pagination
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -52,9 +56,23 @@ class GoogleBooksPagination(private val context: Context, private val query: Goo
 
     private fun buildTable() = GoogleBooksTable(0).apply {
         buildDefaultColumns()
-        setOnItemDoubleClicked {
-            context.showOverlay(GoogleBookDetailsOverlay(context, it))
-        }
+        rowContextMenu = ContextMenu(
+            MenuItem(
+                i18n("google.books.detail.title"),
+                MaterialDesignIconView(MaterialDesignIcon.INFORMATION_OUTLINE)
+            ).apply {
+                setOnAction { showSelectedVolumeInfo() }
+            }
+        )
+        setOnItemDoubleClicked(::showVolumeInfo)
+    }
+
+    private fun showVolumeInfo(volume: Volume) {
+        context.showOverlay(GoogleBookDetailsOverlay(context, volume))
+    }
+
+    fun showSelectedVolumeInfo() {
+        showVolumeInfo(table.selectionModel.selectedItem)
     }
 
     private inner class SearchTask(private val query: GoogleBooksQuery) : GoogleBooksSearchTask(query) {

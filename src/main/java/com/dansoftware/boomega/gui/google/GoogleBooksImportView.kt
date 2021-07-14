@@ -49,7 +49,7 @@ class GoogleBooksImportView(private val context: Context) : GoogleBooksSearchVie
     }
 
     private fun GoogleBooksSearchResultView.expandTableContextMenu() {
-        pagination.table.rowContextMenu = ContextMenu(
+        pagination.table.rowContextMenu.items.add(
             MenuItem(i18n("google.books.volume_import"), MaterialDesignIconView(MaterialDesignIcon.PLUS)).apply {
                 disableProperty().bind(Bindings.isEmpty(pagination.table.selectionModel.selectedItems))
                 setOnAction {

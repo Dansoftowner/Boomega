@@ -22,6 +22,7 @@ import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.i18n.i18n
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Insets
 import javafx.scene.control.*
@@ -42,6 +43,8 @@ class GoogleBooksSearchToolbar(
         leftItems.add(buildHomeButton())
         leftItems.add(Separator())
         leftItems.add(buildTotalItemsLabel())
+        rightItems.add(buildVolumeInfoButton())
+        rightItems.add(Separator())
         rightItems.add(buildReloadButton())
     }
 
@@ -59,6 +62,14 @@ class GoogleBooksSearchToolbar(
                 .concat(" ")
                 .concat(view.totalItemsProperty)
         )
+    }
+
+    private fun buildVolumeInfoButton() = Button().apply {
+        disableProperty().bind(Bindings.isEmpty(view.pagination.table.selectionModel.selectedItems))
+        contentDisplay = ContentDisplay.GRAPHIC_ONLY
+        graphic = MaterialDesignIconView(MaterialDesignIcon.INFORMATION_OUTLINE)
+        tooltip = Tooltip(i18n("google.books.detail.title"))
+        setOnAction { view.showSelectedVolumeInfo() }
     }
 
     private fun buildReloadButton() = Button().apply {
