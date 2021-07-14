@@ -5,7 +5,7 @@
 ### Enhancements/features:
 
 * ✨ [#147](https://github.com/Dansoftowner/Boomega/issues/147): Global toolbar in database view
-* 💥 New Google Books Import View (Closes [#11](https://github.com/Dansoftowner/Boomega/issues/11), [#13](https://github.com/Dansoftowner/Boomega/issues/13))
+* 💥 New Google Books Import View (Closes [#11](https://github.com/Dansoftowner/Boomega/issues/11), [#13](https://github.com/Dansoftowner/Boomega/issues/13) and [#10](https://github.com/Dansoftowner/Boomega/issues/10))
 * ✨ [#14](https://github.com/Dansoftowner/Boomega/issues/14): Google Book preview panel tells the user if the preview is not available
 * ✨ [#149](https://github.com/Dansoftowner/Boomega/issues/149): Google Book Preview toolbar
 * ✨ Google Book Preview is now displayed in a tab
