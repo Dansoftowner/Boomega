@@ -26,8 +26,7 @@ import java.net.URL
 import java.util.*
 
 /**
- * Used for building queries that are capable to download data
- * from the Google Books Database.
+ * Used for building requests for the Google Books service.
  *
  * @author Daniel Gyorffy
  */
@@ -92,6 +91,13 @@ class GoogleBooksQuery {
     fun sortType(sortType: SortType?) = apply { this.sortType = sortType }
 
     fun language(lang: String?) = apply { this.lang = StringUtils.getIfBlank(lang, null) }
+
+    /**
+     * Returns *true* if the query has enough information to be used in the request.
+     */
+    fun isComplete(): Boolean {
+        return listOf(inText, inTitle, inAuthor, inPublisher, subject, isbn).any { it != null }
+    }
 
     private fun buildQueryString(): String {
         return LinkedList<String>().also { members ->

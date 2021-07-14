@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import javafx.scene.Node
 import javafx.scene.layout.StackPane
@@ -47,7 +48,15 @@ open class GoogleBooksSearchView(private val context: Context) : StackPane() {
     }
 
     private fun buildSearchForm() = GoogleBooksSearchForm(context) {
-        content = buildSearchResultView(it)
+        when {
+            it.isComplete() ->
+                content = buildSearchResultView(it)
+            else ->
+                context.showErrorDialog(
+                    i18n("google.books.search.incomplete.title"),
+                    i18n("google.books.search.incomplete.msg")
+                ) { }
+        }
     }
 
     protected fun home() {
