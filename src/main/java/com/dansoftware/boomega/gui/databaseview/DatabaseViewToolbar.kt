@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.databaseview
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.action.GlobalActions
-import com.dansoftware.boomega.gui.control.TwoSideToolBar
+import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.revealInExplorer
@@ -37,7 +37,7 @@ class DatabaseViewToolbar(
     private val view: DatabaseView,
     private val preferences: Preferences,
     private val databaseTracker: DatabaseTracker
-) : TwoSideToolBar() {
+) : BiToolBar() {
 
     init {
         styleClass.add("database-view-toolbar")

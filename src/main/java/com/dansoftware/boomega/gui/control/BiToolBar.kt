@@ -25,7 +25,7 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 
-open class TwoSideToolBar : HBox() {
+open class BiToolBar : HBox() {
 
     val leftToolBar: ToolBar = buildLeftToolBar()
     val rightToolBar: ToolBar = buildRightToolBar()
@@ -44,12 +44,12 @@ open class TwoSideToolBar : HBox() {
 
     private fun buildLeftToolBar() = ToolBar().apply {
         setHgrow(this, Priority.SOMETIMES)
-        prefHeightProperty().bind(this@TwoSideToolBar.heightProperty())
+        prefHeightProperty().bind(this@BiToolBar.heightProperty())
     }
 
     private fun buildRightToolBar() = ToolBar().apply {
         setHgrow(this, Priority.SOMETIMES)
-        prefHeightProperty().bind(this@TwoSideToolBar.heightProperty())
+        prefHeightProperty().bind(this@BiToolBar.heightProperty())
     }
 
     private class SeparatorPane : Pane() {

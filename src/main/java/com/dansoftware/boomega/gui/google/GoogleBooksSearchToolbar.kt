@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.google
 
-import com.dansoftware.boomega.gui.control.TwoSideToolBar
+import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.i18n.i18n
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
@@ -32,7 +32,7 @@ import javafx.scene.control.*
 class GoogleBooksSearchToolbar(
     private val view: GoogleBooksSearchResultView,
     private val onPreviousPageRequested: () -> Unit
-) : TwoSideToolBar() {
+) : BiToolBar() {
 
     init {
         buildUI()

@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.gui.control.BaseTable
-import com.dansoftware.boomega.gui.control.TwoSideToolBar
+import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
@@ -46,7 +46,7 @@ import java.util.function.Supplier
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
-class RecordsViewToolbar(private val view: RecordsView) : TwoSideToolBar() {
+class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
 
     private val abcLocaleProp: ObjectProperty<Locale> = SimpleObjectProperty<Locale>(Locale.getDefault())
     var abcLocale: Locale

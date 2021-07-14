@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.control.TwoSideToolBar
+import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
@@ -40,7 +40,7 @@ import javafx.scene.control.*
 /**
  * The toolbar that appears on the top of the login-view.
  */
-class LoginToolbar(private val context: Context, private val preferences: Preferences) : TwoSideToolBar() {
+class LoginToolbar(private val context: Context, private val preferences: Preferences) : BiToolBar() {
 
     init {
         leftToolBar.padding = Insets(0.0, 10.0, 0.0, 10.0)

@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.dbmanager
 
-import com.dansoftware.boomega.gui.control.TwoSideToolBar
+import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
@@ -28,7 +28,7 @@ import javafx.scene.control.ContentDisplay
 import javafx.scene.control.Label
 import org.apache.commons.lang3.StringUtils
 
-class DatabaseManagerToolbar(private val view: DatabaseManagerView) : TwoSideToolBar() {
+class DatabaseManagerToolbar(private val view: DatabaseManagerView) : BiToolBar() {
 
     init {
         leftToolBar.padding = Insets(0.0, 0.0, 0.0, 10.0)
