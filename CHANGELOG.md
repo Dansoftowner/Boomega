@@ -16,6 +16,7 @@
 ### Bug fixes/improvements
 
 * 🐛 [#146](https://github.com/Dansoftowner/Boomega/issues/146): UnsatisfiedLinkError when running the program as a native app on Windows
+* 🐛 [#148](https://github.com/Dansoftowner/Boomega/issues/148): Google book information overlay - minimum height is too low
 * 🐛 Database view module configurations are not saved when restarting the program
 * 🐛 Closing a non auto-login database removes the auto-login database as well
 * 🐛 Google Books Table: "publisher" column called "subtitle"
