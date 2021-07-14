@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.google
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.SearchTextField
 import com.dansoftware.boomega.gui.control.formsfx.LanguageSelectionControl
+import com.dansoftware.boomega.gui.control.formsfx.OnActionTextControl
 import com.dansoftware.boomega.gui.util.onScenePresent
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
@@ -106,6 +107,7 @@ class GoogleBooksSearchForm(
         generalText.bindBidirectional(textProperty())
         textProperty().bindBidirectional(generalText)
         promptText = i18n("google.books.add.form.gtext")
+        setOnAction { search() }
     }
 
     private fun buildDetailsSearchArea() =
@@ -117,28 +119,33 @@ class GoogleBooksSearchForm(
                         Field.ofStringType(author)
                             .placeholder("google.books.add.form.author.prompt")
                             .label("google.books.add.form.author")
-                            .span(ColSpan.HALF),
+                            .span(ColSpan.HALF)
+                            .render(OnActionTextControl { search() }),
                         Field.ofStringType(title)
                             .placeholder("google.books.add.form.title.prompt")
                             .label("google.books.add.form.title")
-                            .span(ColSpan.HALF),
+                            .span(ColSpan.HALF)
+                            .render(OnActionTextControl { search() }),
                         Field.ofStringType(publisher)
                             .placeholder("google.books.add.form.publisher.prompt")
                             .label("google.books.add.form.publisher")
-                            .span(ColSpan.HALF),
+                            .span(ColSpan.HALF)
+                            .render(OnActionTextControl { search() }),
                         Field.ofStringType(subject)
                             .placeholder("google.books.add.form.subject.prompt")
                             .label("google.books.add.form.subject")
-                            .span(ColSpan.HALF),
+                            .span(ColSpan.HALF)
+                            .render(OnActionTextControl { search() }),
                         Field.ofStringType(isbn)
                             .placeholder("google.books.add.form.isbn.prompt")
                             .label("google.books.add.form.isbn")
-                            .span(ColSpan.HALF),
+                            .span(ColSpan.HALF)
+                            .render(OnActionTextControl { search() }),
                         Field.ofStringType(language)
                             .styleClass("languageSelector")
                             .placeholder("google.books.add.form.lang.prompt")
                             .label("google.books.add.form.lang")
-                            .render(LanguageSelectionControl(context))
+                            .render(LanguageSelectionControl(context) { search() })
                             .span(ColSpan.HALF),
                         //TODO: sort type
                         //TODO: print type

@@ -18,30 +18,22 @@
 
 package com.dansoftware.boomega.gui.control.formsfx;
 
-import com.dansoftware.boomega.gui.api.Context;
-import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl;
 import com.dlsc.formsfx.view.controls.SimpleTextControl;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LanguageSelectionControl extends OnActionTextControl {
+public class OnActionTextControl extends SimpleTextControl {
 
-    private final Context context;
+    private final EventHandler<ActionEvent> onAction;
 
-    public LanguageSelectionControl(@NotNull Context context) {
-        this(context, null);
-    }
-
-    public LanguageSelectionControl(@NotNull Context context, @Nullable EventHandler<ActionEvent> onAction) {
-        super(onAction);
-        this.context = context;
+    public OnActionTextControl(@Nullable EventHandler<ActionEvent> onAction) {
+        this.onAction = onAction;
     }
 
     @Override
     public void initializeParts() {
         super.initializeParts();
-        TextFieldLanguageSelectorControl.applyOnTextField(context, super.editableField);
+        editableField.setOnAction(onAction);
     }
 }
