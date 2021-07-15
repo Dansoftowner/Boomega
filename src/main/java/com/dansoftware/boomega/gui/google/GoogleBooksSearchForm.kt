@@ -53,13 +53,13 @@ class GoogleBooksSearchForm(
     private val onSearchRequest: (GoogleBooksQuery) -> Unit
 ) : StackPane() {
 
-    private val generalText: StringProperty = SimpleStringProperty("")
-    private val author: StringProperty = SimpleStringProperty("")
-    private val title: StringProperty = SimpleStringProperty("")
-    private val publisher: StringProperty = SimpleStringProperty("")
-    private val subject: StringProperty = SimpleStringProperty("")
-    private val isbn: StringProperty = SimpleStringProperty("")
-    private val language: StringProperty = SimpleStringProperty("")
+    val generalText: StringProperty = SimpleStringProperty("")
+    val author: StringProperty = SimpleStringProperty("")
+    val title: StringProperty = SimpleStringProperty("")
+    val publisher: StringProperty = SimpleStringProperty("")
+    val subject: StringProperty = SimpleStringProperty("")
+    val isbn: StringProperty = SimpleStringProperty("")
+    val language: StringProperty = SimpleStringProperty("")
 
     init {
         styleClass.add("google-books-search-form")

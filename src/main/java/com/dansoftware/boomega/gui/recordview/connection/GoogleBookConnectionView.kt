@@ -21,8 +21,8 @@ package com.dansoftware.boomega.gui.recordview.connection
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsPane
-import com.dansoftware.boomega.gui.google.join.GoogleBookJoinerOverlay
 import com.dansoftware.boomega.gui.recordview.RecordTable
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
 import com.dansoftware.boomega.gui.util.typeEquals
@@ -374,12 +374,14 @@ class GoogleBookConnectionView(
         }
 
         fun showGoogleBookJoiner() {
-            context.showOverlay(
-                GoogleBookJoinerOverlay(context) { volume ->
-                    CachedExecutor.submit(
-                        buildJoinActionTask(volume)
-                    )
-                }
+            context.sendRequest(
+                DatabaseView.TabItemShowRequest(
+                    GoogleBookJoinTab(context, items[0]) { tab, record, volume ->
+                        context.sendRequest(DatabaseView.TabItemCloseRequest(tab))
+                        if (items[0] == record)
+                            CachedExecutor.submit(buildJoinActionTask(volume))
+                    }
+                )
             )
         }
 

@@ -30,7 +30,7 @@ import javafx.scene.layout.StackPane
  */
 open class GoogleBooksSearchView(private val context: Context) : StackPane() {
 
-    private val searchForm: GoogleBooksSearchForm = buildSearchForm()
+    protected val searchForm: GoogleBooksSearchForm = buildSearchForm()
 
     private var content: Node?
         get() = children[0]

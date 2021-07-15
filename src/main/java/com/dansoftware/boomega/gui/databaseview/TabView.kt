@@ -82,8 +82,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
     }
 
     private fun selectTab(tabItem: TabItem) {
-        val tab = tabPane.tabs.filterIsInstance<TabImpl>().find { it.tabItem == tabItem }
-        tab?.let(tabPane.selectionModel::select)
+        tabItem.tabImpl?.let(tabPane.selectionModel::select)
     }
 
     @Suppress("NullableBooleanElvis")
@@ -99,6 +98,23 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
         tabPane.tabs.add(tab)
         tabPane.selectionModel.select(tab)
     }
+
+    fun closeTab(item: TabItem) {
+        item.tabImpl?.let(::closeTabImpl)
+    }
+
+    private fun closeTabImpl(tab: TabImpl) {
+        if (tab.tabItem != baseTabItem) {
+            val event = Event(Tab.TAB_CLOSE_REQUEST_EVENT)
+            tab.onCloseRequest.handle(event)
+            if (!event.isConsumed) {
+                tabPane.tabs.remove(tab)
+            }
+        }
+    }
+
+    private val TabItem.tabImpl: TabImpl?
+        get() = tabPane.tabs.filterIsInstance<TabImpl>().find { it.tabItem == this }
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(TabView::class.java)
@@ -147,7 +163,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
             MenuItem(I18N.getValue("database_view.tab_menu.close")).apply {
                 isDisable = (tabView.baseTabItem == tabItem)
                 setOnAction {
-                    closeTab(this@TabImpl)
+                    tabView.closeTabImpl(this@TabImpl)
                 }
             }
 
@@ -162,7 +178,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
                     tabView.tabPane.tabs
                         .filterIsInstance<TabImpl>()
                         .filter { it != this@TabImpl }
-                        .forEach(::closeTab)
+                        .forEach(tabView::closeTabImpl)
                 }
             }
 
@@ -176,7 +192,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
                 setOnAction {
                     tabView.tabPane.tabs
                         .filterIsInstance<TabImpl>()
-                        .forEach(::closeTab)
+                        .forEach(tabView::closeTabImpl)
                 }
             }
 
@@ -187,7 +203,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
                 setOnAction {
                     val tabs = tabView.tabPane.tabs.filterIsInstance<TabImpl>()
                     val currentIndex = tabs.indexOf(this@TabImpl)
-                    tabs.dropLast(tabs.size - currentIndex).forEach(::closeTab)
+                    tabs.dropLast(tabs.size - currentIndex).forEach(tabView::closeTabImpl)
                 }
             }
 
@@ -199,18 +215,9 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
                 setOnAction {
                     val tabs = tabView.tabPane.tabs.filterIsInstance<TabImpl>()
                     val currentIndex = tabs.indexOf(this@TabImpl)
-                    tabs.drop(currentIndex + 1).forEach(::closeTab)
+                    tabs.drop(currentIndex + 1).forEach(tabView::closeTabImpl)
                 }
             }
 
-        private fun closeTab(tab: TabImpl) {
-            if (tab.tabItem != tabView.baseTabItem) {
-                val event = Event(Tab.TAB_CLOSE_REQUEST_EVENT)
-                tab.onCloseRequest.handle(event)
-                if (!event.isConsumed) {
-                    tabView.tabPane.tabs.remove(tab)
-                }
-            }
-        }
     }
 }

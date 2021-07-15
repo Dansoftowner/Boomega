@@ -44,4 +44,6 @@ class DatabaseViewBase(
     }
 
     fun openTab(tabItem: TabItem) = tabView.openTab(tabItem)
+
+    fun closeTab(tabItem: TabItem) = tabView.closeTab(tabItem)
 }

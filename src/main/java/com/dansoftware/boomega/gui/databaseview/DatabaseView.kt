@@ -50,6 +50,10 @@ class DatabaseView(
         (content as DatabaseViewBase).openTab(tabItem)
     }
 
+    fun closeTab(tabItem: TabItem) {
+        (content as DatabaseViewBase).closeTab(tabItem)
+    }
+
     fun openModuleTab() {
         openTab(ModuleView.getTabItem(this))
     }
@@ -67,8 +71,8 @@ class DatabaseView(
                         it.sendMessage(msg)
                     }
                 }
-            is TabItemShowRequest ->
-                openTab(request.tabItem)
+            is TabItemShowRequest -> openTab(request.tabItem)
+            is TabItemCloseRequest -> closeTab(request.tabItem)
         }
     }
 
@@ -114,6 +118,8 @@ class DatabaseView(
     }
 
     class TabItemShowRequest(val tabItem: TabItem) : Context.Request
+
+    class TabItemCloseRequest(val tabItem: TabItem) : Context.Request
 
     class ModuleShowRequest<M : Module>(val classRef: Class<M>) : Context.Request {
 
