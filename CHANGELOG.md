@@ -13,6 +13,7 @@
 * 💄 Updated look and feel, more animations
 * ✨ Showing dialogs for uncaught exceptions
 * ✨ Context menu for `database view` tabs that allows to access some basic tab-operation utility (like closing all tabs etc...)
+* ✨ More precise failed login messages
 
 ### Bug fixes/improvements
 
