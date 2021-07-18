@@ -31,8 +31,10 @@ import com.dansoftware.boomega.gui.entry.EntryActivity;
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener;
 import com.dansoftware.boomega.gui.login.LoginActivity;
 import com.dansoftware.boomega.gui.login.quick.QuickLoginActivity;
+import com.dansoftware.boomega.i18n.I18NUtils;
 import com.dansoftware.boomega.main.ArgumentTransformer;
 import javafx.application.Platform;
+import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -41,6 +43,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
 
 /**
  * An ActivityLauncher can launch the right "activity" ({@link EntryActivity}, {@link DatabaseActivity}) depending
@@ -191,18 +195,19 @@ public class ActivityLauncher implements Runnable {
         //we add the launched database to the last databases
         onNewDatabaseAdded(argument);
         logger.debug("trying to sign in into the database...");
-        Database database = NitriteDatabase.getAuthenticator()
-                .onFailed((title, message, t) -> {
+        Database database = NitriteDatabase.builder()
+                .databaseMeta(argument)
+                .onFailed((message, t) -> {
                     Platform.runLater(() -> {
                         LoginData temp = getLoginData();
                         //we select it, but we don't save it to the configurations
                         temp.setSelectedDatabase(argument);
 
                         EntryActivity entryActivity = showEntryActivity();
-                        entryActivity.getContext().showErrorDialog(title, message, (Exception) t);
+                        entryActivity.getContext().showErrorDialog(i18n("login.failed"), message, (Exception) t);
                         onActivityLaunched(entryActivity.getContext(), null);
                     });
-                }).auth(argument);
+                }).build();
 
         //the login-process was successful
         if (database != null) {
@@ -237,12 +242,13 @@ public class ActivityLauncher implements Runnable {
                     logger.debug("Didn't found GUI for database: '{}'", argument.getFile());
                     onNewDatabaseAdded(argument);
                     final DatabaseLoginListener onDatabaseLogin = db -> onActivityLaunched(showMainActivity(db).getContext(), argument);
-                    Database database = NitriteDatabase.getAuthenticator()
-                            .onFailed((title, message, t) -> {
+                    Database database = NitriteDatabase.builder()
+                            .databaseMeta(argument)
+                            .onFailed((message, t) -> {
                                 Platform.runLater(() -> {
                                     onActivityLaunched(showQuickLoginActivity(argument, onDatabaseLogin).getContext(), argument);
                                 });
-                            }).auth(argument);
+                            }).build();
 
                     if (database != null) {
                         logger.debug("Signed into the argument-database successfully, launching a MainActivity...");
@@ -321,15 +327,16 @@ public class ActivityLauncher implements Runnable {
      * Handles the situation when auto-login is turned on
      */
     private void autoLogin() {
-        Database database = NitriteDatabase.getAuthenticator()
-                .onFailed((title, message, t) -> {
+        Database database = NitriteDatabase.builder()
+                .databaseMeta(getLoginData().getAutoLoginDatabase())
+                .onFailed((message, t) -> {
                     logger.debug("failed signing into the database");
                     Platform.runLater(() -> {
                         EntryActivity entryActivity = showEntryActivity();
-                        entryActivity.getContext().showErrorDialog(title, message, (Exception) t);
+                        entryActivity.getContext().showErrorDialog(i18n("login.failed"), message, (Exception) t);
                         onActivityLaunched(entryActivity.getContext(), null);
                     });
-                }).auth(getLoginData().getAutoLoginDatabase(), getLoginData().getAutoLoginCredentials());
+                }).build(getLoginData().getAutoLoginCredentials());
 
         //the login-process was successful
         if (database != null) {

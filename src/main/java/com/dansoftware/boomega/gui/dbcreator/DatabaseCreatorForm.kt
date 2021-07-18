@@ -26,6 +26,7 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.SpaceValidator
 import com.dansoftware.boomega.gui.util.WindowUtils
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.jfilegoodies.FileGoodies
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
@@ -94,7 +95,7 @@ class DatabaseCreatorForm(
     private fun buildCreateButton() = Button().apply {
         maxWidth = Double.MAX_VALUE
         minHeight = 35.0
-        text = I18N.getValue("database.creator.create")
+        text = i18n("database.creator.create")
         isDefaultButton = true
         setOnAction { create() }
     }
@@ -127,7 +128,7 @@ class DatabaseCreatorForm(
             setColumnSpan(this, 3)
         }
 
-        private fun buildLabel(i18n: String, column: Int, row: Int) = Label(I18N.getValue(i18n)).apply {
+        private fun buildLabel(i18n: String, column: Int, row: Int) = Label(i18n(i18n)).apply {
             setConstraints(this, column, row)
         }
 
@@ -153,7 +154,7 @@ class DatabaseCreatorForm(
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
             graphic = FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN)
             minHeight = 35.0
-            tooltip = Tooltip(I18N.getValue("data.source.adder.choose.dir"))
+            tooltip = Tooltip(i18n("data.source.adder.choose.dir"))
             setOnAction { openDirectory() }
         }
 
@@ -165,7 +166,7 @@ class DatabaseCreatorForm(
             isEditable = false
         }
 
-        private fun buildAuthenticationCheck() = CheckBox(I18N.getValue("database.creator.db_auth")).apply {
+        private fun buildAuthenticationCheck() = CheckBox(i18n("database.creator.db_auth")).apply {
             setConstraints(this, 0, 5)
             setColumnSpan(this, 3)
             setHgrow(this, Priority.SOMETIMES)
@@ -178,7 +179,7 @@ class DatabaseCreatorForm(
             setConstraints(this, 0, 6)
             setColumnSpan(this, 3)
             minHeight = 35.0
-            promptText = I18N.getValue("credentials.username")
+            promptText = i18n("credentials.username")
             textFormatter = SpaceValidator()
             visibleProperty().bind(authentication)
             managedProperty().bind(authentication)
@@ -189,7 +190,7 @@ class DatabaseCreatorForm(
             setConstraints(this, 0, 7)
             setColumnSpan(this, 3)
             minHeight = 35.0
-            promptText = I18N.getValue("credentials.password")
+            promptText = i18n("credentials.password")
             textFormatter = SpaceValidator()
             visibleProperty().bind(authentication)
             managedProperty().bind(authentication)
@@ -200,7 +201,7 @@ class DatabaseCreatorForm(
             setConstraints(this, 0, 8)
             setColumnSpan(this, 3)
             minHeight = 35.0
-            promptText = I18N.getValue("database.creator.password.repeat")
+            promptText = i18n("database.creator.password.repeat")
             textFormatter = SpaceValidator()
             visibleProperty().bind(authentication)
             managedProperty().bind(authentication)
@@ -212,12 +213,13 @@ class DatabaseCreatorForm(
     private fun create() {
         validateInputs { databaseMeta, credentials ->
             createdDatabase.set(databaseMeta)
-            NitriteDatabase.getAuthenticator()
-                .onFailed { title, message, t ->
+            NitriteDatabase.builder()
+                .databaseMeta(databaseMeta)
+                .onFailed { message, t ->
                     createdDatabase.set(null)
-                    context.showErrorDialog(title, message, t as Exception?) {}
-                }.touch(databaseMeta, credentials)
-            databaseTracker.addDatabase(databaseMeta)
+                    context.showErrorDialog(i18n("database.create_failed"), message, t as Exception?) {}
+                }.touch(credentials)
+            databaseTracker.saveDatabase(databaseMeta)
             WindowUtils.getStageOf(this)?.close()
         }
     }
@@ -300,9 +302,9 @@ class DatabaseCreatorForm(
     }
 
     private fun showInfoDialog(@Nls title: String, @Nls msg: String, vararg args: Any?): ButtonType? =
-        context.showInformationDialogAndWait(I18N.getValue(title, *args), I18N.getValue(msg))
+        context.showInformationDialogAndWait(i18n(title, *args), i18n(msg))
 
     private fun showErrorDialog(@Nls title: String, @Nls msg: String, vararg args: Any?): ButtonType? =
-        context.showErrorDialogAndWait(I18N.getValue(title), I18N.getValue(msg, *args))
+        context.showErrorDialogAndWait(i18n(title), i18n(msg, *args))
 
 }

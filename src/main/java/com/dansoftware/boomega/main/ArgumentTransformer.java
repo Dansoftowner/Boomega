@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +55,10 @@ public class ArgumentTransformer {
         if (StringUtils.isBlank(arg))
             return Optional.empty();
 
-        return Optional.ofNullable(DatabaseMeta.parseFrom(arg));
+        File file = new File(arg);
+        if (!file.exists())
+            return Optional.empty();
+        return Optional.of(new DatabaseMeta(file));
     }
 
     public static Optional<DatabaseMeta> transformOptional(@Nullable List<String> args) {

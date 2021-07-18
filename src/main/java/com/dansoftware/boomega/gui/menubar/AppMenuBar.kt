@@ -30,6 +30,7 @@ import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.LauncherMode
 import com.dansoftware.boomega.main.ApplicationRestart
@@ -93,7 +94,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
         val databaseMeta: DatabaseMeta,
         val preferences: Preferences,
         val databaseTracker: DatabaseTracker
-    ) : Menu(I18N.getValue("menubar.menu.file")) {
+    ) : Menu(i18n("menubar.menu.file")) {
 
         init {
             this.menuItem(newEntryMenuItem())
@@ -132,7 +133,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
          * Menu that allows the user to access the recent databases
          */
         private fun recentDatabasesMenuItem(): MenuItem =
-            object : Menu(I18N.getValue("menubar.menu.file.recent")) {
+            object : Menu(i18n("menubar.menu.file.recent")) {
                 private val it = this
                 private val menuItemFactory: (DatabaseMeta) -> MenuItem = { db ->
                     MenuItem(db.toString()).also { menuItem ->
@@ -168,7 +169,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
                 }
             }
 
-        private fun databaseCloseMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.dbclose"))
+        private fun databaseCloseMenuItem() = MenuItem(i18n("menubar.menu.file.dbclose"))
             .action {
                 preferences.editor()
                     .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
@@ -182,18 +183,18 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
             }
             .graphic(MaterialDesignIcon.LOGOUT_VARIANT)
 
-        private fun revealInExplorerMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.reveal"))
-            .action { databaseMeta.file.revealInExplorer() }
+        private fun revealInExplorerMenuItem() = MenuItem(i18n("menubar.menu.file.reveal"))
+            .action { databaseMeta.file!!.revealInExplorer() }
             .graphic(MaterialDesignIcon.FOLDER)
 
-        private fun closeWindowMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.closewindow"))
+        private fun closeWindowMenuItem() = MenuItem(i18n("menubar.menu.file.closewindow"))
             .action { context.close() }
             .graphic(MaterialDesignIcon.CLOSE)
 
         private fun restartMenuItem() =
             MenuItems.of(GlobalActions.RESTART_APPLICATION, context, preferences, databaseTracker)
 
-        private fun quitMenuItem() = MenuItem(I18N.getValue("menubar.menu.file.quit"))
+        private fun quitMenuItem() = MenuItem(i18n("menubar.menu.file.quit"))
             .action { Platform.exit() }
             .graphic(MaterialDesignIcon.CLOSE_BOX)
 
@@ -212,7 +213,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
         }
     }
 
-    private class ModuleMenu(val view: DatabaseView) : Menu(I18N.getValue("menubar.menu.modules")) {
+    private class ModuleMenu(val view: DatabaseView) : Menu(i18n("menubar.menu.modules")) {
         init {
             view.modules.forEach {
                 this.menuItem(MenuItem(it.name, it.icon).action { _ -> view.openModule(it) })
@@ -227,7 +228,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
         val context: Context,
         val preferences: Preferences,
         val databaseTracker: DatabaseTracker
-    ) : Menu(I18N.getValue("menubar.menu.preferences")) {
+    ) : Menu(i18n("menubar.menu.preferences")) {
         init {
             this.menuItem(settingsMenu())
                 .separator()
@@ -238,7 +239,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
         private fun settingsMenu() =
             MenuItems.of(GlobalActions.OPEN_SETTINGS, context, preferences, databaseTracker)
 
-        private fun themeMenu() = object : Menu(I18N.getValue("menubar.menu.preferences.theme")) {
+        private fun themeMenu() = object : Menu(i18n("menubar.menu.preferences.theme")) {
 
             private val themeChangeListener = Themeable { _, newTheme ->
                 items.forEach { if (it is RadioMenuItem) it.isSelected = newTheme.javaClass == it.userData }
@@ -273,7 +274,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
             }
         }
 
-        private fun langMenu() = Menu(I18N.getValue("menubar.menu.preferences.lang"))
+        private fun langMenu() = Menu(i18n("menubar.menu.preferences.lang"))
             .also { menu ->
                 val toggleGroup = ToggleGroup()
                 I18N.getAvailableLocales().forEach { locale ->
@@ -283,8 +284,8 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
                         it.setOnAction {
                             preferences.editor().put(PreferenceKey.LOCALE, locale)
                             context.showConfirmationDialog(
-                                I18N.getValue("app.lang.restart.title"),
-                                I18N.getValue("app.lang.restart.msg")
+                                i18n("app.lang.restart.title"),
+                                i18n("app.lang.restart.msg")
                             ) { btn ->
                                 when {
                                     btn.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
@@ -302,7 +303,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
         val context: Context,
         val preferences: Preferences,
         val databaseTracker: DatabaseTracker
-    ) : Menu(I18N.getValue("menubar.menu.clipboard")) {
+    ) : Menu(i18n("menubar.menu.clipboard")) {
         init {
             this.menuItem(clipboardViewItem())
         }
@@ -315,7 +316,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
      * The 'Window' menu
      */
     private class WindowMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-        Menu(I18N.getValue("menubar.menu.window")) {
+        Menu(i18n("menubar.menu.window")) {
 
         private val windowsChangeOperator = object {
             fun onWindowsAdded(windows: List<Window>) {
@@ -387,7 +388,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
     }
 
     private class PluginMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-        Menu(I18N.getValue("menubar.menu.plugin")) {
+        Menu(i18n("menubar.menu.plugin")) {
 
         init {
             this.menuItem(pluginManagerMenuItem())
@@ -404,7 +405,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
     }
 
     private class HelpMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-        Menu(I18N.getValue("menubar.menu.help")) {
+        Menu(i18n("menubar.menu.help")) {
 
         init {
             this.menuItem(updateSearcherMenuItem())

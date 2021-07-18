@@ -28,23 +28,23 @@ import static org.mockito.Mockito.verify;
 public class NitriteDatabaseTest {
 
     @Mock private Nitrite nitriteClient;
+    @Mock private ObjectRepository<Record> recordRepository;
     private NitriteDatabase underTest;
 
     @BeforeEach
     void initialize() {
-        underTest = NitriteDatabase.of(nitriteClient);
+        given(nitriteClient.getRepository(any(), eq(Record.class))).willReturn(recordRepository);
+        underTest = new NitriteDatabase(nitriteClient);
     }
 
     @SuppressWarnings("unchecked")
     @Test
     void itShouldGetRecords() {
         //given
-        ObjectRepository<Record> recordRepository = mock(ObjectRepository.class);
         Cursor<Record> mockCursor = mock(Cursor.class);
         List<Record> expected = Collections.emptyList();
         given(mockCursor.toList()).willReturn(expected);
         given(recordRepository.find()).willReturn(mockCursor);
-        given(nitriteClient.getRepository(any(), eq(Record.class))).willReturn(recordRepository);
 
         //when
         List<Record> result = underTest.getRecords();
@@ -55,14 +55,10 @@ public class NitriteDatabaseTest {
         assertThat(result == expected).isTrue();
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void itShouldInsertRecord() {
         //given
         Record record = new Record.Builder(Record.Type.BOOK).build();
-
-        ObjectRepository<Record> recordRepository = Mockito.mock(ObjectRepository.class);
-        given(nitriteClient.getRepository(any(), eq(Record.class))).willReturn(recordRepository);
 
         //when
         underTest.insertRecord(record);
@@ -71,14 +67,10 @@ public class NitriteDatabaseTest {
         verify(recordRepository).insert(record);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void itShouldUpdateRecord() {
         //given
         Record record = new Record.Builder(Record.Type.BOOK).build();
-
-        ObjectRepository<Record> recordRepository = Mockito.mock(ObjectRepository.class);
-        given(nitriteClient.getRepository(any(), eq(Record.class))).willReturn(recordRepository);
 
         //when
         underTest.updateRecord(record);
@@ -93,9 +85,6 @@ public class NitriteDatabaseTest {
         //given
         Record record = new Record.Builder(Record.Type.BOOK).build();
 
-        ObjectRepository<Record> recordRepository = Mockito.mock(ObjectRepository.class);
-        given(nitriteClient.getRepository(any(), eq(Record.class))).willReturn(recordRepository);
-
         //when
         underTest.removeRecord(record);
 
@@ -105,39 +94,10 @@ public class NitriteDatabaseTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    @Disabled
-    void itShouldFindRecord() {
-        //TODO: Finish this test
-
-        //given
-        Record record = new Record.Builder(Record.Type.BOOK).build();
-
-        ObjectRepository<Record> recordRepository = Mockito.mock(ObjectRepository.class);
-        given(nitriteClient.getRepository(any(), eq(Record.class))).willReturn(recordRepository);
-
-        final Cursor<Record> mockCursor = Mockito.mock(Cursor.class);
-        given(mockCursor.toList()).willReturn(Collections.emptyList());
-        given(recordRepository.find(any(FindOptions.class))).willReturn(mockCursor);
-        given(recordRepository.find(any(ObjectFilter.class))).willReturn(mockCursor);
-        given(recordRepository.find(any(), any(FindOptions.class))).willReturn(mockCursor);
-
-        //when
-        //underTest.getRecords(any());
-        underTest.getRecords(any(), any());
-
-        //then
-        //verify(recordRepository).find(any(FindOptions.class));
-        verify(recordRepository).find(any(), any());
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
     void itShouldGetTotalCount() {
         //given
-        ObjectRepository<Record> recordRepository = mock(ObjectRepository.class);
         Cursor<Record> mockCursor = mock(Cursor.class);
         given(recordRepository.find()).willReturn(mockCursor);
-        given(nitriteClient.getRepository(any(), eq(Record.class))).willReturn(recordRepository);
 
         //when
         underTest.getTotalRecordCount();

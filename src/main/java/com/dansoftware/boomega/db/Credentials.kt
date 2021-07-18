@@ -15,13 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.dansoftware.boomega.db
 
-@file:JvmName("I18NUtils")
+import org.apache.commons.lang3.StringUtils
 
-package com.dansoftware.boomega.i18n
+class Credentials(val username: String, val password: String) {
 
-import org.jetbrains.annotations.Nls
+    val isAnonymous: Boolean
+        get() = StringUtils.isBlank(username) && StringUtils.isBlank(password)
 
-fun i18n(@Nls key: String, vararg args: Any?) = I18N.getValue(key, *args)
-
-fun LanguageTranslator.getDisplayName() = I18N.getLanguagePack().displayPersonName(firstName, lastName)
+    companion object {
+        @JvmStatic
+        fun anonymous(): Credentials {
+            return Credentials("", "")
+        }
+    }
+}

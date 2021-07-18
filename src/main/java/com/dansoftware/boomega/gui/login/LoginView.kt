@@ -33,6 +33,7 @@ import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.runOnUiThread
+import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -66,8 +67,6 @@ class LoginView(
     fun createdDatabaseProperty(): ReadOnlyObjectProperty<Database> {
         return createdDatabase
     }
-
-    //override fun getContext(): Context = this
 
     fun titleProperty(): ObservableStringValue {
         return loginBoxController.titleProperty()!!
@@ -127,11 +126,12 @@ class LoginView(
                     loginData.isAutoLogin = remember
                     loginData.autoLoginCredentials = credentials.takeIf { remember }
 
-                    NitriteDatabase.getAuthenticator()
-                        .onFailed { title, message, t ->
-                            context.showErrorDialog(title, message, t as Exception?)
+                    NitriteDatabase.builder()
+                        .databaseMeta(databaseMeta)
+                        .onFailed { message, t ->
+                            context.showErrorDialog(i18n("login.failed"), message, t as Exception?)
                             logger.error("Failed to create/open the database", t)
-                        }.auth(databaseMeta, credentials)?.let {
+                        }.build(credentials)?.let {
                             logger.debug("Signing in was successful; closing the LoginWindow")
                             preferences.editor().put(PreferenceKey.LOGIN_DATA, loginData)
                             databaseLoginListener.onDatabaseOpened(it)

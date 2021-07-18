@@ -15,67 +15,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.dansoftware.boomega.db
 
-package com.dansoftware.boomega.db;
-
-import com.dansoftware.boomega.db.data.Record;
-import org.dizitart.no2.FindOptions;
-import org.dizitart.no2.objects.ObjectFilter;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import com.dansoftware.boomega.db.data.Record
 
 /**
  * A Database object can communicate with a particular data source.
  *
- * <p>
- * It supports the CRUD operations with {@link Record}s.
+ *
+ *
+ * It supports the CRUD operations with [Record]s.
  *
  * @author Daniel Gyorffy
  */
-public interface Database {
+interface Database {
 
-    //CREATE, UPDATE, DELETE
+    val records: List<Record>
+    val totalRecordCount: Int
 
-    void insertRecord(@NotNull Record record);
 
-    void updateRecord(@NotNull Record record);
-
-    void removeRecord(@NotNull Record record);
-
-    //READ
-
-    int getTotalRecordCount();
-
-    List<Record> getRecords();
-
-    List<Record> getRecords(@NotNull FindOptions findOptions);
-
-    List<Record> getRecords(@NotNull ObjectFilter objectFilter, @NotNull FindOptions findOptions);
-
-    default List<Record> getRecords(int offSet, int size) {
-        return getRecords(FindOptions.limit(offSet, size));
-    }
-
-    //OTHER
+    fun insertRecord(record: Record)
+    fun updateRecord(record: Record)
+    fun removeRecord(record: Record)
 
     /**
      * Checks whether the db is closed.
      *
      * @return `true` if closed; otherwise `false`.
      */
-    boolean isClosed();
+    val isClosed: Boolean
 
     /**
      * Closes the database
      */
-    void close();
+    fun close()
 
     /**
-     * Returns a {@link DatabaseMeta} object that holds some meta-information
+     * Returns a [DatabaseMeta] object that holds some meta-information
      * of the database.
      *
      * @return the DatabaseMeta object
      */
-    DatabaseMeta getMeta();
+    val meta: DatabaseMeta
 }

@@ -16,29 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db.auth;
+package com.dansoftware.boomega.db
 
-/**
- * Used by {@link DatabaseAuthenticator}s
- * for handling the exceptions.
- *
- * @author Daniel Gyorffy
- */
-public interface FailListener {
+import org.dizitart.no2.Nitrite
 
-    /**
-     * Returns a listener that doesn't do anything.
-     *
-     * @return the "empty" {@link FailListener}
-     */
-    static FailListener empty() {
-        return (title, message, t) -> {
-        };
-    }
-
-    default void onFail(String title, String message) {
-        onFail(title, message, null);
-    }
-
-    void onFail(String title, String message, Throwable t);
+class InMemoryDatabase : NitriteDatabase(Nitrite.builder().openOrCreate()) {
+    override val meta: DatabaseMeta
+        get() = object : DatabaseMeta("InMemory") {
+            override fun toString(): String {
+                return name
+            }
+        }
 }

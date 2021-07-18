@@ -97,7 +97,7 @@ class DatabaseViewToolbar(
         graphic = MaterialDesignIconView(MaterialDesignIcon.FOLDER_OPEN)
         tooltip = Tooltip(I18N.getValue("menubar.menu.file.reveal"))
         setOnAction {
-            view.openedDatabase.file.revealInExplorer()
+            view.openedDatabase.file!!.revealInExplorer()
         }
     }
 }

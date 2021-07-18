@@ -23,7 +23,7 @@ import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.db.NitriteDatabase
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.geometry.Insets
@@ -59,18 +59,18 @@ class QuickForm(
 
     private fun buildUsernameInputField() = TextField().apply {
         minHeight = 35.0
-        promptText = I18N.getValue("credentials.username")
+        promptText = i18n("credentials.username")
         usernameInput.bind(textProperty())
     }
 
     private fun buildPasswordInputField() = PasswordField().apply {
         minHeight = 35.0
-        promptText = I18N.getValue("credentials.password")
+        promptText = i18n("credentials.password")
         passwordInput.bind(textProperty())
     }
 
     private fun buildLoginButton() = Button().apply {
-        text = I18N.getValue("login.form.login")
+        text = i18n("login.form.login")
         minHeight = 35.0
         isDefaultButton = true
         minWidth = 400.0
@@ -84,11 +84,12 @@ class QuickForm(
             StringUtils.trim(usernameInput.get()),
             StringUtils.trim(passwordInput.get())
         ).let { credentials ->
-            NitriteDatabase.getAuthenticator()
-                .onFailed { title, message, t ->
-                    context.showErrorDialog(title, message, t as Exception?)
+            NitriteDatabase.builder()
+                .databaseMeta(databaseMeta)
+                .onFailed { message, t ->
+                    context.showErrorDialog(i18n("login.failed"), message, t as Exception?)
                     logger.error("Failed to create/open the database", t)
-                }.auth(databaseMeta, credentials)?.let {
+                }.build(credentials)?.let {
                     logger.debug("Quick login in was successful")
                     loginListener.onDatabaseOpened(it)
                     context.close()

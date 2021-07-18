@@ -25,7 +25,7 @@ import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.refresh
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -133,7 +133,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         minHeight = 35.0
         minWidth = 355.0
         maxWidth = Double.MAX_VALUE
-        promptText = I18N.getValue("login.source.combo.promt")
+        promptText = i18n("login.source.combo.promt")
         buttonCell = ComboBoxButtonCell(controller.databaseTracker)
         setCellFactory { DatabaseChooserItem(controller.databaseTracker) }
         itemSelected.bind(selectionModel.selectedItemProperty().isNotNull)
@@ -141,7 +141,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     }
 
     private fun buildFileChooserButton() = Button().apply {
-        tooltip = Tooltip(I18N.getValue("login.source.open"))
+        tooltip = Tooltip(i18n("login.source.open"))
         graphic = FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN)
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
         minHeight = 35.0
@@ -152,7 +152,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     }
 
     private fun buildDatabaseManagerButton() = Button().apply {
-        tooltip = Tooltip(I18N.getValue("login.db.manager.open"))
+        tooltip = Tooltip(i18n("login.db.manager.open"))
         graphic = MaterialDesignIconView(MaterialDesignIcon.DATABASE)
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
         minHeight = 35.0
@@ -165,7 +165,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     private fun buildDataSourceButton() = Button().apply {
         minHeight = 35.0
         styleClass.add("source-adder")
-        text = I18N.getValue("login.add.source")
+        text = i18n("login.add.source")
         //prefWidthProperty().bind(this@LoginBox.widthProperty())
         maxWidth = Double.MAX_VALUE
         graphic = MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS)
@@ -188,7 +188,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     private fun buildUsernameInput() = TextField().apply {
         minHeight = 35.0
         prefColumnCount = 10
-        promptText = I18N.getValue("credentials.username")
+        promptText = i18n("credentials.username")
         usernameInput.bindBidirectional(textProperty())
         textProperty().bindBidirectional(usernameInput)
     }
@@ -196,14 +196,14 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     private fun buildPasswordInput() = PasswordField().apply {
         minHeight = 35.0
         prefColumnCount = 10
-        promptText = I18N.getValue("credentials.password")
+        promptText = i18n("credentials.password")
         passwordInput.bindBidirectional(textProperty())
         textProperty().bindBidirectional(passwordInput)
     }
 
     private fun buildCheckBox() = CheckBox().apply {
         alignment = Pos.CENTER_RIGHT
-        text = I18N.getValue("login.form.remember")
+        text = i18n("login.form.remember")
         remember.bindBidirectional(selectedProperty())
         selectedProperty().bindBidirectional(remember)
     }
@@ -211,7 +211,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     private fun buildLoginButton() = Button().apply {
         minHeight = 35.0
         maxWidth = Double.MAX_VALUE
-        text = I18N.getValue("login.form.login")
+        text = i18n("login.form.login")
         isDefaultButton = true
         setOnAction {
             databaseChooser.get().selectionModel.selectedItem?.let { dbMeta ->
@@ -247,16 +247,16 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
                 }
                 else -> {
                     text = item.toString()
-                    val dbFile = item.file
+                    val dbFile = item.file!!
                     when {
                         dbFile.exists().not() || dbFile.isDirectory -> {
-                            tooltip = Tooltip(I18N.getValue("file.not.exists"))
+                            tooltip = Tooltip(i18n("file.not.exists"))
                             graphic = FontAwesomeIconView(FontAwesomeIcon.WARNING).apply {
                                 styleClass.add(NOT_EXISTS_CLASS)
                             }
                         }
                         databaseTracker.isDatabaseUsed(item) -> {
-                            tooltip = Tooltip(I18N.getValue("database.currently.used"))
+                            tooltip = Tooltip(i18n("database.currently.used"))
                             graphic = FontAwesomeIconView(FontAwesomeIcon.PLAY).apply {
                                 styleClass.add(USED_CLASS)
                             }
@@ -275,7 +275,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         override fun updateItem(item: DatabaseMeta?, empty: Boolean) {
             super.updateItem(item, empty)
             if (item === null) {
-                text = I18N.getValue("login.source.combo.promt")
+                text = i18n("login.source.combo.promt")
             }
         }
     }
