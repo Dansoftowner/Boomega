@@ -25,9 +25,11 @@ import javafx.scene.Group;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * An UpdateActivity can show a user an update-downloader dialog, or
+ * An UpdateActivity can show an update-downloader dialog or
  * it can show an alert-dialog if the update-searching failed with an
  * exception.
  *
@@ -48,6 +50,8 @@ import org.jetbrains.annotations.NotNull;
  * @author Daniel Gyorffy
  */
 public class UpdateActivity {
+
+    private static final Logger logger = LoggerFactory.getLogger(UpdateActivity.class);
 
     private final Context context;
     private final UpdateSearcher.UpdateSearchResult updateSearchResult;
@@ -94,6 +98,7 @@ public class UpdateActivity {
                         exception, buttonType -> {
                             //empty
                         });
+                logger.error("Update search failed", exception);
             }
         }).ifNewUpdateAvailable(updateInformation -> {
             UpdateDialog updateDialog = new UpdateDialog(context, updateInformation,

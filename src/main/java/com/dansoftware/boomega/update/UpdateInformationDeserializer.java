@@ -59,6 +59,7 @@ class UpdateInformationDeserializer implements JsonDeserializer<UpdateInformatio
     public UpdateInformation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
         //handling the Json as a JsonObject
         JsonObject jsonObject = json.getAsJsonObject();
+        jsonObject = jsonObject.getAsJsonObject("boomega");
         return new UpdateInformation(getVersion(jsonObject), getReviewUrl(jsonObject), getWebsite(jsonObject), getPacks(jsonObject));
     }
 
