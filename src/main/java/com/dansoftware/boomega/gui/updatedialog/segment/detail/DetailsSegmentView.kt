@@ -55,6 +55,7 @@ class DetailsSegmentView(private val context: Context, private val updateInforma
         setOnRunning {
             ProgressBar().apply {
                 progress = ProgressIndicator.INDETERMINATE_PROGRESS
+                previewScrollPane.isFitToHeight = false
                 previewScrollPane.content = this
             }
         }
@@ -62,6 +63,7 @@ class DetailsSegmentView(private val context: Context, private val updateInforma
         setOnFailed {
             val cause = it.source.exception
             logger.error("Couldn't load the markdown-preview", cause)
+            previewScrollPane.isFitToHeight = true
             previewScrollPane.content = PreviewErrorPlaceHolder(context, cause)
         }
 

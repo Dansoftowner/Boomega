@@ -42,15 +42,16 @@ class PreviewErrorPlaceHolder(private val context: Context, private val cause: T
 
     private fun buildVBox() = VBox(5.0, buildLabel(), buildDetailButton())
 
-    private fun buildLabel() = Label(I18N.getValue("update.view.details.preview.failed"))
+    private fun buildLabel() = Label(I18N.getValue("update.details.preview.failed"))
 
-    private fun buildDetailButton() = Button(I18N.getValue("update.view.details.preview.failed.more")).apply {
+    private fun buildDetailButton() = Button(I18N.getValue("update.details.preview.failed.more")).run {
         setOnAction {
             context.showErrorDialog(
-                I18N.getValue("update.view.details.preview.failed"),
+                I18N.getValue("update.details.preview.failed"),
                 null,
                 cause as Exception
             ) { }
         }
+        StackPane(this)
     }
 }
