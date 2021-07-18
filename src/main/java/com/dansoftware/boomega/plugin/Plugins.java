@@ -18,9 +18,10 @@
 
 package com.dansoftware.boomega.plugin;
 
-import com.dansoftware.boomega.plugin.api.ActivePlugin;
 import com.dansoftware.boomega.plugin.api.BoomegaPlugin;
+import com.dansoftware.boomega.plugin.api.DisabledPlugin;
 import com.dansoftware.boomega.util.ReflectionUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Responsible for loading and accessing the application plugins.
@@ -56,18 +56,22 @@ public class Plugins {
         if (!loaded) {
             plugins.addAll(
                     PluginClassLoader.getInstance().listAllClasses().stream()
-                            .filter(BoomegaPlugin.class::isAssignableFrom)
-                            .filter(classRef -> !Modifier.isAbstract(classRef.getModifiers()))
-                            .filter(classRef -> classRef.getAnnotation(ActivePlugin.class) != null)
+                            .filter(this::isPluginUsable)
                             .peek(classRef -> logger.debug("Found plugin class: {}", classRef.getName()))
                             .map(ReflectionUtils::tryConstructObject)
                             .filter(Objects::nonNull)
                             .map(BoomegaPlugin.class::cast)
                             .peek(BoomegaPlugin::init)
-                            .collect(Collectors.toList())
+                            .toList()
             );
             loaded = true;
         }
+    }
+
+    private boolean isPluginUsable(@NotNull Class<?> classRef) {
+        return BoomegaPlugin.class.isAssignableFrom(classRef) &&
+                !Modifier.isAbstract(classRef.getModifiers()) &&
+                !classRef.isAnnotationPresent(DisabledPlugin.class);
     }
 
     /**
@@ -86,7 +90,7 @@ public class Plugins {
     public List<BoomegaPlugin> getPluginsOfFile(URL url) {
         return plugins.stream()
                 .filter(it -> it.getClass().getProtectionDomain().getCodeSource().getLocation().equals(url))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -102,7 +106,7 @@ public class Plugins {
         return plugins.stream()
                 .filter(it -> classRef.isAssignableFrom(it.getClass()))
                 .map(it -> (P) it)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
