@@ -78,8 +78,13 @@ public class I18N {
     }
 
     @NotNull
-    public static String getValue(@NotNull String key, @Nullable Object... args) throws MissingResourceException {
-        return getValue(getValues(), key, args);
+    public static String getValue(@NotNull String key, @Nullable Object... args) {
+        try {
+            return getValue(getValues(), key, args);
+        } catch (MissingResourceException e) {
+            logger.error("Couldn't find i18n value", e);
+            return key;
+        }
     }
 
     private static String getValue(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object[] args) {
