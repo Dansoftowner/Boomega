@@ -178,8 +178,8 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
                             autoLoginCredentials = null
                         }
                     }).tryCommit()
-                context.close()
                 GlobalActions.NEW_ENTRY.invoke(context, preferences, databaseTracker)
+                context.close()
             }
             .graphic(MaterialDesignIcon.LOGOUT_VARIANT)
 

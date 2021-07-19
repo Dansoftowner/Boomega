@@ -93,8 +93,8 @@ class DatabaseViewToolbar(
                         autoLoginCredentials = null
                     }
                 }).tryCommit()
-            view.close()
             GlobalActions.NEW_ENTRY.invoke(view, preferences, databaseTracker)
+            view.close()
         }
     }
 
