@@ -18,6 +18,7 @@
 package com.dansoftware.boomega.db
 
 import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.db.listener.DatabaseChangeListener
 
 /**
  * A Database object can communicate with a particular data source.
@@ -30,13 +31,21 @@ import com.dansoftware.boomega.db.data.Record
  */
 interface Database {
 
+    /**
+     * Returns a [DatabaseMeta] object that holds some meta-information
+     * of the database.
+     */
+    val meta: DatabaseMeta
+
+    /**
+     * Gives the list of [Record]s stored in the database.
+     */
     val records: List<Record>
+
+    /**
+     * Gives the total count of records.
+     */
     val totalRecordCount: Int
-
-
-    fun insertRecord(record: Record)
-    fun updateRecord(record: Record)
-    fun removeRecord(record: Record)
 
     /**
      * Checks whether the db is closed.
@@ -46,15 +55,43 @@ interface Database {
     val isClosed: Boolean
 
     /**
+     * Inserts a record into the database
+     */
+    fun insertRecord(record: Record)
+
+    /**
+     * Updates the record in the database
+     */
+    fun updateRecord(record: Record)
+
+    /**
+     * Deletes the record from the database
+     */
+    fun removeRecord(record: Record)
+
+    /**
+     * Deletes the given records from the database
+     */
+    fun removeRecords(records: List<Record>)
+
+    /**
      * Closes the database
      */
     fun close()
 
     /**
-     * Returns a [DatabaseMeta] object that holds some meta-information
-     * of the database.
+     * Adds a [DatabaseChangeListener] which will be notified whenever the
+     * database changes.
      *
-     * @return the DatabaseMeta object
+     * If the same listener is added more than once, then it will be ignored.
      */
-    val meta: DatabaseMeta
+    fun addListener(listener: DatabaseChangeListener<Record>)
+
+    /**
+     * Removes the given [DatabaseChangeListener] from the list of listeners that are notified whenever the
+     * database changes.
+     *
+     * If the given listener has not been previously registered then this method call is a no-op.
+     */
+    fun removeListener(listener: DatabaseChangeListener<Record>)
 }

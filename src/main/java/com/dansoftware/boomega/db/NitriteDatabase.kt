@@ -18,6 +18,9 @@
 package com.dansoftware.boomega.db
 
 import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.db.listener.DatabaseChangeEvent
+import com.dansoftware.boomega.db.listener.DatabaseChangeListener
+import com.dansoftware.boomega.db.listener.DatabaseChangeType
 import com.dansoftware.boomega.i18n.i18n
 import org.dizitart.no2.Nitrite
 import org.dizitart.no2.NitriteBuilder
@@ -28,6 +31,9 @@ import org.dizitart.no2.objects.ObjectRepository
 import org.jetbrains.annotations.NonNls
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.util.*
+import java.util.Collections.unmodifiableList
+import kotlin.collections.HashSet
 
 /**
  * A NitriteDatabase is a [Database] that basically wraps the
@@ -41,6 +47,8 @@ open class NitriteDatabase @JvmOverloads constructor(
     override val meta: DatabaseMeta = DatabaseMeta(toString(), null)
 ) : Database {
 
+    private val listeners: MutableSet<DatabaseChangeListener<Record>> = HashSet()
+
     private val recordRepository: ObjectRepository<Record> =
         nitriteClient.getRepository(REPOSITORY_KEY, Record::class.java)
 
@@ -53,20 +61,49 @@ open class NitriteDatabase @JvmOverloads constructor(
     override val isClosed: Boolean
         get() = nitriteClient.isClosed
 
+    @Synchronized
     override fun insertRecord(record: Record) {
         recordRepository.insert(record)
+        notifyListeners(DatabaseChangeType.INSERT, listOf(record))
     }
 
+    @Synchronized
     override fun updateRecord(record: Record) {
         recordRepository.update(record)
+        notifyListeners(DatabaseChangeType.UPDATE, listOf(record))
     }
 
+    @Synchronized
     override fun removeRecord(record: Record) {
         recordRepository.remove(record)
+        notifyListeners(DatabaseChangeType.DELETE, listOf(record))
     }
 
+    @Synchronized
+    override fun removeRecords(records: List<Record>) {
+        records.forEach {
+            recordRepository.remove(it)
+        }
+        notifyListeners(DatabaseChangeType.DELETE, unmodifiableList(records))
+    }
+
+    @Synchronized
     override fun close() {
         nitriteClient.close()
+    }
+
+    @Synchronized
+    override fun addListener(listener: DatabaseChangeListener<Record>) {
+        listeners.add(listener)
+    }
+
+    @Synchronized
+    override fun removeListener(listener: DatabaseChangeListener<Record>) {
+       listeners.remove(listener)
+    }
+
+    private fun notifyListeners(eventType: DatabaseChangeType, items: List<Record>) {
+        listeners.forEach { it.onChange(DatabaseChangeEvent(eventType, items)) }
     }
 
     companion object {

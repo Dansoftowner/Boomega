@@ -59,7 +59,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
     init {
         initDisablePolicy(databaseView)
         this.menus.addAll(
-            FileMenu(databaseView, databaseView.openedDatabase, preferences, tracker),
+            FileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
             ModuleMenu(databaseView),
             PreferencesMenu(databaseView, preferences, tracker),
             ClipboardMenu(databaseView, preferences, tracker),

@@ -16,17 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.databaseview
+package com.dansoftware.boomega.db.listener
 
-import com.dansoftware.boomega.gui.menubar.AppMenuBar
-import com.dansoftware.boomega.gui.window.BaseWindow
-
-private class DatabaseWindow(view: DatabaseView, menuBar: AppMenuBar) :
-    BaseWindow<DatabaseView>("${System.getProperty("app.name")} - ${view.databaseMeta}", menuBar, view) {
-    init {
-        this.isMaximized = true
-        this.exitDialog = true
-        this.minWidth = 530.0
-        this.minHeight = 530.0
-    }
-}
+class DatabaseChangeEvent<R>(val type: DatabaseChangeType, val records: List<R>)

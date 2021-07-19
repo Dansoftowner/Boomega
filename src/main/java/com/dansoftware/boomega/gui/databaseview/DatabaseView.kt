@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.databaseview
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.db.ReadOnlyDatabase
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
@@ -37,7 +38,10 @@ class DatabaseView(
 
     val modules: List<Module> = listModules()
 
-    val openedDatabase: DatabaseMeta
+    val databaseReadOnly: ReadOnlyDatabase
+        get() = ReadOnlyDatabase(database)
+
+    val databaseMeta: DatabaseMeta
         get() = database.meta
 
     init {

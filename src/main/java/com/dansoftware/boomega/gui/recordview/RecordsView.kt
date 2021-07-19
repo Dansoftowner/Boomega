@@ -276,7 +276,7 @@ class RecordsView(
             override fun call() {
                 synchronized(RecordClipboard) {
                     logger.debug("Performing remove action...")
-                    items.forEach(database::removeRecord)
+                    database.removeRecords(items)
                 }
             }
         }

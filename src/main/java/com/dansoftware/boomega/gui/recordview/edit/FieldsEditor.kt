@@ -72,7 +72,8 @@ class FieldsEditor(
         })
     }
 
-    private fun getPreferredType(items: List<Record>) = items.map(Record::recordType).distinct().singleOrNull()
+    private fun getPreferredType(items: List<Record>) =
+        items.mapNotNull(Record::recordType).distinct().singleOrNull()
 
     private fun buildBaseUI(items: List<Record>, type: Record.Type?) {
         content = when {

@@ -24,14 +24,18 @@ import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.revealInExplorer
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.application.Platform
+import javafx.geometry.Insets
 import javafx.geometry.Orientation
 import javafx.scene.Group
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
+import org.apache.commons.io.FileUtils
 
 class DatabaseViewToolbar(
     private val view: DatabaseView,
@@ -48,6 +52,8 @@ class DatabaseViewToolbar(
         leftItems.add(buildHomeButton())
         leftItems.add(buildSeparator())
         leftItems.add(buildDatabaseNameControl())
+        rightItems.add(buildSizeIndicator())
+        rightItems.add(buildSeparator())
         rightItems.add(buildFileOpenerButton())
         rightItems.add(buildSeparator())
         rightItems.add(buildCloseButton())
@@ -70,7 +76,7 @@ class DatabaseViewToolbar(
                 HBox(
                     2.0,
                     MaterialDesignIconView(MaterialDesignIcon.DATABASE),
-                    Label(view.openedDatabase.toString())
+                    Label(view.databaseMeta.toString())
                 )
             )
         )
@@ -82,7 +88,7 @@ class DatabaseViewToolbar(
         setOnAction {
             preferences.editor()
                 .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
-                    if (autoLoginDatabase.equals(view.openedDatabase)) {
+                    if (autoLoginDatabase.equals(view.databaseMeta)) {
                         isAutoLogin = false
                         autoLoginCredentials = null
                     }
@@ -97,7 +103,20 @@ class DatabaseViewToolbar(
         graphic = MaterialDesignIconView(MaterialDesignIcon.FOLDER_OPEN)
         tooltip = Tooltip(I18N.getValue("menubar.menu.file.reveal"))
         setOnAction {
-            view.openedDatabase.file!!.revealInExplorer()
+            view.databaseMeta.file!!.revealInExplorer()
+        }
+    }
+
+    private fun buildSizeIndicator() = Label().apply {
+        padding = Insets(0.0, 5.0, 0.0, 0.0)
+        val updateText = {
+            text = "${i18n("database_view.database_size")} ${FileUtils.byteCountToDisplaySize(view.databaseMeta.file?.length() ?: -1)}"
+        }
+        updateText()
+        view.databaseReadOnly.addListener {
+            Platform.runLater {
+                updateText()
+            }
         }
     }
 }
