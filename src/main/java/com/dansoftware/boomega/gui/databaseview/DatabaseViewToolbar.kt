@@ -88,7 +88,7 @@ class DatabaseViewToolbar(
         setOnAction {
             preferences.editor()
                 .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
-                    if (autoLoginDatabase.equals(view.databaseMeta)) {
+                    if (autoLoginDatabase == view.databaseMeta) {
                         isAutoLogin = false
                         autoLoginCredentials = null
                     }

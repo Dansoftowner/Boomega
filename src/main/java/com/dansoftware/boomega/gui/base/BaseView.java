@@ -32,6 +32,7 @@ import com.dlsc.workbenchfx.model.WorkbenchModule;
 import com.dlsc.workbenchfx.view.WorkbenchView;
 import com.nativejavafx.taskbar.TaskbarProgressbar;
 import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
+import com.nativejavafx.taskbar.exception.StageNotShownException;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -375,14 +376,22 @@ public class BaseView extends StackPane implements Context {
 
     @Override
     public void showIndeterminateProgress() {
-        workbench.setCursor(javafx.scene.Cursor.WAIT);
-        getTaskbarProgressbar().showIndeterminateProgress();
+        if (isShowing()) {
+            workbench.setCursor(javafx.scene.Cursor.WAIT);
+            getTaskbarProgressbar().showIndeterminateProgress();
+            return;
+        }
+        logger.error("Indeterminate progress request on closed BaseView");
     }
 
     @Override
     public void showProgress(long done, long max, @NotNull Context.ProgressType type) {
-        workbench.setCursor(javafx.scene.Cursor.DEFAULT);
-        getTaskbarProgressbar().showCustomProgress(done, max, TaskbarProgressbar.Type.valueOf(type.name()));
+        if (isShowing()) {
+            workbench.setCursor(javafx.scene.Cursor.DEFAULT);
+            getTaskbarProgressbar().showCustomProgress(done, max, TaskbarProgressbar.Type.valueOf(type.name()));
+            return;
+        }
+        logger.error("Progress request on closed BaseView");
     }
 
     @Override
@@ -393,7 +402,11 @@ public class BaseView extends StackPane implements Context {
     @Override
     public void stopProgress() {
         workbench.setCursor(Cursor.DEFAULT);
-        getTaskbarProgressbar().stopProgress();
+        try {
+            getTaskbarProgressbar().stopProgress();
+        } catch (StageNotShownException e) {
+            logger.error("Used taskbar progress-bar on a closed stage", e);
+        }
     }
 
     private TaskbarProgressbar getTaskbarProgressbar() {
