@@ -91,7 +91,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
     init {
         styleClass.add("google-book-details-pane")
         styleClass.add(JMetroStyleClass.BACKGROUND)
-        minHeight = 300.0
+        minHeight = 0.0
         VBox.setVgrow(this, Priority.ALWAYS)
         buildUI()
     }
