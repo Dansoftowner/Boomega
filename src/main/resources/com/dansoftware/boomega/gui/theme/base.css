@@ -341,11 +341,11 @@
  ******************************************************************************/
 
 .state-indicator-file-not-exists {
-    -fx-fill: #B00020;
+    -fx-fill: #B00020 !important;
 }
 
 .state-indicator-used {
-    -fx-fill: green;
+    -fx-fill: green !important;
 }
 
 /*******************************************************************************
