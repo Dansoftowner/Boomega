@@ -105,7 +105,7 @@ class LoginView(
 
         override fun openFile() {
             DatabaseOpener().showMultipleOpenDialog(context.contextWindow).stream()
-                .peek(databaseTracker::addDatabase)
+                .peek(databaseTracker::saveDatabase)
                 .reduce { _, second -> second }
                 .ifPresent { loginBox?.select(it) }
         }

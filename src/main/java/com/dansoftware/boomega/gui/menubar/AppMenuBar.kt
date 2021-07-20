@@ -288,7 +288,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
                                 i18n("app.lang.restart.msg")
                             ) { btn ->
                                 when {
-                                    btn.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
+                                    btn.typeEquals(ButtonType.YES) -> ApplicationRestart.restart()
                                 }
                             }
                         }

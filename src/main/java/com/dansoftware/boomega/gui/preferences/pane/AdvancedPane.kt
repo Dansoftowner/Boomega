@@ -101,7 +101,7 @@ class AdvancedPane(private val context: Context, preferences: Preferences) : Pre
                             // TODO: error dialog
                         }
                         setOnSucceeded {
-                            ApplicationRestart().restartApp()
+                            ApplicationRestart.restart()
                         }
                     }
 

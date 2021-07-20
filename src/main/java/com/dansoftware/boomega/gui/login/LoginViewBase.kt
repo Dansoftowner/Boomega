@@ -67,7 +67,7 @@ class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
                     .map(::DatabaseMeta)
                     .toList()
                     .apply {
-                        forEach(controller.databaseTracker::addDatabase)
+                        forEach(controller.databaseTracker::saveDatabase)
                         lastOrNull()?.let { loginBox.selectedItem = it }
                     }
             }

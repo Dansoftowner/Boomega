@@ -45,6 +45,11 @@ public class ApplicationRestart {
         restart();
     }
 
+    /**
+     * Restarts the application.
+     *
+     * @throws RestartException if the restart process doesn't proceeds for some reason
+     */
     public static void restart() throws RestartException {
         com.restart4j.ApplicationRestart.builder()
                 .beforeNewProcessCreated(ApplicationInstanceService::release)

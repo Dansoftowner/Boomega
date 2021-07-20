@@ -110,7 +110,7 @@ object GlobalActions {
                     I18N.getValue("app.restart.dialog.msg")
                 ) {
                     when {
-                        it.typeEquals(ButtonType.YES) -> ApplicationRestart().restartApp()
+                        it.typeEquals(ButtonType.YES) -> ApplicationRestart.restart()
                     }
                     dialogShownContexts.remove(context)
                 }
@@ -153,7 +153,7 @@ object GlobalActions {
 
     @JvmField
     val OPEN_PLUGIN_DIR =
-        Action("action.open_plugin_dir", MaterialDesignIcon.FOLDER) { context, _, _ ->
+        Action("action.open_plugin_dir", MaterialDesignIcon.FOLDER) { _, _, _ ->
             FileExplorers.get().openDir(File(System.getProperty("boomega.plugin.dir")))
         }
 

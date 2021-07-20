@@ -70,7 +70,7 @@ class LanguagePane(
                         I18N.getValue("app.lang.restart.msg")
                     ) { btn ->
                         btn.takeIf { it.typeEquals(ButtonType.YES) }?.let {
-                            ApplicationRestart().restartApp()
+                            ApplicationRestart.restart()
                         }
                     }
                 }
