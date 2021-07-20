@@ -3,6 +3,7 @@
 * [Used libraries](#used-libraries)
 * [Used libraries/frameworks for testing](#used-librariesframeworks-for-testing)
 * [Used Gradle plugins](#used-gradle-plugins)
+* [Other acknowledgements](#other-acknowledgements)
 
 ## Used libraries
 
@@ -146,6 +147,7 @@
 </table>
 
 ## Used libraries/frameworks for testing
+
 | Software | License |
 | -------- | ------- |
 | [JUnit 5](https://junit.org/junit5/) | [Eclipse Public License - v 2.0](https://github.com/junit-team/junit5/blob/main/LICENSE.md)
@@ -159,3 +161,13 @@
 | [Shadow](https://github.com/johnrengelman/shadow) | [Apache 2.0](https://github.com/johnrengelman/shadow/blob/master/LICENSE)
 | [gradle-versions-plugin](https://github.com/ben-manes/gradle-versions-plugin) | [Apache 2.0](https://github.com/ben-manes/gradle-versions-plugin/blob/master/LICENSE.txt)
 | [jpackage-gradle-plugin](https://github.com/petr-panteleyev/jpackage-gradle-plugin) | [BSD-2-Clause License](https://github.com/petr-panteleyev/jpackage-gradle-plugin)
+
+## Other acknowledgements
+
+**Application icon:** [Freepik](https://www.flaticon.com/authors/freepik)
+
+*Wallpapers:*
+
+* [Wallpaper House](http://wallpaper-house.com)
+* [PassMater](https://www.deviantart.com/passmater)
+* [Freepik](https://www.freepik.com/)
