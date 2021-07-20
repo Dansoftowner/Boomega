@@ -1,6 +1,6 @@
-# Boomega unreleased
+# Boomega v0.7.0 (pre-release)
 
-**Date:** Unknown
+**Date:** 2020-07-20
 
 ### Enhancements/features:
 
@@ -14,6 +14,7 @@
 * ✨ Showing dialogs for uncaught exceptions
 * ✨ Context menu for `database view` tabs that allows to access some basic tab-operation utility (like closing all tabs etc...)
 * ✨ More precise failed login messages
+* ✨ Showing total items/selected items in record-view's toolbar
 
 ### Bug fixes/improvements
 
