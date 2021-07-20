@@ -1,46 +1,45 @@
 {
   "boomega" : {
-    "version" : "0.6.5",
-    "website" : "https://github.com/Dansoftowner/Boomega/releases/tag/v0.6.5",
+    "version" : "0.7.0",
+    "website" : "https://github.com/Dansoftowner/Boomega/releases/tag/v0.7.0",
     "review" : {
       "defaultLang" : "en",
-      "en" : "https://",
-      "hu" : "https://"
+      "en" : "https://raw.githubusercontent.com/Dansoftowner/Boomega/master/CHANGELOG.md"
     },
     "packs" : [
       {
-        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega_0.6.5-win.exe",
+        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-win.exe",
         "fileExtension" : "exe",
         "name" : "Exe installer",
-        "size" : 99817,
+        "size" : 99840,
         "scope" : [ "win" ]
       },
       {
-        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega_0.6.5-win.msi",
+        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-win.msi",
         "fileExtension" : "msi",
         "name" : "MSI package",
-        "size" : 99817,
+        "size" : 99328,
         "scope" : [ "win" ]
       },
       {
-        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega_0.6.5-win.zip",
+        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-win.zip",
         "fileExtension" : "zip",
         "name" : "Zip archive",
-        "size" : 98502,
+        "size" : 98508,
         "scope" : [ "win" ]
       },
       {
-        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/boomega_0.6.5-1_amd64-linux.deb",
+        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-1_amd64-linux.deb",
         "fileExtension" : "deb",
         "name" : "Debian package",
-        "size" : 99495,
+        "size" : 98508,
         "scope" : [ "linux" ]
       },
       {
-        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega_0.6.5-linux.tar.xz",
+        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-linux.tar.xz",
         "fileExtension" : "tar.xz",
         "name" : "Tar.xz archive",
-        "size" : 99097,
+        "size" : 98099,
         "scope" : [ "linux" ]
       },
       {
@@ -51,10 +50,10 @@
         "scope" : [ "mac" ]
       },
       {
-        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.6.5/Boomega-0.6.0-all.jar",
+        "url" : "https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-all.jar",
         "fileExtension" : "jar",
         "name" : "Jar executable",
-        "size" : 35777,
+        "size" : 35840,
         "scope" : [ "*" ]
       }
     ]
