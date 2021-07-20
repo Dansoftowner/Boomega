@@ -154,7 +154,11 @@ class RecordsView(
     fun clipboardEmptyProperty(): BooleanBinding = RecordClipboard.emptyProperty()
         .or(RecordClipboard.identifierProperty().isEqualTo(copyHandle))
 
-    fun itemsCountProperty(): IntegerBinding = Bindings.size(baseItems)
+    fun selectedItemsCount(): IntegerBinding =
+        Bindings.size(table.selectionModel.selectedItems)
+
+    fun itemsCountProperty(): IntegerBinding =
+        Bindings.size(baseItems)
 
     fun scrollToTop() {
         table.scrollTo(0)

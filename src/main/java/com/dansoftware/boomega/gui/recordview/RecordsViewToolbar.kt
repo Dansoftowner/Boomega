@@ -39,7 +39,6 @@ import javafx.geometry.Insets
 import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.scene.control.*
-import org.apache.commons.lang3.StringUtils
 import java.text.Collator
 import java.util.*
 import java.util.function.Supplier
@@ -108,9 +107,12 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
     private fun buildCountItem() = Label().apply {
         padding = Insets(5.0)
         textProperty().bind(
-            SimpleStringProperty(I18N.getValue("record.book.count"))
-                .concat(StringUtils.SPACE)
+            SimpleStringProperty("")
+                .concat(view.selectedItemsCount())
+                .concat("/")
                 .concat(view.itemsCountProperty())
+                .concat(" ")
+                .concat(I18N.getValue("record.book.items_selected"))
         )
     }
 
