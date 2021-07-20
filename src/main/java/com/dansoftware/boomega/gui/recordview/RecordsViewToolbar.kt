@@ -170,6 +170,7 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
 
     private fun buildABCChooserItem() =
         MenuButton(I18N.getValue("record.table.abc")).also { toolbarItem ->
+            toolbarItem.isDisable = true
             ToggleGroup().let { toggleGroup ->
                 I18N.getAvailableCollators().forEach { locale, collatorSupplier ->
                     toolbarItem.items.add(AbcMenuItem(locale, collatorSupplier, toggleGroup))
