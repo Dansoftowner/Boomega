@@ -1,3 +1,13 @@
+# Boomega unreleased 
+
+**Date:** Unknown
+
+### Enhancements/features:
+
+* ✨💄 Updated Google Book Details Panel (Closes [#126](https://github.com/Dansoftowner/Boomega/issues/126))
+
+### Bug fixes/improvements
+
 # Boomega v0.7.0 (pre-release)
 
 **Date:** 2020-07-20
