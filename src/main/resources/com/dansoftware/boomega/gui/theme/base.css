@@ -219,6 +219,41 @@
 
 /*******************************************************************************
  *                                                                             *
+ *                                  PropertyTable                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.property-table .property-mark-label {
+    -fx-font-weight: bold;
+}
+
+.property-table {
+    -fx-background-color: transparent;
+}
+
+.property-table .table-column {
+    -fx-background-color: transparent;
+}
+
+.property-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent !important;
+}
+
+.property-table .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.property-table .filler {
+    -fx-background-color: transparent;
+}
+
+.property-table .read-only-rating {
+    -fx-font-size: 1.5em;
+}
+
+/*******************************************************************************
+ *                                                                             *
  *                                 NotificationNode                            *
  *                                                                             *
  ******************************************************************************/
@@ -424,10 +459,6 @@
 
 .google-book-details-pane .info-panel .label {
     -fx-font-size: 16px;
-}
-
-.google-book-details-pane .property-mark-label {
-    -fx-font-weight: bold;
 }
 
 .google-book-details-pane .header-area .main-header-area {
