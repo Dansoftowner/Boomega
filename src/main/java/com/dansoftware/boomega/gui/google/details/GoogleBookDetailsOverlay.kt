@@ -30,7 +30,7 @@ import javafx.scene.image.ImageView
  * @author Daniel Gyorffy
  */
 class GoogleBookDetailsOverlay(context: Context, volume: Volume) : TitledOverlayBox(
-    I18N.getValue("google.books.detail.title"),
+    i18n("google.books.detail.title"),
     ImageView("/com/dansoftware/boomega/image/util/google_12px.png"),
     GoogleBookDetailsPane(context, volume).apply { minHeight = 300.0 }
 )

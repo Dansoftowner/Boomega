@@ -36,9 +36,9 @@ import javafx.scene.control.Tooltip
  *
  * @author Daniel Gyorffy
  */
-class WebsiteHyperLink(
+open class WebsiteHyperLink @JvmOverloads constructor(
     text: String,
-    url: String?
+    url: String? = null
 ) : Hyperlink(), EventHandler<ActionEvent> {
 
     private val url: StringProperty

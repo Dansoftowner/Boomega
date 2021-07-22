@@ -24,7 +24,7 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.text.Font
 import javafx.scene.text.Text
 
-class ReadOnlyRating(max: Int, value: Int) : Text() {
+open class ReadOnlyRating(max: Int, value: Int) : Text() {
 
     private val maxProperty: IntegerProperty = object : SimpleIntegerProperty(max) {
         override fun invalidated() {

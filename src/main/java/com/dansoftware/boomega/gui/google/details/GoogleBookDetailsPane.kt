@@ -20,14 +20,12 @@ package com.dansoftware.boomega.gui.google.details
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView
-import com.dansoftware.boomega.gui.control.HighlightableLabel
-import com.dansoftware.boomega.gui.control.ReadOnlyRating
-import com.dansoftware.boomega.gui.control.WebsiteHyperLink
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.SystemBrowser
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
@@ -37,7 +35,10 @@ import com.pnikosis.html2markdown.HTML2Md
 import com.sandec.mdfx.MarkdownView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
-import javafx.beans.property.*
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.concurrent.Task
@@ -54,7 +55,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
@@ -66,17 +66,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
     }
 
     private val thumbnail: ObjectProperty<Image?> = SimpleObjectProperty()
-    private val title: StringProperty = SimpleStringProperty()
-    private val subtitle: StringProperty = SimpleStringProperty()
-    private val authors: StringProperty = SimpleStringProperty()
-    private val publisher: StringProperty = SimpleStringProperty()
-    private val date: StringProperty = SimpleStringProperty()
-    private val language: StringProperty = SimpleStringProperty()
-    private val averageRating: DoubleProperty = SimpleDoubleProperty()
-    private val previewLink: StringProperty = SimpleStringProperty()
     private val description: StringProperty = SimpleStringProperty()
-    private val industryIdentifiers: ObjectProperty<List<String>?> = SimpleObjectProperty()
-    private val categories: ObjectProperty<List<String>?> = SimpleObjectProperty()
 
     private val thumbnailCache: Cache<Volume, Image> =
         Caffeine.newBuilder()
@@ -89,10 +79,10 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
             .build()
 
     init {
+        VBox.setVgrow(this, Priority.ALWAYS)
         styleClass.add("google-book-details-pane")
         styleClass.add(JMetroStyleClass.BACKGROUND)
         minHeight = 0.0
-        VBox.setVgrow(this, Priority.ALWAYS)
         buildUI()
     }
 
@@ -101,16 +91,6 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
     }
 
     private fun handleNewVolume(volume: Volume?) {
-        title.set(volume?.volumeInfo?.title)
-        subtitle.set(volume?.volumeInfo?.subtitle)
-        authors.set(volume?.volumeInfo?.authors?.joinToString(", "))
-        publisher.set(volume?.volumeInfo?.publisher)
-        date.set(volume?.volumeInfo?.publishedDate)
-        language.set(volume?.volumeInfo?.language?.let(Locale::forLanguageTag)?.displayLanguage)
-        previewLink.set(volume?.volumeInfo?.previewLink)
-        averageRating.value = volume?.volumeInfo?.averageRating
-        industryIdentifiers.set(volume?.volumeInfo?.industryIdentifiers?.map(Volume.VolumeInfo.IndustryIdentifier::toString))
-        categories.set(volume?.volumeInfo?.categories)
         retrieveThumbnail(volume) { value -> thumbnail.set(value) }
         retrieveDescription(volume) { value -> description.set(value) }
     }
@@ -154,37 +134,15 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
 
         private fun buildUI() {
             children.add(Thumbnail())
-            children.add(buildTypeIndicator())
-            children.add(buildPreviewHyperlink())
+            children.add(buildPreviewButton())
         }
 
-        private fun buildTypeIndicator(): Node =
-            HBox(5.0).run {
-                volume.addListener { _, _, newVolume ->
-                    newVolume?.volumeInfo?.let {
-                        when {
-                            it.isMagazine -> {
-                                children.setAll(
-                                    FixedFontMaterialDesignIconView(MaterialDesignIcon.NEWSPAPER, 17.0),
-                                    StackPane(Label(I18N.getValue("google.books.magazine")))
-                                )
-                            }
-                            else -> {
-                                children.setAll(
-                                    FixedFontMaterialDesignIconView(MaterialDesignIcon.BOOK, 17.0),
-                                    StackPane(Label(I18N.getValue("google.books.book")))
-                                )
-                            }
-                        }
-                    } ?: children.clear()
-                }
-                StackPane(this)
-            }
-
-        private fun buildPreviewHyperlink() = Hyperlink(I18N.getValue("google.books.details.preview")).apply {
-            graphic = MaterialDesignIconView(MaterialDesignIcon.APPLICATION)
+        private fun buildPreviewButton() = Button().apply {
+            graphic = MaterialDesignIconView(MaterialDesignIcon.BOOK_OPEN_VARIANT)
+            text = i18n("google.books.details.preview")
+            maxWidth = Double.MAX_VALUE
             contextMenu = ContextMenu(
-                MenuItem(I18N.getValue("google.book.preview.browser"))
+                MenuItem(i18n("google.book.preview.browser"))
                     .action { volume.get()?.volumeInfo?.previewLink?.let(SystemBrowser::browse) }
             )
             setOnAction {
@@ -242,9 +200,9 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         private fun initTabs() {
-            tabs.add(Tab(I18N.getValue("google.books.details.sale"), SalePane()))
-            tabs.add(Tab(I18N.getValue("google.books.table.column.desc"), DescriptionPane()))
-            tabs.add(Tab(I18N.getValue("google.books.details.info"), InfoPane()))
+            tabs.add(Tab(i18n("google.books.details.sale"), SalePane()))
+            tabs.add(Tab(i18n("google.books.table.column.desc"), DescriptionPane()))
+            tabs.add(Tab(i18n("google.books.details.info"), VolumeInfoTable(volume)))
         }
 
         private fun initOrientation() {
@@ -261,144 +219,6 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                 }
 
             })
-        }
-    }
-
-    private inner class InfoPane : ScrollPane() {
-        init {
-            isFitToWidth = true
-            styleClass.add("info-panel")
-            buildUI()
-        }
-
-        private fun buildUI() {
-            content = buildVBox()
-        }
-
-        private fun buildVBox() = VBox(10.0).apply {
-            //children.add(buildTypeIndicator())
-            children.add(buildTitleLabel())
-            children.add(buildSubtitleLabel())
-            children.add(buildAuthorLabel())
-            children.add(buildPublisherLabel())
-            children.add(buildDateLabel())
-            children.add(buildLangLabel())
-            children.add(buildISBNIndicator())
-            children.add(buildCategoriesIndicator())
-            children.add(buildRatingsIndicator())
-        }
-
-        private fun buildTypeIndicator(): Node =
-            HBox(5.0).also { hBox ->
-                volume.addListener { _, _, newVolume ->
-                    newVolume?.volumeInfo?.let {
-                        when {
-                            it.isMagazine -> {
-                                hBox.children.setAll(
-                                    FixedFontMaterialDesignIconView(MaterialDesignIcon.NEWSPAPER, 20.0),
-                                    Label(I18N.getValue("google.books.magazine"))
-                                )
-                            }
-                            else -> {
-                                hBox.children.setAll(
-                                    FixedFontMaterialDesignIconView(MaterialDesignIcon.BOOK, 20.0),
-                                    Label(I18N.getValue("google.books.book"))
-                                )
-                            }
-                        }
-                    } ?: hBox.children.clear()
-
-                }
-            }
-
-        private fun buildTitleLabel() =
-            PropertyValuePair(
-                I18N.getValue("google.books.table.column.title"),
-                title
-            )
-
-        private fun buildSubtitleLabel() =
-            PropertyValuePair(
-                I18N.getValue("google.books.table.column.subtitle"),
-                subtitle
-            )
-
-        private fun buildAuthorLabel() =
-            PropertyValuePair(
-                I18N.getValue("google.books.table.column.author"),
-                authors
-            )
-
-        private fun buildPublisherLabel() =
-            PropertyValuePair(
-                I18N.getValue("google.books.table.column.publisher"),
-                publisher
-            )
-
-        private fun buildDateLabel() =
-            PropertyValuePair(
-                I18N.getValue("google.books.table.column.date"),
-                date
-            )
-
-        private fun buildLangLabel() =
-            PropertyValuePair(
-                I18N.getValue("google.books.table.column.lang"),
-                language
-            )
-
-        private fun buildISBNIndicator(): Node =
-            VBox(5.0,
-                PropertyNameLabel(I18N.getValue("google.books.table.column.isbn").plus(":")),
-                VBox(2.0).also { vBox ->
-                    industryIdentifiers.addListener { _, _, identifiers ->
-                        vBox.children.setAll(identifiers?.map {
-                            HBox(2.0,
-                                Label("${8226.toChar()}"),
-                                HighlightableLabel(it).apply {
-                                    HBox.setHgrow(this, Priority.ALWAYS)
-                                }
-                            )
-                        } ?: listOf(Label(" - ")))
-                    }
-                }
-            )
-
-
-        private fun buildCategoriesIndicator() =
-            VBox(5.0,
-                PropertyNameLabel(I18N.getValue("google.books.categories").plus(":")),
-                VBox(2.0).also { vBox ->
-                    categories.addListener { _, _, categories ->
-                        vBox.children.setAll(categories?.map {
-                            HBox(2.0,
-                                Label("${8226.toChar()}"),
-                                HighlightableLabel(it).apply {
-                                    HBox.setHgrow(this, Priority.ALWAYS)
-                                }
-                            )
-                        } ?: listOf(Label(" - ")))
-                    }
-                }
-            )
-
-        private fun buildRatingsIndicator() =
-            VBox(
-                5.0,
-                PropertyNameLabel(I18N.getValue("google.books.table.column.rank").plus(":")),
-                ReadOnlyRating(5, 0).apply {
-                    ratingProperty().bind(averageRating)
-                }
-            )
-
-        private fun buildBrowserButton() = Button().apply {
-            graphic = MaterialDesignIconView(MaterialDesignIcon.GOOGLE_CHROME)
-            text = I18N.getValue("google.book.preview.browser")
-            setOnAction {
-                volume.get()?.volumeInfo?.previewLink?.let {
-                    SystemBrowser.browse(it)
-                }
-            }
         }
     }
 
@@ -441,12 +261,18 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         private fun placeHolder() {
-            content = StackPane(Label(I18N.getValue("google.book.description.empty")))
+            content = StackPane(Label(i18n("google.book.description.empty")))
             isFitToHeight = true
         }
     }
 
     private inner class SalePane : ScrollPane() {
+
+        private var table: SaleInfoTable? = null
+            get() = field ?: SaleInfoTable(volume).also {
+                field = it
+            }
+
         init {
             isFitToWidth = true
             isFitToHeight = true
@@ -454,92 +280,17 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         private fun initPlaceHolderPolicy() {
-            placeholder()
+            content = buildNotSaleablePlaceHolder()
             volume.addListener { _, _, volume ->
-                when (volume.saleInfo?.saleability) {
-                    Volume.SaleInfo.FOR_SALE -> normalContent(volume)
-                    else -> placeholder()
+                content = when (volume.saleInfo?.saleability) {
+                    Volume.SaleInfo.FOR_SALE -> table!!
+                    else -> buildNotSaleablePlaceHolder()
                 }
             }
         }
 
-        private fun placeholder() {
-            content = buildNotSaleablePlaceHolder()
-        }
-
-        private fun normalContent(volume: Volume) {
-            content = VBox(
-                10.0,
-                buildEBookIndicator(volume),
-                buildCountryIndicator(volume),
-                buildListPriceLabel(volume),
-                buildRetailPriceLabel(volume),
-                buildBuyLinkLabel(volume)
-            )
-        }
-
-        private fun buildEBookIndicator(volume: Volume): Node =
-            PropertyValuePair(
-                I18N.getValue("google.books.details.sale.isebook"),
-                I18N.getValues().getString(
-                    when (volume.saleInfo?.isEbook) {
-                        true -> "Dialog.yes.button"
-                        else -> "Dialog.no.button"
-                    }
-                )
-            )
-
-        private fun buildCountryIndicator(volume: Volume): Node =
-            PropertyValuePair(
-                I18N.getValue("google.books.details.sale.country"),
-                volume.saleInfo?.country
-            )
-
-        private fun buildListPriceLabel(volume: Volume): Node =
-            PropertyValuePair(
-                I18N.getValue("google.books.details.sale.listprice"),
-                volume.saleInfo?.listPrice.toString()
-            )
-
-        private fun buildRetailPriceLabel(volume: Volume): Node =
-            PropertyValuePair(
-                I18N.getValue("google.books.details.sale.retailprice"),
-                volume.saleInfo?.retailPrice.toString()
-            )
-
-        private fun buildBuyLinkLabel(volume: Volume): Node =
-            HBox(
-                5.0,
-                MaterialDesignIconView(MaterialDesignIcon.GOOGLE_PLAY),
-                WebsiteHyperLink(
-                    I18N.getValue("google.books.details.sale.buylink"),
-                    volume.saleInfo?.buyLink
-                )
-            )
-
-
         private fun buildNotSaleablePlaceHolder(): Node =
-            StackPane(Label(I18N.getValue("google.books.details.notforsale")))
+            StackPane(Label(i18n("google.books.details.notforsale")))
     }
 
-    //Utility classes
-
-    private class PropertyValuePair(key: String, value: StringProperty) : VBox(5.0) {
-        init {
-            children.add(PropertyNameLabel("$key:"))
-            children.add(HighlightableLabel().apply {
-                textProperty().bind(value)
-            })
-            visibleProperty().bind(value.isNotNull)
-            managedProperty().bind(value.isNotNull)
-        }
-
-        constructor(key: String, value: String?) : this(key, SimpleStringProperty(value))
-    }
-
-    private class PropertyNameLabel(initial: String? = null) : Label(initial) {
-        init {
-            styleClass.add("property-mark-label")
-        }
-    }
 }
