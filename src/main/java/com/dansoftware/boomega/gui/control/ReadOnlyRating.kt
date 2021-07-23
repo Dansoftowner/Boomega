@@ -21,10 +21,10 @@ package com.dansoftware.boomega.gui.control
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.scene.text.Font
+import javafx.scene.layout.HBox
 import javafx.scene.text.Text
 
-open class ReadOnlyRating(max: Int, value: Int) : Text() {
+open class ReadOnlyRating(max: Int, value: Int) : HBox() {
 
     private val maxProperty: IntegerProperty = object : SimpleIntegerProperty(max) {
         override fun invalidated() {
@@ -41,14 +41,30 @@ open class ReadOnlyRating(max: Int, value: Int) : Text() {
     init {
         require(max >= value)
         styleClass.add("read-only-rating")
-        style = "-fx-font-family: 'Material Design Icons' !important;"
         update()
     }
 
     private fun update() {
-        text = MaterialDesignIcon.STAR.unicode().repeat(ratingProperty.value) +
-                MaterialDesignIcon.STAR_OUTLINE.unicode().repeat(maxProperty.value - ratingProperty.value)
+        children.setAll(filledStars() + unFilledStars())
     }
+
+    private fun filledStars() =
+        (1..ratingProperty.value).map { filledStarIcon() }
+
+    private fun unFilledStars() =
+        (ratingProperty.value until maxProperty.value).map { unFilledStarIcon() }
+
+    private fun filledStarIcon() =
+        starIcon("filled-star")
+
+    private fun unFilledStarIcon() =
+        starIcon("unfilled-star")
+
+    private fun starIcon(styleClass: String) =
+        Text(MaterialDesignIcon.STAR.unicode()).apply {
+            this.styleClass.add(styleClass)
+            this.style = "-fx-font-family: 'Material Design Icons' !important;"
+        }
 
     fun maxProperty(): IntegerProperty {
         return maxProperty
