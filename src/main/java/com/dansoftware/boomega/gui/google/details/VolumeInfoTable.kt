@@ -28,6 +28,7 @@ import com.dansoftware.boomega.service.googlebooks.Volume
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.beans.property.*
 import javafx.scene.control.Label
+import javafx.scene.control.Tooltip
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
@@ -102,43 +103,9 @@ class VolumeInfoTable(volume: ObjectProperty<Volume>) : PropertyTable() {
         }
     }
 
-    private inner class IndustryIdentifiersBox : VBox(2.0) {
-        init {
-            updateUI()
-            industryIdentifiers.addListener { _, _, _ -> updateUI() }
-        }
+    private inner class IndustryIdentifiersBox : UnorderedList(industryIdentifiers)
 
-        private fun updateUI() {
-            children.setAll(
-                industryIdentifiers.get()?.map {
-                    HBox(2.0,
-                        Label("${8226.toChar()}"),
-                        HighlightableLabel(it).apply {
-                            HBox.setHgrow(this, Priority.ALWAYS)
-                        }
-                    )
-                } ?: listOf(Label(" - "))
-            )
-        }
-    }
-
-    private inner class CategoriesBox : VBox(2.0) {
-        init {
-            updateUI()
-            categories.addListener { _, _, _ -> updateUI() }
-        }
-
-        private fun updateUI() {
-            children.setAll(categories.get()?.map {
-                HBox(2.0,
-                    Label("${8226.toChar()}"),
-                    HighlightableLabel(it).apply {
-                        HBox.setHgrow(this, Priority.ALWAYS)
-                    }
-                )
-            } ?: listOf(Label(" - ")))
-        }
-    }
+    private inner class CategoriesBox : UnorderedList(categories)
 
     private inner class RatingControl : HBox(2.0) {
         init {
@@ -152,6 +119,25 @@ class VolumeInfoTable(volume: ObjectProperty<Volume>) : PropertyTable() {
 
         private fun buildRatingCountLabel() = Label().apply {
             textProperty().bind(SimpleStringProperty("(").concat(ratingsCount).concat(")"))
+        }
+    }
+
+    private abstract class UnorderedList(private val listProperty: ObjectProperty<List<String>?>) : VBox(2.0) {
+        init {
+            updateUI()
+            listProperty.addListener { _, _, _ -> updateUI() }
+        }
+
+        private fun updateUI() {
+            children.setAll(listProperty.get()?.map {
+                HBox(2.0,
+                    Label("${8226.toChar()}"),
+                    HighlightableLabel(it).apply {
+                        HBox.setHgrow(this, Priority.ALWAYS)
+                        tooltip = Tooltip().also { t -> t.textProperty().bind(textProperty()) }
+                    }
+                )
+            } ?: listOf(Label(" - ")))
         }
     }
 }

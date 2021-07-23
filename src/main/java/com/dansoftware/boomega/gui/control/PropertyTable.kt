@@ -25,6 +25,7 @@ import javafx.scene.Node
 import javafx.scene.control.TableCell
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
+import javafx.scene.control.Tooltip
 import javafx.scene.control.cell.PropertyValueFactory
 
 open class PropertyTable : TableView<PropertyTable.Entry>() {
@@ -47,16 +48,18 @@ open class PropertyTable : TableView<PropertyTable.Entry>() {
             isReorderable = false
             isSortable = false
             setCellFactory {
-                object : TableCell<Entry, String>() {
-                    override fun updateItem(item: String?, empty: Boolean) {
-                        super.updateItem(item, empty)
-                        if (empty) {
+                object : PropertyTableCell() {
+
+                    init {
+                        styleClass.add("property-mark-label")
+                    }
+
+                    override fun updateItem(entry: Entry?) {
+                        entry?.let {
+                            text = entry.propertyName
+                        } ?: run {
                             text = null
                             graphic = null
-                        } else {
-                            val entry = tableView.items[index]
-                            text = entry.propertyName
-                            styleClass.add("property-mark-label")
                         }
                     }
                 }
@@ -70,22 +73,33 @@ open class PropertyTable : TableView<PropertyTable.Entry>() {
             isReorderable = false
             isSortable = false
             setCellFactory {
-                object : TableCell<Entry, String>() {
-                    override fun updateItem(item: String?, empty: Boolean) {
-                        super.updateItem(item, empty)
-                        if (empty) {
+                 object : PropertyTableCell() {
+                    override fun updateItem(entry: Entry?) {
+                        entry?.let {
+                            it.configureTableCell(this)
+                        } ?: run {
                             textProperty().unbind()
                             graphicProperty().unbind()
                             text = null
                             graphic = null
-                        } else {
-                            val entry = tableView.items[index]
-                            entry.configureTableCell(this)
                         }
                     }
                 }
             }
         }
+    }
+
+    private abstract class PropertyTableCell : TableCell<Entry, String>() {
+        override fun updateIndex(i: Int) {
+            super.updateIndex(i)
+            if (i in 0 until tableView.items.size) {
+                updateItem(tableView.items[i])
+            } else {
+                updateItem(null)
+            }
+        }
+
+        protected abstract fun updateItem(entry: Entry?)
     }
 
     class Entry(val propertyName: String, val configureTableCell: (TableCell<Entry, String>) -> Unit) {
@@ -101,6 +115,7 @@ open class PropertyTable : TableView<PropertyTable.Entry>() {
         constructor(propertyName: String, value: ObservableStringValue) :
                 this(propertyName, configureTableCell = {
                     it.graphic = HighlightableLabel().apply {
+                        tooltip = Tooltip().also { t -> t.textProperty().bind(textProperty()) }
                         textProperty().bind(Bindings.createStringBinding({ value.get() ?: "-" }, value))
                     }
                 })
