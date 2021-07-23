@@ -5,6 +5,7 @@
 ### Enhancements/features:
 
 * ✨💄 Updated Google Book Details Panel (Closes [#126](https://github.com/Dansoftowner/Boomega/issues/126))
+* 💄 New look for read-only rating
 
 ### Bug fixes/improvements
 
