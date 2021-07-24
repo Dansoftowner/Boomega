@@ -19,22 +19,8 @@
 package com.dansoftware.boomega.db
 
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.db.listener.DatabaseChangeListener
 
-class ReadOnlyDatabase(private val database: Database) : Database {
-
-    override val meta: DatabaseMeta
-        get() = database.meta
-
-    override val records: List<Record>
-        get() = database.records
-
-    override val totalRecordCount: Int
-        get() = database.totalRecordCount
-
-    override val isClosed: Boolean
-        get() = database.isClosed
-
+class ReadOnlyDatabase(database: Database) : Database by database {
     override fun insertRecord(record: Record) {
         throw UnsupportedOperationException("Action INSERT is not supported")
     }
@@ -53,13 +39,5 @@ class ReadOnlyDatabase(private val database: Database) : Database {
 
     override fun close() {
         throw UnsupportedOperationException("Action CLOSE is not supported")
-    }
-
-    override fun addListener(listener: DatabaseChangeListener<Record>) {
-        database.addListener(listener)
-    }
-
-    override fun removeListener(listener: DatabaseChangeListener<Record>) {
-        database.addListener(listener)
     }
 }
