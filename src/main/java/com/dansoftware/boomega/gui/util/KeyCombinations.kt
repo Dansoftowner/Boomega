@@ -20,7 +20,6 @@
 
 package com.dansoftware.boomega.gui.util
 
-import com.dansoftware.boomega.util.equalsIgnoreCase
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
@@ -77,4 +76,4 @@ fun KeyEvent.isOnlyCode(): Boolean {
 }
 
 fun KeyEvent.isUndefined(): Boolean =
-    this.code.name.equalsIgnoreCase("undefined")
+    this.code.name.equals("undefined", ignoreCase = true)

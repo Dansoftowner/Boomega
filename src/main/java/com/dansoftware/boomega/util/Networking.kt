@@ -16,25 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:JvmName("NetworkingUtils")
+
 package com.dansoftware.boomega.util
 
-import com.jfilegoodies.explorer.FileExplorers
-import java.io.File
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
-
-fun String.surrounding(prefixSuffix: String) = this.surrounding(prefixSuffix, prefixSuffix)
-
-fun String.surrounding(prefix: String, suffix: String) = "$prefix$this$suffix"
-
-@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
-fun String.equalsIgnoreCase(other: String): Boolean =
-    (this as java.lang.String).equalsIgnoreCase(other)
-
-fun File.revealInExplorer() {
-    FileExplorers.get().openSelect(this)
-}
 
 fun isServerReachable(url: String) =
     try {

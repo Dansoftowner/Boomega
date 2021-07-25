@@ -21,9 +21,6 @@ package com.dansoftware.boomega.gui.control
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import com.dansoftware.boomega.util.equalsIgnoreCase
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
@@ -38,7 +35,6 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import org.apache.commons.lang3.StringUtils
-import org.controlsfx.control.textfield.CustomTextField
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.function.Consumer
@@ -292,9 +288,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
             userInput: String,
             recordValue: String,
             caseSensitive: Boolean
-        ): Boolean =
-            if (caseSensitive) recordValue == userInput
-            else recordValue.equalsIgnoreCase(userInput)
+        ): Boolean = recordValue.equals(userInput, ignoreCase = !caseSensitive)
     }
 
     private class RegexFilter(
