@@ -19,7 +19,8 @@
 package com.dansoftware.boomega.gui.google;
 
 import com.dansoftware.boomega.gui.control.*;
-import com.dansoftware.boomega.gui.util.BaseFXUtils;
+import com.dansoftware.boomega.gui.util.ImageUtils;
+import com.dansoftware.boomega.gui.util.ObservableUtils;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.service.googlebooks.Volume;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -42,6 +43,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
+import static com.dansoftware.boomega.gui.util.IconUtils.icon;
 
 /**
  * A {@link GoogleBooksTable} is a table-view that used for displaying {@link Volume} objects.
@@ -261,7 +263,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
 
         @Override
         public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
-            return BaseFXUtils.constantObservable(() ->
+            return ObservableUtils.constantObservable(() ->
                     Optional.ofNullable(getValue(cellData.getValue().getVolumeInfo()))
                             .map(Object::toString)
                             .orElse("-"));
@@ -311,7 +313,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
                         setTooltip(null);
                     } else {
                         Volume.VolumeInfo volume = this.getTableView().getItems().get(getIndex()).getVolumeInfo();
-                        setGraphic(new MaterialDesignIconView(volume.isMagazine() ? MaterialDesignIcon.NEWSPAPER : MaterialDesignIcon.BOOK));
+                        setGraphic(icon(volume.isMagazine() ? MaterialDesignIcon.NEWSPAPER : MaterialDesignIcon.BOOK));
                         setTooltip(new Tooltip(I18N.getValue(volume.isMagazine() ? "google.books.magazine" : "google.books.book")));
                     }
                 }
@@ -352,7 +354,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
                                     setGraphic(new ImagePlaceHolder(80) {{
                                         setHeight(PREF_HEIGHT);
                                     }});
-                                    BaseFXUtils.loadImage(thumbnail, image -> {
+                                    ImageUtils.loadImage(thumbnail, image -> {
                                         if (volume.equals(getCurrentVolumeInfo())) {
                                             setGraphic(new ImageView(image));
                                         }
@@ -383,7 +385,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
         ISBN10Column() {
             super(ISBN_10_COLUMN);
             setSortable(false);
-            setCellValueFactory(cellData -> BaseFXUtils.constantObservable(() ->
+            setCellValueFactory(cellData -> ObservableUtils.constantObservable(() ->
                     Optional.ofNullable(cellData.getValue())
                             .map(Volume::getVolumeInfo)
                             .map(Volume.VolumeInfo::getIndustryIdentifiers)
@@ -406,7 +408,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
 
         @Override
         public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
-            return BaseFXUtils.constantObservable(() ->
+            return ObservableUtils.constantObservable(() ->
                     Optional.ofNullable(cellData.getValue())
                             .map(Volume::getVolumeInfo)
                             .map(Volume.VolumeInfo::getIndustryIdentifiers)
@@ -427,7 +429,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
 
         @Override
         public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
-            return BaseFXUtils.constantObservable(() ->
+            return ObservableUtils.constantObservable(() ->
                     Optional.ofNullable(cellData.getValue().getVolumeInfo())
                             .map(Volume.VolumeInfo::getIndustryIdentifiersAsString)
                             .orElse("-"));
@@ -438,7 +440,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
         AuthorColumn() {
             super(AUTHOR_COLUMN);
             setCellValueFactory(cellData ->
-                    BaseFXUtils.constantObservable(() ->
+                    ObservableUtils.constantObservable(() ->
                             Optional.ofNullable(cellData.getValue().getVolumeInfo())
                                     .map(Volume.VolumeInfo::getAuthors)
                                     .map(authors -> String.join(", ", authors))
@@ -489,7 +491,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
 
         @Override
         public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
-            return BaseFXUtils.constantObservable(() ->
+            return ObservableUtils.constantObservable(() ->
                     Optional.ofNullable(cellData.getValue().getVolumeInfo())
                             .map(Volume.VolumeInfo::getLanguage)
                             .map(Locale::forLanguageTag)

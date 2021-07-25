@@ -16,84 +16,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.util;
+@file:JvmName("WindowUtils")
 
-import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.WinDef;
-import javafx.scene.Node;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+package com.dansoftware.boomega.gui.util
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import javafx.scene.Node
+import javafx.stage.Stage
+import javafx.stage.Window
+import java.util.*
+import java.util.stream.Collectors
 
-public class WindowUtils {
+/**
+ * Finds the corresponding [Window] to the particular [Node] object.
+ *
+ * @param node the node to find the window of
+ * @return the [Window] object
+ */
+val Node?.window: Window?
+    get() = this?.scene?.window
 
-    private WindowUtils() {
-    }
+/**
+ * @see .getWindowOf
+ */
+val Node?.stage: Stage?
+    get() = window as? Stage
 
-    @Nullable
-    public static WinDef.HWND getHwnd(@NotNull Stage window) {
-        if (window.isMaximized()) {
-            int windowIndex = javafx.stage.Window.getWindows().indexOf(window);
-            long hwndVal = com.sun.glass.ui.Window.getWindows().get(windowIndex).getNativeWindow();
-            return new WinDef.HWND(Pointer.createConstant(hwndVal));
-        }
-        return null;
-    }
+fun getWindowOptionalOf(node: Node?): Optional<Window> =
+    Optional.ofNullable(node?.scene?.window)
 
-    /**
-     * Finds the corresponding {@link Window} to the particular {@link Node} object.
-     *
-     * @param node the node to find the window of
-     * @return the {@link Window} object
-     */
-    @Nullable
-    public static Window getWindowOf(@Nullable Node node) {
-        if (Objects.isNull(node) || Objects.isNull(node.getScene()))
-            return null;
 
-        return node.getScene().getWindow();
-    }
+fun getStageOptionalOf(node: Node?): Optional<Stage?> =
+    getWindowOptionalOf(node).map { window: Window? -> window as? Stage }
 
-    /**
-     * @see #getWindowOf(Node)
-     */
-    @Nullable
-    public static Stage getStageOf(Node node) {
-        return (Stage) getWindowOf(node);
-    }
-
-    @NotNull
-    public static Optional<Window> getWindowOptionalOf(@Nullable Node node) {
-        if (Objects.isNull(node) || Objects.isNull(node.getScene()))
-            return Optional.empty();
-
-        return Optional.ofNullable(node.getScene().getWindow());
-    }
-
-    @NotNull
-    public static Optional<Stage> getStageOptionalOf(@Nullable Node node) {
-        return getWindowOptionalOf(node).map(window -> (Stage) window);
-    }
-
-    /**
-     * Returns all {@link Stage}s that is owned by the given {@link Stage}.
-     *
-     * @param stage the stage that we want to find the windows of
-     * @return the {@link List} of {@link Stage} objects
-     */
-    public static List<Stage> getOwnedStagesOf(@Nullable Stage stage) {
-        if (stage == null) return Collections.emptyList();
-        return Window.getWindows().stream()
-                .filter(window -> window instanceof Stage)
-                .map(window -> (Stage) window)
-                .filter(window -> window.getOwner().equals(stage))
-                .collect(Collectors.toList());
-    }
-}
+/**
+ * Returns all [Stage]s that is owned by this [Stage].
+ */
+val Stage.ownedStages: List<Stage>
+    get() = Window.getWindows().stream()
+        .filter { window: Window? -> window is Stage }
+        .map { window: Window -> window as Stage }
+        .filter { window: Stage -> window.owner == this }
+        .collect(Collectors.toList())

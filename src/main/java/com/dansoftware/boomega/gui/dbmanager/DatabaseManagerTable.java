@@ -21,9 +21,9 @@ package com.dansoftware.boomega.gui.dbmanager;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
-import com.dansoftware.boomega.gui.util.BaseFXUtils;
+import com.dansoftware.boomega.gui.util.ConcurrencyUtils;
+import com.dansoftware.boomega.gui.util.FXCollectionUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
-import com.dansoftware.boomega.i18n.I18N;
 import com.jfilegoodies.explorer.FileExplorers;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -44,6 +44,9 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import static com.dansoftware.boomega.gui.util.IconUtils.icon;
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
 
 /**
  * A DBManagerTable is a {@link TableView} that is used for managing (monitoring, deleting) databases.
@@ -77,7 +80,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
     private void init(Collection<DatabaseMeta> databases) {
         this.getItems().addAll(databases);
-        this.setPlaceholder(new Label(I18N.getValue("database.manager.table.place.holder")));
+        this.setPlaceholder(new Label(i18n("database.manager.table.place.holder")));
         Stream.of(
                 new StateColumn(),
                 new NameColumn(),
@@ -100,22 +103,22 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
     @Override
     public void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        BaseFXUtils.runOnUiThread(this::refresh);
+        ConcurrencyUtils.runOnUiThread(this::refresh);
     }
 
     @Override
     public void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        BaseFXUtils.runOnUiThread(this::refresh);
+        ConcurrencyUtils.runOnUiThread(this::refresh);
     }
 
     @Override
     public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
-        BaseFXUtils.runOnUiThread(() -> this.getItems().add(databaseMeta));
+        ConcurrencyUtils.runOnUiThread(() -> this.getItems().add(databaseMeta));
     }
 
     @Override
     public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
-        BaseFXUtils.runOnUiThread(() -> this.getItems().remove(databaseMeta));
+        ConcurrencyUtils.runOnUiThread(() -> this.getItems().remove(databaseMeta));
     }
 
 
@@ -157,12 +160,12 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                             var indicator = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
                             indicator.getStyleClass().add(NOT_EXISTS_CLASS);
                             setGraphic(indicator);
-                            getTableRow().setTooltip(new Tooltip(I18N.getValue("file.not.exists")));
+                            getTableRow().setTooltip(new Tooltip(i18n("file.not.exists")));
                         } else if (DatabaseManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
                             var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
                             indicator.getStyleClass().add(USED_CLASS);
                             setGraphic(indicator);
-                            getTableRow().setTooltip(new Tooltip(I18N.getValue("database.currently.used")));
+                            getTableRow().setTooltip(new Tooltip(i18n("database.currently.used")));
                         } else {
                             setGraphic(null);
                             getTableRow().setTooltip(null);
@@ -179,7 +182,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
      */
     private static final class NameColumn extends TableColumn<DatabaseMeta, String> {
         NameColumn() {
-            super(I18N.getValue("database.manager.table.column.name"));
+            super(i18n("database.manager.table.column.name"));
             setReorderable(false);
             setCellValueFactory(new PropertyValueFactory<>("name"));
         }
@@ -190,7 +193,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
      */
     private static final class PathColumn extends TableColumn<DatabaseMeta, String> {
         PathColumn() {
-            super(I18N.getValue("database.manager.table.column.path"));
+            super(i18n("database.manager.table.column.path"));
             setReorderable(false);
             setCellValueFactory(new PropertyValueFactory<>("file"));
         }
@@ -203,7 +206,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         SizeColumn() {
-            super(I18N.getValue("database.manager.table.column.size"));
+            super(i18n("database.manager.table.column.size"));
             setReorderable(false);
             setCellFactory(this);
         }
@@ -241,7 +244,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         FileOpenerColumn() {
-            super(I18N.getValue("database.manager.table.column.open"));
+            super(i18n("database.manager.table.column.open"));
             setMinWidth(90);
             setSortable(false);
             setReorderable(false);
@@ -260,7 +263,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                     } else {
                         Button openButton = new Button();
                         openButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        openButton.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.FOLDER));
+                        openButton.setGraphic(icon(MaterialDesignIcon.FOLDER));
                         openButton.prefWidthProperty().bind(getTableColumn().widthProperty());
                         openButton.setOnAction(event -> getTableView()
                                 .getSelectionModel()
@@ -283,7 +286,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         DeleteColumn() {
-            super(I18N.getValue("database.manager.table.column.delete"));
+            super(i18n("database.manager.table.column.delete"));
             setReorderable(false);
             setSortable(false);
             setMinWidth(90);
@@ -302,11 +305,11 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                     } else {
                         Button deleteButton = new Button();
                         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        deleteButton.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DATABASE_MINUS));
+                        deleteButton.setGraphic(icon(MaterialDesignIcon.DATABASE_MINUS));
                         deleteButton.prefWidthProperty().bind(tableColumn.widthProperty());
                         deleteButton.setOnAction(event -> {
                             ObservableList<DatabaseMeta> selectedItems =
-                                    BaseFXUtils.copy(getTableView().getSelectionModel().getSelectedItems());
+                                    FXCollectionUtils.copy(getTableView().getSelectionModel().getSelectedItems());
                             DBDeleteDialog dialog = new DBDeleteDialog();
                             dialog.show(selectedItems);
                         });
@@ -328,7 +331,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
 
         public void show(@NotNull ObservableList<DatabaseMeta> itemsToRemove) {
             DatabaseManagerTable.this.context.showDialog(
-                    I18N.getValue("database.manager.confirm_delete.title", itemsToRemove.size()),
+                    i18n("database.manager.confirm_delete.title", itemsToRemove.size()),
                     new ListView<>(itemsToRemove),
                     buttonType -> {
                         if (Objects.equals(buttonType, I18NButtonTypes.YES)) {

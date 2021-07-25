@@ -24,12 +24,12 @@ import com.dansoftware.boomega.db.NitriteDatabase
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.SpaceValidator
-import com.dansoftware.boomega.gui.util.WindowUtils
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.stage
+import com.dansoftware.boomega.gui.util.window
 import com.dansoftware.boomega.i18n.i18n
 import com.jfilegoodies.FileGoodies
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.property.*
 import javafx.geometry.Insets
 import javafx.scene.control.*
@@ -87,7 +87,7 @@ class DatabaseCreatorForm(
     }
 
     private fun openDirectory() {
-        directoryChooser.showDialog(WindowUtils.getWindowOf(this))?.let { dir ->
+        directoryChooser.showDialog(this.window)?.let { dir ->
             databaseDir.set(dir.absolutePath)
         }
     }
@@ -152,7 +152,7 @@ class DatabaseCreatorForm(
         private fun buildDirOpenButton() = Button().apply {
             setConstraints(this, 2, 1)
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
-            graphic = FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN)
+            graphic = icon(FontAwesomeIcon.FOLDER_OPEN)
             minHeight = 35.0
             tooltip = Tooltip(i18n("data.source.adder.choose.dir"))
             setOnAction { openDirectory() }
@@ -220,7 +220,7 @@ class DatabaseCreatorForm(
                     context.showErrorDialog(i18n("database.create_failed"), message, t as Exception?) {}
                 }.touch(credentials)
             databaseTracker.saveDatabase(databaseMeta)
-            WindowUtils.getStageOf(this)?.close()
+            this.stage?.close()
         }
     }
 

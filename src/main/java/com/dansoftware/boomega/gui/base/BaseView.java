@@ -22,7 +22,7 @@ import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.api.ContextDialog;
 import com.dansoftware.boomega.gui.control.ExceptionDisplayPane;
 import com.dansoftware.boomega.gui.keybinding.KeyBinding;
-import com.dansoftware.boomega.gui.util.BaseFXUtils;
+import com.dansoftware.boomega.gui.util.EventUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
 import com.dansoftware.boomega.gui.util.WindowUtils;
 import com.dlsc.workbenchfx.Workbench;
@@ -348,7 +348,7 @@ public class BaseView extends StackPane implements Context {
 
     @Override
     public javafx.stage.Window getContextWindow() {
-        return WindowUtils.getWindowOf(workbench);
+        return WindowUtils.getWindow(workbench);
     }
 
     @Override
@@ -396,7 +396,7 @@ public class BaseView extends StackPane implements Context {
 
     @Override
     public void onWindowPresent(Consumer<Window> action) {
-        BaseFXUtils.onWindowPresent(workbench, action);
+        EventUtils.onWindowPresent(workbench, action);
     }
 
     @Override
