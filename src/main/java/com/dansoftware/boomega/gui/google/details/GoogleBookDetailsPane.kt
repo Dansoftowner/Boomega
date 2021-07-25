@@ -24,7 +24,8 @@ import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.action
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.putToSystemClipboard
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.SystemBrowser
@@ -34,7 +35,6 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.pnikosis.html2markdown.HTML2Md
 import com.sandec.mdfx.MarkdownView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
@@ -138,7 +138,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         private fun buildPreviewButton() = Button().apply {
-            graphic = MaterialDesignIconView(MaterialDesignIcon.BOOK_OPEN_VARIANT)
+            graphic = icon(MaterialDesignIcon.BOOK_OPEN_VARIANT)
             text = i18n("google.books.details.preview")
             maxWidth = Double.MAX_VALUE
             contextMenu = ContextMenu(
@@ -227,6 +227,15 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
             init {
                 mdStringProperty().bind(description)
                 maxWidthProperty().bind(this@GoogleBookDetailsPane.prefWidthProperty())
+                buildContextMenu()
+            }
+
+            private fun buildContextMenu() {
+                contextMenu = ContextMenu(
+                    MenuItem(i18n("record.copy"), icon(MaterialDesignIcon.CONTENT_COPY)).action {
+                        mdString.putToSystemClipboard()
+                    }
+                )
             }
 
             override fun setLink(node: Node, link: String, description: String?) {
