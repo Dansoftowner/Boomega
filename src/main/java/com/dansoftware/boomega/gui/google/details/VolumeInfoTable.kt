@@ -114,7 +114,7 @@ class VolumeInfoTable(volume: ObjectProperty<Volume>) : PropertyTable() {
         }
 
         private fun buildRating() = ReadOnlyRating(5, 0).apply {
-            ratingProperty().bind(averageRating)
+            ratingProperty.bind(averageRating)
         }
 
         private fun buildRatingCountLabel() = Label().apply {

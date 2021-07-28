@@ -26,17 +26,31 @@ import javafx.scene.text.Text
 
 open class ReadOnlyRating(max: Int, value: Int) : HBox() {
 
-    private val maxProperty: IntegerProperty = object : SimpleIntegerProperty(max) {
+    @get:JvmName("maxProperty")
+    val maxProperty: IntegerProperty = object : SimpleIntegerProperty(max) {
         override fun invalidated() {
             update()
         }
     }
 
-    private val ratingProperty: IntegerProperty = object : SimpleIntegerProperty(value) {
+    @get:JvmName("ratingProperty")
+    val ratingProperty: IntegerProperty = object : SimpleIntegerProperty(value) {
         override fun invalidated() {
             update()
         }
     }
+
+    var rating: Int
+        get() = ratingProperty.get()
+        set(value) {
+            ratingProperty.set(value)
+        }
+
+    var max: Int
+        get() = maxProperty.get()
+        set(value) {
+            maxProperty.set(value)
+        }
 
     init {
         require(max >= value)
@@ -66,11 +80,4 @@ open class ReadOnlyRating(max: Int, value: Int) : HBox() {
             this.style = "-fx-font-family: 'Material Design Icons' !important;"
         }
 
-    fun maxProperty(): IntegerProperty {
-        return maxProperty
-    }
-
-    fun ratingProperty(): IntegerProperty {
-        return ratingProperty
-    }
 }
