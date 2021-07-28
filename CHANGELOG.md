@@ -6,6 +6,7 @@
 
 * ✨💄 Updated Google Book Details Panel (Closes [#126](https://github.com/Dansoftowner/Boomega/issues/126))
 * ✨ [#150](https://github.com/Dansoftowner/Boomega/issues/150): Ability to copy the description in Google Book details pane
+* ✨ Hiding docks when no items selected in records-view
 * 💄 New look for read-only rating
 
 ### Bug fixes/improvements
