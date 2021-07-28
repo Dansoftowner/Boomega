@@ -20,10 +20,17 @@
 
 package com.dansoftware.boomega.gui.util
 
+import javafx.beans.binding.Bindings
+import javafx.beans.binding.BooleanBinding
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
+import javafx.collections.ObservableList
 
 fun <T> constantObservable(value: () -> T): ObservableValue<T> =
     object : ObservableValueBase<T>() {
         override fun getValue(): T = value()
     }
+
+fun ObservableList<*>.emptyBinding(): BooleanBinding {
+    return Bindings.isEmpty(this)
+}

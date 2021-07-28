@@ -26,7 +26,7 @@ import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsPane
 import com.dansoftware.boomega.gui.recordview.RecordTable
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
 import com.dansoftware.boomega.gui.util.typeEquals
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
@@ -100,7 +100,7 @@ class GoogleBookConnectionView(
 
     fun removeConnectionRequest() {
         context.showDialog(
-            I18N.getValue("google.books.dock.remove.confirmation.title", items.size),
+            i18n("google.books.dock.remove.confirmation.title", items.size),
             buildPreviewTable(items),
             {
                 if (it.typeEquals(ButtonType.YES)) {
@@ -118,7 +118,6 @@ class GoogleBookConnectionView(
 
     private fun buildUI() {
         children.add(vBox)
-        noSelectionUI()
     }
 
     private fun buildCache(): Cache<String, Volume> =
@@ -130,9 +129,8 @@ class GoogleBookConnectionView(
         retrieveGoogleBookHandle(items)?.let {
             normalUI()
             pullVolume(it)
-        } ?: when {
-            items.isEmpty() -> noSelectionUI()
-            items.size == 1 -> noConnectionUI()
+        } ?: when (items.size) {
+            1 -> noConnectionUI()
             else -> multipleSelectionUI()
         }
     }
@@ -152,10 +150,6 @@ class GoogleBookConnectionView(
 
     private fun noConnectionUI() {
         vBox.children.setAll(NoConnectionPlaceHolder())
-    }
-
-    private fun noSelectionUI() {
-        vBox.children.setAll(NoSelectionPlaceHolder())
     }
 
     private fun multipleSelectionUI() {
@@ -251,7 +245,7 @@ class GoogleBookConnectionView(
                 onRefreshed?.run()
                 noConnectionUI()
                 context.showInformationNotification(
-                    I18N.getValue("google.books.dock.success_unjoin.title"),
+                    i18n("google.books.dock.success_unjoin.title"),
                     null,
                     Duration.seconds(2.0)
                 )
@@ -263,23 +257,6 @@ class GoogleBookConnectionView(
                 .peek { it.serviceConnection?.googleBookHandle = null }
                 .forEach(database::updateRecord)
         }
-    }
-
-    private class NoSelectionPlaceHolder() : StackPane() {
-        init {
-            buildUI()
-        }
-
-        private fun buildUI() {
-            styleClass.add(JMetroStyleClass.BACKGROUND)
-            children.add(buildLabel())
-            VBox.setVgrow(this, Priority.ALWAYS)
-        }
-
-        private fun buildLabel() =
-            Label(I18N.getValue("google.books.dock.placeholder.noselection")).apply {
-                styleClass.add("place-holder-label")
-            }
     }
 
     private class MultipleSelectionPlaceHolder : StackPane() {
@@ -294,7 +271,7 @@ class GoogleBookConnectionView(
         }
 
         private fun buildLabel() =
-            Label(I18N.getValue("google.books.dock.placeholder.multiple")).apply {
+            Label(i18n("google.books.dock.placeholder.multiple")).apply {
                 styleClass.add("place-holder-label")
                 minHeight = 0.0
             }
@@ -320,13 +297,13 @@ class GoogleBookConnectionView(
         }
 
         private fun buildLabel() =
-            Label(I18N.getValue("google.books.dock.placeholder.error")).apply {
+            Label(i18n("google.books.dock.placeholder.error")).apply {
                 styleClass.add("place-holder-label")
             }
 
         private fun buildDetailsButton() =
             Button(
-                I18N.getValue("google.books.dock.placeholder.error.details"),
+                i18n("google.books.dock.placeholder.error.details"),
                 MaterialDesignIconView(MaterialDesignIcon.DETAILS)
             ).apply {
                 setOnAction {
@@ -362,12 +339,12 @@ class GoogleBookConnectionView(
         }
 
         private fun buildLabel() =
-            Label(I18N.getValue("google.books.dock.placeholder.noconn")).apply {
+            Label(i18n("google.books.dock.placeholder.noconn")).apply {
                 styleClass.add("place-holder-label")
             }
 
         private fun buildConnectionButton() = Button(
-            I18N.getValue("google.books.dock.connection"),
+            i18n("google.books.dock.connection"),
             MaterialDesignIconView(MaterialDesignIcon.GOOGLE)
         ).apply {
             setOnAction { showGoogleBookJoiner() }
@@ -400,7 +377,7 @@ class GoogleBookConnectionView(
                         refresh()
                         normalUI()
                         context.showInformationNotification(
-                            I18N.getValue("google.books.dock.success_join.title"),
+                            i18n("google.books.dock.success_join.title"),
                             null,
                             Duration.seconds(2.0)
                         )

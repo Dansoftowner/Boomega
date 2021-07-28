@@ -25,6 +25,7 @@ import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.recordview.dock.DockView
+import com.dansoftware.boomega.gui.util.selectedItems
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
@@ -44,10 +45,10 @@ class RecordsViewBase(
     private val baseItems: ObservableList<Record>
 ) : SplitPane() {
 
-    private val dockSplitPane: SplitPane = buildDockSplitPane()
-
     val table: RecordTable = buildBooksTable()
     val docks: ObservableList<Dock> = buildDocksList()
+
+    private val dockSplitPane: SplitPane = buildDockSplitPane()
 
     private val findDialogVisible: BooleanProperty = object : SimpleBooleanProperty() {
         override fun invalidated() {
@@ -59,6 +60,13 @@ class RecordsViewBase(
                 }
             }
         }
+    }
+
+    @Suppress("unused")
+    private val dockSplitPaneNeeded: BooleanProperty = SimpleBooleanProperty().apply {
+        table.selectedItems.addListener(ListChangeListener { set(isDockSplitPaneNeeded()) })
+        docks.addListener(ListChangeListener { set(isDockSplitPaneNeeded()) })
+        addListener { _, _, yes -> locateDockSplitPane(yes) }
     }
 
     var isFindDialogVisible: Boolean
@@ -138,14 +146,17 @@ class RecordsViewBase(
                     )
                 }
             }
-            when {
-                dockSplitPane.items.isEmpty() -> this@RecordsViewBase.items.remove(dockSplitPane)
-                this@RecordsViewBase.items.contains(dockSplitPane).not() -> {
-                    this@RecordsViewBase.items.add(dockSplitPane)
-                }
-            }
         }
     }
+
+    private fun locateDockSplitPane(isDockSplitPaneNeeded: Boolean) {
+        if (isDockSplitPaneNeeded.and(dockSplitPane !in items)) items.add(dockSplitPane)
+        else items.remove(dockSplitPane)
+    }
+
+    private fun isDockSplitPaneNeeded(): Boolean =
+        table.selectedItems.isEmpty().not().and(docks.isEmpty().not())
+
 
     /**
      * Used for storing the preferred table columns in the configurations.

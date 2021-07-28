@@ -23,6 +23,10 @@ package com.dansoftware.boomega.gui.util
 import javafx.collections.ObservableList
 import javafx.scene.control.ButtonType
 import javafx.scene.control.ComboBox
+import javafx.scene.control.TableView
+
+inline val <T> TableView<T>.selectedItems: ObservableList<T>
+    get() = selectionModel.selectedItems
 
 fun <T> ComboBox<T>.refresh() {
     val items: ObservableList<T> = this.items
