@@ -23,8 +23,8 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.gui.clipboard.RecordClipboard
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.clipboard.RecordClipboard
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.i18n.I18N
@@ -37,6 +37,7 @@ import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.binding.IntegerBinding
+import javafx.beans.property.BooleanProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.concurrent.Task
@@ -63,6 +64,9 @@ class RecordsView(
         get() = recordsViewBase.table
     val docks: ObservableList<Dock>
         get() = recordsViewBase.docks
+
+    val findDialogVisibleProperty: BooleanProperty
+        get() = recordsViewBase.findDialogVisibleProperty
 
     var isFindDialogVisible: Boolean
         get() = recordsViewBase.isFindDialogVisible

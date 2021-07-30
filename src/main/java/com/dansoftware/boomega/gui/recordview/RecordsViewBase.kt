@@ -50,7 +50,8 @@ class RecordsViewBase(
 
     private val dockSplitPane: SplitPane = buildDockSplitPane()
 
-    private val findDialogVisible: BooleanProperty = object : SimpleBooleanProperty() {
+    @get:JvmName("findDialogVisibleProperty")
+    val findDialogVisibleProperty: BooleanProperty = object : SimpleBooleanProperty() {
         override fun invalidated() {
             when {
                 get() -> showFindDialog()
@@ -70,9 +71,9 @@ class RecordsViewBase(
     }
 
     var isFindDialogVisible: Boolean
-        get() = findDialogVisible.get()
+        get() = findDialogVisibleProperty.get()
         set(value) {
-            findDialogVisible.set(value)
+            findDialogVisibleProperty.set(value)
         }
 
     var dockInfo: DockInfo
@@ -111,8 +112,8 @@ class RecordsViewBase(
 
     private fun buildRecordFindControl() =
         RecordFindControl(baseItems).apply {
-            setOnCloseRequest { isFindDialogVisible = false }
-            setOnNewResults { list -> table.items = FXCollections.observableArrayList(list) }
+            onCloseRequest = fun() { isFindDialogVisible = false }
+            onNewResults = fun(items) { table.items = FXCollections.observableArrayList(items) }
         }
 
     private fun showFindDialog() {

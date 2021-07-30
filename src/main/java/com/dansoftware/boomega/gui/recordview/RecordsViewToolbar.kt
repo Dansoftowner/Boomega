@@ -32,6 +32,7 @@ import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ListChangeListener
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
@@ -100,7 +101,7 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
         }
 
     private fun buildInsertItem() =
-        buildToolbarItem(MaterialDesignIcon.PLUS_BOX, "record.add.module.title") {
+        buildToolbarItem(MaterialDesignIcon.PLUS_BOX, "record.add.module.title", view.findDialogVisibleProperty) {
             view.insertNewRecord()
         }
 
@@ -197,6 +198,15 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
         i18nTooltip: String,
         onClick: EventHandler<ActionEvent>
     ): Button = buildToolbarItem(MaterialDesignIconView(icon), i18nTooltip, onClick)
+
+    private fun buildToolbarItem(
+        icon: MaterialDesignIcon,
+        i18nTooltip: String,
+        disable: ObservableBooleanValue,
+        onClick: EventHandler<ActionEvent>
+    ): Button = buildToolbarItem(MaterialDesignIconView(icon), i18nTooltip, onClick).apply {
+        disableProperty().bind(disable)
+    }
 
     private fun buildToolbarItem(
         icon: FontAwesomeIcon,

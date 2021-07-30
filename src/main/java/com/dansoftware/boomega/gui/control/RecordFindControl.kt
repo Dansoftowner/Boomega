@@ -37,14 +37,16 @@ import javafx.scene.layout.StackPane
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.function.Consumer
-import java.util.regex.Pattern
 import java.util.stream.Collectors
 
 class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.0) {
 
-    private val onNewResults: ObjectProperty<Consumer<List<Record>>> = SimpleObjectProperty()
-    private val onCloseRequest: ObjectProperty<Runnable> = SimpleObjectProperty()
+    @get:JvmName("onNewResultsProperty")
+    val onNewResultsProperty: ObjectProperty<(List<Record>) -> Unit> = SimpleObjectProperty()
+
+    @get:JvmName("onCloseRequestProperty")
+    val onCloseRequestProperty: ObjectProperty<() -> Unit> = SimpleObjectProperty()
+
     private val resultsCount: IntegerProperty = SimpleIntegerProperty()
     private val caseSensitive: BooleanProperty = SimpleBooleanProperty()
     private val errorMessage: StringProperty = SimpleStringProperty()
@@ -53,17 +55,29 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         object : SimpleStringProperty() {
             override fun invalidated() {
                 search {
-                    onNewResults.get()?.accept(it)
+                    onNewResults?.invoke(it)
                     resultsCount.set(it.size)
                 }
             }
+        }
+
+    var onNewResults: ((List<Record>) -> Unit)?
+        get() = onNewResultsProperty.get()
+        set(value) {
+            onNewResultsProperty.set(value)
+        }
+
+    var onCloseRequest: (() -> Unit)?
+        get() = onCloseRequestProperty.get()
+        set(value) {
+            onCloseRequestProperty.set(value)
         }
 
     private val filter: ObjectProperty<Filter> =
         object : SimpleObjectProperty<Filter>(SimpleFilter(baseText, caseSensitive)) {
             override fun invalidated() {
                 search {
-                    onNewResults.get()?.accept(it)
+                    onNewResults?.invoke(it)
                     resultsCount.set(it.size)
                 }
             }
@@ -72,7 +86,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
     private val baseItemsChangeListener =
         ListChangeListener<Record> {
             search {
-                onNewResults.get()?.accept(it)
+                onNewResults?.invoke(it)
                 resultsCount.set(it.size)
             }
         }
@@ -173,9 +187,9 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         Button(null, MaterialDesignIconView(MaterialDesignIcon.CLOSE)).apply {
             padding = Insets(0.0)
             setOnAction {
-                onCloseRequest.get()?.run()
+                onCloseRequest?.invoke()
             }
-            visibleProperty().bind(onCloseRequest.isNotNull)
+            visibleProperty().bind(onCloseRequestProperty.isNotNull)
             StackPane.setAlignment(this, Pos.CENTER_RIGHT)
         }.let {
             StackPane(it).apply {
@@ -227,68 +241,30 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         }.let(CachedExecutor::submit)
     }
 
-    fun onCloseRequestProperty() = onCloseRequest
-
-    fun setOnCloseRequest(value: Runnable) {
-        this.onCloseRequest.set(value)
-    }
-
-    fun onNewResultsProperty() = onNewResults
-
-    fun setOnNewResults(value: Consumer<List<Record>>) {
-        onNewResults.set(value)
-    }
-
     private abstract class Filter(
         private val baseText: StringProperty,
         private val caseSensitive: BooleanProperty
     ) {
-
-        open val userInputFactory: (String) -> String = { it }
-        open val valueFactory: (String) -> String = { it }
-
-        abstract fun checkMatch(
-            userInput: String,
-            recordValue: String,
-            caseSensitive: Boolean
-        ): Boolean
+        abstract fun checkMatch(userInput: String, recordValue: String, ignoreCase: Boolean): Boolean
 
         fun filter(record: Record): Boolean =
-            record.values().find {
-                checkMatch(userInputFactory(baseText.get() ?: ""), valueFactory(it), caseSensitive.get())
-            } !== null
+            record.values().find { checkMatch(baseText.get() ?: "", it, !caseSensitive.get()) } !== null
     }
 
     private class SimpleFilter(
         baseText: StringProperty,
         caseSensitive: BooleanProperty
     ) : Filter(baseText, caseSensitive) {
-
-        override val userInputFactory: (String) -> String = {
-            it.let { if (caseSensitive.get().not()) it.lowercase() else it }.trim()
-        }
-
-        override val valueFactory: (String) -> String = {
-            if (caseSensitive.get().not()) it.lowercase() else it
-        }
-
-        override fun checkMatch(
-            userInput: String,
-            recordValue: String,
-            caseSensitive: Boolean
-        ): Boolean = recordValue.contains(userInput)
+        override fun checkMatch(userInput: String, recordValue: String, ignoreCase: Boolean): Boolean =
+            recordValue.contains(userInput.trim(), ignoreCase)
     }
 
     private class ExactFilter(
         baseText: StringProperty,
         caseSensitive: BooleanProperty
     ) : Filter(baseText, caseSensitive) {
-
-        override fun checkMatch(
-            userInput: String,
-            recordValue: String,
-            caseSensitive: Boolean
-        ): Boolean = recordValue.equals(userInput, ignoreCase = !caseSensitive)
+        override fun checkMatch(userInput: String, recordValue: String, ignoreCase: Boolean): Boolean =
+            recordValue.equals(userInput, ignoreCase)
     }
 
     private class RegexFilter(
@@ -296,15 +272,11 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         caseSensitive: BooleanProperty
     ) : Filter(baseText, caseSensitive) {
 
-        private fun getPattern(userInput: String, caseSensitive: Boolean) =
-            if (caseSensitive) Pattern.compile(userInput)
-            else Pattern.compile(userInput, Pattern.CASE_INSENSITIVE)
+        private fun compileRegex(userInput: String, ignoreCase: Boolean) =
+            Regex(userInput, if (ignoreCase) setOf(RegexOption.IGNORE_CASE) else setOf())
 
-        override fun checkMatch(
-            userInput: String,
-            recordValue: String,
-            caseSensitive: Boolean
-        ): Boolean = getPattern(userInput, caseSensitive).matcher(recordValue).matches()
+        override fun checkMatch(userInput: String, recordValue: String, ignoreCase: Boolean): Boolean =
+            compileRegex(userInput, ignoreCase).matches(recordValue)
     }
 
     companion object {
