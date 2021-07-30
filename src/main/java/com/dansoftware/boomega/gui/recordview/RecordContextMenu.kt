@@ -18,8 +18,10 @@
 
 package com.dansoftware.boomega.gui.recordview
 
+import com.dansoftware.boomega.gui.export.SupportedExporters
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.keyCombination
 import com.dansoftware.boomega.i18n.I18N
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -27,6 +29,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
 import javafx.collections.ListChangeListener
 import javafx.scene.control.ContextMenu
+import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
 import javafx.scene.control.SeparatorMenuItem
 
@@ -42,6 +45,7 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
         items.add(buildDeleteItem())
         items.add(buildCopyItem())
         items.add(buildCutItem())
+        items.add(buildExportItem())
         items.add(SeparatorMenuItem())
         items.add(buildPasteItem())
     }
@@ -70,6 +74,17 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
             .action { recordsView.pasteItemsFromClipboard() }
             .keyCombination(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }
+
+    private fun buildExportItem() =
+        Menu("Export", icon(MaterialDesignIcon.EXPORT)).apply { // TODO: i18n
+            items.addAll(
+                SupportedExporters.map { exporter ->
+                    MenuItem(exporter.name, icon(exporter.icon)).action {
+                        recordsView.exportSelected(exporter)
+                    }
+                }
+            )
+        }
 
     fun applyOn(table: RecordTable) {
         table.rowContextMenu = this

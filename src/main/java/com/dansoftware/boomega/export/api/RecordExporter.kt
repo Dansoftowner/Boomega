@@ -16,28 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:JvmName("ConcurrencyUtils")
+package com.dansoftware.boomega.export.api
 
-package com.dansoftware.boomega.gui.util
-
-import javafx.application.Platform
+import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.gui.export.ConfigurationPanel
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.concurrent.Task
 
-fun runOnUiThread(action: Runnable) {
-    when {
-        Platform.isFxApplicationThread() -> action.run()
-        else -> Platform.runLater(action)
-    }
-}
+interface RecordExporter<C : RecordExportConfiguration> {
 
-fun <T> Task<T>.onSucceeded(action: (T) -> Unit) {
-    setOnSucceeded { action(value) }
-}
+    val name: String
+    val icon: MaterialDesignIcon
+    val configurationPanel: ConfigurationPanel<C>
+    val contentType: String
+    val contentTypeDescription: String
 
-fun <T> Task<T>.onFailed(action: (Throwable) -> Unit) {
-    setOnFailed { action(it.source.exception) }
-}
+    fun getTask(items: List<Record>, config: C): Task<Unit>
 
-fun <T> Task<T>.onRunning(action: () -> Unit) {
-    setOnRunning { action() }
 }

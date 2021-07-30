@@ -19,8 +19,25 @@
 package com.dansoftware.boomega.util
 
 import com.jfilegoodies.explorer.FileExplorers
+import java.awt.Desktop
 import java.io.File
 
+private inline val desktop
+    get() = Desktop.getDesktop()
+
+/**
+ * Opens a folder containing the file and selects it in a default system file manager.
+ */
 fun File.revealInExplorer() {
-    FileExplorers.get().openSelect(this)
+    when {
+        desktop.isSupported(Desktop.Action.BROWSE_FILE_DIR) -> desktop.browseFileDirectory(this)
+        else -> FileExplorers.get().openSelect(this)
+    }
+}
+
+/**
+ * Launches the associated application to open the file.
+ */
+fun File.open() {
+    desktop.open(this)
 }

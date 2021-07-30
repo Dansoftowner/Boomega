@@ -16,28 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:JvmName("ConcurrencyUtils")
+package com.dansoftware.boomega.gui.export
 
-package com.dansoftware.boomega.gui.util
+import com.dansoftware.boomega.export.api.RecordExporter
+import com.dansoftware.boomega.export.json.JsonExporter
+import okhttp3.internal.toImmutableList
+import java.util.*
 
-import javafx.application.Platform
-import javafx.concurrent.Task
+private fun loadBuiltInExporters() = listOf(
+    JsonExporter()
+)
 
-fun runOnUiThread(action: Runnable) {
-    when {
-        Platform.isFxApplicationThread() -> action.run()
-        else -> Platform.runLater(action)
-    }
-}
+private fun loadExportersFromPlugins() = listOf<RecordExporter<*>>() // TODO: collect from plugins
 
-fun <T> Task<T>.onSucceeded(action: (T) -> Unit) {
-    setOnSucceeded { action(value) }
-}
-
-fun <T> Task<T>.onFailed(action: (Throwable) -> Unit) {
-    setOnFailed { action(it.source.exception) }
-}
-
-fun <T> Task<T>.onRunning(action: () -> Unit) {
-    setOnRunning { action() }
-}
+object SupportedExporters :
+    List<RecordExporter<*>> by LinkedList(loadBuiltInExporters() + loadExportersFromPlugins()).toImmutableList()

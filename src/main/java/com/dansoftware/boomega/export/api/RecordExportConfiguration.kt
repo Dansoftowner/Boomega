@@ -16,28 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:JvmName("ConcurrencyUtils")
+package com.dansoftware.boomega.export.api
 
-package com.dansoftware.boomega.gui.util
+import java.io.OutputStream
 
-import javafx.application.Platform
-import javafx.concurrent.Task
-
-fun runOnUiThread(action: Runnable) {
-    when {
-        Platform.isFxApplicationThread() -> action.run()
-        else -> Platform.runLater(action)
-    }
-}
-
-fun <T> Task<T>.onSucceeded(action: (T) -> Unit) {
-    setOnSucceeded { action(value) }
-}
-
-fun <T> Task<T>.onFailed(action: (Throwable) -> Unit) {
-    setOnFailed { action(it.source.exception) }
-}
-
-fun <T> Task<T>.onRunning(action: () -> Unit) {
-    setOnRunning { action() }
+interface RecordExportConfiguration {
+    var outputStream: OutputStream
 }

@@ -23,12 +23,19 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.export.api.RecordExportConfiguration
+import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.RecordClipboard
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.recordview.dock.Dock
+import com.dansoftware.boomega.gui.util.onFailed
+import com.dansoftware.boomega.gui.util.onRunning
+import com.dansoftware.boomega.gui.util.onSucceeded
+import com.dansoftware.boomega.gui.util.selectedItems
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.dansoftware.boomega.util.open
 import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
@@ -43,7 +50,9 @@ import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.concurrent.WorkerStateEvent
 import javafx.scene.layout.BorderPane
+import javafx.stage.FileChooser
 import org.slf4j.LoggerFactory
+import java.io.FileOutputStream
 import java.lang.reflect.Type
 import java.util.*
 import java.util.stream.Collectors
@@ -288,6 +297,35 @@ class RecordsView(
                 }
             }
         }
+
+    fun <C : RecordExportConfiguration> exportSelected(exporter: RecordExporter<C>) {
+        exporter.configurationPanel.show(context) { config ->
+            val fileExplorer = FileChooser()
+            fileExplorer.extensionFilters.add(
+                FileChooser.ExtensionFilter(
+                    exporter.contentTypeDescription,
+                    "*.${exporter.contentType}"
+                )
+            )
+            fileExplorer.showSaveDialog(context.contextWindow)?.let { file ->
+                config.outputStream = FileOutputStream(file)
+                val task = exporter.getTask(table.selectedItems, config).apply {
+                    onSucceeded {
+                        context.stopProgress()
+                        context.showInformationNotification("Successful", "yeeah, open? (click)") { // TODO: i18n
+                            file.open()
+                        }
+                    }
+                    onFailed { e ->
+                        context.stopProgress()
+                        logger.error("Couldn't export records to '{}'", exporter.contentType, e)
+                    }
+                    onRunning { context.showIndeterminateProgress() }
+                }
+                CachedExecutor.submit(task)
+            }
+        }
+    }
 
     private class ColumnsInfoAdapter : ConfigAdapter<RecordsViewBase.TableColumnsInfo> {
         override fun serialize(
