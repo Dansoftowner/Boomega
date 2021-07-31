@@ -29,13 +29,12 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.RecordClipboard
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.recordview.dock.Dock
-import com.dansoftware.boomega.gui.util.onFailed
-import com.dansoftware.boomega.gui.util.onRunning
-import com.dansoftware.boomega.gui.util.onSucceeded
-import com.dansoftware.boomega.gui.util.selectedItems
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.boomega.util.open
+import com.dansoftware.boomega.util.revealInExplorer
 import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
@@ -49,6 +48,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.concurrent.WorkerStateEvent
+import javafx.event.Event
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
 import org.slf4j.LoggerFactory
@@ -309,12 +309,17 @@ class RecordsView(
             )
             fileExplorer.showSaveDialog(context.contextWindow)?.let { file ->
                 config.outputStream = FileOutputStream(file)
-                val task = exporter.getTask(table.selectedItems, config).apply {
+                val toExport = table.selectedItems.map(Record::copy)
+                val task = exporter.getTask(toExport, config).apply {
                     onSucceeded {
                         context.stopProgress()
-                        context.showInformationNotification("Successful", "yeeah, open? (click)") { // TODO: i18n
-                            file.open()
-                        }
+                        context.showInformationNotification(
+                            i18n("record.export.notification.successful.title"),
+                            i18n("record.export.notification.successful.msg", toExport.size, exporter.contentType),
+                            Event::consume,
+                            hyperLink(i18n("file.open_in_app")) { file.open() },
+                            hyperLink(i18n("file.open_in_explorer")) { file.revealInExplorer() }
+                        )
                     }
                     onFailed { e ->
                         context.stopProgress()

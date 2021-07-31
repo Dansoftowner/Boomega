@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.util
 
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.jfilegoodies.explorer.FileExplorers
 import java.awt.Desktop
 import java.io.File
@@ -29,9 +30,11 @@ private inline val desktop
  * Opens a folder containing the file and selects it in a default system file manager.
  */
 fun File.revealInExplorer() {
-    when {
-        desktop.isSupported(Desktop.Action.BROWSE_FILE_DIR) -> desktop.browseFileDirectory(this)
-        else -> FileExplorers.get().openSelect(this)
+    CachedExecutor.submit {
+        when {
+            desktop.isSupported(Desktop.Action.BROWSE_FILE_DIR) -> desktop.browseFileDirectory(this)
+            else -> FileExplorers.get().openSelect(this)
+        }
     }
 }
 
@@ -39,5 +42,7 @@ fun File.revealInExplorer() {
  * Launches the associated application to open the file.
  */
 fun File.open() {
-    desktop.open(this)
+    CachedExecutor.submit {
+        desktop.open(this)
+    }
 }

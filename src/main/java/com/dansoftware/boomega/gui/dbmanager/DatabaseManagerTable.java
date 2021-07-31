@@ -28,7 +28,6 @@ import com.jfilegoodies.explorer.FileExplorers;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.collections.ObservableList;
@@ -244,7 +243,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
             implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         FileOpenerColumn() {
-            super(i18n("database.manager.table.column.open"));
+            super(i18n("file.open_in_explorer"));
             setMinWidth(90);
             setSortable(false);
             setReorderable(false);

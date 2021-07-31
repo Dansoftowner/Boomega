@@ -21,8 +21,10 @@
 package com.dansoftware.boomega.gui.util
 
 import javafx.collections.ObservableList
+import javafx.scene.Node
 import javafx.scene.control.ButtonType
 import javafx.scene.control.ComboBox
+import javafx.scene.control.Hyperlink
 import javafx.scene.control.TableView
 
 inline val <T> TableView<T>.selectedItems: ObservableList<T>
@@ -40,3 +42,7 @@ fun <T> ComboBox<T>.refresh() {
  * Determines that a ButtonType's button data is the same.
  */
 fun ButtonType.typeEquals(other: ButtonType) = this.buttonData == other.buttonData
+
+fun hyperLink(text: String, graphic: Node? = null, onAction: () -> Unit) = Hyperlink(text, graphic).apply {
+    setOnAction { onAction() }
+}
