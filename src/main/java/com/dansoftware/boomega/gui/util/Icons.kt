@@ -27,3 +27,6 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 
 fun icon(materialIcon: MaterialDesignIcon) = MaterialDesignIconView(materialIcon)
 fun icon(fontAwesomeIcon: FontAwesomeIcon) = FontAwesomeIconView(fontAwesomeIcon)
+fun icon(fontAwesomeIcon: FontAwesomeIcon, size: Double) = FontAwesomeIconView(fontAwesomeIcon).apply {
+    style += "-fx-font-size: $size !important"
+}

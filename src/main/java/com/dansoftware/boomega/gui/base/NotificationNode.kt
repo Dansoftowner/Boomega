@@ -18,18 +18,17 @@
 
 package com.dansoftware.boomega.gui.base
 
+import com.dansoftware.boomega.gui.util.icon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Group
 import javafx.scene.Node
+import javafx.scene.control.Hyperlink
 import javafx.scene.control.Label
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
-import javafx.scene.text.Font
 import org.apache.commons.lang3.StringUtils
 import java.util.function.Consumer
 
@@ -38,17 +37,18 @@ import java.util.function.Consumer
  *
  * @author Daniel Gyorffy
  */
-internal class NotificationNode(
+class NotificationNode @JvmOverloads constructor(
     type: NotificationType,
     title: String,
     message: String?,
+    hyperLinks: Array<Hyperlink>? = null,
     closeAction: Consumer<NotificationNode>
-) : Group(EntryPanel(type, title, message, closeAction)) {
+) : Group(EntryPanel(type, title, message, hyperLinks, closeAction)) {
 
     /**
      * Represents the three notification type
      */
-    enum class NotificationType(internal val icon: FontAwesomeIcon) {
+    enum class NotificationType(val icon: FontAwesomeIcon) {
         INFO(FontAwesomeIcon.INFO_CIRCLE),
         WARNING(FontAwesomeIcon.WARNING),
         ERROR(FontAwesomeIcon.CLOSE);
@@ -61,29 +61,28 @@ internal class NotificationNode(
         type: NotificationType,
         text: String,
         message: String?,
+        hyperLinks: Array<Hyperlink>?,
         private val closeAction: Consumer<NotificationNode>
     ) : HBox(8.0) {
+
         init {
             styleClass.add("notification-node")
-            children.add(StackPane().also {
-                val icon = FontAwesomeIconView(type.icon)
-                icon.font = Font.font(20.0)
-                it.children.add(icon)
-            })
-            children.add(ContentPanel(text, message))
+            children.add(icon(type.icon))
+            children.add(ContentPanel(text, message, hyperLinks))
             children.add(buildCloseButton())
         }
 
-        private fun buildCloseButton(): Node = MaterialDesignIconView(MaterialDesignIcon.CLOSE).also {
-            it.styleClass.add("close-btn")
-            it.isVisible = false
-            this.setOnMouseEntered { _ -> it.isVisible = true }
-            this.setOnMouseExited { _ -> it.isVisible = false }
-            it.setOnMouseClicked { event ->
+        private fun buildCloseButton(): Node = icon(MaterialDesignIcon.CLOSE).apply {
+            styleClass.add("close-btn")
+            isVisible = false
+
+            this@EntryPanel.setOnMouseEntered { isVisible = true }
+            this@EntryPanel.setOnMouseExited { isVisible = false }
+
+            setOnMouseClicked { event ->
                 when (event.button) {
-                    MouseButton.PRIMARY -> closeAction.accept(this.parent as NotificationNode)
-                    else -> {
-                    }
+                    MouseButton.PRIMARY ->
+                        closeAction.accept(this@EntryPanel.parent as NotificationNode)
                 }
             }
         }
@@ -92,18 +91,18 @@ internal class NotificationNode(
     /**
      * Holds the title and the message labels.
      */
-    private class ContentPanel(title: String, message: String?) : StackPane() {
+    private class ContentPanel(title: String, message: String?, hyperLinks: Array<Hyperlink>?) : StackPane() {
         init {
-            children.add(Group(VBox(2.0).also {
-                it.styleClass.add("content-panel")
-                it.children.add(buildTitleLabel(title))
-                when {
-                    StringUtils.isBlank(message).not() -> it.children.add(buildMessageLabel(message!!))
-                }
+            children.add(Group(VBox(2.0).apply {
+                styleClass.add("content-panel")
+                children.add(buildTitleLabel(title))
+                message.takeIf { StringUtils.isBlank(it).not() }?.let { children.add(buildMessageLabel(message!!)) }
+                hyperLinks.takeIf { it?.isNotEmpty() ?: false}?.let { children.add(HBox(2.0, *hyperLinks!!)) }
             }))
         }
 
-        private fun buildTitleLabel(text: String) = Label(text).also { it.styleClass.add("title") }
-        private fun buildMessageLabel(text: String) = Label(text).also { it.styleClass.add("message") }
+        private fun buildTitleLabel(text: String) = Label(text).apply { styleClass.add("title") }
+
+        private fun buildMessageLabel(text: String) = Label(text).apply { styleClass.add("message") }
     }
 }

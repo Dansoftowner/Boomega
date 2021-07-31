@@ -46,6 +46,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.scene.image.Image;
@@ -226,15 +227,17 @@ public class BaseView extends StackPane implements Context {
                                                    String title,
                                                    String message,
                                                    Consumer<NotificationNode> closeAction,
+                                                   Hyperlink[] hyperlinks,
                                                    EventHandler<MouseEvent> onClicked) {
-        final var notificationNode = new NotificationNode(type, title, message, closeAction);
+        final var notificationNode = new NotificationNode(type, title, message, hyperlinks, closeAction);
         StackPane.setAlignment(notificationNode, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(notificationNode, new Insets(0, 10, 10, 0));
         notificationNode.setOnMouseClicked(event -> {
             if (onClicked != null) {
                 onClicked.handle(event);
             }
-            closeAction.accept(notificationNode);
+            if (!event.isConsumed())
+                closeAction.accept(notificationNode);
         });
         return notificationNode;
     }
@@ -244,7 +247,16 @@ public class BaseView extends StackPane implements Context {
                                   String message,
                                   Duration duration,
                                   EventHandler<MouseEvent> onClicked) {
-        final NotificationNode notificationNode = buildNotificationNode(type, title, message, notificationsBox::removeItem, onClicked);
+        showNotification(type, title, message, duration, null, onClicked);
+    }
+
+    private void showNotification(NotificationNode.NotificationType type,
+                                  String title,
+                                  String message,
+                                  Duration duration,
+                                  Hyperlink[] hyperlinks,
+                                  EventHandler<MouseEvent> onClicked) {
+        final NotificationNode notificationNode = buildNotificationNode(type, title, message, notificationsBox::removeItem, hyperlinks, onClicked);
         notificationsBox.pushItem(notificationNode, duration);
         playNotificationSound();
     }
@@ -303,6 +315,11 @@ public class BaseView extends StackPane implements Context {
     @Override
     public void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.INFO, title, message, null, onClicked);
+    }
+
+    @Override
+    public void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked, Hyperlink... hyperlinks) {
+        showNotification(NotificationNode.NotificationType.INFO, title, message, null, hyperlinks, onClicked);
     }
 
     @Override
@@ -423,8 +440,8 @@ public class BaseView extends StackPane implements Context {
         if (exception != null) {
             final ExceptionDisplayPane content = new ExceptionDisplayPane(exception);
             return WorkbenchDialog.builder(title, new VBox(new Label(message), content) {{
-                setSpacing(10);
-            }}, I18NButtonTypes.OK)
+                        setSpacing(10);
+                    }}, I18NButtonTypes.OK)
                     .onResult(onResult)
                     .build();
         }

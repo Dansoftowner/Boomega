@@ -267,19 +267,26 @@
     -fx-border-radius: 2;
     -fx-background-radius: 2;
     -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, .26), 20, 0.19, -1, 6);
 }
 
 .notification-node .content-panel {
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
     -fx-padding: 0 25 0 0;
 }
 
+.notification-node .glyph-icon {
+    -fx-font-size: 20 !important;
+}
+
 .notification-node .content-panel .title {
-    -fx-font-size: 12px;
+    -fx-font-size: 1.1em;
     -fx-font-weight: bold;
 }
 
 .notification-node .content-panel .message {
-    -fx-font-size: 10px;
+    -fx-font-size: 1em;
 }
 
 /*******************************************************************************

@@ -226,8 +226,8 @@
  ******************************************************************************/
 
 .notification-node {
-    -fx-background-color: #262626;
-    -fx-border-color: lightgray;
+    -fx-background-color: #2f3133;
+    -fx-border-color: #858585;
 }
 
 .notification-node .content-panel .title {

@@ -23,6 +23,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.stage.Window;
@@ -154,6 +155,11 @@ public interface EmptyContext extends Context {
 
     @Override
     default void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
+
+    }
+
+    @Override
+    default void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked, Hyperlink... hyperlinks) {
 
     }
 
