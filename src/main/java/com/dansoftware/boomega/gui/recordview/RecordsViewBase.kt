@@ -63,11 +63,14 @@ class RecordsViewBase(
         }
     }
 
-    @Suppress("unused")
-    private val dockSplitPaneNeeded: BooleanProperty = SimpleBooleanProperty().apply {
-        table.selectedItems.addListener(ListChangeListener { set(isDockSplitPaneNeeded()) })
-        docks.addListener(ListChangeListener { set(isDockSplitPaneNeeded()) })
-        addListener { _, _, yes -> locateDockSplitPane(yes) }
+    private val dockSplitPaneVisibleProperty = object : SimpleBooleanProperty() {
+        override fun invalidated() {
+            alignDockSplitPane(get())
+        }
+
+        fun update() {
+            set(isDockSplitPaneNeeded())
+        }
     }
 
     var isFindDialogVisible: Boolean
@@ -101,6 +104,7 @@ class RecordsViewBase(
     private fun buildBooksTable(): RecordTable =
         RecordTable(0).apply {
             items = baseItems
+            selectedItems.addListener(ListChangeListener { dockSplitPaneVisibleProperty.update() })
             VBox.setVgrow(this, Priority.ALWAYS)
         }
 
@@ -147,10 +151,11 @@ class RecordsViewBase(
                     )
                 }
             }
+           dockSplitPaneVisibleProperty.update()
         }
     }
 
-    private fun locateDockSplitPane(isDockSplitPaneNeeded: Boolean) {
+    private fun alignDockSplitPane(isDockSplitPaneNeeded: Boolean) {
         if (isDockSplitPaneNeeded.and(dockSplitPane !in items)) items.add(dockSplitPane)
         else items.remove(dockSplitPane)
     }
