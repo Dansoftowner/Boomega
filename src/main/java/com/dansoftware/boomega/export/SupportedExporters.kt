@@ -16,12 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.export.json
+package com.dansoftware.boomega.export
 
-import com.dansoftware.boomega.export.api.RecordExportConfiguration
+import com.dansoftware.boomega.export.api.RecordExporter
+import com.dansoftware.boomega.export.json.JsonExporter
+import okhttp3.internal.toImmutableList
+import java.util.*
 
-class JsonExportConfiguration : RecordExportConfiguration() {
-    var prettyPrinting: Boolean = true
-    var nonExecutableJson: Boolean = false
-    var serializeNulls: Boolean = false
-}
+private fun loadBuiltInExporters() = listOf(
+    JsonExporter()
+)
+
+private fun loadExportersFromPlugins() = listOf<RecordExporter<*>>() // TODO: collect from plugins
+
+object SupportedExporters :
+    List<RecordExporter<*>> by LinkedList(loadBuiltInExporters() + loadExportersFromPlugins()).toImmutableList()

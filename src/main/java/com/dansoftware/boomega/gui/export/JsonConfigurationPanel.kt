@@ -18,16 +18,11 @@
 
 package com.dansoftware.boomega.gui.export
 
-import com.dansoftware.boomega.export.api.RecordExporter
-import com.dansoftware.boomega.export.json.JsonExporter
-import okhttp3.internal.toImmutableList
-import java.util.*
+import com.dansoftware.boomega.export.json.JsonExportConfiguration
+import com.dansoftware.boomega.gui.api.Context
 
-private fun loadBuiltInExporters() = listOf(
-    JsonExporter()
-)
-
-private fun loadExportersFromPlugins() = listOf<RecordExporter<*>>() // TODO: collect from plugins
-
-object SupportedExporters :
-    List<RecordExporter<*>> by LinkedList(loadBuiltInExporters() + loadExportersFromPlugins()).toImmutableList()
+class JsonConfigurationPanel : ConfigurationPanel<JsonExportConfiguration> {
+    override fun show(context: Context, onFinished: (JsonExportConfiguration) -> Unit) {
+        onFinished(JsonExportConfiguration())
+    }
+}

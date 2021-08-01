@@ -18,8 +18,10 @@
 
 package com.dansoftware.boomega.export.api
 
+import com.dansoftware.boomega.db.data.RecordProperty
 import java.io.OutputStream
 
-interface RecordExportConfiguration {
-    var outputStream: OutputStream
+abstract class RecordExportConfiguration {
+    var outputStream: OutputStream = OutputStream.nullOutputStream()
+    var requiredFields: List<RecordProperty<*>> = RecordProperty.allProperties
 }

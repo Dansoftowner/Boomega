@@ -324,6 +324,7 @@ class RecordsView(
                     onFailed { e ->
                         context.stopProgress()
                         logger.error("Couldn't export records to '{}'", exporter.contentType, e)
+                        // TODO: error dialog
                     }
                     onRunning { context.showIndeterminateProgress() }
                 }
