@@ -144,10 +144,10 @@ class RecordProperty<T> private constructor(
                 name = { i18n("record.property.magazinename") },
                 getValue = Record::magazineName,
                 setValue = { magazineName = it },
-                typeScopes = arrayOf(Record.Type.BOOK)
+                typeScopes = arrayOf(Record.Type.MAGAZINE)
             )
 
-        val values = listOf(
+        val allProperties = listOf(
             TYPE,
             TITLE,
             LANGUAGE,
