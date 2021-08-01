@@ -21,37 +21,55 @@ package com.dansoftware.boomega.db.data
 import com.dansoftware.boomega.i18n.I18N
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class Record(
     @field:Id var id: NitriteId? = null,
-    var recordType: Type = Type.BOOK,
+    var type: Type = Type.BOOK,
 
-    //General
+    @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
     var title: String? = null,
+
+    @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
     var language: String? = null,
+
+    @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
     var publisher: String? = null,
+
+    @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
     var publishedDate: String? = null,
+
+    @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
     var notes: String? = null,
+
+    @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
     var rating: Int? = null,
 
-    //Book specific properties
-    @field:BookProperty var subtitle: String? = null,
-    @field:BookProperty var isbn: String? = null,
-    @field:BookProperty var numberOfCopies: Int? = null,
-    @field:BookProperty var authors: List<String>?,
-    @field:BookProperty var subject: String? = null,
+    @field:RecordFieldTarget(Type.BOOK)
+    var subtitle: String? = null,
 
-    //Magazine specific properties
-    @field:MagazineProperty var magazineName: String? = null
+    @field:RecordFieldTarget(Type.BOOK)
+    var isbn: String? = null,
+
+    @field:RecordFieldTarget(Type.BOOK)
+    var numberOfCopies: Int? = null,
+
+    @field:RecordFieldTarget(Type.BOOK)
+    var authors: List<String>?,
+
+    @field:RecordFieldTarget(Type.BOOK)
+    var subject: String? = null,
+
+    @field:RecordFieldTarget(Type.MAGAZINE)
+    var magazineName: String? = null
 ) {
     var serviceConnection: ServiceConnection? = null
         get() = field ?: ServiceConnection().also { field = it }
 
-    constructor() : this(
+    constructor() : this(Type.BOOK)
+
+    constructor(type: Type) : this(
         null,
-        Type.BOOK,
+        type,
         null,
         null,
         null,
@@ -66,28 +84,9 @@ class Record(
         null
     )
 
-    private constructor(builder: Builder) : this(
-        null,
-        builder.recordType,
-        builder.title,
-        builder.language,
-        builder.publisher,
-        builder.publishedDate,
-        builder.notes,
-        builder.rating,
-        builder.subtitle,
-        builder.isbn,
-        builder.numberOfCopies,
-        builder.authors,
-        builder.subject,
-        builder.magazineName
-    ) {
-        this.serviceConnection = builder.serviceConnection
-    }
-
     fun copy() = Record(
         this.id,
-        this.recordType,
+        this.type,
         this.title,
         this.language,
         this.publisher,
@@ -115,6 +114,9 @@ class Record(
         *authors?.toTypedArray() ?: emptyArray()
     )
 
+    /**
+     * Checks equality by the [id]s.
+     */
     override fun equals(other: Any?): Boolean {
         return when {
             other === this -> true
@@ -123,78 +125,17 @@ class Record(
         }
     }
 
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
+    }
+
     enum class Type(private val i18N: String) {
-        BOOK("record.type.book"), MAGAZINE("record.type.magazine");
+        BOOK("record.type.book"),
+        MAGAZINE("record.type.magazine");
 
         override fun toString(): String {
             return I18N.getValue(i18N)
         }
     }
 
-    class Builder(var recordType: Type) {
-
-        var title: String? = null
-            private set
-        var language: String? = null
-            private set
-        var publisher: String? = null
-            private set
-        var publishedDate: String? = null
-            private set
-        var notes: String? = null
-            private set
-        var rating: Int? = null
-            private set
-
-        //Book specific properties
-        @field:BookProperty
-        var subtitle: String? = null
-            private set
-
-        @field:BookProperty
-        var isbn: String? = null
-            private set
-
-        @field:BookProperty
-        var numberOfCopies: Int? = null
-            private set
-
-        @field:BookProperty
-        var authors: List<String>? = null
-            private set
-
-        @field:BookProperty
-        var subject: String? = null
-
-        //Magazine specific properties
-        @field:MagazineProperty
-        var magazineName: String? = null
-            private set
-
-        var serviceConnection: ServiceConnection? = null
-            private set
-
-        fun title(title: String?) = apply { this.title = title }
-        fun language(language: String?) = apply { this.language = language }
-        fun publisher(publisher: String?) = apply { this.publisher = publisher }
-        fun publishedDate(publishedDate: LocalDate?) = apply {
-            this.publishedDate = publishedDate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        }
-
-        fun notes(notes: String?) = apply { this.notes = notes }
-        fun rating(rating: Int?) = apply { this.rating = rating }
-
-        fun subtitle(subtitle: String?) = apply { this.subtitle = subtitle }
-        fun isbn(isbn: String?) = apply { this.isbn = isbn }
-        fun numberOfCopies(numberOfCopies: Int?) = apply { this.numberOfCopies = numberOfCopies }
-        fun authors(authors: List<String>?) = apply { this.authors = authors }
-        fun subject(subject: String?) = apply { this.subject = subject }
-
-        fun magazineName(magazineName: String?) = apply { this.magazineName = magazineName }
-
-        fun serviceConnection(serviceConnection: ServiceConnection?) =
-            apply { this.serviceConnection = serviceConnection }
-
-        fun build() = Record(this)
-    }
 }

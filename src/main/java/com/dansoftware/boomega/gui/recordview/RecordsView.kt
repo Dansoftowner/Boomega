@@ -240,7 +240,7 @@ class RecordsView(
         removeItems(ArrayList(table.selectionModel.selectedItems))
     }
 
-    fun insertNewRecord(record: Record = Record.Builder(Record.Type.BOOK).build()) {
+    fun insertNewRecord(record: Record = Record(Record.Type.BOOK)) {
         CachedExecutor.submit(buildInsertAction(record))
     }
 

@@ -16,11 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db.data;
+package com.dansoftware.boomega.db.data
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
-
-@Target(ElementType.FIELD)
-public @interface MagazineProperty {
-}
+annotation class RecordFieldTarget(vararg val forType: Record.Type)

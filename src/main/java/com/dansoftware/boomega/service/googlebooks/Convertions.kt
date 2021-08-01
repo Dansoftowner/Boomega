@@ -20,24 +20,24 @@ package com.dansoftware.boomega.service.googlebooks
 
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.db.data.ServiceConnection
+import java.time.format.DateTimeFormatter
 
 /**
  * Converts a [Volume] to a Boomega-record.
  */
 fun Volume.asRecord(): Record {
-    return Record.Builder(
-        when {
+    return Record().apply {
+        type = when {
             volumeInfo?.isMagazine ?: false -> Record.Type.MAGAZINE
             else -> Record.Type.BOOK
         }
-    )
-        .authors(volumeInfo?.authors)
-        .publishedDate(volumeInfo?.getPublishedDateObject())
-        .isbn(volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier)
-        .language(volumeInfo?.language)
-        .title(volumeInfo?.title)
-        .subtitle(volumeInfo?.subtitle)
-        .publisher(volumeInfo?.publisher)
-        .serviceConnection(ServiceConnection().apply { googleBookHandle = id })
-        .build()
+        authors = volumeInfo?.authors
+        publishedDate = volumeInfo?.getPublishedDateObject()?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        isbn = volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier
+        language = volumeInfo?.language
+        title = volumeInfo?.title
+        subtitle = volumeInfo?.subtitle
+        publisher = volumeInfo?.publisher
+        serviceConnection = ServiceConnection().apply { googleBookHandle = this@asRecord.id }
+    }
 }

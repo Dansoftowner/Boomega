@@ -90,7 +90,7 @@ class FieldsEditor(
     }
 
     private fun getPreferredType(items: List<Record>) =
-        items.mapNotNull(Record::recordType).distinct().singleOrNull()
+        items.mapNotNull(Record::type).distinct().singleOrNull()
 
     private fun buildBaseUI(type: Record.Type?) {
         content = when (type) {

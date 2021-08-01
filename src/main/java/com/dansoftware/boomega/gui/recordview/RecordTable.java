@@ -42,7 +42,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
-import org.controlsfx.control.Rating;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -314,7 +313,7 @@ public class RecordTable extends BaseTable<Record> {
                         setGraphic(null);
                     } else {
                         setGraphic(new MaterialDesignIconView(
-                                item.getRecordType() == Record.Type.BOOK ?
+                                item.getType() == Record.Type.BOOK ?
                                         MaterialDesignIcon.BOOK : MaterialDesignIcon.NEWSPAPER));
                     }
                 }

@@ -1,17 +1,31 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.db;
 
 import com.dansoftware.boomega.db.data.Record;
-import org.dizitart.no2.FindOptions;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.objects.Cursor;
-import org.dizitart.no2.objects.ObjectFilter;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
@@ -58,7 +72,7 @@ public class NitriteDatabaseTest {
     @Test
     void itShouldInsertRecord() {
         //given
-        Record record = new Record.Builder(Record.Type.BOOK).build();
+        Record record = new Record(Record.Type.BOOK);
 
         //when
         underTest.insertRecord(record);
@@ -70,7 +84,7 @@ public class NitriteDatabaseTest {
     @Test
     void itShouldUpdateRecord() {
         //given
-        Record record = new Record.Builder(Record.Type.BOOK).build();
+        Record record = new Record(Record.Type.BOOK);
 
         //when
         underTest.updateRecord(record);
@@ -83,7 +97,7 @@ public class NitriteDatabaseTest {
     @Test
     void itShouldRemoveRecord() {
         //given
-        Record record = new Record.Builder(Record.Type.BOOK).build();
+        Record record = new Record(Record.Type.BOOK);
 
         //when
         underTest.removeRecord(record);

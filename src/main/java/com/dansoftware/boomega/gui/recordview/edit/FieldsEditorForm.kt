@@ -1,3 +1,21 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.gui.recordview.edit
 
 import com.dansoftware.boomega.db.Database
@@ -7,6 +25,7 @@ import com.dansoftware.boomega.gui.control.TextFieldLanguageSelectorControl
 import com.dansoftware.boomega.gui.control.formsfx.SimpleRatingControl
 import com.dansoftware.boomega.gui.recordview.RecordValues
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.structure.Group
@@ -184,76 +203,68 @@ class FieldsEditorForm(
         Group.of(
             Field.ofSingleSelectionType(Record.Type.values().asList(), 0)
                 .apply { recordType.bindBidirectional(selectionProperty()) }
-                .label("record.form.type"),
+                .label("${i18n("record.property.type")}:"),
             Field.ofStringType(authors)
-                .label("record.add.form.authors")
-                .placeholder("record.add.form.authors.prompt"),
+                .label("${i18n("record.property.authors")}:"),
             Field.ofStringType(title)
-                .label("record.add.form.title")
-                .placeholder("record.add.form.title.prompt"),
+                .label("${i18n("record.property.title")}:"),
             Field.ofStringType(subtitle)
-                .label("record.add.form.subtitle")
-                .placeholder("record.add.form.subtitle.prompt")
+                .label("${i18n("record.property.subtitle")}:")
                 .required(false),
             Field.ofStringType(isbn)
-                .label("record.add.form.isbn")
-                .placeholder("record.add.form.isbn.prompt")
+                .label("${i18n("record.property.isbn")}:")
                 .required(false),
             Field.ofStringType(language)
                 .styleClass("languageSelector")
-                .label("record.add.form.lang")
-                .placeholder("record.add.form.lang.prompt")
+                .label("${i18n("record.property.lang")}:")
+                .placeholder(i18n("record.add.form.lang.prompt"))
                 .required(false),
             Field.ofStringType(publisher)
-                .label("record.add.form.publisher")
-                .placeholder("record.add.form.publisher.prompt")
+                .label("${i18n("record.property.publisher")}:")
                 .required(false),
             Field.ofStringType(subject)
-                .label("record.add.form.subject")
-                .placeholder("record.add.form.subject.prompt")
+                .label("${i18n("record.property.subject")}:")
                 .required(false),
             Field.ofDate(publishedDate)
-                .label("record.add.form.date")
-                .placeholder("record.add.form.date.prompt")
+                .label("${i18n("record.property.published_date")}:")
                 .required(false)
                 .format("record.date.error"),
             Field.ofIntegerType(numberOfCopies)
-                .label("record.add.form.nofcopies")
-                .required(false)
-                .placeholder("record.add.form.nofcopies.prompt"),
+                .label("${i18n("record.property.nofcopies")}:")
+                .required(false),
             Field.ofIntegerType(rating)
-                .label("record.add.form.rating")
+                .label("${i18n("record.property.rating")}:")
                 .render(SimpleRatingControl(5, rating))
         )
-    ).i18n(ResourceBundleService(I18N.getValues()))
+    )
 
     private fun buildMagazineForm() = Form.of(
         Group.of(
             Field.ofSingleSelectionType(Record.Type.values().asList(), 1)
                 .apply { recordType.bindBidirectional(selectionProperty()) }
-                .label("record.form.type"),
+                .label("record.property.type"),
             Field.ofStringType(magazineName)
-                .label("record.add.form.magazinename")
+                .label("record.property.magazinename")
                 .placeholder("record.add.form.magazinename.prompt"),
             Field.ofStringType(title)
-                .label("record.add.form.title")
+                .label("record.property.title")
                 .placeholder("record.add.form.title.prompt"),
             Field.ofStringType(publisher)
-                .label("record.add.form.publisher")
+                .label("record.property.publisher")
                 .placeholder("record.add.form.publisher.prompt")
                 .required(false),
             Field.ofDate(publishedDate)
-                .label("record.add.form.date")
+                .label("record.property.published_date")
                 .placeholder("record.add.form.date.prompt")
                 .required(false)
                 .format("record.date.error"),
             Field.ofStringType(language)
                 .styleClass("languageSelector")
-                .label("record.add.form.lang")
+                .label("record.property.lang")
                 .placeholder("record.add.form.lang.prompt")
                 .required(false),
             Field.ofIntegerType(rating)
-                .label("record.add.form.rating")
+                .label("record.property.rating")
                 .render(SimpleRatingControl(5, rating))
         )
     ).i18n(ResourceBundleService(I18N.getValues()))
@@ -263,7 +274,7 @@ class FieldsEditorForm(
         logger.debug("Count of items that will be modified: {}", items.size)
         items.forEach { record ->
             logger.debug("Item will be modified: ${record.id}")
-            record.recordType = recordType.get()
+            record.type = recordType.get()
             StringUtils.getIfBlank(title.get(), null)?.let { record.title = it }
             StringUtils.getIfBlank(subtitle.get(), null)?.let { record.subtitle = it }
             StringUtils.getIfBlank(publisher.get(), null)?.let { record.publisher = it }
