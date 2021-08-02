@@ -20,13 +20,13 @@ package com.dansoftware.boomega.export.api
 
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.export.ConfigurationPanel
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.concurrent.Task
+import javafx.scene.Node
 
 interface RecordExporter<C : RecordExportConfiguration> {
 
     val name: String
-    val icon: MaterialDesignIcon
+    val icon: Node
     val configurationPanel: ConfigurationPanel<C>
     val contentType: String
     val contentTypeDescription: String

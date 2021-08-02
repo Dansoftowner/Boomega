@@ -21,9 +21,8 @@ package com.dansoftware.boomega.gui.google
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.Module
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
@@ -45,7 +44,7 @@ class GoogleBooksImportModule(
     override val name: String
         get() = I18N.getValue("google.books.import.module.title")
     override val icon: Node
-        get() = MaterialDesignIconView(MaterialDesignIcon.GOOGLE)
+        get() = icon("google-icon")
     override val id: String
         get() = "google-books-import"
 

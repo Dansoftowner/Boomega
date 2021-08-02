@@ -18,16 +18,12 @@
 
 package com.dansoftware.boomega.gui.databaseview
 
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.onScenePresent
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
-import javafx.beans.value.ChangeListener
-import javafx.beans.value.ObservableValue
 import javafx.css.PseudoClass
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
 import javafx.scene.control.Label
@@ -71,7 +67,7 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
             Group(
                 HBox(10.0).apply {
                     styleClass.add("label-area")
-                    children.add(StackPane(MaterialDesignIconView(MaterialDesignIcon.VIEW_MODULE)))
+                    children.add(StackPane(icon("modules-icon")))
                     children.add(StackPane(Label(I18N.getValue("database_view.modules"))))
                 }
             )
@@ -128,7 +124,7 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
             TabItem(
                 "moduleview",
                 I18N.getValue("database_view.modules"),
-                { MaterialDesignIconView(MaterialDesignIcon.VIEW_MODULE) }) {
+                { icon("modules-icon") }) {
                 ModuleView(context)
             }
     }

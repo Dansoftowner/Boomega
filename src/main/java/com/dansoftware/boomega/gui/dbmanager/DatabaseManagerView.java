@@ -21,14 +21,8 @@ package com.dansoftware.boomega.gui.dbmanager;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.gui.base.BaseView;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
-import com.dansoftware.boomega.i18n.I18N;
-import com.dlsc.workbenchfx.view.controls.ToolbarItem;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.binding.IntegerBinding;
-import javafx.beans.binding.StringExpression;
 import javafx.scene.layout.VBox;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -55,12 +49,7 @@ public class DatabaseManagerView extends BaseView {
     }
 
     private void buildUI() {
-        this.setContent(
-                new VBox(
-                        new DatabaseManagerToolbar(this),
-                        table
-                )
-        );
+        this.setContent(new VBox(new DatabaseManagerToolbar(this), table));
     }
 
     public void refresh() {

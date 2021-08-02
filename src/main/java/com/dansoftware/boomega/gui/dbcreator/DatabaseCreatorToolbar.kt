@@ -18,9 +18,8 @@
 
 package com.dansoftware.boomega.gui.dbcreator
 
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.control.Label
 import javafx.scene.control.ToolBar
 
@@ -32,12 +31,9 @@ class DatabaseCreatorToolbar : ToolBar() {
     }
 
     private fun buildUI() {
-        items.add(buildIcon())
+        items.add(icon("database-plus-icon"))
         items.add(buildLabel())
     }
-
-    private fun buildIcon() =
-        MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS)
 
     private fun buildLabel() =
         Label(I18N.getValue("database.creator.title"))

@@ -24,12 +24,9 @@ import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.refresh
 import com.dansoftware.boomega.i18n.i18n
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
 import javafx.beans.value.ObservableStringValue
 import javafx.geometry.Insets
@@ -41,7 +38,6 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
-import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -142,7 +138,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
 
     private fun buildFileChooserButton() = Button().apply {
         tooltip = Tooltip(i18n("login.source.open"))
-        graphic = FontAwesomeIconView(FontAwesomeIcon.FOLDER_OPEN)
+        graphic = icon("folder-open-icon")
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
         minHeight = 35.0
         minWidth = 40.0
@@ -153,7 +149,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
 
     private fun buildDatabaseManagerButton() = Button().apply {
         tooltip = Tooltip(i18n("login.db.manager.open"))
-        graphic = MaterialDesignIconView(MaterialDesignIcon.DATABASE)
+        graphic = icon("database-icon")
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
         minHeight = 35.0
         minWidth = 40.0
@@ -166,9 +162,8 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         minHeight = 35.0
         styleClass.add("source-adder")
         text = i18n("login.add.source")
-        //prefWidthProperty().bind(this@LoginBox.widthProperty())
         maxWidth = Double.MAX_VALUE
-        graphic = MaterialDesignIconView(MaterialDesignIcon.DATABASE_PLUS)
+        graphic = icon("database-plus-icon")
         setOnAction {
             controller.openDatabaseCreator()
         }
@@ -217,8 +212,8 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
             databaseChooser.get().selectionModel.selectedItem?.let { dbMeta ->
                 controller.login(
                     dbMeta, Credentials(
-                        usernameInput.get().let(StringUtils::trim),
-                        passwordInput.get().let(StringUtils::trim)
+                        usernameInput.get()?.trim() ?: "",
+                        passwordInput.get()?.trim() ?: ""
                     ), remember.get()
                 )
             }
@@ -251,15 +246,11 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
                     when {
                         dbFile.exists().not() || dbFile.isDirectory -> {
                             tooltip = Tooltip(i18n("file.not.exists"))
-                            graphic = FontAwesomeIconView(FontAwesomeIcon.WARNING).apply {
-                                styleClass.add(NOT_EXISTS_CLASS)
-                            }
+                            graphic = icon("warning-icon").apply { styleClass.add(NOT_EXISTS_CLASS) }
                         }
                         databaseTracker.isDatabaseUsed(item) -> {
                             tooltip = Tooltip(i18n("database.currently.used"))
-                            graphic = FontAwesomeIconView(FontAwesomeIcon.PLAY).apply {
-                                styleClass.add(USED_CLASS)
-                            }
+                            graphic = icon("play-icon").apply { styleClass.add(USED_CLASS) }
                         }
                         else -> {
                             graphic = null

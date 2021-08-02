@@ -21,12 +21,11 @@ package com.dansoftware.boomega.gui.google
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.service.googlebooks.asRecord
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
 import javafx.scene.control.*
 
@@ -50,7 +49,7 @@ class GoogleBooksImportView(private val context: Context) : GoogleBooksSearchVie
 
     private fun GoogleBooksSearchResultView.expandTableContextMenu() {
         pagination.table.rowContextMenu.items.add(
-            MenuItem(i18n("google.books.volume_import"), MaterialDesignIconView(MaterialDesignIcon.PLUS)).apply {
+            MenuItem(i18n("google.books.volume_import"), icon("plus-icon")).apply {
                 disableProperty().bind(Bindings.isEmpty(pagination.table.selectionModel.selectedItems))
                 setOnAction {
                     sendInsertionRequest(pagination.table.selectionModel.selectedItem)
@@ -61,7 +60,7 @@ class GoogleBooksImportView(private val context: Context) : GoogleBooksSearchVie
 
     private fun GoogleBooksSearchResultView.buildImportButton() = Button().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        graphic = MaterialDesignIconView(MaterialDesignIcon.PLUS)
+        graphic = icon("plus-icon")
         tooltip = Tooltip(i18n("google.books.volume_import"))
         disableProperty().bind(Bindings.isEmpty(pagination.table.selectionModel.selectedItems))
         setOnAction { sendInsertionRequest(pagination.table.selectionModel.selectedItem) }

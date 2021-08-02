@@ -21,11 +21,8 @@ package com.dansoftware.boomega.gui.recordview
 import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.recordview.dock.Dock
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
@@ -96,12 +93,12 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
     }
 
     private fun buildSearchItem() =
-        buildToolbarItem(FontAwesomeIcon.SEARCH, "record.find") {
+        buildToolbarItem("search-icon", "record.find") {
             view.isFindDialogVisible = view.isFindDialogVisible.not()
         }
 
     private fun buildInsertItem() =
-        buildToolbarItem(MaterialDesignIcon.PLUS_BOX, "record.add.module.title", view.findDialogVisibleProperty) {
+        buildToolbarItem("plus-box-icon", "record.add.module.title", view.findDialogVisibleProperty) {
             view.insertNewRecord()
         }
 
@@ -118,45 +115,45 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
     }
 
     private fun buildDeleteItem() =
-        buildToolbarItem(MaterialDesignIcon.DELETE, "record.delete") {
+        buildToolbarItem("delete-icon", "record.delete") {
             view.removeSelectedItems()
         }.apply {
             disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
         }
 
     private fun buildPasteItem() =
-        buildToolbarItem(MaterialDesignIcon.CONTENT_PASTE, "record.paste") {
+        buildToolbarItem("paste-icon", "record.paste") {
             view.pasteItemsFromClipboard()
         }.apply {
             disableProperty().bind(view.clipboardEmptyProperty())
         }
 
     private fun buildCopyItem() =
-        buildToolbarItem(MaterialDesignIcon.CONTENT_COPY, "record.copy") {
+        buildToolbarItem("copy-icon", "record.copy") {
             view.copySelectedToClipboard()
         }.apply {
             disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
         }
 
     private fun buildCutItem() =
-        buildToolbarItem(MaterialDesignIcon.CONTENT_CUT, "record.cut") {
+        buildToolbarItem("cut-icon", "record.cut") {
             view.cutSelectedToClipboard()
         }.apply {
             disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
         }
 
     private fun buildRefreshItem() =
-        buildToolbarItem(MaterialDesignIcon.REFRESH, "page.reload") { view.refresh() }
+        buildToolbarItem("reload-icon", "page.reload") { view.refresh() }
 
 
     private fun buildScrollToTopItem() =
-        buildToolbarItem(MaterialDesignIcon.BORDER_TOP, "record.table.scrolltop") { view.scrollToTop() }
+        buildToolbarItem("border-top-icon", "record.table.scrolltop") { view.scrollToTop() }
 
 
     private fun buildColumnChooserItem() =
         MenuButton(
             I18N.getValue("record.table.preferred.columns"),
-            FontAwesomeIconView(FontAwesomeIcon.COLUMNS)
+            icon("columns-icon")
         ).apply {
             RecordTable.columns()
                 .map(::TableColumnMenuItem)
@@ -164,7 +161,7 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
         }
 
     private fun buildColumnResetItem() =
-        buildToolbarItem(MaterialDesignIcon.TABLE, "record.table.colreset") {
+        buildToolbarItem("table-icon", "record.table.colreset") {
             view.table.buildDefaultColumns()
             columnChooserItem.items.stream()
                 .map { it as TableColumnMenuItem }
@@ -182,7 +179,7 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
         }
 
     private fun buildDockSelectionItem() =
-        MenuButton(null, MaterialDesignIconView(MaterialDesignIcon.DIVISION)).apply {
+        MenuButton(null, icon("dock-bottom-icon")).apply {
             //TODO: Tooltip
             items.addAll(
                 Stream.of(*Dock.values())
@@ -194,25 +191,19 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
     private fun buildSeparator() = Separator(Orientation.VERTICAL)
 
     private fun buildToolbarItem(
-        icon: MaterialDesignIcon,
+        iconStyleClass: String,
         i18nTooltip: String,
         onClick: EventHandler<ActionEvent>
-    ): Button = buildToolbarItem(MaterialDesignIconView(icon), i18nTooltip, onClick)
+    ): Button = buildToolbarItem(icon(iconStyleClass), i18nTooltip, onClick)
 
     private fun buildToolbarItem(
-        icon: MaterialDesignIcon,
+        iconStyleClass: String,
         i18nTooltip: String,
         disable: ObservableBooleanValue,
         onClick: EventHandler<ActionEvent>
-    ): Button = buildToolbarItem(MaterialDesignIconView(icon), i18nTooltip, onClick).apply {
+    ): Button = buildToolbarItem(icon(iconStyleClass), i18nTooltip, onClick).apply {
         disableProperty().bind(disable)
     }
-
-    private fun buildToolbarItem(
-        icon: FontAwesomeIcon,
-        i18nTooltip: String,
-        onClick: EventHandler<ActionEvent>
-    ): Button = buildToolbarItem(FontAwesomeIconView(icon), i18nTooltip, onClick)
 
     private fun buildToolbarItem(
         graphic: Node,
@@ -279,13 +270,13 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
         val locale: Locale,
         collatorSupplier: Supplier<Collator>,
         toggleGroup: ToggleGroup
-    ) : RadioMenuItem(locale.displayLanguage, MaterialDesignIconView(MaterialDesignIcon.TRANSLATE)) {
+    ) : RadioMenuItem(locale.displayLanguage, icon("translate-icon")) {
         init {
             this.selectedProperty()
                 .bindBidirectional(SimpleBooleanProperty().apply { bind(abcLocaleProp.isEqualTo(locale)) })
             this.setOnAction {
                 @Suppress("UNCHECKED_CAST")
-                view.table.setSortingComparator(collatorSupplier.get() as Comparator<String>)
+                view.table.sortingComparator = collatorSupplier.get() as Comparator<String>
                 abcLocaleProp.set(locale)
             }
             setToggleGroup(toggleGroup)

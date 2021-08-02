@@ -18,13 +18,12 @@
 
 package com.dansoftware.boomega.gui.google
 
+import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dansoftware.boomega.service.googlebooks.Volume
-import com.dansoftware.boomega.db.data.Record
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
 import javafx.scene.control.*
 
@@ -63,7 +62,7 @@ class GoogleBooksJoinView(
 
     private fun GoogleBooksSearchResultView.expandTableContextMenu() {
         pagination.table.rowContextMenu.items.add(
-            MenuItem(i18n("google.books.volume_join"), MaterialDesignIconView(MaterialDesignIcon.LINK)).apply {
+            MenuItem(i18n("google.books.volume_join"), icon("link-icon")).apply {
                 setOnAction { onVolumeSelected(pagination.table.selectionModel.selectedItem) }
             }
         )
@@ -71,7 +70,7 @@ class GoogleBooksJoinView(
 
     private fun GoogleBooksSearchResultView.buildJoinButton() = Button().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        graphic = MaterialDesignIconView(MaterialDesignIcon.LINK)
+        graphic = icon("link-icon")
         tooltip = Tooltip(i18n("google.books.volume_join"))
         disableProperty().bind(Bindings.isEmpty(pagination.table.selectionModel.selectedItems))
         setOnAction { onVolumeSelected(pagination.table.selectionModel.selectedItem) }

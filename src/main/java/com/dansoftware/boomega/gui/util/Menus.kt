@@ -20,8 +20,6 @@
 
 package com.dansoftware.boomega.gui.util
 
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
@@ -49,7 +47,7 @@ fun <M : MenuItem, T : KeyCombination> M.keyCombination(combination: ObjectPrope
 /**
  * Sets the icon of the [MenuItem] and then returns the object itself
  */
-fun <M : MenuItem> M.graphic(icon: MaterialDesignIcon): M = this.also { it.graphic = MaterialDesignIconView(icon) }
+fun <M : MenuItem> M.graphic(iconStyleClass: String): M = this.also { it.graphic = icon(iconStyleClass) }
 
 /**
  * Adds a sub menu item into the [Menu] and then returns the object itself

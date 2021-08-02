@@ -23,14 +23,12 @@ import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.recordview.RecordTable;
 import com.dansoftware.boomega.gui.recordview.dock.DockView;
 import com.dansoftware.boomega.i18n.I18N;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import org.jetbrains.annotations.NotNull;
+
+import static com.dansoftware.boomega.gui.util.Icons.icon;
 
 public class RecordEditorDock extends DockView<RecordEditor> {
     public RecordEditorDock(@NotNull Context context,
@@ -39,7 +37,7 @@ public class RecordEditorDock extends DockView<RecordEditor> {
                             @NotNull RecordTable table) {
         super(
                 parent,
-                new FontAwesomeIconView(FontAwesomeIcon.EDIT),
+                icon("pencil-icon"),
                 I18N.getValue("record.editor.dock.title"),
                 buildContent(context, database, table)
         );
@@ -56,7 +54,7 @@ public class RecordEditorDock extends DockView<RecordEditor> {
         button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         button.disableProperty().bind(getContent().changedProperty().not());
         button.setPadding(new Insets(0));
-        button.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.CONTENT_SAVE));
+        button.setGraphic(icon("save-icon"));
         button.setTooltip(new Tooltip(I18N.getValue("save.changes")));
         button.setOnAction(event -> getContent().saveChanges());
         return button;

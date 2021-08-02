@@ -23,7 +23,7 @@ import javafx.scene.Node
 /**
  * Gives a [TabItem] that represents the [Module]
  */
-internal fun Module.getTabItem() =
+fun Module.getTabItem() =
     object : TabItem(this.id, this.name) {
         override val graphic: Node
             get() = this@getTabItem.icon

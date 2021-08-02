@@ -23,10 +23,11 @@ import com.dansoftware.boomega.db.data.RecordProperty
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.export.ConfigurationPanel
 import com.dansoftware.boomega.gui.export.JsonConfigurationPanel
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import com.google.gson.*
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.concurrent.Task
+import javafx.scene.Node
 import java.io.OutputStreamWriter
 import java.lang.reflect.Type
 
@@ -41,8 +42,8 @@ class JsonExporter : RecordExporter<JsonExportConfiguration> {
     override val name: String
         get() = "JSON"
 
-    override val icon: MaterialDesignIcon
-        get() = MaterialDesignIcon.JSON
+    override val icon: Node
+        get() = icon("json-icon")
 
     override val configurationPanel: ConfigurationPanel<JsonExportConfiguration>
         get() = JsonConfigurationPanel()

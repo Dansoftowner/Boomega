@@ -21,13 +21,12 @@ package com.dansoftware.boomega.gui.google
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsOverlay
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.service.googlebooks.Volumes
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.ContextMenu
@@ -59,7 +58,7 @@ class GoogleBooksPagination(private val context: Context, private val query: Goo
         rowContextMenu = ContextMenu(
             MenuItem(
                 i18n("google.books.detail.title"),
-                MaterialDesignIconView(MaterialDesignIcon.INFORMATION_OUTLINE)
+                icon("info-outline-icon")
             ).apply {
                 setOnAction { showSelectedVolumeInfo() }
             }

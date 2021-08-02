@@ -19,9 +19,8 @@
 package com.dansoftware.boomega.gui.dbmanager
 
 import com.dansoftware.boomega.gui.control.BiToolBar
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.geometry.Insets
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
@@ -42,7 +41,7 @@ class DatabaseManagerToolbar(private val view: DatabaseManagerView) : BiToolBar(
         rightItems.add(buildRefreshButton())
     }
 
-    private fun buildIcon() = MaterialDesignIconView(MaterialDesignIcon.DATABASE)
+    private fun buildIcon() = icon("database-icon")
 
     private fun buildLabel() = Label(I18N.getValue("database.manager.title"))
 
@@ -58,7 +57,7 @@ class DatabaseManagerToolbar(private val view: DatabaseManagerView) : BiToolBar(
 
     private fun buildRefreshButton() = Button().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        graphic = MaterialDesignIconView(MaterialDesignIcon.RELOAD)
+        graphic = icon("reload-icon")
         setOnAction {
             view.refresh()
             animatefx.animation.RotateIn(graphic).play();

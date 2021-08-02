@@ -34,7 +34,7 @@ object MenuItems {
     ) = MenuItem(action.displayName)
         .action { action.invoke(context, preferences, databaseTracker) }
         .keyBinding(action.keyBinding)
-        .graphic(action.icon)
+        .graphic(action.iconStyleClass)
 
     fun <M : MenuItem> of(
         action: Action,
@@ -45,5 +45,5 @@ object MenuItems {
     ) = menuItemFactory(action.displayName)
         .action { action.invoke(context, preferences, databaseTracker) }
         .keyBinding(action.keyBinding)
-        .graphic(action.icon)
+        .graphic(action.iconStyleClass)
 }

@@ -19,10 +19,9 @@
 package com.dansoftware.boomega.gui.control
 
 import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.*
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
@@ -136,7 +135,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
     private fun buildSeparator(): Separator = Separator(Orientation.VERTICAL)
 
     private fun buildRegexToggle(group: ToggleGroup) =
-        ToggleButton(null, MaterialDesignIconView(MaterialDesignIcon.REGEX)).apply {
+        ToggleButton(null, icon("regex-icon")).apply {
             tooltip = Tooltip(I18N.getValue("record.find.regex"))
             toggleGroup = group
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
@@ -151,7 +150,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         }
 
     private fun buildExactToggle(group: ToggleGroup) =
-        ToggleButton(null, MaterialDesignIconView(MaterialDesignIcon.KEYBOARD)).apply {
+        ToggleButton(null, icon("keyboard-icon")).apply {
             tooltip = Tooltip(I18N.getValue("record.find.exact"))
             toggleGroup = group
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
@@ -166,7 +165,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         }
 
     private fun buildCaseToggle() =
-        ToggleButton(null, MaterialDesignIconView(MaterialDesignIcon.CASE_SENSITIVE_ALT)).apply {
+        ToggleButton(null, icon("case-sensitive-icon")).apply {
             tooltip = Tooltip(I18N.getValue("record.find.case_sensitive"))
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
             caseSensitive.bind(selectedProperty())
@@ -184,7 +183,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         }
 
     private fun buildCloseButton() =
-        Button(null, MaterialDesignIconView(MaterialDesignIcon.CLOSE)).apply {
+        Button(null, icon("close-icon")).apply {
             padding = Insets(0.0)
             setOnAction {
                 onCloseRequest?.invoke()

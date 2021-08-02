@@ -19,9 +19,8 @@
 package com.dansoftware.boomega.gui.login.quick
 
 import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -35,12 +34,9 @@ class QuickLoginToolbar(private val databaseMeta: DatabaseMeta) : HBox() {
     }
 
     private fun buildUI() {
-        children.add(buildIcon())
+        children.add(icon("login-icon"))
         children.add(buildLabel())
     }
-
-    private fun buildIcon() =
-        MaterialDesignIconView(MaterialDesignIcon.LOGIN)
 
     private fun buildLabel() =
         Label("${I18N.getValue("login.quick.title")} - $databaseMeta").also {

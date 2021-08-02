@@ -25,14 +25,13 @@ import com.dansoftware.boomega.gui.util.ConcurrencyUtils;
 import com.dansoftware.boomega.gui.util.FXCollectionUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
 import com.jfilegoodies.explorer.FileExplorers;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +43,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static com.dansoftware.boomega.gui.util.IconUtils.icon;
+import static com.dansoftware.boomega.gui.util.Icons.icon;
 import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
 
 /**
@@ -90,6 +89,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
         ).forEach(this.getColumns()::add);
 
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        VBox.setVgrow(this, Priority.ALWAYS);
     }
 
     public IntegerBinding selectedItemsCount() {
@@ -156,12 +156,12 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                         DatabaseMeta databaseMeta = getTableView().getItems().get(getIndex());
                         File dbFile = databaseMeta.getFile();
                         if (!dbFile.exists() || dbFile.isDirectory()) {
-                            var indicator = new FontAwesomeIconView(FontAwesomeIcon.WARNING);
+                            var indicator = icon("warning-icon");
                             indicator.getStyleClass().add(NOT_EXISTS_CLASS);
                             setGraphic(indicator);
                             getTableRow().setTooltip(new Tooltip(i18n("file.not.exists")));
                         } else if (DatabaseManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
-                            var indicator = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
+                            var indicator = icon("play-icon");
                             indicator.getStyleClass().add(USED_CLASS);
                             setGraphic(indicator);
                             getTableRow().setTooltip(new Tooltip(i18n("database.currently.used")));
@@ -262,7 +262,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                     } else {
                         Button openButton = new Button();
                         openButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        openButton.setGraphic(icon(MaterialDesignIcon.FOLDER));
+                        openButton.setGraphic(icon("folder-open-icon"));
                         openButton.prefWidthProperty().bind(getTableColumn().widthProperty());
                         openButton.setOnAction(event -> getTableView()
                                 .getSelectionModel()
@@ -304,7 +304,7 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                     } else {
                         Button deleteButton = new Button();
                         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        deleteButton.setGraphic(icon(MaterialDesignIcon.DATABASE_MINUS));
+                        deleteButton.setGraphic(icon("database-minus-icon"));
                         deleteButton.prefWidthProperty().bind(tableColumn.widthProperty());
                         deleteButton.setOnAction(event -> {
                             ObservableList<DatabaseMeta> selectedItems =

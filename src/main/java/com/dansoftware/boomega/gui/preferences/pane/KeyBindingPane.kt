@@ -22,9 +22,8 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.control.KeyBindDetectionField
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.css.PseudoClass
 import javafx.scene.Node
 import javafx.scene.control.Button
@@ -35,7 +34,7 @@ import org.slf4j.LoggerFactory
 class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
 
     override val title: String = I18N.getValue("preferences.tab.keybindings")
-    override val graphic: Node = MaterialDesignIconView(MaterialDesignIcon.KEYBOARD)
+    override val graphic: Node = icon("keyboard-icon")
 
     override fun buildContent(): Content = object : Content() {
         init {

@@ -29,7 +29,6 @@ import com.dansoftware.boomega.gui.util.stage
 import com.dansoftware.boomega.gui.util.window
 import com.dansoftware.boomega.i18n.i18n
 import com.jfilegoodies.FileGoodies
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import javafx.beans.property.*
 import javafx.geometry.Insets
 import javafx.scene.control.*
@@ -152,7 +151,7 @@ class DatabaseCreatorForm(
         private fun buildDirOpenButton() = Button().apply {
             setConstraints(this, 2, 1)
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
-            graphic = icon(FontAwesomeIcon.FOLDER_OPEN)
+            graphic = icon("folder-open-icon")
             minHeight = 35.0
             tooltip = Tooltip(i18n("data.source.adder.choose.dir"))
             setOnAction { openDirectory() }

@@ -37,7 +37,6 @@ import com.dansoftware.boomega.main.ApplicationRestart
 import com.dansoftware.boomega.util.ReflectionUtils
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import com.dansoftware.boomega.util.revealInExplorer
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
@@ -165,7 +164,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
                 init {
                     databaseTracker.savedDatabases.forEach { db -> this.menuItem(menuItemFactory.invoke(db)) }
                     databaseTracker.registerObserver(trackerObserver)
-                    this.graphic(MaterialDesignIcon.BOOK_OPEN_VARIANT)
+                    this.graphic("database-clock-icon")
                 }
             }
 
@@ -181,22 +180,22 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
                 GlobalActions.NEW_ENTRY.invoke(context, preferences, databaseTracker)
                 context.close()
             }
-            .graphic(MaterialDesignIcon.LOGOUT_VARIANT)
+            .graphic("logout-icon")
 
         private fun revealInExplorerMenuItem() = MenuItem(i18n("menubar.menu.file.reveal"))
             .action { databaseMeta.file!!.revealInExplorer() }
-            .graphic(MaterialDesignIcon.FOLDER)
+            .graphic("folder-open-icon")
 
         private fun closeWindowMenuItem() = MenuItem(i18n("menubar.menu.file.closewindow"))
             .action { context.close() }
-            .graphic(MaterialDesignIcon.CLOSE)
+            .graphic("close-icon")
 
         private fun restartMenuItem() =
             MenuItems.of(GlobalActions.RESTART_APPLICATION, context, preferences, databaseTracker)
 
         private fun quitMenuItem() = MenuItem(i18n("menubar.menu.file.quit"))
             .action { Platform.exit() }
-            .graphic(MaterialDesignIcon.CLOSE_BOX)
+            .graphic("close-box-multiple-icon")
 
         private fun startActivityLauncher(getActivityLauncher: () -> ActivityLauncher) {
             SingleThreadExecutor.submit(object : Task<Unit>() {
@@ -247,7 +246,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
 
             init {
                 Theme.registerThemeable(themeChangeListener)
-                this.graphic(MaterialDesignIcon.FORMAT_PAINT)
+                this.graphic("paint-icon")
                 this.buildItems()
             }
 
@@ -295,7 +294,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
                     })
                 }
             }
-            .graphic(MaterialDesignIcon.TRANSLATE)
+            .graphic("translate-icon")
     }
 
 

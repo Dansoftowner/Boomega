@@ -18,9 +18,8 @@
 
 package com.dansoftware.boomega.gui.clipboard
 
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ChangeListener
@@ -75,7 +74,7 @@ class ClipboardViewToolbar(private val view: ClipboardView) : HBox() {
         fun indicateCopy() {
             children.setAll(
                 Group(
-                    buildHBox(MaterialDesignIcon.CONTENT_COPY, "clipboard.view.action.copy")
+                    buildHBox("copy-icon", "clipboard.view.action.copy")
                 )
             )
         }
@@ -83,14 +82,14 @@ class ClipboardViewToolbar(private val view: ClipboardView) : HBox() {
         fun indicateCut() {
             children.setAll(
                 Group(
-                    buildHBox(MaterialDesignIcon.CONTENT_CUT, "clipboard.view.action.cut")
+                    buildHBox("cut-icon", "clipboard.view.action.cut")
                 )
             )
         }
 
-        private fun buildHBox(icon: MaterialDesignIcon, i18n: String) =
+        private fun buildHBox(iconStyleClass: String, i18n: String) =
             HBox(5.0).apply {
-                children.add(StackPane(MaterialDesignIconView(icon)))
+                children.add(StackPane(icon(iconStyleClass)))
                 children.add(StackPane(Label(I18N.getValue(i18n))))
                 children.add(buildCountItem())
                 visibleProperty().bind(Bindings.isNotEmpty(view.table.items))
@@ -105,7 +104,7 @@ class ClipboardViewToolbar(private val view: ClipboardView) : HBox() {
 
     private fun buildDeleteItem() = Button().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        graphic = MaterialDesignIconView(MaterialDesignIcon.DELETE)
+        graphic = icon("delete-icon")
         disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
         //TODO: tooltip
         setOnAction {

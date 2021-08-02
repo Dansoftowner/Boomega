@@ -21,11 +21,10 @@ package com.dansoftware.boomega.gui.info
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.info.dependency.DependencyViewerActivity
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.getDisplayName
 import com.dansoftware.boomega.util.SystemBrowser
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.geometry.Insets
 import javafx.scene.Cursor
 import javafx.scene.Group
@@ -138,7 +137,7 @@ class InformationView(val context: Context) : VBox(5.0) {
     private fun buildDependencyButton() =
         Button(
             I18N.getValues().getString("info.show.dependencies"),
-            MaterialDesignIconView(MaterialDesignIcon.CODE_BRACES)
+            icon("code-braces-icon")
         ).also {
             it.setOnAction {
                 DependencyViewerActivity(this.context).show()
@@ -148,7 +147,7 @@ class InformationView(val context: Context) : VBox(5.0) {
     private fun buildGithubButton() =
         Button(
             I18N.getValues().getString("info.show.github"),
-            MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX)
+            icon("github-icon")
         ).also {
             it.setOnAction {
                 SystemBrowser.browse(GITHUB_REPO_URL)

@@ -20,15 +20,14 @@ package com.dansoftware.boomega.gui.preferences.pane
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Node
 
 class UpdatePane(preferences: Preferences) : PreferencesPane(preferences) {
 
     override val title: String = I18N.getValue("preferences.tab.update")
-    override val graphic: Node = MaterialDesignIconView(MaterialDesignIcon.UPDATE)
+    override val graphic: Node = icon("update-icon")
 
     override fun buildContent(): Content = object : Content() {
         init {

@@ -20,10 +20,9 @@ package com.dansoftware.boomega.gui.google.preview
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.TabItem
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.service.googlebooks.Volume
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Node
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -37,7 +36,7 @@ class GoogleBookPreviewTabItem(val context: Context, val volume: Volume) : TabIt
 ) {
 
     override val graphic: Node
-        get() = MaterialDesignIconView(MaterialDesignIcon.BOOK_OPEN_VARIANT)
+        get() = icon("book-preview-icon")
 
     override val content: Node
         get() = GoogleBookPreview(context, volume)

@@ -22,6 +22,7 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.SearchTextField
 import com.dansoftware.boomega.gui.control.formsfx.LanguageSelectionControl
 import com.dansoftware.boomega.gui.control.formsfx.OnActionTextControl
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.onScenePresent
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
@@ -32,8 +33,6 @@ import com.dlsc.formsfx.model.util.BindingMode
 import com.dlsc.formsfx.model.util.ResourceBundleService
 import com.dlsc.formsfx.view.renderer.FormRenderer
 import com.dlsc.formsfx.view.util.ColSpan
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.scene.Group
@@ -158,7 +157,7 @@ class GoogleBooksSearchForm(
 
     private fun buildSearchButton() = Button().apply {
         text = I18N.getValue("google.books.add.form.search")
-        graphic = FontAwesomeIconView(FontAwesomeIcon.SEARCH)
+        graphic = icon("search-icon")
         maxWidth = Double.MAX_VALUE
         isDefaultButton = true
         setOnAction { search() }

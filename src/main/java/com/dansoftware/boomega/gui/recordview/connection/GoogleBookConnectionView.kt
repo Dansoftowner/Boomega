@@ -25,6 +25,7 @@ import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsPane
 import com.dansoftware.boomega.gui.recordview.RecordTable
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
@@ -32,8 +33,6 @@ import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
@@ -304,7 +303,7 @@ class GoogleBookConnectionView(
         private fun buildDetailsButton() =
             Button(
                 i18n("google.books.dock.placeholder.error.details"),
-                MaterialDesignIconView(MaterialDesignIcon.DETAILS)
+                icon("details-icon")
             ).apply {
                 setOnAction {
                     context.showErrorDialog(
@@ -345,7 +344,7 @@ class GoogleBookConnectionView(
 
         private fun buildConnectionButton() = Button(
             i18n("google.books.dock.connection"),
-            MaterialDesignIconView(MaterialDesignIcon.GOOGLE)
+            icon("google-icon")
         ).apply {
             setOnAction { showGoogleBookJoiner() }
         }

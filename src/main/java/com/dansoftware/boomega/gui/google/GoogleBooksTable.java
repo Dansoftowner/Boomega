@@ -18,13 +18,14 @@
 
 package com.dansoftware.boomega.gui.google;
 
-import com.dansoftware.boomega.gui.control.*;
+import com.dansoftware.boomega.gui.control.BaseTable;
+import com.dansoftware.boomega.gui.control.ReadOnlyRating;
+import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;
+import com.dansoftware.boomega.gui.control.WebsiteHyperLink;
 import com.dansoftware.boomega.gui.util.ImageUtils;
 import com.dansoftware.boomega.gui.util.ObservableUtils;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.service.googlebooks.Volume;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
@@ -43,7 +44,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
-import static com.dansoftware.boomega.gui.util.IconUtils.icon;
+import static com.dansoftware.boomega.gui.util.Icons.icon;
 
 /**
  * A {@link GoogleBooksTable} is a table-view that used for displaying {@link Volume} objects.
@@ -313,7 +314,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
                         setTooltip(null);
                     } else {
                         Volume.VolumeInfo volume = this.getTableView().getItems().get(getIndex()).getVolumeInfo();
-                        setGraphic(icon(volume.isMagazine() ? MaterialDesignIcon.NEWSPAPER : MaterialDesignIcon.BOOK));
+                        setGraphic(icon(volume.isMagazine() ? "newspaper-icon" : "book-icon"));
                         setTooltip(new Tooltip(I18N.getValue(volume.isMagazine() ? "google.books.magazine" : "google.books.book")));
                     }
                 }
@@ -351,9 +352,9 @@ public class GoogleBooksTable extends BaseTable<Volume> {
                         Optional.ofNullable(volume.getImageLinks())
                                 .map(Volume.VolumeInfo.ImageLinks::getThumbnail)
                                 .ifPresentOrElse(thumbnail -> {
-                                    setGraphic(new ImagePlaceHolder(80) {{
-                                        setHeight(PREF_HEIGHT);
-                                    }});
+                                    var icon = icon("image-icon");
+                                    icon.setStyle("-fx-font-size: 80 !important;");
+                                    setGraphic(icon);
                                     ImageUtils.loadImage(thumbnail, image -> {
                                         if (volume.equals(getCurrentVolumeInfo())) {
                                             setGraphic(new ImageView(image));

@@ -21,11 +21,10 @@ package com.dansoftware.boomega.gui.preferences.pane
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.main.ApplicationRestart
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Node
 import javafx.scene.control.ButtonType
 import javafx.scene.control.ChoiceBox
@@ -38,7 +37,7 @@ class LanguagePane(
 ) : PreferencesPane(preferences) {
 
     override val title: String = I18N.getValue("preferences.tab.language")
-    override val graphic: Node = MaterialDesignIconView(MaterialDesignIcon.TRANSLATE)
+    override val graphic: Node = icon("translate-icon")
 
     override fun buildContent(): Content = object : Content() {
 

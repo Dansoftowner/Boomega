@@ -23,9 +23,8 @@ import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.Module
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
@@ -41,7 +40,7 @@ class RecordsViewModule(
     override val name: String
         get() = I18N.getValue("record.book.view.module.name")
     override val icon: Node
-        get() = MaterialDesignIconView(MaterialDesignIcon.LIBRARY)
+        get() = icon("library-icon")
     override val id: String
         get() = "records-view-module"
 

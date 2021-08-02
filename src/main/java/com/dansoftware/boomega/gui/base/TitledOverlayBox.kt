@@ -18,8 +18,7 @@
 
 package com.dansoftware.boomega.gui.base
 
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import com.dansoftware.boomega.gui.util.icon
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.geometry.Insets
@@ -87,25 +86,25 @@ open class TitledOverlayBox(
                     }
                 }
                 if (resizableV) {
-                    hBox.children.add(buildButton(MaterialDesignIcon.ARROW_UP) {
+                    hBox.children.add(buildButton("arrow-up-icon") {
                         content.prefHeight = content.height + RESIZE_UNIT
                     })
-                    hBox.children.add(buildButton(MaterialDesignIcon.ARROW_DOWN) {
+                    hBox.children.add(buildButton("arrow-down-icon") {
                         content.prefHeight = content.height - RESIZE_UNIT
                     })
                 }
                 if (resizableH) {
-                    hBox.children.add(buildButton(MaterialDesignIcon.ARROW_LEFT) {
+                    hBox.children.add(buildButton("arrow-left-icon") {
                         content.prefWidth = content.width - RESIZE_UNIT
                     })
-                    hBox.children.add(buildButton(MaterialDesignIcon.ARROW_RIGHT) {
+                    hBox.children.add(buildButton("arrow-right-icon") {
                         content.prefWidth = content.width + RESIZE_UNIT
                     })
                 }
             }
 
-        private fun buildButton(icon: MaterialDesignIcon, action: EventHandler<ActionEvent>): Node =
-            Button(null, MaterialDesignIconView(icon)).also {
+        private fun buildButton(iconStyleClass: String, action: EventHandler<ActionEvent>): Node =
+            Button(null, icon(iconStyleClass)).also {
                 it.onAction = action
                 it.padding = Insets(0.0)
             }

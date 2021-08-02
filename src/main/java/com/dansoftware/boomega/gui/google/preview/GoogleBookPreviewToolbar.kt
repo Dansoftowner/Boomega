@@ -21,11 +21,10 @@ package com.dansoftware.boomega.gui.google.preview
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsOverlay
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.surrounding
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.control.*
 
 class GoogleBookPreviewToolbar(private val context: Context, private val view: GoogleBookPreview) : BiToolBar() {
@@ -44,9 +43,7 @@ class GoogleBookPreviewToolbar(private val context: Context, private val view: G
     }
 
     private fun buildLogo() =
-        MaterialDesignIconView(MaterialDesignIcon.GOOGLE).apply {
-            styleClass.add("google-icon")
-        }
+        icon("google-icon")
 
     private fun buildLabel() =
         Label(I18N.getValue("google.book.preview.tab.title", "- ${view.volume.volumeInfo?.title?.surrounding("\"")}"))
@@ -54,7 +51,7 @@ class GoogleBookPreviewToolbar(private val context: Context, private val view: G
     private fun buildInfoItem() =
         Button().apply {
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
-            graphic = MaterialDesignIconView(MaterialDesignIcon.INFORMATION_OUTLINE)
+            graphic = icon("info-outline-icon")
             tooltip = Tooltip(i18n("google.books.volume_information"))
             setOnAction {
                 context.showOverlay(GoogleBookDetailsOverlay(context, view.volume))
@@ -64,7 +61,7 @@ class GoogleBookPreviewToolbar(private val context: Context, private val view: G
     private fun buildRefreshButton() =
         Button().apply {
             contentDisplay = ContentDisplay.GRAPHIC_ONLY
-            graphic = MaterialDesignIconView(MaterialDesignIcon.RELOAD)
+            graphic = icon("reload-icon")
             tooltip = Tooltip(i18n("page.reload"))
             setOnAction {
                 view.reload()

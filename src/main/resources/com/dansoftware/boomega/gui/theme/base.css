@@ -456,6 +456,10 @@
     -fx-padding: 10;
 }
 
+.google-book-details-pane .thumbnail-place-holder {
+    -fx-icon-size: 50;
+}
+
 .google-book-details-pane .description-area {
     -fx-padding: 2px;
 }
@@ -562,8 +566,8 @@
     -fx-tab-max-height: 2.2em;
 }
 
-.records-view .books-table .read-only-rating {
-    -fx-font-size: 1.5em;
+.records-view .books-table .read-only-rating .glyph-icon {
+    -fx-font-size: 1.5em !important;
 }
 
 .record-find-control .text-field {

@@ -23,11 +23,10 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 
 open class Action(
     private val i18nName: String,
-    val icon: MaterialDesignIcon,
+    val iconStyleClass: String,
     val keyBinding: KeyBinding?,
     private val operation: (Context, Preferences, DatabaseTracker) -> Unit
 ) {
@@ -39,9 +38,9 @@ open class Action(
 
     constructor(
         i18nName: String,
-        icon: MaterialDesignIcon,
+        iconStyleClass: String,
         operation: (Context, Preferences, DatabaseTracker) -> Unit
-    ) : this(i18nName, icon, null, operation)
+    ) : this(i18nName, iconStyleClass, null, operation)
 
     open fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
         operation(context, preferences, databaseTracker)

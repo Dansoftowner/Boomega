@@ -18,11 +18,10 @@
 
 package com.dansoftware.boomega.gui.control
 
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
+import com.dansoftware.boomega.gui.util.icon
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.layout.HBox
-import javafx.scene.text.Text
 
 open class ReadOnlyRating(max: Int, value: Int) : HBox() {
 
@@ -75,9 +74,6 @@ open class ReadOnlyRating(max: Int, value: Int) : HBox() {
         starIcon("unfilled-star")
 
     private fun starIcon(styleClass: String) =
-        Text(MaterialDesignIcon.STAR.unicode()).apply {
-            this.styleClass.add(styleClass)
-            this.style = "-fx-font-family: 'Material Design Icons' !important;"
-        }
+        icon("star-icon").apply { this.styleClass.add(styleClass) }
 
 }

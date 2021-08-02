@@ -18,14 +18,12 @@
 
 package com.dansoftware.boomega.gui.recordview
 
-import com.dansoftware.boomega.gui.export.SupportedExporters
+import com.dansoftware.boomega.export.SupportedExporters
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.keyCombination
 import com.dansoftware.boomega.i18n.I18N
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
 import javafx.collections.ListChangeListener
 import javafx.scene.control.ContextMenu
@@ -51,35 +49,35 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
     }
 
     private fun buildDeleteItem() =
-        MenuItem(I18N.getValue("record.delete"), MaterialDesignIconView(MaterialDesignIcon.DELETE))
+        MenuItem(I18N.getValue("record.delete"), icon("delete-icon"))
             .action { recordsView.removeSelectedItems() }
             .keyCombination(KeyBindings.deleteRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
     private fun buildCopyItem() =
-        MenuItem(I18N.getValue("record.copy"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_COPY))
+        MenuItem(I18N.getValue("record.copy"), icon("copy-icon"))
             .action { recordsView.copySelectedToClipboard() }
             .keyCombination(KeyBindings.copyRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
 
     private fun buildCutItem() =
-        MenuItem(I18N.getValue("record.cut"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_CUT))
+        MenuItem(I18N.getValue("record.cut"), icon("cut-icon"))
             .action { recordsView.cutSelectedToClipboard() }
             .keyCombination(KeyBindings.cutRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
     private fun buildPasteItem() =
-        MenuItem(I18N.getValue("record.paste"), MaterialDesignIconView(MaterialDesignIcon.CONTENT_PASTE))
+        MenuItem(I18N.getValue("record.paste"), icon("paste-icon"))
             .action { recordsView.pasteItemsFromClipboard() }
             .keyCombination(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }
 
     private fun buildExportItem() =
-        Menu("Export", icon(MaterialDesignIcon.EXPORT)).apply { // TODO: i18n
+        Menu("Export", icon("file-export-icon")).apply { // TODO: i18n
             items.addAll(
                 SupportedExporters.map { exporter ->
-                    MenuItem(exporter.name, icon(exporter.icon)).action {
+                    MenuItem(exporter.name, exporter.icon).action {
                         recordsView.exportSelected(exporter)
                     }
                 }

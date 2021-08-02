@@ -21,9 +21,8 @@
 package com.dansoftware.boomega.gui.control
 
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.util.surrounding
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
@@ -52,7 +51,7 @@ class TextFieldLanguageSelectorControl(context: Context, textField: TextField) :
     }
 
     private fun buildGraphic(context: Context, textField: TextField): Node =
-        MaterialDesignIconView(MaterialDesignIcon.VIEW_LIST).also { icon ->
+        icon("view-list-icon").also { icon ->
             icon.cursor = Cursor.HAND
             setAlignment(icon, Pos.CENTER_RIGHT)
             icon.setOnMouseClicked { event: MouseEvent ->

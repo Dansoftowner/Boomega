@@ -19,9 +19,8 @@
 package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.control.BiToolBar
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Insets
@@ -50,7 +49,7 @@ class GoogleBooksSearchToolbar(
 
     private fun buildHomeButton() = Button().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        graphic = MaterialDesignIconView(MaterialDesignIcon.ARROW_LEFT)
+        graphic = icon("arrow-left-icon")
         tooltip = Tooltip(i18n("google.books.search.back"))
         setOnAction { onPreviousPageRequested() }
     }
@@ -67,14 +66,14 @@ class GoogleBooksSearchToolbar(
     private fun buildVolumeInfoButton() = Button().apply {
         disableProperty().bind(Bindings.isEmpty(view.pagination.table.selectionModel.selectedItems))
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        graphic = MaterialDesignIconView(MaterialDesignIcon.INFORMATION_OUTLINE)
+        graphic = icon("info-outline-icon")
         tooltip = Tooltip(i18n("google.books.detail.title"))
         setOnAction { view.showSelectedVolumeInfo() }
     }
 
     private fun buildReloadButton() = Button().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        graphic = MaterialDesignIconView(MaterialDesignIcon.RELOAD)
+        graphic = icon("reload-icon")
         tooltip = Tooltip(i18n("page.reload"))
         setOnAction { view.refresh() }
     }

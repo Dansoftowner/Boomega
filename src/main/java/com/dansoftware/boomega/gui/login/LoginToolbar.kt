@@ -26,13 +26,10 @@ import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.concurrent.Task
 import javafx.geometry.Insets
 import javafx.scene.control.*
@@ -54,25 +51,25 @@ class LoginToolbar(private val context: Context, private val preferences: Prefer
         rightItems.add(buildInfoItem())
     }
 
-    private fun buildLogo() = MaterialDesignIconView(MaterialDesignIcon.LOGIN)
+    private fun buildLogo() = icon("login-icon")
 
     private fun buildLabel() = Label(I18N.getValue("database.auth"))
 
     private fun buildInfoItem() = Button().apply {
-        graphic = MaterialDesignIconView(MaterialDesignIcon.INFORMATION)
+        graphic = icon("info-icon")
         setOnAction { InformationActivity(context).show() }
     }
 
     private fun buildQuickOptionsControl() = MenuButton().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
-        graphic = MaterialDesignIconView(MaterialDesignIcon.SETTINGS)
+        graphic = icon("settings-icon")
         items.add(buildUpdateSearchMenuItem())
         items.add(buildPluginManagerMenuItem())
         items.add(buildSettingsMenuItem())
     }
 
     private fun buildUpdateSearchMenuItem() =
-        MenuItem(I18N.getValue("action.update_search"), MaterialDesignIconView(MaterialDesignIcon.UPDATE)).action {
+        MenuItem(I18N.getValue("action.update_search"), icon("update-icon")).action {
             val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
                 init {
                     setOnSucceeded {
@@ -88,12 +85,12 @@ class LoginToolbar(private val context: Context, private val preferences: Prefer
         }
 
     private fun buildPluginManagerMenuItem() =
-        MenuItem(I18N.getValue("action.open_plugin_manager"), FontAwesomeIconView(FontAwesomeIcon.PLUG)).action {
+        MenuItem(I18N.getValue("action.open_plugin_manager"), icon("puzzle-icon")).action {
             PluginManagerActivity().show(context.contextWindow)
         }.apply { isDisable = true } // TODO: unlock plugin manager
 
     private fun buildSettingsMenuItem() =
-        MenuItem(I18N.getValue("action.settings"), MaterialDesignIconView(MaterialDesignIcon.SETTINGS)).action {
+        MenuItem(I18N.getValue("action.settings"), icon("settings-icon")).action {
             PreferencesActivity(preferences).show(context.contextWindow)
         }
 }

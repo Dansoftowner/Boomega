@@ -18,8 +18,7 @@
 
 package com.dansoftware.boomega.gui.control
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import com.dansoftware.boomega.gui.util.icon
 import javafx.geometry.Insets
 import javafx.scene.layout.StackPane
 import org.controlsfx.control.textfield.CustomTextField
@@ -27,7 +26,7 @@ import org.controlsfx.control.textfield.CustomTextField
 class SearchTextField : CustomTextField() {
     init {
         styleClass.add("search-text-field")
-        left = StackPane(FontAwesomeIconView(FontAwesomeIcon.SEARCH)).apply {
+        left = StackPane(icon("search-icon")).apply {
             padding = Insets(5.0)
         }
     }

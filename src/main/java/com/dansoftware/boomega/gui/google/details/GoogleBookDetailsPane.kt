@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.google.details
 
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
@@ -34,7 +33,6 @@ import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.pnikosis.html2markdown.HTML2Md
 import com.sandec.mdfx.MarkdownView
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
@@ -138,7 +136,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
         }
 
         private fun buildPreviewButton() = Button().apply {
-            graphic = icon(MaterialDesignIcon.BOOK_OPEN_VARIANT)
+            graphic = icon("book-preview-icon")
             text = i18n("google.books.details.preview")
             maxWidth = Double.MAX_VALUE
             contextMenu = ContextMenu(
@@ -174,14 +172,11 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
             }
 
             private fun placeholder() {
-                children.setAll(ThumbnailPlaceHolder())
+                children.setAll(icon("image-icon").apply {
+                    style = "-fx-font-size: 50 !important;"
+                })
             }
         }
-
-        /**
-         * Used as a place holder if the thumbnail is not available
-         */
-        private inner class ThumbnailPlaceHolder : FixedFontMaterialDesignIconView(MaterialDesignIcon.IMAGE, 50.0)
     }
 
     private inner class TabArea : TabPane() {
@@ -232,7 +227,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
 
             private fun buildContextMenu() {
                 contextMenu = ContextMenu(
-                    MenuItem(i18n("record.copy"), icon(MaterialDesignIcon.CONTENT_COPY)).action {
+                    MenuItem(i18n("record.copy"), icon("copy-icon")).action {
                         mdString.putToSystemClipboard()
                     }
                 )

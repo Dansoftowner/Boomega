@@ -22,10 +22,9 @@ import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.TabItem
 import com.dansoftware.boomega.gui.google.GoogleBooksJoinView
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.Volume
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Node
 
 class GoogleBookJoinTab(
@@ -37,7 +36,7 @@ class GoogleBookJoinTab(
     i18n("google.book.join.tab.title")
 ) {
     override val graphic: Node
-        get() = MaterialDesignIconView(MaterialDesignIcon.LINK)
+        get() = icon("link-icon")
 
     override val content: Node
         get() = GoogleBooksJoinView(context, record) {

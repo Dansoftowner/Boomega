@@ -23,14 +23,14 @@ import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.recordview.RecordTable;
 import com.dansoftware.boomega.gui.recordview.dock.DockView;
 import com.dansoftware.boomega.i18n.I18N;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
+
+import static com.dansoftware.boomega.gui.util.Icons.icon;
 
 public class GoogleBookConnectionDock extends DockView<GoogleBookConnectionView> {
 
@@ -60,7 +60,7 @@ public class GoogleBookConnectionDock extends DockView<GoogleBookConnectionView>
         button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         button.disableProperty().bind(getContent().isEmpty());
         button.setPadding(new Insets(0));
-        button.setGraphic(new MaterialDesignIconView(MaterialDesignIcon.DELETE));
+        button.setGraphic(icon("delete-icon"));
         button.setTooltip(new Tooltip(I18N.getValue("google.books.dock.remove_connection")));
         button.getStyleClass().add("remove-button");
         button.setOnAction(event -> getContent().removeConnectionRequest());

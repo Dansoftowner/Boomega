@@ -22,11 +22,10 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.ThemeMeta
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.ReflectionUtils
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.scene.Node
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Slider
@@ -36,7 +35,7 @@ import org.slf4j.LoggerFactory
 
 class AppearancePane(preferences: Preferences) : PreferencesPane(preferences) {
     override val title = I18N.getValue("preferences.tab.appearance")
-    override val graphic: Node = MaterialDesignIconView(MaterialDesignIcon.FORMAT_PAINT)
+    override val graphic: Node = icon("paint-icon")
 
     override fun buildContent(): Content = object : Content() {
         init {

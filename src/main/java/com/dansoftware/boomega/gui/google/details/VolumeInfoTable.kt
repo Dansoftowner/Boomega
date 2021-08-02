@@ -18,14 +18,13 @@
 
 package com.dansoftware.boomega.gui.google.details
 
-import com.dansoftware.boomega.gui.control.FixedFontMaterialDesignIconView
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.control.PropertyTable
 import com.dansoftware.boomega.gui.control.ReadOnlyRating
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.Volume
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.beans.property.*
 import javafx.scene.control.Label
 import javafx.scene.control.Tooltip
@@ -92,11 +91,11 @@ class VolumeInfoTable(volume: ObjectProperty<Volume>) : PropertyTable() {
         private fun updateUI() {
             children.setAll(HBox(5.0, *when {
                 type.get() == Volume.VolumeInfo.MAGAZINE -> arrayOf(
-                    FixedFontMaterialDesignIconView(MaterialDesignIcon.NEWSPAPER, 17.0),
+                    icon("newspaper-icon").apply { style = "-fx-font-size: 17 !important;" },
                     StackPane(Label(I18N.getValue("google.books.magazine")))
                 )
                 else -> arrayOf(
-                    FixedFontMaterialDesignIconView(MaterialDesignIcon.BOOK, 17.0),
+                    icon("book-icon").apply { style = "-fx-font-size: 17 !important;" },
                     StackPane(Label(I18N.getValue("google.books.book")))
                 )
             }))

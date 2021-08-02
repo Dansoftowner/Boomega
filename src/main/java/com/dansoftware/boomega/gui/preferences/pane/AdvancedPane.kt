@@ -20,12 +20,11 @@ package com.dansoftware.boomega.gui.preferences.pane
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.main.ApplicationRestart
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.concurrent.Task
 import javafx.scene.Node
 import javafx.scene.control.Button
@@ -37,7 +36,7 @@ import org.slf4j.LoggerFactory
 class AdvancedPane(private val context: Context, preferences: Preferences) : PreferencesPane(preferences) {
 
     override val title: String = I18N.getValue("preferences.tab.advanced")
-    override val graphic: Node = MaterialDesignIconView(MaterialDesignIcon.PALETTE_ADVANCED)
+    override val graphic: Node = icon("palette-advanced-icon")
 
     override fun buildContent(): Content =
         object : Content() {
@@ -61,7 +60,7 @@ class AdvancedPane(private val context: Context, preferences: Preferences) : Pre
             private fun buildResetButton() =
                 Button().apply {
                     contentDisplay = ContentDisplay.GRAPHIC_ONLY
-                    graphic = MaterialDesignIconView(MaterialDesignIcon.DELETE_FOREVER)
+                    graphic = icon("delete-forever-icon")
                     setOnAction {
                         context.showConfirmationDialog(
                             I18N.getValue("preferences.advanced.reset.confirm.title"),

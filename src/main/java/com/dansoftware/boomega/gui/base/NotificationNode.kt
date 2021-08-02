@@ -19,8 +19,6 @@
 package com.dansoftware.boomega.gui.base
 
 import com.dansoftware.boomega.gui.util.icon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.Hyperlink
@@ -48,10 +46,10 @@ class NotificationNode @JvmOverloads constructor(
     /**
      * Represents the three notification type
      */
-    enum class NotificationType(val icon: FontAwesomeIcon) {
-        INFO(FontAwesomeIcon.INFO_CIRCLE),
-        WARNING(FontAwesomeIcon.WARNING),
-        ERROR(FontAwesomeIcon.CLOSE);
+    enum class NotificationType(val iconStyleClass: String) {
+        INFO("info-icon"),
+        WARNING("warning-circle-icon"),
+        ERROR("close-circle-icon");
     }
 
     /**
@@ -67,13 +65,12 @@ class NotificationNode @JvmOverloads constructor(
 
         init {
             styleClass.add("notification-node")
-            children.add(icon(type.icon))
+            children.add(icon(type.iconStyleClass))
             children.add(ContentPanel(text, message, hyperLinks))
             children.add(buildCloseButton())
         }
 
-        private fun buildCloseButton(): Node = icon(MaterialDesignIcon.CLOSE).apply {
-            styleClass.add("close-btn")
+        private fun buildCloseButton(): Node = icon("close-icon").apply {
             isVisible = false
 
             this@EntryPanel.setOnMouseEntered { isVisible = true }

@@ -1,7 +1,23 @@
+/*
+ * Boomega
+ * Copyright (C)  2021  Daniel Gyoerffy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dansoftware.boomega.gui.recordview.dock;
 
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -11,6 +27,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
+
+import static com.dansoftware.boomega.gui.util.Icons.icon;
 
 public abstract class DockView<T extends Node> extends VBox {
 
@@ -47,7 +65,7 @@ public abstract class DockView<T extends Node> extends VBox {
     }
 
     private Button buildLeftButton(SplitPane parent) {
-        Button btn = buildRearrangeButton(MaterialDesignIcon.ARROW_LEFT);
+        Button btn = buildRearrangeButton("arrow-left-icon");
         parent.getItems().addListener((ListChangeListener<? super Node>) modification -> {
             btn.setDisable(parent.getItems().size() < 2 || parent.getItems().indexOf(this) == 0);
         });
@@ -60,7 +78,7 @@ public abstract class DockView<T extends Node> extends VBox {
     }
 
     private Button buildRightButton(SplitPane parent) {
-        Button btn = buildRearrangeButton(MaterialDesignIcon.ARROW_RIGHT);
+        Button btn = buildRearrangeButton("arrow-right-icon");
         parent.getItems().addListener((ListChangeListener<? super Node>) modification -> {
             btn.setDisable(parent.getItems().size() < 2 || parent.getItems().indexOf(this) == parent.getItems().size() - 1);
         });
@@ -72,8 +90,8 @@ public abstract class DockView<T extends Node> extends VBox {
         return btn;
     }
 
-    private Button buildRearrangeButton(MaterialDesignIcon icon) {
-        var btn = new Button(null, new MaterialDesignIconView(icon));
+    private Button buildRearrangeButton(String iconStyleClass) {
+        var btn = new Button(null, icon(iconStyleClass));
         btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         btn.setPadding(new Insets(0));
         return btn;
