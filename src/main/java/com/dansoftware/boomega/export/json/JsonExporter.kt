@@ -20,11 +20,14 @@ package com.dansoftware.boomega.export.json
 
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.db.data.RecordProperty
+import com.dansoftware.boomega.db.data.ServiceConnection
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.export.ConfigurationPanel
 import com.dansoftware.boomega.gui.export.JsonConfigurationPanel
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.util.minus
+import com.dansoftware.boomega.util.set
 import com.google.gson.*
 import javafx.concurrent.Task
 import javafx.scene.Node
@@ -68,12 +71,20 @@ class JsonExporter : RecordExporter<JsonExportConfiguration> {
     }
 
     private class RecordSerializer(private val config: JsonExportConfiguration) : JsonSerializer<Record> {
+
+        private val internalGson = GsonBuilder()
+            .registerTypeAdapter(ServiceConnection::class.java, ServiceConnectionSerializer())
+            .create()
+
         override fun serialize(src: Record, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-            val serialized: JsonElement = Gson().toJsonTree(src)
+            val serialized = internalGson.toJsonTree(src) as JsonObject
 
             // removing data the user should not see
-            serialized.asJsonObject.remove("id")
-            serialized.asJsonObject.remove("serviceConnection")
+            serialized - "id"
+
+            // including service connection data depending on the configuration
+            if (!config.includeServiceConnection)
+                serialized - "serviceConnection"
 
             // we exclude the props that are not used with the given record's type
             val requiredProps = config.requiredFields.filter { src.type in it.typeScopes }
@@ -83,6 +94,14 @@ class JsonExporter : RecordExporter<JsonExportConfiguration> {
             propsToRemove.map(RecordProperty<*>::id).forEach(serialized.asJsonObject::remove)
 
             return serialized
+        }
+    }
+
+    private class ServiceConnectionSerializer() : JsonSerializer<ServiceConnection> {
+        override fun serialize(src: ServiceConnection, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            val jsonObject = JsonObject()
+            src.entries().forEach { jsonObject[it.first] = it.second }
+            return jsonObject
         }
     }
 }

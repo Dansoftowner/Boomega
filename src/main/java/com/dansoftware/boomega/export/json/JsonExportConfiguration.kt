@@ -21,7 +21,8 @@ package com.dansoftware.boomega.export.json
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 
 class JsonExportConfiguration : RecordExportConfiguration() {
-    var prettyPrinting: Boolean = true
-    var nonExecutableJson: Boolean = false
-    var serializeNulls: Boolean = false
+    var prettyPrinting = true
+    var nonExecutableJson = false
+    var serializeNulls = false
+    var includeServiceConnection = false
 }

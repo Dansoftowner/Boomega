@@ -50,6 +50,8 @@ class ServiceConnection {
 
     fun isEmpty() = infoMap.isEmpty()
 
+    fun entries(): List<Pair<String, String>> = infoMap.map { Pair(it.key, it.value.toString()) }
+
     fun copy() = ServiceConnection(HashMap(this.infoMap))
 
     companion object {
