@@ -47,3 +47,7 @@ fun ButtonType.typeEquals(other: ButtonType) = this.buttonData == other.buttonDa
 fun hyperLink(text: String, graphic: Node? = null, onAction: () -> Unit) = Hyperlink(text, graphic).apply {
     setOnAction { onAction() }
 }
+
+fun Node.styleClass(styleClass: String) = apply {
+    getStyleClass().add(styleClass)
+}

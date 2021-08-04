@@ -353,7 +353,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
                                 .map(Volume.VolumeInfo.ImageLinks::getThumbnail)
                                 .ifPresentOrElse(thumbnail -> {
                                     var icon = icon("image-icon");
-                                    icon.setStyle("-fx-font-size: 80 !important;");
+                                    icon.getStyleClass().add("thumbnail-place-holder");
                                     setGraphic(icon);
                                     ImageUtils.loadImage(thumbnail, image -> {
                                         if (volume.equals(getCurrentVolumeInfo())) {

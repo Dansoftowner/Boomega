@@ -457,7 +457,7 @@
 }
 
 .google-book-details-pane .thumbnail-place-holder {
-    -fx-icon-size: 50;
+    -fx-font-size: 50 !important;
 }
 
 .google-book-details-pane .description-area {
@@ -522,6 +522,10 @@
 
 .google-books-search-form .text-field {
     -fx-padding: 5 10 5 5;
+}
+
+.google-books-table .thumbnail-place-holder {
+    -fx-font-size: 80 !important;
 }
 
 /*******************************************************************************

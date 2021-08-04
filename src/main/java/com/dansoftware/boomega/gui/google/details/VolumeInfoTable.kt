@@ -91,11 +91,11 @@ class VolumeInfoTable(volume: ObjectProperty<Volume>) : PropertyTable() {
         private fun updateUI() {
             children.setAll(HBox(5.0, *when {
                 type.get() == Volume.VolumeInfo.MAGAZINE -> arrayOf(
-                    icon("newspaper-icon").apply { style = "-fx-font-size: 17 !important;" },
+                    icon("newspaper-icon"),
                     StackPane(Label(I18N.getValue("google.books.magazine")))
                 )
                 else -> arrayOf(
-                    icon("book-icon").apply { style = "-fx-font-size: 17 !important;" },
+                    icon("book-icon"),
                     StackPane(Label(I18N.getValue("google.books.book")))
                 )
             }))

@@ -25,6 +25,7 @@ import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.putToSystemClipboard
+import com.dansoftware.boomega.gui.util.styleClass
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.SystemBrowser
@@ -172,9 +173,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
             }
 
             private fun placeholder() {
-                children.setAll(icon("image-icon").apply {
-                    style = "-fx-font-size: 50 !important;"
-                })
+                children.setAll(icon("image-icon").styleClass("thumbnail-place-holder"))
             }
         }
     }
