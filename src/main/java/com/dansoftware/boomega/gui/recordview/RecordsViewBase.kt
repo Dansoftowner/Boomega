@@ -37,6 +37,8 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.text.Collator
+import java.util.*
 import java.util.stream.Collectors
 
 class RecordsViewBase(

@@ -17,18 +17,19 @@
  */
 
 @file:JvmName("ControlUtils")
+@file:Suppress("NOTHING_TO_INLINE")
 
 package com.dansoftware.boomega.gui.util
 
 import javafx.collections.ObservableList
 import javafx.scene.Node
-import javafx.scene.control.ButtonType
-import javafx.scene.control.ComboBox
-import javafx.scene.control.Hyperlink
-import javafx.scene.control.TableView
+import javafx.scene.control.*
 
 inline val <T> TableView<T>.selectedItems: ObservableList<T>
     get() = selectionModel.selectedItems
+
+inline fun <T> ChoiceBox<T>.selectedItemProperty() =
+    selectionModel.selectedItemProperty()
 
 fun <T> ComboBox<T>.refresh() {
     val items: ObservableList<T> = this.items

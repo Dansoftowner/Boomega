@@ -24,6 +24,7 @@ import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.keyCombination
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.binding.Bindings
 import javafx.collections.ListChangeListener
 import javafx.scene.control.ContextMenu
@@ -74,7 +75,7 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
             .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }
 
     private fun buildExportItem() =
-        Menu("Export", icon("file-export-icon")).apply { // TODO: i18n
+        Menu(i18n("record.context_menu.export"), icon("file-export-icon")).apply { // TODO: i18n
             items.addAll(
                 SupportedExporters.map { exporter ->
                     MenuItem(exporter.name, exporter.icon).action {

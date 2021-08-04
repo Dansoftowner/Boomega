@@ -40,6 +40,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
+
 public abstract class BaseTable<S> extends TableView<S> {
 
     private final ObjectProperty<Consumer<S>> onItemDoubleClicked;
@@ -219,6 +221,11 @@ public abstract class BaseTable<S> extends TableView<S> {
 
         public boolean isI18N() {
             return options.contains(INTERNATIONALIZED);
+        }
+
+        @Override
+        public String toString() {
+            return isI18N() ? i18n(text) : text;
         }
 
         /**

@@ -67,10 +67,11 @@ class RecordsView(
     private val baseItems: ObservableList<Record> = FXCollections.observableArrayList()
 
     private val recordsViewBase = RecordsViewBase(context, database, baseItems)
-    private val toolbar = RecordsViewToolbar(this)
+    private val toolbar = RecordsViewToolbar(context, this, preferences)
 
     val table: RecordTable
         get() = recordsViewBase.table
+
     val docks: ObservableList<Dock>
         get() = recordsViewBase.docks
 
@@ -81,6 +82,24 @@ class RecordsView(
         get() = recordsViewBase.isFindDialogVisible
         set(value) {
             recordsViewBase.isFindDialogVisible = value
+        }
+
+    var dockInfo: RecordsViewBase.DockInfo
+        get() = recordsViewBase.dockInfo
+        set(value) {
+            recordsViewBase.dockInfo = value
+        }
+
+    var sortingComparator: Comparator<String>
+        get() = table.sortingComparator
+        set(value) {
+            table.sortingComparator = value
+        }
+
+    var columnsInfo: RecordsViewBase.TableColumnsInfo
+        get() = recordsViewBase.columnsInfo
+        set(value) {
+            recordsViewBase.columnsInfo = value
         }
 
     init {
@@ -117,23 +136,15 @@ class RecordsView(
     }
 
     private fun readColumnConfigurations() {
-        recordsViewBase.columnsInfo = preferences.get(colConfigKey)
-        toolbar.updateColumnChooser()
+        recordsViewBase.columnsInfo = preferences.get(COL_CONFIG_KEY)
     }
 
     private fun readSortAbcConfigurations() {
-        toolbar.abcLocale = preferences.get(abcConfigKey)
+
     }
 
     private fun readDockConfigurations() {
-        recordsViewBase.dockInfo = preferences.get(docksConfigKey)
-    }
-
-    fun writeConfig() {
-        preferences.editor()
-            .put(colConfigKey, recordsViewBase.columnsInfo)
-            .put(abcConfigKey, toolbar.abcLocale)
-            .put(docksConfigKey, recordsViewBase.dockInfo)
+        recordsViewBase.dockInfo = preferences.get(DOCKS_CONFIG_KEY)
     }
 
     fun refresh() {
@@ -360,7 +371,7 @@ class RecordsView(
     companion object {
         private val logger = LoggerFactory.getLogger(RecordsView::class.java)
 
-        private val colConfigKey =
+        val COL_CONFIG_KEY =
             PreferenceKey(
                 "books.view.table.columns",
                 RecordsViewBase.TableColumnsInfo::class.java,
@@ -368,14 +379,14 @@ class RecordsView(
                 RecordsViewBase.TableColumnsInfo.Companion::byDefault
             )
 
-        private val docksConfigKey =
+        val DOCKS_CONFIG_KEY =
             PreferenceKey(
                 "books.view.dock.info",
                 RecordsViewBase.DockInfo::class.java,
                 RecordsViewBase.DockInfo.Companion::defaultInfo
             )
 
-        private val abcConfigKey =
+        val ABC_CONFIG_KEY =
             PreferenceKey(
                 "books.view.module.table.abcsort",
                 Locale::class.java,

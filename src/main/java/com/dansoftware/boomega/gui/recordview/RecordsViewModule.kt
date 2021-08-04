@@ -51,7 +51,7 @@ class RecordsViewModule(
 
     override fun destroy(): Boolean = true.also {
         logger.debug("Module closed. Writing configurations...")
-        content.get()?.writeConfig()
+        //content.get()?.writeConfig()
         content.set(null)
     }
 

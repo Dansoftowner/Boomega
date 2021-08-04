@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 import static com.dansoftware.boomega.gui.util.Icons.icon;
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
 
 public enum Dock {
 
@@ -101,6 +102,11 @@ public enum Dock {
      * @return the icon of the dock
      */
     public abstract Node getGraphic();
+
+    @Override
+    public String toString() {
+        return i18n(i18n);
+    }
 
     @Nullable
     public static Dock parse(Class<? extends DockView<?>> dockViewClass) {

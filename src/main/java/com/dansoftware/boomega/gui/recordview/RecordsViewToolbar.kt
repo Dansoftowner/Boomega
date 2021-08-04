@@ -18,16 +18,23 @@
 
 package com.dansoftware.boomega.gui.recordview
 
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.export.SupportedExporters
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.BiToolBar
+import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationOverlay
+import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationPanel
 import com.dansoftware.boomega.gui.recordview.dock.Dock
+import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.emptyBinding
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.selectedItems
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
-import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ListChangeListener
@@ -43,53 +50,40 @@ import java.util.function.Supplier
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
-class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
-
-    private val abcLocaleProp: ObjectProperty<Locale> = SimpleObjectProperty<Locale>(Locale.getDefault())
-    var abcLocale: Locale
-        get() = abcLocaleProp.get()
-        set(value) {
-            abcLocaleProp.set(value)
-        }
-
-    private lateinit var columnChooserItem: MenuButton
+class RecordsViewToolbar(
+    private val context: Context,
+    private val view: RecordsView,
+    private val preferences: Preferences
+) : BiToolBar() {
 
     init {
         buildUI()
     }
 
-    fun updateColumnChooser() {
-        columnChooserItem.items.stream()
-            .map { it as TableColumnMenuItem }
-            .forEach { it.isSelected = view.table.isColumnShown(it.columnType) }
-    }
-
     private fun buildUI() {
-        buildRightSide()
         buildLeftSide()
-    }
-
-    private fun buildRightSide() {
-        rightItems.add(buildSearchItem())
-        rightItems.add(buildSeparator())
-        rightItems.add(buildInsertItem())
-        rightItems.add(buildDeleteItem())
-        rightItems.add(buildSeparator())
-        rightItems.add(buildPasteItem())
-        rightItems.add(buildCutItem())
-        rightItems.add(buildCopyItem())
-        rightItems.add(buildSeparator())
-        rightItems.add(buildCountItem())
-        rightItems.add(buildSeparator())
-        rightItems.add(buildScrollToTopItem())
-        rightItems.add(buildRefreshItem())
+        buildRightSide()
     }
 
     private fun buildLeftSide() {
-        leftItems.add(buildColumnChooserItem().also { columnChooserItem = it })
-        leftItems.add(buildColumnResetItem())
-        leftItems.add(buildABCChooserItem())
-        leftItems.add(buildDockSelectionItem())
+        leftItems.add(buildRefreshItem())
+        leftItems.add(Separator())
+        leftItems.add(buildCountItem())
+        leftItems.add(Separator())
+        leftItems.add(buildExportItem())
+        leftItems.add(Separator())
+        leftItems.add(buildCopyItem())
+        leftItems.add(buildCutItem())
+        leftItems.add(buildPasteItem())
+        leftItems.add(Separator())
+        leftItems.add(buildDeleteItem())
+        leftItems.add(buildInsertItem())
+        leftItems.add(Separator())
+        leftItems.add(buildSearchItem())
+    }
+
+    private fun buildRightSide() {
+        rightItems.add(buildOptionsItem())
     }
 
     private fun buildSearchItem() =
@@ -118,7 +112,7 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
         buildToolbarItem("delete-icon", "record.delete") {
             view.removeSelectedItems()
         }.apply {
-            disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
+            disableProperty().bind(view.table.selectedItems.emptyBinding())
         }
 
     private fun buildPasteItem() =
@@ -132,63 +126,35 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
         buildToolbarItem("copy-icon", "record.copy") {
             view.copySelectedToClipboard()
         }.apply {
-            disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
+            disableProperty().bind(view.table.selectedItems.emptyBinding())
         }
 
     private fun buildCutItem() =
         buildToolbarItem("cut-icon", "record.cut") {
             view.cutSelectedToClipboard()
         }.apply {
-            disableProperty().bind(Bindings.isEmpty(view.table.selectionModel.selectedItems))
+            disableProperty().bind(view.table.selectedItems.emptyBinding())
         }
 
     private fun buildRefreshItem() =
         buildToolbarItem("reload-icon", "page.reload") { view.refresh() }
 
-
-    private fun buildScrollToTopItem() =
-        buildToolbarItem("border-top-icon", "record.table.scrolltop") { view.scrollToTop() }
-
-
-    private fun buildColumnChooserItem() =
-        MenuButton(
-            I18N.getValue("record.table.preferred.columns"),
-            icon("columns-icon")
-        ).apply {
-            RecordTable.columns()
-                .map(::TableColumnMenuItem)
-                .forEach(this.items::add)
-        }
-
-    private fun buildColumnResetItem() =
-        buildToolbarItem("table-icon", "record.table.colreset") {
-            view.table.buildDefaultColumns()
-            columnChooserItem.items.stream()
-                .map { it as TableColumnMenuItem }
-                .forEach { it.isSelected = it.columnType.isDefaultVisible }
-        }
-
-    private fun buildABCChooserItem() =
-        MenuButton(I18N.getValue("record.table.abc")).also { toolbarItem ->
-            toolbarItem.isDisable = true
-            ToggleGroup().let { toggleGroup ->
-                I18N.getAvailableCollators().forEach { locale, collatorSupplier ->
-                    toolbarItem.items.add(AbcMenuItem(locale, collatorSupplier, toggleGroup))
+    private fun buildExportItem() =
+        MenuButton(null, icon("file-export-icon")).apply {
+            tooltip = Tooltip(i18n("record.export"))
+            disableProperty().bind(view.table.selectedItems.emptyBinding())
+            items.addAll(SupportedExporters.map {
+                MenuItem(it.name, it.icon).action { _ ->
+                    view.exportSelected(it)
                 }
-            }
+            })
         }
 
-    private fun buildDockSelectionItem() =
-        MenuButton(null, icon("dock-bottom-icon")).apply {
-            //TODO: Tooltip
-            items.addAll(
-                Stream.of(*Dock.values())
-                    .map(::DockMenuItem)
-                    .collect(Collectors.toList())
-            )
-        }
 
-    private fun buildSeparator() = Separator(Orientation.VERTICAL)
+    private fun buildOptionsItem() =
+        buildToolbarItem("settings-icon", "record.panel_config") {
+            context.showOverlay(RecordsViewConfigurationOverlay(view, preferences))
+        }
 
     private fun buildToolbarItem(
         iconStyleClass: String,
@@ -212,74 +178,5 @@ class RecordsViewToolbar(private val view: RecordsView) : BiToolBar() {
     ): Button = Button(null, graphic).apply {
         onAction = onClick
         tooltip = Tooltip(I18N.getValue(i18nTooltip))
-    }
-
-    private inner class DockMenuItem(val dock: Dock) :
-        CheckMenuItem(I18N.getValue(dock.i18nKey)) {
-
-        init {
-            graphic = dock.graphic
-            initListener()
-            setBehaviourPolicy()
-        }
-
-        private fun initListener() {
-            view.docks.addListener(ListChangeListener {
-                isSelected = view.docks.contains(dock)
-            })
-        }
-
-        private fun setBehaviourPolicy() {
-            setOnAction {
-                when {
-                    this.isSelected.not() ->
-                        view.docks.setAll(
-                            view.docks.stream()
-                                .filter { it !== dock }
-                                .collect(Collectors.toList())
-                        )
-                    else -> view.docks.add(dock)
-                }
-            }
-        }
-    }
-
-    private inner class TableColumnMenuItem(val columnType: BaseTable.ColumnType) :
-        CheckMenuItem(if (columnType.isI18N) I18N.getValue(columnType.text) else columnType.text) {
-
-        init {
-            setOnAction {
-                when {
-                    this.isSelected.not() -> view.table.removeColumnType(columnType)
-                    else -> {
-                        view.table.removeAllColumns()
-                        Platform.runLater {
-                            columnChooserItem.items.stream()
-                                .map { it as TableColumnMenuItem }
-                                .filter(TableColumnMenuItem::isSelected)
-                                .map(TableColumnMenuItem::columnType)
-                                .forEach(view.table::addColumnType)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private inner class AbcMenuItem(
-        val locale: Locale,
-        collatorSupplier: Supplier<Collator>,
-        toggleGroup: ToggleGroup
-    ) : RadioMenuItem(locale.displayLanguage, icon("translate-icon")) {
-        init {
-            this.selectedProperty()
-                .bindBidirectional(SimpleBooleanProperty().apply { bind(abcLocaleProp.isEqualTo(locale)) })
-            this.setOnAction {
-                @Suppress("UNCHECKED_CAST")
-                view.table.sortingComparator = collatorSupplier.get() as Comparator<String>
-                abcLocaleProp.set(locale)
-            }
-            setToggleGroup(toggleGroup)
-        }
     }
 }
