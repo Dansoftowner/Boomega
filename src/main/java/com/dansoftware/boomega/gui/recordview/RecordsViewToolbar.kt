@@ -26,10 +26,7 @@ import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationOverlay
 import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationPanel
 import com.dansoftware.boomega.gui.recordview.dock.Dock
-import com.dansoftware.boomega.gui.util.action
-import com.dansoftware.boomega.gui.util.emptyBinding
-import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.gui.util.selectedItems
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import javafx.application.Platform
@@ -57,6 +54,7 @@ class RecordsViewToolbar(
 ) : BiToolBar() {
 
     init {
+        styleClass("records-view-toolbar")
         buildUI()
     }
 
@@ -141,6 +139,7 @@ class RecordsViewToolbar(
 
     private fun buildExportItem() =
         MenuButton(null, icon("file-export-icon")).apply {
+            styleClass("options-item")
             tooltip = Tooltip(i18n("record.export"))
             disableProperty().bind(view.table.selectedItems.emptyBinding())
             items.addAll(SupportedExporters.map {
