@@ -424,6 +424,9 @@
     -fx-text-fill: #d4d4d4;
 }
 
+.database-view .tab-view .module-view .tile:hover {
+    -fx-background-color: #38383b;
+}
 
 /*******************************************************************************
  *                                                                             *

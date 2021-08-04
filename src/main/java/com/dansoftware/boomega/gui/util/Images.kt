@@ -23,6 +23,7 @@ package com.dansoftware.boomega.gui.util
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import java.io.BufferedInputStream
 import java.util.function.Consumer
 import kotlin.reflect.KClass
@@ -47,3 +48,5 @@ fun loadImage(resource: String, onImageReady: Consumer<Image>) {
         }
     })
 }
+
+fun Image.asView() = ImageView(this)

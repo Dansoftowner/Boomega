@@ -643,8 +643,8 @@
 
 .database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab {
     -fx-padding: 0.083333em 0.8em 0.0769em 0.8em;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
     -fx-background-color: transparent;
 }
 
@@ -656,12 +656,12 @@
     -fx-opacity: 0.65;
 }
 
-.database-view .tab-view .module-view .label-area {
-    -fx-opacity: .6;
+.database-view .tab-view .module-view .label-area .image-view {
+    -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_64px.png");
 }
 
-.database-view .tab-view .module-view .label-area .label {
-    -fx-font-family: "JetBrains Mono";
+.database-view .tab-view .module-view .label-area * {
+    -fx-font-family: "Jetbrains Mono";
     -fx-font-size: 40;
 }
 
@@ -669,43 +669,59 @@
     -fx-font-size: 80 !important;
 }
 
-.tile-pagination {
+.database-view .tab-view .module-view .tile-pagination {
     -fx-padding: 0 0 4em 0;
     -fx-arrows-visible: false;
     -fx-page-information-visible: false;
     -fx-tooltip-visible: false;
 }
 
-.tile-pagination:one-page {
+.database-view .tab-view .module-view .tile-pagination:one-page {
     -fx-padding: 0;
 }
 
-.tile-pagination:one-page > .pagination-control {
+.database-view .tab-view .module-view .tile-pagination:one-page > .pagination-control {
     -fx-opacity: 0;
 }
 
-.tile-pagination > .pagination-control > .control-box {
+.database-view .tab-view .module-view .tile-pagination > .pagination-control > .control-box {
     -fx-spacing: .25em;
 }
 
-.tile-grid {
+.database-view .tab-view .module-view .tile-grid {
     -fx-background-color: transparent;
-    -fx-hgap: 20;
+    -fx-hgap: 10;
     -fx-vgap: 20;
 }
 
-.tile {
-    -fx-padding: 1.2em;
-    -fx-pref-width: 15.8em;
+.database-view .tab-view .module-view .tile {
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-padding: 15 10 0 10;
+    -fx-pref-width: 9em;
     -fx-pref-height: 9.3434588481230382312016806204436em;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 10, 0.12, -1, 2);
 }
 
-.tile .glyph-icon {
-    -fx-font-size: 20 !important;
+.database-view .tab-view .module-view .tile .button {
+    -fx-pref-width: 6.3em;
+    -fx-cursor: HAND;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 10, 0.12, -1, 2);
 }
 
-.database-view .context-menu {
+.database-view .tab-view .module-view .tile .button .glyph-icon {
+    -fx-font-size: 25 !important;
+}
+
+.database-view .tab-view .module-view .tile .label {
+    -fx-padding: inherit 5 inherit 5;
+    -fx-font-size: 0.8em;
+}
+
+.database-view .tab-view .module-view .database-view .context-menu {
     -fx-font-size: 0.998em;
 }
 

@@ -20,14 +20,12 @@ package com.dansoftware.boomega.gui.databaseview
 
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.onScenePresent
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import javafx.css.PseudoClass
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.control.Button
-import javafx.scene.control.ContentDisplay
-import javafx.scene.control.Label
-import javafx.scene.control.Pagination
+import javafx.scene.control.*
+import javafx.scene.image.ImageView
 import javafx.scene.layout.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -67,11 +65,14 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
             Group(
                 HBox(10.0).apply {
                     styleClass.add("label-area")
-                    children.add(StackPane(icon("modules-icon")))
-                    children.add(StackPane(Label(I18N.getValue("database_view.modules"))))
+                    children.add(StackPane(ImageView()))
+                    children.add(StackPane(buildAppLabel()))
                 }
             )
         )
+
+    private fun buildAppLabel() =
+        Label(System.getProperty("app.name"))
 
     private fun buildPagination() = Pagination().apply {
         VBox.setVgrow(this, Priority.ALWAYS)
@@ -99,16 +100,9 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
                 }
             }
 
-    private fun buildTiles(): List<Node> =
-        view.modules.map(this::buildTile)
+    private fun buildTiles(): List<Node> = view.modules.map(::buildTile)
 
-    private fun buildTile(module: Module) =
-        Button(module.name, module.icon).apply {
-            contentDisplay = ContentDisplay.TOP
-            styleClass.add("tile")
-            id = "tile-${module.id}"
-            setOnAction { view.openTab(module.getTabItem()) }
-        }
+    private fun buildTile(module: Module) = Tile(view, module)
 
     companion object {
 
@@ -123,9 +117,34 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
         fun getTabItem(context: DatabaseView) =
             TabItem(
                 "moduleview",
-                I18N.getValue("database_view.modules"),
+                i18n("database_view.modules"),
                 { icon("modules-icon") }) {
                 ModuleView(context)
             }
+    }
+
+    private class Tile(val view: DatabaseView, val module: Module) : VBox() {
+        init {
+            styleClass.add("tile")
+            id = "tile-${module.id}"
+            spacing = 10.0
+            buildUI()
+        }
+
+        private fun buildUI() {
+            children.add(StackPane(buildButton()))
+            children.add(StackPane(buildLabel()))
+        }
+
+        private fun buildLabel() = Label(module.name).apply {
+            tooltip = Tooltip(module.name)
+        }
+
+        private fun buildButton() = Button().apply {
+            contentDisplay = ContentDisplay.GRAPHIC_ONLY
+            graphic = module.icon
+            tooltip = Tooltip(module.name)
+            setOnAction { view.openTab(module.getTabItem()) }
+        }
     }
 }
