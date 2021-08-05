@@ -62,7 +62,9 @@ private val iconPack = mapOf<String, () -> Text>(
     "arrow-up-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.ARROW_UP),
     "arrow-down-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.ARROW_DOWN),
     "arrow-left-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.ARROW_LEFT),
+    "arrows-left-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.STEP_BACKWARD_2),
     "arrow-right-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.ARROW_RIGHT),
+    "arrows-right-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.STEP_FORWARD_2),
     "view-list-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.VIEW_LIST),
     "regex-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.REGEX),
     "keyboard-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.KEYBOARD),
@@ -97,6 +99,7 @@ private val iconPack = mapOf<String, () -> Text>(
     "star-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.STAR),
     "palette-advanced-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.PALETTE_ADVANCED),
     "details-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.DETAILS),
+    "tune-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.TUNE),
 )
 
 fun icon(identifier: String): Text = iconPack[identifier]?.let { it() } ?: Text().apply {

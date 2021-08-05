@@ -41,7 +41,7 @@ public enum Dock {
                                         @NotNull Database database,
                                         @NotNull RecordTable table,
                                         @NotNull SplitPane splitPane) {
-            return new RecordEditorDock(context, database, splitPane, table);
+            return new RecordEditorDock(this, context, database, splitPane, table);
         }
 
         @Override
@@ -57,7 +57,7 @@ public enum Dock {
                                         @NotNull RecordTable table,
                                         @NotNull SplitPane splitPane) {
 
-            return new GoogleBookConnectionDock(context, database, splitPane, table);
+            return new GoogleBookConnectionDock(this, context, database, splitPane, table);
         }
 
         @Override

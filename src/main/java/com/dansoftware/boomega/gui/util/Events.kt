@@ -20,15 +20,23 @@
 
 package com.dansoftware.boomega.gui.util
 
+import com.dansoftware.boomega.util.invoke
+
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.scene.Node
 import javafx.scene.Scene
+import javafx.scene.control.Control
+import javafx.scene.control.Skin
 import javafx.stage.Window
 import java.util.function.Consumer
 
 fun Node.onWindowPresent(action: Consumer<Window>) {
-    this.scene?.window?.also { action.accept(it) }
+    onWindowPresent { action(it) }
+}
+
+inline fun Node.onWindowPresent(crossinline action: (Window) -> Unit) {
+    this.scene?.window?.also { action(it) }
         ?: onScenePresent {
             it.windowProperty().addListener(object : ChangeListener<Window> {
                 override fun changed(
@@ -37,7 +45,7 @@ fun Node.onWindowPresent(action: Consumer<Window>) {
                     newValue: Window?
                 ) {
                     newValue?.let {
-                        action.accept(newValue)
+                        action(newValue)
                         observable.removeListener(this)
                     }
                 }
@@ -45,7 +53,7 @@ fun Node.onWindowPresent(action: Consumer<Window>) {
         }
 }
 
-fun Node.onScenePresent(action: (Scene) -> Unit) {
+inline fun Node.onScenePresent(crossinline action: (Scene) -> Unit) {
     this.scene?.also { action(it) }
         ?: sceneProperty().addListener(object : ChangeListener<Scene> {
             override fun changed(observable: ObservableValue<out Scene>, oldValue: Scene?, newValue: Scene?) {
@@ -55,4 +63,15 @@ fun Node.onScenePresent(action: (Scene) -> Unit) {
                 }
             }
         })
+}
+
+inline fun Control.onSkinPresent(crossinline action: (Skin<*>) -> Unit) {
+    skinProperty().addListener(object : ChangeListener<Skin<*>> {
+        override fun changed(observable: ObservableValue<out Skin<*>>, oldValue: Skin<*>?, newValue: Skin<*>?) {
+            newValue?.let {
+                action(it)
+                observable.removeListener(this)
+            }
+        }
+    })
 }

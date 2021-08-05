@@ -139,4 +139,8 @@ public class I18N {
             add(null);
         }}).get(0));
     }
+
+    public static Optional<Collator> getABCCollator(@Nullable Locale locale) {
+        return getLanguagePackForLocale(locale).map(LanguagePack::getABCCollator);
+    }
 }

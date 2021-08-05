@@ -25,28 +25,34 @@ import com.dansoftware.boomega.gui.recordview.RecordsView
 import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.ABC_CONFIG_KEY
 import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.COL_CONFIG_KEY
 import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.DOCKS_CONFIG_KEY
-import com.dansoftware.boomega.gui.recordview.RecordsViewBase
 import com.dansoftware.boomega.gui.recordview.dock.Dock
-import com.dansoftware.boomega.gui.util.selectedItemProperty
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.invoke
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import javafx.collections.ListChangeListener
 import javafx.geometry.Insets
+import javafx.scene.Node
+import javafx.scene.control.Button
 import javafx.scene.control.ChoiceBox
-import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
+import javafx.scene.control.Tooltip
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 import org.controlsfx.control.ListSelectionView
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.text.Collator
 import java.util.*
-import java.util.function.Supplier
 
 class RecordsViewConfigurationPanel(private val view: RecordsView, private val preferences: Preferences) : GridPane() {
 
     init {
         styleClass.add(JMetroStyleClass.BACKGROUND)
-        padding = Insets(5.0)
+        styleClass.add("records-view-config-panel")
+        padding = Insets(10.0, 20.0, 10.0, 20.0)
+        VBox.setVgrow(this, Priority.ALWAYS)
         buildUI()
     }
 
@@ -59,49 +65,94 @@ class RecordsViewConfigurationPanel(private val view: RecordsView, private val p
 
     private fun buildABCChooserMenu() = ChoiceBox<Locale>().apply {
         setHgrow(this, Priority.ALWAYS)
-        I18N.getAvailableCollators().forEach { locale, getCollator ->
-            items.add(locale)
-            selectedItemProperty().addListener { _, _, selectedItem ->
-                if (selectedItem == locale) {
-                    onABCSelection(locale, getCollator)
-                }
-            }
+        maxWidth = Double.MAX_VALUE
+        items.addAll(I18N.getAvailableCollators().map { it.key })
+        selectedItem = preferences[ABC_CONFIG_KEY]
+        valueConvertingPolicy(Locale::getDisplayLanguage, Locale::forLanguageTag)
+        selectedItemProperty().addListener { _, _, selected ->
+            onABCSelection(
+                selected,
+                I18N.getABCCollator(selected).get()
+            )
         }
     }
 
-    private fun buildDockSelection() = ListSelectionView<Dock>().apply {
+    private fun <T> buildListSelection() = ListSelectionView<T>().apply {
         setVgrow(this, Priority.ALWAYS)
         setHgrow(this, Priority.ALWAYS)
+
+        sourceHeader = Label("Available") // TODO: i18n
+        targetHeader = Label("Selected") // TODO: i18n
+
+        fun Button.graphic(graphic: Node) = apply {
+            graphicProperty().unbind()
+            graphicProperty().set(graphic)
+        }
+
+        fun Button.tooltip(value: String) = apply {
+            tooltipProperty().unbind()
+            tooltipProperty().set(Tooltip(value))
+        }
+
+        onSkinPresent {
+            // TODO: i18n
+            lookup<Button>(".move-to-target-button")!!
+                .graphic(icon("arrow-right-icon"))
+                .tooltip("Move to target")
+            lookup<Button>(".move-to-target-all-button")!!
+                .graphic(icon("arrows-right-icon"))
+                .tooltip("Move all")
+            lookup<Button>(".move-to-source-button")!!
+                .graphic(icon("arrow-left-icon"))
+                .tooltip("Move to source")
+            lookup<Button>(".move-to-source-all-button")!!
+                .graphic(icon("arrows-left-icon"))
+                .tooltip("Move back all")
+        }
+
+    }
+
+    private fun buildDockSelection() = buildListSelection<Dock>().apply {
+        // initializing
         val targetElements = preferences[DOCKS_CONFIG_KEY].docks
         val srcElements = listOf(*Dock.values()) - targetElements
         targetItems.addAll(targetElements)
         sourceItems.addAll(srcElements)
-        targetItemsProperty().addListener { _, _, items ->
-            onDockSelection(items)
-        }
+        targetItems.addListener(ListChangeListener {
+            onDockSelection(targetItems.toList())
+        })
     }
 
-    private fun buildColumnSelection() = ListSelectionView<BaseTable.ColumnType>().apply {
+    private fun buildColumnSelection() = buildListSelection<BaseTable.ColumnType>().apply {
         setVgrow(this, Priority.ALWAYS)
         setHgrow(this, Priority.ALWAYS)
         val targetElements = preferences[COL_CONFIG_KEY].columnTypes
         val srcElements = RecordTable.columns() - targetElements
         targetItems.addAll(targetElements)
         sourceItems.addAll(srcElements)
-        targetItemsProperty().addListener { _, _, items ->
-            onColumnSelection(items)
-        }
+        targetItems.addListener(ListChangeListener {
+            onColumnSelection(targetItems.toList())
+        })
     }
 
     private fun onColumnSelection(items: List<BaseTable.ColumnType>) {
-        preferences.editor().put(COL_CONFIG_KEY, RecordsViewBase.TableColumnsInfo(items))
+        logger.debug("Column selection detected")
+        view.columnsInfo = RecordsView.TableColumnsInfo(items)
     }
 
     private fun onDockSelection(items: List<Dock>) {
-        preferences.editor().put(DOCKS_CONFIG_KEY, RecordsViewBase.DockInfo(items))
+        logger.debug("Dock selection detected")
+        view.dockInfo = RecordsView.DockInfo(items)
     }
 
-    private fun onABCSelection(locale: Locale, getCollator: Supplier<Collator>) {
-        preferences.editor().put(ABC_CONFIG_KEY, locale)
+    private fun onABCSelection(locale: Locale, collator: Collator) {
+        logger.debug("ABC selection detected")
+        CachedExecutor.submit { preferences.editor().put(ABC_CONFIG_KEY, locale) }
+        @Suppress("UNCHECKED_CAST")
+        view.sortingComparator = collator as Comparator<String>
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(RecordsViewConfigurationPanel::class.java)
     }
 }

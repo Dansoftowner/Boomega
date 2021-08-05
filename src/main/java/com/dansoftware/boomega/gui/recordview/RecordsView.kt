@@ -27,6 +27,7 @@ import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.RecordClipboard
+import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.util.*
@@ -66,14 +67,11 @@ class RecordsView(
     private val copyHandle = Any()
     private val baseItems: ObservableList<Record> = FXCollections.observableArrayList()
 
-    private val recordsViewBase = RecordsViewBase(context, database, baseItems)
+    private val recordsViewBase = RecordsViewBase(context, preferences, database, baseItems)
     private val toolbar = RecordsViewToolbar(context, this, preferences)
 
     val table: RecordTable
         get() = recordsViewBase.table
-
-    val docks: ObservableList<Dock>
-        get() = recordsViewBase.docks
 
     val findDialogVisibleProperty: BooleanProperty
         get() = recordsViewBase.findDialogVisibleProperty
@@ -84,10 +82,10 @@ class RecordsView(
             recordsViewBase.isFindDialogVisible = value
         }
 
-    var dockInfo: RecordsViewBase.DockInfo
-        get() = recordsViewBase.dockInfo
+    var dockInfo: DockInfo
+        get() = DockInfo(recordsViewBase.docksList)
         set(value) {
-            recordsViewBase.dockInfo = value
+            recordsViewBase.docksList = value.docks
         }
 
     var sortingComparator: Comparator<String>
@@ -96,10 +94,11 @@ class RecordsView(
             table.sortingComparator = value
         }
 
-    var columnsInfo: RecordsViewBase.TableColumnsInfo
-        get() = recordsViewBase.columnsInfo
+    var columnsInfo: TableColumnsInfo
+        get() = TableColumnsInfo(table.showingColumnTypes)
         set(value) {
-            recordsViewBase.columnsInfo = value
+            table.columns.clear()
+            value.columnTypes.forEach(table::addColumnType)
         }
 
     init {
@@ -129,37 +128,19 @@ class RecordsView(
         RecordContextMenu(this).applyOn(table)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun readConfigurations() {
-        readColumnConfigurations()
-        readSortAbcConfigurations()
-        readDockConfigurations()
+        columnsInfo = preferences.get(COL_CONFIG_KEY)
+        sortingComparator = I18N.getABCCollator(preferences.get(ABC_CONFIG_KEY)).get() as Comparator<String>
+        dockInfo = preferences.get(DOCKS_CONFIG_KEY)
     }
 
-    private fun readColumnConfigurations() {
-        recordsViewBase.columnsInfo = preferences.get(COL_CONFIG_KEY)
-    }
-
-    private fun readSortAbcConfigurations() {
-
-    }
-
-    private fun readDockConfigurations() {
-        recordsViewBase.dockInfo = preferences.get(DOCKS_CONFIG_KEY)
-    }
-
-    fun refresh() {
-        refresh { }
-    }
-
-    fun refresh(onSucceeded: () -> Unit) {
+    @JvmOverloads
+    fun refresh(onSucceeded: () -> Unit = {}) {
         loadRecords(onSucceeded)
     }
 
-    private fun loadRecords() {
-        loadRecords { }
-    }
-
-    private fun loadRecords(onSucceeded: () -> Unit) {
+    private fun loadRecords(onSucceeded: () -> Unit = {}) {
         CachedExecutor.submit(buildRecordsLoadTask(onSucceeded))
     }
 
@@ -183,14 +164,6 @@ class RecordsView(
 
     fun itemsCountProperty(): IntegerBinding =
         Bindings.size(baseItems)
-
-    fun scrollToTop() {
-        table.scrollTo(0)
-    }
-
-    fun setItems(items: List<Record?>) {
-        table.items.setAll(items)
-    }
 
     fun cutSelectedToClipboard() {
         cutItemsToClipboard(ArrayList(table.selectionModel.selectedItems))
@@ -309,7 +282,14 @@ class RecordsView(
             }
         }
 
+    /**
+     * Exports the selected table-items with the given [RecordExporter]
+     */
     fun <C : RecordExportConfiguration> exportSelected(exporter: RecordExporter<C>) {
+        export(exporter, table.selectedItems.map(Record::copy))
+    }
+
+    private fun <C : RecordExportConfiguration> export(exporter: RecordExporter<C>, items: List<Record>) {
         exporter.configurationPanel.show(context) { config ->
             val fileExplorer = FileChooser()
             fileExplorer.extensionFilters.add(
@@ -320,13 +300,12 @@ class RecordsView(
             )
             fileExplorer.showSaveDialog(context.contextWindow)?.let { file ->
                 config.outputStream = FileOutputStream(file)
-                val toExport = table.selectedItems.map(Record::copy)
-                val task = exporter.getTask(toExport, config).apply {
+                val task = exporter.getTask(items, config).apply {
                     onSucceeded {
                         context.stopProgress()
                         context.showInformationNotification(
                             i18n("record.export.notification.successful.title"),
-                            i18n("record.export.notification.successful.msg", toExport.size, exporter.contentType),
+                            i18n("record.export.notification.successful.msg", items.size, exporter.contentType),
                             Event::consume,
                             hyperLink(i18n("file.open_in_app")) { file.open() },
                             hyperLink(i18n("file.open_in_explorer")) { file.revealInExplorer() }
@@ -344,9 +323,35 @@ class RecordsView(
         }
     }
 
-    private class ColumnsInfoAdapter : ConfigAdapter<RecordsViewBase.TableColumnsInfo> {
+    companion object {
+        private val logger = LoggerFactory.getLogger(RecordsView::class.java)
+
+        val COL_CONFIG_KEY =
+            PreferenceKey(
+                "books.view.table.columns",
+                TableColumnsInfo::class.java,
+                ColumnsInfoAdapter(),
+                TableColumnsInfo.Companion::byDefault
+            )
+
+        val DOCKS_CONFIG_KEY =
+            PreferenceKey(
+                "books.view.dock.info",
+                DockInfo::class.java,
+                DockInfo.Companion::defaultInfo
+            )
+
+        val ABC_CONFIG_KEY =
+            PreferenceKey(
+                "books.view.module.table.abcsort",
+                Locale::class.java,
+                Locale::getDefault
+            )
+    }
+
+    private class ColumnsInfoAdapter : ConfigAdapter<TableColumnsInfo> {
         override fun serialize(
-            src: RecordsViewBase.TableColumnsInfo,
+            src: TableColumnsInfo,
             typeOfSrc: Type?,
             context: JsonSerializationContext?
         ): JsonElement =
@@ -361,36 +366,31 @@ class RecordsView(
             json: JsonElement,
             typeOfT: Type?,
             context: JsonDeserializationContext?
-        ): RecordsViewBase.TableColumnsInfo =
-            RecordsViewBase.TableColumnsInfo(
+        ): TableColumnsInfo =
+            TableColumnsInfo(
                 json.asJsonArray
                     .mapNotNull { RecordTable.columnById(it.asString).orElse(null) }
             )
     }
 
-    companion object {
-        private val logger = LoggerFactory.getLogger(RecordsView::class.java)
 
-        val COL_CONFIG_KEY =
-            PreferenceKey(
-                "books.view.table.columns",
-                RecordsViewBase.TableColumnsInfo::class.java,
-                ColumnsInfoAdapter(),
-                RecordsViewBase.TableColumnsInfo.Companion::byDefault
-            )
+    /**
+     * Used for storing the preferred table columns in the configurations.
+     */
+    class TableColumnsInfo(val columnTypes: List<BaseTable.ColumnType>) {
+        companion object {
+            fun byDefault() =
+                TableColumnsInfo(
+                    RecordTable.columns().stream()
+                        .filter(BaseTable.ColumnType::isDefaultVisible)
+                        .collect(Collectors.toList())
+                )
+        }
+    }
 
-        val DOCKS_CONFIG_KEY =
-            PreferenceKey(
-                "books.view.dock.info",
-                RecordsViewBase.DockInfo::class.java,
-                RecordsViewBase.DockInfo.Companion::defaultInfo
-            )
-
-        val ABC_CONFIG_KEY =
-            PreferenceKey(
-                "books.view.module.table.abcsort",
-                Locale::class.java,
-                Locale::getDefault
-            )
+    class DockInfo(val docks: List<Dock>) {
+        companion object {
+            fun defaultInfo() = DockInfo(listOf(*Dock.values()))
+        }
     }
 }

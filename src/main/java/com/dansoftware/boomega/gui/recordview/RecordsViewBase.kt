@@ -18,14 +18,18 @@
 
 package com.dansoftware.boomega.gui.recordview
 
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.RecordFindControl
+import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.COL_CONFIG_KEY
+import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.DOCKS_CONFIG_KEY
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.recordview.dock.DockView
 import com.dansoftware.boomega.gui.util.selectedItems
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
@@ -43,13 +47,13 @@ import java.util.stream.Collectors
 
 class RecordsViewBase(
     private val context: Context,
+    private val preferences: Preferences,
     private val database: Database,
     private val baseItems: ObservableList<Record>
 ) : SplitPane() {
 
     val table: RecordTable = buildBooksTable()
-    val docks: ObservableList<Dock> = buildDocksList()
-
+    private val docks: ObservableList<Dock> = buildDocksList()
     private val dockSplitPane: SplitPane = buildDockSplitPane()
 
     @get:JvmName("findDialogVisibleProperty")
@@ -81,16 +85,10 @@ class RecordsViewBase(
             findDialogVisibleProperty.set(value)
         }
 
-    var dockInfo: DockInfo
-        get() = DockInfo(dockSplitPane)
-        set(dockInfo) {
-            docks.setAll(dockInfo.docks)
-        }
-
-    var columnsInfo: TableColumnsInfo
-        get() = TableColumnsInfo(table.showingColumnTypes)
+    var docksList: List<Dock>
+        get() = dockSplitPane.items.filterIsInstance<DockView<*>>().mapNotNull(DockView<*>::getDockEnum)
         set(value) {
-            value.columnTypes.forEach(table::addColumnType)
+            docks.setAll(value)
         }
 
     init {
@@ -105,15 +103,17 @@ class RecordsViewBase(
 
     private fun buildBooksTable(): RecordTable =
         RecordTable(0).apply {
+            VBox.setVgrow(this, Priority.ALWAYS)
             items = baseItems
             selectedItems.addListener(ListChangeListener { dockSplitPaneVisibleProperty.update() })
-            VBox.setVgrow(this, Priority.ALWAYS)
+            columns.addListener(ListChangeListener { updateTableColumnsConfiguration() })
         }
 
     private fun buildDockSplitPane(): SplitPane =
         SplitPane().apply {
-            orientation = Orientation.HORIZONTAL
             setResizableWithParent(this, false)
+            orientation = Orientation.HORIZONTAL
+            items.addListener(ListChangeListener { updateDocksConfiguration() })
         }
 
     private fun buildRecordFindControl() =
@@ -165,28 +165,23 @@ class RecordsViewBase(
     private fun isDockSplitPaneNeeded(): Boolean =
         table.selectedItems.isEmpty().not().and(docks.isEmpty().not())
 
-
     /**
-     * Used for storing the preferred table columns in the configurations.
+     * Used for updating the docks configuration in case the order is changed.
      */
-    class TableColumnsInfo(val columnTypes: List<BaseTable.ColumnType>) {
-        companion object {
-            fun byDefault() =
-                TableColumnsInfo(
-                    RecordTable.columns().stream()
-                        .filter(BaseTable.ColumnType::isDefaultVisible)
-                        .collect(Collectors.toList())
-                )
+    private fun updateDocksConfiguration() {
+        val docks = docksList
+        CachedExecutor.submit {
+            preferences.editor()[DOCKS_CONFIG_KEY] = RecordsView.DockInfo(docks)
         }
     }
 
-    class DockInfo(val docks: List<Dock>) {
-        constructor(dockSplitPane: SplitPane) :
-                this(dockSplitPane.items.filterIsInstance<DockView<*>>().mapNotNull { Dock.parse(it.javaClass) })
-
-        companion object {
-            fun defaultInfo() =
-                DockInfo(listOf(*Dock.values()))
+    /**
+     * Used for updating the table columns configuration in case the order is changed.
+     */
+    private fun updateTableColumnsConfiguration() {
+        val columns = table.showingColumnTypes
+        CachedExecutor.submit {
+            preferences.editor()[COL_CONFIG_KEY] = RecordsView.TableColumnsInfo(columns)
         }
     }
 

@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.recordview.connection;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.recordview.RecordTable;
+import com.dansoftware.boomega.gui.recordview.dock.Dock;
 import com.dansoftware.boomega.gui.recordview.dock.DockView;
 import com.dansoftware.boomega.i18n.I18N;
 import javafx.geometry.Insets;
@@ -36,11 +37,13 @@ public class GoogleBookConnectionDock extends DockView<GoogleBookConnectionView>
 
     private static final String STYLE_CLASS = "google-book-dock";
 
-    public GoogleBookConnectionDock(@NotNull Context context,
+    public GoogleBookConnectionDock(@NotNull Dock dockEnum,
+                                    @NotNull Context context,
                                     @NotNull Database database,
                                     @NotNull SplitPane parent,
                                     @NotNull RecordTable table) {
         super(
+                dockEnum,
                 parent,
                 new ImageView(new Image("/com/dansoftware/boomega/image/util/google_12px.png")),
                 I18N.getValue("google.books.volume_information"),

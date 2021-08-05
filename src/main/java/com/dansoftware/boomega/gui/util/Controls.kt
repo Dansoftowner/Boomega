@@ -24,12 +24,32 @@ package com.dansoftware.boomega.gui.util
 import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.util.StringConverter
 
 inline val <T> TableView<T>.selectedItems: ObservableList<T>
     get() = selectionModel.selectedItems
 
+inline val <T> ListView<T>.selectedItems: ObservableList<T>
+    get() = selectionModel.selectedItems
+
+inline var <T> ChoiceBox<T>.selectedItem: T
+    get() = selectionModel.selectedItem
+    set(value) {
+        selectionModel.select(value)
+    }
+
 inline fun <T> ChoiceBox<T>.selectedItemProperty() =
     selectionModel.selectedItemProperty()
+
+inline fun <T> ChoiceBox<T>.valueConvertingPolicy(
+    crossinline toStringFun: (T) -> String,
+    crossinline fromStringFun: (String) -> T
+) {
+    converter = object : StringConverter<T>() {
+        override fun toString(obj: T) = toStringFun(obj)
+        override fun fromString(string: String) = fromStringFun(string)
+    }
+}
 
 fun <T> ComboBox<T>.refresh() {
     val items: ObservableList<T> = this.items
@@ -51,3 +71,6 @@ fun hyperLink(text: String, graphic: Node? = null, onAction: () -> Unit) = Hyper
 fun Node.styleClass(styleClass: String) = apply {
     getStyleClass().add(styleClass)
 }
+
+@Suppress("UNCHECKED_CAST", "EXTENSION_SHADOWED_BY_MEMBER")
+inline fun <reified T : Node> Node.lookup(selector: String): T? = lookup(selector) as? T

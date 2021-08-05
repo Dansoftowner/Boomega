@@ -17,6 +17,7 @@
  */
 
 @file:JvmName("ObservableUtils")
+@file:Suppress("NOTHING_TO_INLINE")
 
 package com.dansoftware.boomega.gui.util
 
@@ -26,11 +27,11 @@ import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
 import javafx.collections.ObservableList
 
-fun <T> constantObservable(value: () -> T): ObservableValue<T> =
+inline fun <T> constantObservable(crossinline value: () -> T): ObservableValue<T> =
     object : ObservableValueBase<T>() {
         override fun getValue(): T = value()
     }
 
-fun ObservableList<*>.emptyBinding(): BooleanBinding {
+inline fun ObservableList<*>.emptyBinding(): BooleanBinding {
     return Bindings.isEmpty(this)
 }

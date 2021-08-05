@@ -32,13 +32,16 @@ import static com.dansoftware.boomega.gui.util.Icons.icon;
 
 public abstract class DockView<T extends Node> extends VBox {
 
+    private final Dock dockEnum;
     private final T content;
     private final HBox buttonBar;
 
-    public DockView(@NotNull SplitPane parent,
+    public DockView(@NotNull Dock dockEnum,
+                    @NotNull SplitPane parent,
                     @NotNull Node icon,
                     @NotNull String title,
                     @NotNull T content) {
+        this.dockEnum = dockEnum;
         this.content = content;
         this.buttonBar = buildButtonBar(parent);
         this.buildUI(parent, icon, title);
@@ -103,5 +106,9 @@ public abstract class DockView<T extends Node> extends VBox {
 
     protected HBox getButtonBar() {
         return buttonBar;
+    }
+
+    public Dock getDockEnum() {
+        return dockEnum;
     }
 }

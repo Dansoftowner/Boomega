@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.recordview.edit;
 import com.dansoftware.boomega.db.Database;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.recordview.RecordTable;
+import com.dansoftware.boomega.gui.recordview.dock.Dock;
 import com.dansoftware.boomega.gui.recordview.dock.DockView;
 import com.dansoftware.boomega.i18n.I18N;
 import javafx.geometry.Insets;
@@ -31,11 +32,13 @@ import org.jetbrains.annotations.NotNull;
 import static com.dansoftware.boomega.gui.util.Icons.icon;
 
 public class RecordEditorDock extends DockView<RecordEditor> {
-    public RecordEditorDock(@NotNull Context context,
+    public RecordEditorDock(@NotNull Dock dockEnum,
+                            @NotNull Context context,
                             @NotNull Database database,
                             @NotNull SplitPane parent,
                             @NotNull RecordTable table) {
         super(
+                dockEnum,
                 parent,
                 icon("pencil-icon"),
                 I18N.getValue("record.editor.dock.title"),
