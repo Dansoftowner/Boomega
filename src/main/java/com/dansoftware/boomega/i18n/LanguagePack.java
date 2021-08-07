@@ -21,6 +21,7 @@ package com.dansoftware.boomega.i18n;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.CollationKey;
 import java.text.Collator;
 import java.util.Locale;
 import java.util.Objects;
@@ -70,7 +71,7 @@ public abstract class LanguagePack {
      */
     @NotNull
     public Collator getABCCollator() {
-        return Collator.getInstance(locale);
+        return new NullHandlingCollator(Collator.getInstance(locale));
     }
 
     /**
