@@ -23,8 +23,7 @@ import com.dansoftware.boomega.gui.base.TitledOverlayBox
 import com.dansoftware.boomega.gui.recordview.RecordsView
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
-import javafx.scene.image.Image
 
 class RecordsViewConfigurationOverlay(view: RecordsView, preferences: Preferences) : TitledOverlayBox(
-    i18n("record.panel_config"), icon("tune-icon"), RecordsViewConfigurationPanel(view, preferences)
+    i18n("record.panel_config"), icon("tune-icon"), RecordsViewConfigurationPanel(view)
 )

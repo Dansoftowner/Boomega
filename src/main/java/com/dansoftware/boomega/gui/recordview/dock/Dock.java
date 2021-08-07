@@ -26,9 +26,6 @@ import com.dansoftware.boomega.gui.recordview.edit.RecordEditorDock;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
 
 import static com.dansoftware.boomega.gui.util.Icons.icon;
 import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
@@ -106,10 +103,5 @@ public enum Dock {
     @Override
     public String toString() {
         return i18n(i18n);
-    }
-
-    @Nullable
-    public static Dock parse(Class<? extends DockView<?>> dockViewClass) {
-        return Arrays.stream(values()).filter(it -> it.dockViewClass.equals(dockViewClass)).findFirst().orElse(null);
     }
 }

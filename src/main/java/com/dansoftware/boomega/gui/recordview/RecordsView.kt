@@ -55,6 +55,7 @@ import javafx.stage.FileChooser
 import org.slf4j.LoggerFactory
 import java.io.FileOutputStream
 import java.lang.reflect.Type
+import java.text.Collator
 import java.util.*
 import java.util.stream.Collectors
 
@@ -88,10 +89,10 @@ class RecordsView(
             recordsViewBase.docksList = value.docks
         }
 
-    var sortingComparator: Comparator<String>
-        get() = table.sortingComparator
+    var sortingAbc: Locale = I18N.defaultLocale()
         set(value) {
-            table.sortingComparator = value
+            field = value
+            configureSortingAbc(value)
         }
 
     var columnsInfo: TableColumnsInfo
@@ -131,8 +132,16 @@ class RecordsView(
     @Suppress("UNCHECKED_CAST")
     private fun readConfigurations() {
         columnsInfo = preferences.get(COL_CONFIG_KEY)
-        sortingComparator = I18N.getABCCollator(preferences.get(ABC_CONFIG_KEY)).get() as Comparator<String>
+        sortingAbc = preferences.get(ABC_CONFIG_KEY)
         dockInfo = preferences.get(DOCKS_CONFIG_KEY)
+    }
+
+    private fun configureSortingAbc(locale: Locale) {
+        @Suppress("UNCHECKED_CAST")
+        table.sortingComparator = I18N.getABCCollator(locale).orElse(Collator.getInstance()) as Comparator<String>
+        CachedExecutor.submit {
+            preferences.editor()[ABC_CONFIG_KEY] = locale
+        }
     }
 
     @JvmOverloads

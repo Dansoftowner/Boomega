@@ -35,3 +35,7 @@ inline fun <T> constantObservable(crossinline value: () -> T): ObservableValue<T
 inline fun ObservableList<*>.emptyBinding(): BooleanBinding {
     return Bindings.isEmpty(this)
 }
+
+inline fun <T> ObservableValue<T>.onValuePresent(crossinline action: (newValue: T) -> Unit) {
+    addListener { _, _, newValue -> action(newValue) }
+}

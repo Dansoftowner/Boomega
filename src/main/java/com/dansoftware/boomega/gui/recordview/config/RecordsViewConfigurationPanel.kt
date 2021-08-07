@@ -18,121 +18,96 @@
 
 package com.dansoftware.boomega.gui.recordview.config
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.recordview.RecordTable
 import com.dansoftware.boomega.gui.recordview.RecordsView
-import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.ABC_CONFIG_KEY
-import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.COL_CONFIG_KEY
-import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.DOCKS_CONFIG_KEY
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.dansoftware.boomega.i18n.i18n
+import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.geometry.Insets
-import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Label
-import javafx.scene.control.Tooltip
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
-import org.controlsfx.control.ListSelectionView
+import org.controlsfx.control.CheckListView
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.text.Collator
 import java.util.*
 
-class RecordsViewConfigurationPanel(private val view: RecordsView, private val preferences: Preferences) : GridPane() {
+/**
+ * Panel that allows the user to configure some properties of a [RecordsView].
+ *
+ * These properties are:
+ * - ABC of sorting ([RecordsView.sortingAbc])
+ * - Docks ([RecordsView.dockInfo])
+ * - Columns ([RecordsView.columnsInfo])
+ */
+class RecordsViewConfigurationPanel(private val view: RecordsView) : GridPane() {
 
     init {
+        VBox.setVgrow(this, Priority.ALWAYS)
         styleClass.add(JMetroStyleClass.BACKGROUND)
         styleClass.add("records-view-config-panel")
         padding = Insets(10.0, 20.0, 10.0, 20.0)
-        VBox.setVgrow(this, Priority.ALWAYS)
+        hgap = 10.0
+        vgap = 10.0
         buildUI()
     }
 
     private fun buildUI() {
-        // TODO: i18n
-        addRow(0, Label("ABC:"), buildABCChooserMenu())
-        addRow(1, Label("Dock:"), buildDockSelection())
-        addRow(2, Label("Column:"), buildColumnSelection())
+        add(Label(i18n("record.table.abc")), 0, 0)
+        add(buildABCChooserMenu(), 0, 1)
+        add(Label(i18n("record.preferred_docks")), 0, 2)
+        add(buildDockSelection(), 0, 3)
+        add(Label(i18n("record.table_preferred_columns")), 0, 4)
+        add(buildColumnSelection(), 0, 5)
     }
 
     private fun buildABCChooserMenu() = ChoiceBox<Locale>().apply {
         setHgrow(this, Priority.ALWAYS)
         maxWidth = Double.MAX_VALUE
         items.addAll(I18N.getAvailableCollators().map { it.key })
-        selectedItem = preferences[ABC_CONFIG_KEY]
+        selectedItem = view.sortingAbc
         valueConvertingPolicy(Locale::getDisplayLanguage, Locale::forLanguageTag)
-        selectedItemProperty().addListener { _, _, selected ->
-            onABCSelection(
-                selected,
-                I18N.getABCCollator(selected).get()
-            )
-        }
+        selectedItemProperty().onValuePresent(::onABCSelection)
     }
 
-    private fun <T> buildListSelection() = ListSelectionView<T>().apply {
-        setVgrow(this, Priority.ALWAYS)
-        setHgrow(this, Priority.ALWAYS)
+    private fun buildDockSelection() =
+        CheckListView(FXCollections.observableArrayList(*Dock.values())).apply {
+            // initializing
+            val checked = view.dockInfo.docks
+            checked.forEach(checkModel::check)
 
-        sourceHeader = Label("Available") // TODO: i18n
-        targetHeader = Label("Selected") // TODO: i18n
-
-        fun Button.graphic(graphic: Node) = apply {
-            graphicProperty().unbind()
-            graphicProperty().set(graphic)
+            checkedItems.addListener(ListChangeListener { onDockSelection(checkedItems.toList()) })
         }
 
-        fun Button.tooltip(value: String) = apply {
-            tooltipProperty().unbind()
-            tooltipProperty().set(Tooltip(value))
+    private fun buildColumnSelection() =
+        CheckListView(FXCollections.observableArrayList(*RecordTable.columns().toTypedArray())).run {
+            // initializing
+            val checked = view.columnsInfo.columnTypes
+            checked.forEach(checkModel::check)
+
+            checkedItems.addListener(ListChangeListener { onColumnSelection(checkedItems.toList()) })
+
+            VBox(3.0, this, buildColumnResetButton())
         }
 
-        onSkinPresent {
-            // TODO: i18n
-            lookup<Button>(".move-to-target-button")!!
-                .graphic(icon("arrow-right-icon"))
-                .tooltip("Move to target")
-            lookup<Button>(".move-to-target-all-button")!!
-                .graphic(icon("arrows-right-icon"))
-                .tooltip("Move all")
-            lookup<Button>(".move-to-source-button")!!
-                .graphic(icon("arrow-left-icon"))
-                .tooltip("Move to source")
-            lookup<Button>(".move-to-source-all-button")!!
-                .graphic(icon("arrows-left-icon"))
-                .tooltip("Move back all")
+    private fun CheckListView<BaseTable.ColumnType>.buildColumnResetButton() = Button().apply {
+        maxWidth = Double.MAX_VALUE
+        text = i18n("record.table.colreset")
+        graphic = icon("columns-icon")
+        setOnAction {
+            val defaults = RecordTable.columns().filter { it.isDefaultVisible }
+            val toUncheck = checkedItems - defaults
+            toUncheck.forEach(checkModel::clearCheck)
+            onColumnSelection(defaults)
         }
-
-    }
-
-    private fun buildDockSelection() = buildListSelection<Dock>().apply {
-        // initializing
-        val targetElements = preferences[DOCKS_CONFIG_KEY].docks
-        val srcElements = listOf(*Dock.values()) - targetElements
-        targetItems.addAll(targetElements)
-        sourceItems.addAll(srcElements)
-        targetItems.addListener(ListChangeListener {
-            onDockSelection(targetItems.toList())
-        })
-    }
-
-    private fun buildColumnSelection() = buildListSelection<BaseTable.ColumnType>().apply {
-        setVgrow(this, Priority.ALWAYS)
-        setHgrow(this, Priority.ALWAYS)
-        val targetElements = preferences[COL_CONFIG_KEY].columnTypes
-        val srcElements = RecordTable.columns() - targetElements
-        targetItems.addAll(targetElements)
-        sourceItems.addAll(srcElements)
-        targetItems.addListener(ListChangeListener {
-            onColumnSelection(targetItems.toList())
-        })
     }
 
     private fun onColumnSelection(items: List<BaseTable.ColumnType>) {
@@ -145,11 +120,9 @@ class RecordsViewConfigurationPanel(private val view: RecordsView, private val p
         view.dockInfo = RecordsView.DockInfo(items)
     }
 
-    private fun onABCSelection(locale: Locale, collator: Collator) {
+    private fun onABCSelection(locale: Locale) {
         logger.debug("ABC selection detected")
-        CachedExecutor.submit { preferences.editor().put(ABC_CONFIG_KEY, locale) }
-        @Suppress("UNCHECKED_CAST")
-        view.sortingComparator = collator as Comparator<String>
+        view.sortingAbc = locale
     }
 
     companion object {

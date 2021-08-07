@@ -25,12 +25,16 @@ import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.util.StringConverter
+import org.controlsfx.control.CheckListView
 
 inline val <T> TableView<T>.selectedItems: ObservableList<T>
     get() = selectionModel.selectedItems
 
 inline val <T> ListView<T>.selectedItems: ObservableList<T>
     get() = selectionModel.selectedItems
+
+inline val <T> CheckListView<T>.checkedItems: ObservableList<T>
+    get() = checkModel.checkedItems
 
 inline var <T> ChoiceBox<T>.selectedItem: T
     get() = selectionModel.selectedItem
