@@ -6,11 +6,14 @@
 
 * ✨💄 Updated Google Book Details Panel (Closes [#126](https://github.com/Dansoftowner/Boomega/issues/126))
 * ✨ [#150](https://github.com/Dansoftowner/Boomega/issues/150): Ability to copy the description in Google Book details pane
+* ✨ [#110](https://github.com/Dansoftowner/Boomega/issues/150): Records view configuration panel
 * ✨ Hiding docks when no items selected in records-view
 * ✨ Disable insert-item when the find-dialog is showing in records-view
 * 💄 Look and feel updates
 
 ### Bug fixes/improvements
+
+* 🐛 [#136](https://github.com/Dansoftowner/Boomega/issues/136): Record table sorting does not work
 
 # Boomega v0.7.0 (pre-release)
 
