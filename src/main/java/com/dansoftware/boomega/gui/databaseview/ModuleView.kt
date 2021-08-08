@@ -31,7 +31,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * The [ModuleView] is a panel that allows the user to open the basic modules.
+ * The [ModuleView] (also called as 'Home view') is a panel that allows the user to open the basic modules.
  *
  * @see Module
  */
@@ -117,8 +117,8 @@ class ModuleView(private val view: DatabaseView) : StackPane() {
         fun getTabItem(context: DatabaseView) =
             TabItem(
                 "moduleview",
-                i18n("database_view.modules"),
-                { icon("modules-icon") }) {
+                i18n("database_view.home"),
+                { icon("home-icon") }) {
                 ModuleView(context)
             }
     }

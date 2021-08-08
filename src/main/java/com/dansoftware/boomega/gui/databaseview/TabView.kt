@@ -142,7 +142,6 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
             this.content = tabItem.content
             this.tooltip = buildTooltip()
             this.contextMenu = buildContextMenu()
-            this.isClosable = (tabView.baseTabItem != tabItem)
         }
 
         private fun buildTooltip() =
