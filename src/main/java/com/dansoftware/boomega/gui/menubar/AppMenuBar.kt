@@ -172,7 +172,7 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
             .action {
                 preferences.editor()
                     .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
-                        if (autoLoginDatabase.equals(databaseMeta)) {
+                        if (autoLoginDatabase == databaseMeta) {
                             isAutoLogin = false
                             autoLoginCredentials = null
                         }
