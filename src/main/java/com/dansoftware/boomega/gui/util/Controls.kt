@@ -24,6 +24,7 @@ package com.dansoftware.boomega.gui.util
 import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.scene.layout.StackPane
 import javafx.util.StringConverter
 import org.controlsfx.control.CheckListView
 
@@ -66,15 +67,22 @@ fun <T> ComboBox<T>.refresh() {
 /**
  * Determines that a ButtonType's button data is the same.
  */
-fun ButtonType.typeEquals(other: ButtonType) = this.buttonData == other.buttonData
+inline fun ButtonType.typeEquals(other: ButtonType) =
+    buttonData == other.buttonData
 
-fun hyperLink(text: String, graphic: Node? = null, onAction: () -> Unit) = Hyperlink(text, graphic).apply {
-    setOnAction { onAction() }
-}
+inline fun hyperLink(text: String, graphic: Node? = null, crossinline onAction: () -> Unit) =
+    Hyperlink(text, graphic).apply {
+        setOnAction { onAction() }
+    }
 
-fun Node.styleClass(styleClass: String) = apply {
+inline fun <T : Node> T.styleClass(styleClass: String) = apply {
     getStyleClass().add(styleClass)
 }
 
 @Suppress("UNCHECKED_CAST", "EXTENSION_SHADOWED_BY_MEMBER")
 inline fun <reified T : Node> Node.lookup(selector: String): T? = lookup(selector) as? T
+
+/**
+ * Wraps the given [Node] into a [StackPane]
+ */
+inline fun Node.asCentered() = StackPane(this)

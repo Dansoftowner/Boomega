@@ -3,14 +3,13 @@ package com.dansoftware.boomega.gui.recordview.edit
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.gui.recordview.util.MultipleSelectionPlaceHolder
 import com.dansoftware.boomega.util.SystemBrowser
 import com.dansoftware.mdeditor.MarkdownEditorControl
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Pos
 import javafx.scene.Node
-import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.effect.BoxBlur
@@ -43,7 +42,6 @@ class NotesEditor(
     init {
         this.styleClass.add("notes-editor")
         this.minHeight = 0.0
-        content = NoSelectionPlaceHolder()
     }
 
     fun showProgress() {
@@ -60,7 +58,7 @@ class NotesEditor(
 
     private fun handleItemsChanged(items: List<Record>) {
         when {
-            items.isEmpty() -> content = NoSelectionPlaceHolder()
+            items.isEmpty() -> children.clear()
             items.size > 1 -> content = MultipleSelectionPlaceHolder()
             else -> {
                 content = markdownEditor.also { markdownEditor.markdown = items[0].notes ?: "" }
@@ -91,26 +89,6 @@ class NotesEditor(
     }
 
     fun changedProperty() = changed
-
-    private class NoSelectionPlaceHolder : StackPane() {
-        init {
-            children.add(buildLabel())
-        }
-
-        private fun buildLabel() = Label(I18N.getValue("google.books.dock.placeholder.noselection")).apply {
-            styleClass.add("place-holder-label")
-        }
-    }
-
-    private class MultipleSelectionPlaceHolder : StackPane() {
-        init {
-            children.add(buildLabel())
-        }
-
-        private fun buildLabel() = Label(I18N.getValue("google.books.dock.placeholder.multiple")).apply {
-            styleClass.add("place-holder-label")
-        }
-    }
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(NotesEditor::class.java)

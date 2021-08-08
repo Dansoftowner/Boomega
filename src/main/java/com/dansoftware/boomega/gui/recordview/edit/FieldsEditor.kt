@@ -21,13 +21,17 @@ package com.dansoftware.boomega.gui.recordview.edit
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.asCentered
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import javafx.geometry.Pos
+import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.effect.BoxBlur
+import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -101,12 +105,18 @@ class FieldsEditor(
 
     private class MultipleRecordTypePlaceHolder : StackPane() {
         init {
-            children.add(buildLabel())
+            styleClass.add("multiple-record-type-place-holder")
+            children.add(buildCenterBox())
         }
 
-        private fun buildLabel() = Label(i18n("record.editor.placeholder.multiple_types")).apply {
-            styleClass.add("place-holder-label")
-        }
+        private fun buildCenterBox() = Group(
+            HBox(5.0,
+                icon("numeric-2-box-multiple").asCentered(),
+                buildLabel().asCentered()
+            )
+        )
+
+        private fun buildLabel() = Label(i18n("record.editor.placeholder.multiple_types"))
     }
 
     companion object {

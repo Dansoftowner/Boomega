@@ -586,13 +586,6 @@
     -fx-font-size: 18;
 }
 
-.google-book-dock .place-holder-label, .record-editor .place-holder-label {
-    -fx-font-weight: bold;
-    -fx-font-size: 15px;
-    -fx-text-alignment: justify;
-    -fx-wrap-text: true;
-}
-
 .records-view-toolbar .options-item .arrow-button {
      -fx-padding: 0;
 }
@@ -604,6 +597,12 @@
 .records-view-config-panel {
     -fx-pref-width: 30em;
     -fx-pref-height: 30em;
+}
+
+.multiple-selection-place-holder .glyph-icon,
+.no-connection-place-holder .link-off-icon,
+.error-place-holder .warning-icon {
+    -fx-font-size: 2em !important;
 }
 
 /*******************************************************************************

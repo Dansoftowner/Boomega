@@ -37,7 +37,8 @@ private val iconPack = mapOf<String, () -> Text>(
     "warning-circle-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.ALERT_CIRCLE),
     "close-circle-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.CLOSE_CIRCLE),
     "close-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.CLOSE),
-    "close-box-multiple-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.CLOSE_BOX),//FontIcon(MaterialDesignC.CLOSE_BOX_MULTIPLE),
+    "close-box-multiple-icon" to fun() =
+        MaterialDesignIconView(MaterialDesignIcon.CLOSE_BOX),//FontIcon(MaterialDesignC.CLOSE_BOX_MULTIPLE),
     "json-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.JSON),
     "file-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FILE),
     "file-export-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.EXPORT),
@@ -73,6 +74,7 @@ private val iconPack = mapOf<String, () -> Text>(
     "plus-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.PLUS),
     "plus-box-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.PLUS_BOX),
     "link-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.LINK_VARIANT),
+    "link-off-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.LINK_VARIANT_OFF),
     "reload-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.RELOAD),
     "code-braces-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.CODE_BRACES),
     "github-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.GITHUB_BOX),
@@ -100,16 +102,12 @@ private val iconPack = mapOf<String, () -> Text>(
     "palette-advanced-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.PALETTE_ADVANCED),
     "details-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.DETAILS),
     "tune-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.TUNE),
+    "buffer-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.BUFFER),
+    "numeric-2-box-multiple" to fun() = MaterialDesignIconView(MaterialDesignIcon.NUMERIC_2_BOX_MULTIPLE_OUTLINE),
 )
 
-fun icon(identifier: String): Text = iconPack[identifier]?.let { it() } ?: Text().apply {
-    logger.error("Couldn't find icon for '{}'", identifier)
-}
-
-/*FontIcon().apply {
-    this.styleClass.add("glyph-icon") // Temporary
-    this.styleClass.add(styleClass)
-}*/
-
-
-
+fun icon(identifier: String): Text = (
+        iconPack[identifier]?.invoke() ?: Text().apply {
+            logger.error("Couldn't find icon for '{}'", identifier)
+        }
+).styleClass(identifier)

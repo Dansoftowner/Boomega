@@ -24,7 +24,9 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsPane
 import com.dansoftware.boomega.gui.recordview.RecordTable
+import com.dansoftware.boomega.gui.recordview.util.MultipleSelectionPlaceHolder
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
+import com.dansoftware.boomega.gui.util.asCentered
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.i18n
@@ -38,8 +40,8 @@ import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.scene.Group
-import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
@@ -258,28 +260,11 @@ class GoogleBookConnectionView(
         }
     }
 
-    private class MultipleSelectionPlaceHolder : StackPane() {
-        init {
-            buildUI()
-        }
-
-        private fun buildUI() {
-            styleClass.add(JMetroStyleClass.BACKGROUND)
-            children.add(buildLabel())
-            VBox.setVgrow(this, Priority.ALWAYS)
-        }
-
-        private fun buildLabel() =
-            Label(i18n("google.books.dock.placeholder.multiple")).apply {
-                styleClass.add("place-holder-label")
-                minHeight = 0.0
-            }
-    }
-
     private inner class ErrorPlaceHolder(private val exception: Throwable) : StackPane() {
         init {
-            styleClass.add(JMetroStyleClass.BACKGROUND)
             VBox.setVgrow(this, Priority.ALWAYS)
+            styleClass.add(JMetroStyleClass.BACKGROUND)
+            styleClass.add("error-place-holder")
             buildUI()
         }
 
@@ -288,17 +273,19 @@ class GoogleBookConnectionView(
                 Group(
                     VBox(
                         20.0,
-                        StackPane(buildLabel()),
-                        StackPane(buildDetailsButton())
+                        buildLabel(),
+                        buildDetailsButton().asCentered()
                     )
                 )
             )
         }
 
         private fun buildLabel() =
-            Label(i18n("google.books.dock.placeholder.error")).apply {
-                styleClass.add("place-holder-label")
-            }
+            HBox(5.0,
+                icon("warning-icon").asCentered(),
+                Label(i18n("google.books.dock.placeholder.error")).asCentered()
+            )
+
 
         private fun buildDetailsButton() =
             Button(
@@ -318,29 +305,29 @@ class GoogleBookConnectionView(
     private inner class NoConnectionPlaceHolder() : StackPane() {
 
         init {
-            styleClass.add(JMetroStyleClass.BACKGROUND)
             VBox.setVgrow(this, Priority.ALWAYS)
+            styleClass.add(JMetroStyleClass.BACKGROUND)
+            styleClass.add("no-connection-place-holder")
             buildUI()
         }
 
         private fun buildUI() {
-            children.add(buildContent())
+            children.add(buildCenterBox())
         }
 
-        private fun buildContent(): Node {
-            return Group(
-                VBox(
-                    20.0,
-                    StackPane(buildLabel()),
+        private fun buildCenterBox() =
+            Group(
+                VBox(20.0,
+                    buildLabel().asCentered(),
                     buildConnectionButton()
                 )
             )
-        }
 
         private fun buildLabel() =
-            Label(i18n("google.books.dock.placeholder.noconn")).apply {
-                styleClass.add("place-holder-label")
-            }
+            HBox(5.0,
+                icon("link-off-icon"),
+                Label(i18n("google.books.dock.placeholder.noconn")).asCentered()
+            )
 
         private fun buildConnectionButton() = Button(
             i18n("google.books.dock.connection"),
@@ -388,10 +375,6 @@ class GoogleBookConnectionView(
                     database.updateRecord(items[0])
                 }
             }
-
-        init {
-            buildUI()
-        }
     }
 
     companion object {

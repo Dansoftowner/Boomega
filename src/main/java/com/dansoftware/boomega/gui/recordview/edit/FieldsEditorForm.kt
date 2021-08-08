@@ -76,15 +76,9 @@ class FieldsEditorForm(
     private val scrollPane: ScrollPane
 
     private var content: Node
-        get() = scrollPane.content
-        set(value) {
+        inline get() = scrollPane.content
+        inline set(value) {
             scrollPane.content = value
-        }
-
-    private var bottom: Node
-        get() = children[1]
-        set(value) {
-            children.setAll(scrollPane, value)
         }
 
     init {
