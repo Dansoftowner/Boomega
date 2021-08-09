@@ -299,7 +299,7 @@ class RecordsView(
     }
 
     private fun <C : RecordExportConfiguration> export(exporter: RecordExporter<C>, items: List<Record>) {
-        exporter.configurationPanel.show(context) { config ->
+        exporter.configurationDialog.show(context) { config ->
             val fileExplorer = FileChooser()
             fileExplorer.extensionFilters.add(
                 FileChooser.ExtensionFilter(
@@ -309,7 +309,7 @@ class RecordsView(
             )
             fileExplorer.showSaveDialog(context.contextWindow)?.let { file ->
                 config.outputStream = FileOutputStream(file)
-                val task = exporter.getTask(items, config).apply {
+                val task = exporter.task(items, config).apply {
                     onSucceeded {
                         context.stopProgress()
                         context.showInformationNotification(

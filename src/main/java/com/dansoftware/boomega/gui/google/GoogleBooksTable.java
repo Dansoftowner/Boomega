@@ -43,8 +43,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
+import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.DEFAULT_VISIBLE;
+import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.TEXT_GUI_VISIBLE;
 import static com.dansoftware.boomega.gui.util.Icons.icon;
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
 
 /**
  * A {@link GoogleBooksTable} is a table-view that used for displaying {@link Volume} objects.
@@ -56,134 +58,120 @@ public class GoogleBooksTable extends BaseTable<Volume> {
     public static final ColumnType INDEX_COLUMN =
             new ColumnType(
                     "index",
-                    "google.books.table.column.index",
+                    i18n("google.books.table.column.index"),
                     GoogleBooksTable.class,
                     table -> new IndexColumn(table.startIndex),
-                    DEFAULT_VISIBLE,
-                    INTERNATIONALIZED
+                    DEFAULT_VISIBLE
             );
 
     public static final ColumnType TYPE_INDICATOR_COLUMN =
             new ColumnType(
                     "type_indicator",
-                    "google.books.table.column.typeindicator",
+                    i18n("google.books.table.column.typeindicator"),
                     TypeIndicatorColumn::new,
-                    DEFAULT_VISIBLE,
-                    INTERNATIONALIZED
+                    DEFAULT_VISIBLE
             );
 
     public static final ColumnType THUMBNAIL_COLUMN =
             new ColumnType(
                     "thumbnail",
-                    "google.books.table.column.thumbnail",
+                    i18n("google.books.table.column.thumbnail"),
                     ThumbnailColumn::new,
                     DEFAULT_VISIBLE,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType ISBN_COLUMN =
             new ColumnType(
                     "isbn",
-                    "google.books.table.column.isbn",
+                    i18n("google.books.table.column.isbn"),
                     ISBNColumn::new,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType ISBN_10_COLUMN =
             new ColumnType(
                     "isbn10",
-                    "google.books.table.column.isbn10",
+                    i18n("google.books.table.column.isbn10"),
                     ISBN10Column::new,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType ISBN_13_COLUMN =
             new ColumnType(
                     "isbn13",
-                    "google.books.table.column.isbn13",
+                    i18n("google.books.table.column.isbn13"),
                     ISBN13Column::new,
                     DEFAULT_VISIBLE,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType AUTHOR_COLUMN =
             new ColumnType(
                     "author",
-                    "google.books.table.column.author",
+                    i18n("google.books.table.column.author"),
                     AuthorColumn::new,
                     DEFAULT_VISIBLE,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType TITLE_COLUMN =
             new ColumnType(
                     "title",
-                    "google.books.table.column.title",
+                    i18n("google.books.table.column.title"),
                     TitleColumn::new,
                     DEFAULT_VISIBLE,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType SUB_TITLE_COLUMN =
             new ColumnType(
                     "subtitle",
-                    "google.books.table.column.subtitle",
+                    i18n("google.books.table.column.subtitle"),
                     SubtitleColumn::new,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType PUBLISHER_COLUMN =
             new ColumnType(
                     "publisher",
-                    "google.books.table.column.publisher",
+                    i18n("google.books.table.column.publisher"),
                     PublisherColumn::new,
                     DEFAULT_VISIBLE,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType LANG_COLUMN =
             new ColumnType(
                     "lang",
-                    "google.books.table.column.lang",
+                    i18n("google.books.table.column.lang"),
                     LangColumn::new,
                     DEFAULT_VISIBLE,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType DATE_COLUMN =
             new ColumnType(
                     "date",
-                    "google.books.table.column.date",
+                    i18n("google.books.table.column.date"),
                     DateColumn::new,
                     DEFAULT_VISIBLE,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType RANK_COLUMN =
             new ColumnType(
                     "rank",
-                    "google.books.table.column.rank",
+                    i18n("google.books.table.column.rank"),
                     RankColumn::new,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType BROWSER_COLUMN =
             new ColumnType(
                     "browse",
-                    "google.books.table.column.browse",
+                    i18n("google.books.table.column.browse"),
                     BrowserColumn::new,
-                    INTERNATIONALIZED,
                     TEXT_GUI_VISIBLE
             );
 

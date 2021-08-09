@@ -594,7 +594,7 @@
      -fx-padding: 0;
 }
 
-.records-view-config-panel {
+.records-view-config-panel, .json-configuration-view {
     -fx-pref-width: 30em;
     -fx-pref-height: 30em;
 }

@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  $originalComment.match("Copyright (\d+)", 1, "-")2021  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.export
+package com.dansoftware.boomega.gui.export.json
 
-import com.dansoftware.boomega.export.api.RecordExportConfiguration
+import com.dansoftware.boomega.export.json.JsonExportConfiguration
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.export.ConfigurationDialog
 
-interface ConfigurationPanel<C : RecordExportConfiguration> {
-    fun show(context: Context, onFinished: (C) -> Unit)
+class JsonConfigurationDialog : ConfigurationDialog<JsonExportConfiguration> {
+    override fun show(context: Context, onFinished: (JsonExportConfiguration) -> Unit) {
+        var overlay: JsonConfigurationOverlay? = null
+        overlay = JsonConfigurationOverlay {
+            context.hideOverlay(overlay!!)
+            onFinished(it)
+        }
+        context.showOverlay(overlay)
+    }
 }

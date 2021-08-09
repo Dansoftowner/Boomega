@@ -23,11 +23,15 @@ import com.dansoftware.boomega.export.json.JsonExporter
 import okhttp3.internal.toImmutableList
 import java.util.*
 
+/**
+ * An immutable list of [RecordExporter]s can be used by the other parts of the app.
+ * It includes exporters collected from plugins.
+ */
+object SupportedExporters :
+    List<RecordExporter<*>> by LinkedList(loadBuiltInExporters() + loadExportersFromPlugins()).toImmutableList()
+
 private fun loadBuiltInExporters() = listOf(
     JsonExporter()
 )
 
 private fun loadExportersFromPlugins() = listOf<RecordExporter<*>>() // TODO: collect from plugins
-
-object SupportedExporters :
-    List<RecordExporter<*>> by LinkedList(loadBuiltInExporters() + loadExportersFromPlugins()).toImmutableList()

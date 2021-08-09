@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.control;
 
-import com.dansoftware.boomega.i18n.I18N;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -171,7 +170,6 @@ public abstract class BaseTable<S> extends TableView<S> {
 
         public static final Option DEFAULT_VISIBLE = new Option();
         public static final Option TEXT_GUI_VISIBLE = new Option();
-        public static final Option INTERNATIONALIZED = new Option();
 
         private final String id;
         private final String text;
@@ -230,13 +228,9 @@ public abstract class BaseTable<S> extends TableView<S> {
             return options.contains(TEXT_GUI_VISIBLE);
         }
 
-        public boolean isI18N() {
-            return options.contains(INTERNATIONALIZED);
-        }
-
         @Override
         public String toString() {
-            return isI18N() ? i18n(text) : text;
+            return i18n(text);
         }
 
         /**
@@ -268,8 +262,7 @@ public abstract class BaseTable<S> extends TableView<S> {
         }
 
         private String getTextFor(ColumnType columnType) {
-            return columnType.isTextOnUIVisible() ?
-                    (columnType.isI18N() ? I18N.getValue(columnType.text) : columnType.text) : null;
+            return columnType.isTextOnUIVisible() ? columnType.text : null;
         }
 
     }

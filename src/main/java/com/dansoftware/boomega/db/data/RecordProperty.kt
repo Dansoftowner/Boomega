@@ -31,19 +31,31 @@ import com.dansoftware.boomega.i18n.i18n
  */
 class RecordProperty<T> private constructor(
     val id: String,
-    val name: () -> (String),
-    val getValue: Record.() -> T,
+    val name: String,
+    val typeClassReference: Class<T>,
+    val getValue: (Record?) -> T?,
     val setValue: Record.(T) -> Unit,
     vararg val typeScopes: Record.Type
 ) {
 
-    private constructor(id: String, name: () -> String, getValue: Record.() -> T, setValue: Record.(T) -> Unit) : this(
+    private constructor(
+        id: String,
+        name: String,
+        typeClassReference: Class<T>,
+        getValue: (Record?) -> T?,
+        setValue: Record.(T) -> Unit
+    ) : this(
         id,
         name,
+        typeClassReference,
         getValue,
         setValue,
         *Record.Type.values()
     )
+
+    override fun toString(): String {
+        return name
+    }
 
     @Suppress("MemberVisibilityCanBePrivate")
     companion object {
@@ -51,64 +63,72 @@ class RecordProperty<T> private constructor(
         @JvmField
         val TYPE = RecordProperty(
             id = "type",
-            name = { i18n("record.property.type") },
-            getValue = Record::type,
+            name = i18n("record.property.type"),
+            typeClassReference = Record.Type::class.java,
+            getValue = { it?.type },
             setValue = { type = it }
         )
 
         @JvmField
         val TITLE = RecordProperty(
             id = "title",
-            name = { i18n("record.property.title") },
-            getValue = Record::title,
+            name = i18n("record.property.title"),
+            typeClassReference = String::class.java,
+            getValue = { it?.title },
             setValue = { title = it }
         )
 
         @JvmField
         val LANGUAGE = RecordProperty(
             id = "language",
-            name = { i18n("record.property.lang") },
-            getValue = Record::language,
+            name = i18n("record.property.lang"),
+            typeClassReference = String::class.java,
+            getValue = { it?.language },
             setValue = { language = it }
         )
 
         @JvmField
         val PUBLISHER = RecordProperty(
             id = "publisher",
-            name = { i18n("record.property.publisher") },
-            getValue = Record::publisher,
+            name = i18n("record.property.publisher"),
+            typeClassReference = String::class.java,
+            getValue = { it?.publisher },
             setValue = { publisher = it }
         )
 
         @JvmField
         val PUBLISHED_DATE = RecordProperty(
             id = "publishedDate",
-            name = { i18n("record.property.published_date") },
-            getValue = Record::publishedDate,
+            name = i18n("record.property.published_date"),
+            typeClassReference = String::class.java,
+            getValue = { it?.publishedDate },
             setValue = { publishedDate = it }
         )
 
         @JvmField
         val NOTES = RecordProperty(
             id = "notes",
-            name = { i18n("record.property.notes") },
-            getValue = Record::notes,
+            name = i18n("record.property.notes"),
+            typeClassReference = String::class.java,
+            getValue = { it?.notes },
             setValue = { notes = it }
         )
 
         @JvmField
         val RATING = RecordProperty(
             id = "rating",
-            name = { i18n("record.property.rating") },
-            getValue = Record::rating,
+            name = i18n("record.property.rating"),
+            typeClassReference = Int::class.java,
+            getValue = { it?.rating },
             setValue = { rating = it }
         )
 
         @JvmField
         val SUBTITLE = RecordProperty(
             id = "subtitle",
-            name = { i18n("record.property.subtitle") },
-            getValue = Record::subtitle,
+            name = i18n("record.property.subtitle"),
+            typeClassReference = String::class.java,
+            getValue = { it?.subtitle },
             setValue = { subtitle = it },
             typeScopes = arrayOf(Record.Type.BOOK)
         )
@@ -116,8 +136,9 @@ class RecordProperty<T> private constructor(
         @JvmField
         val ISBN = RecordProperty(
             id = "isbn",
-            name = { i18n("record.property.isbn") },
-            getValue = Record::isbn,
+            name = i18n("record.property.isbn"),
+            typeClassReference = String::class.java,
+            getValue = { it?.isbn },
             setValue = { isbn = it },
             typeScopes = arrayOf(Record.Type.BOOK)
         )
@@ -126,17 +147,19 @@ class RecordProperty<T> private constructor(
         val NUMBER_OF_COPIES =
             RecordProperty(
                 id = "numberOfCopies",
-                name = { i18n("record.property.nofcopies") },
-                getValue = Record::numberOfCopies,
+                name = i18n("record.property.nofcopies"),
+                typeClassReference = Int::class.javaObjectType,
+                getValue = { it?.numberOfCopies },
                 setValue = { numberOfCopies = it },
                 typeScopes = arrayOf(Record.Type.BOOK)
             )
 
         @JvmField
-        val AUTHORS = RecordProperty(
+        val AUTHORS = RecordProperty<List<String>>(
             id = "authors",
-            name = { i18n("record.property.authors") },
-            getValue = Record::authors,
+            name = i18n("record.property.authors"),
+            typeClassReference = List::class.java as Class<List<String>>,
+            getValue = { it?.authors },
             setValue = { authors = it },
             typeScopes = arrayOf(Record.Type.BOOK)
         )
@@ -144,8 +167,9 @@ class RecordProperty<T> private constructor(
         @JvmField
         val SUBJECT = RecordProperty(
             id = "subject",
-            name = { i18n("record.property.subject") },
-            getValue = Record::subject,
+            name = i18n("record.property.subject"),
+            typeClassReference = String::class.java,
+            getValue = { it?.subject },
             setValue = { subject = it },
             typeScopes = arrayOf(Record.Type.BOOK)
         )
@@ -154,8 +178,9 @@ class RecordProperty<T> private constructor(
         val MAGAZINE_NAME =
             RecordProperty(
                 id = "magazineName",
-                name = { i18n("record.property.magazinename") },
-                getValue = Record::magazineName,
+                name = i18n("record.property.magazinename"),
+                typeClassReference = String::class.java,
+                getValue = { it?.magazineName },
                 setValue = { magazineName = it },
                 typeScopes = arrayOf(Record.Type.MAGAZINE)
             )
@@ -164,25 +189,27 @@ class RecordProperty<T> private constructor(
         val SERVICE_CONNECTION =
             RecordProperty(
                 id = "serviceConnection",
-                name = { i18n("record.property.service_connection") },
-                getValue = Record::serviceConnection,
+                name = i18n("record.property.service_connection"),
+                typeClassReference = ServiceConnection::class.java,
+                getValue = { it?.serviceConnection },
                 setValue = { throw UnsupportedOperationException() }
             )
 
         val allProperties = listOf(
             TYPE,
+            AUTHORS,
             TITLE,
-            LANGUAGE,
+            SUBTITLE,
+            MAGAZINE_NAME,
+            ISBN,
             PUBLISHER,
             PUBLISHED_DATE,
-            NOTES,
+            LANGUAGE,
             RATING,
-            SUBTITLE,
-            ISBN,
             NUMBER_OF_COPIES,
-            AUTHORS,
             SUBJECT,
-            MAGAZINE_NAME
+            SERVICE_CONNECTION,
+            NOTES
         )
     }
 }

@@ -20,8 +20,50 @@ package com.dansoftware.boomega.export.api
 
 import com.dansoftware.boomega.db.data.RecordProperty
 import java.io.OutputStream
+import java.util.*
 
+/**
+ * A [RecordExportConfiguration] allows to specify configurations
+ * for a particular [RecordExporter].
+ */
 abstract class RecordExportConfiguration {
+
+    /**
+     * The [OutputStream] the exporter should write the result to.
+     *
+     * By default, it's a *null output stream*.
+     *
+     * @see OutputStream.nullOutputStream
+     */
     var outputStream: OutputStream = OutputStream.nullOutputStream()
+
+    /**
+     * The required record-fields (represented by [RecordProperty] objects) to be handled
+     * by the exporter.
+     *
+     * By default, all properties are handled.
+     */
     var requiredFields: List<RecordProperty<*>> = RecordProperty.allProperties
+
+    /**
+     * The record-field (represented by a [RecordProperty]) to be used by
+     * the exporter for sorting the records.
+     *
+     * If it's null (as by default), no sorting will be performed.
+     */
+    var fieldToSortBy: RecordProperty<Comparable<*>>? = null
+
+    /**
+     * The [Locale] representing the abc the exporter should use in case of
+     * sorting records.
+     * It's only used for sorting **string**-properties.
+     *
+     * Note: if the [fieldToSortBy] is not specified, this has no effect.
+     */
+    var sortingAbc: Locale = Locale.forLanguageTag("")
+
+    /**
+     * Specifies if the order of the records should be reversed.
+     */
+    var reverseItems: Boolean = false
 }

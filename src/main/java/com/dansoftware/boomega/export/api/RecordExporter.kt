@@ -19,18 +19,48 @@
 package com.dansoftware.boomega.export.api
 
 import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.gui.export.ConfigurationPanel
+import com.dansoftware.boomega.gui.export.ConfigurationDialog
 import javafx.concurrent.Task
 import javafx.scene.Node
 
+/**
+ * A [RecordExporter] allows to export [Record]s into a particular format.
+ *
+ * @param C specifies the [RecordExportConfiguration] the exporter requires
+ */
 interface RecordExporter<C : RecordExportConfiguration> {
 
+    /**
+     * The name of the format this exporter will export the records to
+     */
     val name: String
+
+    /**
+     * The graphical icon for the exporter
+     */
     val icon: Node
-    val configurationPanel: ConfigurationPanel<C>
+
+    /**
+     * The [ConfigurationDialog] the exporter provides
+     */
+    val configurationDialog: ConfigurationDialog<C>
+
+    /**
+     * The mime-type (or content-type) of the format
+     */
     val contentType: String
+
+    /**
+     * A simple description of the content-type
+     */
     val contentTypeDescription: String
 
-    fun getTask(items: List<Record>, config: C): Task<Unit>
+    /**
+     * Builds a [Task] for the exporting-process
+     *
+     * @param items the list of records the task should export
+     * @param config the configuration-object required by the exporter
+     */
+    fun task(items: List<Record>, config: C): Task<Unit>
 
 }

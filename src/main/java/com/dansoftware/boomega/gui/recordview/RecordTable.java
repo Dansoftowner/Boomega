@@ -61,16 +61,14 @@ public class RecordTable extends BaseTable<Record> {
                     "record.table.column.index",
                     RecordTable.class,
                     table -> new IndexColumn(table.startIndex),
-                    DEFAULT_VISIBLE,
-                    INTERNATIONALIZED
+                    DEFAULT_VISIBLE
             );
 
     public static final ColumnType TYPE_INDICATOR_COLUMN =
             buildColumnType(
                     RecordProperty.TYPE,
                     (col, table) -> new TypeIndicatorColumn(),
-                    DEFAULT_VISIBLE,
-                    INTERNATIONALIZED
+                    DEFAULT_VISIBLE
             );
 
     public static final ColumnType AUTHOR_COLUMN =
@@ -78,8 +76,7 @@ public class RecordTable extends BaseTable<Record> {
                     RecordProperty.AUTHORS,
                     (col, table) -> new AuthorColumn(),
                     DEFAULT_VISIBLE,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
+                    TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType LANG_COLUMN =
@@ -87,8 +84,7 @@ public class RecordTable extends BaseTable<Record> {
                     RecordProperty.LANGUAGE,
                     (col, table) -> new LangColumn(),
                     DEFAULT_VISIBLE,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
+                    TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType RANK_COLUMN =
@@ -96,38 +92,36 @@ public class RecordTable extends BaseTable<Record> {
                     RecordProperty.RATING,
                     (col, table) -> new RankColumn(),
                     DEFAULT_VISIBLE,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
+                    TEXT_GUI_VISIBLE
             );
 
     public static final ColumnType SERVICE_CONNECTION_COLUMN =
             buildColumnType(
                     RecordProperty.SERVICE_CONNECTION,
                     (col, table) -> new ServiceConnectionColumn(),
-                    DEFAULT_VISIBLE,
-                    INTERNATIONALIZED
+                    DEFAULT_VISIBLE
             );
 
     public static final ColumnType MAGAZINE_NAME_COLUMN =
-            buildColumnType(RecordProperty.MAGAZINE_NAME, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+            buildColumnType(RecordProperty.MAGAZINE_NAME, TEXT_GUI_VISIBLE);
 
     public static final ColumnType TITLE_COLUMN =
-            buildColumnType(RecordProperty.TITLE, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+            buildColumnType(RecordProperty.TITLE, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE);
 
     public static final ColumnType SUB_TITLE_COLUMN =
-            buildColumnType(RecordProperty.SUBTITLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+            buildColumnType(RecordProperty.SUBTITLE, TEXT_GUI_VISIBLE);
 
     public static final ColumnType ISBN_COLUMN =
-            buildColumnType(RecordProperty.ISBN, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+            buildColumnType(RecordProperty.ISBN, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE);
 
     public static final ColumnType PUBLISHER_COLUMN =
-            buildColumnType(RecordProperty.PUBLISHER, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+            buildColumnType(RecordProperty.PUBLISHER, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE);
 
     public static final ColumnType DATE_COLUMN =
-            buildColumnType(RecordProperty.PUBLISHED_DATE, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+            buildColumnType(RecordProperty.PUBLISHED_DATE, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE);
 
     public static final ColumnType COPY_COUNT_COLUMN =
-            buildColumnType(RecordProperty.NUMBER_OF_COPIES, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+            buildColumnType(RecordProperty.NUMBER_OF_COPIES, TEXT_GUI_VISIBLE);
 
     private static final List<ColumnType> columnsList =
             List.of(
@@ -159,7 +153,7 @@ public class RecordTable extends BaseTable<Record> {
                                               Option... options) {
         return new ColumnType(
                 recordProperty.getId(),
-                recordProperty.getName().invoke(),
+                recordProperty.getName(),
                 RecordTable.class,
                 columnFactory,
                 options

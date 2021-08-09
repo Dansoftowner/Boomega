@@ -22,9 +22,10 @@ import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.db.data.RecordProperty
 import com.dansoftware.boomega.db.data.ServiceConnection
 import com.dansoftware.boomega.export.api.RecordExporter
-import com.dansoftware.boomega.gui.export.ConfigurationPanel
-import com.dansoftware.boomega.gui.export.JsonConfigurationPanel
+import com.dansoftware.boomega.gui.export.ConfigurationDialog
+import com.dansoftware.boomega.gui.export.json.JsonConfigurationDialog
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.minus
 import com.dansoftware.boomega.util.set
@@ -34,6 +35,9 @@ import javafx.scene.Node
 import java.io.OutputStreamWriter
 import java.lang.reflect.Type
 
+/**
+ * A [JsonExporter] allows to export [Record]s into json format.
+ */
 class JsonExporter : RecordExporter<JsonExportConfiguration> {
 
     override val contentType: String
@@ -48,18 +52,34 @@ class JsonExporter : RecordExporter<JsonExportConfiguration> {
     override val icon: Node
         get() = icon("json-icon")
 
-    override val configurationPanel: ConfigurationPanel<JsonExportConfiguration>
-        get() = JsonConfigurationPanel()
+    override val configurationDialog: ConfigurationDialog<JsonExportConfiguration>
+        get() = JsonConfigurationDialog()
 
-    override fun getTask(items: List<Record>, config: JsonExportConfiguration): Task<Unit> = object : Task<Unit>() {
+    override fun task(items: List<Record>, config: JsonExportConfiguration): Task<Unit> = object : Task<Unit>() {
         override fun call() = write(items, config)
     }
 
     private fun write(items: List<Record>, config: JsonExportConfiguration) {
         OutputStreamWriter(config.outputStream).buffered().use {
             val gson = buildGson(config)
-            gson.toJson(gson.toJsonTree(items, List::class.java), it)
+            gson.toJson(gson.toJsonTree(sortList(items, config), List::class.java), it)
         }
+    }
+
+    private fun sortList(items: List<Record>, config: JsonExportConfiguration): List<Record> {
+        val sortedItems = config.fieldToSortBy?.let { field ->
+            val abcCollator = I18N.getABCCollator(config.sortingAbc).orElse(null)
+            @Suppress("UNCHECKED_CAST")
+            items.sortedWith { o1, o2 ->
+                val o1Value = field.getValue(o1)
+                val o2Value = field.getValue(o2)
+
+                if ((o1Value is String || o2Value is String) && abcCollator != null)
+                    abcCollator.compare(o1Value, o2Value)
+                else o2Value?.let { (o1Value as? Comparable<Comparable<*>>)?.compareTo(it) } ?: 0
+            }
+        } ?: items
+        return if (config.reverseItems) sortedItems.asReversed() else sortedItems
     }
 
     private fun buildGson(config: JsonExportConfiguration) = GsonBuilder().run {
@@ -72,19 +92,17 @@ class JsonExporter : RecordExporter<JsonExportConfiguration> {
 
     private class RecordSerializer(private val config: JsonExportConfiguration) : JsonSerializer<Record> {
 
-        private val internalGson = GsonBuilder()
-            .registerTypeAdapter(ServiceConnection::class.java, ServiceConnectionSerializer())
-            .create()
+        private val internalGson = GsonBuilder().run {
+            config.serializeNulls.takeUnless(Boolean::not)?.let { serializeNulls() }
+            registerTypeAdapter(ServiceConnection::class.java, ServiceConnectionSerializer())
+            create()
+        }
 
         override fun serialize(src: Record, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             val serialized = internalGson.toJsonTree(src) as JsonObject
 
             // removing data the user should not see
             serialized - "id"
-
-            // including service connection data depending on the configuration
-            if (!config.includeServiceConnection)
-                serialized - "serviceConnection"
 
             // we exclude the props that are not used with the given record's type
             val requiredProps = config.requiredFields.filter { src.type in it.typeScopes }
@@ -98,10 +116,19 @@ class JsonExporter : RecordExporter<JsonExportConfiguration> {
     }
 
     private class ServiceConnectionSerializer() : JsonSerializer<ServiceConnection> {
-        override fun serialize(src: ServiceConnection, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-            val jsonObject = JsonObject()
-            src.entries().forEach { jsonObject[it.first] = it.second }
-            return jsonObject
+        override fun serialize(
+            src: ServiceConnection,
+            typeOfSrc: Type,
+            context: JsonSerializationContext
+        ): JsonElement {
+            return when {
+                src.entries().isEmpty() -> JsonNull.INSTANCE
+                else -> JsonObject().also { jsonObject ->
+                    src.entries().forEach {
+                        jsonObject[it.first] = it.second
+                    }
+                }
+            }
         }
     }
 }

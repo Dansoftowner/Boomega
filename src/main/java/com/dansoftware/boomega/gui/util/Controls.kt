@@ -24,6 +24,7 @@ package com.dansoftware.boomega.gui.util
 import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.scene.layout.GridPane
 import javafx.scene.layout.StackPane
 import javafx.util.StringConverter
 import org.controlsfx.control.CheckListView
@@ -46,9 +47,28 @@ inline var <T> ChoiceBox<T>.selectedItem: T
 inline fun <T> ChoiceBox<T>.selectedItemProperty() =
     selectionModel.selectedItemProperty()
 
+inline var <T> ComboBox<T>.selectedItem: T
+    get() = selectionModel.selectedItem
+    set(value) {
+        selectionModel.select(value)
+    }
+
+inline fun <T> ComboBox<T>.selectedItemProperty() =
+    selectionModel.selectedItemProperty()
+
 inline fun <T> ChoiceBox<T>.valueConvertingPolicy(
-    crossinline toStringFun: (T) -> String,
-    crossinline fromStringFun: (String) -> T
+    crossinline toStringFun: (T) -> String?,
+    crossinline fromStringFun: (String?) -> T
+) {
+    converter = object : StringConverter<T>() {
+        override fun toString(obj: T) = toStringFun(obj)
+        override fun fromString(string: String) = fromStringFun(string)
+    }
+}
+
+inline fun <T> ComboBox<T>.valueConvertingPolicy(
+    crossinline toStringFun: (T) -> String?,
+    crossinline fromStringFun: (String?) -> T
 ) {
     converter = object : StringConverter<T>() {
         override fun toString(obj: T) = toStringFun(obj)
@@ -70,11 +90,6 @@ fun <T> ComboBox<T>.refresh() {
 inline fun ButtonType.typeEquals(other: ButtonType) =
     buttonData == other.buttonData
 
-inline fun hyperLink(text: String, graphic: Node? = null, crossinline onAction: () -> Unit) =
-    Hyperlink(text, graphic).apply {
-        setOnAction { onAction() }
-    }
-
 inline fun <T : Node> T.styleClass(styleClass: String) = apply {
     getStyleClass().add(styleClass)
 }
@@ -86,3 +101,17 @@ inline fun <reified T : Node> Node.lookup(selector: String): T? = lookup(selecto
  * Wraps the given [Node] into a [StackPane]
  */
 inline fun Node.asCentered() = StackPane(this)
+
+inline fun GridPane.addRow(vararg elements: Node) {
+    addRow(rowCount, *elements)
+}
+
+inline fun hyperLink(text: String, graphic: Node? = null, crossinline onAction: () -> Unit) =
+    Hyperlink(text, graphic).apply {
+        setOnAction { onAction() }
+    }
+
+inline fun checkBox(text: String? = null, crossinline onSelection: (Boolean) -> Unit) =
+    CheckBox(text).apply {
+        selectedProperty().addListener { _, _, it -> onSelection(it) }
+    }

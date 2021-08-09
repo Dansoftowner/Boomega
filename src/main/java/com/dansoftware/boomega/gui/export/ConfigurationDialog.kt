@@ -16,34 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.export.json
+package com.dansoftware.boomega.gui.export
 
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
+import com.dansoftware.boomega.export.api.RecordExporter
+import com.dansoftware.boomega.gui.api.Context
 
 /**
- * A [JsonExportConfiguration] allows to specify configurations for a [JsonExporter].
+ * A [ConfigurationDialog] is provided by a particular [RecordExporter].
+ * It has the ability to show a configuration-panel on the GUI that allows to
+ * create a [RecordExportConfiguration].
+ *
+ * @param C the [RecordExportConfiguration] this dialog creates
+ * @see RecordExporter.configurationDialog
  */
-class JsonExportConfiguration : RecordExportConfiguration() {
+interface ConfigurationDialog<C : RecordExportConfiguration> {
 
     /**
-     * Configures the exporter whether it should output Json formatted prettily or not.
+     * Requests the dialog to be shown.
      *
-     * By default, it's _true_.
+     * @param context the [Context] that provides access to the UI
+     * @param onFinished the callback that will receive the configuration
      */
-    var prettyPrinting = true
-
-    /**
-     * Configures the exporter whether it should make the output JSON non-executable
-     * in Javascript by prefixing it with some special text or not.
-     *
-     * By default, it's _false_.
-     */
-    var nonExecutableJson = false
-
-    /**
-     * Configures the exporter whether it should serialize null fields or not.
-     *
-     * By default, the exporter omits all fields that are null during serialization.
-     */
-    var serializeNulls = false
+    fun show(context: Context, onFinished: (C) -> Unit)
 }
