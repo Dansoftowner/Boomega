@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -99,7 +100,7 @@ public abstract class BaseTable<S> extends TableView<S> {
 
     @SuppressWarnings("unchecked")
     public void addColumnType(@NotNull ColumnType columnType) {
-        getColumns().add((TableColumn<S, ?>) columnType.columnFactory.apply(this));
+        getColumns().add((TableColumn<S, ?>) columnType.columnFactory.apply(columnType, (BaseTable<S>) this));
     }
 
     public void addColumnTypes(ColumnType... columnTypes) {
@@ -174,7 +175,7 @@ public abstract class BaseTable<S> extends TableView<S> {
 
         private final String id;
         private final String text;
-        private final Function<BaseTable<?>, ? extends Column<?, ?>> columnFactory;
+        private final BiFunction<ColumnType, BaseTable<?>, ? extends Column<?, ?>>  columnFactory;
         private final List<Option> options;
 
         public ColumnType(@NotNull String id,
@@ -183,7 +184,7 @@ public abstract class BaseTable<S> extends TableView<S> {
                           Option... options) {
             this.id = Objects.requireNonNull(id);
             this.text = Objects.requireNonNull(text);
-            this.columnFactory = table -> columnFactory.get();
+            this.columnFactory = (col, table) -> columnFactory.get();
             this.options = List.of(options);
         }
 
@@ -193,11 +194,21 @@ public abstract class BaseTable<S> extends TableView<S> {
                                                    @SuppressWarnings("unused") @NotNull Class<T> tableClass,
                                                    @NotNull Function<T, ? extends Column<?, ?>> columnFactory,
                                                    Option... options) {
+            this(id, text, tableClass, (col, table) -> columnFactory.apply(table), options);
+        }
+
+        @SuppressWarnings("unchecked")
+        public <T extends BaseTable<?>> ColumnType(@NotNull String id,
+                                                   @NotNull String text,
+                                                   @SuppressWarnings("unused") @NotNull Class<T> tableClass,
+                                                   @NotNull BiFunction<ColumnType, T, ? extends Column<?, ?>> columnFactory,
+                                                   Option... options) {
             this.id = Objects.requireNonNull(id);
             this.text = Objects.requireNonNull(text);
-            this.columnFactory = (Function<BaseTable<?>, ? extends Column<?, ?>>) columnFactory;
+            this.columnFactory = (BiFunction<ColumnType, BaseTable<?>, ? extends Column<?, ?>>) columnFactory;
             this.options = List.of(options);
         }
+
 
         public String getId() {
             return id;
@@ -207,7 +218,7 @@ public abstract class BaseTable<S> extends TableView<S> {
             return text;
         }
 
-        public Function<BaseTable<?>, ? extends Column<?, ?>> getColumnFactory() {
+        public BiFunction<ColumnType, BaseTable<?>, ? extends Column<?, ?>> getColumnFactory() {
             return columnFactory;
         }
 

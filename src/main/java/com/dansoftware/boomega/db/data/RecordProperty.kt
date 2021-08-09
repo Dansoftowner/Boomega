@@ -48,6 +48,7 @@ class RecordProperty<T> private constructor(
     @Suppress("MemberVisibilityCanBePrivate")
     companion object {
 
+        @JvmField
         val TYPE = RecordProperty(
             id = "type",
             name = { i18n("record.property.type") },
@@ -55,6 +56,7 @@ class RecordProperty<T> private constructor(
             setValue = { type = it }
         )
 
+        @JvmField
         val TITLE = RecordProperty(
             id = "title",
             name = { i18n("record.property.title") },
@@ -62,6 +64,7 @@ class RecordProperty<T> private constructor(
             setValue = { title = it }
         )
 
+        @JvmField
         val LANGUAGE = RecordProperty(
             id = "language",
             name = { i18n("record.property.lang") },
@@ -69,6 +72,7 @@ class RecordProperty<T> private constructor(
             setValue = { language = it }
         )
 
+        @JvmField
         val PUBLISHER = RecordProperty(
             id = "publisher",
             name = { i18n("record.property.publisher") },
@@ -76,6 +80,7 @@ class RecordProperty<T> private constructor(
             setValue = { publisher = it }
         )
 
+        @JvmField
         val PUBLISHED_DATE = RecordProperty(
             id = "publishedDate",
             name = { i18n("record.property.published_date") },
@@ -83,6 +88,7 @@ class RecordProperty<T> private constructor(
             setValue = { publishedDate = it }
         )
 
+        @JvmField
         val NOTES = RecordProperty(
             id = "notes",
             name = { i18n("record.property.notes") },
@@ -90,6 +96,7 @@ class RecordProperty<T> private constructor(
             setValue = { notes = it }
         )
 
+        @JvmField
         val RATING = RecordProperty(
             id = "rating",
             name = { i18n("record.property.rating") },
@@ -97,6 +104,7 @@ class RecordProperty<T> private constructor(
             setValue = { rating = it }
         )
 
+        @JvmField
         val SUBTITLE = RecordProperty(
             id = "subtitle",
             name = { i18n("record.property.subtitle") },
@@ -105,6 +113,7 @@ class RecordProperty<T> private constructor(
             typeScopes = arrayOf(Record.Type.BOOK)
         )
 
+        @JvmField
         val ISBN = RecordProperty(
             id = "isbn",
             name = { i18n("record.property.isbn") },
@@ -113,6 +122,7 @@ class RecordProperty<T> private constructor(
             typeScopes = arrayOf(Record.Type.BOOK)
         )
 
+        @JvmField
         val NUMBER_OF_COPIES =
             RecordProperty(
                 id = "numberOfCopies",
@@ -122,6 +132,7 @@ class RecordProperty<T> private constructor(
                 typeScopes = arrayOf(Record.Type.BOOK)
             )
 
+        @JvmField
         val AUTHORS = RecordProperty(
             id = "authors",
             name = { i18n("record.property.authors") },
@@ -130,6 +141,7 @@ class RecordProperty<T> private constructor(
             typeScopes = arrayOf(Record.Type.BOOK)
         )
 
+        @JvmField
         val SUBJECT = RecordProperty(
             id = "subject",
             name = { i18n("record.property.subject") },
@@ -138,6 +150,7 @@ class RecordProperty<T> private constructor(
             typeScopes = arrayOf(Record.Type.BOOK)
         )
 
+        @JvmField
         val MAGAZINE_NAME =
             RecordProperty(
                 id = "magazineName",
@@ -145,6 +158,15 @@ class RecordProperty<T> private constructor(
                 getValue = Record::magazineName,
                 setValue = { magazineName = it },
                 typeScopes = arrayOf(Record.Type.MAGAZINE)
+            )
+
+        @JvmField
+        val SERVICE_CONNECTION =
+            RecordProperty(
+                id = "serviceConnection",
+                name = { i18n("record.property.service_connection") },
+                getValue = Record::serviceConnection,
+                setValue = { throw UnsupportedOperationException() }
             )
 
         val allProperties = listOf(

@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.recordview;
 
 import com.dansoftware.boomega.db.data.Record;
+import com.dansoftware.boomega.db.data.RecordProperty;
 import com.dansoftware.boomega.db.data.ServiceConnection;
 import com.dansoftware.boomega.gui.control.BaseTable;
 import com.dansoftware.boomega.gui.control.ReadOnlyRating;
@@ -48,6 +49,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
 
@@ -64,119 +66,68 @@ public class RecordTable extends BaseTable<Record> {
             );
 
     public static final ColumnType TYPE_INDICATOR_COLUMN =
-            new ColumnType(
-                    "type_indicator",
-                    "record.table.column.typeindicator",
-                    TypeIndicatorColumn::new,
+            buildColumnType(
+                    RecordProperty.TYPE,
+                    (col, table) -> new TypeIndicatorColumn(),
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED
             );
 
     public static final ColumnType AUTHOR_COLUMN =
-            new ColumnType(
-                    "author",
-                    "record.table.column.author",
-                    AuthorColumn::new,
+            buildColumnType(
+                    RecordProperty.AUTHORS,
+                    (col, table) -> new AuthorColumn(),
                     DEFAULT_VISIBLE,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
-            );
-
-    public static final ColumnType MAGAZINE_NAME_COLUMN =
-            new ColumnType(
-                    "magazine_name",
-                    "record.table.column.magazinename",
-                    MagazineNameColumn::new,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
-            );
-
-    public static final ColumnType TITLE_COLUMN =
-            new ColumnType(
-                    "title",
-                    "record.table.column.title",
-                    TitleColumn::new,
-                    DEFAULT_VISIBLE,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
-            );
-
-    public static final ColumnType SUB_TITLE_COLUMN =
-            new ColumnType(
-                    "subtitle",
-                    "record.table.column.subtitle",
-                    SubtitleColumn::new,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
-            );
-
-    public static final ColumnType ISBN_COLUMN =
-            new ColumnType(
-                    "isbn",
-                    "record.table.column.isbn",
-                    ISBNColumn::new,
-                    DEFAULT_VISIBLE,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
-            );
-
-    public static final ColumnType PUBLISHER_COLUMN =
-            new ColumnType(
-                    "publisher",
-                    "record.table.column.publisher",
-                    PublisherColumn::new,
-                    DEFAULT_VISIBLE,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
-            );
-
-    public static final ColumnType DATE_COLUMN =
-            new ColumnType(
-                    "date",
-                    "record.table.column.date",
-                    DateColumn::new,
-                    DEFAULT_VISIBLE,
-                    TEXT_GUI_VISIBLE,
-                    INTERNATIONALIZED
-            );
-
-    public static final ColumnType COPY_COUNT_COLUMN =
-            new ColumnType(
-                    "copy_count",
-                    "record.table.column.copycount",
-                    CopyCountColumn::new,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
     public static final ColumnType LANG_COLUMN =
-            new ColumnType(
-                    "lang",
-                    "record.table.column.lang",
-                    LangColumn::new,
+            buildColumnType(
+                    RecordProperty.LANGUAGE,
+                    (col, table) -> new LangColumn(),
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
     public static final ColumnType RANK_COLUMN =
-            new ColumnType(
-                    "rank",
-                    "record.table.column.rank",
-                    RankColumn::new,
+            buildColumnType(
+                    RecordProperty.RATING,
+                    (col, table) -> new RankColumn(),
                     DEFAULT_VISIBLE,
                     TEXT_GUI_VISIBLE,
                     INTERNATIONALIZED
             );
 
     public static final ColumnType SERVICE_CONNECTION_COLUMN =
-            new ColumnType(
-                    "service_connection",
-                    "record.table.column.service",
-                    ServiceConnectionColumn::new,
+            buildColumnType(
+                    RecordProperty.SERVICE_CONNECTION,
+                    (col, table) -> new ServiceConnectionColumn(),
                     DEFAULT_VISIBLE,
                     INTERNATIONALIZED
             );
+
+    public static final ColumnType MAGAZINE_NAME_COLUMN =
+            buildColumnType(RecordProperty.MAGAZINE_NAME, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+
+    public static final ColumnType TITLE_COLUMN =
+            buildColumnType(RecordProperty.TITLE, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+
+    public static final ColumnType SUB_TITLE_COLUMN =
+            buildColumnType(RecordProperty.SUBTITLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+
+    public static final ColumnType ISBN_COLUMN =
+            buildColumnType(RecordProperty.ISBN, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+
+    public static final ColumnType PUBLISHER_COLUMN =
+            buildColumnType(RecordProperty.PUBLISHER, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+
+    public static final ColumnType DATE_COLUMN =
+            buildColumnType(RecordProperty.PUBLISHED_DATE, DEFAULT_VISIBLE, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
+
+    public static final ColumnType COPY_COUNT_COLUMN =
+            buildColumnType(RecordProperty.NUMBER_OF_COPIES, TEXT_GUI_VISIBLE, INTERNATIONALIZED);
 
     private static final List<ColumnType> columnsList =
             List.of(
@@ -194,6 +145,26 @@ public class RecordTable extends BaseTable<Record> {
                     RANK_COLUMN,
                     SERVICE_CONNECTION_COLUMN
             );
+
+    private static ColumnType buildColumnType(@NotNull RecordProperty<?> recordProperty, Option... options) {
+        return buildColumnType(
+                recordProperty,
+                (col, table) -> new SimplePropertyColumn(col, recordProperty),
+                options
+        );
+    }
+
+    private static ColumnType buildColumnType(@NotNull RecordProperty<?> recordProperty,
+                                              @NotNull BiFunction<ColumnType, RecordTable, Column<?, ?>> columnFactory,
+                                              Option... options) {
+        return new ColumnType(
+                recordProperty.getId(),
+                recordProperty.getName().invoke(),
+                RecordTable.class,
+                columnFactory,
+                options
+        );
+    }
 
     public static List<ColumnType> columns() {
         return columnsList;
@@ -213,13 +184,6 @@ public class RecordTable extends BaseTable<Record> {
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
         this.setPlaceholder(new PlaceHolder(this));
-    }
-
-    public void buildDefaultColumns() {
-        this.getColumns().clear();
-        columns().stream()
-                .filter(ColumnType::isDefaultVisible)
-                .forEach(this::addColumnType);
     }
 
     public IntegerProperty startIndexProperty() {
@@ -342,31 +306,10 @@ public class RecordTable extends BaseTable<Record> {
         }
     }
 
-    private static final class MagazineNameColumn extends SortableColumn<Record> {
-        MagazineNameColumn() {
-            super(MAGAZINE_NAME_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("magazineName"));
-        }
-    }
-
-    private static final class TitleColumn extends SortableColumn<Record> {
-        TitleColumn() {
-            super(TITLE_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("title"));
-        }
-    }
-
-    private static final class SubtitleColumn extends SortableColumn<Record> {
-        SubtitleColumn() {
-            super(SUB_TITLE_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("subtitle"));
-        }
-    }
-
-    private static final class PublisherColumn extends SortableColumn<Record> {
-        PublisherColumn() {
-            super(PUBLISHER_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("publisher"));
+    private static final class SimplePropertyColumn extends SortableColumn<Record> {
+        SimplePropertyColumn(@NotNull ColumnType columnType, @NotNull RecordProperty<?> property) {
+            super(columnType);
+            setCellValueFactory(new PropertyValueFactory<>(property.getId()));
         }
     }
 
@@ -388,27 +331,6 @@ public class RecordTable extends BaseTable<Record> {
                     return StringUtils.EMPTY;
                 }
             };
-        }
-    }
-
-    private static final class DateColumn extends Column<Record, String> {
-        DateColumn() {
-            super(DATE_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("publishedDate"));
-        }
-    }
-
-    private static final class ISBNColumn extends Column<Record, String> {
-        ISBNColumn() {
-            super(ISBN_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("isbn"));
-        }
-    }
-
-    private static final class CopyCountColumn extends Column<Record, Integer> {
-        CopyCountColumn() {
-            super(COPY_COUNT_COLUMN);
-            setCellValueFactory(new PropertyValueFactory<>("numberOfCopies"));
         }
     }
 
@@ -476,7 +398,6 @@ public class RecordTable extends BaseTable<Record> {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
-
                 }
             };
         }
