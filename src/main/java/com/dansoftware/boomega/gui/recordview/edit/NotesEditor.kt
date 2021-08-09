@@ -33,8 +33,8 @@ class NotesEditor(
     private val markdownEditor: MarkdownEditorControl = buildMarkdownEditor()
     private val changed: BooleanProperty = SimpleBooleanProperty()
 
-    private var content: Node
-        get() = children[0]
+    private var content: Node?
+        get() = children.getOrNull(0)
         set(value) {
             children.setAll(value)
         }
@@ -45,14 +45,14 @@ class NotesEditor(
     }
 
     fun showProgress() {
-        content.effect = BoxBlur()
+        content?.effect = BoxBlur()
         children.add(ProgressBar(ProgressIndicator.INDETERMINATE_PROGRESS).also {
             setAlignment(it, Pos.CENTER)
         })
     }
 
     fun stopProgress() {
-        content.effect = null
+        content?.effect = null
         children.removeIf { it is ProgressBar }
     }
 
