@@ -105,7 +105,9 @@ class RecordsViewConfigurationPanel(private val view: RecordsView) : GridPane() 
         setOnAction {
             val defaults = RecordTable.columns().filter { it.isDefaultVisible }
             val toUncheck = checkedItems - defaults
+            val toCheck = defaults - checkedItems
             toUncheck.forEach(checkModel::clearCheck)
+            toCheck.forEach(checkModel::check)
             onColumnSelection(defaults)
         }
     }
