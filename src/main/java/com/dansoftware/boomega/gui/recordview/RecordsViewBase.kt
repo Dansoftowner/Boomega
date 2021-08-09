@@ -22,7 +22,6 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.COL_CONFIG_KEY
 import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.DOCKS_CONFIG_KEY
@@ -41,9 +40,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.text.Collator
 import java.util.*
-import java.util.stream.Collectors
 
 class RecordsViewBase(
     private val context: Context,
@@ -124,7 +121,9 @@ class RecordsViewBase(
 
     private fun showFindDialog() {
         logger.debug("Showing find dialog...")
-        (table.parent as VBox).children.add(0, buildRecordFindControl())
+        val recordFindControl = buildRecordFindControl()
+        (table.parent as VBox).children.add(0, recordFindControl)
+        recordFindControl.requestFocus()
     }
 
     private fun hideFindDialog() {

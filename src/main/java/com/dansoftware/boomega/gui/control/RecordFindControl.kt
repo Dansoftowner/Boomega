@@ -102,6 +102,11 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
         baseItems.removeListener(baseItemsChangeListener)
     }
 
+    override fun requestFocus() {
+        // requesting focus on the text-field
+        children[0]!!.requestFocus()
+    }
+
     private fun buildUI() {
         children.add(buildField())
         ToggleGroup().let {
@@ -272,7 +277,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
     ) : Filter(baseText, caseSensitive) {
 
         private fun compileRegex(userInput: String, ignoreCase: Boolean) =
-            Regex(userInput, if (ignoreCase) setOf(RegexOption.IGNORE_CASE) else setOf())
+            Regex(userInput, if (ignoreCase) setOf(RegexOption.IGNORE_CASE) else emptySet())
 
         override fun checkMatch(userInput: String, recordValue: String, ignoreCase: Boolean): Boolean =
             compileRegex(userInput, ignoreCase).matches(recordValue)
