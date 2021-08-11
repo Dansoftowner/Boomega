@@ -313,8 +313,8 @@ class RecordsView(
                     onSucceeded {
                         context.stopProgress()
                         context.showInformationNotification(
-                            i18n("record.export.notification.successful.title"),
-                            i18n("record.export.notification.successful.msg", items.size, exporter.contentType, file.name),
+                            i18n("record.export.successful.title"),
+                            i18n("record.export.successful.msg", items.size, exporter.contentType, file.name),
                             Event::consume,
                             hyperLink(i18n("file.open_in_app")) { file.open() },
                             hyperLink(i18n("file.open_in_explorer")) { file.revealInExplorer() }
@@ -323,7 +323,11 @@ class RecordsView(
                     onFailed { e ->
                         context.stopProgress()
                         logger.error("Couldn't export records to '{}'", exporter.contentType, e)
-                        // TODO: error dialog
+                        context.showErrorDialog(
+                            i18n("record.export.error.title"),
+                            i18n("record.export.error.msg", items.size, exporter.contentType),
+                            e as? Exception
+                        ) { }
                     }
                     onRunning { context.showIndeterminateProgress() }
                 }
