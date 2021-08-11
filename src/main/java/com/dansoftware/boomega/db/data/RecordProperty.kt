@@ -33,6 +33,7 @@ class RecordProperty<T> private constructor(
     val id: String,
     val name: String,
     val typeClassReference: Class<T>,
+    val isSortable: Boolean = Comparable::class.java.isAssignableFrom(typeClassReference),
     val getValue: (Record?) -> T?,
     val setValue: Record.(T) -> Unit,
     vararg val typeScopes: Record.Type
@@ -45,12 +46,12 @@ class RecordProperty<T> private constructor(
         getValue: (Record?) -> T?,
         setValue: Record.(T) -> Unit
     ) : this(
-        id,
-        name,
-        typeClassReference,
-        getValue,
-        setValue,
-        *Record.Type.values()
+        id = id,
+        name = name,
+        typeClassReference = typeClassReference,
+        getValue = getValue,
+        setValue = setValue,
+        typeScopes = Record.Type.values()
     )
 
     override fun toString(): String {
@@ -83,6 +84,7 @@ class RecordProperty<T> private constructor(
             id = "language",
             name = i18n("record.property.lang"),
             typeClassReference = String::class.java,
+            isSortable = false,
             getValue = { it?.language },
             setValue = { language = it }
         )
@@ -110,6 +112,7 @@ class RecordProperty<T> private constructor(
             id = "notes",
             name = i18n("record.property.notes"),
             typeClassReference = String::class.java,
+            isSortable = false,
             getValue = { it?.notes },
             setValue = { notes = it }
         )
@@ -211,5 +214,10 @@ class RecordProperty<T> private constructor(
             SERVICE_CONNECTION,
             NOTES
         )
+
+        val sortableProperties: List<RecordProperty<Comparable<*>>>
+            get() = allProperties
+                .filter(RecordProperty<*>::isSortable)
+                .filterIsInstance<RecordProperty<Comparable<*>>>()
     }
 }

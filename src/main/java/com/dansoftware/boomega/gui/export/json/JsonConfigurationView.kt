@@ -54,7 +54,11 @@ class JsonConfigurationView(
     private fun buildUI() {
         initColumnConstraints()
         addRow(Label(i18n("record.export.sort_by")), Label(i18n("record.export.sorting_abc")))
-        addRow(SortingPropertyChooser(jsonExportConfiguration), SortingAbcChooser(jsonExportConfiguration), buildReverseItemsToggle())
+        addRow(
+            SortingPropertyChooser(jsonExportConfiguration),
+            SortingAbcChooser(jsonExportConfiguration),
+            buildReverseItemsToggle()
+        )
         addRow(Label(i18n("record.export.options")))
         addRow(OptionsChecker(jsonExportConfiguration))
         addRow(Label(i18n("record.export.fields")))
@@ -155,12 +159,7 @@ class JsonConfigurationView(
      */
     private class SortingPropertyChooser(jsonExportConfiguration: JsonExportConfiguration) :
         ChoiceBox<RecordProperty<Comparable<*>>?>(
-            FXCollections.observableArrayList(
-                listOf(null) +
-                        RecordProperty.allProperties
-                            .filter { Comparable::class.java.isAssignableFrom(it.typeClassReference) }
-                            .filterIsInstance<RecordProperty<Comparable<*>>>()
-            )
+            FXCollections.observableArrayList(listOf(null) + RecordProperty.sortableProperties)
         ) {
 
         init {
