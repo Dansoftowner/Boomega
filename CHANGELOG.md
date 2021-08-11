@@ -4,6 +4,7 @@
 
 ### Enhancements/features:
 
+* ✨ Exporting to **JSON** (see [#41](https://github.com/Dansoftowner/Boomega/issues/41))
 * ✨💄 Updated Google Book Details Panel (Closes [#126](https://github.com/Dansoftowner/Boomega/issues/126))
 * ✨ [#150](https://github.com/Dansoftowner/Boomega/issues/150): Ability to copy the description in Google Book details pane
 * ✨ [#110](https://github.com/Dansoftowner/Boomega/issues/150): Records view configuration panel
@@ -14,6 +15,8 @@
 ### Bug fixes/improvements
 
 * 🐛 [#136](https://github.com/Dansoftowner/Boomega/issues/136): Record table sorting does not work
+
+> Note: your column-configurations might be broken after updating to this release
 
 # Boomega v0.7.0 (pre-release)
 
