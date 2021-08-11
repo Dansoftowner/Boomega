@@ -28,6 +28,7 @@ import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
@@ -294,7 +295,7 @@ public class RecordTable extends BaseTable<Record> {
                     final List<String> authors = cellData.getValue().getAuthors();
                     if (authors != null)
                         return String.join(", ", authors);
-                    return StringUtils.EMPTY;
+                    return "-";
                 }
             };
         }
@@ -303,7 +304,14 @@ public class RecordTable extends BaseTable<Record> {
     private static final class SimplePropertyColumn extends SortableColumn<Record> {
         SimplePropertyColumn(@NotNull ColumnType columnType, @NotNull RecordProperty<?> property) {
             super(columnType);
-            setCellValueFactory(new PropertyValueFactory<>(property.getId()));
+            setCellValueFactory(new PropertyValueFactory<>(property.getId()) {
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Record, String> param) {
+                    ObservableValue<String> observable = super.call(param);
+                    String value = observable.getValue();
+                    return new ReadOnlyObjectWrapper<>(value != null ? value : "-");
+                }
+            });
         }
     }
 
@@ -322,7 +330,7 @@ public class RecordTable extends BaseTable<Record> {
                     final String raw = cellData.getValue().getLanguage();
                     if (raw != null)
                         return Locale.forLanguageTag(raw).getDisplayLanguage();
-                    return StringUtils.EMPTY;
+                    return "-";
                 }
             };
         }
