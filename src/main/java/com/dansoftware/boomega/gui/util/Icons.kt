@@ -105,6 +105,7 @@ private val iconPack = mapOf<String, () -> Text>(
     "buffer-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.BUFFER),
     "numeric-2-box-multiple" to fun() = MaterialDesignIconView(MaterialDesignIcon.NUMERIC_2_BOX_MULTIPLE_OUTLINE),
     "rotate-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.ROTATE_3D),
+    "duplicate-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.CONTENT_DUPLICATE)
 )
 
 fun icon(identifier: String): Text = (

@@ -20,10 +20,10 @@ package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.export.SupportedExporters
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.keybinding.keyBinding
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.keyCombination
-import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.binding.Bindings
 import javafx.collections.ListChangeListener
@@ -44,32 +44,39 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
         items.add(buildDeleteItem())
         items.add(buildCopyItem())
         items.add(buildCutItem())
+        items.add(buildDuplicateItem())
         items.add(buildExportItem())
         items.add(SeparatorMenuItem())
         items.add(buildPasteItem())
     }
+    
+    private fun buildDuplicateItem() = 
+        MenuItem(i18n("record.duplicate"), icon("duplicate-icon"))
+            .action { recordsView.duplicateSelectedItems() }
+            .keyBinding(KeyBindings.duplicateRecordKeyBinding)
+            .apply { disableProperty().bind(itemsEmpty) }
 
     private fun buildDeleteItem() =
-        MenuItem(I18N.getValue("record.delete"), icon("delete-icon"))
+        MenuItem(i18n("record.delete"), icon("delete-icon"))
             .action { recordsView.removeSelectedItems() }
             .keyCombination(KeyBindings.deleteRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
     private fun buildCopyItem() =
-        MenuItem(I18N.getValue("record.copy"), icon("copy-icon"))
+        MenuItem(i18n("record.copy"), icon("copy-icon"))
             .action { recordsView.copySelectedToClipboard() }
             .keyCombination(KeyBindings.copyRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
 
     private fun buildCutItem() =
-        MenuItem(I18N.getValue("record.cut"), icon("cut-icon"))
+        MenuItem(i18n("record.cut"), icon("cut-icon"))
             .action { recordsView.cutSelectedToClipboard() }
             .keyCombination(KeyBindings.cutRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
     private fun buildPasteItem() =
-        MenuItem(I18N.getValue("record.paste"), icon("paste-icon"))
+        MenuItem(i18n("record.paste"), icon("paste-icon"))
             .action { recordsView.pasteItemsFromClipboard() }
             .keyCombination(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
             .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }

@@ -21,31 +21,18 @@ package com.dansoftware.boomega.gui.recordview
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.export.SupportedExporters
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationOverlay
-import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationPanel
-import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
-import javafx.application.Platform
-import javafx.beans.binding.Bindings
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ObservableBooleanValue
-import javafx.collections.ListChangeListener
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.geometry.Insets
-import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.scene.control.*
-import java.text.Collator
-import java.util.*
-import java.util.function.Supplier
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 class RecordsViewToolbar(
     private val context: Context,
@@ -73,6 +60,7 @@ class RecordsViewToolbar(
         leftItems.add(buildCopyItem())
         leftItems.add(buildCutItem())
         leftItems.add(buildPasteItem())
+        leftItems.add(buildDuplicateItem())
         leftItems.add(Separator())
         leftItems.add(buildDeleteItem())
         leftItems.add(buildInsertItem())
@@ -123,6 +111,13 @@ class RecordsViewToolbar(
     private fun buildCopyItem() =
         buildToolbarItem("copy-icon", "record.copy") {
             view.copySelectedToClipboard()
+        }.apply {
+            disableProperty().bind(view.table.selectedItems.emptyBinding())
+        }
+
+    private fun buildDuplicateItem() =
+        buildToolbarItem("duplicate-icon", "record.duplicate") {
+            view.duplicateSelectedItems()
         }.apply {
             disableProperty().bind(view.table.selectedItems.emptyBinding())
         }

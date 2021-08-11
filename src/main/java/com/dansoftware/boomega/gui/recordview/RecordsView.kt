@@ -175,7 +175,7 @@ class RecordsView(
         Bindings.size(baseItems)
 
     fun cutSelectedToClipboard() {
-        cutItemsToClipboard(ArrayList(table.selectionModel.selectedItems))
+        cutItemsToClipboard(table.selectionModel.selectedItems.toList())
     }
 
     private fun cutItemsToClipboard(items: List<Record>) {
@@ -185,7 +185,7 @@ class RecordsView(
     }
 
     fun copySelectedToClipboard() {
-        copyItemsToClipboard(ArrayList(table.selectionModel.selectedItems))
+        copyItemsToClipboard(table.selectionModel.selectedItems.toList())
     }
 
     private fun copyItemsToClipboard(items: List<Record>) {
@@ -290,6 +290,10 @@ class RecordsView(
                 }
             }
         }
+
+    fun duplicateSelectedItems() {
+        CachedExecutor.submit(buildPasteAction(table.selectedItems.toList()))
+    }
 
     /**
      * Exports the selected table-items with the given [RecordExporter]

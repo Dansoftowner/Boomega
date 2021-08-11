@@ -149,6 +149,15 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.V, KeyCombination.META_DOWN)
         )
 
+    val duplicateRecordKeyBinding: KeyBinding =
+        KeyBinding(
+            id = "duplicateRecordKeyBinding",
+            i18nTitle = "preferences.keybindings.duplicate_record",
+            i18nDescription = "preferences.keybindings.duplicate_record.desc",
+            winLinuxKeyCombination = KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN),
+            macKeyCombination = KeyCodeCombination(KeyCode.D, KeyCombination.META_DOWN)
+        )
+
     val findRecordKeyBinding: KeyBinding =
         KeyBinding(
             id = "findRecordKeyBinding",
@@ -174,7 +183,7 @@ object KeyBindings {
 
     @JvmStatic
     fun allKeyBindings(): List<KeyBinding> =
-        javaClass.declaredFields
+        javaClass.declaredFields.asSequence()
             .filter { it.type == KeyBinding::class.java }
             .map { it.get(this) as KeyBinding }
             .toList()
