@@ -314,7 +314,7 @@ class RecordsView(
                         context.stopProgress()
                         context.showInformationNotification(
                             i18n("record.export.notification.successful.title"),
-                            i18n("record.export.notification.successful.msg", items.size, exporter.contentType),
+                            i18n("record.export.notification.successful.msg", items.size, exporter.contentType, file.name),
                             Event::consume,
                             hyperLink(i18n("file.open_in_app")) { file.open() },
                             hyperLink(i18n("file.open_in_explorer")) { file.revealInExplorer() }
