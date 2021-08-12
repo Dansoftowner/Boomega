@@ -19,6 +19,8 @@
 package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.util.addKeyBindingDetection
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import javafx.beans.property.IntegerProperty
 import javafx.scene.layout.BorderPane
@@ -39,12 +41,17 @@ class GoogleBooksSearchResultView(context: Context, query: GoogleBooksQuery, onP
 
     init {
         styleClass.add("google-books-search-result-view")
+        initKeyBindDetections()
         buildUI()
     }
 
     private fun buildUI() {
         top = toolbar
         center = pagination
+    }
+
+    private fun initKeyBindDetections() {
+        addKeyBindingDetection(KeyBindings.refreshPage) { refresh() }
     }
 
     fun refresh() {

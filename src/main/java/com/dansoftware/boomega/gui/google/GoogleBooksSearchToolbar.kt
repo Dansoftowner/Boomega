@@ -19,6 +19,8 @@
 package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.control.BiToolBar
+import com.dansoftware.boomega.gui.control.KeyBindingTooltip
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.binding.Bindings
@@ -74,8 +76,7 @@ class GoogleBooksSearchToolbar(
     private fun buildReloadButton() = Button().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
         graphic = icon("reload-icon")
-        tooltip = Tooltip(i18n("page.reload"))
+        tooltip = KeyBindingTooltip(i18n("page.reload"), KeyBindings.refreshPage)
         setOnAction { view.refresh() }
     }
-
 }
