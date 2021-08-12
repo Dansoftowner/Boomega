@@ -22,6 +22,7 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.export.SupportedExporters
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
+import com.dansoftware.boomega.gui.control.KeyBindingTooltip
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationOverlay
@@ -141,7 +142,11 @@ class RecordsViewToolbar(
         ) { view.cutSelectedToClipboard() }
 
     private fun buildRefreshItem() =
-        buildToolbarItem("reload-icon", "page.reload") { view.refresh() }
+        buildToolbarItem(
+            "reload-icon",
+            "page.reload",
+            KeyBindings.refreshPage
+        ) { view.refresh() }
 
     private fun buildExportItem() =
         MenuButton(null, icon("file-export-icon")).apply {
@@ -192,14 +197,7 @@ class RecordsViewToolbar(
         onClick: EventHandler<ActionEvent>
     ): Button = Button(null, icon(iconStyleClass)).apply {
         onAction = onClick
-        tooltip = Tooltip().apply {
-            textProperty().bind(
-                SimpleStringProperty(
-                    "${i18n(i18nTooltip)} (")
-                    .concat(keyBinding.keyCombinationProperty)
-                    .concat(")")
-            )
-        }
+        tooltip = KeyBindingTooltip(i18n(i18nTooltip), keyBinding)
         disable?.let(disableProperty()::bind)
     }
 }

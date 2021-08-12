@@ -26,8 +26,8 @@ import javafx.scene.input.KeyEvent
 
 class KeyBinding(
     val id: String,
-    val i18nTitle: String,
-    val i18nDescription: String,
+    val title: String,
+    val description: () -> String,
     val defaultKeyCombination: KeyCombination
 ) {
 
@@ -38,14 +38,14 @@ class KeyBinding(
 
     constructor(
         id: String,
-        i18nTitle: String,
-        i18nDescription: String,
+        title: String,
+        description: () -> String,
         winLinuxKeyCombination: KeyCombination,
         macKeyCombination: KeyCombination
     ) : this(
         id,
-        i18nTitle,
-        i18nDescription,
+        title,
+        description,
         when {
             OsInfo.isMac() -> macKeyCombination
             else -> winLinuxKeyCombination
@@ -54,15 +54,15 @@ class KeyBinding(
 
     constructor(
         id: String,
-        i18nTitle: String,
-        i18nDescription: String,
+        title: String,
+        description: () -> String,
         winKeyCombination: KeyCombination,
         linuxKeyCombination: KeyCombination,
-        macKeyCombination: KeyCombination,
+        macKeyCombination: KeyCombination
     ) : this(
         id,
-        i18nTitle,
-        i18nDescription,
+        title,
+        description,
         when {
             OsInfo.isLinux() -> linuxKeyCombination
             OsInfo.isMac() -> macKeyCombination

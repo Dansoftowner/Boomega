@@ -48,9 +48,11 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
         items.add(buildExportItem())
         items.add(SeparatorMenuItem())
         items.add(buildPasteItem())
+        items.add(SeparatorMenuItem())
+        items.add(buildReloadItem())
     }
-    
-    private fun buildDuplicateItem() = 
+
+    private fun buildDuplicateItem() =
         MenuItem(i18n("record.duplicate"), icon("duplicate-icon"))
             .action { recordsView.duplicateSelectedItems() }
             .keyBinding(KeyBindings.duplicateRecord)
@@ -82,7 +84,7 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
             .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }
 
     private fun buildExportItem() =
-        Menu(i18n("record.context_menu.export"), icon("file-export-icon")).apply { // TODO: i18n
+        Menu(i18n("record.context_menu.export"), icon("file-export-icon")).apply {
             items.addAll(
                 SupportedExporters.map { exporter ->
                     MenuItem(exporter.name, exporter.icon).action {
@@ -91,6 +93,11 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
                 }
             )
         }
+
+    private fun buildReloadItem() =
+        MenuItem(i18n("page.reload"), icon("reload-icon"))
+            .action { recordsView.refresh() }
+            .keyBinding(KeyBindings.refreshPage)
 
     fun applyOn(table: RecordTable) {
         table.rowContextMenu = this

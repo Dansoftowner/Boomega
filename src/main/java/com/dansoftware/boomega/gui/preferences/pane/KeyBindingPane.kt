@@ -63,8 +63,8 @@ class KeyBindingPane(preferences: Preferences) : PreferencesPane(preferences) {
 
         private fun buildKeyBindDetectionControl(keyBinding: KeyBinding): PreferencesControl =
             PairControl(
-                I18N.getValue(keyBinding.i18nTitle),
-                I18N.getValue(keyBinding.i18nDescription),
+                keyBinding.title,
+                keyBinding.description(),
                 KeyBindDetectionField(keyBinding.keyCombination).apply {
                     this.keyCombinationProperty().addListener { _, _, combination ->
                         keyBinding.keyCombinationProperty.set(combination)

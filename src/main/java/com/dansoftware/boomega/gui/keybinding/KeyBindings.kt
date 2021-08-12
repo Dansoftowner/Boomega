@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.keybinding
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.i18n.i18n
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
@@ -35,8 +36,8 @@ object KeyBindings {
     val newEntry: KeyBinding =
         KeyBinding(
             id = "newEntryKeyBinding",
-            i18nTitle = "action.new_entry",
-            i18nDescription = "preferences.keybindings.new_entry.desc",
+            title = i18n("action.new_entry"),
+            description = { i18n("preferences.keybindings.new_entry.desc") },
             winLinuxKeyCombination = KeyCodeCombination(
                 KeyCode.N,
                 KeyCombination.SHIFT_DOWN,
@@ -48,8 +49,8 @@ object KeyBindings {
     val restartApplication: KeyBinding =
         KeyBinding(
             id = "restartApplicationKeyBinding",
-            i18nTitle = "action.restart",
-            i18nDescription = "preferences.keybindings.restart.desc",
+            title = i18n("action.restart"),
+            description = { i18n("preferences.keybindings.restart.desc") },
             winLinuxKeyCombination = KeyCodeCombination(
                 KeyCode.R,
                 KeyCombination.SHIFT_DOWN,
@@ -61,8 +62,8 @@ object KeyBindings {
     val openDatabase: KeyBinding =
         KeyBinding(
             id = "openDatabaseKeyBinding",
-            i18nTitle = "action.open_database",
-            i18nDescription = "preferences.keybindings.open_database.desc",
+            title = i18n("action.open_database"),
+            description = { i18n("preferences.keybindings.open_database.desc") },
             winLinuxKeyCombination = KeyCodeCombination(
                 KeyCode.O,
                 KeyCombination.ALT_DOWN,
@@ -74,8 +75,8 @@ object KeyBindings {
     val createDatabase: KeyBinding =
         KeyBinding(
             id = "createDatabaseKeyBinding",
-            i18nTitle = "action.create_database",
-            i18nDescription = "preferences.keybindings.create_database.desc",
+            title = i18n("action.create_database"),
+            description = { i18n("preferences.keybindings.create_database.desc") },
             winLinuxKeyCombination = KeyCodeCombination(
                 KeyCode.C,
                 KeyCombination.ALT_DOWN,
@@ -87,8 +88,8 @@ object KeyBindings {
     val openDatabaseManager: KeyBinding =
         KeyBinding(
             id = "openDatabaseManagerKeyBinding",
-            i18nTitle = "action.open_database_manager",
-            i18nDescription = "preferences.keybindings.open_database_manager.desc",
+            title = i18n("action.open_database_manager"),
+            description = { i18n("preferences.keybindings.open_database_manager.desc") },
             winLinuxKeyCombination = KeyCodeCombination(
                 KeyCode.M,
                 KeyCombination.ALT_DOWN,
@@ -100,16 +101,16 @@ object KeyBindings {
     val fullScreen: KeyBinding =
         KeyBinding(
             id = "fullScreenKeyBinding",
-            i18nTitle = "action.full_screen",
-            i18nDescription = "preferences.keybindings.full_screen.desc",
+            title = i18n("action.full_screen"),
+            description = { i18n("preferences.keybindings.full_screen.desc") },
             defaultKeyCombination = KeyCodeCombination(KeyCode.F11)
         )
 
     val saveChanges: KeyBinding =
         KeyBinding(
             id = "saveChangesKeyBinding",
-            i18nTitle = "action.save_changes",
-            i18nDescription = "preferences.keybindings.save_changes.desc",
+            title = i18n("action.save_changes"),
+            description = { i18n("preferences.keybindings.save_changes.desc") },
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN)
         )
@@ -117,16 +118,16 @@ object KeyBindings {
     val deleteRecord: KeyBinding =
         KeyBinding(
             id = "deleteRecordKeyBinding",
-            i18nTitle = "preferences.keybindings.delete_record",
-            i18nDescription = "preferences.keybindings.delete_record.desc",
+            title = i18n("preferences.keybindings.delete_record"),
+            description = { i18n("preferences.keybindings.delete_record.desc") },
             defaultKeyCombination = KeyCodeCombination(KeyCode.DELETE)
         )
 
     val copyRecord: KeyBinding =
         KeyBinding(
             id = "copyRecordKeyBinding",
-            i18nTitle = "preferences.keybindings.copy_record",
-            i18nDescription = "preferences.keybindings.copy_record.desc",
+            title = i18n("preferences.keybindings.copy_record"),
+            description = { i18n("preferences.keybindings.copy_record.desc") },
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.META_DOWN)
         )
@@ -134,8 +135,8 @@ object KeyBindings {
     val cutRecord: KeyBinding =
         KeyBinding(
             id = "cutRecordKeyBinding",
-            i18nTitle = "preferences.keybindings.cut_record",
-            i18nDescription = "preferences.keybindings.cut_record.desc",
+            title = i18n("preferences.keybindings.cut_record"),
+            description = { i18n("preferences.keybindings.cut_record.desc") },
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.X, KeyCombination.META_DOWN)
         )
@@ -143,8 +144,8 @@ object KeyBindings {
     val pasteRecord: KeyBinding =
         KeyBinding(
             id = "pasteRecordKeyBinding",
-            i18nTitle = "preferences.keybindings.paste_record",
-            i18nDescription = "preferences.keybindings.paste_record.desc",
+            title = i18n("preferences.keybindings.paste_record"),
+            description = { i18n("preferences.keybindings.paste_record.desc") },
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.V, KeyCombination.META_DOWN)
         )
@@ -152,8 +153,8 @@ object KeyBindings {
     val duplicateRecord: KeyBinding =
         KeyBinding(
             id = "duplicateRecordKeyBinding",
-            i18nTitle = "preferences.keybindings.duplicate_record",
-            i18nDescription = "preferences.keybindings.duplicate_record.desc",
+            title = i18n("preferences.keybindings.duplicate_record"),
+            description = { i18n("preferences.keybindings.duplicate_record.desc") },
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.D, KeyCombination.META_DOWN)
         )
@@ -161,8 +162,8 @@ object KeyBindings {
     val findRecord: KeyBinding =
         KeyBinding(
             id = "findRecordKeyBinding",
-            i18nTitle = "preferences.keybindings.find_record",
-            i18nDescription = "preferences.keybindings.find_record.desc",
+            title = i18n("preferences.keybindings.find_record"),
+            description = { i18n("preferences.keybindings.find_record.desc") },
             winLinuxKeyCombination = KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN),
             macKeyCombination = KeyCodeCombination(KeyCode.F, KeyCombination.META_DOWN)
         )
@@ -170,8 +171,8 @@ object KeyBindings {
     val openSettings: KeyBinding =
         KeyBinding(
             id = "openSettingsKeyBinding",
-            i18nTitle = "action.settings",
-            i18nDescription = "preferences.keybindings.open_settings.desc",
+            title = i18n("action.settings"),
+            description = { i18n("preferences.keybindings.open_settings.desc") },
             winLinuxKeyCombination = KeyCodeCombination(
                 KeyCode.S,
                 KeyCombination.ALT_DOWN,
@@ -180,6 +181,13 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 
+    val refreshPage: KeyBinding =
+        KeyBinding(
+            id = "refreshPageKeyBinding",
+            title = i18n("page.reload"),
+            description = { "" },
+            defaultKeyCombination = KeyCodeCombination(KeyCode.F5)
+        )
 
     @JvmStatic
     fun allKeyBindings(): List<KeyBinding> =
