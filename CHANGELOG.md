@@ -9,6 +9,7 @@
 * ✨ [#150](https://github.com/Dansoftowner/Boomega/issues/150): Ability to copy the description in Google Book details pane
 * ✨ [#110](https://github.com/Dansoftowner/Boomega/issues/150): Records view configuration panel
 * ✨ [#104](https://github.com/Dansoftowner/Boomega/issues/104): Duplicate record item
+* ✨ [#94](https://github.com/Dansoftowner/Boomega/issues/94): Showing key combinations in the tooltips of the toolbar items
 * ✨ Hiding docks when no items selected in records-view
 * ✨ Disable insert-item when the find-dialog is showing in records-view
 * 💄 Look and feel updates
