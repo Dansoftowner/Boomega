@@ -88,7 +88,7 @@ class RecordEditor(
     }
 
     private fun initSaveKeyCombination() {
-        KeyBindings.saveChangesKeyBinding.also { keyBinding ->
+        KeyBindings.saveChanges.also { keyBinding ->
             this.setOnKeyPressed {
                 if (keyBinding.match(it)) {
                     logger.debug("Save changes key combination detected")

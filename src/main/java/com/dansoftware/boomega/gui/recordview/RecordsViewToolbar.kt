@@ -22,6 +22,8 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.export.SupportedExporters
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
+import com.dansoftware.boomega.gui.keybinding.KeyBinding
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationOverlay
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
@@ -73,14 +75,18 @@ class RecordsViewToolbar(
     }
 
     private fun buildSearchItem() =
-        buildToolbarItem("search-icon", "record.find") {
-            view.isFindDialogVisible = view.isFindDialogVisible.not()
-        }
+        buildToolbarItem(
+            "search-icon",
+            "record.find",
+            KeyBindings.findRecord
+        ) { view.isFindDialogVisible = view.isFindDialogVisible.not() }
 
     private fun buildInsertItem() =
-        buildToolbarItem("plus-box-icon", "record.add.module.title", view.findDialogVisibleProperty) {
-            view.insertNewRecord()
-        }
+        buildToolbarItem(
+            "plus-box-icon",
+            "record.add.module.title",
+            view.findDialogVisibleProperty
+        ) { view.insertNewRecord() }
 
     private fun buildCountItem() = Label().apply {
         padding = Insets(5.0)
@@ -95,39 +101,44 @@ class RecordsViewToolbar(
     }
 
     private fun buildDeleteItem() =
-        buildToolbarItem("delete-icon", "record.delete") {
-            view.removeSelectedItems()
-        }.apply {
-            disableProperty().bind(view.table.selectedItems.emptyBinding())
-        }
+        buildToolbarItem(
+            "delete-icon",
+            "record.delete",
+            KeyBindings.deleteRecord,
+            view.table.selectedItems.emptyBinding()
+        ) { view.removeSelectedItems() }
 
     private fun buildPasteItem() =
-        buildToolbarItem("paste-icon", "record.paste") {
-            view.pasteItemsFromClipboard()
-        }.apply {
-            disableProperty().bind(view.clipboardEmptyProperty())
-        }
+        buildToolbarItem(
+            "paste-icon",
+            "record.paste",
+            KeyBindings.pasteRecord,
+            view.clipboardEmptyProperty()
+        ) { view.pasteItemsFromClipboard() }
 
     private fun buildCopyItem() =
-        buildToolbarItem("copy-icon", "record.copy") {
-            view.copySelectedToClipboard()
-        }.apply {
-            disableProperty().bind(view.table.selectedItems.emptyBinding())
-        }
+        buildToolbarItem(
+            "copy-icon",
+            "record.copy",
+            KeyBindings.copyRecord,
+            view.table.selectedItems.emptyBinding()
+        ) { view.copySelectedToClipboard() }
 
     private fun buildDuplicateItem() =
-        buildToolbarItem("duplicate-icon", "record.duplicate") {
-            view.duplicateSelectedItems()
-        }.apply {
-            disableProperty().bind(view.table.selectedItems.emptyBinding())
-        }
+        buildToolbarItem(
+            "duplicate-icon",
+            "record.duplicate",
+            KeyBindings.duplicateRecord,
+            view.table.selectedItems.emptyBinding()
+        ) { view.duplicateSelectedItems() }
 
     private fun buildCutItem() =
-        buildToolbarItem("cut-icon", "record.cut") {
-            view.cutSelectedToClipboard()
-        }.apply {
-            disableProperty().bind(view.table.selectedItems.emptyBinding())
-        }
+        buildToolbarItem(
+            "cut-icon",
+            "record.cut",
+            KeyBindings.cutRecord,
+            view.table.selectedItems.emptyBinding()
+        ) { view.cutSelectedToClipboard() }
 
     private fun buildRefreshItem() =
         buildToolbarItem("reload-icon", "page.reload") { view.refresh() }
@@ -143,7 +154,6 @@ class RecordsViewToolbar(
                 }
             })
         }
-
 
     private fun buildOptionsItem() =
         buildToolbarItem("tune-icon", "record.panel_config") {
@@ -172,5 +182,24 @@ class RecordsViewToolbar(
     ): Button = Button(null, graphic).apply {
         onAction = onClick
         tooltip = Tooltip(I18N.getValue(i18nTooltip))
+    }
+
+    private fun buildToolbarItem(
+        iconStyleClass: String,
+        i18nTooltip: String,
+        keyBinding: KeyBinding,
+        disable: ObservableBooleanValue? = null,
+        onClick: EventHandler<ActionEvent>
+    ): Button = Button(null, icon(iconStyleClass)).apply {
+        onAction = onClick
+        tooltip = Tooltip().apply {
+            textProperty().bind(
+                SimpleStringProperty(
+                    "${i18n(i18nTooltip)} (")
+                    .concat(keyBinding.keyCombinationProperty)
+                    .concat(")")
+            )
+        }
+        disable?.let(disableProperty()::bind)
     }
 }

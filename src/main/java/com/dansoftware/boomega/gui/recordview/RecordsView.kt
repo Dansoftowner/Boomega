@@ -120,7 +120,7 @@ class RecordsView(
     }
 
     private fun initFindKeyDetection() {
-        context.addKeyBindingDetection(KeyBindings.findRecordKeyBinding) {
+        context.addKeyBindingDetection(KeyBindings.findRecord) {
             isFindDialogVisible = true
         }
     }

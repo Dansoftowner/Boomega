@@ -53,32 +53,32 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
     private fun buildDuplicateItem() = 
         MenuItem(i18n("record.duplicate"), icon("duplicate-icon"))
             .action { recordsView.duplicateSelectedItems() }
-            .keyBinding(KeyBindings.duplicateRecordKeyBinding)
+            .keyBinding(KeyBindings.duplicateRecord)
             .apply { disableProperty().bind(itemsEmpty) }
 
     private fun buildDeleteItem() =
         MenuItem(i18n("record.delete"), icon("delete-icon"))
             .action { recordsView.removeSelectedItems() }
-            .keyCombination(KeyBindings.deleteRecordKeyBinding.keyCombinationProperty)
+            .keyCombination(KeyBindings.deleteRecord.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
     private fun buildCopyItem() =
         MenuItem(i18n("record.copy"), icon("copy-icon"))
             .action { recordsView.copySelectedToClipboard() }
-            .keyCombination(KeyBindings.copyRecordKeyBinding.keyCombinationProperty)
+            .keyCombination(KeyBindings.copyRecord.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
 
     private fun buildCutItem() =
         MenuItem(i18n("record.cut"), icon("cut-icon"))
             .action { recordsView.cutSelectedToClipboard() }
-            .keyCombination(KeyBindings.cutRecordKeyBinding.keyCombinationProperty)
+            .keyCombination(KeyBindings.cutRecord.keyCombinationProperty)
             .apply { disableProperty().bind(itemsEmpty) }
 
     private fun buildPasteItem() =
         MenuItem(i18n("record.paste"), icon("paste-icon"))
             .action { recordsView.pasteItemsFromClipboard() }
-            .keyCombination(KeyBindings.pasteRecordKeyBinding.keyCombinationProperty)
+            .keyCombination(KeyBindings.pasteRecord.keyCombinationProperty)
             .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }
 
     private fun buildExportItem() =

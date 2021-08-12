@@ -54,7 +54,7 @@ object GlobalActions {
     val NEW_ENTRY = Action(
         "action.new_entry",
         "database-icon",
-        KeyBindings.newEntryKeyBinding
+        KeyBindings.newEntry
     ) { context, preferences, databaseTracker ->
         submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker))
     }
@@ -64,7 +64,7 @@ object GlobalActions {
         Action(
             "action.open_database",
             "file-icon",
-            KeyBindings.openDatabaseKeyBinding
+            KeyBindings.openDatabase
         ) { context, preferences, databaseTracker ->
             DatabaseOpener().showOpenDialog(context.contextWindow)?.also {
                 // launches the database
@@ -77,7 +77,7 @@ object GlobalActions {
         Action(
             "action.create_database",
             "database-plus-icon",
-            KeyBindings.createDatabaseKeyBinding
+            KeyBindings.createDatabase
         ) { context, preferences, databaseTracker ->
             DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
                 // launches the database
@@ -90,7 +90,7 @@ object GlobalActions {
         Action(
             "action.open_database_manager",
             "database-icon",
-            KeyBindings.openDatabaseManagerKeyBinding
+            KeyBindings.openDatabaseManager
         ) { context, _, databaseTracker ->
             DatabaseManagerActivity().show(databaseTracker, context.contextWindow)
         }
@@ -101,7 +101,7 @@ object GlobalActions {
         Action(
             "action.restart",
             "update-icon",
-            KeyBindings.restartApplicationKeyBinding
+            KeyBindings.restartApplication
         ) { context, _, _ ->
             if (!dialogShownContexts.contains(context)) {
                 context.showConfirmationDialog(
@@ -123,7 +123,7 @@ object GlobalActions {
         Action(
             "action.settings",
             "settings-icon",
-            KeyBindings.openSettingsKeyBinding
+            KeyBindings.openSettings
         ) { context, preferences, _ ->
             PreferencesActivity(preferences).show(context.contextWindow)
         }
@@ -133,7 +133,7 @@ object GlobalActions {
         Action(
             "action.full_screen",
             "full-screen-icon",
-            KeyBindings.fullScreenKeyBinding
+            KeyBindings.fullScreen
         ) { context, _, _ ->
             context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() }
         }

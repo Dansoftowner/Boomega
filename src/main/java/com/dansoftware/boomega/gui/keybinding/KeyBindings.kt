@@ -32,7 +32,7 @@ object KeyBindings {
         KeyBindingsAdapter()
     ) { this }
 
-    val newEntryKeyBinding: KeyBinding =
+    val newEntry: KeyBinding =
         KeyBinding(
             id = "newEntryKeyBinding",
             i18nTitle = "action.new_entry",
@@ -45,7 +45,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN)
         )
 
-    val restartApplicationKeyBinding: KeyBinding =
+    val restartApplication: KeyBinding =
         KeyBinding(
             id = "restartApplicationKeyBinding",
             i18nTitle = "action.restart",
@@ -58,7 +58,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN),
         )
 
-    val openDatabaseKeyBinding: KeyBinding =
+    val openDatabase: KeyBinding =
         KeyBinding(
             id = "openDatabaseKeyBinding",
             i18nTitle = "action.open_database",
@@ -71,7 +71,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 
-    val createDatabaseKeyBinding: KeyBinding =
+    val createDatabase: KeyBinding =
         KeyBinding(
             id = "createDatabaseKeyBinding",
             i18nTitle = "action.create_database",
@@ -84,7 +84,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN)
         )
 
-    val openDatabaseManagerKeyBinding: KeyBinding =
+    val openDatabaseManager: KeyBinding =
         KeyBinding(
             id = "openDatabaseManagerKeyBinding",
             i18nTitle = "action.open_database_manager",
@@ -97,7 +97,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.META_DOWN),
         )
 
-    val fullScreenKeyBinding: KeyBinding =
+    val fullScreen: KeyBinding =
         KeyBinding(
             id = "fullScreenKeyBinding",
             i18nTitle = "action.full_screen",
@@ -105,7 +105,7 @@ object KeyBindings {
             defaultKeyCombination = KeyCodeCombination(KeyCode.F11)
         )
 
-    val saveChangesKeyBinding: KeyBinding =
+    val saveChanges: KeyBinding =
         KeyBinding(
             id = "saveChangesKeyBinding",
             i18nTitle = "action.save_changes",
@@ -114,7 +114,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN)
         )
 
-    val deleteRecordKeyBinding: KeyBinding =
+    val deleteRecord: KeyBinding =
         KeyBinding(
             id = "deleteRecordKeyBinding",
             i18nTitle = "preferences.keybindings.delete_record",
@@ -122,7 +122,7 @@ object KeyBindings {
             defaultKeyCombination = KeyCodeCombination(KeyCode.DELETE)
         )
 
-    val copyRecordKeyBinding: KeyBinding =
+    val copyRecord: KeyBinding =
         KeyBinding(
             id = "copyRecordKeyBinding",
             i18nTitle = "preferences.keybindings.copy_record",
@@ -131,7 +131,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.C, KeyCombination.META_DOWN)
         )
 
-    val cutRecordKeyBinding: KeyBinding =
+    val cutRecord: KeyBinding =
         KeyBinding(
             id = "cutRecordKeyBinding",
             i18nTitle = "preferences.keybindings.cut_record",
@@ -140,7 +140,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.X, KeyCombination.META_DOWN)
         )
 
-    val pasteRecordKeyBinding: KeyBinding =
+    val pasteRecord: KeyBinding =
         KeyBinding(
             id = "pasteRecordKeyBinding",
             i18nTitle = "preferences.keybindings.paste_record",
@@ -149,7 +149,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.V, KeyCombination.META_DOWN)
         )
 
-    val duplicateRecordKeyBinding: KeyBinding =
+    val duplicateRecord: KeyBinding =
         KeyBinding(
             id = "duplicateRecordKeyBinding",
             i18nTitle = "preferences.keybindings.duplicate_record",
@@ -158,7 +158,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.D, KeyCombination.META_DOWN)
         )
 
-    val findRecordKeyBinding: KeyBinding =
+    val findRecord: KeyBinding =
         KeyBinding(
             id = "findRecordKeyBinding",
             i18nTitle = "preferences.keybindings.find_record",
@@ -167,7 +167,7 @@ object KeyBindings {
             macKeyCombination = KeyCodeCombination(KeyCode.F, KeyCombination.META_DOWN)
         )
 
-    val openSettingsKeyBinding: KeyBinding =
+    val openSettings: KeyBinding =
         KeyBinding(
             id = "openSettingsKeyBinding",
             i18nTitle = "action.settings",
@@ -183,7 +183,7 @@ object KeyBindings {
 
     @JvmStatic
     fun allKeyBindings(): List<KeyBinding> =
-        javaClass.declaredFields.asSequence()
+        javaClass.declaredFields
             .filter { it.type == KeyBinding::class.java }
             .map { it.get(this) as KeyBinding }
             .toList()
