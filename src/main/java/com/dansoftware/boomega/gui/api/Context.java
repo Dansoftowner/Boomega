@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.api;
 
-import com.dansoftware.boomega.gui.keybinding.KeyBinding;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -158,8 +157,6 @@ public interface Context {
 
     default void sendRequest(@NotNull Request request) {
     }
-
-    void addKeyBindingDetection(@NotNull KeyBinding keyBinding, Consumer<KeyBinding> onDetected);
 
     /* *** */
 

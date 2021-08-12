@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.api;
 
-import com.dansoftware.boomega.gui.keybinding.KeyBinding;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -160,11 +159,6 @@ public interface EmptyContext extends Context {
 
     @Override
     default void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked, Hyperlink... hyperlinks) {
-
-    }
-
-    @Override
-    default void addKeyBindingDetection(@NotNull KeyBinding keyBinding, Consumer<KeyBinding> onDetected) {
 
     }
 

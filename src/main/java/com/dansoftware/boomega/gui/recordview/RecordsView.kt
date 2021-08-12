@@ -113,16 +113,14 @@ class RecordsView(
     }
 
     private fun init() {
-        initFindKeyDetection()
+        initKeyDetections()
         buildTableRowContextMenu()
         readConfigurations()
         loadRecords()
     }
 
-    private fun initFindKeyDetection() {
-        context.addKeyBindingDetection(KeyBindings.findRecord) {
-            isFindDialogVisible = true
-        }
+    private fun initKeyDetections() {
+        addKeyBindingDetection(KeyBindings.findRecord) { isFindDialogVisible = true }
     }
 
     private fun buildTableRowContextMenu() {

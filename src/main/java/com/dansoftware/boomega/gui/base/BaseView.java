@@ -21,7 +21,6 @@ package com.dansoftware.boomega.gui.base;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.api.ContextDialog;
 import com.dansoftware.boomega.gui.control.ExceptionDisplayPane;
-import com.dansoftware.boomega.gui.keybinding.KeyBinding;
 import com.dansoftware.boomega.gui.util.EventUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
 import com.dansoftware.boomega.gui.util.WindowUtils;
@@ -50,7 +49,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -330,32 +328,6 @@ public class BaseView extends StackPane implements Context {
     @Override
     public void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.INFO, title, message, duration, onClicked);
-    }
-
-    @Override
-    public void addKeyBindingDetection(@NotNull KeyBinding keyBinding, Consumer<KeyBinding> onDetected) {
-        final Consumer<Scene> action = (scene) -> {
-            scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-                if (keyBinding.match(event)) {
-                    onDetected.accept(keyBinding);
-                }
-            });
-        };
-
-        final Scene scene = getContextScene();
-        if (scene != null) {
-            action.accept(scene);
-        } else {
-            workbench.sceneProperty().addListener(new ChangeListener<Scene>() {
-                @Override
-                public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
-                    if (newValue != null) {
-                        action.accept(newValue);
-                        observable.removeListener(this);
-                    }
-                }
-            });
-        }
     }
 
     @Override

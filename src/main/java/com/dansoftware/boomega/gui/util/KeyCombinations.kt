@@ -17,19 +17,26 @@
  */
 
 @file:JvmName("KeyUtils")
+@file:Suppress("NOTHING_TO_INLINE")
 
 package com.dansoftware.boomega.gui.util
 
+import com.dansoftware.boomega.gui.keybinding.KeyBinding
+import javafx.event.EventHandler
+import javafx.scene.Node
+import javafx.scene.Scene
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
+import javafx.scene.layout.Region
+import java.lang.ref.WeakReference
 
 /**
  * Utility function that converts a [KeyCodeCombination] into a [KeyEvent] object,
  * simulating that the particular key-combination is pressed by the user
  */
-fun KeyCodeCombination.asKeyEvent(): KeyEvent =
+inline fun KeyCodeCombination.asKeyEvent(): KeyEvent =
     KeyEvent(
         KeyEvent.KEY_PRESSED,
         this.code.toString(),
@@ -41,7 +48,7 @@ fun KeyCodeCombination.asKeyEvent(): KeyEvent =
         this.meta == KeyCombination.ModifierValue.DOWN
     )
 
-fun KeyEvent.asKeyCombination(): KeyCombination? =
+inline fun KeyEvent.asKeyCombination(): KeyCombination? =
     mutableListOf<KeyCombination.Modifier>().also { modifiers ->
         this.isControlDown.takeIf { it }?.let { modifiers.add(KeyCombination.CONTROL_DOWN) }
         this.isAltDown.takeIf { it }?.let { modifiers.add(KeyCombination.ALT_DOWN) }
@@ -65,7 +72,7 @@ fun KeyEvent.asKeyCombination(): KeyCombination? =
         }
     }
 
-fun KeyEvent.isOnlyCode(): Boolean {
+inline fun KeyEvent.isOnlyCode(): Boolean {
     return listOf(
         this.isControlDown.takeIf { it },
         this.isAltDown.takeIf { it },
@@ -75,5 +82,37 @@ fun KeyEvent.isOnlyCode(): Boolean {
     ).count { it !== null } == 0
 }
 
-fun KeyEvent.isUndefined(): Boolean =
+inline fun KeyEvent.isUndefined(): Boolean =
     this.code.name.equals("undefined", ignoreCase = true)
+
+
+fun Region.addKeyBindingDetection(keyBinding: KeyBinding, action: (KeyBinding) -> Unit) {
+    onScenePresent {
+        it.addKeyBindingDetection(this, keyBinding, action)
+    }
+}
+
+private fun Scene.addKeyBindingDetection(node: Node, keyBinding: KeyBinding, action: (KeyBinding) -> Unit) {
+    // binding the action to the node ( for avoiding losing it before the node is removed from memory )
+    node.properties["keyBindDetectionActionCache"]?.run {
+        @Suppress("UNCHECKED_CAST")
+        takeIf { it is MutableList<*> }?.let { it as MutableList<Any> }?.add(action)
+            ?: throw RuntimeException()
+    } ?: run {
+        node.properties["keyBindDetectionActionCache"] = mutableListOf(action)
+    }
+
+    val nodeWeakReference = WeakReference(node)
+    val actionWeakReference = WeakReference(action)
+
+    var eventHandler: EventHandler<KeyEvent>? = null
+    eventHandler = EventHandler {
+        if (nodeWeakReference.get()?.scene == this) {
+            if (keyBinding.match(it))
+                actionWeakReference.get()?.invoke(keyBinding)
+        } else {
+            removeEventHandler(KeyEvent.KEY_PRESSED, eventHandler)
+        }
+    }
+    addEventHandler(KeyEvent.KEY_PRESSED, eventHandler)
+}
