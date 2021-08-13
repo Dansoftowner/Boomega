@@ -310,8 +310,7 @@ class RecordsView(
                 )
             )
             fileExplorer.showSaveDialog(context.contextWindow)?.let { file ->
-                config.outputStream = FileOutputStream(file)
-                val task = exporter.task(items, config).apply {
+                val task = exporter.task(items, FileOutputStream(file), config).apply {
                     onSucceeded {
                         context.stopProgress()
                         context.showInformationNotification(

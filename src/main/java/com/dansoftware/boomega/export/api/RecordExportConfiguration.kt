@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.export.api
 
 import com.dansoftware.boomega.db.data.RecordProperty
-import java.io.OutputStream
 import java.util.*
 
 /**
@@ -27,15 +26,6 @@ import java.util.*
  * for a particular [RecordExporter].
  */
 abstract class RecordExportConfiguration {
-
-    /**
-     * The [OutputStream] the exporter should write the result to.
-     *
-     * By default, it's a *null output stream*.
-     *
-     * @see OutputStream.nullOutputStream
-     */
-    var outputStream: OutputStream = OutputStream.nullOutputStream()
 
     /**
      * The required record-fields (represented by [RecordProperty] objects) to be handled

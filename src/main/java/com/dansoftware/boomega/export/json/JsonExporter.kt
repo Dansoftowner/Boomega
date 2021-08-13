@@ -21,6 +21,7 @@ package com.dansoftware.boomega.export.json
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.db.data.RecordProperty
 import com.dansoftware.boomega.db.data.ServiceConnection
+import com.dansoftware.boomega.export.api.ExportProcessObserver
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.export.ConfigurationDialog
 import com.dansoftware.boomega.gui.export.json.JsonConfigurationDialog
@@ -30,8 +31,8 @@ import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.minus
 import com.dansoftware.boomega.util.set
 import com.google.gson.*
-import javafx.concurrent.Task
 import javafx.scene.Node
+import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.lang.reflect.Type
 
@@ -55,12 +56,13 @@ class JsonExporter : RecordExporter<JsonExportConfiguration> {
     override val configurationDialog: ConfigurationDialog<JsonExportConfiguration>
         get() = JsonConfigurationDialog()
 
-    override fun task(items: List<Record>, config: JsonExportConfiguration): Task<Unit> = object : Task<Unit>() {
-        override fun call() = write(items, config)
-    }
-
-    private fun write(items: List<Record>, config: JsonExportConfiguration) {
-        OutputStreamWriter(config.outputStream).buffered().use {
+    override fun write(
+        items: List<Record>,
+        output: OutputStream,
+        config: JsonExportConfiguration,
+        observer: ExportProcessObserver
+    ) {
+        OutputStreamWriter(output).buffered().use {
             val gson = buildGson(config)
             gson.toJson(gson.toJsonTree(sortList(items, config), List::class.java), it)
         }

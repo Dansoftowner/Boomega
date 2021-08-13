@@ -22,6 +22,7 @@ import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.export.ConfigurationDialog
 import javafx.concurrent.Task
 import javafx.scene.Node
+import java.io.OutputStream
 
 /**
  * A [RecordExporter] allows to export [Record]s into a particular format.
@@ -46,7 +47,8 @@ interface RecordExporter<C : RecordExportConfiguration> {
     val configurationDialog: ConfigurationDialog<C>
 
     /**
-     * The mime-type (or content-type) of the format
+     * The mime-type (or content-type) of the format.
+     * It's usually identical with the file-extension.
      */
     val contentType: String
 
@@ -56,11 +58,31 @@ interface RecordExporter<C : RecordExportConfiguration> {
     val contentTypeDescription: String
 
     /**
+     * Exports the given records.
+     *
+     * @param items the records the exporter should export
+     * @param output the [OutputStream] the exporter should write the result to.
+     * @param config the configuration-object required by the exporter
+     * @param observer the observer for handling the progress, messages etc...
+     */
+    fun write(items: List<Record>, output: OutputStream, config: C, observer: ExportProcessObserver)
+
+    /**
      * Builds a [Task] for the exporting-process
      *
      * @param items the list of records the task should export
      * @param config the configuration-object required by the exporter
      */
-    fun task(items: List<Record>, config: C): Task<Unit>
-
+    fun task(items: List<Record>, out: OutputStream, config: C): Task<Unit> =
+        object : Task<Unit>() {
+            override fun call() {
+                let { taskObj ->
+                    write(items, out, config, object : ExportProcessObserver {
+                        override fun updateMessage(message: String?) = taskObj.updateMessage(message)
+                        override fun updateProgress(workDone: Double, max: Double) = taskObj.updateProgress(workDone, max)
+                        override fun updateTitle(title: String?) = taskObj.updateTitle(title)
+                    })
+                }
+            }
+        }
 }
