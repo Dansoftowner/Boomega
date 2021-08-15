@@ -125,6 +125,7 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,gradle
 
+*.log
 
 distribution/input
 distribution/temp
@@ -133,7 +134,5 @@ distribution/application-package
 distribution/*.class
 distribution/*.jar
 distribution/META-INF
-UML
-planning
-icon-sources.txt
-*.log
+
+src/test/java/Random.java
