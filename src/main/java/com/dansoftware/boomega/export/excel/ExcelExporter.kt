@@ -114,7 +114,7 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
     ) {
         val cellStyle = config.regularCellStyle.asPoiCellStyle(workbook.xssfWorkbook)
         items.forEachIndexed { index, it ->
-            createRowForRecord(sheet, cellStyle, it, config, initialRowCount + 1)
+            createRowForRecord(sheet, cellStyle, it, config, index + initialRowCount)
         }
     }
 
@@ -170,6 +170,7 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
             is java.time.LocalDateTime -> setCellValue(value)
             is java.time.LocalDate -> setCellValue(value)
             is java.util.Calendar -> setCellValue(value)
+            is java.util.Locale -> setCellValue(value.displayLanguage)
             is List<*> -> setCellValue(value.joinToString(separator = ", "))
             else -> setCellValue(value?.toString() ?: "-")
         }
