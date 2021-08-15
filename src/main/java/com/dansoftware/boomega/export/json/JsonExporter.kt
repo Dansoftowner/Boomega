@@ -21,12 +21,11 @@ package com.dansoftware.boomega.export.json
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.db.data.RecordProperty
 import com.dansoftware.boomega.db.data.ServiceConnection
+import com.dansoftware.boomega.export.api.BaseExporter
 import com.dansoftware.boomega.export.api.ExportProcessObserver
-import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.export.ConfigurationDialog
 import com.dansoftware.boomega.gui.export.json.JsonConfigurationDialog
 import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.minus
 import com.dansoftware.boomega.util.set
@@ -39,7 +38,7 @@ import java.lang.reflect.Type
 /**
  * A [JsonExporter] allows to export [Record]s into json format.
  */
-class JsonExporter : RecordExporter<JsonExportConfiguration> {
+class JsonExporter : BaseExporter<JsonExportConfiguration>() {
 
     override val contentType: String
         get() = "json"
@@ -64,24 +63,8 @@ class JsonExporter : RecordExporter<JsonExportConfiguration> {
     ) {
         OutputStreamWriter(output).buffered().use {
             val gson = buildGson(config)
-            gson.toJson(gson.toJsonTree(sortList(items, config), List::class.java), it)
+            gson.toJson(gson.toJsonTree(sortRecords(items, config), List::class.java), it)
         }
-    }
-
-    private fun sortList(items: List<Record>, config: JsonExportConfiguration): List<Record> {
-        val sortedItems = config.fieldToSortBy?.let { field ->
-            val abcCollator = I18N.getABCCollator(config.sortingAbc).orElse(null)
-            @Suppress("UNCHECKED_CAST")
-            items.sortedWith { o1, o2 ->
-                val o1Value = field.getValue(o1)
-                val o2Value = field.getValue(o2)
-
-                if ((o1Value is String || o2Value is String) && abcCollator != null)
-                    abcCollator.compare(o1Value, o2Value)
-                else o2Value?.let { (o1Value as? Comparable<Comparable<*>>)?.compareTo(it) } ?: 0
-            }
-        } ?: items
-        return if (config.reverseItems) sortedItems.asReversed() else sortedItems
     }
 
     private fun buildGson(config: JsonExportConfiguration) = GsonBuilder().run {

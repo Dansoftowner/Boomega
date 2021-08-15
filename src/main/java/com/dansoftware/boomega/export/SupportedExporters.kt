@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.export
 
 import com.dansoftware.boomega.export.api.RecordExporter
+import com.dansoftware.boomega.export.excel.ExcelExporter
 import com.dansoftware.boomega.export.json.JsonExporter
 import okhttp3.internal.toImmutableList
 import java.util.*
@@ -31,7 +32,8 @@ object SupportedExporters :
     List<RecordExporter<*>> by LinkedList(loadBuiltInExporters() + loadExportersFromPlugins()).toImmutableList()
 
 private fun loadBuiltInExporters() = listOf(
-    JsonExporter()
+    JsonExporter(),
+    ExcelExporter()
 )
 
 private fun loadExportersFromPlugins() = listOf<RecordExporter<*>>() // TODO: collect from plugins
