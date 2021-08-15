@@ -28,12 +28,18 @@ import java.util.*
 abstract class RecordExportConfiguration {
 
     /**
+     * The available record-fields (represented by [RecordProperty] objects) that can be exported by the exporter.
+     */
+    open val availableFields: List<RecordProperty<*>>
+        get() = RecordProperty.allProperties
+
+    /**
      * The required record-fields (represented by [RecordProperty] objects) to be handled
      * by the exporter.
      *
      * By default, all properties are handled.
      */
-    var requiredFields: List<RecordProperty<*>> = RecordProperty.allProperties
+    var requiredFields: List<RecordProperty<*>> = availableFields
 
     /**
      * The record-field (represented by a [RecordProperty]) to be used by

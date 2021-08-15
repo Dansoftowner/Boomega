@@ -18,12 +18,16 @@
 
 package com.dansoftware.boomega.export.excel
 
+import com.dansoftware.boomega.db.data.RecordProperty
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 
 /**
  * A [ExcelExportConfiguration] allows to specify configurations for an [ExcelExporter].
  */
 class ExcelExportConfiguration : RecordExportConfiguration() {
+
+    override val availableFields: List<RecordProperty<*>>
+        get() = RecordProperty.allProperties - listOf(RecordProperty.SERVICE_CONNECTION, RecordProperty.NOTES)
 
     /**
      * The name of the Excel sheet where the records will be exported
