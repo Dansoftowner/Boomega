@@ -117,13 +117,14 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-collections:commons-collections:3.2.2'
 
-    implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'org.jetbrains:annotations:21.0.1'
-    implementation 'com.github.oshi:oshi-core:5.8.0'
     implementation 'org.jsoup:jsoup:1.14.1'
+    implementation 'org.apache.poi:poi-ooxml:5.0.0'
+    implementation 'org.dizitart:nitrite:3.4.3'
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.github.oshi:oshi-core:5.8.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.3'
-    implementation 'org.dizitart:nitrite:3.4.3'
     implementation 'it.sauronsoftware:junique:1.0.4'
     implementation 'io.github.g00fy2:versioncompare:1.4.1'
 

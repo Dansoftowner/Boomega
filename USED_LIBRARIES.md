@@ -21,6 +21,10 @@
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
     <tr>
+        <td><a href="https://poi.apache.org">Apache POI</a></td>
+        <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
+    </tr>
+    <tr>
         <td><a href="https://github.com/Typhon0/AnimateFX">AnimateFX</a></td>
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>

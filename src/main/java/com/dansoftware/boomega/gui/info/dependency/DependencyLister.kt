@@ -41,6 +41,11 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
+            "Apache POI",
+            "https://poi.apache.org/",
+            LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
             "AnimateFX",
             "https://github.com/Typhon0/AnimateFX",
             LicenseInfo.apache20License()
