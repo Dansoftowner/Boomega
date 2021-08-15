@@ -21,6 +21,7 @@ package com.dansoftware.boomega.service.googlebooks
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.db.data.ServiceConnection
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * Converts a [Volume] to a Boomega-record.
@@ -34,7 +35,7 @@ fun Volume.asRecord(): Record {
         authors = volumeInfo?.authors
         publishedDate = volumeInfo?.getPublishedDateObject()?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         isbn = volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier
-        language = volumeInfo?.language
+        language = Locale.forLanguageTag(volumeInfo?.language)
         title = volumeInfo?.title
         subtitle = volumeInfo?.subtitle
         publisher = volumeInfo?.publisher

@@ -327,9 +327,9 @@ public class RecordTable extends BaseTable<Record> {
             return new ObservableValueBase<String>() {
                 @Override
                 public String getValue() {
-                    final String raw = cellData.getValue().getLanguage();
+                    final Locale raw = cellData.getValue().getLanguage();
                     if (raw != null)
-                        return Locale.forLanguageTag(raw).getDisplayLanguage();
+                        return raw.getDisplayLanguage();
                     return "-";
                 }
             };

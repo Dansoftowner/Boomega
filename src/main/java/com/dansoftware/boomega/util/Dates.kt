@@ -18,12 +18,14 @@
 
 package com.dansoftware.boomega.util
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun String.surrounding(prefixSuffix: String) = this.surrounding(prefixSuffix, prefixSuffix)
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun String.surrounding(prefix: String, suffix: String) = "$prefix$this$suffix"
-
-inline fun String?.ifNotBlank(block: (String) -> Unit) {
-    this?.takeIf(String::isNotBlank)?.let { block(it) }
+inline fun LocalDate.format(format: String, ifFailed: (Exception) -> Unit = {}): String? {
+    return try {
+        format(DateTimeFormatter.ofPattern(format))
+    } catch (e: RuntimeException) {
+        ifFailed(e)
+        null
+    }
 }

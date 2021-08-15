@@ -21,6 +21,7 @@ package com.dansoftware.boomega.db.data
 import com.dansoftware.boomega.i18n.I18N
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
+import java.util.*
 
 class Record(
     @field:Id var id: NitriteId? = null,
@@ -30,7 +31,7 @@ class Record(
     var title: String? = null,
 
     @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
-    var language: String? = null,
+    var language: Locale? = null,
 
     @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
     var publisher: String? = null,
@@ -104,7 +105,7 @@ class Record(
     fun values(): List<String> = listOfNotNull(
         title,
         isbn,
-        language,
+        language?.displayLanguage,
         magazineName,
         notes,
         publishedDate,

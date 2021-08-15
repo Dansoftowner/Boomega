@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.db.data
 
 import com.dansoftware.boomega.i18n.i18n
+import java.util.*
 
 /**
  * Represents a user-visible field of a [Record].
@@ -83,7 +84,7 @@ class RecordProperty<T> private constructor(
         val LANGUAGE = RecordProperty(
             id = "language",
             name = i18n("record.property.lang"),
-            typeClassReference = String::class.java,
+            typeClassReference = Locale::class.java,
             isSortable = false,
             getValue = { it?.language },
             setValue = { language = it }
@@ -158,7 +159,7 @@ class RecordProperty<T> private constructor(
             )
 
         @JvmField
-        val AUTHORS = RecordProperty<List<String>>(
+        val AUTHORS = RecordProperty(
             id = "authors",
             name = i18n("record.property.authors"),
             typeClassReference = List::class.java as Class<List<String>>,

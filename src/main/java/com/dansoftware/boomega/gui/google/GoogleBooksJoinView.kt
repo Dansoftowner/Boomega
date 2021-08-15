@@ -42,7 +42,7 @@ class GoogleBooksJoinView(
             title.value = record.title ?: ""
             author.value = record.authors?.joinToString(", ") ?: ""
             isbn.value = record.isbn ?: ""
-            language.value = record.language ?: ""
+            language.value = record.language?.language ?: ""
             publisher.value = record.publisher ?: ""
             subject.value = record.subject ?: ""
         }

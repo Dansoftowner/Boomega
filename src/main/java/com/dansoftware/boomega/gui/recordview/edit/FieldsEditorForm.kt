@@ -26,6 +26,8 @@ import com.dansoftware.boomega.gui.control.formsfx.SimpleRatingControl
 import com.dansoftware.boomega.gui.recordview.RecordValues
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.util.format
+import com.dansoftware.boomega.util.ifNotBlank
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.structure.Group
@@ -38,11 +40,10 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.control.TextField
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
-import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.util.*
 
 class FieldsEditorForm(
     private val context: Context,
@@ -141,7 +142,7 @@ class FieldsEditorForm(
                     publisher(items.map(Record::publisher).distinct().singleOrNull())
                     magazineName(items.map(Record::magazineName).distinct().singleOrNull())
                     authors(items.map(Record::authors).distinct().singleOrNull()?.joinToString(", "))
-                    language(items.map(Record::language).distinct().singleOrNull())
+                    language(items.map { it.language?.language }.distinct().singleOrNull())
                     isbn(items.map(Record::isbn).distinct().singleOrNull())
                     subject(items.map(Record::subject).distinct().singleOrNull())
                     notes(items.map(Record::notes).distinct().singleOrNull())
@@ -269,24 +270,17 @@ class FieldsEditorForm(
         items.forEach { record ->
             logger.debug("Item will be modified: ${record.id}")
             record.type = recordType.get()
-            StringUtils.getIfBlank(title.get(), null)?.let { record.title = it }
-            StringUtils.getIfBlank(subtitle.get(), null)?.let { record.subtitle = it }
-            StringUtils.getIfBlank(publisher.get(), null)?.let { record.publisher = it }
-            StringUtils.getIfBlank(magazineName.get(), null)?.let { record.magazineName = it }
-            StringUtils.getIfBlank(authors.get(), null)?.let { record.authors = it.split(",") }
-            StringUtils.getIfBlank(language.get(), null)?.let { record.language = it }
-            StringUtils.getIfBlank(isbn.get(), null)?.let { record.isbn = it }
-            StringUtils.getIfBlank(subject.get(), null)?.let { record.subject = it }
+            title.get().ifNotBlank { record.title = it }
+            subtitle.get().ifNotBlank { record.subtitle = it }
+            publisher.get().ifNotBlank { record.publisher = it }
+            magazineName.get().ifNotBlank  { record.magazineName = it }
+            authors.get().ifNotBlank  { record.authors = it.split(",") }
+            language.get().ifNotBlank { record.language = Locale.forLanguageTag(it) }
+            isbn.get().ifNotBlank { record.isbn = it }
+            subject.get().ifNotBlank { record.subject = it }
             numberOfCopies.value?.let { record.numberOfCopies = it }
             rating.value?.let { record.rating = it }
-            publishedDate.get()
-                ?.let {
-                    try {
-                        record.publishedDate = it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                    } catch (e: RuntimeException) {
-                        logger.error("Couldn't parse date ", e)
-                    }
-                }
+            publishedDate.get().format("yyyy-MM-dd") { e -> logger.error("Couldn't parse date ", e) }
         }
         logger.debug("Updating ({}) records in database...", items.size)
         items.forEach(database::updateRecord)
