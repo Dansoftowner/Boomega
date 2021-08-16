@@ -91,13 +91,15 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
      *
      * @return the count of the rows it created
      */
-    private fun createHeaderRows(workbook: SXSSFWorkbook, sheet: Sheet, config: ExcelExportConfiguration): Int {
+    private fun createHeaderRows(workbook: SXSSFWorkbook, sheet: SXSSFSheet, config: ExcelExportConfiguration): Int {
         val row = sheet.createRow(0)
+        row.height = -1
         val cellStyle = config.headerCellStyle.asPoiCellStyle(workbook.xssfWorkbook)
         config.requiredFields.forEachIndexed { index, field ->
             val cell = row.createCell(index)
             cell.setCellValue(field.name)
             cell.cellStyle = cellStyle
+            sheet.trackColumnForAutoSizing(index)
         }
         return 1
     }
@@ -129,6 +131,7 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
         rowIndex: Int
     ) {
         val row = sheet.createRow(rowIndex)
+        row.height = -1
         config.requiredFields.forEachIndexed { index, field ->
             val cell = row.createCell(index)
             cell.setValue(field.getValue(record))
@@ -159,6 +162,7 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
             strikeout = this@getPoiFont.isStrikeout
             underline = this@getPoiFont.underline
             fontColor?.let { setColor(it.asXSSFColor(workbook)) }
+            fontSize?.let { fontHeightInPoints = it }
         }
 
     private fun Cell.setValue(value: Any?) {
@@ -181,7 +185,6 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
      */
     private fun SXSSFSheet.autoSizeColumns(indices: IntRange) {
         indices.forEach {
-            trackColumnForAutoSizing(it)
             autoSizeColumn(it)
         }
     }

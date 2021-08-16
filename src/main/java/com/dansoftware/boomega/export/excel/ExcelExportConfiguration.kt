@@ -37,22 +37,23 @@ class ExcelExportConfiguration : RecordExportConfiguration() {
     /**
      * The style of the header row cells
      */
-    var headerCellStyle = CellStyle(isBold = true)
+    val headerCellStyle = CellStyle(isBold = true)
 
     /**
      * The style of the cells of the regular rows
      */
-    var regularCellStyle = CellStyle()
+    val regularCellStyle = CellStyle()
 
     /**
      * Holds the configurable cell attributes/styles.
      */
     class CellStyle(
-        var fontName: String? = null,
         var isBold: Boolean = false,
         var isItalic: Boolean = false,
         var isStrikeout: Boolean = false,
         var underline: Byte = 0,
+        var fontName: String? = null,
+        var fontSize: Short? = null,
         var fontColor: java.awt.Color? = null,
         var backgroundColor: java.awt.Color? = null
     )
