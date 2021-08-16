@@ -19,11 +19,13 @@
 package com.dansoftware.boomega.util
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun String.surrounding(prefixSuffix: String) = this.surrounding(prefixSuffix, prefixSuffix)
+inline fun String.surrounding(prefixSuffix: String) = surrounding(prefixSuffix, prefixSuffix)
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun String.surrounding(prefix: String, suffix: String) = "$prefix$this$suffix"
 
-inline fun String?.ifNotBlank(block: (String) -> Unit) {
-    this?.takeIf(String::isNotBlank)?.let { block(it) }
-}
+/**
+ * Gives _null_ value if the string is blank
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun String?.nullIfBlank() = this?.takeIf { it.isNotBlank() }

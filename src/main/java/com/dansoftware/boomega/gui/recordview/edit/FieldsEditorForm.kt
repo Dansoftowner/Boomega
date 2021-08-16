@@ -27,7 +27,7 @@ import com.dansoftware.boomega.gui.recordview.RecordValues
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.format
-import com.dansoftware.boomega.util.ifNotBlank
+import com.dansoftware.boomega.util.nullIfBlank
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.structure.Group
@@ -50,11 +50,9 @@ class FieldsEditorForm(
     private val database: Database,
 ) : VBox(5.0) {
 
+    private val currentForm: ObjectProperty<Form> = SimpleObjectProperty()
     private val itemsCount: IntegerProperty = SimpleIntegerProperty()
-
     private var items: List<Record> = emptyList()
-
-    private val currentForm: ObjectProperty<Form> = SimpleObjectProperty<Form>()
 
     private val recordType: ObjectProperty<Record.Type> = object : SimpleObjectProperty<Record.Type>() {
         override fun invalidated() = buildForm(get())
@@ -270,17 +268,19 @@ class FieldsEditorForm(
         items.forEach { record ->
             logger.debug("Item will be modified: ${record.id}")
             record.type = recordType.get()
-            title.get().ifNotBlank { record.title = it }
-            subtitle.get().ifNotBlank { record.subtitle = it }
-            publisher.get().ifNotBlank { record.publisher = it }
-            magazineName.get().ifNotBlank  { record.magazineName = it }
-            authors.get().ifNotBlank  { record.authors = it.split(",") }
-            language.get().ifNotBlank { record.language = Locale.forLanguageTag(it) }
-            isbn.get().ifNotBlank { record.isbn = it }
-            subject.get().ifNotBlank { record.subject = it }
-            numberOfCopies.value?.let { record.numberOfCopies = it }
-            rating.value?.let { record.rating = it }
-            publishedDate.get().format("yyyy-MM-dd") { e -> logger.error("Couldn't parse date ", e) }
+            record.title = title.get().nullIfBlank()
+            record.subtitle = subtitle.get().nullIfBlank()
+            record.publisher = publisher.get().nullIfBlank()
+            record.magazineName = magazineName.get().nullIfBlank()
+            record.authors = authors.get().nullIfBlank()?.split(",")
+            record.language = language.get().nullIfBlank()?.let(Locale::forLanguageTag)
+            record.isbn = isbn.get().nullIfBlank()
+            record.subject = subject.get().nullIfBlank()
+            record.numberOfCopies = numberOfCopies.value
+            record.rating = rating.value
+            record.publishedDate = publishedDate.get()?.format("yyyy-MM-dd") { e ->
+                logger.error("Couldn't parse date ", e)
+            }
         }
         logger.debug("Updating ({}) records in database...", items.size)
         items.forEach(database::updateRecord)
