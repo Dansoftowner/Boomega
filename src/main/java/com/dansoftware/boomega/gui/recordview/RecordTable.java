@@ -308,8 +308,8 @@ public class RecordTable extends BaseTable<Record> {
                 @Override
                 public ObservableValue<String> call(CellDataFeatures<Record, String> param) {
                     ObservableValue<String> observable = super.call(param);
-                    String value = observable.getValue();
-                    return new ReadOnlyObjectWrapper<>(value != null ? value : "-");
+                    Object value = observable.getValue();
+                    return new ReadOnlyObjectWrapper<>(value != null ? value.toString() : "-");
                 }
             });
         }
