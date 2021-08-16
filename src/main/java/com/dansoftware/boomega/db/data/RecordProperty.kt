@@ -199,26 +199,29 @@ class RecordProperty<T> private constructor(
                 setValue = { throw UnsupportedOperationException() }
             )
 
-        val allProperties = listOf(
-            TYPE,
-            AUTHORS,
-            TITLE,
-            SUBTITLE,
-            MAGAZINE_NAME,
-            ISBN,
-            PUBLISHER,
-            PUBLISHED_DATE,
-            LANGUAGE,
-            RATING,
-            NUMBER_OF_COPIES,
-            SUBJECT,
-            SERVICE_CONNECTION,
-            NOTES
-        )
+        val allProperties by lazy {
+            listOf(
+                TYPE,
+                AUTHORS,
+                TITLE,
+                SUBTITLE,
+                MAGAZINE_NAME,
+                ISBN,
+                PUBLISHER,
+                PUBLISHED_DATE,
+                LANGUAGE,
+                RATING,
+                NUMBER_OF_COPIES,
+                SUBJECT,
+                SERVICE_CONNECTION,
+                NOTES
+            )
+        }
 
-        val sortableProperties: List<RecordProperty<Comparable<*>>>
-            get() = allProperties
+        val sortableProperties: List<RecordProperty<Comparable<*>>> by lazy {
+            allProperties
                 .filter(RecordProperty<*>::isSortable)
                 .filterIsInstance<RecordProperty<Comparable<*>>>()
+        }
     }
 }

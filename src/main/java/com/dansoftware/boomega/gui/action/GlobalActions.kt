@@ -176,9 +176,11 @@ object GlobalActions {
 
     /* <-------------------------------------------------------------------- */
 
-    val allActions: List<Action> = this.javaClass.declaredFields
-        .filter { Action::class.java.isAssignableFrom(it.type) }
-        .mapNotNull { it.get(null) as Action? }
+    val allActions: List<Action> by lazy {
+        javaClass.declaredFields
+            .filter { Action::class.java.isAssignableFrom(it.type) }
+            .mapNotNull { it.get(null) as Action? }
+    }
 
     /**
      * Applies the key-binding actions on the given scene.
