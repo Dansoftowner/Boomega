@@ -25,7 +25,6 @@ import javafx.geometry.Insets
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
 import javafx.scene.control.Label
-import org.apache.commons.lang3.StringUtils
 
 class DatabaseManagerToolbar(private val view: DatabaseManagerView) : BiToolBar() {
 
@@ -50,7 +49,7 @@ class DatabaseManagerToolbar(private val view: DatabaseManagerView) : BiToolBar(
             view.tableItemsCount().asString()
                 .concat("/")
                 .concat(view.selectedTableItemsCount())
-                .concat(StringUtils.SPACE)
+                .concat(" ")
                 .concat(I18N.getValue("database.manager.selected"))
         )
     }

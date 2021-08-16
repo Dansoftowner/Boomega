@@ -35,7 +35,6 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 import javafx.util.Callback
-import org.apache.commons.lang3.StringUtils
 import java.util.*
 import java.util.function.Consumer
 
@@ -148,7 +147,7 @@ class LanguageSelection(private val context: Context, initialSelected: Locale?, 
                         item?.let {
                             "${it.displayLanguage} ${
                                 when {
-                                    StringUtils.isNotBlank(it.language) ->
+                                    it.language?.isNotBlank() ?: false ->
                                         it.language.surrounding("(", ")")
                                     else -> ""
                                 }

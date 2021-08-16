@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.util
 
 import javafx.scene.control.TextFormatter
-import org.apache.commons.lang3.StringUtils
 
 /**
  * A SpaceValidator can be used for [TextInputControl] objects (for example: [javafx.scene.control.TextField])
@@ -28,7 +27,7 @@ import org.apache.commons.lang3.StringUtils
 class SpaceValidator : TextFormatter<TextFormatter.Change?>({ change: Change ->
     val text = change.text
     when {
-        StringUtils.isEmpty(text) -> change.text = text.replace("\\s+".toRegex(), StringUtils.EMPTY)
+        text?.isEmpty() ?: true -> change.text = text.replace("\\s+".toRegex(), "")
     }
 
     change

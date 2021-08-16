@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.instance
 
 import org.apache.commons.io.FileUtils
-import org.apache.commons.lang3.StringUtils
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
@@ -37,7 +36,7 @@ object RuntimeArgumentsHolderFile : File(FileUtils.getTempDirectory(), "librarya
 
     fun clear() {
         try {
-            BufferedWriter(FileWriter(this)).use { it.write(StringUtils.EMPTY) }
+            BufferedWriter(FileWriter(this)).use { it.write("") }
         } catch (ignored: IOException) {
         }
     }

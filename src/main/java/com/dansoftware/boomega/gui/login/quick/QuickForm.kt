@@ -32,7 +32,6 @@ import javafx.scene.control.PasswordField
 import javafx.scene.control.TextField
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
-import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -81,8 +80,8 @@ class QuickForm(
 
     private fun login() {
         Credentials(
-            StringUtils.trim(usernameInput.get()),
-            StringUtils.trim(passwordInput.get())
+            usernameInput.get().trim(),
+            passwordInput.get().trim()
         ).let { credentials ->
             NitriteDatabase.builder()
                 .databaseMeta(databaseMeta)

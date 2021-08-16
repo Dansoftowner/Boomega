@@ -110,8 +110,3 @@ inline fun hyperLink(text: String, graphic: Node? = null, crossinline onAction: 
     Hyperlink(text, graphic).apply {
         setOnAction { onAction() }
     }
-
-inline fun checkBox(text: String? = null, crossinline onSelection: (Boolean) -> Unit) =
-    CheckBox(text).apply {
-        selectedProperty().addListener { _, _, it -> onSelection(it) }
-    }

@@ -26,13 +26,12 @@ import javafx.event.Event
 import javafx.scene.control.TextField
 import javafx.scene.input.KeyCombination
 import javafx.scene.input.KeyEvent
-import org.apache.commons.lang3.StringUtils
 
 class KeyBindDetectionField(initial: KeyCombination) : TextField() {
 
     private val keyCombination: ObjectProperty<KeyCombination> = object : SimpleObjectProperty<KeyCombination>() {
         override fun invalidated() {
-            this@KeyBindDetectionField.text = StringUtils.getIfEmpty(get().displayText, null)
+            this@KeyBindDetectionField.text = get()?.displayText?.takeIf { it.isNotEmpty() }
         }
     }
 

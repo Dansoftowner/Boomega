@@ -27,7 +27,6 @@ import javafx.scene.input.MouseButton
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
-import org.apache.commons.lang3.StringUtils
 import java.util.function.Consumer
 
 /**
@@ -93,7 +92,7 @@ class NotificationNode @JvmOverloads constructor(
             children.add(Group(VBox(2.0).apply {
                 styleClass.add("content-panel")
                 children.add(buildTitleLabel(title))
-                message.takeIf { StringUtils.isBlank(it).not() }?.let { children.add(buildMessageLabel(message!!)) }
+                message.takeIf { it?.isBlank()?.not() ?: false }?.let { children.add(buildMessageLabel(message!!)) }
                 hyperLinks.takeIf { it?.isNotEmpty() ?: false}?.let { children.add(HBox(2.0, *hyperLinks!!)) }
             }))
         }

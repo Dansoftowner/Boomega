@@ -39,7 +39,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
-import org.apache.commons.lang3.StringUtils
 import java.util.*
 
 class InformationView(val context: Context) : VBox(5.0) {
@@ -111,7 +110,7 @@ class InformationView(val context: Context) : VBox(5.0) {
         children.add(KeyValuePair("java.home", System.getProperty("java.home")))
         children.add(KeyValuePair("java.vm", System.getProperty("java.vm.name").let { vmName ->
             System.getProperty("java.vm.vendor").let {
-                if (StringUtils.isBlank(it).not()) {
+                if (it?.isBlank()?.not() ?: false) {
                     "$vmName ${I18N.getValues().getString("java.vm.by")} $it"
                 } else null
             } ?: vmName

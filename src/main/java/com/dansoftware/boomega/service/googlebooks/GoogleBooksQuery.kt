@@ -18,9 +18,9 @@
 
 package com.dansoftware.boomega.service.googlebooks
 
+import com.dansoftware.boomega.util.nullIfBlank
 import com.dansoftware.boomega.util.surrounding
 import okhttp3.HttpUrl
-import org.apache.commons.lang3.StringUtils
 import java.net.URISyntaxException
 import java.net.URL
 import java.util.*
@@ -33,64 +33,55 @@ import java.util.*
 class GoogleBooksQuery {
 
     var inText: String? = null
-        private set
+        set(value) {
+            field = value.nullIfBlank()
+        }
 
     var inTitle: String? = null
-        private set
+        set(value) {
+            field = value.nullIfBlank()
+        }
 
     var inAuthor: String? = null
-        private set
+        set(value) {
+            field = value.nullIfBlank()
+        }
 
     var inPublisher: String? = null
-        private set
+        set(value) {
+            field = value.nullIfBlank()
+        }
 
     var subject: String? = null
-        private set
+        set(value) {
+            field = value.nullIfBlank()
+        }
 
     var isbn: String? = null
-        private set
+        set(value) {
+            field = value.nullIfBlank()
+        }
 
     var lang: String? = null
-        private set
+        set(value) {
+            field = value.nullIfBlank()
+        }
 
     var startIndex = 0
-        private set
+        set(value) {
+            require(value >= 0) { "Start index can't be less than 0!" }
+            field = value
+        }
 
     var maxResults = 10
-        private set
+        set(value) {
+            require(maxResults <= 40) { "MaxResults can't be greater than 40!" }
+            field = value
+        }
 
     var printType: PrintType? = null
-        private set
 
     var sortType: SortType? = null
-
-    fun inText(inText: String?) = apply { this.inText = StringUtils.getIfBlank(inText, null) }
-
-    fun inTitle(inTitle: String?) = apply { this.inTitle = StringUtils.getIfBlank(inTitle, null) }
-
-    fun inAuthor(inAuthor: String?) = apply { this.inAuthor = StringUtils.getIfBlank(inAuthor, null) }
-
-    fun inPublisher(inPublisher: String?) = apply { this.inPublisher = StringUtils.getIfBlank(inPublisher, null) }
-
-    fun subject(subject: String?) = apply { this.subject = StringUtils.getIfBlank(subject, null) }
-
-    fun isbn(isbn: String?) = apply { this.isbn = StringUtils.getIfBlank(isbn, null) }
-
-    fun startIndex(startIndex: Int) = apply {
-        require(startIndex >= 0) { "Start index can't be less than 0!" }
-        this.startIndex = startIndex
-    }
-
-    fun maxResults(maxResults: Int) = apply {
-        require(maxResults <= 40) { "MaxResults can't be greater than 40!" }
-        this.maxResults = maxResults
-    }
-
-    fun printType(printType: PrintType?) = apply { this.printType = printType }
-
-    fun sortType(sortType: SortType?) = apply { this.sortType = sortType }
-
-    fun language(lang: String?) = apply { this.lang = StringUtils.getIfBlank(lang, null) }
 
     /**
      * Returns *true* if the query has enough information to be used in the request.

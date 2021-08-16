@@ -37,7 +37,6 @@ import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.stage.DirectoryChooser
-import org.apache.commons.lang3.StringUtils
 import org.jetbrains.annotations.Nls
 import java.io.File
 
@@ -227,14 +226,14 @@ class DatabaseCreatorForm(
         val databaseFile = fullPath.get().let(::File)
         val databaseDirFile = databaseDir.get().let(::File)
         when {
-            StringUtils.isBlank(databaseName.get()) -> {
+            databaseName.get()?.isBlank() ?: true -> {
                 showErrorDialog(
                     "database.creator.missing_name.title",
                     "database.creator.missing_name.msg"
                 )
                 false
             }
-            StringUtils.isBlank(databaseDir.get()) -> {
+            databaseDir.get()?.isBlank() ?: true -> {
                 showErrorDialog(
                     "database.creator.missing_dir.title",
                     "database.creator.missing_dir.msg"
@@ -257,21 +256,21 @@ class DatabaseCreatorForm(
                 )
                 false
             }
-            authentication.get() && StringUtils.isBlank(username.get()) -> {
+            authentication.get() && username.get()?.isBlank() ?: true -> {
                 showErrorDialog(
                     "database.creator.empty_user_name.title",
                     "database.creator.empty_user_name.msg"
                 )
                 false
             }
-            authentication.get() && StringUtils.isBlank(password.get()) -> {
+            authentication.get() && password.get()?.isBlank() ?: true -> {
                 showErrorDialog(
                     "database.creator.empty_password.title",
                     "database.creator.empty_password.msg"
                 )
                 false
             }
-            authentication.get() && password.get().equals(passwordRepeat.get()).not() -> {
+            authentication.get() && password.get() != passwordRepeat.get() -> {
                 showErrorDialog(
                     "database.creator.passwords_not_match.title",
                     "database.creator.passwords_not_match.msg"

@@ -168,13 +168,13 @@ class GoogleBooksSearchForm(
     }
 
     private fun buildGoogleBooksQuery() =
-        GoogleBooksQuery()
-            .inText(generalText.get())
-            .inAuthor(author.get())
-            .inPublisher(publisher.get())
-            .inTitle(title.get())
-            .isbn(isbn.get())
-            .language(language.get())
-            .subject(subject.get())
-
+        GoogleBooksQuery().apply {
+            inText = generalText.get()
+            inAuthor = author.get()
+            inPublisher = publisher.get()
+            inTitle = title.get()
+            lang = language.get()
+            subject = this@GoogleBooksSearchForm.subject.get()
+            isbn = this@GoogleBooksSearchForm.isbn.get()
+        }
 }

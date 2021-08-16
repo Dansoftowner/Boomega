@@ -44,7 +44,7 @@ class GoogleBooksPagination(private val context: Context, private val query: Goo
     init {
         styleClass.add("google-books-pagination")
         setPageFactory {
-            CachedExecutor.submit(SearchTask(query.startIndex(it * query.maxResults)))
+            CachedExecutor.submit(SearchTask(query.apply { startIndex = it * query.maxResults }))
             table
         }
     }

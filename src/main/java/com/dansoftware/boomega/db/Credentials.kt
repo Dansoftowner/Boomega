@@ -17,12 +17,10 @@
  */
 package com.dansoftware.boomega.db
 
-import org.apache.commons.lang3.StringUtils
-
 class Credentials(val username: String, val password: String) {
 
     val isAnonymous: Boolean
-        get() = StringUtils.isBlank(username) && StringUtils.isBlank(password)
+        get() = username.isBlank() && password.isBlank()
 
     companion object {
         @JvmStatic

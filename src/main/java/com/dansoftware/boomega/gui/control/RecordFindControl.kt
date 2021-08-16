@@ -33,7 +33,6 @@ import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
-import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.stream.Collectors
@@ -128,7 +127,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
 
     private fun buildResultsLabel() = Label().apply {
         textProperty().bind(
-            resultsCount.asString().concat(StringUtils.SPACE).concat(I18N.getValue("record.find.results"))
+            resultsCount.asString().concat(" ").concat(I18N.getValue("record.find.results"))
         )
     }.let { StackPane(it) }
 

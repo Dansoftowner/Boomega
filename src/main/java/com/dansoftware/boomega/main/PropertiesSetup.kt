@@ -21,7 +21,6 @@ package com.dansoftware.boomega.main
 import com.dansoftware.boomega.util.os.OsInfo
 import com.juserdirs.UserDirectories
 import org.apache.commons.io.FileUtils
-import org.apache.commons.lang3.StringUtils
 import java.io.File
 
 /**
@@ -129,8 +128,8 @@ object PropertiesSetup {
      */
     private fun getPluginDirPath(): String = when {
         OsInfo.isWindows() -> {
-            var appdata: String = System.getenv("APPDATA")
-            if (StringUtils.isBlank(appdata)) {
+            var appdata = System.getenv("APPDATA")
+            if (appdata?.isBlank() ?: true) {
                 appdata = FileUtils.getUserDirectoryPath()
             }
             File(

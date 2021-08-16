@@ -30,7 +30,6 @@ import javafx.beans.value.ObservableStringValue
 import javafx.beans.value.ObservableValue
 import javafx.event.EventHandler
 import javafx.stage.WindowEvent
-import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -99,7 +98,7 @@ private class LoginWindow(
 
                 private fun copyValue(separator: String, newValue: String) {
                     when (newValue) {
-                        "null" -> this.set(StringUtils.EMPTY)
+                        "null" -> this.set("")
                         else -> this.set(separator.plus(newValue))
                     }
                 }
