@@ -17,6 +17,7 @@
 ### Bug fixes/improvements
 
 * 🐛 [#136](https://github.com/Dansoftowner/Boomega/issues/136): Record table sorting does not work
+* 🐛 [#151](https://github.com/Dansoftowner/Boomega/issues/151): Can't replace record attributes with empty strings.
 
 > Note: your column-configurations might be broken after updating to this release
 
