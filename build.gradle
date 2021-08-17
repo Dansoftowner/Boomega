@@ -47,7 +47,8 @@ applicationDefaultJvmArgs = [
         '--add-exports', 'javafx.graphics/com.sun.javafx.text=ALL-UNNAMED',
         '--add-opens', 'javafx.graphics/com.sun.javafx.text=ALL-UNNAMED',
         '--add-exports', 'javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED',
-        '--add-exports', 'javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED'
+        '--add-exports', 'javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.time=ALL-UNNAMED'
 ]
 
 compileKotlin {

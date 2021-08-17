@@ -16,4 +16,5 @@
 --add-opens java.base/java.io=ALL-UNNAMED
 --add-opens javafx.graphics/javafx.scene.text=ALL-UNNAMED 
 --add-opens javafx.graphics/com.sun.javafx.text=ALL-UNNAMED 
+--add-opens java.base/java.time=ALL-UNNAMED
 ```
