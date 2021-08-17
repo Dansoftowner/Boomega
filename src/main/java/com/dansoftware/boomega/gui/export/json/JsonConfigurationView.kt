@@ -18,22 +18,27 @@
 
 package com.dansoftware.boomega.gui.export.json
 
-import com.dansoftware.boomega.db.data.RecordProperty
 import com.dansoftware.boomega.export.json.JsonExportConfiguration
-import com.dansoftware.boomega.gui.util.*
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.gui.export.control.RecordPropertyChecker
+import com.dansoftware.boomega.gui.export.control.SortingAbcChooser
+import com.dansoftware.boomega.gui.export.control.SortingPropertyChooser
+import com.dansoftware.boomega.gui.util.addRow
+import com.dansoftware.boomega.gui.util.checkedItems
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.geometry.Insets
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.Label
+import javafx.scene.control.ToggleButton
+import javafx.scene.control.Tooltip
 import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 import org.controlsfx.control.CheckListView
-import java.util.*
 
 class JsonConfigurationView(
     private val onFinished: (JsonExportConfiguration) -> Unit
@@ -54,15 +59,11 @@ class JsonConfigurationView(
     private fun buildUI() {
         initColumnConstraints()
         addRow(Label(i18n("record.export.sort_by")), Label(i18n("record.export.sorting_abc")))
-        addRow(
-            SortingPropertyChooser(jsonExportConfiguration),
-            SortingAbcChooser(jsonExportConfiguration),
-            buildReverseItemsToggle()
-        )
+        addRow(SortingPropertyChooser(jsonExportConfiguration), SortingAbcChooser(jsonExportConfiguration), buildReverseItemsToggle())
         addRow(Label(i18n("record.export.options")))
-        addRow(OptionsChecker(jsonExportConfiguration))
+        addRow(JsonOptionsChecker(jsonExportConfiguration))
         addRow(Label(i18n("record.export.fields")))
-        addRow(PropertyChecker(jsonExportConfiguration))
+        addRow(RecordPropertyChecker(jsonExportConfiguration))
         addRow(buildExecuteButton())
     }
 
@@ -98,9 +99,9 @@ class JsonConfigurationView(
     /**
      * The list-view that allows to select some options regarding the json-export.
      */
-    private class OptionsChecker(
+    private class JsonOptionsChecker(
         private val jsonExportConfiguration: JsonExportConfiguration
-    ) : CheckListView<OptionsChecker.Entry>(
+    ) : CheckListView<JsonOptionsChecker.Entry>(
         FXCollections.observableArrayList(
             Entry(
                 i18n("record.export.json.pretty_printing"),
@@ -135,55 +136,6 @@ class JsonConfigurationView(
             action: (Boolean) -> Unit
         ) : (Boolean) -> Unit by action {
             override fun toString() = text
-        }
-    }
-
-    /**
-     * The list-view that allows to select the properties
-     */
-    private class PropertyChecker(private val jsonExportConfiguration: JsonExportConfiguration) :
-        CheckListView<RecordProperty<*>>(FXCollections.observableArrayList(RecordProperty.allProperties)) {
-        init {
-            setHgrow(this, Priority.ALWAYS)
-            setVgrow(this, Priority.SOMETIMES)
-            setColumnSpan(this, 3)
-            jsonExportConfiguration.requiredFields.forEach(checkModel::check)
-            checkedItems.addListener(ListChangeListener {
-                jsonExportConfiguration.requiredFields = checkedItems.toList()
-            })
-        }
-    }
-
-    /**
-     * The choice-box that allows to select the property to sort with
-     */
-    private class SortingPropertyChooser(jsonExportConfiguration: JsonExportConfiguration) :
-        ChoiceBox<RecordProperty<Comparable<*>>?>(
-            FXCollections.observableArrayList(listOf(null) + RecordProperty.sortableProperties)
-        ) {
-
-        init {
-            maxWidth = Double.MAX_VALUE
-            selectedItem = jsonExportConfiguration.fieldToSortBy
-            selectedItemProperty().addListener { _, _, selected ->
-                jsonExportConfiguration.fieldToSortBy = selected
-            }
-        }
-    }
-
-    /**
-     * The choice-box that allows to select the abc to sort with
-     */
-    private class SortingAbcChooser(jsonExportConfiguration: JsonExportConfiguration) : ChoiceBox<Locale>() {
-        init {
-            setHgrow(this, Priority.ALWAYS)
-            maxWidth = Double.MAX_VALUE
-            items.addAll(listOf(Locale.forLanguageTag("")) + I18N.getAvailableCollators().map { it.key })
-            selectedItem = jsonExportConfiguration.sortingAbc
-            valueConvertingPolicy(Locale::getDisplayLanguage, Locale::forLanguageTag)
-            selectedItemProperty().onValuePresent {
-                jsonExportConfiguration.sortingAbc = it
-            }
         }
     }
 }
