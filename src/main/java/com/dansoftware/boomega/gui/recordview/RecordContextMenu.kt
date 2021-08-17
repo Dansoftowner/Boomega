@@ -92,6 +92,7 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
                     }
                 }
             )
+            disableProperty().bind(itemsEmpty)
         }
 
     private fun buildReloadItem() =
