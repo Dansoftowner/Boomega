@@ -20,7 +20,6 @@ package com.dansoftware.boomega.service.googlebooks
 
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.db.data.ServiceConnection
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -33,7 +32,7 @@ fun Volume.asRecord(): Record {
             else -> Record.Type.BOOK
         }
         authors = volumeInfo?.authors
-        publishedDate = volumeInfo?.getPublishedDateObject()?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        publishedDate = volumeInfo?.getPublishedDateObject()
         isbn = volumeInfo?.industryIdentifiers?.find { it.isIsbn13 }?.identifier
         language = Locale.forLanguageTag(volumeInfo?.language)
         title = volumeInfo?.title

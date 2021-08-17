@@ -19,8 +19,10 @@
 package com.dansoftware.boomega.db.data
 
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.util.format
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
+import java.time.LocalDate
 import java.util.*
 
 class Record(
@@ -37,7 +39,10 @@ class Record(
     var publisher: String? = null,
 
     @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
-    var publishedDate: String? = null,
+    // for allowing the nitrite database to serialize/deserialize the LocalDate object
+    @field:com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = LocalDateDeserializer::class)
+    @field:com.fasterxml.jackson.databind.annotation.JsonSerialize(using = LocalDateSerializer::class)
+    var publishedDate: LocalDate? = null,
 
     @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
     var notes: String? = null,
@@ -108,7 +113,7 @@ class Record(
         language?.displayLanguage,
         magazineName,
         notes,
-        publishedDate,
+        publishedDate?.format("yyyy-MM-dd"),
         publisher,
         subject,
         subtitle,

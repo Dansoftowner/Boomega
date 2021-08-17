@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.db.data
 
 import com.dansoftware.boomega.i18n.i18n
+import java.time.LocalDate
 import java.util.*
 
 /**
@@ -103,7 +104,7 @@ class RecordProperty<T> private constructor(
         val PUBLISHED_DATE = RecordProperty(
             id = "publishedDate",
             name = i18n("record.property.published_date"),
-            typeClassReference = String::class.java,
+            typeClassReference = LocalDate::class.java,
             getValue = { it?.publishedDate },
             setValue = { publishedDate = it }
         )

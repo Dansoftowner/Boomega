@@ -26,7 +26,6 @@ import com.dansoftware.boomega.gui.control.formsfx.SimpleRatingControl
 import com.dansoftware.boomega.gui.recordview.RecordValues
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
-import com.dansoftware.boomega.util.format
 import com.dansoftware.boomega.util.nullIfBlank
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
@@ -136,7 +135,7 @@ class FieldsEditorForm(
                 RecordValues().apply {
                     title(items.map(Record::title).distinct().singleOrNull())
                     subtitle(items.map(Record::subtitle).distinct().singleOrNull())
-                    date(items.map(Record::publishedDate).distinct().singleOrNull()?.let(LocalDate::parse))
+                    date(items.map(Record::publishedDate).distinct().singleOrNull())
                     publisher(items.map(Record::publisher).distinct().singleOrNull())
                     magazineName(items.map(Record::magazineName).distinct().singleOrNull())
                     authors(items.map(Record::authors).distinct().singleOrNull()?.joinToString(", "))
@@ -278,9 +277,7 @@ class FieldsEditorForm(
             record.subject = subject.get().nullIfBlank()
             record.numberOfCopies = numberOfCopies.value
             record.rating = rating.value
-            record.publishedDate = publishedDate.get()?.format("yyyy-MM-dd") { e ->
-                logger.error("Couldn't parse date ", e)
-            }
+            record.publishedDate = publishedDate.get()
         }
         logger.debug("Updating ({}) records in database...", items.size)
         items.forEach(database::updateRecord)
