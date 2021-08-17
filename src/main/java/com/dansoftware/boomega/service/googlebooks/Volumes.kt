@@ -1,8 +1,5 @@
 package com.dansoftware.boomega.service.googlebooks
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 /**
  * Represents a collection of [Volume]s pulled from a Google Books server
  *
@@ -47,33 +44,6 @@ data class Volume(var id: String?) {
         var printType: String? = null
         var averageRating: Double? = null
         var ratingsCount: Int = 0
-
-        //Not in the original format
-        val isMagazine: Boolean
-            get() = (printType == MAGAZINE)
-
-        fun getIndustryIdentifiersAsString() = industryIdentifiers?.joinToString("\n")
-
-        fun getPublishedDateObject(): LocalDate? {
-            return when {
-                publishedDate != null -> {
-                    try {
-                        LocalDate.parse(publishedDate)
-                    } catch (e: java.time.format.DateTimeParseException) {
-                        try {
-                            LocalDate.parse(publishedDate, DateTimeFormatter.ofPattern("yyyy-MM"))
-                        } catch (e: java.time.format.DateTimeParseException) {
-                            try {
-                                LocalDate.parse(publishedDate, DateTimeFormatter.ofPattern("yyyy"))
-                            } catch (e: java.time.format.DateTimeParseException) {
-                                null
-                            }
-                        }
-                    }
-                }
-                else -> null
-            }
-        }
 
         class ImageLinks {
             var extraLarge: String? = null

@@ -26,6 +26,7 @@ import com.dansoftware.boomega.gui.util.ImageUtils;
 import com.dansoftware.boomega.gui.util.ObservableUtils;
 import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.service.googlebooks.Volume;
+import com.dansoftware.boomega.service.googlebooks.VolumeUtils;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
@@ -302,8 +303,8 @@ public class GoogleBooksTable extends BaseTable<Volume> {
                         setTooltip(null);
                     } else {
                         Volume.VolumeInfo volume = this.getTableView().getItems().get(getIndex()).getVolumeInfo();
-                        setGraphic(icon(volume.isMagazine() ? "newspaper-icon" : "book-icon"));
-                        setTooltip(new Tooltip(I18N.getValue(volume.isMagazine() ? "google.books.magazine" : "google.books.book")));
+                        setGraphic(icon(VolumeUtils.isMagazine(volume) ? "newspaper-icon" : "book-icon"));
+                        setTooltip(new Tooltip(I18N.getValue(VolumeUtils.isMagazine(volume) ? "google.books.magazine" : "google.books.book")));
                     }
                 }
             };
@@ -420,7 +421,7 @@ public class GoogleBooksTable extends BaseTable<Volume> {
         public ObservableValue<String> call(CellDataFeatures<Volume, String> cellData) {
             return ObservableUtils.constantObservable(() ->
                     Optional.ofNullable(cellData.getValue().getVolumeInfo())
-                            .map(Volume.VolumeInfo::getIndustryIdentifiersAsString)
+                            .map(VolumeUtils::getIndustryIdentifiersAsString)
                             .orElse("-"));
         }
     }

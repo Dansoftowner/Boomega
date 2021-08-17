@@ -20,6 +20,7 @@ package com.dansoftware.boomega.util
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 inline fun LocalDate.format(format: String, ifFailed: (Exception) -> Unit = {}): String? {
     return try {
@@ -27,5 +28,24 @@ inline fun LocalDate.format(format: String, ifFailed: (Exception) -> Unit = {}):
     } catch (e: RuntimeException) {
         ifFailed(e)
         null
+    }
+}
+
+inline fun String.parseToDate(
+    vararg fallbackFormats: String,
+    onFailed: (format: String, DateTimeParseException) -> Unit = { _, _ -> }
+): LocalDate? {
+    try {
+        return LocalDate.parse(this)
+    } catch (e: DateTimeParseException) {
+        onFailed("yyyy-MM-dd", e)
+        fallbackFormats.forEach {
+            try {
+                return LocalDate.parse(this, DateTimeFormatter.ofPattern(it))
+            } catch (e: DateTimeParseException) {
+                onFailed(it, e)
+            }
+        }
+        return null
     }
 }
