@@ -21,7 +21,12 @@ package com.dansoftware.boomega.gui.recordview
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.i18n.i18n
 import javafx.concurrent.Task
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+private val logger: Logger = LoggerFactory.getLogger("RecordGetTask")
 
 /**
  * Task for loading books from the database
@@ -46,8 +51,13 @@ class TableRecordsGetTask(
     init {
         setOnRunning { context.showIndeterminateProgress() }
         setOnFailed {
-            //TODO: DIALOG
+            logger.error("Failed to load items", it.source.exception)
             context.stopProgress()
+            context.showErrorDialog(
+                i18n("record.load.failed.title"),
+                i18n("record.load.failed.msg"),
+                it.source.exception as? Exception
+            )
         }
         setOnSucceeded {
             context.stopProgress()
