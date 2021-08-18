@@ -147,6 +147,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
 ## Source code
 [![Java version](https://img.shields.io/badge/java-16-orange?logo=java&logoColor=white)](https://jdk.java.net/16/)
 [![Kotlin version](https://img.shields.io/badge/kotlin-1.5-purple?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
+[![Gradle](https://img.shields.io/badge/gradle-7.0-green?logo=gradle&logoColor=white)](https://gradle.org/)
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 [![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)](https://github.com/Dansoftowner/Boomega)
 [![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega?logo=files&logoColor=white)](https://github.com/Dansoftowner/Boomega)
