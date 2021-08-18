@@ -149,7 +149,6 @@ The detailed user guide is available [here](USER_GUIDE.md).
 [![Kotlin version](https://img.shields.io/badge/kotlin-1.5-purple?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
 [![Gradle](https://img.shields.io/badge/gradle-7.0-green?logo=gradle&logoColor=white)](https://gradle.org/)
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
-[![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)](https://github.com/Dansoftowner/Boomega)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
 
 * The repo has two important branches:
@@ -157,8 +156,8 @@ The detailed user guide is available [here](USER_GUIDE.md).
   * `dev` - for developing the app further
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
-* The app targets `Java 16+` but the code is `unmodularized`
-* The build tool used for this project is [Gradle](https://gradle.org/)
+* The app targets `Java 16+` but the project is `unmodularized`
+* The build tool used is [Gradle](https://gradle.org/)
 * _Want to contribute?_ See the [contribution guideline](CONTRIBUTING.md).
 
 ## Build
