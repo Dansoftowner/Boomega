@@ -145,11 +145,11 @@ The detailed user guide is available [here](USER_GUIDE.md).
 </table>
 
 ## Source code
-[![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega?icon=files&iconColor=white)](https://github.com/Dansoftowner/Boomega)
+[![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega?logo=files&logoColor=white)](https://github.com/Dansoftowner/Boomega)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
 [![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)](https://github.com/Dansoftowner/Boomega)
-[![Java version](https://img.shields.io/badge/java-16-orange?icon=java&iconColor=white)](https://jdk.java.net/16/)
-[![Kotlin version](https://img.shields.io/badge/kotlin-1.5-purple?icon=kotlin&iconColor=white)](https://kotlinlang.org/)
+[![Java version](https://img.shields.io/badge/java-16-orange?logo=java&logoColor=white)](https://jdk.java.net/16/)
+[![Kotlin version](https://img.shields.io/badge/kotlin-1.5-purple?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 
 * The repo has two important branches:
