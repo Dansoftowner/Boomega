@@ -150,7 +150,6 @@ The detailed user guide is available [here](USER_GUIDE.md).
 [![Gradle](https://img.shields.io/badge/gradle-7.0-green?logo=gradle&logoColor=white)](https://gradle.org/)
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
 [![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)](https://github.com/Dansoftowner/Boomega)
-[![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega?logo=files&logoColor=white)](https://github.com/Dansoftowner/Boomega)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
 
 * The repo has two important branches:
