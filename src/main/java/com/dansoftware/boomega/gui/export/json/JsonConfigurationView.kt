@@ -19,72 +19,31 @@
 package com.dansoftware.boomega.gui.export.json
 
 import com.dansoftware.boomega.export.json.JsonExportConfiguration
-import com.dansoftware.boomega.gui.export.control.RecordPropertyChecker
-import com.dansoftware.boomega.gui.export.control.SortingAbcChooser
-import com.dansoftware.boomega.gui.export.control.SortingPropertyChooser
+import com.dansoftware.boomega.gui.export.control.BaseConfigurationView
 import com.dansoftware.boomega.gui.util.addRow
 import com.dansoftware.boomega.gui.util.checkedItems
-import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
-import javafx.geometry.Insets
 import javafx.scene.control.Button
 import javafx.scene.control.Label
-import javafx.scene.control.ToggleButton
-import javafx.scene.control.Tooltip
-import javafx.scene.layout.ColumnConstraints
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
-import javafx.scene.layout.VBox
-import jfxtras.styles.jmetro.JMetroStyleClass
 import org.controlsfx.control.CheckListView
 
 class JsonConfigurationView(
     private val onFinished: (JsonExportConfiguration) -> Unit
-) : GridPane() {
-
-    private val jsonExportConfiguration = JsonExportConfiguration()
+) : BaseConfigurationView<JsonExportConfiguration>(JsonExportConfiguration()) {
 
     init {
-        VBox.setVgrow(this, Priority.ALWAYS)
-        styleClass.add(JMetroStyleClass.BACKGROUND)
         styleClass.add("json-configuration-view")
-        padding = Insets(20.0)
-        hgap = 10.0
-        vgap = 10.0
         buildUI()
     }
 
     private fun buildUI() {
-        initColumnConstraints()
-        addRow(Label(i18n("record.export.sort_by")), Label(i18n("record.export.sorting_abc")))
-        addRow(SortingPropertyChooser(jsonExportConfiguration), SortingAbcChooser(jsonExportConfiguration), buildReverseItemsToggle())
         addRow(Label(i18n("record.export.options")))
-        addRow(JsonOptionsChecker(jsonExportConfiguration))
-        addRow(Label(i18n("record.export.fields")))
-        addRow(RecordPropertyChecker(jsonExportConfiguration))
+        addRow(JsonOptionsChecker(exportConfiguration))
         addRow(buildExecuteButton())
     }
-
-    private fun initColumnConstraints() {
-        columnConstraints.addAll(
-            List(3) {
-                ColumnConstraints().apply {
-                    hgrow = Priority.ALWAYS
-                }
-            }
-        )
-    }
-
-    private fun buildReverseItemsToggle() =
-        ToggleButton().apply {
-            tooltip = Tooltip(i18n("record.export.reverse_order"))
-            graphic = icon("rotate-icon")
-            selectedProperty().addListener { _, _, isSelected ->
-                jsonExportConfiguration.reverseItems = isSelected
-            }
-        }
 
     private fun buildExecuteButton() = Button().apply {
         setColumnSpan(this, 3)
@@ -92,7 +51,7 @@ class JsonConfigurationView(
         isDefaultButton = true
         text = i18n("record.export.execute")
         setOnAction {
-            onFinished(jsonExportConfiguration)
+            onFinished(exportConfiguration)
         }
     }
 
