@@ -35,6 +35,11 @@ class ExcelExportConfiguration : RecordExportConfiguration() {
     var sheetName: String? = null
 
     /**
+     * The place-holder string that will be used for filling the cells that don't have value
+     */
+    var emptyCellPlaceHolder: String? = "-"
+
+    /**
      * The style of the header row cells
      */
     val headerCellStyle = CellStyle(isBold = true)

@@ -26,11 +26,13 @@ import com.dansoftware.boomega.gui.export.excel.ExcelConfigurationDialog
 import com.dansoftware.boomega.gui.util.icon
 import javafx.scene.Node
 import org.apache.poi.ss.usermodel.*
+import org.apache.poi.ss.util.WorkbookUtil
 import org.apache.poi.xssf.streaming.SXSSFSheet
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.OutputStream
+import java.time.LocalDate
 
 /**
  * An [ExcelExporter] allows to export [Record]s into Excel (.xlsx) format.
@@ -74,9 +76,11 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
         // see https://poi.apache.org/components/spreadsheet/
         val workbook = SXSSFWorkbook()
 
-        val sheet: SXSSFSheet = workbook.run {
-            config.sheetName?.let(::createSheet) ?: createSheet()
-        }
+        val sheet: SXSSFSheet =
+            config.sheetName
+                ?.let(WorkbookUtil::createSafeSheetName)
+                ?.let(workbook::createSheet)
+                ?: workbook.createSheet()
 
         val createdRowCount = createHeaderRows(workbook, sheet, config)
         createRegularRows(workbook, sheet, items, config, createdRowCount)
@@ -134,8 +138,8 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
         row.height = -1
         config.requiredFields.forEachIndexed { index, field ->
             val cell = row.createCell(index)
-            cell.setValue(field.getValue(record))
             cell.cellStyle = cellStyle
+            cell.setValue(field.getValue(record), config.emptyCellPlaceHolder)
         }
     }
 
@@ -165,18 +169,18 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
             fontSize?.let { fontHeightInPoints = it }
         }
 
-    private fun Cell.setValue(value: Any?) {
+    private fun Cell.setValue(value: Any?, valueIfNull: String?) {
         when (value) {
             is String -> setCellValue(value)
             is Boolean -> setCellValue(value)
             is Double -> setCellValue(value)
             is java.util.Date -> setCellValue(value)
             is java.time.LocalDateTime -> setCellValue(value)
-            is java.time.LocalDate -> setCellValue(value)
             is java.util.Calendar -> setCellValue(value)
             is java.util.Locale -> setCellValue(value.displayLanguage)
+            is LocalDate -> setDate(value)
             is List<*> -> setCellValue(value.joinToString(separator = ", "))
-            else -> setCellValue(value?.toString() ?: "-")
+            else -> setCellValue(value?.toString() ?: valueIfNull)
         }
     }
 
@@ -194,4 +198,14 @@ class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
      */
     private fun java.awt.Color.asXSSFColor(workbook: XSSFWorkbook): XSSFColor =
         XSSFColor(this, workbook.stylesSource.indexedColors)
+
+    /**
+     * Sets the value and configures it to be formatted as date
+     */
+    private fun Cell.setDate(value: LocalDate) {
+        cellStyle?.dataFormat = sheet.workbook.creationHelper
+            .createDataFormat()
+            .getFormat("yyyy-MM-dd")
+        setCellValue(value)
+    }
 }
