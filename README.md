@@ -43,10 +43,10 @@
 The detailed user guide is available [here](USER_GUIDE.md).
 
 ## Download
-[![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)]()
+[![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?logo=linux&logoColor=white)]()
 [![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)](https://github.com/Dansoftowner/Boomega/releases)
 [![Version](https://img.shields.io/github/v/release/Dansoftowner/Boomega?include_prereleases)](https://github.com/Dansoftowner/Boomega/releases)
-[![GitHub Release Date](https://img.shields.io/github/release-date-pre/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date-pre/Dansoftowner/Boomega?logo=googlecalendar&logoColor=white)](https://github.com/Dansoftowner/Boomega/releases)
 
 <table>
 
@@ -145,20 +145,19 @@ The detailed user guide is available [here](USER_GUIDE.md).
 </table>
 
 ## Source code
-[![GitHub repo file count](https://img.shields.io/github/directory-file-count/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
-[![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
-[![Modularization](https://img.shields.io/badge/modularization-unmodularized-red)](https://github.com/Dansoftowner/Boomega)
-[![Java version](https://img.shields.io/badge/java-16-orange)](https://jdk.java.net/16/)
-[![Kotlin version](https://img.shields.io/badge/kotlin-1.5.20-purple)](https://kotlinlang.org/)
+[![Java version](https://img.shields.io/badge/java-16-orange?logo=java&logoColor=white)](https://jdk.java.net/16/)
+[![Kotlin version](https://img.shields.io/badge/kotlin-1.5-purple?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
+[![Gradle](https://img.shields.io/badge/gradle-7.0-green?logo=gradle&logoColor=white)](https://gradle.org/)
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
+[![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
 
 * The repo has two important branches:
   * `master` - for stable versions
   * `dev` - for developing the app further
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
-* The app targets `Java 16+` but the code is `unmodularized`
-* The build tool used for this project is [Gradle](https://gradle.org/)
+* The app targets `Java 16+` but the project is `unmodularized`
+* The build tool used is [Gradle](https://gradle.org/)
 * _Want to contribute?_ See the [contribution guideline](CONTRIBUTING.md).
 
 ## Build

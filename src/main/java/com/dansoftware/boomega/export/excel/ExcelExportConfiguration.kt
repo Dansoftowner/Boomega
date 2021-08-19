@@ -27,7 +27,7 @@ import com.dansoftware.boomega.export.api.RecordExportConfiguration
 class ExcelExportConfiguration : RecordExportConfiguration() {
 
     override val availableFields: List<RecordProperty<*>>
-        get() = RecordProperty.allProperties - listOf(RecordProperty.SERVICE_CONNECTION, RecordProperty.NOTES)
+        get() = AVAILABLE_FIELDS
 
     /**
      * The name of the Excel sheet where the records will be exported
@@ -62,4 +62,10 @@ class ExcelExportConfiguration : RecordExportConfiguration() {
         var fontColor: java.awt.Color? = null,
         var backgroundColor: java.awt.Color? = null
     )
+
+    private companion object {
+        val AVAILABLE_FIELDS by lazy {
+            RecordProperty.allProperties - listOf(RecordProperty.SERVICE_CONNECTION, RecordProperty.NOTES)
+        }
+    }
 }
