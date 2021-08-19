@@ -35,7 +35,8 @@
 .date-picker.combo-box-base, .date-picker.combo-box-base:focused, .date-picker.combo-box-base:hover,
 .spinner, .spinner .text-field,
 .spinner .increment-arrow-button, .spinner .decrement-arrow-button,
-.context-menu, .combo-box-popup .list-view {
+.context-menu, .combo-box-popup .list-view ,
+.color-picker, .color-picker:focused {
     -fx-border-radius: 3;
     -fx-background-radius: 3;
 }
@@ -594,9 +595,14 @@
      -fx-padding: 0;
 }
 
-.records-view-config-panel, .json-configuration-view {
+.records-view-config-panel, .json-configuration-view, .excel-configuration-view {
     -fx-pref-width: 30em;
     -fx-pref-height: 30em;
+}
+
+.excel-configuration-view .style-view .category-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
 }
 
 .multiple-selection-place-holder .glyph-icon,
