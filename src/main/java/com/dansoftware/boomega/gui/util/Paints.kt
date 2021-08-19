@@ -16,19 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.export.excel
+package com.dansoftware.boomega.gui.util
 
-import com.dansoftware.boomega.export.excel.ExcelExportConfiguration
-import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.export.ConfigurationDialog
+fun java.awt.Color.toFXColor(): javafx.scene.paint.Color {
+    return javafx.scene.paint.Color.rgb(red, green, blue, alpha / 255.0)
+}
 
-class ExcelConfigurationDialog : ConfigurationDialog<ExcelExportConfiguration> {
-    override fun show(context: Context, onFinished: (ExcelExportConfiguration) -> Unit) {
-        var overlay: ExcelConfigurationOverlay? = null
-        overlay = ExcelConfigurationOverlay() {
-            context.hideOverlay(overlay!!)
-            onFinished(it)
-        }
-        context.showOverlay(overlay)
-    }
+fun javafx.scene.paint.Color.toAWTColor(): java.awt.Color {
+    return java.awt.Color(red.toFloat(), green.toFloat(), blue.toFloat(), opacity.toFloat())
 }

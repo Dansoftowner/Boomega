@@ -25,6 +25,8 @@ import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.util.StringConverter
 import org.controlsfx.control.CheckListView
@@ -44,17 +46,23 @@ inline var <T> ChoiceBox<T>.selectedItem: T
         selectionModel.select(value)
     }
 
-inline fun <T> ChoiceBox<T>.selectedItemProperty() =
-    selectionModel.selectedItemProperty()
-
 inline var <T> ComboBox<T>.selectedItem: T
     get() = selectionModel.selectedItem
     set(value) {
         selectionModel.select(value)
     }
 
-inline fun <T> ComboBox<T>.selectedItemProperty() =
-    selectionModel.selectedItemProperty()
+inline fun <T> ChoiceBox<T>.selectedItemProperty() = selectionModel.selectedItemProperty()
+
+inline fun <T> ComboBox<T>.selectedItemProperty() = selectionModel.selectedItemProperty()
+
+inline fun <T> ComboBox<T>.refresh() {
+    val items: ObservableList<T> = this.items
+    val selected: T = this.selectionModel.selectedItem
+    this.items = null
+    this.items = items
+    this.selectionModel.select(selected)
+}
 
 inline fun <T> ChoiceBox<T>.valueConvertingPolicy(
     crossinline toStringFun: (T) -> String?,
@@ -76,23 +84,10 @@ inline fun <T> ComboBox<T>.valueConvertingPolicy(
     }
 }
 
-fun <T> ComboBox<T>.refresh() {
-    val items: ObservableList<T> = this.items
-    val selected: T = this.selectionModel.selectedItem
-    this.items = null
-    this.items = items
-    this.selectionModel.select(selected)
-}
-
 /**
  * Determines that a ButtonType's button data is the same.
  */
-inline fun ButtonType.typeEquals(other: ButtonType) =
-    buttonData == other.buttonData
-
-inline fun <T : Node> T.styleClass(styleClass: String) = apply {
-    getStyleClass().add(styleClass)
-}
+inline fun ButtonType.typeEquals(other: ButtonType) = (buttonData == other.buttonData)
 
 @Suppress("UNCHECKED_CAST", "EXTENSION_SHADOWED_BY_MEMBER")
 inline fun <reified T : Node> Node.lookup(selector: String): T? = lookup(selector) as? T
@@ -102,11 +97,33 @@ inline fun <reified T : Node> Node.lookup(selector: String): T? = lookup(selecto
  */
 inline fun Node.asCentered() = StackPane(this)
 
-inline fun GridPane.addRow(vararg elements: Node) {
-    addRow(rowCount, *elements)
-}
-
 inline fun hyperLink(text: String, graphic: Node? = null, crossinline onAction: () -> Unit) =
     Hyperlink(text, graphic).apply {
         setOnAction { onAction() }
     }
+
+inline fun scrollPane(content: Node, fitToWidth: Boolean = false, fitToHeight: Boolean = false) = ScrollPane(content).apply {
+    isFitToWidth = fitToWidth
+    isFitToHeight = fitToHeight
+}
+
+inline fun GridPane.addRow(vararg elements: Node) = apply {
+    addRow(rowCount, *elements)
+}
+
+inline fun <T : Node> T.styleClass(styleClass: String) = apply {
+    getStyleClass().add(styleClass)
+}
+
+inline fun <T : Node> T.colspan(value: Int) = apply {
+    GridPane.setColumnSpan(this, value)
+}
+
+inline fun <T : Node> T.hgrow(priority: Priority) = apply {
+    HBox.setHgrow(this, priority)
+    GridPane.setHgrow(this, priority)
+}
+
+inline fun <T : Control> T.tooltip(value: String) = apply {
+    tooltip = Tooltip(value)
+}

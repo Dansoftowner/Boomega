@@ -106,7 +106,10 @@ private val iconPack = mapOf<String, () -> Text>(
     "numeric-2-box-multiple" to fun() = MaterialDesignIconView(MaterialDesignIcon.NUMERIC_2_BOX_MULTIPLE_OUTLINE),
     "rotate-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.ROTATE_3D),
     "duplicate-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.CONTENT_DUPLICATE),
-    "excel-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FILE_EXCEL)
+    "excel-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FILE_EXCEL),
+    "bold-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_BOLD),
+    "italic-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ITALIC),
+    "strikethrough-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_STRIKETHROUGH),
 )
 
 fun icon(identifier: String): Text = (

@@ -19,16 +19,12 @@
 package com.dansoftware.boomega.gui.export.excel
 
 import com.dansoftware.boomega.export.excel.ExcelExportConfiguration
-import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.export.ConfigurationDialog
+import com.dansoftware.boomega.gui.base.TitledOverlayBox
+import com.dansoftware.boomega.gui.util.icon
 
-class ExcelConfigurationDialog : ConfigurationDialog<ExcelExportConfiguration> {
-    override fun show(context: Context, onFinished: (ExcelExportConfiguration) -> Unit) {
-        var overlay: ExcelConfigurationOverlay? = null
-        overlay = ExcelConfigurationOverlay() {
-            context.hideOverlay(overlay!!)
-            onFinished(it)
-        }
-        context.showOverlay(overlay)
-    }
-}
+class ExcelConfigurationOverlay(onFinished: (ExcelExportConfiguration) -> Unit) : TitledOverlayBox(
+    // TODO: i18n
+    "Excel export",
+    icon("excel-icon"),
+    ExcelConfigurationView(onFinished)
+)
