@@ -32,7 +32,7 @@ class ExcelExportConfiguration : RecordExportConfiguration() {
     /**
      * The name of the Excel sheet where the records will be exported
      */
-    var sheetName: String? = null
+    var sheetName: String? = "Records"
 
     /**
      * The place-holder string that will be used for filling the cells that don't have value

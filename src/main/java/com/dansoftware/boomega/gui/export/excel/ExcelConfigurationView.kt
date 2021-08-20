@@ -103,22 +103,26 @@ class ExcelConfigurationView(
 
         private fun buildUI() {
             // TODO: i18n
-            addRow(Label("Header").styleClass("category-label").colspan(2).hgrow(Priority.ALWAYS))
+            addTextField("Sheet name:", config.sheetName, config::sheetName::set)
+            addTextField("Place holder text:", config.emptyCellPlaceHolder, config::emptyCellPlaceHolder::set)
+            addSection("Header", config.headerCellStyle)
+            addSection("Regular rows", config.regularCellStyle)
+        }
+
+        private inline fun addTextField(label: String, defaultText: String?, crossinline onTextChanged: (String) -> Unit) {
+            addRow(Label(label))
+            addRow(TextField(defaultText).apply { textProperty().onValuePresent(onTextChanged) })
+        }
+
+        private fun addSection(title: String, cellStyle: ExcelExportConfiguration.CellStyle) {
+            addRow(Label(title).styleClass("category-label").colspan(2).hgrow(Priority.ALWAYS))
             addRow(Separator().colspan(2).hgrow(Priority.ALWAYS))
             addRow(Label("Background color: "))
-            addRow(BackgroundColorPicker(config.headerCellStyle))
+            addRow(BackgroundColorPicker(cellStyle))
             addRow(Label("Font: "))
-            addRow(CellFontChooser(config.headerCellStyle))
+            addRow(CellFontChooser(cellStyle))
             addRow(Label("Font color: "))
-            addRow(FontColorPicker(config.headerCellStyle))
-            addRow(Label("Regular rows").styleClass("category-label").colspan(2).hgrow(Priority.ALWAYS))
-            addRow(Separator().colspan(2).hgrow(Priority.ALWAYS))
-            addRow(Label("Background color: "))
-            addRow(BackgroundColorPicker(config.regularCellStyle))
-            addRow(Label("Font:"))
-            addRow(CellFontChooser(config.regularCellStyle))
-            addRow(Label("Font color: "))
-            addRow(FontColorPicker(config.regularCellStyle))
+            addRow(FontColorPicker(cellStyle))
         }
     }
 
@@ -174,11 +178,11 @@ class ExcelConfigurationView(
 
     private class BackgroundColorPicker(cellStyle: ExcelExportConfiguration.CellStyle) :
         ColorPicker(cellStyle.backgroundColor?.toFXColor() ?: Color.TRANSPARENT) {
-            init {
-                GridPane.setHgrow(this, Priority.ALWAYS)
-                GridPane.setColumnSpan(this, 2)
-                maxWidth = Double.MAX_VALUE
-                valueProperty().onValuePresent { cellStyle.backgroundColor = it.toAWTColor() }
-            }
+        init {
+            GridPane.setHgrow(this, Priority.ALWAYS)
+            GridPane.setColumnSpan(this, 2)
+            maxWidth = Double.MAX_VALUE
+            valueProperty().onValuePresent { cellStyle.backgroundColor = it.toAWTColor() }
         }
+    }
 }
