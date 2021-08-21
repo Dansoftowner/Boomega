@@ -36,11 +36,13 @@ import com.dansoftware.boomega.launcher.ActivityLauncher;
 import com.dansoftware.boomega.launcher.LauncherMode;
 import com.dansoftware.boomega.plugin.PluginClassLoader;
 import com.dansoftware.boomega.plugin.Plugins;
+import com.dansoftware.boomega.update.Release;
 import com.dansoftware.boomega.update.UpdateSearcher;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +113,7 @@ public class Main extends BaseApplication {
         final LoginData loginData = readLoginData(preferences, databaseTracker);
 
         //searching for updates, if necessary
-        final UpdateSearcher.UpdateSearchResult searchResult = searchForUpdates(preferences);
+        final Release searchResult = searchForUpdates(preferences);
 
         //launching the main gui environment
         launchGUI(preferences, databaseTracker, loginData, searchResult, queue);
@@ -121,7 +123,7 @@ public class Main extends BaseApplication {
     private void launchGUI(@NotNull Preferences preferences,
                            @NotNull DatabaseTracker databaseTracker,
                            @NotNull LoginData loginData,
-                           @NotNull UpdateSearcher.UpdateSearchResult searchResult,
+                           @NotNull Release updateSearchResult,
                            @NotNull ActivityLauncher.PostLaunchQueue queue) {
         notifyPreloader("preloader.gui.build");
         new InitActivityLauncher(
@@ -129,7 +131,7 @@ public class Main extends BaseApplication {
                 preferences,
                 databaseTracker,
                 loginData,
-                searchResult,
+                updateSearchResult,
                 queue
         ).launch();
     }
@@ -311,13 +313,13 @@ public class Main extends BaseApplication {
      * @return the update-search result object
      */
     @Init
-    private UpdateSearcher.UpdateSearchResult searchForUpdates(@NotNull Preferences preferences) {
+    private Release searchForUpdates(@NotNull Preferences preferences) {
         if (preferences.get(PreferenceKey.SEARCH_UPDATES)) {
             notifyPreloader("preloader.update.search");
-            UpdateSearcher updateSearcher = UpdateSearcher.defaultInstance();
+            UpdateSearcher updateSearcher = UpdateSearcher.getDefault();
             return updateSearcher.search();
         }
-        return new UpdateSearcher.UpdateSearchResult();
+        return null;
     }
 
 
@@ -351,18 +353,18 @@ public class Main extends BaseApplication {
 
         private final Preferences preferences;
         private final LoginData loginData;
-        private final UpdateSearcher.UpdateSearchResult searchResult;
+        private final Release updateSearchResult;
 
         private InitActivityLauncher(@NotNull List<String> args,
                                      @NotNull Preferences preferences,
                                      @NotNull DatabaseTracker databaseTracker,
                                      @NotNull LoginData loginData,
-                                     @NotNull UpdateSearcher.UpdateSearchResult searchResult,
+                                     @Nullable Release updateSearchResult,
                                      @NotNull PostLaunchQueue postLaunchQueue) {
             super(LauncherMode.INIT, preferences, databaseTracker, postLaunchQueue, args);
             this.preferences = preferences;
             this.loginData = loginData;
-            this.searchResult = searchResult;
+            this.updateSearchResult = updateSearchResult;
         }
 
         @Override
@@ -379,8 +381,10 @@ public class Main extends BaseApplication {
 
         @Override
         protected void onActivityLaunched(@NotNull Context context) {
-            UpdateActivity updateActivity = new UpdateActivity(context, searchResult);
-            updateActivity.show(false);
+            if (updateSearchResult != null) {
+                UpdateActivity updateActivity = new UpdateActivity(context, updateSearchResult);
+                updateActivity.show();
+            }
         }
     }
 

@@ -22,12 +22,10 @@
 package com.dansoftware.boomega.gui.util
 
 import javafx.collections.ObservableList
+import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.*
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
-import javafx.scene.layout.StackPane
+import javafx.scene.layout.*
 import javafx.util.StringConverter
 import org.controlsfx.control.CheckListView
 
@@ -126,4 +124,8 @@ inline fun <T : Node> T.hgrow(priority: Priority) = apply {
 
 inline fun <T : Control> T.tooltip(value: String) = apply {
     tooltip = Tooltip(value)
+}
+
+inline fun <T : Region> T.padding(value: Insets) = apply {
+    padding = value
 }

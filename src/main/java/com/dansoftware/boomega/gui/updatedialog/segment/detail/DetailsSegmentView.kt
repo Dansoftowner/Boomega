@@ -19,62 +19,27 @@
 package com.dansoftware.boomega.gui.updatedialog.segment.detail
 
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.update.UpdateInformation
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.dansoftware.boomega.update.Release
 import com.sandec.mdfx.MarkdownView
 import javafx.geometry.Insets
-import javafx.scene.control.ProgressBar
-import javafx.scene.control.ProgressIndicator
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class DetailsSegmentView(private val context: Context, private val updateInformation: UpdateInformation) : VBox() {
-
-    private val previewScrollPane: ScrollPane
+class DetailsSegmentView(private val context: Context, private val release: Release) : VBox() {
 
     init {
-        children.add(buildPreviewScrollPane().also { previewScrollPane = it })
-        load()
+        children.add(buildPreviewScrollPane())
     }
 
     private fun buildPreviewScrollPane() = ScrollPane().apply {
+        setMargin(this, Insets(0.0, 0.0, 10.0, 0.0))
         prefHeight = 200.0
         prefWidth = 200.0
         isFitToWidth = true
-        setMargin(this, Insets(0.0, 0.0, 10.0, 0.0))
-    }
-
-    private fun load() {
-        CachedExecutor.submit(buildLoadTask())
-    }
-
-    private fun buildLoadTask() = PreviewTextLoadTask(updateInformation).apply {
-
-        setOnRunning {
-            ProgressBar().apply {
-                progress = ProgressIndicator.INDETERMINATE_PROGRESS
-                previewScrollPane.isFitToHeight = false
-                previewScrollPane.content = this
-            }
-        }
-
-        setOnFailed {
-            val cause = it.source.exception
-            logger.error("Couldn't load the markdown-preview", cause)
-            previewScrollPane.isFitToHeight = true
-            previewScrollPane.content = PreviewErrorPlaceHolder(context, cause)
-        }
-
-        //if the task succeeded, we render it as a markdown-text into a javaFX node
-        setOnSucceeded {
-            previewScrollPane.apply {
-                content = MarkdownView(value)
-                isFitToHeight = false
-                isFitToWidth = true
-            }
-        }
+        isFitToHeight = true
+        content = MarkdownView(release.description)
     }
 
     companion object {

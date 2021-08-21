@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.updatedialog.segment.detail;
 
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.i18n.I18N;
-import com.dansoftware.boomega.update.UpdateInformation;
+import com.dansoftware.boomega.update.Release;
 import com.dansoftware.sgmdialog.FixedContentSegment;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
@@ -34,16 +34,16 @@ import org.jetbrains.annotations.NotNull;
 public class DetailsSegment extends FixedContentSegment {
 
     private final Context context;
-    private final UpdateInformation updateInformation;
+    private final Release githubRelease;
 
-    public DetailsSegment(@NotNull Context context, @NotNull UpdateInformation updateInformation) {
+    public DetailsSegment(@NotNull Context context, @NotNull Release release) {
         super(I18N.getValues().getString("update.segment.details.name"));
         this.context = context;
-        this.updateInformation = updateInformation;
+        this.githubRelease = release;
     }
 
     @Override
     protected @NotNull Node createContent() {
-        return new DetailsSegmentView(context, updateInformation);
+        return new DetailsSegmentView(context, githubRelease);
     }
 }

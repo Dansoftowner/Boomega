@@ -19,25 +19,28 @@
 package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.action.GlobalActions
+import com.dansoftware.boomega.gui.action.MenuItems
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
-import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.update.UpdateSearcher
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import javafx.concurrent.Task
 import javafx.geometry.Insets
 import javafx.scene.control.*
 
 /**
  * The toolbar that appears on the top of the login-view.
  */
-class LoginToolbar(private val context: Context, private val preferences: Preferences) : BiToolBar() {
+class LoginToolbar(
+    private val context: Context,
+    private val databaseTracker: DatabaseTracker,
+    private val preferences: Preferences
+) : BiToolBar() {
 
     init {
         leftToolBar.padding = Insets(0.0, 10.0, 0.0, 10.0)
@@ -69,20 +72,7 @@ class LoginToolbar(private val context: Context, private val preferences: Prefer
     }
 
     private fun buildUpdateSearchMenuItem() =
-        MenuItem(I18N.getValue("action.update_search"), icon("update-icon")).action {
-            val task = object : Task<UpdateSearcher.UpdateSearchResult>() {
-                init {
-                    setOnSucceeded {
-                        context.stopProgress()
-                        UpdateActivity(context, it.source.value as UpdateSearcher.UpdateSearchResult).show()
-                    }
-                    setOnRunning { context.showIndeterminateProgress() }
-                }
-
-                override fun call() = UpdateSearcher.defaultInstance().search()
-            }
-            CachedExecutor.submit(task)
-        }
+        MenuItems.of(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
 
     private fun buildPluginManagerMenuItem() =
         MenuItem(I18N.getValue("action.open_plugin_manager"), icon("puzzle-icon")).action {

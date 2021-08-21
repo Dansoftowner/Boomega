@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.updatedialog.segment.notification
 
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.update.UpdateInformation
+import com.dansoftware.boomega.update.Release
 import javafx.geometry.Insets
 import javafx.geometry.Orientation
 import javafx.scene.Group
@@ -32,7 +32,7 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 
 class NotificationSegmentView(
-    private val updateInformation: UpdateInformation
+    private val release: Release
 ) : VBox(10.0) {
 
     init {
@@ -42,7 +42,7 @@ class NotificationSegmentView(
 
     private fun buildUI() {
         children.add(Header())
-        children.add(VersionArea(updateInformation))
+        children.add(VersionArea(release))
     }
 
     private class Header : StackPane() {
@@ -63,7 +63,7 @@ class NotificationSegmentView(
         }
     }
 
-    private class VersionArea(private val updateInformation: UpdateInformation) : StackPane() {
+    private class VersionArea(private val release: Release) : StackPane() {
         init {
             buildUI()
         }
@@ -90,7 +90,7 @@ class NotificationSegmentView(
             HBox.setHgrow(this, Priority.SOMETIMES)
         }
 
-        private fun buildNextVersionLabel() = Label(updateInformation.version).apply {
+        private fun buildNextVersionLabel() = Label(release.version).apply {
             HBox.setHgrow(this, Priority.SOMETIMES)
         }
     }

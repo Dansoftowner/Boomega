@@ -19,8 +19,7 @@
 package com.dansoftware.boomega.gui.updatedialog;
 
 import com.dansoftware.boomega.gui.api.Context;
-import com.dansoftware.boomega.i18n.I18N;
-import com.dansoftware.boomega.update.UpdateSearcher;
+import com.dansoftware.boomega.update.Release;
 import javafx.scene.Group;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -29,23 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * An UpdateActivity can show an update-downloader dialog or
- * it can show an alert-dialog if the update-searching failed with an
- * exception.
- *
- * <p>
- * It needs a {@link Context} for displaying the dialog(s) and
- * an {@link UpdateSearcher.UpdateSearchResult}
- * that can be created by an {@link UpdateSearcher}.
- * <p>
- *
- * <pre>{@code
- * UpdateSearcher searcher = new UpdateSearcher(new VersionInfo("0.0.0"));
- * UpdateSearcher.UpdateSearchResult result = searcher.search();
- *
- * UpdateActivity updateActivity = new UpdateActivity(context, result);
- * updateActivity.show();
- * }</pre>
+ * Used for showing update-downloader dialog
  *
  * @author Daniel Gyorffy
  */
@@ -54,65 +37,26 @@ public class UpdateActivity {
     private static final Logger logger = LoggerFactory.getLogger(UpdateActivity.class);
 
     private final Context context;
-    private final UpdateSearcher.UpdateSearchResult updateSearchResult;
+    private final Release updateSearchResult;
 
     /**
      * Creates a basic {@link UpdateActivity}.
      *
      * @param context            for displaying the dialogs.
-     * @param updateSearchResult the actual update-search data
+     * @param updateSearchResult the found github release
      */
     public UpdateActivity(@NotNull Context context,
-                          @NotNull UpdateSearcher.UpdateSearchResult updateSearchResult) {
+                          @NotNull Release updateSearchResult) {
         this.context = context;
         this.updateSearchResult = updateSearchResult;
     }
 
     /**
      * Shows the activity through the particular {@link Context}.
-     *
-     * <p>
-     * It will display an error-dialog if the program couldn't search for updates because of an error.
-     * <p>
-     * This method actually calls the {@link #show(boolean)} method with a {@code true} value.
-     *
-     * @see #show(boolean)
      */
     public void show() {
-        this.show(true);
-    }
-
-    /**
-     * Shows the activity through the particular {@link Context}.
-     *
-     * @param showFeedbackDialog it should be {@code true} if we want an error message if the update-searching failed or
-     *                           a feedback message if there is no new update available;
-     *                           {@code false} if we only want to show if an update is available
-     */
-    public void show(boolean showFeedbackDialog) {
-        updateSearchResult.ifFailed(exception -> {
-            if (showFeedbackDialog) {
-                context.showErrorDialog(
-                        I18N.getValue("update.failed.title"),
-                        I18N.getValue("update.failed.msg"),
-                        exception, buttonType -> {
-                            //empty
-                        });
-                logger.error("Update search failed", exception);
-            }
-        }).ifNewUpdateAvailable(updateInformation -> {
-            UpdateDialog updateDialog = new UpdateDialog(context, updateInformation,
-                    (context, updDialog) -> context.hideOverlay((Region) updDialog.getParent().getParent()));
-            this.context.showOverlay(new StackPane(new Group(updateDialog)), true);
-        }).ifNoUpdateAvailable(updateInformation -> {
-            if (showFeedbackDialog) {
-                context.showInformationDialog(
-                        I18N.getValue("update.up_to_date.title"),
-                        I18N.getValue("update.up_to_date.msg"),
-                        buttonType -> {
-                            //empty
-                        });
-            }
-        });
+        UpdateDialog updateDialog = new UpdateDialog(context, updateSearchResult,
+                (context, updDialog) -> context.hideOverlay((Region) updDialog.getParent().getParent()));
+        this.context.showOverlay(new StackPane(new Group(updateDialog)), true);
     }
 }

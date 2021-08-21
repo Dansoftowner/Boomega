@@ -19,19 +19,18 @@
 package com.dansoftware.boomega.gui.updatedialog.segment.download;
 
 import com.dansoftware.boomega.i18n.I18N;
-import com.dansoftware.boomega.update.DownloadableBinary;
-import com.dansoftware.boomega.update.UpdateInformation;
+import com.dansoftware.boomega.update.Release;
+import com.dansoftware.boomega.update.ReleaseAsset;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.Objects;
 
 /**
  * Task for downloading the particular update package from the server.
@@ -47,27 +46,24 @@ public class DownloaderTask extends Task<File> {
      */
     private final Object lock = new Object();
 
-
     private final BooleanProperty pausedProperty = new SimpleBooleanProperty();
+
     /**
      * The boolean that indicates that the task's background thread is paused
      */
     private volatile boolean paused;
-    private final UpdateInformation updateInformation;
-    private final DownloadableBinary binary;
+    private final Release release;
+    private final ReleaseAsset releaseAsset;
     private final File dir;
 
     /**
      * Creates a normal {@link DownloaderTask}.
-     *
-     * @param binary the {@link DownloadableBinary} object that defines what to download
-     * @param dir    the directory where we want to save the downloaded binary
      */
-    DownloaderTask(@NotNull UpdateInformation updateInformation,
-                   @NotNull DownloadableBinary binary,
+    DownloaderTask(@NotNull Release release,
+                   @NotNull ReleaseAsset releaseAsset,
                    @NotNull File dir) {
-        this.updateInformation = updateInformation;
-        this.binary = binary;
+        this.release = release;
+        this.releaseAsset = releaseAsset;
         this.dir = dir;
     }
 
@@ -95,39 +91,20 @@ public class DownloaderTask extends Task<File> {
         return pausedProperty;
     }
 
-    /**
-     * Helper method to define the file that we want to save the downloaded file to.
-     *
-     * @param binary the object that represents the downloadable binary
-     * @param dir    the directory where we want to save the file
-     * @return the {@link File} object that represents the file that we should save to
-     */
-    private File getOutputFile(DownloadableBinary binary, File dir) {
-        String fileName = FilenameUtils.getName(binary.getDownloadUrl());
-        if (StringUtils.isBlank(fileName)) {
-            fileName = "boomega-" + updateInformation.getVersion() + "." + binary.getFileExtension();
-        } else if (!StringUtils.endsWithIgnoreCase(fileName, binary.getFileExtension())) {
-            fileName += (fileName.endsWith(".") ? StringUtils.EMPTY : ".") + binary.getFileExtension();
-        }
-
-        return new File(dir, fileName);
-    }
-
     @Override
     protected File call() throws IOException, InterruptedException {
         synchronized (lock) {
             logger.debug("Starting downloading the update bundle...");
 
             //defining the file that we want to write to
-            File outputFile = getOutputFile(this.binary, this.dir);
+            File outputFile = new File(dir, Objects.requireNonNull(releaseAsset.getName()));
 
             //creating the input-, and output-stream
-            try (var input = new BufferedInputStream(binary.openStream());
+            try (var input = new BufferedInputStream(releaseAsset.openStream());
                  var output = new BufferedOutputStream(new FileOutputStream(outputFile))) {
                 updateMessage(I18N.getValue("update.page.download.happening"));
 
-                //getting the size (in bytes) of the downloadable content
-                long contentSize = this.binary.getSize() * 1024L;
+                long contentSize = this.releaseAsset.getSize();
                 logger.debug("Full content size (in bytes): {}", contentSize);
 
                 //calculating the value of 1 %

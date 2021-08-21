@@ -18,9 +18,44 @@
 
 package com.dansoftware.boomega.update
 
+import com.google.gson.annotations.SerializedName
 import java.io.InputStream
 import java.net.URL
 
-open class DownloadableBinary(val name: String, val fileExtension: String, val downloadUrl: String, val size: Int) {
+/**
+ * Represents an asset (a file) in a particular github release.
+ */
+open class ReleaseAsset {
+
+    /**
+     * The file name
+     */
+    var name: String? = null
+
+    /**
+     * The file size in bytes
+     */
+    var size: Long = 0
+
+    /**
+     * The url to download the file from
+     */
+    @SerializedName("browser_download_url")
+    var downloadUrl: String? = null
+
+    /**
+     * The mime-type (or content type) of the file
+     */
+    @SerializedName("content_type")
+    var contentType: String? = null
+
+    /**
+     * Opens an input-stream for downloading the asset's file
+     */
     open fun openStream(): InputStream = URL(downloadUrl).openStream()
+
+    override fun toString(): String {
+        return "GithubAsset(name=$name, size=$size, downloadUrl=$downloadUrl, contentType=$contentType)"
+    }
+
 }

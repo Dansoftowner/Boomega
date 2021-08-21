@@ -20,9 +20,8 @@ package com.dansoftware.boomega.gui.updatedialog.segment.download
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.update.UpdateInformation
+import com.dansoftware.boomega.update.Release
 import com.dansoftware.sgmdialog.TitledSegment
-import javafx.fxml.FXMLLoader
 import javafx.scene.Node
 
 /**
@@ -33,13 +32,10 @@ import javafx.scene.Node
  */
 class DownloadSegment(
     private val context: Context,
-    private val updateInformation: UpdateInformation
+    private val release: Release
 ) : TitledSegment(
     I18N.getValue("update.segment.download.name"),
     I18N.getValue("update.segment.download.title")
 ) {
-    override fun getCenterContent(): Node =
-        FXMLLoader(javaClass.getResource("DownloadSegment.fxml"), I18N.getValues(), null) {
-            DownloadSegmentController(context, updateInformation)
-        }.load()
+    override fun getCenterContent(): Node = DownloadView(context, release)
 }

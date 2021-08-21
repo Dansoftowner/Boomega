@@ -31,11 +31,15 @@ import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
+import com.dansoftware.boomega.gui.util.onFailed
+import com.dansoftware.boomega.gui.util.onRunning
+import com.dansoftware.boomega.gui.util.onSucceeded
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.LauncherMode
 import com.dansoftware.boomega.main.ApplicationRestart
+import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.jfilegoodies.explorer.FileExplorers
@@ -44,11 +48,13 @@ import javafx.scene.Scene
 import javafx.scene.control.ButtonType
 import javafx.scene.input.KeyEvent
 import javafx.stage.Stage
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 
 object GlobalActions {
 
-    /* --------------------------------------------------------------------> */
+    private val logger: Logger = LoggerFactory.getLogger(GlobalActions::class.java)
 
     @JvmField
     val NEW_ENTRY = Action(
@@ -159,7 +165,32 @@ object GlobalActions {
     @JvmField
     val SEARCH_FOR_UPDATES =
         Action("action.update_search", "update-icon") { context, _, _ ->
-            UpdateActivity(context, UpdateSearcher.defaultInstance().search()).show(true)
+            CachedExecutor.submit(object : Task<Release?>() {
+                init {
+                    onRunning {
+                        context.showIndeterminateProgress()
+                    }
+                    onFailed {
+                        context.stopProgress()
+                        context.showErrorDialog(
+                            I18N.getValue("update.failed.title"),
+                            I18N.getValue("update.failed.msg"),
+                            it as? Exception
+                        ) {}
+                        logger.error("Update search failed", it)
+                    }
+                    onSucceeded { githubRelease ->
+                        githubRelease?.let { UpdateActivity(context, it).show() }
+                            ?: context.showInformationDialog(
+                                I18N.getValue("update.up_to_date.title"),
+                                I18N.getValue("update.up_to_date.msg")
+                            ) {}
+                    }
+                }
+
+                override fun call() =
+                    UpdateSearcher.default.search()
+            })
         }
 
     @JvmField
@@ -217,5 +248,4 @@ object GlobalActions {
             }
         })
     }
-
 }

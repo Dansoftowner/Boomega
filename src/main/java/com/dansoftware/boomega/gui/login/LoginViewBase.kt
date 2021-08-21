@@ -51,7 +51,7 @@ class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
     fun titleProperty(): ObservableStringValue = loginBox.titleProperty()
 
     private fun buildUI() {
-        children.add(LoginToolbar(controller.context, controller.preferences))
+        children.add(LoginToolbar(controller.context, controller.databaseTracker, controller.preferences))
         children.add(StackPane(Group(loginBox)).also { VBox.setVgrow(it, Priority.ALWAYS) })
     }
 
