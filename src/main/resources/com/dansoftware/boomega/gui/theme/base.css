@@ -595,6 +595,18 @@
      -fx-padding: 0;
 }
 
+.multiple-selection-place-holder .glyph-icon,
+.no-connection-place-holder .link-off-icon,
+.error-place-holder .warning-icon {
+    -fx-font-size: 2em !important;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                         Export configuration views                          *
+ *                                                                             *
+ ******************************************************************************/
+
 .records-view-config-panel, .json-configuration-view, .excel-configuration-view {
     -fx-pref-width: 30em;
     -fx-pref-height: 30em;
@@ -605,10 +617,8 @@
     -fx-font-size: 1.1em;
 }
 
-.multiple-selection-place-holder .glyph-icon,
-.no-connection-place-holder .link-off-icon,
-.error-place-holder .warning-icon {
-    -fx-font-size: 2em !important;
+.excel-configuration-view .tab-pane > .tab-header-area {
+    -fx-padding: 0;
 }
 
 /*******************************************************************************

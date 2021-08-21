@@ -30,9 +30,6 @@ import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import jfxtras.styles.jmetro.JMetroStyleClass
 
-// TODO: specifying sheet name
-// TODO: specifying empty cell place holder
-
 class ExcelConfigurationView(
     private val onFinished: (ExcelExportConfiguration) -> Unit
 ) : BorderPane() {
@@ -74,9 +71,8 @@ class ExcelConfigurationView(
         }
 
         private fun buildUI() {
-            // TODO: i18n
-            tabs.add(tab("General", GeneralView(excelExportConfiguration)))
-            tabs.add(tab("Styling", scrollPane(StyleView(excelExportConfiguration), fitToWidth = true)))
+            tabs.add(tab(i18n("record.export.excel.tab.general"), GeneralView(excelExportConfiguration)))
+            tabs.add(tab(i18n("record.export.excel.tab.format"), scrollPane(StyleView(excelExportConfiguration), fitToWidth = true)))
         }
 
         private fun tab(title: String, content: Node) = Tab(title, content).apply {
@@ -102,11 +98,10 @@ class ExcelConfigurationView(
         }
 
         private fun buildUI() {
-            // TODO: i18n
-            addTextField("Sheet name:", config.sheetName, config::sheetName::set)
-            addTextField("Place holder text:", config.emptyCellPlaceHolder, config::emptyCellPlaceHolder::set)
-            addSection("Header", config.headerCellStyle)
-            addSection("Regular rows", config.regularCellStyle)
+            addTextField(i18n("record.export.excel.sheet_name"), config.sheetName, config::sheetName::set)
+            addTextField(i18n("record.export.excel.place_holder_text"), config.emptyCellPlaceHolder, config::emptyCellPlaceHolder::set)
+            addSection(i18n("record.export.excel.header"), config.headerCellStyle)
+            addSection(i18n("record.export.excel.regular"), config.regularCellStyle)
         }
 
         private inline fun addTextField(label: String, defaultText: String?, crossinline onTextChanged: (String) -> Unit) {
@@ -117,11 +112,11 @@ class ExcelConfigurationView(
         private fun addSection(title: String, cellStyle: ExcelExportConfiguration.CellStyle) {
             addRow(Label(title).styleClass("category-label").colspan(2).hgrow(Priority.ALWAYS))
             addRow(Separator().colspan(2).hgrow(Priority.ALWAYS))
-            addRow(Label("Background color: "))
+            addRow(Label(i18n("record.export.excel.background_color")))
             addRow(BackgroundColorPicker(cellStyle))
-            addRow(Label("Font: "))
+            addRow(Label(i18n("record.export.excel.font")))
             addRow(CellFontChooser(cellStyle))
-            addRow(Label("Font color: "))
+            addRow(Label(i18n("record.export.excel.font_color")))
             addRow(FontColorPicker(cellStyle))
         }
     }

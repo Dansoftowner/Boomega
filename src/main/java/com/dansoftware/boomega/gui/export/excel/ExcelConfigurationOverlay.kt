@@ -21,10 +21,10 @@ package com.dansoftware.boomega.gui.export.excel
 import com.dansoftware.boomega.export.excel.ExcelExportConfiguration
 import com.dansoftware.boomega.gui.base.TitledOverlayBox
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.i18n.i18n
 
 class ExcelConfigurationOverlay(onFinished: (ExcelExportConfiguration) -> Unit) : TitledOverlayBox(
-    // TODO: i18n
-    "Excel export",
+    i18n("record.export.excel.title"),
     icon("excel-icon"),
     ExcelConfigurationView(onFinished)
 )

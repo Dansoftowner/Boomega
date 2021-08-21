@@ -370,6 +370,17 @@
     -fx-opacity: 0.25;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ *                         Export configuration views                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.excel-configuration-view .tab-pane>*.tab-header-area>*.tab-header-background,
+.excel-configuration-view .tab-pane.underlined > .tab-header-area > .headers-region > .tab,
+.excel-configuration-view .tab-pane.underlined > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: #252525, #252525, #252525;
+}
 
 /*******************************************************************************
  *                                                                             *
