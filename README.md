@@ -28,12 +28,10 @@
 
 * Cross-platform
 * Dark/Light theme, modern UI
-* Multiple languages
-* Multiple database support
-* Easy transportation between databases
-* Multiple record-types like "Book" and "Magazine"
-* Custom notes with Markdown support
-* Importing from Google Books
+* Multiple UI languages
+* Exporting to several formats like **Excel Spreadsheets**, **JSON**, etc...
+* Custom notes with **Markdown** support
+* **Google Books** synchronization
 * Customizable key-bindings
 * Plugin support
 * ...and more!
