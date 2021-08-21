@@ -4,7 +4,7 @@
 
 ### Enhancements/features:
 
-* ✨ Exporting to **JSON** (see [#41](https://github.com/Dansoftowner/Boomega/issues/41))
+* ✨ Exporting to **JSON** & **Excel Spreadsheet format** (see [#41](https://github.com/Dansoftowner/Boomega/issues/41))
 * ✨💄 Updated Google Book Details Panel (Closes [#126](https://github.com/Dansoftowner/Boomega/issues/126))
 * ✨ [#150](https://github.com/Dansoftowner/Boomega/issues/150): Ability to copy the description in Google Book details pane
 * ✨ [#110](https://github.com/Dansoftowner/Boomega/issues/150): Records view configuration panel
