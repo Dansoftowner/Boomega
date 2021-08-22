@@ -90,17 +90,17 @@ The detailed user guide is available [here](USER_GUIDE.md).
   <ul>
       <li>
         <h4>
-           <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-win.exe">Exe installer (.exe)</a>
+           <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.5/Boomega-0.7.5-win.exe">Exe installer (.exe)</a>
         </h4>
       </li>
       <li>
           <h4>
-            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-win.msi">MSI installer package (.msi)</a>
+            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.5/Boomega-0.7.5-win.msi">MSI installer package (.msi)</a>
           </h4>
       </li>
       <li>
         <h4>
-           <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-win.zip">Portable (.zip)</a>
+           <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.5/Boomega-0.7.5-win.zip">Portable (.zip)</a>
         </h4>
       </li>
   </ul>
@@ -136,7 +136,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
 <tr>
 
   <td align="center" colspan="3">
-    <b><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-all.jar">Java archive (.jar)</a></b>
+    <b><a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.5/Boomega-0.7.5-all.jar">Java archive (.jar)</a></b>
   </td>
 
 </tr>
