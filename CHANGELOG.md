@@ -1,6 +1,6 @@
-# Boomega unreleased 
+# Boomega 0.7.5 
 
-**Date:** Unknown
+**Date:** 2021-08-22
 
 ### Enhancements/features:
 
