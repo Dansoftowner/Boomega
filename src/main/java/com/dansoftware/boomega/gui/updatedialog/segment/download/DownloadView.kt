@@ -56,8 +56,8 @@ class DownloadView(private val context: Context, private val release: Release) :
     private val selectedAsset = SimpleObjectProperty<ReleaseAsset>()
     private val downloadDirectory = SimpleStringProperty()
     private val downloadService = DownloadService(context, release, selectedAsset, downloadDirectory)
-    private val dialog: UpdateDialog
-        get() = parent.parent as UpdateDialog
+    private val dialog: UpdateDialog get() = parent.parent as UpdateDialog
+    private val downloadFile get() = File(downloadDirectory.get(), selectedAsset.get()?.name ?: "")
 
     init {
         padding = Insets(10.0)
@@ -80,6 +80,7 @@ class DownloadView(private val context: Context, private val release: Release) :
 
     private fun buildAssetChooser() = AssetChooser(release.assets!!).apply {
         this@DownloadView.selectedAsset.bind(selectedAsset)
+        disableProperty().bind(downloadService.runningProperty())
     }
 
     private fun buildPathField() = CustomTextField().also { textField ->
@@ -113,8 +114,10 @@ class DownloadView(private val context: Context, private val release: Release) :
         )
         setOnAction {
             initUpdateDialogBehaviour()
-            downloadService.reset()
-            downloadService.start()
+            checkDownloadFileExists {
+                downloadService.reset()
+                downloadService.start()
+            }
         }
     }
 
@@ -202,6 +205,20 @@ class DownloadView(private val context: Context, private val release: Release) :
     private fun initUpdateDialogBehaviour() {
         dialog.prevButtonDisableProperty().bind(downloadService.runningProperty())
         dialog.nextButtonDisableProperty().bind(downloadService.runningProperty())
+    }
+
+    /**
+     * Checks whether the download file exists or not.
+     * If it does not exist, it will simply execute the given [action].
+     * If exists, it will show a confirmation dialog,
+     * and executes the given [action] if the user still wants to download.
+     */
+    private inline fun checkDownloadFileExists(crossinline action: () -> Unit) {
+        downloadFile.takeUnless { it.exists() }?.let { action() }
+            ?: context.showConfirmationDialog(
+                i18n("update.dialog.download.install.file_exists.title", downloadFile.name),
+                i18n("update.dialog.download.install.file_exists.msg")
+            ) { if (it.typeEquals(ButtonType.YES)) action() }
     }
 
     companion object {
