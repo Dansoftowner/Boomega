@@ -12,17 +12,7 @@
 
 <h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
 
-<table style="width: 100%; border: none;">
-<tr>
-<td>
-    <img src="img/login-activity-preview.png">
-</td>
-
-<td>
-    <img src="img/main-activity-preview.png">
-</td>
-</tr>
-</table>
+![Screenshot](img/main-activity-preview.png)
 
 ## :sparkles: Features
 
