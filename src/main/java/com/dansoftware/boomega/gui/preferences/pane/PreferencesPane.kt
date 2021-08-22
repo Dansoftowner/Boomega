@@ -78,7 +78,7 @@ abstract class PreferencesPane(val preferences: Preferences) {
         abstract fun addNode(parent: GridPane)
     }
 
-    open class PairControl<T : Region>(val title: String, val description: String?, val customControl: T) :
+    open class PairControl<T : Region>(val title: String, val description: String? = null, val customControl: T) :
         PreferencesControl() {
         override fun addNode(parent: GridPane) {
             parent.rowCount.also { row ->

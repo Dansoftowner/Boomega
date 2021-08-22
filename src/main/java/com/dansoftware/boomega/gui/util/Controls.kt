@@ -24,9 +24,11 @@ package com.dansoftware.boomega.gui.util
 import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ObservableList
 import javafx.geometry.Insets
+import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.*
+import javafx.scene.text.TextAlignment
 import javafx.util.StringConverter
 import org.controlsfx.control.CheckListView
 
@@ -94,7 +96,9 @@ inline fun <reified T : Node> Node.lookup(selector: String): T? = lookup(selecto
 /**
  * Wraps the given [Node] into a [StackPane]
  */
-inline fun Node.asCentered() = StackPane(this)
+inline fun Node.asCentered(pos: Pos = Pos.CENTER) = StackPane(this).also {
+    StackPane.setAlignment(this, pos)
+}
 
 inline fun hyperLink(text: String, graphic: Node? = null, crossinline onAction: () -> Unit) =
     Hyperlink(text, graphic).apply {
@@ -129,6 +133,10 @@ inline fun <T : Control> T.tooltip(value: String) = apply {
 
 inline fun <T : Region> T.padding(value: Insets) = apply {
     padding = value
+}
+
+inline fun <T : Label> T.textAlignment(value: TextAlignment) = apply {
+    textAlignment = value
 }
 
 /**

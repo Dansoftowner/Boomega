@@ -20,9 +20,14 @@ package com.dansoftware.boomega.gui.preferences.pane
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.util.asCentered
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
+import javafx.geometry.Pos
 import javafx.scene.Node
+import javafx.scene.control.Label
+import java.time.format.DateTimeFormatter
 
 class UpdatePane(preferences: Preferences) : PreferencesPane(preferences) {
 
@@ -36,17 +41,27 @@ class UpdatePane(preferences: Preferences) : PreferencesPane(preferences) {
 
         private fun buildItems() {
             items.add(buildAutoSearchToggle())
+            items.add(buildLastTimeSearchLabel())
         }
 
         private fun buildAutoSearchToggle(): PreferencesControl =
             ToggleControl(
-                I18N.getValue("preferences.update.automatic"),
-                I18N.getValue("preferences.update.automatic.desc")
+                i18n("preferences.update.automatic"),
+                i18n("preferences.update.automatic.desc")
             ).apply {
                 isSelected = preferences.get(PreferenceKey.SEARCH_UPDATES)
                 selectedProperty().addListener { _, _, selected ->
                     preferences.editor().put(PreferenceKey.SEARCH_UPDATES, selected)
                 }
             }
+
+        private fun buildLastTimeSearchLabel() = PairControl(
+            title = i18n("preferences.update.last"),
+            customControl = Label(
+                preferences.get(PreferenceKey.LAST_UPDATE_SEARCH)
+                    ?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"))
+            ).asCentered(Pos.CENTER_RIGHT)
+        )
+
     }
 }

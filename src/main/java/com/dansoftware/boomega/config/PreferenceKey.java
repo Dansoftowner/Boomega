@@ -25,6 +25,7 @@ import com.dansoftware.boomega.gui.theme.config.ThemeAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.function.Supplier;
 
@@ -83,20 +84,25 @@ public class PreferenceKey<T> {
     /**
      * Key for accessing the default locale.
      */
-    public static final PreferenceKey<Locale> LOCALE = new PreferenceKey<>("locale", Locale.class, Locale::getDefault);
+    public static final PreferenceKey<@NotNull Locale> LOCALE = new PreferenceKey<>("locale", Locale.class, Locale::getDefault);
 
     /**
      * Key for accessing the login data
      */
-    public static final PreferenceKey<LoginData> LOGIN_DATA = new PreferenceKey<>("loginData", LoginData.class, new LoginDataAdapter(), LoginData::new);
+    public static final PreferenceKey<@NotNull LoginData> LOGIN_DATA = new PreferenceKey<>("loginData", LoginData.class, new LoginDataAdapter(), LoginData::new);
 
     /**
      * Key for accessing that the automatic update-searching is turned on or off
      */
-    public static final PreferenceKey<Boolean> SEARCH_UPDATES = new PreferenceKey<>("searchUpdates", Boolean.class, () -> Boolean.TRUE);
+    public static final PreferenceKey<@NotNull Boolean> SEARCH_UPDATES = new PreferenceKey<>("searchUpdates", Boolean.class, () -> Boolean.TRUE);
 
     /**
      * Key for accessing the configured theme
      */
-    public static final PreferenceKey<Theme> THEME = new PreferenceKey<>("theme", Theme.class, new ThemeAdapter(), Theme::getDefault);
+    public static final PreferenceKey<@NotNull Theme> THEME = new PreferenceKey<>("theme", Theme.class, new ThemeAdapter(), Theme::getDefault);
+
+    /**
+     * Key for accessing the time of the last update-search
+     */
+    public static final PreferenceKey<@Nullable LocalDateTime> LAST_UPDATE_SEARCH = new PreferenceKey<>("searchUpdates.last", LocalDateTime.class, () -> null);
 }

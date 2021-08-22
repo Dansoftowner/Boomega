@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.action
 
+import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
@@ -51,6 +52,7 @@ import javafx.stage.Stage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.time.LocalDateTime
 
 object GlobalActions {
 
@@ -164,7 +166,8 @@ object GlobalActions {
 
     @JvmField
     val SEARCH_FOR_UPDATES =
-        Action("action.update_search", "update-icon") { context, _, _ ->
+        Action("action.update_search", "update-icon") { context, prefs, _ ->
+            prefs.editor().put(PreferenceKey.LAST_UPDATE_SEARCH, LocalDateTime.now())
             CachedExecutor.submit(object : Task<Release?>() {
                 init {
                     onRunning {

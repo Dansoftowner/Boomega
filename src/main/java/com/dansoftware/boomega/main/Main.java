@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -317,7 +318,8 @@ public class Main extends BaseApplication {
         if (preferences.get(PreferenceKey.SEARCH_UPDATES)) {
             notifyPreloader("preloader.update.search");
             UpdateSearcher updateSearcher = UpdateSearcher.getDefault();
-            return updateSearcher.search();
+            preferences.editor().put(PreferenceKey.LAST_UPDATE_SEARCH, LocalDateTime.now());
+            return updateSearcher.trySearch(e -> logger.error("Couldn't search for updates", e));
         }
         return null;
     }
