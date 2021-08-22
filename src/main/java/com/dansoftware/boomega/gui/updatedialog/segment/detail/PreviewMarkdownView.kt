@@ -18,29 +18,16 @@
 
 package com.dansoftware.boomega.gui.updatedialog.segment.detail
 
-import com.dansoftware.boomega.update.Release
-import javafx.geometry.Insets
-import javafx.scene.control.ScrollPane
-import javafx.scene.layout.VBox
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.dansoftware.boomega.util.SystemBrowser
+import com.sandec.mdfx.MarkdownView
+import javafx.scene.Cursor
+import javafx.scene.Node
 
-class DetailsSegmentView(private val release: Release) : VBox() {
-
-    init {
-        children.add(buildPreviewScrollPane())
-    }
-
-    private fun buildPreviewScrollPane() = ScrollPane().apply {
-        setMargin(this, Insets(0.0, 0.0, 10.0, 0.0))
-        prefHeight = 200.0
-        prefWidth = 200.0
-        isFitToWidth = true
-        isFitToHeight = true
-        content = PreviewMarkdownView(release.description)
-    }
-
-    companion object {
-        private val logger: Logger = LoggerFactory.getLogger(DetailsSegmentView::class.java)
+class PreviewMarkdownView(markdown: String? = null) : MarkdownView(markdown) {
+    override fun setLink(node: Node, link: String?, description: String?) {
+        node.cursor = Cursor.HAND
+        node.setOnMouseClicked {
+            link?.let(SystemBrowser::browse)
+        }
     }
 }

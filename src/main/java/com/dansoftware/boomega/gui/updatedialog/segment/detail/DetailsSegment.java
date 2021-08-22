@@ -44,6 +44,6 @@ public class DetailsSegment extends FixedContentSegment {
 
     @Override
     protected @NotNull Node createContent() {
-        return new DetailsSegmentView(context, githubRelease);
+        return new DetailsSegmentView(githubRelease);
     }
 }
