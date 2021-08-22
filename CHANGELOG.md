@@ -14,6 +14,7 @@
 * ✨ Disable insert-item when the find-dialog is showing in records-view
 * 💄 Look and feel updates
 * 💥 [#152](https://github.com/Dansoftowner/Boomega/issues/152): New Update detection policy
+* ✨ [#23](https://github.com/Dansoftowner/Boomega/issues/23): Handling duplicate file in UpdateDialog
 
 ### Bug fixes/improvements
 
