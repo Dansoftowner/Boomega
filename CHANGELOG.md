@@ -10,11 +10,12 @@
 * ✨ [#110](https://github.com/Dansoftowner/Boomega/issues/150): Records view configuration panel
 * ✨ [#104](https://github.com/Dansoftowner/Boomega/issues/104): Duplicate record item
 * ✨ [#94](https://github.com/Dansoftowner/Boomega/issues/94): Showing key combinations in the tooltips of the toolbar items
+* 💥 [#152](https://github.com/Dansoftowner/Boomega/issues/152): New Update detection policy
+* ✨ [#23](https://github.com/Dansoftowner/Boomega/issues/23): Handling duplicate file in UpdateDialog
+* ✨ [#8](https://github.com/Dansoftowner/Boomega/issues/8): Saving the time of the last update-searching
 * ✨ Hiding docks when no items selected in records-view
 * ✨ Disable insert-item when the find-dialog is showing in records-view
 * 💄 Look and feel updates
-* 💥 [#152](https://github.com/Dansoftowner/Boomega/issues/152): New Update detection policy
-* ✨ [#23](https://github.com/Dansoftowner/Boomega/issues/23): Handling duplicate file in UpdateDialog
 
 ### Bug fixes/improvements
 
