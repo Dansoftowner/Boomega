@@ -21,6 +21,7 @@
 package com.dansoftware.boomega.gui.util
 
 import javafx.application.Platform
+import javafx.concurrent.Service
 import javafx.concurrent.Task
 
 fun runOnUiThread(action: Runnable) {
@@ -30,14 +31,30 @@ fun runOnUiThread(action: Runnable) {
     }
 }
 
-fun <T> Task<T>.onSucceeded(action: (T) -> Unit) {
+inline fun <T> Task<T>.onSucceeded(crossinline action: (T) -> Unit) {
     setOnSucceeded { action(value) }
 }
 
-fun <T> Task<T>.onFailed(action: (Throwable) -> Unit) {
+inline fun <T> Task<T>.onFailed(crossinline action: (Throwable) -> Unit) {
     setOnFailed { action(it.source.exception) }
 }
 
-fun <T> Task<T>.onRunning(action: () -> Unit) {
+inline fun <T> Task<T>.onRunning(crossinline action: () -> Unit) {
     setOnRunning { action() }
+}
+
+inline fun <T> Service<T>.onSucceeded(crossinline action: (T) -> Unit) {
+    setOnSucceeded { action(value) }
+}
+
+inline fun <T> Service<T>.onFailed(crossinline action: (Throwable) -> Unit) {
+    setOnFailed { action(it.source.exception) }
+}
+
+inline fun <T> Service<T>.onRunning(crossinline action: () -> Unit) {
+    setOnRunning { action() }
+}
+
+inline fun <T> Service<T>.onCancelled(crossinline action: () -> Unit) {
+    setOnCancelled { action() }
 }

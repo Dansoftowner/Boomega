@@ -22,7 +22,6 @@ import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.updatedialog.segment.detail.DetailsSegment;
 import com.dansoftware.boomega.gui.updatedialog.segment.download.DownloadSegment;
 import com.dansoftware.boomega.gui.updatedialog.segment.notification.NotificationSegment;
-import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.update.Release;
 import com.dansoftware.boomega.util.InMemoryResourceBundle;
 import com.dansoftware.sgmdialog.Segment;
@@ -43,6 +42,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
+
 /**
  * An {@link UpdateDialog} allows a user to review and download the new update.
  *
@@ -56,13 +57,11 @@ public class UpdateDialog extends SegmentDialog {
     }
 
     private final Context context;
-    private final Release githubRelease;
     private final HidePolicy hidePolicy;
 
     public UpdateDialog(@NotNull Context context, @NotNull Release githubRelease, @NotNull HidePolicy hidePolicy) {
         super(buildSegmentDialogValues(), new SegmentSequenceImpl(context, githubRelease));
         this.context = context;
-        this.githubRelease = githubRelease;
         this.hidePolicy = hidePolicy;
         this.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         this.getStyleClass().add(STYLE_CLASS);
@@ -72,10 +71,10 @@ public class UpdateDialog extends SegmentDialog {
 
     private static ResourceBundle buildSegmentDialogValues() {
         return new InMemoryResourceBundle.Builder()
-                .put("segment.dialog.button.next", I18N.getValue("update.dialog.button.next"))
-                .put("segment.dialog.button.finish", I18N.getValue("update.dialog.button.finish"))
-                .put("segment.dialog.button.prev", I18N.getValue("update.dialog.button.prev"))
-                .put("segment.dialog.button.skip", I18N.getValue("update.dialog.button.skip"))
+                .put("segment.dialog.button.next", i18n("update.dialog.button.next"))
+                .put("segment.dialog.button.finish", i18n("update.dialog.button.finish"))
+                .put("segment.dialog.button.prev", i18n("update.dialog.button.prev"))
+                .put("segment.dialog.button.skip", i18n("update.dialog.button.skip"))
                 .build();
     }
 
@@ -90,7 +89,7 @@ public class UpdateDialog extends SegmentDialog {
 
     private final class LaterButton extends Button implements EventHandler<ActionEvent> {
         LaterButton() {
-            super(I18N.getValues().getString("update.dialog.button.later"));
+            super(i18n("update.dialog.button.later"));
             setOnAction(this);
             HBox.setMargin(this, new Insets(0, 10, 0, 0));
         }

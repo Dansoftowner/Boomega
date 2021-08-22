@@ -21,15 +21,12 @@ package com.dansoftware.boomega.gui.updatedialog.segment.download
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.WebsiteHyperLink
 import com.dansoftware.boomega.gui.updatedialog.UpdateDialog
-import com.dansoftware.boomega.gui.util.asCentered
-import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.gui.util.padding
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.ReleaseAsset
 import com.dansoftware.boomega.update.sizeInMegaBytes
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.boomega.util.revealInExplorer
 import com.jfilegoodies.FileGoodies
 import com.juserdirs.UserDirectories
@@ -37,6 +34,7 @@ import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.concurrent.Service
 import javafx.concurrent.Task
+import javafx.css.PseudoClass
 import javafx.geometry.Insets
 import javafx.scene.Cursor
 import javafx.scene.control.*
@@ -47,17 +45,17 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.TextAlignment
 import javafx.stage.DirectoryChooser
 import org.controlsfx.control.textfield.CustomTextField
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
-
-// TODO: disabling dialog buttons during download
-// TODO: Somehow the pause and stop buttons are all disabled during the download
+import kotlin.properties.Delegates
 
 class DownloadView(private val context: Context, private val release: Release) : VBox(10.0) {
 
     private val selectedAsset = SimpleObjectProperty<ReleaseAsset>()
     private val downloadDirectory = SimpleStringProperty()
-    private val downloadService = DownloadService(release, selectedAsset, downloadDirectory)
+    private val downloadService = DownloadService(context, release, selectedAsset, downloadDirectory)
     private val dialog: UpdateDialog
         get() = parent.parent as UpdateDialog
 
@@ -86,7 +84,7 @@ class DownloadView(private val context: Context, private val release: Release) :
 
     private fun buildPathField() = CustomTextField().also { textField ->
         downloadDirectory.bind(textField.textProperty())
-        disableProperty().bind(downloadService.runningProperty())
+        textField.disableProperty().bind(downloadService.runningProperty())
         textField.text = UserDirectories.get().downloadsDirectoryPath()
         textField.isEditable = false
         textField.right = StackPane(icon("folder-open-icon").apply {
@@ -104,18 +102,30 @@ class DownloadView(private val context: Context, private val release: Release) :
         HBox(5.0, buildDownloadButton(), buildPauseButton(), buildSuspendButton())
 
     private fun buildDownloadButton() = Button().apply {
-        HBox.setHgrow(this, Priority.ALWAYS)
-        disableProperty().bind(downloadService.runningProperty().or(downloadDirectory.isNull).or(selectedAsset.isNull))
+        hgrow(Priority.ALWAYS)
         text = i18n("update.dialog.download_binary")
         maxWidth = Double.MAX_VALUE
+        disableProperty().bind(
+            downloadService.runningProperty()
+                .or(downloadDirectory.isNull)
+                .or(selectedAsset.isNull)
+                .or(downloadService.valueProperty().isNotNull)
+        )
         setOnAction {
+            initUpdateDialogBehaviour()
+            downloadService.reset()
             downloadService.start()
         }
     }
 
     private fun buildPauseButton() = Button().apply {
         disableProperty().bind(downloadService.runningProperty().not())
-        graphic = icon("pause-icon")
+        graphicProperty().bind(
+            Bindings.createObjectBinding(
+                { icon(if (downloadService.isPaused) "play-icon" else "pause-icon") },
+                downloadService.pausedProperty, downloadService.runningProperty()
+            )
+        )
         setOnAction {
             downloadService.pauseOrResume()
         }
@@ -130,9 +140,11 @@ class DownloadView(private val context: Context, private val release: Release) :
     }
 
     private fun buildProgressbar() = ProgressBar().apply {
-        visibleProperty().bind(downloadService.runningProperty())
-        managedProperty().bind(downloadService.runningProperty())
+        bindFullVisibilityTo(downloadService.runningProperty())
         progressProperty().bind(downloadService.progressProperty())
+        downloadService.pausedProperty.addListener { _, _, isPaused ->
+            pseudoClassStateChanged(PseudoClass.getPseudoClass("paused"), isPaused)
+        }
     }
 
     private fun buildProgressDetailArea() = HBox(2.0).apply {
@@ -141,25 +153,23 @@ class DownloadView(private val context: Context, private val release: Release) :
     }
 
     private fun buildProgressTitleLabel() = Label().apply {
-        HBox.setHgrow(this, Priority.ALWAYS)
-        visibleProperty().bind(downloadService.runningProperty())
-        managedProperty().bind(downloadService.runningProperty())
+        hgrow(Priority.ALWAYS)
+        bindFullVisibilityTo(downloadService.runningProperty())
         textProperty().bind(downloadService.titleProperty())
     }
 
     private fun buildProgressMessageLabel() = Label().apply {
-        HBox.setHgrow(this, Priority.ALWAYS)
-        visibleProperty().bind(downloadService.runningProperty())
-        managedProperty().bind(downloadService.runningProperty())
+        bindFullVisibilityTo(downloadService.runningProperty())
+        hgrow(Priority.ALWAYS)
         textProperty().bind(downloadService.messageProperty())
         textAlignment = TextAlignment.RIGHT
     }
 
     private fun buildInstallButton() = Button().apply {
+        bindFullVisibilityTo(downloadService.valueProperty().isNotNull)
         text = i18n("update.dialog.download.install")
         maxWidth = Double.MAX_VALUE
         isDefaultButton = true
-        disableProperty().bind(downloadService.runningProperty().or(downloadService.valueProperty().isNull))
         setOnAction {
             downloadService.value?.let {
                 it.takeIf(FileGoodies::isOSExecutable)?.let {
@@ -178,9 +188,9 @@ class DownloadView(private val context: Context, private val release: Release) :
     }
 
     private fun buildOpenButton() = Button().apply {
+        bindFullVisibilityTo(downloadService.valueProperty().isNotNull)
         text = i18n("update.dialog.download.open_in_explorer")
         maxWidth = Double.MAX_VALUE
-        disableProperty().bind(downloadService.runningProperty().or(downloadService.valueProperty().isNull))
         setOnAction {
             downloadService.value?.revealInExplorer()
         }
@@ -189,16 +199,34 @@ class DownloadView(private val context: Context, private val release: Release) :
     private fun buildWebsiteHyperlink() =
         WebsiteHyperLink(i18n("website.open"), release.website).asCentered()
 
+    private fun initUpdateDialogBehaviour() {
+        dialog.prevButtonDisableProperty().bind(downloadService.runningProperty())
+        dialog.nextButtonDisableProperty().bind(downloadService.runningProperty())
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(DownloadView::class.java)
+    }
+
     private class DownloadService(
+        private val context: Context,
         private val release: Release,
         private val releaseAsset: ObjectProperty<ReleaseAsset>,
         private val downloadDirectory: StringProperty
     ) : Service<File>() {
 
-        private var task: DownloaderTask? = null
+        val pausedProperty = SimpleBooleanProperty()
+        val isPaused get() = pausedProperty.get()
+
+        private var task: DownloaderTask? by Delegates.observable(null) { _, _, it ->
+            it?.let { pausedProperty.bind(it.pausedProperty().and(runningProperty())) }
+        }
 
         init {
-            executor = CachedExecutor
+            onFailed(::onFailed)
+            onCancelled(::onCancelled)
+            onSucceeded { onSucceeded() }
+            progressProperty().addListener { _, _, _ -> onProgress() }
         }
 
         override fun createTask(): Task<File> =
@@ -206,6 +234,42 @@ class DownloadView(private val context: Context, private val release: Release) :
 
         fun pauseOrResume() {
             task!!.isPaused = task!!.isPaused.not()
+        }
+
+        private fun onFailed(exception: Throwable) {
+            logger.error("Failed during update downloading", exception)
+
+            context.showProgress(
+                workDone.toLong(),
+                totalWork.toLong(),
+                Context.ProgressType.ERROR
+            )
+
+            context.showErrorDialog(
+                I18N.getValue("update.dialog.download.failed.title"),
+                I18N.getValue("update.dialog.download.failed.msg"),
+                exception as? Exception
+            ) { context.stopProgress() }
+        }
+
+        private fun onSucceeded() {
+            context.stopProgress()
+            context.contextWindow?.requestFocus()
+        }
+
+        private fun onCancelled() {
+            context.stopProgress()
+        }
+
+        private fun onProgress() {
+            context.showProgress(
+                workDone.toLong(),
+                totalWork.toLong(),
+                when {
+                    isPaused -> Context.ProgressType.PAUSED
+                    else -> Context.ProgressType.NORMAL
+                }
+            )
         }
     }
 

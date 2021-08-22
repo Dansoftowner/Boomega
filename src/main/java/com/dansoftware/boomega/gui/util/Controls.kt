@@ -21,6 +21,7 @@
 
 package com.dansoftware.boomega.gui.util
 
+import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ObservableList
 import javafx.geometry.Insets
 import javafx.scene.Node
@@ -128,4 +129,12 @@ inline fun <T : Control> T.tooltip(value: String) = apply {
 
 inline fun <T : Region> T.padding(value: Insets) = apply {
     padding = value
+}
+
+/**
+ * Binds the node's [Node.visibleProperty] and [Node.disableProperty] to the given observable value
+ */
+inline infix fun <T : Node> T.bindFullVisibilityTo(to: ObservableBooleanValue) {
+    visibleProperty().bind(to)
+    managedProperty().bind(to)
 }
