@@ -24,7 +24,7 @@
 </tr>
 </table>
 
-## Features
+## :sparkles: Features
 
 * Cross-platform
 * Dark/Light theme, modern UI
@@ -36,11 +36,11 @@
 * Plugin support
 * ...and more!
 
-## Documentation
+## :page_facing_up: Documentation
 
 The detailed user guide is available [here](USER_GUIDE.md).
 
-## Download
+## :arrow_down: Download
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?logo=linux&logoColor=white)]()
 [![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)](https://github.com/Dansoftowner/Boomega/releases)
 [![Version](https://img.shields.io/github/v/release/Dansoftowner/Boomega?include_prereleases)](https://github.com/Dansoftowner/Boomega/releases)
@@ -158,7 +158,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
 * The build tool used is [Gradle](https://gradle.org/)
 * _Want to contribute?_ See the [contribution guideline](CONTRIBUTING.md).
 
-## Build
+## :hammer: Build
 The recommended IDE for building this project is `IntelliJ Idea`.
 
 ### Build requirements
@@ -175,5 +175,9 @@ To build executable binaries, use `gradlew jpackage` ([see distribution guidelin
   ![Viewing third-party libraries in the app](img/BoomegaThirdPartyInfo.png)
 
 
-## License
+## Support
+
+If you like this project, give a :star:!
+
+## :page_facing_up: License
 This software is licensed under the [GNU General Public License v3](https://en.wikipedia.org/wiki/GNU_General_Public_License).
