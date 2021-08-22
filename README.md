@@ -113,12 +113,12 @@ The detailed user guide is available [here](USER_GUIDE.md).
    <ul>
         <li>
           <h4>
-            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-1_amd64-linux.deb">Debian Software Package (.deb)</a>
+            <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.5/boomega_0.7.5-1_amd64-linux.deb">Debian Software Package (.deb)</a>
           </h4>
         </li>
         <li>
           <h4>
-             <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.0/Boomega-0.7.0-linux.tar.xz">Portable (.tar.xz)</a>
+             <a href="https://github.com/Dansoftowner/Boomega/releases/download/v0.7.5/Boomega-0.7.5-linux.tar.xz">Portable (.tar.xz)</a>
           </h4>
         </li>
    </ul>
