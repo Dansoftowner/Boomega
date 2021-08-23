@@ -4,8 +4,8 @@
 </p>
 
 <p align="center">
-    <a href="LICENSE"><img align="center" alt="License" src="https://img.shields.io/github/license/DansoftOwner/Boomega"></a>
     <a href="https://github.com/Dansoftowner/Boomega"><img align="center" alt="Alpha stage" src="https://img.shields.io/badge/stage-alpha-red"></a>
+    <a href="LICENSE"><img align="center" alt="License" src="https://img.shields.io/github/license/DansoftOwner/Boomega"></a>
     <a href="https://github.com/Dansoftowner/Boomega/issues"><img align="center" alt="Issues" src="https://img.shields.io/github/issues/DansoftOwner/Boomega"></a>
     <a href="https://github.com/Dansoftowner/Boomega/issues"><img align="center" alt="Issues closed" src="https://img.shields.io/github/issues-closed/Dansoftowner/Boomega"></a>
     <a href="https://github.com/Dansoftowner/Boomega/commits/dev"><img align="center" alt="Last commit" src="https://img.shields.io/github/last-commit/Dansoftowner/Boomega"></a>
