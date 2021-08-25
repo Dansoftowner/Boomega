@@ -96,11 +96,6 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
-            "JNA",
-            "https://github.com/java-native-access/jna",
-            LicenseInfo("Apache-2.0 OR LGPL-2.1", "https://github.com/java-native-access/jna/blob/master/LICENSE")
-        ),
-        DependencyInfo(
             "jSystemThemeDetector",
             "https://github.com/Dansoftowner/jSystemThemeDetector",
             LicenseInfo.apache20License()

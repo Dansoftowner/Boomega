@@ -69,10 +69,6 @@
         <td><a href="https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt">Apache 2.0</a></td>
     </tr>
     <tr>
-        <td><a href="https://github.com/java-native-access/jna">JNA</a></td>
-        <td><a href="https://github.com/java-native-access/jna/blob/master/LICENSE">Apache-2.0 OR LGPL-2.1</a></td>
-    </tr>
-    <tr>
         <td><a href="https://github.com/nico2sh/jHTML2Md">jHTML2Md</a></td>
         <td>-</td>
     </tr>
