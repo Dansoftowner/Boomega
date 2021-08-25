@@ -18,15 +18,16 @@
 
 package com.dansoftware.boomega.main;
 
+import com.dansoftware.boomega.db.DatabaseMeta;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
 
 /**
  * An abstract {@link Application} implementation.
@@ -50,7 +51,7 @@ public abstract class BaseApplication extends Application {
     }
 
     protected void notifyPreloader(@Nls String i18n) {
-        notifyPreloader(new Preloader.MessageNotification(i18n));
+        notifyPreloader(new Preloader.MessageNotification(i18n(i18n)));
     }
 
     protected void hidePreloader() {
@@ -78,10 +79,10 @@ public abstract class BaseApplication extends Application {
         return !getApplicationArgs().isEmpty();
     }
 
-    protected <T> Optional<T> getFormattedArgument(@NotNull Function<List<String>, T> argumentsConverter) {
+    protected Optional<DatabaseMeta> getParsedArgument() {
         if (!hasParameters())
             return Optional.empty();
-        return Optional.ofNullable(argumentsConverter.apply(getApplicationArgs()));
+        return Optional.ofNullable(ArgumentTransformer.transform(getApplicationArgs()));
     }
 
     /**

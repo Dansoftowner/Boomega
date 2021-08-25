@@ -14,7 +14,7 @@ public class PreloaderSimulation extends Application {
     public void init() throws Exception {
         synchronized (this) {
             for (int i = 0; i <= 100; i++) {
-                notifyPreloader(new Preloader.MessageNotification(false, "Message {0}", i));
+                notifyPreloader(new Preloader.MessageNotification("Message " + i));
                 if (i == 100) i = 0;
                 Thread.sleep(1000);
             }

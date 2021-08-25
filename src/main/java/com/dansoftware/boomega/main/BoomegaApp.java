@@ -21,7 +21,6 @@ package com.dansoftware.boomega.main;
 import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
-import com.dansoftware.boomega.exception.UncaughtExceptionHandler;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity;
@@ -30,10 +29,11 @@ import com.dansoftware.boomega.gui.keybinding.KeyBindings;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity;
 import com.dansoftware.boomega.gui.window.BaseWindow;
-import com.dansoftware.boomega.i18n.I18N;
 import com.dansoftware.boomega.instance.ApplicationInstanceService;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
 import com.dansoftware.boomega.launcher.LauncherMode;
+import com.dansoftware.boomega.main.Preloader.MessageNotification;
+import com.dansoftware.boomega.main.Preloader.MessageNotification.Priority;
 import com.dansoftware.boomega.plugin.PluginClassLoader;
 import com.dansoftware.boomega.plugin.Plugins;
 import com.dansoftware.boomega.update.Release;
@@ -52,47 +52,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
+
 /**
- * The main class and javafx application starter.
+ * The basic implementation of the JavaFX Application.
  *
  * <p>
  * Responsible for initializing the application and launching the GUI
  *
  * @author Daniel Gyorffy
  */
-public class Main extends BaseApplication {
+public class BoomegaApp extends BaseApplication {
 
-    private static final Logger logger;
-    private static final Object initThreadLock;
+    private static final Logger logger = LoggerFactory.getLogger(BoomegaApp.class);
+    private static final Object initThreadLock = BoomegaApp.class;
 
     static {
-        //object for synchronizing the JavaFX Launcher Thread
-        initThreadLock = Main.class;
-
-        PropertiesSetup.setupSystemProperties();
-        //we create the logger after the necessary system-properties are put
-        logger = LoggerFactory.getLogger(Main.class);
-        //Set the default uncaught exception handler
-        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
-    }
-
-    /**
-     * The main-method of the application;
-     *
-     * <p>
-     * Starts the {@link ApplicationInstanceService}.
-     * <p>
-     * If the {@link ApplicationInstanceService} didn't stop the app,
-     * the main launches the application with a
-     * preloader.
-     *
-     * @see BaseApplication#launchApp(Class, String...)
-     * @see ApplicationInstanceService#open(String[])
-     */
-    public static void main(String[] args) {
-        ApplicationInstanceService.open(args);
         CustomFontsLoader.loadFonts();
-        BaseApplication.launchApp(Main.class, args);
     }
 
     @Override
@@ -124,7 +100,7 @@ public class Main extends BaseApplication {
     private void launchGUI(@NotNull Preferences preferences,
                            @NotNull DatabaseTracker databaseTracker,
                            @NotNull LoginData loginData,
-                           @NotNull Release updateSearchResult,
+                           @Nullable Release updateSearchResult,
                            @NotNull ActivityLauncher.PostLaunchQueue queue) {
         notifyPreloader("preloader.gui.build");
         new InitActivityLauncher(
@@ -147,12 +123,12 @@ public class Main extends BaseApplication {
     @Init
     private void handleApplicationArgument(@NotNull ActivityLauncher.PostLaunchQueue queue) {
         //if a file is passed as a parameter, we show a message about it on the Preloader
-        getFormattedArgument(ArgumentTransformer::transform).ifPresent(file ->
-                notifyPreloader(new Preloader.FixedMessageNotification("preloader.file.open", file.getName())));
+        getParsedArgument().ifPresent(file ->
+                notifyPreloader(new MessageNotification(i18n("preloader.file.open", file.getName()), Priority.HIGH)));
         queue.pushItem((context, launchedDatabase) -> {
             if (launchedDatabase != null) {
                 context.showInformationNotification(
-                        I18N.getValue("database.file.launched", launchedDatabase.getName()), null
+                        i18n("database.file.launched", launchedDatabase.getName()), null
                 );
             }
         });
@@ -172,7 +148,7 @@ public class Main extends BaseApplication {
         if (readPluginsCount > 0)
             queue.pushItem((context, databaseMeta) -> {
                 context.showInformationNotification(
-                        I18N.getValue("plugins.read.count.title", readPluginsCount),
+                        i18n("plugins.read.count.title", readPluginsCount),
                         null,
                         Duration.minutes(1)
                 );
@@ -201,10 +177,10 @@ public class Main extends BaseApplication {
             logger.error("Couldn't read configurations ", e);
             queue.pushItem((context, databaseMeta) -> {
                 context.showErrorNotification(
-                        I18N.getValue("preferences.read.failed.title"), null, event -> {
+                        i18n("preferences.read.failed.title"), null, event -> {
                             context.showErrorDialog(
-                                    I18N.getValue("preferences.read.failed.title"),
-                                    I18N.getValue("preferences.read.failed.msg"), e);
+                                    i18n("preferences.read.failed.title"),
+                                    i18n("preferences.read.failed.msg"), e);
                         });
             });
         }

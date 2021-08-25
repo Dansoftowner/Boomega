@@ -20,20 +20,15 @@ package com.dansoftware.boomega.main;
 
 import com.dansoftware.boomega.gui.preloader.BackingStage;
 import com.dansoftware.boomega.gui.preloader.PreloaderGUI;
-import com.dansoftware.boomega.i18n.I18N;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.text.MessageFormat;
 
 /**
  * The preloader class for the application.
@@ -101,15 +96,12 @@ public class Preloader extends javafx.application.Preloader {
 
     @Override
     public void handleApplicationNotification(PreloaderNotification info) {
-        if (!messageProperty.isBound() && info instanceof FixedMessageNotification msgNotification) {
-            messageProperty.bind(new SimpleStringProperty(msgNotification.message));
-        } else if (!messageProperty.isBound() && info instanceof MessageNotification msgNotification) {
-            messageProperty.set(msgNotification.message);
-        } else if (info instanceof HideNotification) {
-            contentStage.hide();
-        } else if (info instanceof ShowNotification) {
-            contentStage.show();
-        }
+        if (!messageProperty.isBound() && info instanceof MessageNotification msgNotification)
+            if (msgNotification.priority == MessageNotification.Priority.HIGH)
+                messageProperty.bind(new SimpleStringProperty(msgNotification.message));
+            else messageProperty.set(msgNotification.message);
+        else if (info instanceof HideNotification) contentStage.hide();
+        else if (info instanceof ShowNotification) contentStage.show();
     }
 
 
@@ -126,46 +118,25 @@ public class Preloader extends javafx.application.Preloader {
     }
 
     /**
-     * Internationalized notification for sending messages to the preloader
+     * Notification for sending messages to the preloader
      */
     public static class MessageNotification implements PreloaderNotification {
 
+        protected final Priority priority;
         protected final String message;
 
-        public MessageNotification(@NotNull String i18n, Object... args) {
-            this(true, i18n, args);
+        public MessageNotification(@NotNull String message) {
+            this(message, Priority.REGULAR);
         }
 
-        public MessageNotification(@NotNull @Nls String i18n) {
-            this(true, i18n);
+        public MessageNotification(@NotNull String message, @NotNull Priority priority) {
+            this.priority = priority;
+            this.message = message;
         }
 
-        public MessageNotification(boolean i18n, @NotNull String value, Object... args) {
-            if (i18n) {
-                if (ArrayUtils.isEmpty(args))
-                    message = I18N.getValue(value);
-                else
-                    message = I18N.getValue(value, args);
-            } else {
-                if (ArrayUtils.isEmpty(args))
-                    message = value;
-                else
-                    message = MessageFormat.format(value, args);
-            }
-        }
-    }
-
-    /**
-     * Internationalized notification that will be not replaced by other messages
-     */
-    public static class FixedMessageNotification extends MessageNotification {
-
-        public FixedMessageNotification(@NotNull @Nls String i18n, Object... args) {
-            super(i18n, args);
-        }
-
-        public FixedMessageNotification(@NotNull @Nls String i18n) {
-            super(i18n);
+        enum Priority {
+            HIGH,
+            REGULAR
         }
     }
 
