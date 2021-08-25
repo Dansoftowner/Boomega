@@ -1,4 +1,4 @@
-# Boomega 0.7.5 
+# Boomega 0.7.5 (pre-release)
 
 **Date:** 2021-08-22
 
