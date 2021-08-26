@@ -21,13 +21,14 @@ package com.dansoftware.boomega.gui.window
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.theme.Theme
-import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.util.loadImageResource
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.os.OsInfo
 import de.jangassen.MenuToolkit
-import javafx.beans.property.*
+import javafx.beans.property.DoubleProperty
+import javafx.beans.property.SimpleDoubleProperty
+import javafx.beans.property.StringProperty
 import javafx.event.EventHandler
 import javafx.scene.Parent
 import javafx.scene.Scene
@@ -49,8 +50,7 @@ import org.slf4j.LoggerFactory
  * @param C the type of the content that is shown in the Window's scene
  * @author Daniel Gyorffy
  */
-abstract class BaseWindow<C> : Stage, Themeable
-        where C : Parent, C : Context {
+abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Parent, C : Context {
 
     private var content: C? = null
     protected var exitDialog: Boolean = false
@@ -59,7 +59,7 @@ abstract class BaseWindow<C> : Stage, Themeable
         setupIconPack()
         buildExitDialogEvent()
         buildFullScreenExitHint()
-        addEventHandler(WindowEvent.WINDOW_SHOWING) { Theme.registerThemeable(this) }
+        addEventHandler(WindowEvent.WINDOW_SHOWING) { Theme.registerListener(this) }
         opacityProperty().bind(globalOpacity)
     }
 
@@ -79,7 +79,6 @@ abstract class BaseWindow<C> : Stage, Themeable
      *
      * @param title the title
      * @param content the graphic content
-     * @param getContext the supplier for getting the [Context]
      */
     protected constructor(title: String, content: C) : this(title) {
         this.content = content
@@ -104,7 +103,6 @@ abstract class BaseWindow<C> : Stage, Themeable
      *
      * @param title the string property to bind the window's title to
      * @param content the gui-content
-     * @param getContext supplier for getting the [Context]
      */
     protected constructor(
         title: StringProperty,
@@ -115,9 +113,9 @@ abstract class BaseWindow<C> : Stage, Themeable
         this.titleProperty().bind(title)
     }
 
-    override fun handleThemeApply(oldTheme: Theme, newTheme: Theme) {
+    override fun onDefaultThemeChanged(oldTheme: Theme?, newTheme: Theme) {
         scene?.root?.let {
-            oldTheme.applyBack(it)
+            oldTheme?.deApply(it)
             newTheme.apply(it)
         }
     }

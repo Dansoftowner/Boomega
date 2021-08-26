@@ -1,15 +1,12 @@
-package com.dansoftware.boomega.plugin.api;
+package com.dansoftware.boomega.plugin.api
 
-import com.dansoftware.boomega.gui.theme.Theme;
-import com.dansoftware.boomega.gui.theme.ThemeMeta;
-import org.jetbrains.annotations.NotNull;
+import com.dansoftware.boomega.gui.theme.Theme
 
 /**
  * Allows to add a custom theme to the application.
  *
  * @author Daniel Gyoerffy
  */
-public interface ThemePlugin extends BoomegaPlugin {
-    @NotNull
-    ThemeMeta<? extends Theme> getThemeMeta();
+interface ThemePlugin : BoomegaPlugin {
+    val theme: Theme
 }

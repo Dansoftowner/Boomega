@@ -18,9 +18,16 @@
 
 package com.dansoftware.boomega.gui.theme
 
+import com.dansoftware.boomega.i18n.i18n
+import jfxtras.styles.jmetro.Style
+
 /**
- * Used for creating the default [Theme] object
+ * Applies dark appearance to the UI components.
  */
-object DefaultThemeFactory {
-    fun get(): Theme = OsSynchronizedTheme()
+object DarkTheme : JMetroTheme(Style.DARK) {
+    override val name: String
+        get() = i18n("app.ui.theme.dark")
+
+    override val additionalStyleSheets: List<String>
+        get() = listOf(javaClass.getResource("dark.css")!!.toExternalForm())
 }

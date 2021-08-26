@@ -15,81 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.dansoftware.boomega.gui.theme.config
 
-package com.dansoftware.boomega.gui.theme.config;
+import com.dansoftware.boomega.gui.theme.Theme
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import org.slf4j.LoggerFactory
+import java.lang.reflect.Type
 
-import com.dansoftware.boomega.gui.theme.Theme;
-import com.dansoftware.boomega.plugin.PluginClassLoader;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+class ThemeDeserializer : JsonDeserializer<Theme?> {
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Type;
-
-public class ThemeDeserializer implements JsonDeserializer<Theme> {
-
-    private static final Logger logger = LoggerFactory.getLogger(ThemeDeserializer.class);
-
-    private ClassLoader getClassLoader() {
-        return PluginClassLoader.getInstance();
-    }
-
-    private String getClassName(JsonElement jsonElement) {
-        return jsonElement.getAsString();
-    }
-
-    private Class<?> getClassRef(String className) throws ClassNotFoundException {
-        return getClassLoader().loadClass(className);
-    }
-
-    private Constructor<?> getThemeConstructor(Class<?> classRef) throws NoSuchMethodException {
-        return classRef.getConstructor();
-    }
-
-    private Object getInstanceOf(Class<?> classRef) {
-        try {
-            Constructor<?> defaultConstructor = getThemeConstructor(classRef);
-            defaultConstructor.setAccessible(true);
-            return defaultConstructor.newInstance();
-        } catch (ReflectiveOperationException | ClassCastException e) {
-            throw new RuntimeException(e);
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext?): Theme? {
+        return try {
+            Theme.available.find { it::class.java.name == json.asString }
+                ?: throw ThemeClassNotValidException("The configured theme class '${json.asString}' has not been found")
+        } catch (e : RuntimeException) {
+            logger.error("Couldn't deserialize theme", e)
+            Theme.default
         }
     }
 
-    private void checkClassValid(Class<?> classRef) throws ThemeClassNotValidException {
-        if (classRef == Theme.class) {
-            throw new ThemeClassNotValidException(String.format("The class shouldn't be the abstract '%s' class", Theme.class));
-        } else if (!Theme.class.isAssignableFrom(classRef)) {
-            throw new ThemeClassNotValidException(String.format("The class '%s' is not a subtype of '%s'", classRef, Theme.class));
-        }
-    }
+    private class ThemeClassNotValidException(msg: String) : RuntimeException(msg)
 
-    private Theme getThemeInstance(JsonElement json) {
-        try {
-            Class<?> classRef = getClassRef(getClassName(json));
-            checkClassValid(classRef);
-            return (Theme) getInstanceOf(classRef);
-        } catch (ClassNotFoundException e) {
-            logger.error("The configured theme not found", e);
-        } catch (ThemeClassNotValidException e) {
-            logger.error("The configured theme is not valid", e);
-        }
-
-        return null;
-    }
-
-    @Override
-    public Theme deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return getThemeInstance(json);
-    }
-
-    private static final class ThemeClassNotValidException extends Exception {
-        ThemeClassNotValidException(String msg) {
-            super(msg);
-        }
+    companion object {
+        private val logger = LoggerFactory.getLogger(ThemeDeserializer::class.java)
     }
 }

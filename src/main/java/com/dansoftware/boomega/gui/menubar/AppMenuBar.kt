@@ -27,14 +27,12 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.theme.Theme
-import com.dansoftware.boomega.gui.theme.Themeable
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.LauncherMode
 import com.dansoftware.boomega.main.ApplicationRestart
-import com.dansoftware.boomega.util.ReflectionUtils
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import com.dansoftware.boomega.util.revealInExplorer
 import javafx.application.Platform
@@ -240,29 +238,29 @@ class AppMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: 
 
         private fun themeMenu() = object : Menu(i18n("menubar.menu.preferences.theme")) {
 
-            private val themeChangeListener = Themeable { _, newTheme ->
+            private val themeChangeListener = Theme.DefaultThemeListener { _, newTheme ->
                 items.forEach { if (it is RadioMenuItem) it.isSelected = newTheme.javaClass == it.userData }
             }
 
             init {
-                Theme.registerThemeable(themeChangeListener)
+                Theme.registerListener(themeChangeListener)
                 this.graphic("paint-icon")
                 this.buildItems()
             }
 
             private fun buildItems() {
-                val toggleGroup = ToggleGroup()
-                Theme.getAvailableThemesData().forEach { themeMeta ->
-                    this.menuItem(RadioMenuItem(themeMeta.displayName).also {
-                        it.toggleGroup = toggleGroup
-                        it.userData = themeMeta.themeClass
-                        it.isSelected = Theme.getDefault().javaClass == themeMeta.themeClass
-                        it.action {
+                val radioGroup = ToggleGroup()
+                Theme.available.forEach { theme ->
+                    this.menuItem(RadioMenuItem(theme.name).apply {
+                        toggleGroup = radioGroup
+                        isSelected = Theme.default.javaClass == theme.javaClass
+                        setOnAction {
                             try {
-                                val themeObject = ReflectionUtils.constructObject(themeMeta.themeClass)
-                                logger.debug("The theme object: {}", themeObject)
-                                Theme.setDefault(themeObject)
-                                preferences.editor().put(PreferenceKey.THEME, themeObject)
+                                Theme.default = theme
+                                logger.debug("Default theme set: '{}'", theme.javaClass.name)
+                                preferences.editor().put(PreferenceKey.THEME, theme)
+                                // we explicitly set it selected for avoiding some buggy behaviour
+                                isSelected = true
                             } catch (e: Exception) {
                                 logger.error("Couldn't set the theme", e)
                                 // TODO: error dialog

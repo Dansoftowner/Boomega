@@ -21,11 +21,9 @@ package com.dansoftware.boomega.gui.preferences.pane
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.theme.Theme
-import com.dansoftware.boomega.gui.theme.ThemeMeta
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.ReflectionUtils
 import javafx.scene.Node
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.Slider
@@ -69,31 +67,30 @@ class AppearancePane(preferences: Preferences) : PreferencesPane(preferences) {
         }
 
         private fun buildThemeSelect(): PreferencesControl {
-            return ChoiceBox<ThemeMeta<*>>().run {
+            return ChoiceBox<Theme>().run {
 
-                this.converter = object : StringConverter<ThemeMeta<*>?>() {
-                    override fun toString(themeMeta: ThemeMeta<*>?): String {
-                        return themeMeta?.displayNameSupplier?.get() ?: ""
+                this.converter = object : StringConverter<Theme?>() {
+                    override fun toString(themeMeta: Theme?): String {
+                        return themeMeta?.name ?: ""
                     }
 
-                    override fun fromString(string: String?): ThemeMeta<*>? {
+                    override fun fromString(string: String?): Theme? {
                         //TODO("Not yet implemented")
                         return null
                     }
                 }
 
-                Theme.getAvailableThemesData().forEach {
-                    if (Theme.getDefault().javaClass == it.themeClass)
+                Theme.available.forEach {
+                    if (Theme.default.javaClass == it.javaClass)
                         selectionModel.select(it)
                     items.add(it)
                 }
 
                 selectionModel.selectedItemProperty().addListener { _, _, it ->
                     try {
-                        val themeObject = ReflectionUtils.constructObject(it.themeClass)
-                        logger.debug("The theme object: {}", themeObject)
-                        Theme.setDefault(themeObject)
-                        preferences.editor().put(PreferenceKey.THEME, themeObject)
+                        Theme.default = it
+                        logger.debug("Default theme set: '{}'", it.javaClass.name)
+                        preferences.editor().put(PreferenceKey.THEME, it)
                     } catch (e: Exception) {
                         logger.error("Couldn't set the theme", e)
                         // TODO: error dialog
