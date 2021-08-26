@@ -1,8 +1,18 @@
+# Boomega unreleased
+
+**Date:** UNKNOWN
+
+### Enhancements/features
+
+* 💄 Look and feel updates
+
+### Bug fixes/improvements
+
 # Boomega 0.7.5 (pre-release)
 
 **Date:** 2021-08-22
 
-### Enhancements/features:
+### Enhancements/features
 
 * ✨ Exporting to **JSON** & **Excel Spreadsheet format** (see [#41](https://github.com/Dansoftowner/Boomega/issues/41))
 * ✨💄 Updated Google Book Details Panel (Closes [#126](https://github.com/Dansoftowner/Boomega/issues/126))
@@ -28,7 +38,7 @@
 
 **Date:** 2020-07-20
 
-### Enhancements/features:
+### Enhancements/features
 
 * ✨ [#147](https://github.com/Dansoftowner/Boomega/issues/147): Global toolbar in database view
 * 💥 New Google Books Import View (Closes [#11](https://github.com/Dansoftowner/Boomega/issues/11), [#13](https://github.com/Dansoftowner/Boomega/issues/13) and [#10](https://github.com/Dansoftowner/Boomega/issues/10))
