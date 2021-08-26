@@ -94,6 +94,7 @@ test {
 dependencies {
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.21"
 
     //logging
     implementation 'org.slf4j:slf4j-api:1.7.32'
