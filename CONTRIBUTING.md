@@ -11,6 +11,8 @@ The recommended IDE for this project is Intellij.
 
 ## Writing code
 
+Please commit your changes into the `dev` branch.
+
 You can use both `Java` and `Kotlin` for writing your code.  
 
 Use the default formatting of your IDE for the code you write.  
