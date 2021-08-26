@@ -45,10 +45,25 @@
     -fx-padding: 3 0 3 0;
 }
 
-/* In the menu bar, we don't want rounded corners */
-.menu-bar .menu-button, .menu-bar .context-menu {
+/* The menu-bar's menu buttons shouldn't have rounded corners */
+.menu-bar .menu-button {
     -fx-border-radius: 0;
     -fx-background-radius: 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ *                                 Context menus                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.context-menu {
+    -fx-padding: 5;
+}
+
+.context-menu .menu-item {
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
 }
 
 /*******************************************************************************
