@@ -35,7 +35,7 @@
 .date-picker.combo-box-base, .date-picker.combo-box-base:focused, .date-picker.combo-box-base:hover,
 .spinner, .spinner .text-field,
 .spinner .increment-arrow-button, .spinner .decrement-arrow-button,
-.context-menu, .combo-box-popup .list-view ,
+.context-menu, .context-menu .menu-item, .combo-box-popup .list-view ,
 .color-picker, .color-picker:focused {
     -fx-border-radius: 3;
     -fx-background-radius: 3;
@@ -58,12 +58,7 @@
  ******************************************************************************/
 
 .context-menu {
-    -fx-padding: 5;
-}
-
-.context-menu .menu-item {
-    -fx-border-radius: 3;
-    -fx-background-radius: 3;
+    -fx-padding: 6 5 6 5;
 }
 
 /*******************************************************************************
