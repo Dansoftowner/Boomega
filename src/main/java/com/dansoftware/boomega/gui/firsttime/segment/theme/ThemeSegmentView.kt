@@ -36,7 +36,7 @@ class ThemeSegmentView(private val preferences: Preferences) : StackPane() {
                     "segment.theme.light",
                     "/com/dansoftware/boomega/image/firsttime/ThemeLight.png",
                     group,
-                    LightTheme
+                    LightTheme.INSTANCE
                 )
             )
 
@@ -45,7 +45,7 @@ class ThemeSegmentView(private val preferences: Preferences) : StackPane() {
                     "segment.theme.dark",
                     "/com/dansoftware/boomega/image/firsttime/ThemeDark.png",
                     group,
-                    DarkTheme
+                    DarkTheme.INSTANCE
                 )
             )
 
@@ -54,7 +54,7 @@ class ThemeSegmentView(private val preferences: Preferences) : StackPane() {
                     "segment.theme.sync",
                     "/com/dansoftware/boomega/image/firsttime/ThemeSynchronized.png",
                     group,
-                    OsSynchronizedTheme
+                    OsSynchronizedTheme.INSTANCE
                 )
             )
         }

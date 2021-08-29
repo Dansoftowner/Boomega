@@ -19,15 +19,47 @@
 package com.dansoftware.boomega.gui.theme
 
 import com.dansoftware.boomega.i18n.i18n
+import javafx.scene.Parent
+import javafx.scene.Scene
 import jfxtras.styles.jmetro.Style
 
 /**
  * Applies light appearance to the UI components.
  */
-object LightTheme : JMetroTheme(Style.LIGHT) {
+open class LightTheme : JMetroTheme(Style.LIGHT) {
+
     override val name: String
         get() = i18n("app.ui.theme.light")
 
-    override val additionalStyleSheets: List<String>
-        get() = listOf(javaClass.getResource("light.css")!!.toExternalForm())
+    override fun apply(region: Parent) {
+        super.apply(region)
+        region.stylesheets.add(STYLE_SHEET)
+    }
+
+    override fun apply(scene: Scene) {
+        super.apply(scene)
+        scene.stylesheets.add(STYLE_SHEET)
+    }
+
+    override fun deApply(region: Parent) {
+        super.deApply(region)
+        region.stylesheets.remove(STYLE_SHEET)
+    }
+
+    override fun deApply(scene: Scene) {
+        super.deApply(scene)
+        scene.stylesheets.remove(STYLE_SHEET)
+    }
+
+    companion object {
+
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        private val STYLE_SHEET get() = javaClass.getResource("light.css")!!.toExternalForm()
+
+        /**
+         * A global instance of the [LightTheme]
+         */
+        @JvmStatic
+        val INSTANCE = LightTheme()
+    }
 }

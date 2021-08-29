@@ -37,7 +37,7 @@ abstract class Theme {
 
     /**
      * Returns:
-     * - _true_ - if the [init] method is called,
+     * - _true_ - if the [init] method has been called,
      * - _false_ - if the [init] method has not been invoked or the [destroy] method has been invoked after it
      */
     var isInitialized: Boolean = false
@@ -131,7 +131,7 @@ abstract class Theme {
             return default?.apply {
                 if (!isInitialized)
                     init()
-            } ?: OsSynchronizedTheme
+            } ?: OsSynchronizedTheme.INSTANCE
         }
 
         @Synchronized

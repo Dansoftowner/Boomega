@@ -30,31 +30,20 @@ import kotlin.reflect.KClass
  */
 abstract class JMetroTheme(val style: Style) : Theme() {
 
-    /**
-     * Stylesheets that should be applied additionally outside the JMetro styles.
-     */
-    open val additionalStyleSheets: List<String>
-        get() = emptyList()
-
-
     override fun apply(scene: Scene) {
         JMetro(style).scene = scene
-        scene.stylesheets.addAll(additionalStyleSheets)
     }
 
     override fun apply(region: Parent) {
         JMetro(style).parent = region
-        region.stylesheets.addAll(additionalStyleSheets)
     }
 
     override fun deApply(scene: Scene) {
         scene.stylesheets.removeAll(jMetroStyleSheets)
-        scene.stylesheets.removeAll(additionalStyleSheets)
     }
 
     override fun deApply(region: Parent) {
         region.stylesheets.removeAll(jMetroStyleSheets)
-        region.stylesheets.removeAll(additionalStyleSheets)
     }
 
     private companion object {

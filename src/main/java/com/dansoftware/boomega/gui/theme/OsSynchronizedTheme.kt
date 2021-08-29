@@ -29,19 +29,36 @@ import java.lang.ref.WeakReference
 import java.util.Collections.synchronizedList
 import java.util.function.Consumer
 
-object OsSynchronizedTheme : Theme() {
-
-    private val logger: Logger = LoggerFactory.getLogger(OsSynchronizedTheme::class.java)
+/**
+ * Synchronizes the appearance of the UI components based on what's the system's preferred theme (dark/ light).
+ */
+open class OsSynchronizedTheme : Theme() {
 
     override val name: String
         get() = i18n("app.ui.theme.sync")
 
-    private val osThemeDetector
-        get() = OsThemeDetector.getDetector()
+    /**
+     * Specifies the [Theme] should be used when the system is in dark mode
+     */
+    open val darkTheme: Theme
+        get() = DarkTheme.INSTANCE
 
+    /**
+     * Specifies the [Theme] should be used when the system is in light mode
+     */
+    open val lightTheme: Theme
+        get() = LightTheme.INSTANCE
+
+    /**
+     * The list of functions that should be invoked by the os theme detection listener, when
+     * the theme changes.
+     */
     private val themeChangeEventHandlers =
         synchronizedList(mutableListOf<(isDark: Boolean) -> Boolean>())
 
+    /**
+     * The theme-detection listener
+     */
     private val themeDetectionListener = Consumer<Boolean> { isDark ->
         Platform.runLater {
             val iterator = themeChangeEventHandlers.iterator()
@@ -54,6 +71,9 @@ object OsSynchronizedTheme : Theme() {
             }
         }
     }
+
+    private inline val osThemeDetector
+        get() = OsThemeDetector.getDetector()
 
     override fun init() {
         super.init()
@@ -84,25 +104,36 @@ object OsSynchronizedTheme : Theme() {
     }
 
     private fun registerScene(scene: WeakReference<Scene>) {
-        fun apply(isDark: Boolean): Boolean =
+        val applyFunction = fun(isDark: Boolean): Boolean =
             scene.get()?.let {
                 getAppropriateTheme(!isDark).deApply(it)
                 getAppropriateTheme(isDark).apply(it)
             } != null
-        apply(osThemeDetector.isDark)
-        themeChangeEventHandlers.add(::apply)
+        applyFunction(osThemeDetector.isDark)
+        themeChangeEventHandlers.add(applyFunction)
     }
 
     private fun registerRegion(region: WeakReference<Parent>) {
-        fun apply(isDark: Boolean): Boolean =
+        val applyFunction = fun(isDark: Boolean): Boolean =
             region.get()?.let {
                 getAppropriateTheme(!isDark).deApply(it)
                 getAppropriateTheme(isDark).apply(it)
             } != null
-        apply(osThemeDetector.isDark)
-        themeChangeEventHandlers.add(::apply)
+        applyFunction(osThemeDetector.isDark)
+        themeChangeEventHandlers.add(applyFunction)
     }
 
     private fun getAppropriateTheme(isDark: Boolean) =
-        if (isDark) DarkTheme else LightTheme
+        if (isDark) darkTheme else lightTheme
+
+    companion object {
+
+        private val logger: Logger = LoggerFactory.getLogger(OsSynchronizedTheme::class.java)
+
+        /**
+         * A global instance of the [OsSynchronizedTheme]
+         */
+        @JvmStatic
+        val INSTANCE = OsSynchronizedTheme()
+    }
 }

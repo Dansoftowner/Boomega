@@ -19,15 +19,47 @@
 package com.dansoftware.boomega.gui.theme
 
 import com.dansoftware.boomega.i18n.i18n
+import javafx.scene.Parent
+import javafx.scene.Scene
 import jfxtras.styles.jmetro.Style
 
 /**
  * Applies dark appearance to the UI components.
  */
-object DarkTheme : JMetroTheme(Style.DARK) {
+open class DarkTheme : JMetroTheme(Style.DARK) {
+
     override val name: String
         get() = i18n("app.ui.theme.dark")
 
-    override val additionalStyleSheets: List<String>
-        get() = listOf(javaClass.getResource("dark.css")!!.toExternalForm())
+    override fun apply(region: Parent) {
+        super.apply(region)
+        region.stylesheets.add(STYLE_SHEET)
+    }
+
+    override fun apply(scene: Scene) {
+        super.apply(scene)
+        scene.stylesheets.add(STYLE_SHEET)
+    }
+
+    override fun deApply(region: Parent) {
+        super.deApply(region)
+        region.stylesheets.remove(STYLE_SHEET)
+    }
+
+    override fun deApply(scene: Scene) {
+        super.deApply(scene)
+        scene.stylesheets.remove(STYLE_SHEET)
+    }
+
+    companion object {
+
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        private val STYLE_SHEET get() = javaClass.getResource("dark.css")!!.toExternalForm()
+
+        /**
+         * A global instance of the [DarkTheme]
+         */
+        @JvmStatic
+        val INSTANCE = DarkTheme()
+    }
 }

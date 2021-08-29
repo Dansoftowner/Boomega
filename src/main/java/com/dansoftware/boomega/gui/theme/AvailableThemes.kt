@@ -31,21 +31,23 @@ private val logger: Logger = LoggerFactory.getLogger("SupportedThemes")
  * The list of the available [Theme]s can be used by the app.
  * Includes built-in and plugin themes as well.
  */
-object AvailableThemes : List<Theme> by LinkedList(
-    loadBuiltInThemes() + loadThemesFromPlugins()
-).toImmutableList()
+object AvailableThemes : List<Theme> by LinkedList(loadThemes()).toImmutableList()
 
-private fun loadBuiltInThemes(): List<Theme> = listOf(
-    LightTheme,
-    DarkTheme,
-    OsSynchronizedTheme
-)
+private fun loadThemes(): List<Theme> =
+    builtInThemes().plus(pluginThemes())
+        .distinctBy(Any::javaClass)
+        .onEach { logger.debug("Found theme: '{}'", it::class.java) }
+        .toList()
 
-private fun loadThemesFromPlugins(): List<Theme> {
+private fun builtInThemes(): Sequence<Theme> =
+    sequenceOf(
+        LightTheme.INSTANCE,
+        DarkTheme.INSTANCE,
+        OsSynchronizedTheme.INSTANCE
+    )
+
+private fun pluginThemes(): Sequence<Theme> {
     logger.debug("Checking plugins for themes...")
     return Plugins.getInstance().of(ThemePlugin::class.java).asSequence()
         .map(ThemePlugin::theme)
-        .distinctBy(Any::javaClass)
-        .onEach { logger.debug("Found [PLUGIN] theme: '{}'", it::class.java) }
-        .toList()
 }
