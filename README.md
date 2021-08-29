@@ -133,6 +133,7 @@ The detailed user guide is available [here](USER_GUIDE.md).
 </table>
 
 ## Source code
+[![Top language](https://img.shields.io/github/languages/top/Dansoftowner/Boomega?logo=kotlin&logoColor=white)](https://github.com/Dansoftowner/Boomega)
 [![Java version](https://img.shields.io/badge/java-16-orange?logo=java&logoColor=white)](https://jdk.java.net/16/)
 [![Kotlin version](https://img.shields.io/badge/kotlin-1.5-purple?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
 [![Gradle](https://img.shields.io/badge/gradle-7.0-green?logo=gradle&logoColor=white)](https://gradle.org/)
