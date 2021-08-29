@@ -40,8 +40,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
-
 public abstract class BaseTable<S> extends TableView<S> {
 
     private final ObjectProperty<Consumer<S>> onItemDoubleClicked;
@@ -230,7 +228,7 @@ public abstract class BaseTable<S> extends TableView<S> {
 
         @Override
         public String toString() {
-            return i18n(text);
+            return text;
         }
 
         /**
