@@ -133,7 +133,7 @@ open class OsSynchronizedTheme : Theme() {
         /**
          * A global instance of the [OsSynchronizedTheme]
          */
-        @JvmStatic
+        @JvmField
         val INSTANCE = OsSynchronizedTheme()
     }
 }

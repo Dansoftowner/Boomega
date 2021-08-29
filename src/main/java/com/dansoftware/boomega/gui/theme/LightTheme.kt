@@ -59,7 +59,7 @@ open class LightTheme : JMetroTheme(Style.LIGHT) {
         /**
          * A global instance of the [LightTheme]
          */
-        @JvmStatic
+        @JvmField
         val INSTANCE = LightTheme()
     }
 }

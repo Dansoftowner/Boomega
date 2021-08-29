@@ -23,22 +23,27 @@ import com.dansoftware.boomega.plugin.api.ThemePlugin
 import okhttp3.internal.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.*
 
-private val logger: Logger = LoggerFactory.getLogger("SupportedThemes")
+private val logger: Logger = LoggerFactory.getLogger(Theme::class.java)
 
 /**
  * The list of the available [Theme]s can be used by the app.
  * Includes built-in and plugin themes as well.
  */
-object AvailableThemes : List<Theme> by LinkedList(loadThemes()).toImmutableList()
+object AvailableThemes : List<Theme> by loadThemes().toImmutableList()
 
+/**
+ * Gives a list of built-in themes and third-party themes
+ */
 private fun loadThemes(): List<Theme> =
     builtInThemes().plus(pluginThemes())
         .distinctBy(Any::javaClass)
-        .onEach { logger.debug("Found theme: '{}'", it::class.java) }
+        .onEach { logger.debug("Found theme: '{}'", it::class.java.name) }
         .toList()
 
+/**
+ * Gives a [Sequence] of built-in themes
+ */
 private fun builtInThemes(): Sequence<Theme> =
     sequenceOf(
         LightTheme.INSTANCE,
@@ -46,6 +51,9 @@ private fun builtInThemes(): Sequence<Theme> =
         OsSynchronizedTheme.INSTANCE
     )
 
+/**
+ * Gives a [Sequence] of third-party themes read from plugins
+ */
 private fun pluginThemes(): Sequence<Theme> {
     logger.debug("Checking plugins for themes...")
     return Plugins.getInstance().of(ThemePlugin::class.java).asSequence()

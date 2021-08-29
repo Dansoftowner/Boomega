@@ -59,7 +59,7 @@ open class DarkTheme : JMetroTheme(Style.DARK) {
         /**
          * A global instance of the [DarkTheme]
          */
-        @JvmStatic
+        @JvmField
         val INSTANCE = DarkTheme()
     }
 }
