@@ -94,7 +94,6 @@ test {
 dependencies {
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.21"
 
     //logging
     implementation 'org.slf4j:slf4j-api:1.7.32'
@@ -104,8 +103,8 @@ dependencies {
     //Testing
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'org.assertj:assertj-core:3.20.2'
-    testImplementation 'org.mockito:mockito-core:3.11.2'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.11.2'
+    testImplementation 'org.mockito:mockito-core:3.12.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.1'
 
     implementation 'com.github.Dansoftowner:jFileGoodies:1.2.6'
     implementation 'com.github.Dansoftowner:jUserDirectories:1.0'
@@ -121,11 +120,11 @@ dependencies {
     implementation 'org.jetbrains:annotations:22.0.0'
 
     implementation 'org.apache.poi:poi-ooxml:5.0.0' // Microsoft Documents
-    implementation 'com.google.code.gson:gson:2.8.7' // JSON Parsing
+    implementation 'com.google.code.gson:gson:2.8.8' // JSON Parsing
     implementation 'org.jsoup:jsoup:1.14.2' // HTML parsing
     implementation 'org.dizitart:nitrite:3.4.3' // NoSql database
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.3'
-    implementation 'com.github.oshi:oshi-core:5.8.0'
+    implementation 'com.github.oshi:oshi-core:5.8.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'it.sauronsoftware:junique:1.0.4'
     implementation 'io.github.g00fy2:versioncompare:1.4.1'
