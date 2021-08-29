@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.main;
+package com.dansoftware.boomega.gui.app;
 
 import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
@@ -26,14 +26,14 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity;
 import com.dansoftware.boomega.gui.font.CustomFontsLoader;
 import com.dansoftware.boomega.gui.keybinding.KeyBindings;
+import com.dansoftware.boomega.gui.preloader.Preloader.MessageNotification;
+import com.dansoftware.boomega.gui.preloader.Preloader.MessageNotification.Priority;
 import com.dansoftware.boomega.gui.theme.Theme;
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity;
 import com.dansoftware.boomega.gui.window.BaseWindow;
 import com.dansoftware.boomega.instance.ApplicationInstanceService;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
 import com.dansoftware.boomega.launcher.LauncherMode;
-import com.dansoftware.boomega.main.Preloader.MessageNotification;
-import com.dansoftware.boomega.main.Preloader.MessageNotification.Priority;
 import com.dansoftware.boomega.plugin.PluginClassLoader;
 import com.dansoftware.boomega.plugin.Plugins;
 import com.dansoftware.boomega.update.Release;

@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 /**
- * A {@link PreloaderGUI} is used by {@link com.dansoftware.boomega.main.Preloader} for creating the
+ * A {@link PreloaderGUI} is used by {@link Preloader} for creating the
  * preloader gui easily.
  *
  * <p>

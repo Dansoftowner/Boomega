@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.main;
+package com.dansoftware.boomega.gui.app;
 
 import com.dansoftware.boomega.db.DatabaseMeta;
+import com.dansoftware.boomega.gui.preloader.Preloader;
+import com.dansoftware.boomega.main.ArgumentParser;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -82,7 +84,7 @@ public abstract class BaseApplication extends Application {
     protected Optional<DatabaseMeta> getParsedArgument() {
         if (!hasParameters())
             return Optional.empty();
-        return Optional.ofNullable(ArgumentTransformer.transform(getApplicationArgs()));
+        return Optional.ofNullable(ArgumentParser.parse(getApplicationArgs()));
     }
 
     /**

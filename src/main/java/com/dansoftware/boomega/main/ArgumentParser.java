@@ -36,18 +36,18 @@ import java.util.Optional;
  *
  * @author Daniel Gyorffy
  */
-public class ArgumentTransformer {
+public class ArgumentParser {
 
-    private ArgumentTransformer() {
+    private ArgumentParser() {
     }
 
     @Nullable
-    public static DatabaseMeta transform(String arg) {
+    public static DatabaseMeta parse(String arg) {
         return transformOptional(arg).orElse(null);
     }
 
     @Nullable
-    public static DatabaseMeta transform(List<String> args) {
+    public static DatabaseMeta parse(List<String> args) {
         return transformOptional(args).orElse(null);
     }
 

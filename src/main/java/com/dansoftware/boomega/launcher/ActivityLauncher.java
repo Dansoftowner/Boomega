@@ -31,10 +31,8 @@ import com.dansoftware.boomega.gui.entry.EntryActivity;
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener;
 import com.dansoftware.boomega.gui.login.LoginActivity;
 import com.dansoftware.boomega.gui.login.quick.QuickLoginActivity;
-import com.dansoftware.boomega.i18n.I18NUtils;
-import com.dansoftware.boomega.main.ArgumentTransformer;
+import com.dansoftware.boomega.main.ArgumentParser;
 import javafx.application.Platform;
-import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -110,14 +108,14 @@ public class ActivityLauncher implements Runnable {
      * @param preferences     the {@link Preferences} object that stores the application configurations.
      * @param databaseTracker the {@link DatabaseTracker} object that tracks the opened databases.
      * @param params          the program-arguments
-     * @see ArgumentTransformer#transform(List)
+     * @see ArgumentParser#parse(List)
      * @see DatabaseTracker#getGlobal()
      */
     public ActivityLauncher(@NotNull LauncherMode mode,
                             @NotNull Preferences preferences,
                             @NotNull DatabaseTracker databaseTracker,
                             @Nullable List<String> params) {
-        this(mode, ArgumentTransformer.transform(params), preferences, databaseTracker);
+        this(mode, ArgumentParser.parse(params), preferences, databaseTracker);
     }
 
     public ActivityLauncher(@NotNull LauncherMode mode,
@@ -125,7 +123,7 @@ public class ActivityLauncher implements Runnable {
                             @NotNull DatabaseTracker databaseTracker,
                             @Nullable PostLaunchQueue postLaunchQueue,
                             @Nullable List<String> params) {
-        this(mode, ArgumentTransformer.transform(params), preferences, databaseTracker);
+        this(mode, ArgumentParser.parse(params), preferences, databaseTracker);
         this.postLaunchQueue = postLaunchQueue;
     }
 

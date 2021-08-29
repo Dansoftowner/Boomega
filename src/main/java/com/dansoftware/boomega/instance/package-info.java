@@ -16,26 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:JvmName("Main")
-
-package com.dansoftware.boomega.main
-
-import com.dansoftware.boomega.exception.UncaughtExceptionHandler
-import com.dansoftware.boomega.gui.app.BaseApplication
-import com.dansoftware.boomega.gui.app.BoomegaApp
-import com.dansoftware.boomega.instance.ApplicationInstanceService
-
-fun main(args: Array<String>) {
-    init(args)
-    launch(args)
-}
-
-private fun init(args: Array<String>) {
-    PropertiesSetup.setupSystemProperties()
-    Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler())
-    ApplicationInstanceService.open(args)
-}
-
-private fun launch(args: Array<String>) {
-    BaseApplication.launchApp(BoomegaApp::class.java, *args)
-}
+/**
+ * This package is about preventing the application to run in multiple
+ * instances and handling the arguments passed to new instances of the application.
+ */
+package com.dansoftware.boomega.instance;

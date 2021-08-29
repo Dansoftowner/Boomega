@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.main;
 
+import com.dansoftware.boomega.gui.preloader.Preloader;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;

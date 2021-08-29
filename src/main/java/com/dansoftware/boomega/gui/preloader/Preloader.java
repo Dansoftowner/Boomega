@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.main;
+package com.dansoftware.boomega.gui.preloader;
 
-import com.dansoftware.boomega.gui.preloader.BackingStage;
-import com.dansoftware.boomega.gui.preloader.PreloaderGUI;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Scene;
@@ -134,7 +132,7 @@ public class Preloader extends javafx.application.Preloader {
             this.message = message;
         }
 
-        enum Priority {
+        public enum Priority {
             HIGH,
             REGULAR
         }
