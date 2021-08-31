@@ -25,15 +25,17 @@ import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.db.NitriteDatabase
-import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.util.onScenePresent
 import com.dansoftware.boomega.gui.util.runOnUiThread
 import com.dansoftware.boomega.i18n.i18n
+import javafx.application.Platform
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -62,6 +64,15 @@ class LoginView(
 
     init {
         content = LoginViewBase(loginBoxController)
+        playAnimation()
+    }
+
+    private fun playAnimation() {
+        onScenePresent {
+            Platform.runLater {
+                animatefx.animation.FadeIn(this).play()
+            }
+        }
     }
 
     fun createdDatabaseProperty(): ReadOnlyObjectProperty<Database> {

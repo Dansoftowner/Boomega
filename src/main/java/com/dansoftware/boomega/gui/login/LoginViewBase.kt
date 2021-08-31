@@ -19,8 +19,6 @@
 package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.gui.util.onScenePresent
-import javafx.application.Platform
 import javafx.beans.value.ObservableStringValue
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
@@ -37,22 +35,13 @@ class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
         styleClass.add("login-form")
         buildUI()
         enableDragSupport()
-        playAnimation()
-    }
-
-    private fun playAnimation() {
-        onScenePresent {
-            Platform.runLater {
-                animatefx.animation.FadeInUp(children[1]).play()
-            }
-        }
     }
 
     fun titleProperty(): ObservableStringValue = loginBox.titleProperty()
 
     private fun buildUI() {
         children.add(LoginToolbar(controller.context, controller.databaseTracker, controller.preferences))
-        children.add(StackPane(Group(loginBox)).also { VBox.setVgrow(it, Priority.ALWAYS) })
+        children.add(StackPane(Group(loginBox)).also { setVgrow(it, Priority.ALWAYS) })
     }
 
     private fun enableDragSupport() {
