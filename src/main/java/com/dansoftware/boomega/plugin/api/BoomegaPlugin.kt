@@ -1,53 +1,44 @@
-package com.dansoftware.boomega.plugin.api;
+package com.dansoftware.boomega.plugin.api
 
-import javafx.scene.image.Image;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javafx.scene.image.Image
 
 /**
- * The base plugin class.
- *
- * @author Daniel Gyoerffy
+ * The base plugin interface.
  */
-public interface BoomegaPlugin {
+interface BoomegaPlugin {
 
     /**
-     * Executed when the plugin object is created by the application
+     * The plugin's name
      */
-    void init();
-
-    /**
-     * Executed when the user removes the plugin
-     */
-    void destroy(); //TODO: use it
-
-    /**
-     * @return the icon for the plugin
-     */
-    @Nullable
-    Image getIcon();
-
-    /**
-     * @return the plugin's name
-     */
-    @NotNull
-    String getName();
-
-    /**
-     * @return the Plugin version
-     */
-    @NotNull
-    String getVersion();
-
-    /**
-     * @return the Plugin description
-     */
-    @Nullable
-    String getDescription();
+    val name: String
 
     /**
      * @return the plugin's author's information object
      */
-    @NotNull
-    PluginAuthor getAuthor();
+    val author: PluginAuthor
+
+    /**
+     * The plugin's version
+     */
+    val version: String
+
+    /**
+     * The plugin's description
+     */
+    val description: String?
+
+    /**
+     * The icon for the plugin
+     */
+    val icon: Image?
+
+    /**
+     * Executed when the plugin object is created by the application
+     */
+    fun init()
+
+    /**
+     * Executed when the user removes the plugin
+     */
+    fun destroy() //TODO: use it
 }
