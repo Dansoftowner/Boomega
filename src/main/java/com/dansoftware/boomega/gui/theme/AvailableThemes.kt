@@ -38,7 +38,7 @@ object AvailableThemes : List<Theme> by loadThemes().toImmutableList()
 private fun loadThemes(): List<Theme> =
     builtInThemes().plus(pluginThemes())
         .distinctBy(Any::javaClass)
-        .onEach { logger.debug("Found theme: '{}'", it::class.java.name) }
+        .onEach { logger.info("Found theme: '{}'", it::class.java.name) }
         .toList()
 
 /**
