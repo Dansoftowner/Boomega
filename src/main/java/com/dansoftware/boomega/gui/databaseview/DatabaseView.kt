@@ -26,6 +26,8 @@ import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.google.GoogleBooksImportModule
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
+import com.dansoftware.boomega.plugin.Plugins
+import com.dansoftware.boomega.plugin.api.ModulePlugin
 import javafx.stage.WindowEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -33,10 +35,10 @@ import org.slf4j.LoggerFactory
 class DatabaseView(
     private val preferences: Preferences,
     private val database: Database,
-    databaseTracker: DatabaseTracker
+    private val databaseTracker: DatabaseTracker
 ) : BaseView() {
 
-    val modules: List<Module> = listModules()
+    val modules: List<Module> = loadModules()
 
     val databaseReadOnly: ReadOnlyDatabase
         get() = ReadOnlyDatabase(database)
@@ -103,12 +105,23 @@ class DatabaseView(
         }
     }
 
-    private fun listModules(): List<Module> {
-        //TODO: plugin modules
-        return listOf(
+    private fun loadModules(): List<Module> {
+        return loadBuiltInModules().plus(loadPluginModules())
+            .onEach { logger.info("Found module: '{}'", it::class.java.name) }
+            .toList()
+    }
+
+    private fun loadBuiltInModules(): Sequence<Module> {
+        return sequenceOf(
             RecordsViewModule(this, preferences, database),
             GoogleBooksImportModule(this, preferences)
         )
+    }
+
+    private fun loadPluginModules(): Sequence<Module> {
+        logger.debug("Checking plugins for modules...")
+        return Plugins.getInstance().of(ModulePlugin::class.java).asSequence()
+            .map { it.getModule(this, preferences, databaseTracker, databaseReadOnly) }
     }
 
     private inner class ShutdownHook : Thread() {
