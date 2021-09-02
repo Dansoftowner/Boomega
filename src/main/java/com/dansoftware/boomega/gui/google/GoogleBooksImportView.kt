@@ -27,7 +27,9 @@ import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.service.googlebooks.asRecord
 import javafx.beans.binding.Bindings
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.MenuItem
+import javafx.scene.control.Separator
 
 /**
  * A [GoogleBooksImportView] is a [GoogleBooksSearchView] that also allows the user
@@ -36,7 +38,7 @@ import javafx.scene.control.*
 class GoogleBooksImportView(private val context: Context) : GoogleBooksSearchView(context) {
 
     override fun buildSearchResultView(query: GoogleBooksQuery): GoogleBooksSearchResultView {
-        return GoogleBooksSearchResultView(context, query, onPreviousPageRequested = { home() }).apply {
+        return GoogleBooksSearchResultView(context, query, onPreviousPageRequested = ::home).apply {
             expandToolbar()
             expandTableContextMenu()
         }
@@ -59,9 +61,9 @@ class GoogleBooksImportView(private val context: Context) : GoogleBooksSearchVie
     }
 
     private fun GoogleBooksSearchResultView.buildImportButton() = Button().apply {
-        contentDisplay = ContentDisplay.GRAPHIC_ONLY
+        styleClass.add("import-button")
         graphic = icon("plus-icon")
-        tooltip = Tooltip(i18n("google.books.volume_import"))
+        text = i18n("google.books.volume_import")
         disableProperty().bind(Bindings.isEmpty(pagination.table.selectionModel.selectedItems))
         setOnAction { sendInsertionRequest(pagination.table.selectionModel.selectedItem) }
     }
