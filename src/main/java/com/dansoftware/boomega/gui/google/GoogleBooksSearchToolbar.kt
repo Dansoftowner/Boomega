@@ -37,6 +37,7 @@ class GoogleBooksSearchToolbar(
 ) : BiToolBar() {
 
     init {
+        styleClass.add("google-book-search-toolbar")
         buildUI()
     }
 

@@ -539,6 +539,17 @@
     -fx-font-size: 80 !important;
 }
 
+.google-book-search-toolbar .import-button,
+.google-book-search-toolbar .import-button:hover,
+.google-book-search-toolbar .import-button:pressed {
+    -fx-background-color: rgb(0, 120, 215);
+    -fx-text-fill: whitesmoke;
+}
+
+.google-book-search-toolbar .import-button .glyph-icon {
+    -fx-fill: whitesmoke;
+}
+
 /*******************************************************************************
  *                                                                             *
  *                           Google book preview                               *
