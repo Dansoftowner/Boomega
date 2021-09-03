@@ -21,6 +21,7 @@ package com.dansoftware.boomega.export
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.export.excel.ExcelExporter
 import com.dansoftware.boomega.export.json.JsonExporter
+import com.dansoftware.boomega.export.yaml.YamlExporter
 import okhttp3.internal.toImmutableList
 import java.util.*
 
@@ -33,6 +34,7 @@ object SupportedExporters :
 
 private fun loadBuiltInExporters() = listOf(
     JsonExporter(),
+    YamlExporter(),
     ExcelExporter()
 )
 

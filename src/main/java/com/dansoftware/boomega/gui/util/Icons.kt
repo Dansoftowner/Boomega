@@ -111,7 +111,8 @@ private val iconPack = mapOf<String, () -> Text>(
     "italic-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ITALIC),
     "strikethrough-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_STRIKETHROUGH),
     "pause-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.PAUSE),
-    "stop-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.STOP)
+    "stop-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.STOP),
+    "yaml-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.YAMMER)
 )
 
 fun icon(identifier: String): Text = (
