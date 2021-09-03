@@ -103,8 +103,8 @@ dependencies {
     //Testing
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'org.assertj:assertj-core:3.20.2'
-    testImplementation 'org.mockito:mockito-core:3.12.1'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.1'
+    testImplementation 'org.mockito:mockito-core:3.12.4'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.4'
 
     implementation 'com.github.Dansoftowner:jFileGoodies:1.2.6'
     implementation 'com.github.Dansoftowner:jUserDirectories:1.0'
@@ -120,8 +120,9 @@ dependencies {
     implementation 'org.jetbrains:annotations:22.0.0'
 
     implementation 'org.apache.poi:poi-ooxml:5.0.0' // Microsoft Documents
-    implementation 'com.google.code.gson:gson:2.8.8' // JSON Parsing
+    implementation 'org.yaml:snakeyaml:1.21'
     implementation 'org.jsoup:jsoup:1.14.2' // HTML parsing
+    implementation 'com.google.code.gson:gson:2.8.8' // JSON Parsing
     implementation 'org.dizitart:nitrite:3.4.3' // NoSql database
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.3'
     implementation 'com.github.oshi:oshi-core:5.8.1'
