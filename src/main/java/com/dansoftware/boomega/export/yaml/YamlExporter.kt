@@ -71,8 +71,6 @@ class YamlExporter : BaseExporter<YamlExportConfiguration>() {
         Yaml(Constructor(Record::class.java), RepresenterImpl(), buildDumperOptions(config))
 
     private fun buildDumperOptions(config: YamlExportConfiguration) = DumperOptions().apply {
-        // for excluding the 'id'
-        isAllowReadOnlyProperties = false
         defaultScalarStyle = config.defaultScalarStyle.snakeYamlType
         defaultFlowStyle = config.defaultFlowStyle.snakeYamlType
         isCanonical = config.isCanonical
@@ -104,6 +102,8 @@ class YamlExporter : BaseExporter<YamlExportConfiguration>() {
 
     private class RepresenterImpl : Representer() {
         init {
+            // for excluding type definitions
+            classTags[Record::class.java] = Tag.MAP
             representers[Locale::class.java] = LocaleRepresent()
         }
     }
