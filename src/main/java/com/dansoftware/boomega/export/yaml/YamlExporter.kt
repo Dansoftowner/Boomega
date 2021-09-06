@@ -25,10 +25,16 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.export.ConfigurationDialog
 import com.dansoftware.boomega.gui.util.icon
 import javafx.scene.Node
+import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
+import org.yaml.snakeyaml.nodes.ScalarNode
+import org.yaml.snakeyaml.nodes.Tag
+import org.yaml.snakeyaml.representer.Represent
+import org.yaml.snakeyaml.representer.Representer
 import java.io.OutputStream
 import java.io.OutputStreamWriter
+import java.util.*
 
 class YamlExporter : BaseExporter<YamlExportConfiguration>() {
     override val name: String
@@ -57,10 +63,59 @@ class YamlExporter : BaseExporter<YamlExportConfiguration>() {
         observer: ExportProcessObserver
     ) {
         OutputStreamWriter(output).buffered().use {
-            buildYamlProcessor().dumpAll(sortRecords(items, config).iterator(), it)
+            buildYamlProcessor(config).dump(sortRecords(items, config), it)
         }
     }
 
-    private fun buildYamlProcessor() = Yaml(Constructor(Record::class.java)).apply {
+    private fun buildYamlProcessor(config: YamlExportConfiguration) =
+        Yaml(Constructor(Record::class.java), RepresenterImpl(), buildDumperOptions(config))
+
+    private fun buildDumperOptions(config: YamlExportConfiguration) = DumperOptions().apply {
+        // for excluding the 'id'
+        isAllowReadOnlyProperties = false
+        defaultScalarStyle = config.defaultScalarStyle.snakeYamlType
+        defaultFlowStyle = config.defaultFlowStyle.snakeYamlType
+        isCanonical = config.isCanonical
+        isAllowUnicode = config.isAllowUnicode
+        indent = config.indent
+        width = config.bestWidth
+        splitLines = config.splitLines
+        isExplicitStart = config.explicitStart
+        isExplicitEnd = config.explicitEnd
+        isPrettyFlow = config.prettyFlow
+    }
+
+
+    private val YamlExportConfiguration.ScalarStyle.snakeYamlType get() =
+        when(this) {
+            YamlExportConfiguration.ScalarStyle.DOUBLE_QUOTED -> DumperOptions.ScalarStyle.DOUBLE_QUOTED
+            YamlExportConfiguration.ScalarStyle.SINGLE_QUOTED -> DumperOptions.ScalarStyle.SINGLE_QUOTED
+            YamlExportConfiguration.ScalarStyle.LITERAL -> DumperOptions.ScalarStyle.LITERAL
+            YamlExportConfiguration.ScalarStyle.FOLDED -> DumperOptions.ScalarStyle.FOLDED
+            YamlExportConfiguration.ScalarStyle.PLAIN -> DumperOptions.ScalarStyle.PLAIN
+        }
+
+    private val YamlExportConfiguration.FlowStyle.snakeYamlType get() =
+        when(this) {
+            YamlExportConfiguration.FlowStyle.FLOW -> DumperOptions.FlowStyle.FLOW
+            YamlExportConfiguration.FlowStyle.BLOCK -> DumperOptions.FlowStyle.BLOCK
+            YamlExportConfiguration.FlowStyle.AUTO -> DumperOptions.FlowStyle.AUTO
+        }
+
+    private class RepresenterImpl : Representer() {
+        init {
+            representers[Locale::class.java] = LocaleRepresent()
+        }
+    }
+
+    private class LocaleRepresent : Represent {
+        override fun representData(data: Any?): org.yaml.snakeyaml.nodes.Node? {
+            return (data as? Locale)?.let {
+                representScalar(it.toLanguageTag())
+            }
+        }
+
+        private fun representScalar(value: String) =
+            ScalarNode(Tag.STR, value, null, null, DumperOptions.ScalarStyle.PLAIN)
     }
 }

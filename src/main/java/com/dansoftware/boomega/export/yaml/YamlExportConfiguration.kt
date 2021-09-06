@@ -22,4 +22,39 @@ import com.dansoftware.boomega.export.api.RecordExportConfiguration
 
 class YamlExportConfiguration : RecordExportConfiguration() {
 
+    var defaultScalarStyle: ScalarStyle = ScalarStyle.PLAIN
+
+    var defaultFlowStyle: FlowStyle = FlowStyle.AUTO
+
+    var isCanonical = false
+
+    var isAllowUnicode = true
+
+    var indent = 2
+
+    var bestWidth = 80
+
+    var splitLines = true
+
+    var explicitStart = false
+
+    var explicitEnd = false
+
+    var prettyFlow = false
+
+    enum class ScalarStyle(val displayName: String) {
+        // TODO: i18n
+        DOUBLE_QUOTED("Double quoted"),
+        SINGLE_QUOTED("Single quoted"),
+        LITERAL("Literal"),
+        FOLDED("Folded"),
+        PLAIN("Plain")
+    }
+
+    enum class FlowStyle(val displayName: String) {
+        // TODO: i18n
+        FLOW("flow"),
+        BLOCK("block"),
+        AUTO("auto")
+    }
 }
