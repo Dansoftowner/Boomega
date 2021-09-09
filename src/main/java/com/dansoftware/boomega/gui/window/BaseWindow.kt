@@ -27,6 +27,7 @@ import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.os.OsInfo
 import de.jangassen.MenuToolkit
+import javafx.application.Platform
 import javafx.beans.property.*
 import javafx.event.EventHandler
 import javafx.scene.Parent
@@ -130,8 +131,10 @@ abstract class BaseWindow<C> : Stage, Themeable
     private fun buildMenuBarContent(content: Parent, menuBar: MenuBar): Parent =
         when {
             OsInfo.isMac() -> content.also {
-                logger.debug("MacOS detected: building native menu bar...")
-                MenuToolkit.toolkit().setMenuBar(this, menuBar)
+                addEventHandler(WindowEvent.WINDOW_SHOWN) {
+                    logger.debug("MacOS detected: building native menu bar...")
+                    MenuToolkit.toolkit().setMenuBar(this, menuBar)
+                }
             }
             else -> {
                 logger.debug("MacOS is not detected: building JavaFX based menu-bar...")
