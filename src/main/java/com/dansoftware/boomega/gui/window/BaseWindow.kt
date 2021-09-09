@@ -128,10 +128,13 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
     private fun buildMenuBarContent(content: Parent, menuBar: MenuBar): Parent =
         when {
             OsInfo.isMac() -> content.also {
-                addEventHandler(WindowEvent.WINDOW_SHOWN) {
-                    logger.debug("MacOS detected: building native menu bar...")
-                    MenuToolkit.toolkit().setMenuBar(this, menuBar)
-                }
+                addEventHandler(WindowEvent.WINDOW_SHOWN, object : EventHandler<WindowEvent> {
+                    override fun handle(event: WindowEvent) {
+                        logger.debug("MacOS detected: building native menu bar...")
+                        MenuToolkit.toolkit().setMenuBar(this@BaseWindow, menuBar)
+                        removeEventHandler(event.eventType, this)
+                    }
+                })
             }
             else -> {
                 logger.debug("MacOS is not detected: building JavaFX based menu-bar...")
