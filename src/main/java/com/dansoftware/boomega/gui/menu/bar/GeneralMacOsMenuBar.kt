@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.menu.bar
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.databaseview.DatabaseView
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.menu.MacOsApplicationMenu
 
@@ -28,12 +28,12 @@ import com.dansoftware.boomega.gui.menu.MacOsApplicationMenu
  *
  * @see MacOsApplicationMenu
  */
-open class SimpleMacOsMenuBar(
-    databaseView: DatabaseView,
+open class GeneralMacOsMenuBar(
+    context: Context,
     preferences: Preferences,
     databaseTracker: DatabaseTracker
-) : BaseMenuBar(databaseView) {
+) : BaseMenuBar(context) {
     init {
-        menus.add(MacOsApplicationMenu(databaseView, preferences, databaseTracker))
+        menus.add(MacOsApplicationMenu(context, preferences, databaseTracker))
     }
 }

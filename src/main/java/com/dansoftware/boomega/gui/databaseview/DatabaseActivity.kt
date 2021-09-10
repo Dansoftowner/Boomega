@@ -22,7 +22,7 @@ import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.menu.bar.getPreferredMenuBar
+import com.dansoftware.boomega.gui.menu.bar.getPreferredApplicationMenuBar
 import javafx.stage.WindowEvent
 import java.lang.ref.WeakReference
 import java.util.*
@@ -48,7 +48,7 @@ class DatabaseActivity(
     }
 
     private fun buildDatabaseWindow(): DatabaseWindow {
-        val menuBar = getPreferredMenuBar(databaseView, preferences, databaseTracker)
+        val menuBar = getPreferredApplicationMenuBar(databaseView, preferences, databaseTracker)
         val window = DatabaseWindow(databaseView, menuBar)
         window.addEventHandler(WindowEvent.WINDOW_HIDDEN) {
             database.close()

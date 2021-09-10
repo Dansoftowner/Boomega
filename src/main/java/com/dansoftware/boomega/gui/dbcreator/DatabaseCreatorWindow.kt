@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.dbcreator
 
 import com.dansoftware.boomega.gui.window.BaseWindow
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import javafx.stage.Modality
 import javafx.stage.Window
 
@@ -28,7 +28,7 @@ import javafx.stage.Window
  * used to display [DatabaseCreatorView] gui-objects.
  */
 class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) :
-    BaseWindow<DatabaseCreatorView>(I18N.getValue("window.dbcreator.title"), view) {
+    BaseWindow<DatabaseCreatorView>(i18n("window.dbcreator.title"), view) {
 
     init {
         initModality(Modality.APPLICATION_MODAL)

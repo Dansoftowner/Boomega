@@ -22,6 +22,7 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.menu.bar.getPreferredGeneralMenuBar
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
 import javafx.beans.property.SimpleStringProperty
@@ -46,8 +47,11 @@ private class LoginWindow(
     private val root: LoginView,
     private val preferences: Preferences,
     private val databaseTracker: DatabaseTracker
-) : BaseWindow<LoginView>(TitleProperty("window.login.title", " - ", root.titleProperty()), root),
-    EventHandler<WindowEvent> {
+) : BaseWindow<LoginView>(
+    TitleProperty("window.login.title", " - ", root.titleProperty()),
+    getPreferredGeneralMenuBar(root, preferences, databaseTracker),
+    root
+), EventHandler<WindowEvent> {
 
     init {
         Objects.requireNonNull(preferences)

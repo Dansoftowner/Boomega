@@ -143,11 +143,13 @@ public class BaseView extends StackPane implements Context {
         this.content.set(content);
     }
 
-    public ObservableList<Region> getBlockingOverlaysShown() {
+    @Override
+    public @NotNull ObservableList<Region> getBlockingOverlaysShown() {
         return workbench.getBlockingOverlaysShown();
     }
 
-    public ObservableList<Region> getNonBlockingOverlaysShown() {
+    @Override
+    public @NotNull ObservableList<Region> getNonBlockingOverlaysShown() {
         return workbench.getNonBlockingOverlaysShown();
     }
 

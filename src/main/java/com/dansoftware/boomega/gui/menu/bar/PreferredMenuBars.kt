@@ -19,15 +19,35 @@
 package com.dansoftware.boomega.gui.menu.bar
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.util.os.OsInfo
+import javafx.scene.control.MenuBar
 
 /**
- * Provides the preferred menu-bar depending on what platform the app is running on
+ * Provides the preferred menu-bar for a [DatabaseView] depending on what platform the app is running on.
  */
-fun getPreferredMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) =
+fun getPreferredApplicationMenuBar(
+    databaseView: DatabaseView,
+    preferences: Preferences,
+    tracker: DatabaseTracker
+): MenuBar =
     when {
         OsInfo.isMac() -> MacOsMenuBar(databaseView, preferences, tracker)
         else -> RegularMenuBar(databaseView, preferences, tracker)
+    }
+
+/**
+ * Provides the preferred general menu-bar depending on what platform the app is running on.
+ * It might be _null_ if general menu-bars shouldn't be used on the platform.
+ */
+fun getPreferredGeneralMenuBar(
+    context: Context,
+    preferences: Preferences,
+    databaseTracker: DatabaseTracker
+): MenuBar? =
+    when {
+        OsInfo.isMac() -> GeneralMacOsMenuBar(context, preferences, databaseTracker)
+        else -> null
     }

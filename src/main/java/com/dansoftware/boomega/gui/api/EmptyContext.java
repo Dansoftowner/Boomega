@@ -18,6 +18,8 @@
 
 package com.dansoftware.boomega.gui.api;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -207,5 +209,47 @@ public interface EmptyContext extends Context {
     @Override
     default void onWindowPresent(Consumer<Window> action) {
 
+    }
+
+    @NotNull
+    @Override
+    default ObservableList<Region> getBlockingOverlaysShown() {
+        return FXCollections.observableArrayList();
+    }
+
+    @NotNull
+    @Override
+    default ObservableList<Region> getNonBlockingOverlaysShown() {
+        return FXCollections.observableArrayList();
+    }
+
+    @Override
+    default void showOverlay(@NotNull Region region) {
+        Context.super.showOverlay(region);
+    }
+
+    @Override
+    default void showErrorDialog(@NotNull String title, @NotNull String message) {
+        Context.super.showErrorDialog(title, message);
+    }
+
+    @Override
+    default void showErrorDialog(@NotNull String title, @NotNull String message, @Nullable Exception e) {
+        Context.super.showErrorDialog(title, message, e);
+    }
+
+    @Override
+    default void sendRequest(@NotNull Context.Request request) {
+        Context.super.sendRequest(request);
+    }
+
+    @Override
+    default boolean isReachable() {
+        return Context.super.isReachable();
+    }
+
+    @Override
+    default void close() {
+        Context.super.close();
     }
 }

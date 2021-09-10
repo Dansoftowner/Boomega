@@ -70,7 +70,7 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
      *
      * @param title the title
      */
-    private constructor(title: String) : this() {
+    private constructor(title: String?) : this() {
         this.title = title
     }
 
@@ -80,20 +80,16 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
      * @param title the title
      * @param content the graphic content
      */
-    protected constructor(title: String, content: C) : this(title) {
-        this.content = content
-        this.scene = Scene(content)
-    }
+    protected constructor(title: String?, content: C) : this(title, null, content)
 
     /**
      * Creates a BaseWindow with an initial title, [MenuBar] on the top and content.
      */
     protected constructor(
-        @NonNls title: String,
-        menuBar: MenuBar,
+        @NonNls title: String?,
+        menuBar: MenuBar?,
         content: C,
-    ) {
-        this.title = title
+    ) : this(title) {
         this.content = content
         this.scene = Scene(buildMenuBarContent(content, menuBar))
     }
@@ -106,11 +102,10 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
      */
     protected constructor(
         title: StringProperty,
+        menuBar: MenuBar?,
         content: C
-    ) {
-        this.content = content
-        this.scene = Scene(content)
-        this.titleProperty().bind(title)
+    ) : this(null, menuBar, content) {
+        titleProperty().bind(title)
     }
 
     override fun onDefaultThemeChanged(oldTheme: Theme?, newTheme: Theme) {
@@ -125,9 +120,10 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
         this.toFront()
     }
 
-    private fun buildMenuBarContent(content: Parent, menuBar: MenuBar): Parent =
+    private fun buildMenuBarContent(content: Parent, menuBar: MenuBar?): Parent =
         when {
-            OsInfo.isMac() -> content.also {
+            menuBar == null -> content
+            OsInfo.isMac() -> content.apply {
                 addEventHandler(WindowEvent.WINDOW_SHOWN, object : EventHandler<WindowEvent> {
                     override fun handle(event: WindowEvent) {
                         logger.debug("MacOS detected: building native menu bar...")

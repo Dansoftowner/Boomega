@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.menu.bar
 
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import javafx.beans.binding.Bindings
 import javafx.scene.control.MenuBar
@@ -29,21 +30,19 @@ import javafx.scene.control.MenuBar
  * @see RegularMenuBar
  * @see MacOsMenuBar
  */
-abstract class BaseMenuBar(databaseView: DatabaseView) : MenuBar() {
+abstract class BaseMenuBar(context: Context) : MenuBar() {
 
     init {
-        initDisablePolicy(databaseView)
+        initDisablePolicy(context)
     }
 
-    private fun initDisablePolicy(databaseView: DatabaseView) {
-        databaseView.let {
-            properties["overlays.visible.listener"] = // for keeping it in the memory
-                Bindings.isEmpty(it.blockingOverlaysShown).and(Bindings.isEmpty(it.nonBlockingOverlaysShown))
-                    .also { observable ->
-                        observable.addListener { _, _, isEmpty ->
-                            this.isDisable = isEmpty.not()
-                        }
+    private fun initDisablePolicy(context: Context) {
+        properties["overlays.visible.listener"] = // for keeping it in the memory
+            Bindings.isEmpty(context.blockingOverlaysShown).and(Bindings.isEmpty(context.nonBlockingOverlaysShown))
+                .also { observable ->
+                    observable.addListener { _, _, isEmpty ->
+                        this.isDisable = isEmpty.not()
                     }
-        }
+                }
     }
 }

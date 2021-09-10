@@ -32,7 +32,7 @@ class MacOsMenuBar(
     databaseView: DatabaseView,
     preferences: Preferences,
     tracker: DatabaseTracker
-) : SimpleMacOsMenuBar(databaseView, preferences, tracker) {
+) : GeneralMacOsMenuBar(databaseView, preferences, tracker) {
     init {
         menus.addAll(
             MacOsFileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
