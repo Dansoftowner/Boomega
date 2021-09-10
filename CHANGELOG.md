@@ -4,6 +4,7 @@
 
 ### Enhancements/features
 
+* ✨ MacOS specific menu-bar
 * 💄 Look and feel updates
 
 ### Bug fixes/improvements
