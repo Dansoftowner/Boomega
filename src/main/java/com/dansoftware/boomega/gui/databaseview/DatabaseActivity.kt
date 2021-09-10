@@ -15,81 +15,60 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.dansoftware.boomega.gui.databaseview
 
-package com.dansoftware.boomega.gui.databaseview;
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.db.Database
+import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.menubar.getPreferredMenuBar
+import javafx.stage.WindowEvent
+import java.lang.ref.WeakReference
+import java.util.*
 
-import com.dansoftware.boomega.config.Preferences;
-import com.dansoftware.boomega.db.Database;
-import com.dansoftware.boomega.db.DatabaseMeta;
-import com.dansoftware.boomega.gui.api.Context;
-import com.dansoftware.boomega.gui.entry.DatabaseTracker;
-import com.dansoftware.boomega.gui.menubar.AppMenuBar;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.stage.WindowEvent;
-import org.jetbrains.annotations.NotNull;
+class DatabaseActivity(
+    private val database: Database,
+    private val preferences: Preferences,
+    private val databaseTracker: DatabaseTracker
+) {
 
-import java.lang.ref.WeakReference;
-import java.util.*;
+    private val databaseView by lazy { buildDatabaseView() }
+    val context: Context get() = databaseView
 
-public class DatabaseActivity {
-
-    private static final Set<WeakReference<DatabaseActivity>> instances = Collections.synchronizedSet(new HashSet<>());
-
-    private final BooleanProperty showing;
-    private final Preferences preferences;
-    private final DatabaseTracker databaseTracker;
-    private final DatabaseView databaseView;
-    private Database database;
-
-    public DatabaseActivity(@NotNull Database database, @NotNull Preferences preferences, @NotNull DatabaseTracker databaseTracker) {
-        this.database = Objects.requireNonNull(database, "The database mustn't be null");
-        this.preferences = Objects.requireNonNull(preferences);
-        this.databaseTracker = Objects.requireNonNull(databaseTracker);
-        this.showing = new SimpleBooleanProperty();
-        this.databaseView = new DatabaseView(preferences, database, databaseTracker);
-        instances.add(new WeakReference<>(this));
-        databaseTracker.registerUsedDatabase(database.getMeta());
+    init {
+        instances.add(WeakReference(this))
+        databaseTracker.registerUsedDatabase(database.meta)
     }
 
-    public boolean show() {
-        final DatabaseWindow databaseWindow = new DatabaseWindow(
-                databaseView,
-                new AppMenuBar(
-                        databaseView,
-                        preferences,
-                        databaseTracker
-                )
-        );
-        databaseWindow.show();
-        databaseWindow.addEventHandler(
-                WindowEvent.WINDOW_HIDDEN,
-                event -> {
-                    database.close();
-                    databaseTracker.closingDatabase(database.getMeta());
-                    database = null;
-                });
-        return true;
+    fun show(): Boolean {
+        val databaseWindow = buildDatabaseWindow()
+        databaseWindow.show()
+        return true
     }
 
-    public boolean isShowing() {
-        return showing.get();
+    private fun buildDatabaseWindow(): DatabaseWindow {
+        val menuBar = getPreferredMenuBar(databaseView, preferences, databaseTracker)
+        val window = DatabaseWindow(databaseView, menuBar)
+        window.addEventHandler(WindowEvent.WINDOW_HIDDEN) {
+            database.close()
+            databaseTracker.registerClosedDatabase(database.meta)
+        }
+        return window
     }
 
-    public ReadOnlyBooleanProperty showingProperty() {
-        return showing;
-    }
+    private fun buildDatabaseView() = DatabaseView(preferences, database, databaseTracker)
 
-    public Context getContext() {
-        return databaseView;
-    }
+    companion object {
 
-    public static Optional<DatabaseActivity> getByDatabase(DatabaseMeta databaseMeta) {
-        return instances.stream()
-                .map(WeakReference::get)
-                .filter(Objects::nonNull)
-                .filter(activity -> activity.database != null && activity.database.getMeta().equals(databaseMeta))
-                .findAny();
+        private val instances = Collections.synchronizedSet(HashSet<WeakReference<DatabaseActivity>>())
+
+        @JvmStatic
+        fun getByDatabase(databaseMeta: DatabaseMeta?): Optional<DatabaseActivity> {
+            return instances.asSequence()
+                .map { obj: WeakReference<DatabaseActivity> -> obj.get() }
+                .find { it?.database?.meta == databaseMeta }
+                .let { Optional.ofNullable(it) }
+        }
     }
 }

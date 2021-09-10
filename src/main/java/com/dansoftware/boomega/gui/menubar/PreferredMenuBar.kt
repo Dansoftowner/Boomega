@@ -16,17 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.databaseview
+package com.dansoftware.boomega.gui.menubar
 
-import com.dansoftware.boomega.gui.window.BaseWindow
-import javafx.scene.control.MenuBar
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.databaseview.DatabaseView
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.util.os.OsInfo
 
-class DatabaseWindow(view: DatabaseView, menuBar: MenuBar) :
-    BaseWindow<DatabaseView>("${System.getProperty("app.name")} - ${view.databaseMeta}", menuBar, view) {
-    init {
-        this.isMaximized = true
-        this.exitDialog = true
-        this.minWidth = 530.0
-        this.minHeight = 530.0
+fun getPreferredMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) =
+    when {
+        OsInfo.isMac() -> MacOsMenuBar(databaseView, preferences, tracker)
+        else -> MacOsMenuBar(databaseView, preferences, tracker)
     }
-}

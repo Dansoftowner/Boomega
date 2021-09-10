@@ -131,7 +131,7 @@ class LoginView(
             when {
                 databaseTracker.isDatabaseUsed(databaseMeta) ->
                     DatabaseActivity.getByDatabase(databaseMeta)
-                        .map(DatabaseActivity::getContext)
+                        .map(DatabaseActivity::context)
                         .ifPresent(Context::toFrontRequest)
                 else -> {
                     loginData.isAutoLogin = remember

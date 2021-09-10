@@ -16,17 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.databaseview
+package com.dansoftware.boomega.gui.menubar
 
-import com.dansoftware.boomega.gui.window.BaseWindow
-import javafx.scene.control.MenuBar
+import com.dansoftware.boomega.gui.databaseview.DatabaseView
+import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.menuItem
+import com.dansoftware.boomega.i18n.i18n
+import javafx.scene.control.Menu
+import javafx.scene.control.MenuItem
 
-class DatabaseWindow(view: DatabaseView, menuBar: MenuBar) :
-    BaseWindow<DatabaseView>("${System.getProperty("app.name")} - ${view.databaseMeta}", menuBar, view) {
+class ModuleMenu(val view: DatabaseView) : Menu(i18n("menubar.menu.modules")) {
     init {
-        this.isMaximized = true
-        this.exitDialog = true
-        this.minWidth = 530.0
-        this.minHeight = 530.0
+        view.modules.forEach {
+            this.menuItem(MenuItem(it.name, it.icon).action { _ -> view.openModule(it) })
+        }
     }
 }
