@@ -54,6 +54,7 @@ applicationDefaultJvmArgs = [
 compileKotlin {
     kotlinOptions {
         jvmTarget = '16'
+        freeCompilerArgs += '-Xjvm-default=all'
     }
 }
 
