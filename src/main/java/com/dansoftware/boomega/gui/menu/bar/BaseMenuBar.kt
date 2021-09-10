@@ -16,13 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu.bar
 
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import javafx.beans.binding.Bindings
 import javafx.scene.control.MenuBar
 
-open class BaseMenuBar(databaseView: DatabaseView) : MenuBar() {
+/**
+ * A basic [MenuBar] implementation that disables itself
+ * if an overlay is visible in the given [DatabaseView].
+ *
+ * @see RegularMenuBar
+ * @see MacOsMenuBar
+ */
+abstract class BaseMenuBar(databaseView: DatabaseView) : MenuBar() {
+
     init {
         initDisablePolicy(databaseView)
     }

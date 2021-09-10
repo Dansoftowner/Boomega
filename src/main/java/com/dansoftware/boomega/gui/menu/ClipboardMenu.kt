@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.action.GlobalActions
@@ -27,19 +27,16 @@ import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.i18n.i18n
 import javafx.scene.control.Menu
 
-class PluginMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-    Menu(i18n("menubar.menu.plugin")) {
+class ClipboardMenu(
+    private val context: Context,
+    private val preferences: Preferences,
+    private val databaseTracker: DatabaseTracker
+) : Menu(i18n("menubar.menu.clipboard")) {
 
     init {
-        this.menuItem(pluginManagerMenuItem())
-            .menuItem(pluginDirectoryItem())
+        this.menuItem(clipboardViewItem())
     }
 
-    private fun pluginManagerMenuItem() =
-        MenuItems.of(GlobalActions.OPEN_PLUGIN_MANAGER, context, preferences, databaseTracker).apply {
-            isDisable = true // TODO: unlock plugin manager
-        }
-
-    private fun pluginDirectoryItem() =
-        MenuItems.of(GlobalActions.OPEN_PLUGIN_DIR, context, preferences, databaseTracker)
+    private fun clipboardViewItem() =
+        MenuItems.of(GlobalActions.OPEN_CLIPBOARD_VIEWER, context, preferences, databaseTracker)
 }

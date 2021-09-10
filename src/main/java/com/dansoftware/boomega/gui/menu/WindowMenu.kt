@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.action.GlobalActions
@@ -33,8 +33,11 @@ import javafx.stage.Stage
 import javafx.stage.Window
 import java.lang.ref.WeakReference
 
-class WindowMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-    Menu(i18n("menubar.menu.window")) {
+class WindowMenu(
+    private val context: Context,
+    private val preferences: Preferences,
+    private val databaseTracker: DatabaseTracker
+) : Menu(i18n("menubar.menu.window")) {
 
     private val windowsChangeOperator by lazy {
         object {

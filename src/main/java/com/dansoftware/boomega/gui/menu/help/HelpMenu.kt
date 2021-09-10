@@ -16,32 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu.help
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.action.MenuItems
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.i18n.i18n
 import javafx.scene.control.Menu
 
-class HelpMenu(val context: Context, val preferences: Preferences, val databaseTracker: DatabaseTracker) :
-    Menu(i18n("menubar.menu.help")) {
+/**
+ * The base help menu. Supertype of all kind of os specific help-menus.
+ */
+abstract class HelpMenu(
+    private val context: Context,
+    private val preferences: Preferences,
+    private val databaseTracker: DatabaseTracker
+) : Menu(i18n("menubar.menu.help")) {
 
     init {
-        this.menuItem(updateSearcherMenuItem())
-            .menuItem(contactMenuItem())
-            .menuItem(infoMenuItem())
+        items.add(contactMenuItem())
     }
-
-    private fun updateSearcherMenuItem() =
-        MenuItems.of(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
 
     private fun contactMenuItem() =
         MenuItems.of(GlobalActions.OPEN_CONTACT_INFO, context, preferences, databaseTracker)
-
-    private fun infoMenuItem() =
-        MenuItems.of(GlobalActions.OPEN_APP_INFO, context, preferences, databaseTracker)
 }

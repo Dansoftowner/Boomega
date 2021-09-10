@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu.file
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
@@ -39,11 +39,9 @@ import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
 
 /**
- * The base file menu, that's used on MacOS.
- * The file menu used on Windows/Linux is the [RegularFileMenu] which
- * is a subtype of the [FileMenu].
+ * The base file menu. Supertype of all kind of os specific file-menus.
  */
-open class FileMenu(
+abstract class FileMenu(
     private val context: Context,
     private val databaseMeta: DatabaseMeta,
     private val preferences: Preferences,
@@ -84,7 +82,9 @@ open class FileMenu(
      */
     private fun recentDatabasesMenuItem(): MenuItem =
         object : Menu(i18n("menubar.menu.file.recent")) {
-            private val it = this
+
+            private val recentMenu = this
+
             private val menuItemFactory: (DatabaseMeta) -> MenuItem = { db ->
                 MenuItem(db.toString()).also { menuItem ->
                     menuItem.setOnAction {
@@ -100,14 +100,15 @@ open class FileMenu(
                     menuItem.userData = db
                 }
             }
+
             private val trackerObserver = object : DatabaseTracker.Observer {
                 override fun onDatabaseAdded(db: DatabaseMeta) {
-                    it.menuItem(menuItemFactory.invoke(db))
+                    recentMenu.menuItem(menuItemFactory.invoke(db))
                 }
 
                 override fun onDatabaseRemoved(db: DatabaseMeta) {
-                    it.items.find { menuItem -> menuItem.userData == db }?.also { menuItem ->
-                        it.items.remove(menuItem)
+                    recentMenu.items.find { menuItem -> menuItem.userData == db }?.also { menuItem ->
+                        recentMenu.items.remove(menuItem)
                     }
                 }
             }
@@ -120,6 +121,7 @@ open class FileMenu(
         }
 
     private fun databaseCloseMenuItem() = MenuItem(i18n("menubar.menu.file.dbclose"))
+        .graphic("logout-icon")
         .action {
             preferences.editor()
                 .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
@@ -131,14 +133,14 @@ open class FileMenu(
             GlobalActions.NEW_ENTRY.invoke(context, preferences, databaseTracker)
             context.close()
         }
-        .graphic("logout-icon")
 
     private fun revealInExplorerMenuItem() = MenuItem(i18n("menubar.menu.file.reveal"))
-        .action { databaseMeta.file!!.revealInExplorer() }
         .graphic("folder-open-icon")
+        .action { databaseMeta.file!!.revealInExplorer() }
 
-    private fun startActivityLauncher(getActivityLauncher: () -> ActivityLauncher) {
+    private inline fun startActivityLauncher(crossinline getActivityLauncher: () -> ActivityLauncher) {
         SingleThreadExecutor.submit(object : Task<Unit>() {
+
             init {
                 this.setOnRunning { context.showIndeterminateProgress() }
                 this.setOnFailed { context.stopProgress() }

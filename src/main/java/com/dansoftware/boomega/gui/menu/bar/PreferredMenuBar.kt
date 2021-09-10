@@ -16,19 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu.bar
 
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
-import com.dansoftware.boomega.gui.util.action
-import com.dansoftware.boomega.gui.util.menuItem
-import com.dansoftware.boomega.i18n.i18n
-import javafx.scene.control.Menu
-import javafx.scene.control.MenuItem
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.util.os.OsInfo
 
-class ModuleMenu(val view: DatabaseView) : Menu(i18n("menubar.menu.modules")) {
-    init {
-        view.modules.forEach {
-            this.menuItem(MenuItem(it.name, it.icon).action { _ -> view.openModule(it) })
-        }
+/**
+ * Provides the preferred menu-bar depending on what platform the app is running on
+ */
+fun getPreferredMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) =
+    when {
+        OsInfo.isMac() -> MacOsMenuBar(databaseView, preferences, tracker)
+        else -> RegularMenuBar(databaseView, preferences, tracker)
     }
-}

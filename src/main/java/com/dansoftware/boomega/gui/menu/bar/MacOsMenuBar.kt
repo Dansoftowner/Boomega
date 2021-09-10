@@ -16,27 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu.bar
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.menu.*
+import com.dansoftware.boomega.gui.menu.file.MacOsFileMenu
+import com.dansoftware.boomega.gui.menu.help.MacOsHelpMenu
 
 /**
- * The menu-bar used on Windows/Linux.
+ * The menu-bar used on macOS
  */
-class RegularMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) :
-    javafx.scene.control.MenuBar() {
-
+class MacOsMenuBar(
+    databaseView: DatabaseView,
+    preferences: Preferences,
+    tracker: DatabaseTracker
+) : SimpleMacOsMenuBar(databaseView, preferences, tracker) {
     init {
-        this.menus.addAll(
-            RegularFileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
+        menus.addAll(
+            MacOsFileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
             ModuleMenu(databaseView),
             PreferencesMenu(databaseView, preferences, tracker),
             ClipboardMenu(databaseView, preferences, tracker),
             WindowMenu(databaseView, preferences, tracker),
             PluginMenu(databaseView, preferences, tracker),
-            HelpMenu(databaseView, preferences, tracker)
+            MacOsHelpMenu(databaseView, preferences, tracker)
         )
     }
 }

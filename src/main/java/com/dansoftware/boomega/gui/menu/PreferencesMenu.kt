@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
@@ -41,10 +41,11 @@ import org.slf4j.LoggerFactory
 import java.util.*
 
 class PreferencesMenu(
-    val context: Context,
-    val preferences: Preferences,
-    val databaseTracker: DatabaseTracker
+    private val context: Context,
+    private val preferences: Preferences,
+    private val databaseTracker: DatabaseTracker
 ) : Menu(i18n("menubar.menu.preferences")) {
+
     init {
         this.menuItem(settingsMenu())
             .separator()

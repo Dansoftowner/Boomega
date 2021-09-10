@@ -16,15 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menubar
+package com.dansoftware.boomega.gui.menu.help
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.gui.databaseview.DatabaseView
+import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.util.os.OsInfo
 
-fun getPreferredMenuBar(databaseView: DatabaseView, preferences: Preferences, tracker: DatabaseTracker) =
-    when {
-        OsInfo.isMac() -> MacOsMenuBar(databaseView, preferences, tracker)
-        else -> MacOsMenuBar(databaseView, preferences, tracker)
-    }
+/**
+ * The help-menu used on macOS
+ */
+class MacOsHelpMenu(
+    context: Context,
+    preferences: Preferences,
+    databaseTracker: DatabaseTracker
+) : HelpMenu(context, preferences, databaseTracker)
