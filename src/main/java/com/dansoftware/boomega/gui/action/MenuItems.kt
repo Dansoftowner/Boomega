@@ -25,25 +25,39 @@ import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.graphic
 import javafx.scene.control.MenuItem
 
+@Suppress("NOTHING_TO_INLINE")
+inline fun menuItemOf(action: Action, context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) =
+    menuItemOf(action, context, preferences, databaseTracker, ::MenuItem)
+
+inline fun <M : MenuItem> menuItemOf(
+    action: Action,
+    context: Context,
+    preferences: Preferences,
+    databaseTracker: DatabaseTracker,
+    menuItemFactory: (String) -> M
+) = menuItemFactory(action.displayName)
+    .action { action.invoke(context, preferences, databaseTracker) }
+    .keyBinding(action.keyBinding)
+    .graphic(action.iconStyleClass)
+
+
+@Deprecated("Use the top level functions instead")
 object MenuItems {
+
+    @Deprecated("Use the top level menuItemOf instead.", replaceWith = ReplaceWith("menuItemOf()"))
     fun of(
         action: Action,
         context: Context,
         preferences: Preferences,
         databaseTracker: DatabaseTracker
-    ) = MenuItem(action.displayName)
-        .action { action.invoke(context, preferences, databaseTracker) }
-        .keyBinding(action.keyBinding)
-        .graphic(action.iconStyleClass)
+    ) = menuItemOf(action, context, preferences, databaseTracker)
 
+    @Deprecated("Use the top level menuItemOf instead.", replaceWith = ReplaceWith("menuItemOf()"))
     fun <M : MenuItem> of(
         action: Action,
         context: Context,
         preferences: Preferences,
         databaseTracker: DatabaseTracker,
         menuItemFactory: (String) -> M
-    ) = menuItemFactory(action.displayName)
-        .action { action.invoke(context, preferences, databaseTracker) }
-        .keyBinding(action.keyBinding)
-        .graphic(action.iconStyleClass)
+    ) = menuItemOf(action, context, preferences, databaseTracker, menuItemFactory)
 }
