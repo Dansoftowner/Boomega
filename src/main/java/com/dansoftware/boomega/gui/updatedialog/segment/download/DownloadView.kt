@@ -27,8 +27,9 @@ import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.ReleaseAsset
 import com.dansoftware.boomega.update.sizeInMegaBytes
+import com.dansoftware.boomega.util.isExecutable
+import com.dansoftware.boomega.util.open
 import com.dansoftware.boomega.util.revealInExplorer
-import com.jfilegoodies.FileGoodies
 import com.juserdirs.UserDirectories
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
@@ -175,9 +176,9 @@ class DownloadView(private val context: Context, private val release: Release) :
         isDefaultButton = true
         setOnAction {
             downloadService.value?.let {
-                it.takeIf(FileGoodies::isOSExecutable)?.let {
+                it.takeIf(File::isExecutable)?.let {
                     try {
-                        Runtime.getRuntime().exec(it.absoluteFile.absolutePath)
+                        it.open()
                     } catch (e: IOException) {
                         context.showErrorDialog(
                             I18N.getValue("update.dialog.download.install.failed.title"),

@@ -107,7 +107,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.12.4'
     testImplementation 'org.mockito:mockito-junit-jupiter:3.12.4'
 
-    implementation 'com.github.Dansoftowner:jFileGoodies:1.2.6'
     implementation 'com.github.Dansoftowner:jUserDirectories:1.0'
     implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.7'
     implementation 'com.github.Dansoftowner:Restart4j:1.4.7'

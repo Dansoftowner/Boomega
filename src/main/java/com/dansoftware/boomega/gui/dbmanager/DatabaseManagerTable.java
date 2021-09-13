@@ -24,7 +24,6 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.util.ConcurrencyUtils;
 import com.dansoftware.boomega.gui.util.FXCollectionUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
-import com.jfilegoodies.explorer.FileExplorers;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.collections.ObservableList;
@@ -269,7 +268,8 @@ class DatabaseManagerTable extends TableView<DatabaseMeta>
                                 .getSelectedItems()
                                 .stream()
                                 .map(DatabaseMeta::getFile)
-                                .forEach(FileExplorers.getLazy()::openSelect));
+                                .filter(Objects::nonNull)
+                                .forEach(com.dansoftware.boomega.util.FileUtils::revealInExplorer));
                         openButton.disableProperty().bind(getTableRow().selectedProperty().not());
                         setGraphic(openButton);
                     }

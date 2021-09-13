@@ -16,15 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:JvmName("FileUtils")
+
 package com.dansoftware.boomega.util
 
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import com.jfilegoodies.explorer.FileExplorers
+import com.dansoftware.boomega.util.os.OsInfo
 import java.awt.Desktop
 import java.io.File
 
-private inline val desktop
-    get() = Desktop.getDesktop()
+import java.awt.Desktop.getDesktop as desktop
+import java.lang.Runtime.getRuntime as runtime
 
 /**
  * Opens a folder containing the file and selects it in a default system file manager.
@@ -32,17 +34,43 @@ private inline val desktop
 fun File.revealInExplorer() {
     CachedExecutor.submit {
         when {
-            desktop.isSupported(Desktop.Action.BROWSE_FILE_DIR) -> desktop.browseFileDirectory(this)
-            else -> FileExplorers.get().openSelect(this)
+            desktop().isSupported(Desktop.Action.BROWSE_FILE_DIR) -> desktop().browseFileDirectory(this)
+            else -> invokeSelectCommand()
         }
     }
 }
+
+private fun File.invokeSelectCommand() =
+    when {
+        OsInfo.isWindows() -> runtime().exec("explorer.exe /root, \"$path\"")
+        OsInfo.isLinux() -> runtime().exec(arrayOf("nautilus", path))
+        OsInfo.isMac() -> runtime().exec(arrayOf("open", "-a", "Finder", path))
+        else -> null
+    }
 
 /**
  * Launches the associated application to open the file.
  */
 fun File.open() {
     CachedExecutor.submit {
-        desktop.open(this)
+        if (desktop().isSupported(Desktop.Action.OPEN))
+            desktop().open(this)
+        else runtime().exec(absoluteFile.absolutePath)
+    }
+}
+
+/**
+ * Determines whether the file is an executable by the operating system
+ * based on the following conditions:
+ * - on Windows the executable file extensions are: "exe" and "msi"
+ * - on Mac the executable file extensions are: "dmg" and "app"
+ * - on Linux the executable file extensions are: "deb" and "rpm"
+ */
+fun File.isExecutable(): Boolean {
+    return extension in when {
+        OsInfo.isWindows() -> listOf("exe", "msi")
+        OsInfo.isMac() -> listOf("dmg", "app")
+        OsInfo.isLinux() -> listOf("deb", "rpm")
+        else -> emptyList()
     }
 }

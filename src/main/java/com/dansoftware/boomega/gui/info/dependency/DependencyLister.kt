@@ -124,11 +124,6 @@ object DependencyLister {
             )
         ),
         DependencyInfo(
-            "jFileGoodies",
-            "https://github.com/Dansoftowner/jFileGoodies",
-            LicenseInfo.apache20License()
-        ),
-        DependencyInfo(
             "JFoenix",
             "http://www.jfoenix.com/",
             LicenseInfo.apache20License()
