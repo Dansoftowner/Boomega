@@ -127,6 +127,11 @@ inline fun <T : Node> T.hgrow(priority: Priority) = apply {
     GridPane.setHgrow(this, priority)
 }
 
+inline fun <T : Node> T.vgrow(priority: Priority) = apply {
+    VBox.setVgrow(this, priority)
+    GridPane.setVgrow(this, priority)
+}
+
 inline fun <T : Control> T.tooltip(value: String) = apply {
     tooltip = Tooltip(value)
 }

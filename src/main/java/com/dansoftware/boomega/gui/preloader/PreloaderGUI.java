@@ -45,6 +45,7 @@ import java.util.Optional;
  *
  * @author Daniel Gyorffy
  */
+@Deprecated
 public class PreloaderGUI extends VBox {
 
     private static final String MAIN_PANE_STYLE_CLASS = "mainPane";

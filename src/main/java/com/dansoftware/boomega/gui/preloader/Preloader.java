@@ -54,9 +54,7 @@ public class Preloader extends javafx.application.Preloader {
         try {
             backingStage = new BackingStage();
             //Building the gui
-            PreloaderGUI gui = PreloaderGUI.builder()
-                    .messageProperty(messageProperty)
-                    .build();
+            var gui = new PreloaderView();
 
             Scene scene = new Scene(gui);
             scene.getStylesheets().add(STYLESHEET);
@@ -65,7 +63,6 @@ public class Preloader extends javafx.application.Preloader {
             contentStage = backingStage.createChild(StageStyle.UNDECORATED);
             contentStage.setScene(scene);
             contentStage.centerOnScreen();
-            contentStage.setOnShown(event -> gui.logoAnimation());
 
             backingStage.show();
             contentStage.show();
