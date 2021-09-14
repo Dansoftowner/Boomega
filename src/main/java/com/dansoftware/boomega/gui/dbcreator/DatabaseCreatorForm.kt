@@ -28,7 +28,8 @@ import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.stage
 import com.dansoftware.boomega.gui.util.window
 import com.dansoftware.boomega.i18n.i18n
-import com.jfilegoodies.FileGoodies
+import com.dansoftware.boomega.util.hasValidPath
+import com.dansoftware.boomega.util.shortenedPath
 import javafx.beans.property.*
 import javafx.geometry.Insets
 import javafx.scene.control.*
@@ -240,7 +241,7 @@ class DatabaseCreatorForm(
                 )
                 false
             }
-            FileGoodies.hasNotValidPath(databaseDirFile) -> {
+            databaseDirFile.hasValidPath.not() -> {
                 showErrorDialog(
                     "database.creator.invalid_dir.title",
                     "database.creator.invalid_dir.msg",
@@ -252,7 +253,7 @@ class DatabaseCreatorForm(
                 showErrorDialog(
                     "database.creator.file_already_exists.title",
                     "database.creator.file_already_exists.msg",
-                    FileGoodies.shortenedFilePath(databaseFile, 1)
+                    databaseFile.shortenedPath(1)
                 )
                 false
             }

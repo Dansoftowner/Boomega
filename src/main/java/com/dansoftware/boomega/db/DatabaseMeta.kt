@@ -17,8 +17,7 @@
  */
 package com.dansoftware.boomega.db
 
-import com.jfilegoodies.FileGoodies
-import org.apache.commons.io.FilenameUtils
+import com.dansoftware.boomega.util.shortenedPath
 import java.io.File
 import java.util.*
 
@@ -26,9 +25,10 @@ import java.util.*
  * A DatabaseMeta can hold all meta-information about a particular database.
  */
 open class DatabaseMeta @JvmOverloads constructor(var name: String, var file: File? = null) {
+
     private var stringFormat: String? = null
 
-    constructor(file: File) : this(FilenameUtils.getBaseName(file.name), file)
+    constructor(file: File) : this(file.nameWithoutExtension, file)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -42,6 +42,6 @@ open class DatabaseMeta @JvmOverloads constructor(var name: String, var file: Fi
     }
 
     override fun toString(): String =
-        stringFormat ?: String.format("%s (%s)", name, file?.let { FileGoodies.shortenedFilePath(it, 1) } ?: "null")
+        stringFormat ?: String.format("%s (%s)", name, file?.shortenedPath(maxBack = 1) ?: "null")
             .also { stringFormat = it }
 }

@@ -22,31 +22,71 @@ package com.dansoftware.boomega.util
 
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.boomega.util.os.OsInfo
+import com.juserdirs.UserDirectories
 import java.awt.Desktop
 import java.io.File
-
+import java.nio.file.InvalidPathException
 import java.awt.Desktop.getDesktop as desktop
 import java.lang.Runtime.getRuntime as runtime
+
+/**
+ * Checks if the file's path is valid or not (it has no special characters etc...).
+ */
+val File.hasValidPath: Boolean
+    get() {
+        return try {
+            toPath() //ignored result
+            true
+        } catch (e: InvalidPathException) {
+            false
+        } catch (e: NullPointerException) {
+            false
+        }
+    }
+
+/**
+ * Gets the [File] representation of the system's temporary directory
+ */
+val tempDirectory by lazy {
+    File(System.getProperty("java.io.tmpdir"))
+}
+
+/**
+ * Gets the user home directory's path
+ */
+val userDirectoryPath: String get() = System.getProperty("user.home")
+
+/**
+ * Gets the system's default "Documents" directory-path, if exists
+ */
+val documentsDirectoryPath: String? get() = UserDirectories.get().documentsDirectoryPath()
+
+/**
+ * Gives a directory separated string of the specified elements.
+ * Can be useful for building file paths.
+ */
+fun joinToFilePath(vararg elements: String): String =
+    elements.joinToString(File.separator)
 
 /**
  * Opens a folder containing the file and selects it in a default system file manager.
  */
 fun File.revealInExplorer() {
+    fun invokeNativeCommand() =
+        when {
+            OsInfo.isWindows() -> runtime().exec("explorer.exe /root, \"$path\"")
+            OsInfo.isLinux() -> runtime().exec(arrayOf("nautilus", path))
+            OsInfo.isMac() -> runtime().exec(arrayOf("open", "-a", "Finder", path))
+            else -> null
+        }
+
     CachedExecutor.submit {
         when {
             desktop().isSupported(Desktop.Action.BROWSE_FILE_DIR) -> desktop().browseFileDirectory(this)
-            else -> invokeSelectCommand()
+            else -> invokeNativeCommand()
         }
     }
 }
-
-private fun File.invokeSelectCommand() =
-    when {
-        OsInfo.isWindows() -> runtime().exec("explorer.exe /root, \"$path\"")
-        OsInfo.isLinux() -> runtime().exec(arrayOf("nautilus", path))
-        OsInfo.isMac() -> runtime().exec(arrayOf("open", "-a", "Finder", path))
-        else -> null
-    }
 
 /**
  * Launches the associated application to open the file.
@@ -73,4 +113,53 @@ fun File.isExecutable(): Boolean {
         OsInfo.isLinux() -> listOf("deb", "rpm")
         else -> emptyList()
     }
+}
+
+/**
+ * Creates a shortened path from a file.
+ *
+ * It is useful when you don't want to use a very long file-path, and you want to short it.
+ *
+ * ### Examples
+ *
+ * Let's say you have a file-path: `/images/background/wallpaper/design/First.png`, and you want to create a
+ * user-visible string that only shows the 2 previous directory: `.../wallpaper/design/First.png`.
+ * Then you can do this:
+ * ```kotlin
+ * file.shortenedPath(maxBack = 2, prefix = "...", separator = "/")
+ * ```
+ * *More examples*
+ * ```kotlin
+ * val file = File("programFiles/thePrg/appdata/inf/config.prop")
+ * file.shortenedPath(0, "<DEFAULT>", "\\") // "<DEFAULT>\config.prop"
+ * ```
+ * ```kotlin
+ * val file = File("users/user0/documents/Plans.docx")
+ * file.shortenedPath(1, "[USER_HOME]", "/") // "[USER_HOME]/documents/Plans.docx"
+ * ```
+ *
+ * @param prefix    the prefix that will be at the start of the string;
+ *                  basically what hides the directories that are not displayed
+ * @param separator the separator character that will separate the directory names.
+ * @param maxBack   specifies the maximum number of directories we want to display before the file's name
+ * @return the shortened path
+ */
+fun File.shortenedPath(maxBack: Int, prefix: String = "...", separator: String = File.separator): String {
+    require(maxBack < 0)
+
+    val stringBuilder = StringBuilder()
+
+    var i = maxBack
+    var lastParent: File? = parentFile
+    while (i > 0 && lastParent != null) {
+        stringBuilder.insert(0, separator).insert(0, lastParent.name)
+        lastParent = lastParent.parentFile
+        i--
+    }
+
+    lastParent?.let {
+        stringBuilder.insert(0, separator).insert(0, prefix).toString()
+    }
+
+    return stringBuilder.toString()
 }

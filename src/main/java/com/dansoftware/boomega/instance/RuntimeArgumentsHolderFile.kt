@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.instance
 
-import org.apache.commons.io.FileUtils
+import com.dansoftware.boomega.util.tempDirectory
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
@@ -29,7 +29,7 @@ import java.io.IOException
  *
  * @author Daniel Gyorffy
  */
-object RuntimeArgumentsHolderFile : File(FileUtils.getTempDirectory(), "libraryappruntimeparams.parms") {
+object RuntimeArgumentsHolderFile : File(tempDirectory, "libraryappruntimeparams.parms") {
     init {
         createNewFile()
     }

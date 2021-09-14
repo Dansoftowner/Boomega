@@ -43,7 +43,7 @@ import com.dansoftware.boomega.main.ApplicationRestart
 import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import com.jfilegoodies.explorer.FileExplorers
+import com.dansoftware.boomega.util.open
 import javafx.concurrent.Task
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
@@ -161,7 +161,7 @@ object GlobalActions {
     @JvmField
     val OPEN_PLUGIN_DIR =
         Action("action.open_plugin_dir", "folder-open-icon") { _, _, _ ->
-            FileExplorers.get().openDir(File(System.getProperty("boomega.plugin.dir")))
+            File(System.getProperty("boomega.plugin.dir")).open()
         }
 
     @JvmField

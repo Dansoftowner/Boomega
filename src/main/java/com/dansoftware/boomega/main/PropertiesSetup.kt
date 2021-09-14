@@ -18,9 +18,11 @@
 
 package com.dansoftware.boomega.main
 
+import com.dansoftware.boomega.util.documentsDirectoryPath
+import com.dansoftware.boomega.util.joinToFilePath
 import com.dansoftware.boomega.util.os.OsInfo
-import com.juserdirs.UserDirectories
-import org.apache.commons.io.FileUtils
+import com.dansoftware.boomega.util.tempDirectory
+import com.dansoftware.boomega.util.userDirectoryPath
 import java.io.File
 
 /**
@@ -49,7 +51,7 @@ object PropertiesSetup {
     /**
      * The log-file's path without the extension (for the logback configuration)
      */
-    private val LOG_FILE_PATH_VALUE = FileUtils.getFile(FileUtils.getTempDirectory(), "boomega").toString()
+    private val LOG_FILE_PATH_VALUE = File(tempDirectory, "boomega").toString()
 
     /**
      * The log-file's path with the extension
@@ -113,38 +115,25 @@ object PropertiesSetup {
 
     private fun getDefaultDirectoryFilePath() =
         File(
-            UserDirectories.get().documentsDirectoryPath() ?: System.getProperty("user.home"),
+            documentsDirectoryPath ?: System.getProperty("user.home"),
             BOOMEGA_DOCUMENTS_FOLDER
         ).absolutePath
 
     /**
      * Returns the config file's path
      */
-    private fun getConfigFilePath() =
-        listOf(FileUtils.getUserDirectoryPath(), ".libraryapp2020", "bmcfg").joinToString(File.separator)
+    private fun getConfigFilePath() = joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg")
 
     /**
      * Returns the plugin directory's path
      */
     private fun getPluginDirPath(): String = when {
         OsInfo.isWindows() -> {
-            var appdata = System.getenv("APPDATA")
-            if (appdata?.isBlank() ?: true) {
-                appdata = FileUtils.getUserDirectoryPath()
-            }
-            File(
-                File(appdata),
-                listOf("Dansoftware", "boomega", "plugin").joinToString(File.separator)
-            ).absolutePath
+            val appdata = System.getenv("APPDATA")?.takeIf { it.isNotBlank() } ?: userDirectoryPath
+            File(File(appdata), "Dansoftware\\boomega\\plugin").absolutePath
         }
-        OsInfo.isLinux() ->
-            listOf(
-                FileUtils.getUserDirectoryPath(),
-                "boomega",
-                "plugin"
-            ).joinToString(File.separator)
-        OsInfo.isMac() ->
-            listOf(FileUtils.getUserDirectoryPath(), "boomega", "plugin").joinToString(File.separator)
+        OsInfo.isLinux() -> "$userDirectoryPath/boomega/plugin"
+        OsInfo.isMac() -> "$userDirectoryPath/boomega/plugin"
         else -> "plugin"
     }
 }
