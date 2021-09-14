@@ -23,12 +23,12 @@
 * Custom notes with **Markdown** support
 * **Google Books** synchronization
 * Customizable key-bindings
-* Plugin support (see [plugin guide](PLUGIN_GUIDE.md))
+* Plugin support (see [plugin guide](docs/PLUGIN_GUIDE.md))
 * ...and more!
 
 ## :page_facing_up: Documentation
 
-The detailed user guide is available [here](USER_GUIDE.md).
+The detailed user guide is available [here](docs/USER_GUIDE.md).
 
 ## :arrow_down: Download
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?logo=linux&logoColor=white)]()

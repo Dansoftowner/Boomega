@@ -1,0 +1,3 @@
+# Plugin guide
+
+> Coming soon
