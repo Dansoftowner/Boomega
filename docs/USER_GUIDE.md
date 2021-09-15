@@ -33,7 +33,7 @@ and for registering/saving books to local database files.
 
 ## Getting Boomega
 
-**You can download Boomega [here](../README.md#download) or from the [releases](https://github.com/Dansoftowner/Boomega/releases) page.**
+**You can download Boomega [here](../README.md#arrow_down-download) or from the [releases](https://github.com/Dansoftowner/Boomega/releases) page.**
 
 ### Platform support
 
@@ -128,7 +128,7 @@ When Boomega runs for the first time, it will show a customization/configuration
 
 Select whether you want to use the **light**, **dark** or **os-synchronized** theme.
 
-![Selecting themes in the customization dialog](../img/userguide/firsttime/FirstTimeTheme.png)
+![Selecting themes in the customization dialog](img/userguide/firsttime/FirstTimeTheme.png)
 
 Read more about user interface themes [here](#user-interface-themes).
 
@@ -136,7 +136,7 @@ Read more about user interface themes [here](#user-interface-themes).
 
 Select your preferred language from the available language list.
 
-![Selecting languages in the customization dialog](../img/userguide/firsttime/FirstTimeLanguage.png)
+![Selecting languages in the customization dialog](img/userguide/firsttime/FirstTimeLanguage.png)
 
 Read more about user interface languages [here](#user-interface-languages).
 
@@ -147,13 +147,13 @@ Here, you are able to enter into a particular database, and you can access some
 basic tools/functions the app provides like: [Opening existing databases](#opening-existing-database),
 [Creating database](#creating-database), [Database manager](#database-manager) and the [Preferences dialog](#preferences-dialog).
 
-![Login view](../img/userguide/loginview/LoginView_Light.png)
+![Login view](img/userguide/loginview/LoginView_Light.png)
 
 #### The top toolbar
 
-- By clicking on the ![info](../img/userguide/icon/information.png) icon, you can view the [Boomega info](#viewing-boomega-info).
-- By clicking on the ![option](../img/userguide/icon/options.png) icon, you can access the `quick menu`:  
-  ![Quick options menu](../img/userguide/loginview/quick-options-menu.png)  
+- By clicking on the ![info](img/userguide/icon/information.png) icon, you can view the [Boomega info](#viewing-boomega-info).
+- By clicking on the ![option](img/userguide/icon/options.png) icon, you can access the `quick menu`:  
+  ![Quick options menu](img/userguide/loginview/quick-options-menu.png)  
   Here you are able to:
   - Search for software updates
   - Open the plugin manager (read more about the Plugin Manager [here](#plugin-manager))
@@ -161,24 +161,24 @@ basic tools/functions the app provides like: [Opening existing databases](#openi
 
 #### The login box (in the center)
 
-![Login box](../img/userguide/loginview/login-box.png)
+![Login box](img/userguide/loginview/login-box.png)
 
-- By clicking on the ![database](../img/userguide/icon/database.png) icon you can open the [Database manager](#database-manager)
-- By clicking on the ![folder](../img/userguide/icon/folder-open.png) icon you can open an existing database from your file-system
+- By clicking on the ![database](img/userguide/icon/database.png) icon you can open the [Database manager](#database-manager)
+- By clicking on the ![folder](img/userguide/icon/folder-open.png) icon you can open an existing database from your file-system
   (see [Opening existing database](#opening-existing-database))
-- By clicking on the ![database-plus](../img/userguide/icon/database-plus.png) icon on the bottom you can create a new database (see [Creating database](#creating-database))
+- By clicking on the ![database-plus](img/userguide/icon/database-plus.png) icon on the bottom you can create a new database (see [Creating database](#creating-database))
 
 If you created/opened some database files, you can choose a data source in the combo-box:
-![Combo-box list](../img/userguide/loginview/database-list.png)
+![Combo-box list](img/userguide/loginview/database-list.png)
 
 After you selected a database, you can specify the credentials and sign in into the database:
 
-![Login box with selected database](../img/userguide/loginview/login-box-selected.png)
+![Login box with selected database](img/userguide/loginview/login-box-selected.png)
 
 If you check the `remember it` box before you log in to the database, the next time you launch the app, the program
 will log in to that database automatically.
 
-![](../img/userguide/loginview/login-box-typed.png)
+![](img/userguide/loginview/login-box-typed.png)
 
 After you logged in, a `database view` shows up (read about database view [here](#database-view)).
 
@@ -187,33 +187,33 @@ After you logged in, a `database view` shows up (read about database view [here]
 
 ##### Special marks
 
-- If you see the ![play](../img/userguide/icon/play.png) icon next to a database list item:  
-  ![](../img/userguide/loginview/running-database-icon.png)  
+- If you see the ![play](img/userguide/icon/play.png) icon next to a database list item:  
+  ![](img/userguide/loginview/running-database-icon.png)  
   that means **the database is already opened** in a `database view`.
 
-- If you see the ![alert](../img/userguide/icon/alert.png) icon next to a database list item:  
-  ![](../img/userguide/loginview/missing-database-icon.png)  
+- If you see the ![alert](img/userguide/icon/alert.png) icon next to a database list item:  
+  ![](img/userguide/loginview/missing-database-icon.png)  
   that means **the database file does not exist**
 
 ### Opening existing database
 
 You can open an existing database from both the [login view](#login-view) and the [database view](#database-view)'s menubar:
 
-![Opening database from the file chooser](../img/userguide/open_existing_database/file-chooser.png)
+![Opening database from the file chooser](img/userguide/open_existing_database/file-chooser.png)
 
 If you open a database from the `login view`, the selected database will appear in the combo-box's list.  
 
 If you open a database from the `database view` (by `File > Open`), and the database is protected by username & password 
 , a `quick login dialog` will show up:
 
-![Quick login dialog](../img/userguide/open_existing_database/quick-login.png)
+![Quick login dialog](img/userguide/open_existing_database/quick-login.png)
 
 ### Creating database
 
 You can open the `database creator` from both the [Login View](#login-view) and the [Database View](#database-view) 
 (by `File > Creating new database`).
 
-![Database creator window](../img/userguide/creating_database/database_creator_auth.png)
+![Database creator window](img/userguide/creating_database/database_creator_auth.png)
 
 Firstly, you have to give a name for the database and choose a directory where the database file will be saved.  
 The `full path` field just shows what will be the full path of the created database file, **it's not editable**.
@@ -231,15 +231,15 @@ Database manager is used for viewing/managing the registered databases.
 
 You can open the `database manager` from both the [Login View](#login-view) and the [Database View](#database-view) (`File > Open database manager`).
 
-![Database manager window](../img/userguide/database_manager/database-manager-no-selection.png)
+![Database manager window](img/userguide/database_manager/database-manager-no-selection.png)
 
-Also, you are able to open database file(s) in your system's file explorer by clicking on the ![folder](../img/userguide/icon/folder.png) icon.
+Also, you are able to open database file(s) in your system's file explorer by clicking on the ![folder](img/userguide/icon/folder.png) icon.
 
 #### Deleting database(s)
 
-For deleting databases, select the particular items (hold the `ctrl` or `shift` key if necessary) and use the ![database minus](../img/userguide/icon/database-minus.png) symbol:
+For deleting databases, select the particular items (hold the `ctrl` or `shift` key if necessary) and use the ![database minus](img/userguide/icon/database-minus.png) symbol:
 
-![Deleting database(s)](../img/userguide/database_manager/deleting-items.gif)
+![Deleting database(s)](img/userguide/database_manager/deleting-items.gif)
 
 **Note: removing a database here will not delete the database-file from your file system!**
 
@@ -247,10 +247,10 @@ For deleting databases, select the particular items (hold the `ctrl` or `shift` 
 
 Just like in the [login view](#the-login-box-in-the-center) there are special indicators:
 
-- ![play](../img/userguide/icon/play.png) - means the database is opened at the moment
-- ![alert](../img/userguide/icon/alert.png) - means the database file does not exist
+- ![play](img/userguide/icon/play.png) - means the database is opened at the moment
+- ![alert](img/userguide/icon/alert.png) - means the database file does not exist
 
-![Special marks in database manager](../img/userguide/database_manager/database-manager-markers.png)
+![Special marks in database manager](img/userguide/database_manager/database-manager-markers.png)
 
 ### Preferences dialog
 
@@ -281,7 +281,7 @@ TODO
 If you would like to know some basic info of your application like what version you use,
 you can view all the information about your Boomega release in the `Boomega info` dialog:
 
-![Boomega info dialog](../img/userguide/BoomegaInfo.png)
+![Boomega info dialog](img/userguide/BoomegaInfo.png)
 
 - **Version** - the current version you use
 - **Software developer**
@@ -292,7 +292,7 @@ you can view all the information about your Boomega release in the `Boomega info
 - **Java version** - the version of the Java environment
 - **Default log file** - the path to the log file
 
-You can copy all this data to the clipboard by clicking on the ![copy](../img/userguide/icon/content-copy.png) icon.
+You can copy all this data to the clipboard by clicking on the ![copy](img/userguide/icon/content-copy.png) icon.
 
-This dialog can be launched by clicking on the top-right ![info](../img/userguide/icon/information.png) icon in the [login view](#login-view)
+This dialog can be launched by clicking on the top-right ![info](img/userguide/icon/information.png) icon in the [login view](#login-view)
 or by clicking on the `File > Help > About` item in the [database view](#database-view).
