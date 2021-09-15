@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.preloader;
 
+import com.dansoftware.boomega.gui.font.CustomFontsLoader;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Scene;
@@ -37,8 +38,11 @@ import org.slf4j.LoggerFactory;
 public class Preloader extends javafx.application.Preloader {
 
     private static final Logger logger = LoggerFactory.getLogger(Preloader.class);
-
     private static final String STYLESHEET = "/com/dansoftware/boomega/gui/theme/preloader.css";
+
+    static {
+        CustomFontsLoader.loadFonts();
+    }
 
     private BackingStage backingStage;
     private Stage contentStage;

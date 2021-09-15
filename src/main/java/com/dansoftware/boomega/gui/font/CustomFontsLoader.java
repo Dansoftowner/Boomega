@@ -19,10 +19,20 @@
 package com.dansoftware.boomega.gui.font;
 
 import javafx.scene.text.Font;
+import org.apache.commons.lang3.ClassPathUtils;
+import org.apache.xmlgraphics.util.ClasspathResource;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Utility for loading the custom javaFX fonts.
@@ -36,35 +46,59 @@ import java.util.List;
  */
 public class CustomFontsLoader {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomFontsLoader.class);
+
+    private static final String FONT_DIR = "/com/dansoftware/boomega/gui/font/poppins";
+
     private static final List<String> fontPaths = List.of(
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-Bold.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-BoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-ExtraBold.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-ExtraBoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-ExtraLight.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-ExtraLightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-Italic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-Light.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-LightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-Medium.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-MediumItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-Regular.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-Thin.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMono-ThinItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Bold.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-BoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ExtraBold.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ExtraBoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ExtraLight.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ExtraLightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Italic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Light.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-LightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Medium.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-MediumItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Regular.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-Thin.ttf",
-            "/com/dansoftware/boomega/gui/font/JetBrainsMonoNL-ThinItalic.ttf"
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Bold.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-BoldItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ExtraBold.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ExtraBoldItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ExtraLight.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ExtraLightItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Italic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Light.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-LightItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Medium.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-MediumItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Regular.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Thin.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ThinItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Bold.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-BoldItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ExtraBold.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ExtraBoldItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ExtraLight.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ExtraLightItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Italic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Light.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-LightItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Medium.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-MediumItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Regular.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Thin.ttf",
+            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ThinItalic.ttf",
+
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Black.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-BlackItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Bold.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-BoldItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ExtraBold.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ExtraBoldItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ExtraLight.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ExtraLightItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Italic.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Light.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-LightItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Medium.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-MediumItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Regular.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-SemiBold.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-SemiBoldItalic.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Thin.ttf",
+            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ThinItalic.ttf"
+
     );
 
     private CustomFontsLoader() {

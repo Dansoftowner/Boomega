@@ -1,7 +1,8 @@
 @import url("/com/dansoftware/boomega/gui/theme/base.css");
 
 .root {
-    /*-fx-background-image: url(/com/dansoftware/boomega/image/backgrounds/preloader-background.jpg);*/
+    -fx-background-image: url(/com/dansoftware/boomega/image/backgrounds/preloader-background.png);
+    -fx-background-repeat: stretch;
     /*-fx-border-color: #1f1f1f;*/
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, .26), 20, 0.19, -1, 6);
     -fx-pref-width: 739px;
@@ -17,4 +18,10 @@
     -fx-text-alignment: center;
     -fx-font-size: 20px;
     -fx-text-fill: #dedede;
+}
+
+.logo-label {
+    -fx-font-family: "Poppins Bold";
+    -fx-font-size: 50;
+    -fx-text-fill: white;
 }

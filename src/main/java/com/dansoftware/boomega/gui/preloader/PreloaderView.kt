@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.preloader
 
 import com.dansoftware.boomega.gui.util.asCentered
 import com.dansoftware.boomega.gui.util.onScenePresent
+import com.dansoftware.boomega.gui.util.styleClass
 import com.dansoftware.boomega.gui.util.vgrow
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
@@ -43,6 +44,7 @@ class PreloaderView : VBox() {
 
     private fun buildUI() {
         children.add(Logo().asCentered().vgrow(Priority.ALWAYS))
+        children.add(Label(System.getProperty("app.name")).styleClass("logo-label").asCentered())
         children.add(buildMessageLabel().asCentered())
         children.add(buildProgressBar())
     }

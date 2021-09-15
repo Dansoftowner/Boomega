@@ -67,10 +67,6 @@ public class BoomegaApp extends BaseApplication {
     private static final Logger logger = LoggerFactory.getLogger(BoomegaApp.class);
     private static final Object initThreadLock = BoomegaApp.class;
 
-    static {
-        CustomFontsLoader.loadFonts();
-    }
-
     @Override
     public void init() throws Exception {
         //the list that holds the actions that will be executed by the InitActivityLauncher
