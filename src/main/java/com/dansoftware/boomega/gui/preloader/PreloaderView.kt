@@ -29,6 +29,7 @@ import javafx.beans.property.StringProperty
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
 import javafx.scene.image.ImageView
+import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 
@@ -43,10 +44,16 @@ class PreloaderView : VBox() {
     }
 
     private fun buildUI() {
-        children.add(Logo().asCentered().vgrow(Priority.ALWAYS))
-        children.add(Label(System.getProperty("app.name")).styleClass("logo-label").asCentered())
-        children.add(buildMessageLabel().asCentered())
-        children.add(buildProgressBar())
+        children.addAll(
+            HBox(3.0,
+                Logo().asCentered(),
+                Label(System.getProperty("app.name"))
+                    .styleClass("logo-label")
+                    .asCentered()
+            ).asCentered().vgrow(Priority.ALWAYS),
+            buildMessageLabel().asCentered(),
+            buildProgressBar()
+        )
     }
 
     private fun buildProgressBar() = ProgressBar().apply {

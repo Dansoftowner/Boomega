@@ -25,7 +25,9 @@ import javafx.beans.value.ObservableBooleanValue
 import javafx.collections.ObservableList
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Group
 import javafx.scene.Node
+import javafx.scene.Parent
 import javafx.scene.control.*
 import javafx.scene.layout.*
 import javafx.scene.text.TextAlignment
@@ -96,8 +98,10 @@ inline fun <reified T : Node> Node.lookup(selector: String): T? = lookup(selecto
 /**
  * Wraps the given [Node] into a [StackPane]
  */
-inline fun Node.asCentered(pos: Pos = Pos.CENTER) = StackPane(this).also {
-    StackPane.setAlignment(this, pos)
+inline fun Node.asCentered(pos: Pos = Pos.CENTER) = StackPane().also {
+    val content = if (this is Parent) Group(this) else this
+    StackPane.setAlignment(content, pos)
+    it.children.add(content)
 }
 
 inline fun hyperLink(text: String, graphic: Node? = null, crossinline onAction: () -> Unit) =
