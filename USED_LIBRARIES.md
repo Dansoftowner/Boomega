@@ -171,3 +171,7 @@
 * [Wallpaper House](http://wallpaper-house.com)
 * [PassMater](https://www.deviantart.com/passmater)
 * [Freepik](https://www.freepik.com/)
+
+*Fonts:*
+* [Jetbrains Mono](https://www.jetbrains.com/lp/mono/)
+* [Poppins](https://fonts.google.com/specimen/Poppins)
