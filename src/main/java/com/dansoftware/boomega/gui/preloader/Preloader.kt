@@ -19,13 +19,13 @@
 package com.dansoftware.boomega.gui.preloader
 
 import com.dansoftware.boomega.gui.font.CustomFontsLoader
+import com.dansoftware.boomega.gui.util.shadowed
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.Scene
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
-import javafx.stage.WindowEvent
 import org.slf4j.LoggerFactory
 
 class Preloader : javafx.application.Preloader() {
@@ -56,7 +56,7 @@ class Preloader : javafx.application.Preloader() {
     private fun initApplicationName() {
         // Fixes the wrong app name on the top bar issue on Gnome systems
         // See more details: https://github.com/Dansoftowner/Boomega/issues/111
-        com.sun.glass.ui.Application.GetApplication().name = System.getProperty("app.name");
+        com.sun.glass.ui.Application.GetApplication().name = System.getProperty("app.name")
     }
 
     override fun handleStateChangeNotification(info: StateChangeNotification) {
@@ -79,7 +79,6 @@ class Preloader : javafx.application.Preloader() {
             is ShowNotification -> window.show()
         }
     }
-
 
     /**
      * Notification for hiding the preloader-window.
@@ -108,14 +107,6 @@ class Preloader : javafx.application.Preloader() {
             REGULAR
         }
     }
-
-    private fun Stage.shadowed() =
-        Stage(StageStyle.UTILITY).apply {
-            opacity = 0.0
-            this@shadowed.initOwner(this)
-            addEventHandler(WindowEvent.WINDOW_SHOWN) { this@shadowed.show() }
-            addEventHandler(WindowEvent.WINDOW_HIDING) { this@shadowed.hide() }
-        }
 
     companion object {
 

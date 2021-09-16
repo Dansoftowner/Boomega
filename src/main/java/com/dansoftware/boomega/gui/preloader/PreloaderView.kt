@@ -18,7 +18,10 @@
 
 package com.dansoftware.boomega.gui.preloader
 
-import com.dansoftware.boomega.gui.util.*
+import com.dansoftware.boomega.gui.util.asCentered
+import com.dansoftware.boomega.gui.util.stackPaneAlignment
+import com.dansoftware.boomega.gui.util.styleClass
+import com.dansoftware.boomega.gui.util.vgrow
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleStringProperty
@@ -67,15 +70,6 @@ class PreloaderView : VBox() {
     private class Logo() : ImageView() {
         init {
             styleClass.add("center-logo")
-            playAnimation()
-        }
-
-        private fun playAnimation() {
-            onScenePresent {
-                animatefx.animation
-                    .BounceIn(this)
-                    .play()
-            }
         }
     }
 }

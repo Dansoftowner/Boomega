@@ -22,9 +22,10 @@ package com.dansoftware.boomega.gui.util
 
 import javafx.scene.Node
 import javafx.stage.Stage
+import javafx.stage.StageStyle
 import javafx.stage.Window
+import javafx.stage.WindowEvent
 import java.util.*
-import java.util.stream.Collectors
 
 /**
  * Finds the corresponding [Window] to the particular [Node] object.
@@ -36,15 +37,18 @@ val Node?.window: Window?
     get() = this?.scene?.window
 
 /**
- * @see .getWindowOf
+ * Gets the node's window as a [Stage] instance
+ *
+ * @see window
  */
 val Node?.stage: Stage?
     get() = window as? Stage
 
+@Deprecated("")
 fun getWindowOptionalOf(node: Node?): Optional<Window> =
     Optional.ofNullable(node?.scene?.window)
 
-
+@Deprecated("")
 fun getStageOptionalOf(node: Node?): Optional<Stage?> =
     getWindowOptionalOf(node).map { window: Window? -> window as? Stage }
 
@@ -52,8 +56,18 @@ fun getStageOptionalOf(node: Node?): Optional<Stage?> =
  * Returns all [Stage]s that is owned by this [Stage].
  */
 val Stage.ownedStages: List<Stage>
-    get() = Window.getWindows().stream()
-        .filter { window: Window? -> window is Stage }
-        .map { window: Window -> window as Stage }
-        .filter { window: Stage -> window.owner == this }
-        .collect(Collectors.toList())
+    get() = Window.getWindows().asSequence()
+        .filterIsInstance<Stage>()
+        .filter { it.owner == this }
+        .toList()
+
+/**
+ * Wraps a stage into a "shadowed" stage that doesn't appear on the task-bar
+ */
+fun Stage.shadowed() =
+    Stage(StageStyle.UTILITY).apply {
+        opacity = 0.0
+        this@shadowed.initOwner(this)
+        addEventHandler(WindowEvent.WINDOW_SHOWN) { this@shadowed.show() }
+        addEventHandler(WindowEvent.WINDOW_HIDING) { this@shadowed.hide() }
+    }
