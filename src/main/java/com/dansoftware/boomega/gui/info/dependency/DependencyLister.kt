@@ -124,11 +124,6 @@ object DependencyLister {
             )
         ),
         DependencyInfo(
-            "JFoenix",
-            "http://www.jfoenix.com/",
-            LicenseInfo.apache20License()
-        ),
-        DependencyInfo(
             "JMetro",
             "https://pixelduke.com/java-javafx-theme-jmetro/",
             LicenseInfo(

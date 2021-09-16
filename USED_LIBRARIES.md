@@ -85,10 +85,6 @@
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
     <tr>
-        <td><a href="http://www.jfoenix.com/">JFoenix</a></td>
-        <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
-    </tr>
-    <tr>
         <td><a href="https://pixelduke.com/java-javafx-theme-jmetro/">JMetro</a></td>
         <td><a href="http://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_.28.22Revised_BSD_License.22.2C_.22New_BSD_License.22.2C_or_.22Modified_BSD_License.22.29">New BSD license</a></td>
     </tr>
