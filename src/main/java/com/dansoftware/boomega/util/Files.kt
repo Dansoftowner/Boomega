@@ -23,6 +23,7 @@ package com.dansoftware.boomega.util
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.boomega.util.os.OsInfo
 import com.juserdirs.UserDirectories
+import org.apache.commons.io.FileUtils
 import java.awt.Desktop
 import java.io.File
 import java.nio.file.InvalidPathException
@@ -162,4 +163,12 @@ fun File.shortenedPath(maxBack: Int, prefix: String = "...", separator: String =
     }
 
     return stringBuilder.toString()
+}
+
+/**
+ * Returns a human-readable version of the file size
+ */
+fun File.byteCountToDisplaySize(): String {
+    val size = FileUtils.sizeOf(this)
+    return FileUtils.byteCountToDisplaySize(size)
 }

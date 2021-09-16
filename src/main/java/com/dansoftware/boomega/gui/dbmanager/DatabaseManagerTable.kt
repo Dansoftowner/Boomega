@@ -15,330 +15,295 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.dansoftware.boomega.gui.dbmanager
 
-package com.dansoftware.boomega.gui.dbmanager;
-
-import com.dansoftware.boomega.db.DatabaseMeta;
-import com.dansoftware.boomega.gui.api.Context;
-import com.dansoftware.boomega.gui.entry.DatabaseTracker;
-import com.dansoftware.boomega.gui.util.ConcurrencyUtils;
-import com.dansoftware.boomega.gui.util.FXCollectionUtils;
-import com.dansoftware.boomega.gui.util.I18NButtonTypes;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.IntegerBinding;
-import javafx.collections.ObservableList;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.util.Callback;
-import org.apache.commons.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Stream;
-
-import static com.dansoftware.boomega.gui.util.Icons.icon;
-import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
+import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.util.*
+import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.util.byteCountToDisplaySize
+import com.dansoftware.boomega.util.revealInExplorer
+import javafx.beans.binding.Bindings
+import javafx.beans.binding.IntegerBinding
+import javafx.collections.ObservableList
+import javafx.scene.control.*
+import javafx.scene.control.cell.PropertyValueFactory
+import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
+import javafx.util.Callback
+import org.slf4j.LoggerFactory
+import java.io.File
 
 /**
- * A DBManagerTable is a {@link TableView} that is used for managing (monitoring, deleting) databases.
+ * A DBManagerTable is a [TableView] that is used for managing (monitoring, deleting) databases.
  *
- * <p>
- * It should only be used through a {@link DatabaseManagerView}.
- *
- * @author Daniel Gyorffy
  * @see DatabaseManagerView
+ * @author Daniel Gyoerffy
  */
-class DatabaseManagerTable extends TableView<DatabaseMeta>
-        implements DatabaseTracker.Observer {
+class DatabaseManagerTable(
+    private val context: Context,
+    private val databaseTracker: DatabaseTracker
+) : TableView<DatabaseMeta>(), DatabaseTracker.Observer {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseManagerTable.class);
+    private val itemsCount = Bindings.size(items)
+    private val selectedItemsCount = Bindings.size(selectionModel.selectedItems)
 
-    private final Context context;
-    private final DatabaseTracker databaseTracker;
-
-    private final IntegerBinding itemsCount;
-    private final IntegerBinding selectedItemsCount;
-
-    public DatabaseManagerTable(@NotNull Context context,
-                                @NotNull DatabaseTracker databaseTracker) {
-        this.context = context;
-        this.databaseTracker = databaseTracker;
-        this.databaseTracker.registerObserver(this);
-        this.itemsCount = Bindings.size(getItems());
-        this.selectedItemsCount = Bindings.size(getSelectionModel().getSelectedItems());
-        this.init(databaseTracker.getSavedDatabases());
+    init {
+        VBox.setVgrow(this, Priority.ALWAYS)
+        databaseTracker.registerObserver(this)
+        items.addAll(databaseTracker.savedDatabases)
+        selectionModel.selectionMode = SelectionMode.MULTIPLE
+        buildUI()
     }
 
-    private void init(Collection<DatabaseMeta> databases) {
-        this.getItems().addAll(databases);
-        this.setPlaceholder(new Label(i18n("database.manager.table.place.holder")));
-        Stream.of(
-                new StateColumn(),
-                new NameColumn(),
-                new PathColumn(),
-                new SizeColumn(),
-                new FileOpenerColumn(),
-                new DeleteColumn()
-        ).forEach(this.getColumns()::add);
-
-        this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        VBox.setVgrow(this, Priority.ALWAYS);
+    private fun buildUI() {
+        placeholder = Label(i18n("database.manager.table.place.holder"))
+        columns.add(StateColumn(databaseTracker))
+        columns.add(NameColumn())
+        columns.add(PathColumn())
+        columns.add(SizeColumn())
+        columns.add(FileOpenerColumn())
+        columns.add(DeleteColumn(context, databaseTracker))
     }
 
-    public IntegerBinding selectedItemsCount() {
-        return selectedItemsCount;
+    fun selectedItemsCount(): IntegerBinding {
+        return selectedItemsCount
     }
 
-    public IntegerBinding itemsCount() {
-        return itemsCount;
+    fun itemsCount(): IntegerBinding {
+        return itemsCount
     }
 
-    @Override
-    public void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        ConcurrencyUtils.runOnUiThread(this::refresh);
+    override fun onUsingDatabase(databaseMeta: DatabaseMeta) {
+        runOnUiThread { refresh() }
     }
 
-    @Override
-    public void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        ConcurrencyUtils.runOnUiThread(this::refresh);
+    override fun onClosingDatabase(databaseMeta: DatabaseMeta) {
+        runOnUiThread { refresh() }
     }
 
-    @Override
-    public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
-        ConcurrencyUtils.runOnUiThread(() -> this.getItems().add(databaseMeta));
+    override fun onDatabaseAdded(databaseMeta: DatabaseMeta) {
+        runOnUiThread { items.add(databaseMeta) }
     }
 
-    @Override
-    public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
-        ConcurrencyUtils.runOnUiThread(() -> this.getItems().remove(databaseMeta));
+    override fun onDatabaseRemoved(databaseMeta: DatabaseMeta) {
+        runOnUiThread { items.remove(databaseMeta) }
     }
 
-
-    /* ------------------- TABLE COLUMNS ---------------------- */
 
     /**
      * The state-column shows an error-mark (red circle) if the particular database does not exist.
      */
-    private final class StateColumn extends TableColumn<DatabaseMeta, String>
-            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
+    private class StateColumn(
+        private val databaseTracker: DatabaseTracker
+    ) : TableColumn<DatabaseMeta, String>(),
+        Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
-        StateColumn() {
-            setReorderable(false);
-            setSortable(false);
-            setResizable(false);
-            setPrefWidth(30);
-            setCellFactory(this);
+        init {
+            isReorderable = false
+            isSortable = false
+            isResizable = false
+            prefWidth = 30.0
+            cellFactory = this
         }
 
-        @Override
-        public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
-            return new TableCell<>() {
+        override fun call(tableColumn: TableColumn<DatabaseMeta, String>): TableCell<DatabaseMeta, String> {
+            return object : TableCell<DatabaseMeta, String>() {
+                private val NOT_EXISTS_CLASS = "state-indicator-file-not-exists"
+                private val USED_CLASS = "state-indicator-used"
 
-                private static final String NOT_EXISTS_CLASS = "state-indicator-file-not-exists";
-                private static final String USED_CLASS = "state-indicator-used";
-
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                        setTooltip(null);
-                    } else {
-
-                        DatabaseMeta databaseMeta = getTableView().getItems().get(getIndex());
-                        File dbFile = databaseMeta.getFile();
-                        if (!dbFile.exists() || dbFile.isDirectory()) {
-                            var indicator = icon("warning-icon");
-                            indicator.getStyleClass().add(NOT_EXISTS_CLASS);
-                            setGraphic(indicator);
-                            getTableRow().setTooltip(new Tooltip(i18n("file.not.exists")));
-                        } else if (DatabaseManagerTable.this.databaseTracker.isDatabaseUsed(databaseMeta)) {
-                            var indicator = icon("play-icon");
-                            indicator.getStyleClass().add(USED_CLASS);
-                            setGraphic(indicator);
-                            getTableRow().setTooltip(new Tooltip(i18n("database.currently.used")));
-                        } else {
-                            setGraphic(null);
-                            getTableRow().setTooltip(null);
+                override fun updateItem(item: String?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    when {
+                        empty -> {
+                            graphic = null
+                            text = null
+                            tooltip = null
                         }
-
+                        else -> {
+                            val databaseMeta = tableView.items[index]!!
+                            val dbFile = databaseMeta.file
+                            dbFile?.takeIf { it.exists() and !it.isDirectory }?.let {
+                                if (databaseTracker.isDatabaseUsed(databaseMeta)) {
+                                    graphic = icon("play-icon").styleClass(USED_CLASS)
+                                    tableRow.tooltip = Tooltip(i18n("database.currently.used"))
+                                } else {
+                                    graphic = null
+                                    tableRow.setTooltip(null)
+                                }
+                            } ?: run {
+                                graphic = icon("warning-icon").styleClass(NOT_EXISTS_CLASS)
+                                tooltip = Tooltip(i18n("file.not.exists"))
+                            }
+                        }
                     }
                 }
-            };
+            }
         }
     }
 
     /**
      * The name-column shows the name of the database.
      */
-    private static final class NameColumn extends TableColumn<DatabaseMeta, String> {
-        NameColumn() {
-            super(i18n("database.manager.table.column.name"));
-            setReorderable(false);
-            setCellValueFactory(new PropertyValueFactory<>("name"));
+    private class NameColumn : TableColumn<DatabaseMeta, String>(i18n("database.manager.table.column.name")) {
+        init {
+            isReorderable = false
+            cellValueFactory = PropertyValueFactory("name")
         }
     }
 
     /**
      * The path-column shows the filepath of the database
      */
-    private static final class PathColumn extends TableColumn<DatabaseMeta, String> {
-        PathColumn() {
-            super(i18n("database.manager.table.column.path"));
-            setReorderable(false);
-            setCellValueFactory(new PropertyValueFactory<>("file"));
+    private class PathColumn() : TableColumn<DatabaseMeta, String>(i18n("database.manager.table.column.path")) {
+        init {
+            isReorderable = false
+            cellValueFactory = PropertyValueFactory("file")
         }
     }
 
     /**
      * The size-column shows the file-size of the database
      */
-    private static final class SizeColumn extends TableColumn<DatabaseMeta, String>
-            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
+    private class SizeColumn :
+        TableColumn<DatabaseMeta, String>(i18n("database.manager.table.column.size")),
+        Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
-        SizeColumn() {
-            super(i18n("database.manager.table.column.size"));
-            setReorderable(false);
-            setCellFactory(this);
+        init {
+            isReorderable = false
+            cellFactory = this
         }
 
-        @Override
-        public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                        setText(null);
-                    } else {
-                        DatabaseMeta databaseMeta = getTableView().getItems().get(getIndex());
-                        File dbFile = databaseMeta.getFile();
-                        if (dbFile.exists() && !dbFile.isDirectory()) {
-                            long size = FileUtils.sizeOf(dbFile);
-                            String readableSize = FileUtils.byteCountToDisplaySize(size);
-                            setText(readableSize);
-                        } else {
-                            setText("-");
+        override fun call(tableColumn: TableColumn<DatabaseMeta, String>): TableCell<DatabaseMeta, String> {
+            return object : TableCell<DatabaseMeta, String>() {
+                override fun updateItem(item: String?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    when {
+                        empty -> {
+                            graphic = null
+                            text = null
+                        }
+                        else -> {
+                            val databaseMeta = tableView.items[index]!!
+                            val dbFile = databaseMeta.file
+                            text = dbFile?.takeIf { it.exists() and !it.isDirectory }?.byteCountToDisplaySize() ?: "-"
                         }
                     }
                 }
-            };
+            }
         }
     }
 
     /**
-     * The file-opener-column provides a {@link Button} to open the database-file in the native
+     * The file-opener-column provides a [Button] to open the database-file in the native
      * file-explorer.
      */
-    private static final class FileOpenerColumn extends TableColumn<DatabaseMeta, String>
-            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
+    private class FileOpenerColumn :
+        TableColumn<DatabaseMeta, String>(i18n("file.open_in_explorer")),
+        Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
-        FileOpenerColumn() {
-            super(i18n("file.open_in_explorer"));
-            setMinWidth(90);
-            setSortable(false);
-            setReorderable(false);
-            setCellFactory(this);
+        init {
+            minWidth = 90.0
+            isSortable = false
+            isReorderable = false
+            cellFactory = this
         }
 
-        @Override
-        public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        Button openButton = new Button();
-                        openButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        openButton.setGraphic(icon("folder-open-icon"));
-                        openButton.prefWidthProperty().bind(getTableColumn().widthProperty());
-                        openButton.setOnAction(event -> getTableView()
-                                .getSelectionModel()
-                                .getSelectedItems()
-                                .stream()
-                                .map(DatabaseMeta::getFile)
-                                .filter(Objects::nonNull)
-                                .forEach(com.dansoftware.boomega.util.FileUtils::revealInExplorer));
-                        openButton.disableProperty().bind(getTableRow().selectedProperty().not());
-                        setGraphic(openButton);
+        override fun call(tableColumn: TableColumn<DatabaseMeta, String>): TableCell<DatabaseMeta, String> {
+            return object : TableCell<DatabaseMeta, String>() {
+                override fun updateItem(item: String?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    when {
+                        empty -> {
+                            text = null
+                            graphic = null
+                        }
+                        else -> {
+                            graphic = Button().apply {
+                                contentDisplay = ContentDisplay.GRAPHIC_ONLY
+                                graphic = icon("folder-open-icon")
+                                maxWidth = Double.MAX_VALUE
+                                disableProperty().bind(tableRow.selectedProperty().not())
+                                setOnAction {
+                                    tableView
+                                        .selectionModel
+                                        .selectedItems
+                                        .asSequence()
+                                        .map(DatabaseMeta::file)
+                                        .filterNotNull()
+                                        .forEach(File::revealInExplorer)
+                                }
+                            }
+                        }
                     }
                 }
-            };
+            }
         }
     }
 
     /**
-     * The delete-column provides a {@link Button} to delete the selected database(s).
+     * The delete-column provides a [Button] to delete the selected database(s).
      */
-    private final class DeleteColumn extends TableColumn<DatabaseMeta, String>
-            implements Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
+    private class DeleteColumn(private val context: Context, private val databaseTracker: DatabaseTracker) :
+        TableColumn<DatabaseMeta, String>(i18n("database.manager.table.column.delete")),
+        Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
-        DeleteColumn() {
-            super(i18n("database.manager.table.column.delete"));
-            setReorderable(false);
-            setSortable(false);
-            setMinWidth(90);
-            setCellFactory(this);
+        init {
+            isReorderable = false
+            isSortable = false
+            minWidth = 90.0
+            cellFactory = this
         }
 
-        @Override
-        public TableCell<DatabaseMeta, String> call(TableColumn<DatabaseMeta, String> tableColumn) {
-            return new TableCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        Button deleteButton = new Button();
-                        deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        deleteButton.setGraphic(icon("database-minus-icon"));
-                        deleteButton.prefWidthProperty().bind(tableColumn.widthProperty());
-                        deleteButton.setOnAction(event -> {
-                            ObservableList<DatabaseMeta> selectedItems =
-                                    FXCollectionUtils.copy(getTableView().getSelectionModel().getSelectedItems());
-                            DBDeleteDialog dialog = new DBDeleteDialog();
-                            dialog.show(selectedItems);
-                        });
-                        deleteButton.disableProperty().bind(this.getTableRow().selectedProperty().not());
-                        setGraphic(deleteButton);
+        override fun call(tableColumn: TableColumn<DatabaseMeta, String>): TableCell<DatabaseMeta, String> {
+            return object : TableCell<DatabaseMeta, String>() {
+                override fun updateItem(item: String?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    when {
+                        empty -> {
+                            text = null
+                            graphic = null
+                        }
+                        else -> {
+                            graphic = Button().apply {
+                                contentDisplay = ContentDisplay.GRAPHIC_ONLY
+                                graphic = icon("database-minus-icon")
+                                maxWidth = Double.MAX_VALUE
+                                disableProperty().bind(tableRow.selectedProperty().not())
+                                setOnAction {
+                                    val dialog = DBDeleteDialog(context, databaseTracker)
+                                    dialog.show(tableView.selectedItems.copy())
+                                }
+                            }
+                        }
                     }
                 }
-            };
+            }
         }
     }
-
-    /* -------------------- */
 
     /**
      * A DBDeleteDialog is used for showing database-deleting dialog.
-     * It's used by the {@link DeleteColumn}.
+     * It's used by the [DeleteColumn].
      */
-    private final class DBDeleteDialog {
-
-        public void show(@NotNull ObservableList<DatabaseMeta> itemsToRemove) {
-            DatabaseManagerTable.this.context.showDialog(
-                    i18n("database.manager.confirm_delete.title", itemsToRemove.size()),
-                    new ListView<>(itemsToRemove),
-                    buttonType -> {
-                        if (Objects.equals(buttonType, I18NButtonTypes.YES)) {
-                            itemsToRemove.forEach(DatabaseManagerTable.this.databaseTracker::removeDatabase);
-                        }
-                    },
-                    I18NButtonTypes.YES,
-                    I18NButtonTypes.NO);
+    private class DBDeleteDialog(private val context: Context, private val databaseTracker: DatabaseTracker) {
+        fun show(itemsToRemove: ObservableList<DatabaseMeta>) {
+            context.showDialog(
+                title = i18n("database.manager.confirm_delete.title", itemsToRemove.size),
+                content = ListView(itemsToRemove),
+                onResult = {
+                    if (it.typeEquals(ButtonType.YES)) {
+                        itemsToRemove.forEach(databaseTracker::removeDatabase)
+                    }
+                },
+                I18NButtonTypes.YES,
+                I18NButtonTypes.NO
+            )
         }
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(DatabaseManagerTable::class.java)
     }
 }
