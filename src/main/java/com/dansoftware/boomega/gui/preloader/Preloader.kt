@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.preloader
 
 import com.dansoftware.boomega.gui.font.CustomFontsLoader
+import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.Scene
 import javafx.scene.paint.Color
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory
 
 class Preloader : javafx.application.Preloader() {
 
+    private val progressProperty = SimpleDoubleProperty()
     private val messageProperty = SimpleStringProperty()
     private lateinit var window: Stage
 
@@ -37,6 +39,7 @@ class Preloader : javafx.application.Preloader() {
 
         val ui = PreloaderView()
         ui.messageProperty.bind(messageProperty)
+        ui.progressProperty.bind(progressProperty)
         window = Stage(StageStyle.TRANSPARENT)
             .apply {
                 scene = Scene(ui).apply {
@@ -63,12 +66,18 @@ class Preloader : javafx.application.Preloader() {
     }
 
     override fun handleApplicationNotification(info: PreloaderNotification) {
-        if (!messageProperty.isBound && info is MessageNotification)
-            if (info.priority == MessageNotification.Priority.HIGH)
-                messageProperty.bind(SimpleStringProperty (info.message));
-            else messageProperty.set(info.message);
-        else if (info is HideNotification) window.hide();
-        else if (info is ShowNotification) window.show();
+        when(info) {
+            is MessageNotification ->
+                if (!messageProperty.isBound) {
+                    if (info.priority == MessageNotification.Priority.HIGH)
+                        messageProperty.bind(SimpleStringProperty(info.message))
+                    else
+                        messageProperty.set(info.message)
+                }
+            is ProgressNotification -> progressProperty.set(info.progress)
+            is HideNotification -> window.hide()
+            is ShowNotification -> window.show()
+        }
     }
 
 
@@ -81,6 +90,11 @@ class Preloader : javafx.application.Preloader() {
      * Notification for showing the preloader-window if its hidden.
      */
     class ShowNotification : PreloaderNotification
+
+    /**
+     * Notification for showing progress
+     */
+    class ProgressNotification(val progress: Double) : PreloaderNotification
 
     /**
      * Notification for sending messages to the preloader

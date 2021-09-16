@@ -136,6 +136,10 @@ inline fun <T : Node> T.vgrow(priority: Priority) = apply {
     GridPane.setVgrow(this, priority)
 }
 
+inline fun <T : Node> T.stackPaneAlignment(pos: Pos) = apply {
+    StackPane.setAlignment(this, pos)
+}
+
 inline fun <T : Control> T.tooltip(value: String) = apply {
     tooltip = Tooltip(value)
 }

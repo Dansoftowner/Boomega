@@ -18,14 +18,12 @@
 
 package com.dansoftware.boomega.gui.preloader
 
-import com.dansoftware.boomega.gui.util.asCentered
-import com.dansoftware.boomega.gui.util.onScenePresent
-import com.dansoftware.boomega.gui.util.styleClass
-import com.dansoftware.boomega.gui.util.vgrow
+import com.dansoftware.boomega.gui.util.*
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
+import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
 import javafx.scene.image.ImageView
@@ -50,8 +48,8 @@ class PreloaderView : VBox() {
                 Label(System.getProperty("app.name"))
                     .styleClass("logo-label")
                     .asCentered()
-            ).asCentered().vgrow(Priority.ALWAYS),
-            buildMessageLabel().asCentered(),
+            ).asCentered().vgrow(Priority.ALWAYS)
+                .apply { children.add(buildMessageLabel().stackPaneAlignment(Pos.BOTTOM_CENTER)) },
             buildProgressBar()
         )
     }
@@ -62,6 +60,7 @@ class PreloaderView : VBox() {
     }
 
     private fun buildMessageLabel() = Label().apply {
+        styleClass.add("message-label")
         textProperty().bind(messageProperty)
     }
 

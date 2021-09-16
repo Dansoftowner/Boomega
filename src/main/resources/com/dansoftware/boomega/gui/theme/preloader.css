@@ -4,7 +4,7 @@
     -fx-background-image: url(/com/dansoftware/boomega/image/backgrounds/preloader-background.png);
     -fx-background-position: center;
     /*-fx-border-color: #1f1f1f;*/
-    -fx-effect: dropshadow(three-pass-box, #000000, 10.0, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, .26), 50, 0.50, -1, 6);
     -fx-pref-width: 739px;
     -fx-pref-height: 453px;
 }
@@ -12,20 +12,22 @@
 .center-logo {
     -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_128.png");
     -fx-padding: 0 10 0 0;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, .26), 20, 0.19, -1, 6);
+    -fx-effect:  dropshadow(gaussian, rgba(0, 0, 0, .26), 50, 0.50, -1, 6);
 }
 
 .preloader-view .message-label {
     -fx-text-alignment: center;
     -fx-font-size: 20px;
+    -fx-font-family: "Poppins";
     -fx-text-fill: #dedede;
+    -fx-padding: 10;
 }
 
 .logo-label {
     -fx-font-family: "Poppins Bold";
     -fx-font-size: 6em;
     -fx-text-fill: white;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, .26), 20, 0.19, -1, 6);
+    -fx-effect:  dropshadow(gaussian, rgba(0, 0, 0, .26), 10, 0.12, -1, 2);
 }
 
 .progress-bar > .bar {

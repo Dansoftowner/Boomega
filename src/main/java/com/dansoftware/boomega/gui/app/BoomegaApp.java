@@ -24,7 +24,6 @@ import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity;
-import com.dansoftware.boomega.gui.font.CustomFontsLoader;
 import com.dansoftware.boomega.gui.keybinding.KeyBindings;
 import com.dansoftware.boomega.gui.preloader.Preloader.MessageNotification;
 import com.dansoftware.boomega.gui.preloader.Preloader.MessageNotification.Priority;
@@ -72,21 +71,27 @@ public class BoomegaApp extends BaseApplication {
         //the list that holds the actions that will be executed by the InitActivityLauncher
         final var queue = new ActivityLauncher.PostLaunchQueue();
         handleApplicationArgument(queue);
+        progress(0.2);
         loadPlugins(queue);
+        progress(0.4);
         Preferences preferences = readConfigurations(queue);
+        progress(0.6);
 
         if (!showFirstTimeActivity(preferences))
             applyBaseConfigurations(preferences);
         applyAdditionalConfigurations(preferences);
+        progress(0.8);
 
         logger.debug("Theme is: {}", Theme.getDefault());
         logger.debug("Locale is: {}", Locale.getDefault());
 
         final DatabaseTracker databaseTracker = DatabaseTracker.getGlobal();
         final LoginData loginData = readLoginData(preferences, databaseTracker);
+        progress(0.9);
 
         //searching for updates, if necessary
         final Release searchResult = searchForUpdates(preferences);
+        progress(1);
 
         //launching the main gui environment
         launchGUI(preferences, databaseTracker, loginData, searchResult, queue);

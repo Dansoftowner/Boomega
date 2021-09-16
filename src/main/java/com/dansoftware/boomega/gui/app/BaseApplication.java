@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.app;
 
 import com.dansoftware.boomega.db.DatabaseMeta;
-import com.dansoftware.boomega.gui.font.CustomFontsLoader;
 import com.dansoftware.boomega.gui.preloader.Preloader;
 import com.dansoftware.boomega.main.ArgumentParser;
 import com.sun.javafx.application.LauncherImpl;
@@ -55,6 +54,10 @@ public abstract class BaseApplication extends Application {
 
     protected void notifyPreloader(@Nls String i18n) {
         notifyPreloader(new Preloader.MessageNotification(i18n(i18n)));
+    }
+
+    protected void progress(double value) {
+        notifyPreloader(new Preloader.ProgressNotification(value));
     }
 
     protected void hidePreloader() {
