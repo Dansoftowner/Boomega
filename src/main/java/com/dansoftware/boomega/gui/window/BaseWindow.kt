@@ -136,6 +136,9 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
                         removeEventHandler(event.eventType, this)
                     }
                 })
+                focusedProperty().addListener { _, _, isFocused ->
+                    if (isFocused) MenuToolkit.toolkit().setApplicationMenu(menuBar.menus[0])
+                }
             }
             else -> {
                 logger.debug("MacOS is not detected: building JavaFX based menu-bar...")
