@@ -24,6 +24,7 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.menu.*
 import com.dansoftware.boomega.gui.menu.file.MacOsFileMenu
 import com.dansoftware.boomega.gui.menu.help.MacOsHelpMenu
+import javafx.scene.control.MenuBar
 
 /**
  * The menu-bar used on macOS
@@ -32,9 +33,10 @@ class MacOsMenuBar(
     databaseView: DatabaseView,
     preferences: Preferences,
     tracker: DatabaseTracker
-) : GeneralMacOsMenuBar(databaseView, preferences, tracker) {
+) : MenuBar() {
     init {
         menus.addAll(
+            MacOsApplicationMenu(databaseView, preferences, tracker),
             MacOsFileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
             ModuleMenu(databaseView),
             PreferencesMenu(databaseView, preferences, tracker),
