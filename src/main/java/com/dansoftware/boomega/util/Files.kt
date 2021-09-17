@@ -146,7 +146,7 @@ fun File.isExecutable(): Boolean {
  * @return the shortened path
  */
 fun File.shortenedPath(maxBack: Int, prefix: String = "...", separator: String = File.separator): String {
-    require(maxBack < 0)
+    require(maxBack > 0)
 
     val stringBuilder = StringBuilder()
 
