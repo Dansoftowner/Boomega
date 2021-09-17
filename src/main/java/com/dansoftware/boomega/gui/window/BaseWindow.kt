@@ -120,13 +120,18 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
         this.toFront()
     }
 
-    private fun buildMenuBarContent(content: Parent, menuBar: MenuBar?): Parent =
-        when {
-            menuBar == null -> content
-            OsInfo.isMac() -> content.apply {
+    private fun buildMenuBarContent(content: Parent, menuBar: MenuBar?): Parent {
+        logger.debug("Building menu-bar content...")
+        return when {
+            menuBar == null -> {
+                logger.debug("The given menu-bar is null")
+                content
+            }
+            OsInfo.isMac() -> content.also {
+                logger.debug("MacOS detected: adding event handler...")
                 addEventHandler(WindowEvent.WINDOW_SHOWN, object : EventHandler<WindowEvent> {
                     override fun handle(event: WindowEvent) {
-                        logger.debug("MacOS detected: building native menu bar...")
+                        logger.debug("Building native MacOS menu bar...")
                         MenuToolkit.toolkit().setMenuBar(this@BaseWindow, menuBar)
                         removeEventHandler(event.eventType, this)
                     }
@@ -137,6 +142,7 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
                 BorderPane(content).apply { top = menuBar }
             }
         }
+    }
 
     private fun setupIconPack() {
         this.icons.addAll(
