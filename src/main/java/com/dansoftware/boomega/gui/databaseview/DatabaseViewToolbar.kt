@@ -26,6 +26,7 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.util.byteCountToDisplaySize
 import com.dansoftware.boomega.util.revealInExplorer
 import javafx.application.Platform
 import javafx.geometry.Insets
@@ -34,7 +35,6 @@ import javafx.scene.Group
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
-import org.apache.commons.io.FileUtils
 
 class DatabaseViewToolbar(
     private val view: DatabaseView,
@@ -109,7 +109,7 @@ class DatabaseViewToolbar(
     private fun buildSizeIndicator() = Label().apply {
         padding = Insets(0.0, 5.0, 0.0, 0.0)
         val updateText = {
-            text = "${i18n("database_view.database_size")} ${FileUtils.byteCountToDisplaySize(view.databaseMeta.file?.length() ?: -1)}"
+            text = "${i18n("database_view.database_size")} ${view.databaseMeta.file?.byteCountToDisplaySize() ?: ""}"
         }
         updateText()
         view.databaseReadOnly.addListener {

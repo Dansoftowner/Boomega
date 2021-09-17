@@ -26,6 +26,7 @@ import com.juserdirs.UserDirectories
 import org.apache.commons.io.FileUtils
 import java.awt.Desktop
 import java.io.File
+import java.net.URL
 import java.nio.file.InvalidPathException
 import java.awt.Desktop.getDesktop as desktop
 import java.lang.Runtime.getRuntime as runtime
@@ -171,4 +172,11 @@ fun File.shortenedPath(maxBack: Int, prefix: String = "...", separator: String =
 fun File.byteCountToDisplaySize(): String {
     val size = FileUtils.sizeOf(this)
     return FileUtils.byteCountToDisplaySize(size)
+}
+
+/**
+ * Converts the array of [File]s into an array of [URL]s
+ */
+fun Array<File>.toURLS(): Array<URL> {
+    return Array(size) { this[it].toURI().toURL() }
 }

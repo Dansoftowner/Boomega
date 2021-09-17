@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.plugin
 
-import org.apache.commons.io.FileUtils
+import com.dansoftware.boomega.util.toURLS
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
@@ -66,7 +66,7 @@ object PluginDirectory {
      */
     fun getPluginFilesAsUrls(): Array<URL>? {
         return try {
-            FileUtils.toURLs(*getPluginFiles())
+            getPluginFiles().toURLS()
         } catch (e: IOException) {
             null
         }
