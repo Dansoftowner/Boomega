@@ -74,13 +74,13 @@ fun joinToFilePath(vararg elements: String): String =
  * Opens a folder containing the file and selects it in a default system file manager.
  */
 fun File.revealInExplorer() {
-    fun invokeNativeCommand() =
+    fun invokeNativeCommand() {
         when {
-            OsInfo.isWindows() -> runtime().exec("explorer.exe /root, \"$path\"")
+            OsInfo.isWindows() -> runtime().exec("explorer.exe /select, \"$path\"")
             OsInfo.isLinux() -> runtime().exec(arrayOf("nautilus", path))
-            OsInfo.isMac() -> runtime().exec(arrayOf("open", "-a", "Finder", path))
-            else -> null
+            OsInfo.isMac() -> runtime().exec(arrayOf("open", "-a", "Finder", path)) // alternatively: open -R <file path>
         }
+    }
 
     CachedExecutor.submit {
         when {
