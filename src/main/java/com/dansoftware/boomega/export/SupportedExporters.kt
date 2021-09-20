@@ -22,20 +22,35 @@ import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.export.excel.ExcelExporter
 import com.dansoftware.boomega.export.json.JsonExporter
 import com.dansoftware.boomega.export.yaml.YamlExporter
+import com.dansoftware.boomega.plugin.Plugins
+import com.dansoftware.boomega.plugin.api.RecordExporterPlugin
 import okhttp3.internal.toImmutableList
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.*
+
+private val logger: Logger = LoggerFactory.getLogger("SupportedExporters")
 
 /**
  * An immutable list of [RecordExporter]s can be used by the other parts of the app.
  * It includes exporters collected from plugins.
  */
 object SupportedExporters :
-    List<RecordExporter<*>> by LinkedList(loadBuiltInExporters() + loadExportersFromPlugins()).toImmutableList()
+    List<RecordExporter<*>> by LinkedList(loadExporters()).toImmutableList()
 
-private fun loadBuiltInExporters() = listOf(
+private fun loadExporters() =
+    loadBuiltInExporters().plus(loadExportersFromPlugins())
+        .onEach { logger.debug("Found exporter '{}'", it.javaClass.name) }
+        .toList()
+
+private fun loadBuiltInExporters() = sequenceOf(
     JsonExporter(),
     YamlExporter(),
     ExcelExporter()
 )
 
-private fun loadExportersFromPlugins() = listOf<RecordExporter<*>>() // TODO: collect from plugins
+private fun loadExportersFromPlugins() =
+    Plugins.getInstance()
+        .of(RecordExporterPlugin::class.java)
+        .asSequence()
+        .map(RecordExporterPlugin::exporter)
