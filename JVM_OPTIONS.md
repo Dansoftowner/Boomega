@@ -1,6 +1,10 @@
 # Required JVM options
 
 ```
+-Dhttps.protocols=TLSv1.2,TLSv1.1,TLSv1
+```
+
+```
 --add-exports javafx.base/com.sun.javafx=ALL-UNNAMED  
 --add-exports javafx.base/com.sun.javafx.runtime=ALL-UNNAMED
 --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
