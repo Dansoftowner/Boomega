@@ -58,6 +58,11 @@ interface RecordExporter<C : RecordExportConfiguration> {
     val contentTypeDescription: String
 
     /**
+     * Gives `false` if the exporter shouldn't be used yet
+     */
+    val isDisabled: Boolean get() = false
+
+    /**
      * Exports the given records.
      *
      * @param items the records the exporter should export

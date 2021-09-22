@@ -89,7 +89,7 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
                 SupportedExporters.map { exporter ->
                     MenuItem(exporter.name, exporter.icon).action {
                         recordsView.exportSelected(exporter)
-                    }
+                    }.apply { isDisable = exporter.isDisabled }
                 }
             )
             disableProperty().bind(itemsEmpty)

@@ -56,6 +56,9 @@ class YamlExporter : BaseExporter<YamlExportConfiguration>() {
     override val contentTypeDescription: String
         get() = "yaml files" // todo: i18n
 
+    override val isDisabled: Boolean
+        get() = true
+
     override fun write(
         items: List<Record>,
         output: OutputStream,

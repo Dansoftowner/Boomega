@@ -156,7 +156,7 @@ class RecordsViewToolbar(
             items.addAll(SupportedExporters.map {
                 MenuItem(it.name, it.icon).action { _ ->
                     view.exportSelected(it)
-                }
+                }.apply { isDisable = it.isDisabled }
             })
         }
 
