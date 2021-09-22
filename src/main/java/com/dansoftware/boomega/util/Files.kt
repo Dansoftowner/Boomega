@@ -149,7 +149,7 @@ fun File.isExecutable(): Boolean {
 fun File.shortenedPath(maxBack: Int, prefix: String = "...", separator: String = File.separator): String {
     require(maxBack > 0)
 
-    val stringBuilder = StringBuilder()
+    val stringBuilder = StringBuilder(name)
 
     var i = maxBack
     var lastParent: File? = parentFile
