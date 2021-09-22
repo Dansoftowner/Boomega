@@ -18,10 +18,11 @@
 
 package com.dansoftware.boomega.util;
 
+import com.dansoftware.boomega.util.os.OsInfo;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,8 +42,27 @@ public class FileUtilsTest {
         File file = new File("/A/B/C/D/E");
 
         String excepted = ".../C/D/E";
-        String actual = FileUtils.shortenedPath(file, 3, "...", "/");
+        String actual = FileUtils.shortenedPath(file, 2, "...", "/");
 
         assertThat(actual).isEqualTo(excepted);
+    }
+
+    @Test
+    void testIsExecutable() {
+        Stream<String> executables =
+                OsInfo.isWindows() ? Stream.of("exe", "msi") :
+                OsInfo.isLinux() ? Stream.of("deb", "rpm") :
+                        OsInfo.isMac() ? Stream.of("dmg", "app") :
+                                Stream.empty();
+
+        executables.map(ext -> new File("file." + ext))
+                .forEach(it -> assertThat(FileUtils.isExecutable(it)).isTrue());
+    }
+
+    @Test
+    void testIsNotExecutable() {
+        Stream.of("txt", "docx", "xlsx")
+                .map(ext -> new File("file." + ext))
+                .forEach(it -> assertThat(FileUtils.isExecutable(it)).isFalse());
     }
 }
