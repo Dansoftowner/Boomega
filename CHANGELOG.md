@@ -9,6 +9,7 @@
 
 ### Bug fixes/improvements
 
+* 🐛 [#158](https://github.com/Dansoftowner/Boomega/issues/158): Json export does not serialize languages
 * 🐛 Native MacOS menubar insertion fails
 
 # Boomega 0.7.5 (pre-release)
