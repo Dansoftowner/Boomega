@@ -38,19 +38,21 @@ class RecordProperty<T> private constructor(
     val isSortable: Boolean = Comparable::class.java.isAssignableFrom(typeClassReference),
     val getValue: (Record?) -> T?,
     val setValue: Record.(T) -> Unit,
-    vararg val typeScopes: Record.Type
+    val typeScopes: Array<Record.Type>
 ) {
 
     private constructor(
         id: String,
         name: String,
         typeClassReference: Class<T>,
+        isSortable: Boolean = Comparable::class.java.isAssignableFrom(typeClassReference),
         getValue: (Record?) -> T?,
         setValue: Record.(T) -> Unit
     ) : this(
         id = id,
         name = name,
         typeClassReference = typeClassReference,
+        isSortable = isSortable,
         getValue = getValue,
         setValue = setValue,
         typeScopes = Record.Type.values()
