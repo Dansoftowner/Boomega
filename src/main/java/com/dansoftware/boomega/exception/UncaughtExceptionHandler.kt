@@ -21,16 +21,12 @@ package com.dansoftware.boomega.exception
 import javafx.application.Platform
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.lang.IllegalStateException
 
 class UncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
-    companion object {
-        private val logger: Logger = LoggerFactory.getLogger(UncaughtExceptionHandler::class.java)
-    }
 
     override fun uncaughtException(t: Thread, e: Throwable) {
         logger.error("Uncaught exception occurred", e)
-        showGuiMessage(e)
+        if (e.isNotIgnored) showGuiMessage(e)
     }
 
     private fun showGuiMessage(e: Throwable) {
@@ -43,5 +39,16 @@ class UncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
                 UncaughtExceptionDialog(e).show()
             }
         }
+    }
+
+    private val Throwable.isNotIgnored: Boolean get() =
+        ignoredExceptions.find { this::class == it::class && message == it.message } == null
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(UncaughtExceptionHandler::class.java)
+
+        private val ignoredExceptions = listOf<Throwable>(
+            NullPointerException("Cannot invoke \"javafx.scene.Parent.getParent()\" because \"p\" is null")
+        )
     }
 }
