@@ -21,6 +21,7 @@ package com.dansoftware.boomega.export
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.export.excel.ExcelExporter
 import com.dansoftware.boomega.export.json.JsonExporter
+import com.dansoftware.boomega.export.txtable.TXTableExporter
 import com.dansoftware.boomega.export.yaml.YamlExporter
 import com.dansoftware.boomega.plugin.Plugins
 import com.dansoftware.boomega.plugin.api.RecordExporterPlugin
@@ -46,6 +47,7 @@ private fun loadExporters() =
 private fun loadBuiltInExporters() = sequenceOf(
     JsonExporter(),
     YamlExporter(),
+    TXTableExporter(),
     ExcelExporter()
 )
 
