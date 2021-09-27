@@ -91,6 +91,11 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
+            "java_text_tables",
+            "https://github.com/iNamik/java_text_tables",
+            LicenseInfo.mitLicense()
+        ),
+        DependencyInfo(
             "Jetbrains annotations",
             "https://github.com/JetBrains/java-annotations",
             LicenseInfo.apache20License()

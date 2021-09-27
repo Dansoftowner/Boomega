@@ -81,6 +81,10 @@ repositories {
     maven {
         url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2"
     }
+
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 configurations {
@@ -121,6 +125,7 @@ dependencies {
 
     implementation 'org.apache.poi:poi-ooxml:5.0.0' // Microsoft Documents
     implementation 'org.yaml:snakeyaml:1.21'
+    implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT'
     implementation 'org.jsoup:jsoup:1.14.2' // HTML parsing
     implementation 'com.google.code.gson:gson:2.8.8' // JSON Parsing
     implementation 'org.dizitart:nitrite:3.4.3' // NoSql database

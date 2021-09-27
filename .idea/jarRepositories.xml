@@ -71,5 +71,10 @@
       <option name="name" value="maven3" />
       <option name="url" value="https://sandec.jfrog.io/artifactory/repo" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven4" />
+      <option name="name" value="maven4" />
+      <option name="url" value="https://oss.sonatype.org/content/repositories/snapshots/" />
+    </remote-repository>
   </component>
 </project>
