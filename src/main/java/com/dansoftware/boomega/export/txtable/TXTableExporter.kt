@@ -26,6 +26,7 @@ import com.dansoftware.boomega.gui.export.ConfigurationDialog
 import com.dansoftware.boomega.gui.util.icon
 import com.inamik.text.tables.GridTable
 import com.inamik.text.tables.SimpleTable
+import com.inamik.text.tables.grid.Border
 import com.inamik.text.tables.grid.Util
 import javafx.scene.Node
 import java.io.OutputStream
@@ -60,80 +61,60 @@ class TXTableExporter : BaseExporter<TXTableConfiguration>() {
         config: TXTableConfiguration,
         observer: ExportProcessObserver
     ) {
-        PrintStream(output.buffered()).use {
+        PrintStream(output.buffered(), true, charset("UTF-8")).use {
             val grid = buildGrid(sortRecords(items, config), config)
             Util.print(grid, it)
         }
     }
 
     private fun buildGrid(items: List<Record>, config: TXTableConfiguration): GridTable {
-        val table = SimpleTable.of()
-        table.nextRow().apply {
+
+        val table = SimpleTable.of().run {
+            nextRow()
             config.requiredFields.forEach {
                 nextCell()
                 addLine(it.name)
+                applyHeaderConfigToCell(config)
             }
+
+            items.forEach { record ->
+                nextRow()
+                config.requiredFields.forEach { field ->
+                    nextCell()
+                    addLine(field.getValue(record)?.toString() ?: config.nullValuePlaceHolder)
+                    applyRegularConfigToCell(config)
+                }
+            }
+
+            toGrid()
         }
 
-        return table.toGrid();
-
-        /* val height = 10
-        val width = 10
-
-        val s: SimpleTable = SimpleTable.of()
-            .nextRow()
-            .nextCell()
-            .addLine("Left")
-            .addLine("Top")
-            .applyToCell(TOP_ALIGN.withHeight(height))
-            .applyToCell(LEFT_ALIGN.withWidth(width).withChar('^'))
-            .nextCell()
-            .addLine("Center")
-            .addLine("Top")
-            .applyToCell(TOP_ALIGN.withHeight(height))
-            .applyToCell(HORIZONTAL_CENTER.withWidth(width))
-            .nextCell()
-            .addLine("Right")
-            .addLine("Top")
-            .applyToCell(TOP_ALIGN.withHeight(height))
-            .applyToCell(RIGHT_ALIGN.withWidth(width))
-            .nextRow()
-            .nextCell()
-            .addLine("Left")
-            .addLine("Center")
-            .applyToCell(VERTICAL_CENTER.withHeight(height))
-            .applyToCell(LEFT_ALIGN.withWidth(width))
-            .nextCell()
-            .addLine("Center")
-            .addLine("Center")
-            .applyToCell(VERTICAL_CENTER.withHeight(height))
-            .applyToCell(HORIZONTAL_CENTER.withWidth(width).withChar('.'))
-            .nextCell()
-            .addLine("Right")
-            .addLine("Center")
-            .applyToCell(VERTICAL_CENTER.withHeight(height))
-            .applyToCell(RIGHT_ALIGN.withWidth(width))
-            .nextRow()
-            .nextCell()
-            .addLine("Left")
-            .addLine("Bottom")
-            .applyToCell(BOTTOM_ALIGN.withHeight(height))
-            .applyToCell(LEFT_ALIGN.withWidth(width))
-            .nextCell()
-            .addLine("Center")
-            .addLine("Bottom")
-            .applyToCell(BOTTOM_ALIGN.withHeight(height))
-            .applyToCell(HORIZONTAL_CENTER.withWidth(width))
-            .nextCell()
-            .addLine("Right")
-            .addLine("Bottom")
-            .applyToCell(BOTTOM_ALIGN.withHeight(height))
-            .applyToCell(RIGHT_ALIGN.withWidth(width).withChar('_'))
-
-        var g = s.toGrid()
-
-        g = Border.of(Border.Chars.of('+', '-', '|')).apply(g)
-
-        Util.print(g, PrintStream(output))*/
+        return config.border?.run {
+            Border.of(Border.Chars.of(intersect, horizontal, vertical)).apply(table)
+        } ?: table
     }
+
+    private fun SimpleTable.applyHeaderConfigToCell(config: TXTableConfiguration) {
+        applyToCell(config.headerVerticalAlignment.internalType.withHeight(config.headerHeight))
+        applyToCell(config.headerHorizontalAlignment.internalType.withWidth(config.headerMinWidth).withChar(config.headerPlaceHolderChar))
+    }
+
+    private fun SimpleTable.applyRegularConfigToCell(config: TXTableConfiguration) {
+        applyToCell(config.verticalAlignment.internalType.withHeight(config.regularHeight))
+        applyToCell(config.horizontalAlignment.internalType.withWidth(config.regularMinWidth).withChar(config.regularPlaceHolderChar))
+    }
+
+    private val TXTableConfiguration.HorizontalAlignment.internalType
+        get() = when (this) {
+            TXTableConfiguration.HorizontalAlignment.LEFT -> com.inamik.text.tables.Cell.Functions.LEFT_ALIGN
+            TXTableConfiguration.HorizontalAlignment.RIGHT -> com.inamik.text.tables.Cell.Functions.RIGHT_ALIGN
+            TXTableConfiguration.HorizontalAlignment.CENTER -> com.inamik.text.tables.Cell.Functions.HORIZONTAL_CENTER
+        }
+
+    private val TXTableConfiguration.VerticalAlignment.internalType
+        get() = when (this) {
+            TXTableConfiguration.VerticalAlignment.TOP -> com.inamik.text.tables.Cell.Functions.TOP_ALIGN
+            TXTableConfiguration.VerticalAlignment.CENTER -> com.inamik.text.tables.Cell.Functions.VERTICAL_CENTER
+            TXTableConfiguration.VerticalAlignment.BOTTOM -> com.inamik.text.tables.Cell.Functions.BOTTOM_ALIGN
+        }
 }

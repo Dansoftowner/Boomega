@@ -18,9 +18,13 @@
 
 package com.dansoftware.boomega.export.txtable
 
+import com.dansoftware.boomega.db.data.RecordProperty
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 
 class TXTableConfiguration : RecordExportConfiguration() {
+
+    override val availableFields: List<RecordProperty<*>>
+        get() = AVAILABLE_FIELDS
 
     var headerVerticalAlignment = VerticalAlignment.CENTER
 
@@ -36,6 +40,16 @@ class TXTableConfiguration : RecordExportConfiguration() {
 
     var regularHeight = 1
 
+    var headerMinWidth = 10
+
+    var regularMinWidth = 10
+
+    var headerPlaceHolderChar = ' '
+
+    var regularPlaceHolderChar = ' '
+
+    var nullValuePlaceHolder = "-"
+
     class Border(
         val intersect: Char = '+',
         val horizontal: Char = '-',
@@ -48,5 +62,11 @@ class TXTableConfiguration : RecordExportConfiguration() {
 
     enum class HorizontalAlignment {
         CENTER, LEFT, RIGHT
+    }
+
+    companion object {
+        private val AVAILABLE_FIELDS by lazy {
+            RecordProperty.allProperties - listOf(RecordProperty.SERVICE_CONNECTION, RecordProperty.NOTES)
+        }
     }
 }
