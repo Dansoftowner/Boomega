@@ -21,45 +21,93 @@ package com.dansoftware.boomega.export.txtable
 import com.dansoftware.boomega.db.data.RecordProperty
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 
+/**
+ * Configuration for the [TXTableExporter]
+ */
 class TXTableConfiguration : RecordExportConfiguration() {
 
     override val availableFields: List<RecordProperty<*>>
         get() = AVAILABLE_FIELDS
 
+    /**
+     * The vertical alignment for the column-cells
+     */
     var headerVerticalAlignment = VerticalAlignment.CENTER
 
+    /**
+     * The horizontal alignment for the column-cells
+     */
     var headerHorizontalAlignment = HorizontalAlignment.CENTER
 
+    /**
+     * The vertical alignment for the regular cells
+     */
     var verticalAlignment = VerticalAlignment.CENTER
 
+    /**
+     * The horizontal alignment for the regular cells
+     */
     var horizontalAlignment = HorizontalAlignment.CENTER
 
+    /**
+     * The border style of the table
+     */
     var border: Border? = Border()
 
+    /**
+     * The height of the header row
+     */
     var headerHeight = 1
 
+    /**
+     * The height of regular rows
+     */
     var regularHeight = 1
 
+    /**
+     * The minimum width of the header cells
+     */
     var headerMinWidth = 10
 
+    /**
+     * The minimum width of the regular cells
+     */
     var regularMinWidth = 10
 
+    /**
+     * The place-holder char to fill the header cell's empty area with
+     */
     var headerPlaceHolderChar = ' '
 
+    /**
+     * The place-holder char to fill the regular cell's empty area with
+     */
     var regularPlaceHolderChar = ' '
 
+    /**
+     * The place-holder string to replace null values in the cells
+     */
     var nullValuePlaceHolder = "-"
 
+    /**
+     * Represents the table's border
+     */
     class Border(
         val intersect: Char = '+',
         val horizontal: Char = '-',
         val vertical: Char = '|'
     )
 
+    /**
+     * Represents a vertical-alignment
+     */
     enum class VerticalAlignment {
         TOP, CENTER, BOTTOM
     }
 
+    /**
+     * Represents a horizontal-alignment
+     */
     enum class HorizontalAlignment {
         CENTER, LEFT, RIGHT
     }

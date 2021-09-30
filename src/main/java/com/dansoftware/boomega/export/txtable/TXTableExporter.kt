@@ -21,8 +21,8 @@ package com.dansoftware.boomega.export.txtable
 import com.dansoftware.boomega.db.data.Record
 import com.dansoftware.boomega.export.api.BaseExporter
 import com.dansoftware.boomega.export.api.ExportProcessObserver
-import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.export.ConfigurationDialog
+import com.dansoftware.boomega.gui.export.txtable.TXTableConfigurationDialog
 import com.dansoftware.boomega.gui.util.icon
 import com.inamik.text.tables.GridTable
 import com.inamik.text.tables.SimpleTable
@@ -32,7 +32,9 @@ import javafx.scene.Node
 import java.io.OutputStream
 import java.io.PrintStream
 
-
+/**
+ * Allows exporting [Record]s into txt tables.
+ */
 class TXTableExporter : BaseExporter<TXTableConfiguration>() {
 
     override val name: String
@@ -42,12 +44,7 @@ class TXTableExporter : BaseExporter<TXTableConfiguration>() {
         get() = icon("txt-icon")
 
     override val configurationDialog: ConfigurationDialog<TXTableConfiguration>
-        get() = object : ConfigurationDialog<TXTableConfiguration> {
-            override fun show(context: Context, onFinished: (TXTableConfiguration) -> Unit) {
-                onFinished(TXTableConfiguration())
-            }
-
-        }
+        get() = TXTableConfigurationDialog()
 
     override val contentType: String
         get() = "txt"
