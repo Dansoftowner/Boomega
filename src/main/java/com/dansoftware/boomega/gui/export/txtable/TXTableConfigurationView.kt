@@ -20,13 +20,12 @@ package com.dansoftware.boomega.gui.export.txtable
 
 import com.dansoftware.boomega.export.txtable.TXTableConfiguration
 import com.dansoftware.boomega.gui.export.control.BaseConfigurationView
+import com.dansoftware.boomega.gui.util.addRow
 import com.dansoftware.boomega.gui.util.scrollPane
 import com.dansoftware.boomega.i18n.i18n
 import javafx.geometry.Insets
 import javafx.scene.Node
-import javafx.scene.control.Button
-import javafx.scene.control.Tab
-import javafx.scene.control.TabPane
+import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.StackPane
@@ -100,7 +99,30 @@ class TXTableConfigurationView(
         }
 
         private fun buildUI() {
+            // TODO: i18n
 
+            addTextField("intersect:", config.border.intersect.toString()) {
+                config.border.intersect = it.getOrElse(0) { ' ' }
+            }
+            addTextField("horizontal separator:", config.border.horizontal.toString()) {
+                config.border.horizontal = it.getOrElse(0) { ' ' }
+            }
+            addTextField("vertical separator:", config.border.vertical.toString()) {
+                config.border.vertical = it.getOrElse(0) { ' ' }
+            }
         }
+
+
+        private inline fun addTextField(label: String, defaultText: String?, crossinline onTextChanged: (String) -> Unit) {
+            addRow(Label(label))
+            addRow(TextField(defaultText).apply {
+                textProperty().addListener { _, oldValue, newValue ->
+                    if (newValue.length > 1)
+                        textProperty().set(oldValue)
+                }
+
+            })
+        }
+
     }
 }

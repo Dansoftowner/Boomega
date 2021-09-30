@@ -52,7 +52,7 @@ class TXTableConfiguration : RecordExportConfiguration() {
     /**
      * The border style of the table
      */
-    var border: Border? = Border()
+    var border: Border = Border()
 
     /**
      * The height of the header row
@@ -93,9 +93,9 @@ class TXTableConfiguration : RecordExportConfiguration() {
      * Represents the table's border
      */
     class Border(
-        val intersect: Char = '+',
-        val horizontal: Char = '-',
-        val vertical: Char = '|'
+        var intersect: Char = '+',
+        var horizontal: Char = '-',
+        var vertical: Char = '|'
     )
 
     /**
