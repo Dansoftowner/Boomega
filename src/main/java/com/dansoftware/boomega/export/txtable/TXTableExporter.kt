@@ -86,9 +86,9 @@ class TXTableExporter : BaseExporter<TXTableConfiguration>() {
             toGrid()
         }
 
-        return config.border?.run {
+        return config.border.run {
             Border.of(Border.Chars.of(intersect, horizontal, vertical)).apply(table)
-        } ?: table
+        }
     }
 
     private fun SimpleTable.applyHeaderConfigToCell(config: TXTableConfiguration) {

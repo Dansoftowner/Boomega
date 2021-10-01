@@ -633,12 +633,12 @@
     -fx-pref-height: 30em;
 }
 
-.excel-configuration-view .style-view .category-label {
+.export-configuration-view .style-view .category-label {
     -fx-font-weight: bold;
     -fx-font-size: 1.1em;
 }
 
-.excel-configuration-view .tab-pane > .tab-header-area {
+.export-configuration-view .tab-pane > .tab-header-area {
     -fx-padding: 0;
 }
 

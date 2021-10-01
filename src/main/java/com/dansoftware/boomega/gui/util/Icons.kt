@@ -113,7 +113,12 @@ private val iconPack = mapOf<String, () -> Text>(
     "pause-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.PAUSE),
     "stop-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.STOP),
     "yaml-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.YAMMER),
-    "txt-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FILE)
+    "txt-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FILE),
+    "left-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_LEFT),
+    "right-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_RIGHT),
+    "center-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_CENTER),
+    "top-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_TOP),
+    "bottom-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_BOTTOM)
 )
 
 fun icon(identifier: String): Text = (

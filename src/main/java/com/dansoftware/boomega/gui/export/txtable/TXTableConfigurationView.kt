@@ -20,15 +20,12 @@ package com.dansoftware.boomega.gui.export.txtable
 
 import com.dansoftware.boomega.export.txtable.TXTableConfiguration
 import com.dansoftware.boomega.gui.export.control.BaseConfigurationView
-import com.dansoftware.boomega.gui.util.addRow
-import com.dansoftware.boomega.gui.util.scrollPane
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
 import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.*
-import javafx.scene.layout.BorderPane
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.StackPane
+import javafx.scene.layout.*
 import jfxtras.styles.jmetro.JMetroStyleClass
 import jfxtras.styles.jmetro.JMetroStyleClass.BACKGROUND
 
@@ -74,7 +71,7 @@ class TXTableConfigurationView(
         private fun buildUI() {
             // TODO: i18n
             tabs.add(tab("general", GeneralView(configuration)))
-            tabs.add(tab("formatting", scrollPane(StyleView(configuration))))
+            tabs.add(tab("formatting", scrollPane(StyleView(configuration), fitToWidth = true)))
         }
 
         private fun tab(title: String, content: Node) = Tab(title, content).apply {
@@ -84,10 +81,10 @@ class TXTableConfigurationView(
 
     private class GeneralView(exportConfiguration: TXTableConfiguration) :
         BaseConfigurationView<TXTableConfiguration>(exportConfiguration) {
-            init {
-                styleClass.add("general-view")
-            }
+        init {
+            styleClass.add("general-view")
         }
+    }
 
     private class StyleView(private val config: TXTableConfiguration) : GridPane() {
         init {
@@ -100,29 +97,158 @@ class TXTableConfigurationView(
 
         private fun buildUI() {
             // TODO: i18n
+            addGeneralSection()
+            addHeaderSection()
+            addRegularSection()
+        }
 
-            addTextField("intersect:", config.border.intersect.toString()) {
-                config.border.intersect = it.getOrElse(0) { ' ' }
-            }
-            addTextField("horizontal separator:", config.border.horizontal.toString()) {
-                config.border.horizontal = it.getOrElse(0) { ' ' }
-            }
-            addTextField("vertical separator:", config.border.vertical.toString()) {
-                config.border.vertical = it.getOrElse(0) { ' ' }
-            }
+        private fun addGeneralSection() {
+            addOneCharTextField("intersect:", config.border.intersect.toString(), config.border::intersect::set)
+            addOneCharTextField(
+                "horizontal separator:",
+                config.border.horizontal.toString(),
+                config.border::horizontal::set
+            )
+            addOneCharTextField("vertical separator:", config.border.vertical.toString(), config.border::vertical::set)
+        }
+
+        private fun addHeaderSection() {
+            addSectionLabel("Header row")
+            addOneCharTextField(
+                "Place holder:",
+                config.headerPlaceHolderChar.toString(),
+                config::headerPlaceHolderChar::set
+            )
+            addIntegerField(
+                "Min height",
+                defaultValue = config.headerHeight,
+                onValueChanged = config::headerHeight::set
+            )
+            addIntegerField(
+                "Min width",
+                defaultValue = config.headerMinWidth,
+                onValueChanged = config::headerMinWidth::set
+            )
         }
 
 
-        private inline fun addTextField(label: String, defaultText: String?, crossinline onTextChanged: (String) -> Unit) {
-            addRow(Label(label))
-            addRow(TextField(defaultText).apply {
-                textProperty().addListener { _, oldValue, newValue ->
-                    if (newValue.length > 1)
-                        textProperty().set(oldValue)
-                }
+        private fun addRegularSection() {
+            addSectionLabel("Regular rows")
+            addOneCharTextField(
+                "Place holder:",
+                config.regularPlaceHolderChar.toString(),
+                config::regularPlaceHolderChar::set
+            )
+            addTextField(
+                "Null value place holder:",
+                config.nullValuePlaceHolder,
+                config::nullValuePlaceHolder::set
+            )
+            addIntegerField(
+                "Min height",
+                defaultValue = config.regularHeight,
+                onValueChanged = config::regularHeight::set
+            )
+            addIntegerField(
+                "Min width",
+                defaultValue = config.regularMinWidth,
+                onValueChanged = config::regularMinWidth::set
+            )
+        }
 
+        private fun addSectionLabel(title: String) {
+            addRow(Label(title).styleClass("category-label").colspan(2).hgrow(Priority.ALWAYS))
+            addRow(Separator().colspan(2).hgrow(Priority.ALWAYS))
+        }
+
+        private inline fun addOneCharTextField(
+            label: String,
+            defaultText: String?,
+            crossinline onTextChanged: (Char) -> Unit
+        ) {
+            addRow(Label(label))
+            addRow(buildOneCharTextField(defaultText) {
+                onTextChanged(it.getOrElse(0) { ' ' })
             })
         }
 
+        private inline fun addIntegerField(
+            label: String,
+            min: Int = 1,
+            max: Int = Integer.MAX_VALUE,
+            defaultValue: Int = min,
+            crossinline onValueChanged: (Int) -> Unit
+        ) {
+            addRow(Label(label))
+            addRow(buildIntegerField(min, max, defaultValue, onValueChanged))
+        }
+
+        private inline fun addTextField(
+            label: String,
+            defaultText: String?,
+            crossinline onTextChanged: (String) -> Unit
+        ) {
+            addRow(Label(label))
+            addRow(buildTextField(defaultText, onTextChanged))
+        }
+
+        private inline fun buildIntegerField(
+            min: Int = 1,
+            max: Int = Integer.MAX_VALUE,
+            defaultValue: Int = min,
+            crossinline onValueChanged: (Int) -> Unit
+        ) = Spinner<Int>(min, max, defaultValue).apply {
+            valueProperty().addListener { _, _, newValue ->
+                onValueChanged(newValue)
+            }
+        }
+
+        private inline fun buildOneCharTextField(defaultText: String?, crossinline onTextChanged: (String) -> Unit) =
+            TextField(defaultText).apply {
+                setHgrow(this, Priority.ALWAYS)
+                maxWidth = Double.MAX_VALUE
+                textProperty().addListener { _, oldValue, newValue ->
+                    if (newValue.length > 1)
+                        textProperty().set(oldValue)
+                    onTextChanged(newValue)
+                }
+            }
+
+        private inline fun buildTextField(
+            defaultText: String?,
+            crossinline onTextChanged: (String) -> Unit
+        ) = TextField(defaultText).apply {
+            setHgrow(this, Priority.ALWAYS)
+            maxWidth = Double.MAX_VALUE
+            textProperty().addListener { _, _, newValue ->
+                onTextChanged(newValue)
+            }
+        }
+
+        // TODO: finish h-algin control
+        // TODO: v-align control
+
+        private class HAlignControl(onValueChanged: (TXTableConfiguration.HorizontalAlignment) -> Unit) : HBox(3.0) {
+
+            private val radioGroup = ToggleGroup().apply {
+                selectedToggleProperty().addListener { _, _, toggle ->
+
+                }
+            }
+
+            init {
+            }
+
+            private fun buildButton(
+                icon: Node,
+                tooltipText: String,
+                align: TXTableConfiguration.HorizontalAlignment
+            ) = Button().apply {
+                contentDisplay = ContentDisplay.GRAPHIC_ONLY
+                tooltip = Tooltip(tooltipText)
+                graphic = icon
+                properties["align-value"] = align
+            }
+        }
     }
 }
