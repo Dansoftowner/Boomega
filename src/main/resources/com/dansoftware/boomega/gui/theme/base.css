@@ -628,7 +628,7 @@
  *                                                                             *
  ******************************************************************************/
 
-.records-view-config-panel, .json-configuration-view, .excel-configuration-view {
+.export-configuration-view {
     -fx-pref-width: 30em;
     -fx-pref-height: 30em;
 }

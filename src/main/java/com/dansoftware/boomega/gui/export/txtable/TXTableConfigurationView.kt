@@ -39,7 +39,7 @@ class TXTableConfigurationView(
     private val exportConfiguration = TXTableConfiguration()
 
     init {
-        styleClass.addAll(BACKGROUND, "txtable-configuration-view")
+        styleClass.addAll(BACKGROUND, "export-configuration-view", "txtable-configuration-view")
         buildUI()
     }
 

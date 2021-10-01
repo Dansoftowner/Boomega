@@ -35,7 +35,7 @@ class JsonConfigurationView(
 ) : BaseConfigurationView<JsonExportConfiguration>(JsonExportConfiguration()) {
 
     init {
-        styleClass.add("json-configuration-view")
+        styleClass.addAll("json-configuration-view", "export-configuration-view")
         buildUI()
     }
 

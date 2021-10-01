@@ -29,6 +29,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import jfxtras.styles.jmetro.JMetroStyleClass
+import jfxtras.styles.jmetro.JMetroStyleClass.BACKGROUND
 
 class ExcelConfigurationView(
     private val onFinished: (ExcelExportConfiguration) -> Unit
@@ -38,7 +39,7 @@ class ExcelConfigurationView(
 
     init {
         VBox.setVgrow(this, Priority.ALWAYS)
-        styleClass.addAll(JMetroStyleClass.BACKGROUND, "excel-configuration-view")
+        styleClass.addAll(BACKGROUND, "export-configuration-view", "excel-configuration-view")
         buildUI()
     }
 
