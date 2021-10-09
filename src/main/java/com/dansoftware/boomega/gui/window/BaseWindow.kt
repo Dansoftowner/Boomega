@@ -21,10 +21,10 @@ package com.dansoftware.boomega.gui.window
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.theme.Theme
-import com.dansoftware.boomega.gui.util.loadImageResource
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.os.OsInfo
+import com.dansoftware.boomega.util.resImg
 import de.jangassen.MenuToolkit
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
@@ -149,11 +149,17 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
 
     private fun setupIconPack() {
         this.icons.addAll(
-            BaseWindow::class.loadImageResource(LOGO_16),
-            BaseWindow::class.loadImageResource(LOGO_32),
-            BaseWindow::class.loadImageResource(LOGO_128),
-            BaseWindow::class.loadImageResource(LOGO_256),
-            BaseWindow::class.loadImageResource(LOGO_512)
+            resImg(LOGO_16),
+            resImg(LOGO_20),
+            resImg(LOGO_24),
+            resImg(LOGO_32),
+            resImg(LOGO_40),
+            resImg(LOGO_48),
+            resImg(LOGO_64),
+            resImg(LOGO_96),
+            resImg(LOGO_128),
+            resImg(LOGO_256),
+            resImg(LOGO_512)
         )
     }
 
@@ -211,26 +217,56 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
         /**
          * The 16px icon's path.
          */
-        private const val LOGO_16 = "/com/dansoftware/boomega/image/logo/bookshelf_16.png"
+        private const val LOGO_16 = "/com/dansoftware/boomega/image/logo/boomega_cg_16.png"
+
+        /**
+         * The 20px icon's path.
+         */
+        private const val LOGO_20 = "/com/dansoftware/boomega/image/logo/boomega_cg_20.png"
+
+        /**
+         * The 24px icon's path.
+         */
+        private const val LOGO_24 = "/com/dansoftware/boomega/image/logo/boomega_cg_24.png"
 
         /**
          * The 32px icon's path.
          */
-        private const val LOGO_32 = "/com/dansoftware/boomega/image/logo/bookshelf_32.png"
+        private const val LOGO_32 = "/com/dansoftware/boomega/image/logo/boomega_cg_32.png"
+
+        /**
+         * The 40px icon's path.
+         */
+        private const val LOGO_40 = "/com/dansoftware/boomega/image/logo/boomega_cg_40.png"
+
+        /**
+         * The 48px icon's path.
+         */
+        private const val LOGO_48 = "/com/dansoftware/boomega/image/logo/boomega_cg_48.png"
+
+        /**
+         * The 64px icon's path.
+         */
+        private const val LOGO_64 = "/com/dansoftware/boomega/image/logo/boomega_cg_64.png"
+
+        /**
+         * The 96px icon's path.
+         */
+        private const val LOGO_96 = "/com/dansoftware/boomega/image/logo/boomega_cg_96.png"
 
         /**
          * The 128px icon's path.
          */
-        private const val LOGO_128 = "/com/dansoftware/boomega/image/logo/bookshelf_128.png"
+        private const val LOGO_128 = "/com/dansoftware/boomega/image/logo/boomega_cg_128.png"
 
         /**
          * The 256px icon's path.
          */
-        private const val LOGO_256 = "/com/dansoftware/boomega/image/logo/bookshelf_256.png"
+        private const val LOGO_256 = "/com/dansoftware/boomega/image/logo/boomega_cg_256.png"
 
         /**
          * The 512px icon's path.
          */
-        private const val LOGO_512 = "/com/dansoftware/boomega/image/logo/bookshelf_512.png"
+        private const val LOGO_512 = "/com/dansoftware/boomega/image/logo/boomega_cg_512.png"
     }
 }

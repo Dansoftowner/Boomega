@@ -266,7 +266,7 @@
 }
 
 .record-table-place-holder .image-view {
-    -fx-image: url("/com/dansoftware/boomega/image/logo/bookshelf_128_black.png");
+    -fx-image: url("/com/dansoftware/boomega/image/util/empty_black.png");
     -fx-opacity: 0.35;
 }
 
