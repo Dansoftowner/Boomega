@@ -20,24 +20,28 @@ package com.dansoftware.boomega.util
 
 import javafx.scene.image.Image
 import java.io.BufferedInputStream
+import java.io.InputStream
 import java.net.URL
 import kotlin.reflect.KClass
 
 /**
  * Gives the resource as a [URL].
  */
+@JvmOverloads
 fun res(path: String, clazz: KClass<*> = R::class): URL? =
     clazz.java.getResource(path)
 
 /**
  * Gives the resource as an [java.io.InputStream].
  */
-fun resStream(path: String, clazz: KClass<*> = R::class) =
+@JvmOverloads
+fun resStream(path: String, clazz: KClass<*> = R::class): InputStream? =
     clazz.java.getResourceAsStream(path)
 
 /**
  * Gives the resource loaded into an [Image] object
  */
+@JvmOverloads
 fun resImg(path: String, clazz: KClass<*> = R::class): Image? {
     return resStream(path, clazz)
         ?.let(::BufferedInputStream)
