@@ -160,7 +160,7 @@ fun File.shortenedPath(maxBack: Int, prefix: String = "...", separator: String =
     }
 
     lastParent?.let {
-        stringBuilder.insert(0, separator).insert(0, prefix).toString()
+        stringBuilder.insert(0, separator).insert(0, prefix)
     }
 
     return stringBuilder.toString()
