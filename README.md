@@ -14,7 +14,7 @@
 
 ![Screenshot](img/main-activity-preview.png)
 
-## :sparkles: Features
+## ✨ Features
 
 * Cross-platform
 * Dark/Light theme, modern UI
@@ -26,11 +26,11 @@
 * Plugin support (see [plugin guide](docs/PLUGIN_GUIDE.md))
 * ...and more!
 
-## :page_facing_up: Documentation
+## 📄 Documentation
 
 The detailed user guide is available [here](docs/USER_GUIDE.md).
 
-## :arrow_down: Download
+## ⬇️ Download
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?logo=linux&logoColor=white)]()
 [![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)](https://github.com/Dansoftowner/Boomega/releases)
 [![Version](https://img.shields.io/github/v/release/Dansoftowner/Boomega?include_prereleases)](https://github.com/Dansoftowner/Boomega/releases)
@@ -132,7 +132,7 @@ The detailed user guide is available [here](docs/USER_GUIDE.md).
 </tr>
 </table>
 
-## Source code
+## ⌨️Source code
 [![Java version](https://img.shields.io/badge/java-16-orange?logo=java&logoColor=white)](https://jdk.java.net/16/)
 [![Kotlin version](https://img.shields.io/badge/kotlin-1.5-purple?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
 [![Top language](https://img.shields.io/github/languages/top/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
@@ -149,7 +149,7 @@ The detailed user guide is available [here](docs/USER_GUIDE.md).
 * The build tool used is [Gradle](https://gradle.org/)
 * _Want to contribute?_ See the [contribution guideline](CONTRIBUTING.md).
 
-## :hammer: Build
+## 🔨 Build
 The recommended IDE for building this project is `IntelliJ Idea`.
 
 ### Build requirements
@@ -166,11 +166,11 @@ To build executable binaries, use `gradlew jpackage` ([see distribution guidelin
   ![Viewing third-party libraries in the app](img/BoomegaThirdPartyInfo.png)
 
 
-## Support
+## 💙 Support
 
 If you like this project, give a :star:!
 
 <a href='https://ko-fi.com/K3K24JK0V' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi1.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
-## :page_facing_up: License
+## 📄 License
 This software is licensed under the [GNU General Public License v3](https://en.wikipedia.org/wiki/GNU_General_Public_License).
