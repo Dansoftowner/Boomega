@@ -1,11 +1,17 @@
-# Third party software used by the app
+# Acknowledgements
 
-* [Used libraries](#used-libraries)
-* [Used libraries/frameworks for testing](#used-librariesframeworks-for-testing)
-* [Used Gradle plugins](#used-gradle-plugins)
+* [Used third-party software](#used-libraries)
+  * [Used libraries](#used-libraries) 
+  * [Used libraries/frameworks for testing](#used-librariesframeworks-for-testing)
+  * [Used Gradle plugins](#used-gradle-plugins)
 * [Other acknowledgements](#other-acknowledgements)
+  * [Application icon](#application-icon)
+  * [Wallpapers](#wallpapers)
+  * [Fonts](#fonts)
 
-## Used libraries
+## Used third-party software
+
+### Used libraries
 
 <table>
     <tr>
@@ -146,7 +152,7 @@
     </tr>
 </table>
 
-## Used libraries/frameworks for testing
+### Used libraries/frameworks for testing
 
 | Software | License |
 | -------- | ------- |
@@ -154,7 +160,7 @@
 | [AssertJ](https://assertj.github.io/doc/) | [Apache-2.0 License](https://github.com/assertj/assertj-core/blob/main/LICENSE.txt)
 | [Mockito](https://site.mockito.org/) | [MIT License](https://github.com/mockito/mockito/blob/release/3.x/LICENSE)
 
-## Used Gradle plugins
+### Used Gradle plugins
 
 | Software | License |
 | -----    | ------- |
@@ -164,14 +170,17 @@
 
 ## Other acknowledgements
 
-**Application icon:** [Freepik](https://www.flaticon.com/authors/freepik)
+### Application icon
 
-*Wallpapers:*
+The application icon is made by **Barnabás Joó** (📷: [@barnabas.joo](https://www.instagram.com/barnabas.joo)).
+
+### Wallpapers
 
 * [Wallpaper House](http://wallpaper-house.com)
 * [PassMater](https://www.deviantart.com/passmater)
 * [Freepik](https://www.freepik.com/)
 
-*Fonts:*
+### Fonts
+
 * [Jetbrains Mono](https://www.jetbrains.com/lp/mono/)
 * [Poppins](https://fonts.google.com/specimen/Poppins)

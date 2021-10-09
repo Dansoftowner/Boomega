@@ -160,15 +160,13 @@ If you want to run the project, simply use `gradlew run`. <br/>
 To build a fat jar, use `gradlew shadowJar`. <br/>
 To build executable binaries, use `gradlew jpackage` ([see distribution guideline](distribution/DISTRIBUTION_GUIDELINE.md))
 
-## Used third-party libraries
-* [Jump to list](USED_LIBRARIES.md)
-* ...or you can view them in the `Boomega Info`:<br>
-  ![Viewing third-party libraries in the app](img/BoomegaThirdPartyInfo.png)
+## 🏋️ Acknowledgements
 
+[Jump to list](ACKNOWLEDGEMENTS.md)
 
 ## 💙 Support
 
-If you like this project, give a :star:!
+If you like this project, give a ⭐!
 
 <a href='https://ko-fi.com/K3K24JK0V' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi1.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
