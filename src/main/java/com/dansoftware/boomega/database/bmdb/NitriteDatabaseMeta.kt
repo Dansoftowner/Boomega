@@ -16,9 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db.api
+package com.dansoftware.boomega.database.bmdb
 
-/**
- * Represents an option can be used for a particular database-system.
- */
-interface DatabaseOption
+import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.api.DatabaseProvider
+import java.io.File
+
+class NitriteDatabaseMeta(val name: String, val file: File, provider: DatabaseProvider) : DatabaseMeta(provider) {
+
+    override val url: String by lazy {
+        file.toURI().toURL().toExternalForm()
+    }
+
+
+
+}

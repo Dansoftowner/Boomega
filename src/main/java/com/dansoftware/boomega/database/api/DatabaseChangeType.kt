@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.dansoftware.boomega.database.api
 
-package com.dansoftware.boomega.db.api
-
-abstract class DatabaseMeta(val provider: DatabaseProvider) {
-    abstract val url: String
+enum class DatabaseChangeType {
+    INSERT, UPDATE, DELETE
 }

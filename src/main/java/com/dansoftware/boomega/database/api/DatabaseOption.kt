@@ -16,12 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db.api
+package com.dansoftware.boomega.database.api
 
 /**
- * Represents a specifiable value or credential used for a particular database-system.
+ * Represents an option can be used for a particular database-system.
  */
-interface DatabaseField {
-    val isRequired: Boolean
-    // TODO ...
-}
+interface DatabaseOption

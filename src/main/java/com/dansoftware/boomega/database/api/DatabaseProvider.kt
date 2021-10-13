@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db.api
+package com.dansoftware.boomega.database.api
 
 import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.gui.api.Context
