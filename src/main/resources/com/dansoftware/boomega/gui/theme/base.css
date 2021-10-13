@@ -632,7 +632,7 @@
  *                                                                             *
  ******************************************************************************/
 
-.export-configuration-view {
+.records-view-config-panel, .export-configuration-view {
     -fx-pref-width: 30em;
     -fx-pref-height: 30em;
 }
