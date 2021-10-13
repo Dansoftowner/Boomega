@@ -391,6 +391,10 @@
     -fx-image: url("/com/dansoftware/boomega/image/logo/boomega_b_32.png");
 }
 
+.login-box .header .label {
+    -fx-opacity: .8;
+}
+
 /*******************************************************************************
  *                                                                             *
  *                                  Database manager                           *
@@ -716,6 +720,10 @@
 .database-view .tab-view .module-view .label-area * {
     -fx-font-family: "Jetbrains Mono";
     -fx-font-size: 40;
+}
+
+.database-view .tab-view .module-view .label-area .label {
+    -fx-opacity: .8;
 }
 
 .database-view .tab-view .module-view .label-area .glyph-icon {
