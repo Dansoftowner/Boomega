@@ -6,6 +6,7 @@
 
 * ✨ MacOS specific menu-bar
 * 💄 Look and feel updates
+* 💄 New application icon
 
 ### Bug fixes/improvements
 
