@@ -32,9 +32,9 @@ import java.util.Collections.unmodifiableList
  * @author Daniel Gyorffy
  * @see Nitrite
  */
-open class NitriteDatabase @JvmOverloads constructor(
+open class NitriteDatabase(
     private val nitriteClient: Nitrite,
-    override val meta: DatabaseMeta = NitriteDatabaseMeta(toString(), File(""), BMDBProvider)
+    override val meta: DatabaseMeta
 ) : Database {
 
     private val listeners: MutableSet<DatabaseChangeListener<Record>> = HashSet()

@@ -16,12 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.database.api
+package com.dansoftware.boomega.database.bmdb
 
-abstract class DatabaseMeta(val provider: DatabaseProvider) {
-    abstract val url: String
+import org.dizitart.no2.Nitrite
+import java.io.File
 
-    override fun toString(): String {
-        return url
-    }
-}
+/*
+class BMDBDatabase(
+    username: String,
+    password: String,
+    file: File,
+    isCompressed: Boolean = true,
+    autoCommitBufferSize: Int = 1024
+) : NitriteDatabase(
+    Nitrite.builder()
+        .autoCommitBufferSize(autoCommitBufferSize)
+        .filePath(file)
+        .run { if (isCompressed) compressed() else this }
+        .openOrCreate(username, password),
+
+)*/

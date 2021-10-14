@@ -20,14 +20,22 @@ package com.dansoftware.boomega.database.bmdb
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
+import com.dansoftware.boomega.util.shortenedPath
 import java.io.File
 
-class NitriteDatabaseMeta(val name: String, val file: File, provider: DatabaseProvider) : DatabaseMeta(provider) {
+class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
 
     override val url: String by lazy {
         file.toURI().toURL().toExternalForm()
     }
 
+    private val stringFormat by lazy {
+        String.format("%s (%s)", name, file.shortenedPath(maxBack = 1))
+    }
 
+    constructor(file: File) : this(file.nameWithoutExtension, file)
 
+    override fun toString(): String {
+        return stringFormat
+    }
 }
