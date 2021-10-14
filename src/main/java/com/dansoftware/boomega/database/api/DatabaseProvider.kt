@@ -75,14 +75,12 @@ interface DatabaseProvider<M : DatabaseMeta> {
      *                     the login form will try to authenticate
      *                     the database based on it.
      * @param options the initial database options
-     * @param onDatabaseAuthenticated the action to perform when the user successfully logged in
      */
     fun buildUILoginForm(
         context: Context,
         databaseMeta: ReadOnlyObjectProperty<M>,
-        options: Map<DatabaseOption<*>, Any>,
-        onDatabaseAuthenticated: (Database) -> Unit
-    ): Region
+        options: Map<DatabaseOption<*>, Any>
+    ): LoginForm
 
     /**
      * Builds a basic UI registration form
@@ -93,7 +91,6 @@ interface DatabaseProvider<M : DatabaseMeta> {
      */
     fun buildUIRegistrationForm(
         context: Context,
-        options: Map<DatabaseOption<*>, Any>,
-        onDatabaseCreated: (M) -> Unit
-    )
+        options: Map<DatabaseOption<*>, Any>
+    ): RegistrationForm
 }

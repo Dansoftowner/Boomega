@@ -18,16 +18,11 @@
 
 package com.dansoftware.boomega.database.bmdb
 
-import com.dansoftware.boomega.database.api.DatabaseField
-import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.api.DatabaseOption
-import com.dansoftware.boomega.database.api.DatabaseProvider
-import com.dansoftware.boomega.database.api.Database
+import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.icon
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
-import javafx.scene.layout.Region
 import java.io.File
 
 object BMDBProvider : DatabaseProvider<BMDBMeta> {
@@ -77,17 +72,15 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
     override fun buildUILoginForm(
         context: Context,
         databaseMeta: ReadOnlyObjectProperty<BMDBMeta>,
-        options: Map<DatabaseOption<*>, Any>,
-        onDatabaseAuthenticated: (Database) -> Unit
-    ): Region {
+        options: Map<DatabaseOption<*>, Any>
+    ): LoginForm {
         TODO("Not yet implemented")
     }
 
     override fun buildUIRegistrationForm(
         context: Context,
-        options: Map<DatabaseOption<*>, Any>,
-        onDatabaseCreated: (BMDBMeta) -> Unit
-    ) {
+        options: Map<DatabaseOption<*>, Any>
+    ): RegistrationForm {
         TODO("Not yet implemented")
     }
 }
