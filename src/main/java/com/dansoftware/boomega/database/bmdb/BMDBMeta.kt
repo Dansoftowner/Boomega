@@ -25,9 +25,8 @@ import java.io.File
 
 class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
 
-    override val url: String by lazy {
-        file.toURI().toURL().toExternalForm()
-    }
+    override val url: String
+        get() = file.absolutePath
 
     private val stringFormat by lazy {
         String.format("%s (%s)", name, file.shortenedPath(maxBack = 1))

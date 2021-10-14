@@ -21,18 +21,17 @@ package com.dansoftware.boomega.database.bmdb
 import org.dizitart.no2.Nitrite
 import java.io.File
 
-/*
 class BMDBDatabase(
     username: String,
     password: String,
-    file: File,
+    meta: BMDBMeta,
     isCompressed: Boolean = true,
     autoCommitBufferSize: Int = 1024
 ) : NitriteDatabase(
     Nitrite.builder()
         .autoCommitBufferSize(autoCommitBufferSize)
-        .filePath(file)
+        .filePath(meta.file)
         .run { if (isCompressed) compressed() else this }
         .openOrCreate(username, password),
-
-)*/
+    meta
+)

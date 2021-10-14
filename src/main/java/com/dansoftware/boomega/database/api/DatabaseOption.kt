@@ -21,4 +21,13 @@ package com.dansoftware.boomega.database.api
 /**
  * Represents an option can be used for a particular database-system.
  */
-interface DatabaseOption
+open class DatabaseOption<T>(
+    val name: String,
+    val description: String? = null,
+    val type: Class<T>,
+    val defaultValue: T
+) {
+    fun getValueFrom(map: Map<DatabaseOption<*>, Any>): T {
+        return map.getOrDefault(this, this.defaultValue as Any) as T
+    }
+}

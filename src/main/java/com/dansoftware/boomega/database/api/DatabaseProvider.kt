@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.database.api
 
-import com.dansoftware.boomega.db.Database
 import com.dansoftware.boomega.gui.api.Context
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
@@ -27,7 +26,7 @@ import javafx.scene.layout.Region
 /**
  * A flexible abstraction of a particular database-system.
  */
-interface DatabaseProvider {
+interface DatabaseProvider<M : DatabaseMeta> {
 
     /**
      * Gives the name of the Database system (e.g. "MySql" or "MongoDb")
@@ -42,7 +41,7 @@ interface DatabaseProvider {
     /**
      * Gives the list of the configurable options can be used for the database
      */
-    val availableOptions: List<DatabaseOption>
+    val availableOptions: List<DatabaseOption<*>>
 
     /**
      * Gives the list of fields can be used for
@@ -63,8 +62,9 @@ interface DatabaseProvider {
      * @param options the initial database options
      */
     fun getDatabase(
+        meta: M,
         credentials: Map<DatabaseField, Any?>,
-        options: List<DatabaseOption>
+        options: Map<DatabaseOption<*>, Any>
     ): Database
 
     /**
@@ -79,8 +79,8 @@ interface DatabaseProvider {
      */
     fun buildUILoginForm(
         context: Context,
-        databaseMeta: ReadOnlyObjectProperty<DatabaseMeta>,
-        options: List<DatabaseOption>,
+        databaseMeta: ReadOnlyObjectProperty<M>,
+        options: Map<DatabaseOption<*>, Any>,
         onDatabaseAuthenticated: (Database) -> Unit
     ): Region
 
@@ -93,7 +93,7 @@ interface DatabaseProvider {
      */
     fun buildUIRegistrationForm(
         context: Context,
-        options: List<DatabaseOption>,
-        onDatabaseCreated: (DatabaseMeta) -> Unit
+        options: Map<DatabaseOption<*>, Any>,
+        onDatabaseCreated: (M) -> Unit
     )
 }

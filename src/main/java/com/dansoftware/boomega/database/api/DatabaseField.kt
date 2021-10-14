@@ -21,7 +21,6 @@ package com.dansoftware.boomega.database.api
 /**
  * Represents a specifiable value or credential used for a particular database-system.
  */
-interface DatabaseField {
-    val isRequired: Boolean
+open class DatabaseField(val isRequired: Boolean = true) {
     // TODO ...
 }

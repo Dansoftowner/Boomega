@@ -22,15 +22,22 @@ import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseOption
 import com.dansoftware.boomega.database.api.DatabaseProvider
-import com.dansoftware.boomega.db.Database
+import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.icon
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
 import javafx.scene.layout.Region
+import java.io.File
 
-object BMDBProvider : DatabaseProvider {
+object BMDBProvider : DatabaseProvider<BMDBMeta> {
 
+    val USERNAME_FIELD = DatabaseField()
+    val PASSWORD_FIELD = DatabaseField()
+
+    // TODO: i18n
+    val COMPRESSED = DatabaseOption(name = "Compress", type = Boolean::class.java, defaultValue = true)
+    val AUTO_COMMIT_BUFFER_SIZE = DatabaseOption(name = "Auto commit buffer size", type = Int::class.java, defaultValue = 1024)
 
     // TODO: i18n
     override val name: String
@@ -39,25 +46,38 @@ object BMDBProvider : DatabaseProvider {
     override val icon: Node
         get() = icon("file-icon")
 
-    override val availableOptions: List<DatabaseOption>
-        get() = TODO("Not yet implemented")
+    override val availableOptions: List<DatabaseOption<*>> = listOf(
+        COMPRESSED,
+        AUTO_COMMIT_BUFFER_SIZE
+    )
 
-
-    override val fields: List<DatabaseField>
-        get() = TODO("Not yet implemented")
+    override val fields: List<DatabaseField> = listOf(
+        USERNAME_FIELD,
+        PASSWORD_FIELD
+    )
 
     override fun getMeta(url: String): DatabaseMeta {
-        TODO("Not yet implemented")
+        return BMDBMeta(File(url))
     }
 
-    override fun getDatabase(credentials: Map<DatabaseField, Any?>, options: List<DatabaseOption>): Database {
-        TODO("Not yet implemented")
+    override fun getDatabase(
+        meta: BMDBMeta,
+        credentials: Map<DatabaseField, Any?>,
+        options: Map<DatabaseOption<*>, Any>
+    ): Database {
+        return BMDBDatabase(
+            credentials[USERNAME_FIELD].toString(),
+            credentials[PASSWORD_FIELD].toString(),
+            meta,
+            isCompressed = COMPRESSED.getValueFrom(options),
+            autoCommitBufferSize = AUTO_COMMIT_BUFFER_SIZE.getValueFrom(options)
+        )
     }
 
     override fun buildUILoginForm(
         context: Context,
-        databaseMeta: ReadOnlyObjectProperty<DatabaseMeta>,
-        options: List<DatabaseOption>,
+        databaseMeta: ReadOnlyObjectProperty<BMDBMeta>,
+        options: Map<DatabaseOption<*>, Any>,
         onDatabaseAuthenticated: (Database) -> Unit
     ): Region {
         TODO("Not yet implemented")
@@ -65,8 +85,8 @@ object BMDBProvider : DatabaseProvider {
 
     override fun buildUIRegistrationForm(
         context: Context,
-        options: List<DatabaseOption>,
-        onDatabaseCreated: (DatabaseMeta) -> Unit
+        options: Map<DatabaseOption<*>, Any>,
+        onDatabaseCreated: (BMDBMeta) -> Unit
     ) {
         TODO("Not yet implemented")
     }

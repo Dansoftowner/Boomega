@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.database
 
 import com.dansoftware.boomega.database.api.DatabaseProvider
+import com.dansoftware.boomega.database.bmdb.BMDBProvider
 import com.dansoftware.boomega.util.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -26,13 +27,15 @@ import java.util.*
 
 private val logger: Logger = LoggerFactory.getLogger("SupportedExporters")
 
-object SupportedDatabases : List<DatabaseProvider> by LinkedList(loadProviders()).toImmutableList()
+object SupportedDatabases : List<DatabaseProvider<*>> by LinkedList(loadProviders()).toImmutableList()
 
 private fun loadProviders() =
     loadBuiltInProviders().plus(loadProvidersFromPlugins())
         .onEach { logger.debug("Found database provider '{}'", it.javaClass.name) }
         .toList()
 
-private fun loadBuiltInProviders() = sequenceOf<DatabaseProvider>()
+private fun loadBuiltInProviders() = sequenceOf<DatabaseProvider<*>>(
+    BMDBProvider
+)
 
-private fun loadProvidersFromPlugins() = sequenceOf<DatabaseProvider>() // TODO: load from plugins
+private fun loadProvidersFromPlugins() = sequenceOf<DatabaseProvider<*>>() // TODO: load from plugins
