@@ -20,6 +20,7 @@ package com.dansoftware.boomega.database.bmdb
 
 import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.database.bmdb.BMDBLoginForm
 import com.dansoftware.boomega.gui.util.icon
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
@@ -78,8 +79,8 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
         context: Context,
         databaseMeta: ReadOnlyObjectProperty<BMDBMeta>,
         options: Map<DatabaseOption<*>, Any>
-    ): LoginForm {
-        TODO("Not yet implemented")
+    ): LoginForm<BMDBMeta> {
+        return BMDBLoginForm(context, databaseMeta, options)
     }
 
     override fun buildUIRegistrationForm(
