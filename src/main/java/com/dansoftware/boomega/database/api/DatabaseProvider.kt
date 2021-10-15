@@ -80,7 +80,7 @@ interface DatabaseProvider<M : DatabaseMeta> {
         context: Context,
         databaseMeta: ReadOnlyObjectProperty<M>,
         options: Map<DatabaseOption<*>, Any>
-    ): LoginForm
+    ): LoginForm<*>
 
     /**
      * Builds a basic UI registration form

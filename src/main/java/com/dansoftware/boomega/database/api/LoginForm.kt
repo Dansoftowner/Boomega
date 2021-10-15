@@ -22,10 +22,13 @@ import com.dansoftware.boomega.gui.api.Context
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.layout.Region
 
-abstract class LoginForm(
+abstract class LoginForm<M : DatabaseMeta>(
     protected val context: Context,
-    protected val databaseMeta: ReadOnlyObjectProperty<DatabaseMeta>,
+    protected val databaseMeta: ReadOnlyObjectProperty<M>,
     protected val options: Map<DatabaseOption<*>, Any>
 ) : Region() {
+
+    abstract val fields: Map<DatabaseField, Any>
+
     abstract fun login(): Database
 }
