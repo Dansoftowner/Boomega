@@ -27,12 +27,17 @@ import java.io.File
 
 object BMDBProvider : DatabaseProvider<BMDBMeta> {
 
-    val USERNAME_FIELD = DatabaseField()
-    val PASSWORD_FIELD = DatabaseField()
-
     // TODO: i18n
-    val COMPRESSED = DatabaseOption(name = "Compress", type = Boolean::class.java, defaultValue = true)
-    val AUTO_COMMIT_BUFFER_SIZE = DatabaseOption(name = "Auto commit buffer size", type = Int::class.java, defaultValue = 1024)
+
+    val USERNAME_FIELD =
+        DatabaseField(id = "usrnm", name = "Username")
+    val PASSWORD_FIELD =
+        DatabaseField(id = "psswrd", name = "Password")
+
+    val COMPRESSED =
+        DatabaseOption(id = "cmprsd", name = "Compress", type = Boolean::class.java, defaultValue = true)
+    val AUTO_COMMIT_BUFFER_SIZE =
+        DatabaseOption(id = "bfs", name = "Auto commit buffer size", type = Int::class.java, defaultValue = 1024)
 
     // TODO: i18n
     override val name: String

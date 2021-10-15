@@ -22,6 +22,7 @@ package com.dansoftware.boomega.database.api
  * Represents an option can be used for a particular database-system.
  */
 open class DatabaseOption<T>(
+    val id: String,
     val name: String,
     val description: String? = null,
     val type: Class<T>,
