@@ -85,6 +85,36 @@
     -fx-background-color: red;
 }
 
+.rounded-tab-pane {
+    -fx-tab-min-height: 2.4em;
+    -fx-tab-max-height: 2.4em;
+    -fx-tab-max-width: 17em;
+}
+
+.rounded-tab-pane > .tab-header-area  {
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em 0.166667em 0.0em 0.3em;
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region  {
+    -fx-padding: 4 5 5 4;
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-padding: 0.083333em 0.8em 0.0769em 0.8em;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-background-color: transparent;
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-padding: 0 5 0 0;
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region > .tab .tab-close-button {
+    -fx-opacity: 0.65;
+}
+
 /*******************************************************************************
  *                                                                             *
  *                                  SplitPane                                  *
@@ -681,36 +711,6 @@
     -fx-border-width: 1 0 1 0;
     -fx-pref-height: 25;
     -fx-font-size: 12px;
-}
-
-.database-view .tab-view > .tab-pane {
-    -fx-tab-min-height: 2.4em;
-    -fx-tab-max-height: 2.4em;
-    -fx-tab-max-width: 17em;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area  {
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em 0.166667em 0.0em 0.3em;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region  {
-    -fx-padding: 4 5 5 4;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab {
-    -fx-padding: 0.083333em 0.8em 0.0769em 0.8em;
-    -fx-border-radius: 3;
-    -fx-background-radius: 3;
-    -fx-background-color: transparent;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
-    -fx-padding: 0 5 0 0;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab .tab-close-button {
-    -fx-opacity: 0.65;
 }
 
 .database-view .tab-view .module-view .label-area .image-view {

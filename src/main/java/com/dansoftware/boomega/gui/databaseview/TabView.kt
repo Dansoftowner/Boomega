@@ -54,6 +54,7 @@ class TabView(private val baseTabItem: TabItem) : StackPane() {
     }
 
     private fun buildTabPane() = TabPane().apply {
+        styleClass.add("rounded-tab-pane")
         tabDragPolicy = TabPane.TabDragPolicy.REORDER
         tabClosingPolicy = TabPane.TabClosingPolicy.ALL_TABS
     }
