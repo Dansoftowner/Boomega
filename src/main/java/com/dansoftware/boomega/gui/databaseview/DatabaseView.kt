@@ -18,9 +18,9 @@
 package com.dansoftware.boomega.gui.databaseview
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.db.Database
-import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.db.ReadOnlyDatabase
+import com.dansoftware.boomega.database.api.Database
+import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.api.ReadOnlyDatabase
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker

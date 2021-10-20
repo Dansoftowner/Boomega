@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.plugin.api
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.db.Database
+import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.Module
 import com.dansoftware.boomega.gui.entry.DatabaseTracker

@@ -21,8 +21,8 @@ package com.dansoftware.boomega.launcher;
 import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.db.Database;
-import com.dansoftware.boomega.db.DatabaseMeta;
 import com.dansoftware.boomega.db.NitriteDatabase;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
@@ -234,10 +234,10 @@ public class ActivityLauncher implements Runnable {
         DatabaseActivity.getByDatabase(argument)
                 .map(DatabaseActivity::getContext)
                 .ifPresentOrElse(context -> {
-                    logger.debug("Found gui-context for database: '{}'", argument.getFile());
+                    logger.debug("Found gui-context for database: '{}'", argument.getUrl());
                     Platform.runLater(context::toFrontRequest);
                 }, () -> {
-                    logger.debug("Didn't found GUI for database: '{}'", argument.getFile());
+                    logger.debug("Didn't found GUI for database: '{}'", argument.getUrl());
                     onNewDatabaseAdded(argument);
                     final DatabaseLoginListener onDatabaseLogin = db -> onActivityLaunched(showMainActivity(db).getContext(), argument);
                     Database database = NitriteDatabase.builder()
@@ -326,7 +326,7 @@ public class ActivityLauncher implements Runnable {
      */
     private void autoLogin() {
         Database database = NitriteDatabase.builder()
-                .databaseMeta(getLoginData().getAutoLoginDatabase())
+                .databaseMeta(getLoginData().getSelectedDatabase())
                 .onFailed((message, t) -> {
                     logger.debug("failed signing into the database");
                     Platform.runLater(() -> {
