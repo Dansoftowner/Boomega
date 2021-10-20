@@ -125,8 +125,7 @@ abstract class FileMenu(
         .action {
             preferences.editor()
                 .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
-                    if (autoLoginDatabase == databaseMeta) {
-                        isAutoLogin = false
+                    if (isAutoLogin && selectedDatabase == databaseMeta) {
                         autoLoginCredentials = null
                     }
                 }).tryCommit()

@@ -20,8 +20,8 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
+import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.db.Credentials
-import com.dansoftware.boomega.db.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.icon
@@ -40,6 +40,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
 
 class LoginBox(private val controller: Controller) : VBox(10.0) {
 
@@ -89,13 +90,16 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         databaseChooser.get().let { databaseChooser ->
             databaseChooser.items.addAll(loginData.savedDatabases)
             loginData.selectedDatabase?.let(databaseChooser.selectionModel::select)
+            /*loginData.autoLoginCredentials?.run {
+
+            }
             loginData.autoLoginDatabase?.let {
                 remember.set(true)
                 loginData.autoLoginCredentials?.run {
                     usernameInput.set(username)
                     passwordInput.set(password)
                 }
-            }
+            }*/
         }
     }
 
@@ -242,13 +246,13 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
                 }
                 else -> {
                     text = item.toString()
-                    val dbFile = item.file!!
+                    val dbFile = File(item.url)
                     when {
                         dbFile.exists().not() || dbFile.isDirectory -> {
                             tooltip = Tooltip(i18n("file.not.exists"))
                             graphic = icon("warning-icon").apply { styleClass.add(NOT_EXISTS_CLASS) }
                         }
-                        databaseTracker.isDatabaseUsed(item) -> {
+                        databaseTracker.isDatabaseUsed(TODO()/*item*/) -> {
                             tooltip = Tooltip(i18n("database.currently.used"))
                             graphic = icon("play-icon").apply { styleClass.add(USED_CLASS) }
                         }

@@ -28,7 +28,7 @@ abstract class LoginForm<M : DatabaseMeta>(
     protected val options: Map<DatabaseOption<*>, Any>
 ) : Region() {
 
-    abstract val fields: Map<DatabaseField, Any>
+    abstract val fields: Map<DatabaseField<*>, Any>
 
     abstract fun login(): Database
 }

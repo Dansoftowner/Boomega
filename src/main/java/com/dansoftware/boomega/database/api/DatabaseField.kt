@@ -21,7 +21,8 @@ package com.dansoftware.boomega.database.api
 /**
  * Represents a specifiable value or credential used for a particular database-system.
  */
-open class DatabaseField(
+open class DatabaseField<T>(
+    val valueType: Class<T>,
     val id: String,
     val name: String,
     val description: String? = null,

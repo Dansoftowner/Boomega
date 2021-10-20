@@ -21,7 +21,6 @@ package com.dansoftware.boomega.database.api
 import com.dansoftware.boomega.gui.api.Context
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
-import javafx.scene.layout.Region
 
 /**
  * A flexible abstraction of a particular database-system.
@@ -48,7 +47,7 @@ interface DatabaseProvider<M : DatabaseMeta> {
      * specifying credentials or other required/optional values
      * for authenticating/creating the particular database
      */
-    val fields: List<DatabaseField>
+    val fields: List<DatabaseField<*>>
 
     /**
      * Gives a database meta information object from the given "url" or identifier
@@ -63,7 +62,7 @@ interface DatabaseProvider<M : DatabaseMeta> {
      */
     fun getDatabase(
         meta: M,
-        credentials: Map<DatabaseField, Any?>,
+        credentials: Map<DatabaseField<*>, Any?>,
         options: Map<DatabaseOption<*>, Any>
     ): Database
 

@@ -18,8 +18,10 @@
 
 package com.dansoftware.boomega.gui.database.bmdb
 
-import com.dansoftware.boomega.database.api.*
-import com.dansoftware.boomega.database.bmdb.BMDBDatabase
+import com.dansoftware.boomega.database.api.Database
+import com.dansoftware.boomega.database.api.DatabaseField
+import com.dansoftware.boomega.database.api.DatabaseOption
+import com.dansoftware.boomega.database.api.LoginForm
 import com.dansoftware.boomega.database.bmdb.BMDBMeta
 import com.dansoftware.boomega.database.bmdb.BMDBProvider
 import com.dansoftware.boomega.gui.api.Context
@@ -43,7 +45,7 @@ class BMDBLoginForm(
     private val username: StringProperty = SimpleStringProperty()
     private val password: StringProperty = SimpleStringProperty()
 
-    override val fields: Map<DatabaseField, Any>
+    override val fields: Map<DatabaseField<*>, Any>
         get() = mapOf(
             BMDBProvider.USERNAME_FIELD to username.get(),
             BMDBProvider.PASSWORD_FIELD to password.get()

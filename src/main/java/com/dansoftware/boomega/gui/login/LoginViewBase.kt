@@ -18,14 +18,12 @@
 
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.db.DatabaseMeta
 import javafx.beans.value.ObservableStringValue
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
-import java.io.File
 
 class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
 
@@ -50,7 +48,7 @@ class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
                 event.acceptTransferModes(*TransferMode.COPY_OR_MOVE)
         }
         setOnDragDropped { event ->
-            if (event.dragboard.hasFiles()) {
+          /*  if (event.dragboard.hasFiles()) {
                 event.dragboard.files
                     .filter(File::isFile)
                     .map(::DatabaseMeta)
@@ -59,7 +57,7 @@ class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
                         forEach(controller.databaseTracker::saveDatabase)
                         lastOrNull()?.let { loginBox.selectedItem = it }
                     }
-            }
+            }*/
         }
     }
 
