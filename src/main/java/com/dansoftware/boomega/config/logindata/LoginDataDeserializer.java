@@ -18,12 +18,14 @@
 
 package com.dansoftware.boomega.config.logindata;
 
-import com.dansoftware.boomega.db.Credentials;
-import com.dansoftware.boomega.db.DatabaseMeta;
+import com.dansoftware.boomega.database.api.DatabaseField;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.google.gson.*;
+import javafx.collections.FXCollections;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -47,20 +49,19 @@ public class LoginDataDeserializer implements JsonDeserializer<LoginData> {
 
     private LoginData asLoginData(JsonObject json) {
         final List<DatabaseMeta> savedDatabases = getSavedDatabases(json);
-        final Credentials autoLoginCredentials = gson.fromJson(json.get(AUTO_LOGIN_CREDENTIALS), Credentials.class);
-        final int selectedDatabaseIndex = json.get(SELECTED_DATABASE_INDEX).getAsInt();
         final boolean autoLogin = json.get(AUTO_LOGIN).getAsBoolean();
+        final int selectedDatabaseIndex = json.get(SELECTED_DATABASE_INDEX).getAsInt();
+        final Map<DatabaseField, String> autoLoginCredentials = if (autoLogin) gson.fromJson(json.get(AUTO_LOGIN_CREDENTIALS), Map.class) else null;
         return buildLoginData(savedDatabases, autoLoginCredentials, selectedDatabaseIndex, autoLogin);
     }
 
     private LoginData buildLoginData(List<DatabaseMeta> savedDatabases,
-                                     Credentials autoLoginCredentials,
+                                     Map<DatabaseField, String> autoLoginCredentials,
                                      int selectedDatabaseIndex,
                                      boolean autoLogin) {
-        final LoginData loginData = new LoginData(savedDatabases);
-        loginData.setAutoLoginCredentials(autoLoginCredentials);
+        final LoginData loginData = new LoginData(FXCollections.observableArrayList(savedDatabases), savedDatabases.get(selectedDatabaseIndex), autoLoginCredentials);
+        loginData.setAutoLoginCredentials(aautoLoginCredentials);
         loginData.setSelectedDatabaseIndex(selectedDatabaseIndex);
-        loginData.setAutoLogin(autoLogin);
         return loginData;
     }
 

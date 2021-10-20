@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.config.logindata;
 
+import com.dansoftware.boomega.database.api.DatabaseProvider;
 import com.dansoftware.boomega.db.Credentials;
 import com.dansoftware.boomega.db.DatabaseMeta;
 import javafx.collections.FXCollections;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginData {
+public class LoginData_ {
 
     private final ObservableList<DatabaseMeta> savedDatabases;
     private DatabaseMeta selectedDatabase;
