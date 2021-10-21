@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.menu.file
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.action.MenuItems
 import com.dansoftware.boomega.gui.api.Context

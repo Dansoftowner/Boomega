@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db.data
+package com.dansoftware.boomega.database.api.data
 
 /**
  * A [ServiceConnection] used for connecting/pairing a [Record]

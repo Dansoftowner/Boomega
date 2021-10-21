@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.login.quick
 
-import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
 import javafx.scene.layout.VBox

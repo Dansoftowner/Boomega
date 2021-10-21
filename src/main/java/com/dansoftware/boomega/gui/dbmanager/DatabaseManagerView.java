@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.dbmanager;
 
-import com.dansoftware.boomega.db.DatabaseMeta;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.gui.base.BaseView;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import javafx.beans.binding.IntegerBinding;

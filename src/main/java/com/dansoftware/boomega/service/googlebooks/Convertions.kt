@@ -18,8 +18,8 @@
 
 package com.dansoftware.boomega.service.googlebooks
 
-import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.db.data.ServiceConnection
+import com.dansoftware.boomega.database.api.data.Record
+import com.dansoftware.boomega.database.api.data.ServiceConnection
 import java.util.*
 
 /**

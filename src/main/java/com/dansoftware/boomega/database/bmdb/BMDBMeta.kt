@@ -20,6 +20,7 @@ package com.dansoftware.boomega.database.bmdb
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
+import com.dansoftware.boomega.util.revealInExplorer
 import com.dansoftware.boomega.util.shortenedPath
 import java.io.File
 
@@ -27,6 +28,9 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
 
     override val url: String
         get() = file.absolutePath
+
+    override val supportedActions: Set<Action<*>>
+        get() = setOf(Action.SizeInBytes, Action.OpenInExternalApplication)
 
     private val stringFormat by lazy {
         String.format("%s (%s)", name, file.shortenedPath(maxBack = 1))
@@ -36,5 +40,14 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
 
     override fun toString(): String {
         return stringFormat
+    }
+
+    @Suppress( "UNCHECKED_CAST")
+    override fun <T> performAction(action: Action<T>): T {
+        return when (action) {
+            Action.SizeInBytes -> (if (performAction(Action.Exists)) file.length() else 0) as T
+            Action.OpenInExternalApplication -> file.revealInExplorer() as T
+            Action.Exists -> file.exists().and(!file.isDirectory) as T
+        }
     }
 }

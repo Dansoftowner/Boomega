@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.clipboard
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.gui.recordview.RecordTable
 import javafx.collections.ListChangeListener
 import jfxtras.styles.jmetro.JMetroStyleClass

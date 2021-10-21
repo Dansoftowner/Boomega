@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.databaseview
 
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
@@ -101,20 +102,30 @@ class DatabaseViewToolbar(
         graphic = icon("folder-open-icon")
         tooltip = Tooltip(I18N.getValue("menubar.menu.file.reveal"))
         setOnAction {
-            view.databaseMeta.file!!.revealInExplorer()
+            if (view.databaseMeta.isActionSupported(DatabaseMeta.Action.OpenInExternalApplication))
+                view.databaseMeta.performAction(DatabaseMeta.Action.OpenInExternalApplication)
         }
     }
 
     private fun buildSizeIndicator() = Label().apply {
-        padding = Insets(0.0, 5.0, 0.0, 0.0)
-        val updateText = {
-            text = "${i18n("database_view.database_size")} ${view.databaseMeta.file?.byteCountToDisplaySize() ?: ""}"
-        }
-        updateText()
-        view.databaseReadOnly.addListener {
-            Platform.runLater {
-                updateText()
+        if (view.databaseMeta.isActionSupported(DatabaseMeta.Action.SizeInBytes)) {
+            padding = Insets(0.0, 5.0, 0.0, 0.0)
+
+            val updateText = {
+                text = "${i18n("database_view.database_size")} ${
+                    byteCountToDisplaySize(
+                        view.databaseMeta.performAction(DatabaseMeta.Action.SizeInBytes)
+                    )
+                }"
+            }.also { it() }
+            view.databaseReadOnly.addListener {
+                Platform.runLater {
+                    updateText()
+                }
             }
+        } else {
+            isManaged = false
+            isVisible = false
         }
     }
 }

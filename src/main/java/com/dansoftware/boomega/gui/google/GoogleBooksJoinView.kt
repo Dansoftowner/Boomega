@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.google
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.i18n

@@ -17,7 +17,7 @@
  */
 package com.dansoftware.boomega.gui.dbmanager
 
-import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.*
@@ -123,18 +123,24 @@ class DatabaseManagerTable(
                         }
                         else -> {
                             val databaseMeta = tableView.items[index]!!
-                            val dbFile = databaseMeta.file
-                            dbFile?.takeIf { it.exists() and !it.isDirectory }?.let {
-                                if (databaseTracker.isDatabaseUsed(databaseMeta)) {
+
+                            when {
+                                databaseTracker.isDatabaseUsed(databaseMeta) -> {
                                     graphic = icon("play-icon").styleClass(USED_CLASS)
                                     tableRow.tooltip = Tooltip(i18n("database.currently.used"))
-                                } else {
+                                }
+                                else -> {
                                     graphic = null
                                     tableRow.setTooltip(null)
                                 }
-                            } ?: run {
-                                graphic = icon("warning-icon").styleClass(NOT_EXISTS_CLASS)
-                                tooltip = Tooltip(i18n("file.not.exists"))
+                            }
+
+                            when {
+                                databaseMeta.isActionSupported(DatabaseMeta.Action.Exists) &&
+                                        !databaseMeta.performAction(DatabaseMeta.Action.Exists) -> {
+                                    graphic = icon("warning-icon").styleClass(NOT_EXISTS_CLASS)
+                                    tooltip = Tooltip(i18n("file.not.exists"))
+                                }
                             }
                         }
                     }

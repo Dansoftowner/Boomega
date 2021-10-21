@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.entry;
 
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
-import com.dansoftware.boomega.db.Database;
+import com.dansoftware.boomega.database.api.Database;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener;

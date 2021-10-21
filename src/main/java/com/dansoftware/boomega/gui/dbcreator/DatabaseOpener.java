@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.dbcreator;
 
-import com.dansoftware.boomega.db.DatabaseMeta;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.apache.commons.collections.CollectionUtils;

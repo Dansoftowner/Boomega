@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.export.excel
 
-import com.dansoftware.boomega.db.data.RecordProperty
+import com.dansoftware.boomega.database.api.data.RecordProperty
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 
 /**

@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.database.bmdb
 
 import org.dizitart.no2.Nitrite
-import java.io.File
 
 class BMDBDatabase(
     username: String,

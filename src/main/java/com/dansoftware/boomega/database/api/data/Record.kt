@@ -16,17 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db.data
+package com.dansoftware.boomega.database.api.data
 
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.format
-import org.dizitart.no2.NitriteId
-import org.dizitart.no2.objects.Id
 import java.time.LocalDate
 import java.util.*
 
 class Record(
-    @field:Id var id: NitriteId? = null,
+    var id: Long? = null,
     var type: Type = Type.BOOK,
 
     @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
@@ -39,9 +37,6 @@ class Record(
     var publisher: String? = null,
 
     @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
-    // for allowing the nitrite database to serialize/deserialize the LocalDate object
-    @field:com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = LocalDateDeserializer::class)
-    @field:com.fasterxml.jackson.databind.annotation.JsonSerialize(using = LocalDateSerializer::class)
     var publishedDate: LocalDate? = null,
 
     @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)

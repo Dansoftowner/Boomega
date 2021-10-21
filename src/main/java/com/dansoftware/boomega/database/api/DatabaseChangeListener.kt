@@ -17,6 +17,6 @@
  */
 package com.dansoftware.boomega.database.api
 
-interface DatabaseChangeListener<R> {
-    fun onChange(event: DatabaseChangeEvent<R>)
+fun interface DatabaseChangeListener {
+    fun onChange(event: DatabaseChangeEvent)
 }

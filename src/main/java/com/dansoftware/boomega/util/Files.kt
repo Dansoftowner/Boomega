@@ -170,7 +170,10 @@ fun File.shortenedPath(maxBack: Int, prefix: String = "...", separator: String =
  * Returns a human-readable version of the file size
  */
 fun File.byteCountToDisplaySize(): String {
-    val size = FileUtils.sizeOf(this)
+    return byteCountToDisplaySize(FileUtils.sizeOf(this))
+}
+
+fun byteCountToDisplaySize(size: Long): String {
     return FileUtils.byteCountToDisplaySize(size)
 }
 

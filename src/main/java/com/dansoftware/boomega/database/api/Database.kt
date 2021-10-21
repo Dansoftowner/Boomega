@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.database.api
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 
 /**
  * A Database object can communicate with a particular data source.
@@ -80,12 +80,12 @@ interface Database {
     fun close()
 
     /**
-     * Adds a [DatabaseChangeListener] which will be notified whenever the
+     * Adds a database change listener which will be notified whenever the
      * database changes.
      *
      * If the same listener is added more than once, then it will be ignored.
      */
-    fun addListener(listener: DatabaseChangeListener<Record>)
+    fun addListener(listener: DatabaseChangeListener)
 
     /**
      * Removes the given [DatabaseChangeListener] from the list of listeners that are notified whenever the
@@ -93,5 +93,5 @@ interface Database {
      *
      * If the given listener has not been previously registered then this method call is a no-op.
      */
-    fun removeListener(listener: DatabaseChangeListener<Record>)
+    fun removeListener(listener: DatabaseChangeListener)
 }

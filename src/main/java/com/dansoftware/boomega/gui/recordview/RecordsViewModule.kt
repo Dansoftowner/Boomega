@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.Database
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.Module
 import com.dansoftware.boomega.gui.util.icon

@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.app;
 
-import com.dansoftware.boomega.db.DatabaseMeta;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.gui.preloader.Preloader;
 import com.dansoftware.boomega.main.ArgumentParser;
 import com.sun.javafx.application.LauncherImpl;

@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.login.quick
 
-import com.dansoftware.boomega.db.DatabaseMeta
+import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
 

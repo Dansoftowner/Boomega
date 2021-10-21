@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.recordview.edit
 
 import com.dansoftware.boomega.database.api.Database
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N

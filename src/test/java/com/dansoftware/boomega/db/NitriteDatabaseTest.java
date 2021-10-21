@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.db;
 
-import com.dansoftware.boomega.db.data.Record;
+import com.dansoftware.boomega.database.api.data.Record;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.objects.Cursor;
 import org.dizitart.no2.objects.ObjectRepository;

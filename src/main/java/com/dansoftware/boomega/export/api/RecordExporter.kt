@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.export.api
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.gui.export.ConfigurationDialog
 import javafx.concurrent.Task
 import javafx.scene.Node

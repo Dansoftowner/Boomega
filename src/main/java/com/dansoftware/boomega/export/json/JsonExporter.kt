@@ -18,9 +18,9 @@
 
 package com.dansoftware.boomega.export.json
 
-import com.dansoftware.boomega.db.data.Record
-import com.dansoftware.boomega.db.data.RecordProperty
-import com.dansoftware.boomega.db.data.ServiceConnection
+import com.dansoftware.boomega.database.api.data.Record
+import com.dansoftware.boomega.database.api.data.RecordProperty
+import com.dansoftware.boomega.database.api.data.ServiceConnection
 import com.dansoftware.boomega.export.api.BaseExporter
 import com.dansoftware.boomega.export.api.ExportProcessObserver
 import com.dansoftware.boomega.gui.export.ConfigurationDialog

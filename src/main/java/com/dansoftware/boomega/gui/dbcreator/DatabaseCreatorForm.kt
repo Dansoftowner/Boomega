@@ -19,8 +19,7 @@
 package com.dansoftware.boomega.gui.dbcreator
 
 import com.dansoftware.boomega.db.Credentials
-import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.db.NitriteDatabase
+import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.SpaceValidator
@@ -212,12 +211,12 @@ class DatabaseCreatorForm(
     private fun create() {
         validateInputs { databaseMeta, credentials ->
             createdDatabase.set(databaseMeta)
-            NitriteDatabase.builder()
+          /*  NitriteDatabase.builder()
                 .databaseMeta(databaseMeta)
                 .onFailed { message, t ->
                     createdDatabase.set(null)
                     context.showErrorDialog(i18n("database.create_failed"), message, t as Exception?) {}
-                }.touch(credentials)
+                }.touch(credentials)*/
             databaseTracker.saveDatabase(databaseMeta)
             this.stage?.close()
         }
@@ -294,7 +293,7 @@ class DatabaseCreatorForm(
             else -> true
         }.takeIf { it }?.let {
             onSuccess(
-                DatabaseMeta(databaseName.get(), databaseFile),
+                TODO()/*DatabaseMeta(databaseName.get(), databaseFile)*/,
                 Credentials(username.get(), password.get())
             )
         }

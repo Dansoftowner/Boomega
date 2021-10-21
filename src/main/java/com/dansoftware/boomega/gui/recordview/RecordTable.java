@@ -18,9 +18,9 @@
 
 package com.dansoftware.boomega.gui.recordview;
 
-import com.dansoftware.boomega.db.data.Record;
-import com.dansoftware.boomega.db.data.RecordProperty;
-import com.dansoftware.boomega.db.data.ServiceConnection;
+import com.dansoftware.boomega.database.api.data.Record;
+import com.dansoftware.boomega.database.api.data.RecordProperty;
+import com.dansoftware.boomega.database.api.data.ServiceConnection;
 import com.dansoftware.boomega.gui.control.BaseTable;
 import com.dansoftware.boomega.gui.control.ReadOnlyRating;
 import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;

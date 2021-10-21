@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.clipboard
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.collections.FXCollections

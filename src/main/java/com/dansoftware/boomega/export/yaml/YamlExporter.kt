@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.export.yaml
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.export.api.BaseExporter
 import com.dansoftware.boomega.export.api.ExportProcessObserver
 import com.dansoftware.boomega.gui.api.Context

@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.export.api
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.i18n.I18N
 
 abstract class BaseExporter<C : RecordExportConfiguration> : RecordExporter<C> {

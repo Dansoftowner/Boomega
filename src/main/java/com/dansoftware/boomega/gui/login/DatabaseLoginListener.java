@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.login;
 
-import com.dansoftware.boomega.db.Database;
+import com.dansoftware.boomega.database.api.Database;
 import org.jetbrains.annotations.NotNull;
 
 public interface DatabaseLoginListener {

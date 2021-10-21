@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.database.api
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 
 class ReadOnlyDatabase(database: Database) : Database by database {
     override fun insertRecord(record: Record) {

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db.data
+package com.dansoftware.boomega.database.api.data
 
 import com.dansoftware.boomega.i18n.i18n
 import java.time.LocalDate

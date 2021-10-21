@@ -22,7 +22,7 @@ import com.dansoftware.boomega.config.ConfigAdapter
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.Database
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.api.Context

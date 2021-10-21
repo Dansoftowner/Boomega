@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.control
 
-import com.dansoftware.boomega.db.data.Record
+import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.util.concurrent.CachedExecutor

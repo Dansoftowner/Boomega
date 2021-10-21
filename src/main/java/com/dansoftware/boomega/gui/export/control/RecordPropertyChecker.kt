@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.export.control
 
-import com.dansoftware.boomega.db.data.RecordProperty
+import com.dansoftware.boomega.database.api.data.RecordProperty
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.gui.util.checkedItems
 import javafx.collections.FXCollections
