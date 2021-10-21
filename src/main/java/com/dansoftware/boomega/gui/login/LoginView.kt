@@ -18,23 +18,12 @@
 
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
-import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.db.Database
-import com.dansoftware.boomega.db.DatabaseMeta
-import com.dansoftware.boomega.db.NitriteDatabase
-import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.BaseView
-import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
-import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
-import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
-import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.onScenePresent
-import com.dansoftware.boomega.gui.util.runOnUiThread
-import com.dansoftware.boomega.i18n.i18n
 import javafx.application.Platform
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.ReadOnlyObjectProperty
@@ -56,14 +45,13 @@ class LoginView(
     databaseLoginListener: DatabaseLoginListener
 ) : BaseView() {
 
-    private val loginBoxController = LoginBoxController(this, tracker, loginData, preferences, databaseLoginListener)
     private val createdDatabase: ObjectProperty<Database> = SimpleObjectProperty()
 
     val loginData: LoginData
-        get() = loginBoxController.loginData
+        get() = TODO()
 
     init {
-        content = LoginViewBase(loginBoxController)
+        content = LoginViewBase(TODO())
         playAnimation()
     }
 
@@ -80,9 +68,9 @@ class LoginView(
     }
 
     fun titleProperty(): ObservableStringValue {
-        return loginBoxController.titleProperty()!!
+       TODO()
     }
-
+/*
     private class LoginBoxController(
         override val context: Context,
         override val databaseTracker: DatabaseTracker,
@@ -182,7 +170,7 @@ class LoginView(
             }
         }
     }
-
+*/
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(LoginView::class.java)
     }

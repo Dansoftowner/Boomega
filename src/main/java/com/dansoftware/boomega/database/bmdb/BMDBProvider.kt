@@ -31,9 +31,9 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
     // TODO: i18n
 
     val USERNAME_FIELD =
-        DatabaseField(id = "usrnm", name = "Username")
+        DatabaseField(valueType = String::class.java, id = "usrnm", name = "Username")
     val PASSWORD_FIELD =
-        DatabaseField(id = "psswrd", name = "Password")
+        DatabaseField(valueType = String::class.java, id = "psswrd", name = "Password")
 
     val COMPRESSED =
         DatabaseOption(id = "cmprsd", name = "Compress", type = Boolean::class.java, defaultValue = true)
@@ -52,7 +52,7 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
         AUTO_COMMIT_BUFFER_SIZE
     )
 
-    override val fields: List<DatabaseField> = listOf(
+    override val fields: List<DatabaseField<*>> = listOf(
         USERNAME_FIELD,
         PASSWORD_FIELD
     )
@@ -63,7 +63,7 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
 
     override fun getDatabase(
         meta: BMDBMeta,
-        credentials: Map<DatabaseField, Any?>,
+        credentials: Map<DatabaseField<*>, Any?>,
         options: Map<DatabaseOption<*>, Any>
     ): Database {
         return BMDBDatabase(

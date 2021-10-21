@@ -18,21 +18,28 @@
 
 package com.dansoftware.boomega.config.logindata
 
+import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.google.gson.*
 import java.lang.reflect.Type
 
 class LoginDataSerializer : JsonSerializer<LoginData> {
 
-
-    override fun serialize(src: LoginData,
-                           typeOfSrc: Type?,
-                           context: JsonSerializationContext?): JsonElement {
+    override fun serialize(
+        src: LoginData,
+        typeOfSrc: Type,
+        context: JsonSerializationContext
+    ): JsonElement {
         val json = JsonObject()
         json.add(SAVED_DATABASES, serializeDatabases(src.savedDatabases.toList()))
         json.addProperty(AUTO_LOGIN, src.isAutoLogin)
         json.addProperty(SELECTED_DATABASE_INDEX, src.selectedDatabaseIndex)
-        json.addProperty(AUTO_LOGIN_CREDENTIALS, if (src.isAutoLogin) src)
+        json.add(
+            AUTO_LOGIN_CREDENTIALS,
+            src.autoLoginCredentials
+                ?.takeIf { src.isAutoLogin }
+                ?.let { serializeCredentials(context, it) }
+        )
         return json
     }
 
@@ -46,6 +53,18 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
         }
         serializedEntries.forEach(array::add)
         return array
+    }
+
+    private fun serializeCredentials(
+        context: JsonSerializationContext,
+        autoLoginCredentials: Map<DatabaseField<*>, Any>
+    ): JsonObject {
+        //TODO: encryption
+        val jsonObject = JsonObject()
+        autoLoginCredentials.forEach { (key, value) ->
+            jsonObject.add(key.id, context.serialize(value))
+        }
+        return jsonObject
     }
 
     companion object {

@@ -17,6 +17,7 @@
  */
 package com.dansoftware.boomega.db
 
+@Deprecated("Use the new database API features")
 class Credentials(val username: String, val password: String) {
 
     val isAnonymous: Boolean

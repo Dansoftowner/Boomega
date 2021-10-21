@@ -20,21 +20,25 @@ package com.dansoftware.boomega.config.logindata
 
 import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 
 class LoginData(
-    val savedDatabases: ObservableList<DatabaseMeta>,
+    savedDatabases: List<DatabaseMeta>,
     selectedDatabase: DatabaseMeta,
-    autoLoginCredentials: Map<DatabaseField, String>?
+    autoLoginCredentials: Map<DatabaseField<*>, Any>?
 ) {
+    val savedDatabases: ObservableList<DatabaseMeta> =
+        FXCollections.observableArrayList(savedDatabases)
+
     var selectedDatabase: DatabaseMeta = selectedDatabase
         set(value) {
-             if (value !in savedDatabases)
-                 savedDatabases.add(selectedDatabase)
+            if (value !in savedDatabases)
+                savedDatabases.add(selectedDatabase)
             field = value
         }
 
-    var autoLoginCredentials: Map<DatabaseField, String>? = autoLoginCredentials
+    var autoLoginCredentials: Map<DatabaseField<*>, Any>? = autoLoginCredentials
         get() = field ?: emptyMap()
 
     var selectedDatabaseIndex: Int

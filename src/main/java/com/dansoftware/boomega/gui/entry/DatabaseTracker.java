@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.entry;
 
-import com.dansoftware.boomega.db.DatabaseMeta;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import org.jetbrains.annotations.NotNull;

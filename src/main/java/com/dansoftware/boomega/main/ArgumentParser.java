@@ -18,7 +18,8 @@
 
 package com.dansoftware.boomega.main;
 
-import com.dansoftware.boomega.db.DatabaseMeta;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
+import com.dansoftware.boomega.database.bmdb.BMDBMeta;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +59,7 @@ public class ArgumentParser {
         File file = new File(arg);
         if (!file.exists())
             return Optional.empty();
-        return Optional.of(new DatabaseMeta(file));
+        return Optional.of(new BMDBMeta(file));
     }
 
     public static Optional<DatabaseMeta> transformOptional(@Nullable List<String> args) {

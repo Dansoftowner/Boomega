@@ -18,18 +18,61 @@
 
 package com.dansoftware.boomega.config.logindata
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
+import com.dansoftware.boomega.database.SupportedDatabases
+import com.dansoftware.boomega.database.api.DatabaseField
+import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.api.DatabaseProvider
+import com.google.gson.*
 import java.lang.reflect.Type
 
 class LoginDataDeserializer : JsonDeserializer<LoginData> {
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): LoginData {
-
+    override fun deserialize(jsonSrc: JsonElement, typeOfT: Type, context: JsonDeserializationContext): LoginData {
+        val json = jsonSrc.asJsonObject
+        val databases = deserializeDatabases(json.getAsJsonArray(SAVED_DATABASES))
+        val isAutoLogin = json[AUTO_LOGIN].asBoolean
+        val selectedDatabaseIndex = json[SELECTED_DATABASE_INDEX].asInt
+        val selectedDatabase = databases[selectedDatabaseIndex]
+        val autoLoginCredentials =
+            json[AUTO_LOGIN_CREDENTIALS].asJsonObject.takeIf { isAutoLogin }?.let {
+                deserializeCredentials(
+                    context,
+                    selectedDatabase.provider,
+                    it
+                )
+            }
+        return LoginData(databases, selectedDatabase, autoLoginCredentials)
     }
 
-    companion object {
+    private fun deserializeDatabases(jsonArray: JsonArray): List<DatabaseMeta> {
+        return jsonArray.map(JsonElement::getAsJsonObject).map {
+            val provider = getDatabaseProvider(it[DATABASE_PROVIDER].asString)
+            provider!!.getMeta(it[DATABASE_URL].asString)
+        }
+    }
 
+    private fun deserializeCredentials(
+        context: JsonDeserializationContext,
+        provider: DatabaseProvider<*>,
+        jsonObject: JsonObject
+    ): Map<DatabaseField<*>, Any> {
+        return jsonObject.entrySet().associate { (key, value) ->
+            // TODO: decryption
+            val databaseField = provider.fields.find { it.id == key }!!
+            val fieldValue = context.deserialize<Any>(value, databaseField.valueType)
+            databaseField to fieldValue
+        }
+    }
+
+    private fun getDatabaseProvider(className: String) =
+        SupportedDatabases.find { it.javaClass.name == className }
+
+    companion object {
+        private const val SAVED_DATABASES = "svdbs"
+        private const val SELECTED_DATABASE_INDEX = "slctdb"
+        private const val AUTO_LOGIN = "autolgn"
+        private const val AUTO_LOGIN_CREDENTIALS = "crdntls"
+        private const val DATABASE_PROVIDER = "provider"
+        private const val DATABASE_URL = "dburl"
     }
 }
