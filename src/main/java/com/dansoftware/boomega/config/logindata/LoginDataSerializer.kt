@@ -30,6 +30,7 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
         typeOfSrc: Type,
         context: JsonSerializationContext
     ): JsonElement {
+        // { "svdbs" : [ ... ], "autolgn": true,  "scltdb": 2, "crdntls": { ... } }
         val json = JsonObject()
         json.add(SAVED_DATABASES, serializeDatabases(src.savedDatabases.toList()))
         json.addProperty(AUTO_LOGIN, src.isAutoLogin)
@@ -44,6 +45,7 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
     }
 
     private fun serializeDatabases(savedDatabases: List<DatabaseMeta>): JsonArray {
+        // [ { "provider" : "<CLASS>", "dburl" : "<FILE PATH>" }, ... ]
         val array = JsonArray()
         val serializedEntries = savedDatabases.map {
             JsonObject().apply {
@@ -59,6 +61,7 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
         context: JsonSerializationContext,
         autoLoginCredentials: Map<DatabaseField<*>, Any>
     ): JsonObject {
+        // { "field" : <VALUE>, "field1" : <VALUE>, ... }
         //TODO: encryption
         val jsonObject = JsonObject()
         autoLoginCredentials.forEach { (key, value) ->
