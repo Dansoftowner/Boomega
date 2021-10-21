@@ -21,8 +21,8 @@ package com.dansoftware.boomega.database.bmdb
 import org.dizitart.no2.Nitrite
 
 class BMDBDatabase(
-    username: String,
-    password: String,
+    username: String?,
+    password: String?,
     meta: BMDBMeta,
     isCompressed: Boolean = true,
     autoCommitBufferSize: Int = 1024
@@ -30,7 +30,12 @@ class BMDBDatabase(
     Nitrite.builder()
         .autoCommitBufferSize(autoCommitBufferSize)
         .filePath(meta.file)
-        .run { if (isCompressed) compressed() else this }
-        .openOrCreate(username, password),
+        .apply { if (isCompressed) compressed() }
+        .run {
+            if (username === null || password === null)
+                openOrCreate()
+            else
+                openOrCreate(username, password)
+        },
     meta
 )

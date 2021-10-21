@@ -67,8 +67,8 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
         options: Map<DatabaseOption<*>, Any>
     ): Database {
         return BMDBDatabase(
-            credentials[USERNAME_FIELD].toString(),
-            credentials[PASSWORD_FIELD].toString(),
+            credentials[USERNAME_FIELD]?.toString()?.takeIf { it.isNotBlank() },
+            credentials[PASSWORD_FIELD]?.toString()?.takeIf { it.isNotBlank() },
             meta,
             isCompressed = COMPRESSED.getValueFrom(options),
             autoCommitBufferSize = AUTO_COMMIT_BUFFER_SIZE.getValueFrom(options)
