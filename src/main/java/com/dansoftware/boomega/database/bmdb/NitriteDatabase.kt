@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory
 import java.util.Collections.unmodifiableList
 
 /**
- * A NitriteDatabase is a [Database] that basically wraps the
+ * A NitriteDatabase is a [Database] implementation that basically wraps the
  * Nitrite database api.
  *
  * @author Daniel Gyorffy
@@ -36,7 +36,7 @@ open class NitriteDatabase(
     override val meta: DatabaseMeta
 ) : Database {
 
-    private val listeners: MutableSet<DatabaseChangeListener<Record>> = HashSet()
+    private val listeners: MutableSet<DatabaseChangeListener> = HashSet()
 
     private val recordRepository: ObjectRepository<NitriteRecord> =
         nitriteClient.getRepository(REPOSITORY_KEY, NitriteRecord::class.java)
@@ -82,12 +82,12 @@ open class NitriteDatabase(
     }
 
     @Synchronized
-    override fun addListener(listener: DatabaseChangeListener<Record>) {
+    override fun addListener(listener: DatabaseChangeListener) {
         listeners.add(listener)
     }
 
     @Synchronized
-    override fun removeListener(listener: DatabaseChangeListener<Record>) {
+    override fun removeListener(listener: DatabaseChangeListener) {
        listeners.remove(listener)
     }
 

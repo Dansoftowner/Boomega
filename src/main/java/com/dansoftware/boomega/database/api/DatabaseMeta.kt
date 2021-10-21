@@ -29,7 +29,7 @@ abstract class DatabaseMeta(val provider: DatabaseProvider<*>) {
 
     abstract fun <T> performAction(action: Action<T>): T
 
-    fun isActionSupported(action: Action<*>): Boolean {
+    open fun isActionSupported(action: Action<*>): Boolean {
         return action in supportedActions
     }
 

@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.database.bmdb
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.util.revealInExplorer
 import com.dansoftware.boomega.util.shortenedPath
 import java.io.File
@@ -42,10 +41,17 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
         return stringFormat
     }
 
+    override fun isActionSupported(action: Action<*>): Boolean {
+        return when(action) {
+            Action.SizeInBytes -> performAction(Action.Exists)
+            else -> super.isActionSupported(action)
+        }
+    }
+
     @Suppress( "UNCHECKED_CAST")
     override fun <T> performAction(action: Action<T>): T {
         return when (action) {
-            Action.SizeInBytes -> (if (performAction(Action.Exists)) file.length() else 0) as T
+            Action.SizeInBytes -> (if (performAction(Action.Exists)) file.length() else -1) as T
             Action.OpenInExternalApplication -> file.revealInExplorer() as T
             Action.Exists -> file.exists().and(!file.isDirectory) as T
         }

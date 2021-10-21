@@ -18,4 +18,6 @@
 
 package com.dansoftware.boomega.database.api
 
+import com.dansoftware.boomega.database.api.data.Record
+
 class DatabaseChangeEvent(val type: DatabaseChangeType, val records: List<Record>)

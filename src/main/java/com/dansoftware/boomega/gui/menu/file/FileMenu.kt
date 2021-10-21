@@ -22,7 +22,7 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.action.GlobalActions
-import com.dansoftware.boomega.gui.action.MenuItems
+import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.action
@@ -33,7 +33,6 @@ import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.LauncherMode
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
-import com.dansoftware.boomega.util.revealInExplorer
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
@@ -63,19 +62,19 @@ abstract class FileMenu(
      * Menu item that allows the user to show a new entry point (LoginActivity)
      */
     private fun newEntryMenuItem(): MenuItem =
-        MenuItems.of(GlobalActions.NEW_ENTRY, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.NEW_ENTRY, context, preferences, databaseTracker)
 
     /**
      * Menu item that allows the user to open a database file from the file system
      */
     private fun openMenuItem() =
-        MenuItems.of(GlobalActions.OPEN_DATABASE, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.OPEN_DATABASE, context, preferences, databaseTracker)
 
     private fun databaseCreatorMenuItem() =
-        MenuItems.of(GlobalActions.CREATE_DATABASE, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.CREATE_DATABASE, context, preferences, databaseTracker)
 
     private fun databaseManagerMenuItem() =
-        MenuItems.of(GlobalActions.OPEN_DATABASE_MANAGER, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.OPEN_DATABASE_MANAGER, context, preferences, databaseTracker)
 
     /**
      * Menu that allows the user to access the recent databases
@@ -135,7 +134,8 @@ abstract class FileMenu(
 
     private fun revealInExplorerMenuItem() = MenuItem(i18n("menubar.menu.file.reveal"))
         .graphic("folder-open-icon")
-        .action { databaseMeta.file!!.revealInExplorer() }
+        .apply { isDisable = databaseMeta.isActionSupported(DatabaseMeta.Action.OpenInExternalApplication) }
+        .action { databaseMeta.performAction(DatabaseMeta.Action.OpenInExternalApplication) }
 
     private inline fun startActivityLauncher(crossinline getActivityLauncher: () -> ActivityLauncher) {
         SingleThreadExecutor.submit(object : Task<Unit>() {

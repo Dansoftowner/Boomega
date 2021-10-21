@@ -23,7 +23,6 @@ import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.byteCountToDisplaySize
-import com.dansoftware.boomega.util.revealInExplorer
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.IntegerBinding
 import javafx.collections.ObservableList
@@ -33,7 +32,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.util.Callback
 import org.slf4j.LoggerFactory
-import java.io.File
 
 /**
  * A DBManagerTable is a [TableView] that is used for managing (monitoring, deleting) databases.
@@ -192,8 +190,11 @@ class DatabaseManagerTable(
                         }
                         else -> {
                             val databaseMeta = tableView.items[index]!!
-                            val dbFile = databaseMeta.file
-                            text = dbFile?.takeIf { it.exists() and !it.isDirectory }?.byteCountToDisplaySize() ?: "-"
+                            text = when {
+                                databaseMeta.isActionSupported(DatabaseMeta.Action.SizeInBytes) ->
+                                    byteCountToDisplaySize(databaseMeta.performAction(DatabaseMeta.Action.SizeInBytes))
+                                else -> "-"
+                            }
                         }
                     }
                 }
@@ -236,9 +237,8 @@ class DatabaseManagerTable(
                                         .selectionModel
                                         .selectedItems
                                         .asSequence()
-                                        .map(DatabaseMeta::file)
-                                        .filterNotNull()
-                                        .forEach(File::revealInExplorer)
+                                        .filter { it.isActionSupported(DatabaseMeta.Action.OpenInExternalApplication) }
+                                        .forEach { it.performAction(DatabaseMeta.Action.OpenInExternalApplication) }
                                 }
                             }
                         }

@@ -18,9 +18,8 @@
 
 package com.dansoftware.boomega.gui.login.quick
 
-import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.db.NitriteDatabase
+import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
 import com.dansoftware.boomega.i18n.i18n
@@ -34,6 +33,8 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+// TODO: use new database api in quick form
 
 class QuickForm(
     private val context: Context,
@@ -83,7 +84,7 @@ class QuickForm(
             usernameInput.get().trim(),
             passwordInput.get().trim()
         ).let { credentials ->
-            NitriteDatabase.builder()
+            /*NitriteDatabase.builder()
                 .databaseMeta(databaseMeta)
                 .onFailed { message, t ->
                     context.showErrorDialog(i18n("login.failed"), message, t as Exception?)
@@ -92,7 +93,7 @@ class QuickForm(
                     logger.debug("Quick login in was successful")
                     loginListener.onDatabaseOpened(it)
                     context.close()
-                }
+                }*/
         }
     }
 
