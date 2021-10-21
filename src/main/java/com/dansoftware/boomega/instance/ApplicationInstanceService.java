@@ -113,14 +113,13 @@ public class ApplicationInstanceService implements MessageHandler {
 
         List<String> args = Collections.emptyList();
         switch (Integer.parseInt(arg)) {
-            case EMPTY_ARGS_MESSAGE:
-                logger.debug("No need to read arguments from file");
-                break;
-            case ERROR_MESSAGE:
+            case EMPTY_ARGS_MESSAGE ->
+                    logger.debug("No need to read arguments from file");
+            case ERROR_MESSAGE -> {
                 logger.debug("Something went wrong in the other process");
                 logger.debug("Aren't reading the arguments");
-                break;
-            case SUCCESS_MESSAGE:
+            }
+            case SUCCESS_MESSAGE -> {
                 logger.debug("Reading arguments from file...");
                 try {
                     args = readArgumentsFromFile(RuntimeArgumentsHolderFile.INSTANCE);
@@ -129,7 +128,7 @@ public class ApplicationInstanceService implements MessageHandler {
                 } catch (IOException e) {
                     logger.error("Failed to read the arguments from file!", e);
                 }
-                break;
+            }
         }
 
         logger.debug("starting an ActivityLauncher...");
@@ -164,7 +163,7 @@ public class ApplicationInstanceService implements MessageHandler {
             LoginData loginData = getPreferences().get(PreferenceKey.LOGIN_DATA);
             loginData.getSavedDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);
-            loginData.setAutoLogin(false);
+            loginData.setAutoLoginCredentials(null);
             return loginData;
         }
 

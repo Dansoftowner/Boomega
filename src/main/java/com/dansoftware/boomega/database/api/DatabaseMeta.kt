@@ -21,6 +21,7 @@ package com.dansoftware.boomega.database.api
 abstract class DatabaseMeta(val provider: DatabaseProvider<*>) {
 
     abstract val url: String
+    abstract val simpleName: String
     protected abstract val supportedActions: Set<Action<*>>
 
     override fun toString(): String {

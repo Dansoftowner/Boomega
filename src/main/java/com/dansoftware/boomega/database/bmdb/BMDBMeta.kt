@@ -28,6 +28,9 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
     override val url: String
         get() = file.absolutePath
 
+    override val simpleName: String
+        get() = file.name
+
     override val supportedActions: Set<Action<*>>
         get() = setOf(Action.SizeInBytes, Action.OpenInExternalApplication)
 

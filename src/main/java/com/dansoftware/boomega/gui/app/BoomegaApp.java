@@ -125,11 +125,11 @@ public class BoomegaApp extends BaseApplication {
     private void handleApplicationArgument(@NotNull ActivityLauncher.PostLaunchQueue queue) {
         //if a file is passed as a parameter, we show a message about it on the Preloader
         getParsedArgument().ifPresent(file ->
-                notifyPreloader(new MessageNotification(i18n("preloader.file.open", file.getName()), Priority.HIGH)));
+                notifyPreloader(new MessageNotification(i18n("preloader.file.open", file.getSimpleName()), Priority.HIGH)));
         queue.pushItem((context, launchedDatabase) -> {
             if (launchedDatabase != null) {
                 context.showInformationNotification(
-                        i18n("database.file.launched", launchedDatabase.getName()), null
+                        i18n("database.file.launched", launchedDatabase.getSimpleName()), null
                 );
             }
         });
