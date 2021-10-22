@@ -59,11 +59,13 @@ interface DatabaseProvider<M : DatabaseMeta> {
      *
      * @param credentials the credentials specified for [DatabaseField]s
      * @param options the initial database options
+     * @throws [DatabaseConstructionException] if the creation of the database failed for some reason
      */
+    @Throws(DatabaseConstructionException::class)
     fun getDatabase(
         meta: M,
-        credentials: Map<DatabaseField<*>, Any?>,
-        options: Map<DatabaseOption<*>, Any>
+        credentials: Map<DatabaseField<*>, Any?> = emptyMap(),
+        options: Map<DatabaseOption<*>, Any> = emptyMap()
     ): Database
 
     /**

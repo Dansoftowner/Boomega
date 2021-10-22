@@ -18,25 +18,10 @@
 
 package com.dansoftware.boomega.database.api
 
-abstract class DatabaseMeta(val provider: DatabaseProvider<DatabaseMeta>) {
-
-    abstract val url: String
-    abstract val simpleName: String
-    protected abstract val supportedActions: Set<Action<*>>
-
-    override fun toString(): String {
-        return url
-    }
-
-    abstract fun <T> performAction(action: Action<T>): T
-
-    open fun isActionSupported(action: Action<*>): Boolean {
-        return action in supportedActions
-    }
-
-    sealed class Action<T> {
-        object Exists : Action<Boolean>()
-        object SizeInBytes : Action<Long>()
-        object OpenInExternalApplication: Action<Unit>()
-    }
+open class DatabaseConstructionException(
+    private val localizedMessage: String? = null,
+    override val message: String? = null,
+    override val cause: Throwable? = null
+) : Exception() {
+    override fun getLocalizedMessage(): String? = localizedMessage
 }

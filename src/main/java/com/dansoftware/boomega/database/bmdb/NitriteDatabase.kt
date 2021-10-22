@@ -50,6 +50,10 @@ open class NitriteDatabase(
     override val isClosed: Boolean
         get() = nitriteClient.isClosed
 
+    init {
+
+    }
+
     @Synchronized
     override fun insertRecord(record: Record) {
         recordRepository.insert(NitriteRecord(record))

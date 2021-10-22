@@ -22,8 +22,12 @@ import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBLoginForm
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
+import org.dizitart.no2.exceptions.ErrorMessage
+import org.dizitart.no2.exceptions.NitriteException
+import org.dizitart.no2.exceptions.NitriteIOException
 import java.io.File
 
 object BMDBProvider : DatabaseProvider<BMDBMeta> {
@@ -66,13 +70,18 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
         credentials: Map<DatabaseField<*>, Any?>,
         options: Map<DatabaseOption<*>, Any>
     ): Database {
-        return BMDBDatabase(
-            credentials[USERNAME_FIELD]?.toString()?.takeIf { it.isNotBlank() },
-            credentials[PASSWORD_FIELD]?.toString()?.takeIf { it.isNotBlank() },
-            meta,
-            isCompressed = COMPRESSED.getValueFrom(options),
-            autoCommitBufferSize = AUTO_COMMIT_BUFFER_SIZE.getValueFrom(options)
-        )
+        try {
+            return BMDBDatabase(
+                credentials[USERNAME_FIELD]?.toString()?.takeIf { it.isNotBlank() },
+                credentials[PASSWORD_FIELD]?.toString()?.takeIf { it.isNotBlank() },
+                meta,
+                isCompressed = COMPRESSED.getValueFrom(options),
+                autoCommitBufferSize = AUTO_COMMIT_BUFFER_SIZE.getValueFrom(options)
+            )
+        } catch (e: NitriteException) {
+            throw DatabaseConstructionException(localizedMessage = e.specificMessage(), cause = e)
+        }
+
     }
 
     override fun buildUILoginForm(
@@ -88,5 +97,24 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
         options: Map<DatabaseOption<*>, Any>
     ): RegistrationForm {
         TODO("Not yet implemented")
+    }
+
+    @Suppress("NullableBooleanElvis")
+    private fun NitriteException.specificMessage(): String {
+        return i18n(
+            when (errorMessage) {
+                ErrorMessage.NO_USER_MAP_FOUND -> "login.failed.null_user_credential"
+                ErrorMessage.USER_MAP_SHOULD_NOT_EXISTS -> "login.failed.authentication_required"
+                ErrorMessage.DATABASE_OPENED_IN_OTHER_PROCESS -> "login.failed.database_opened_in_other_process"
+                ErrorMessage.UNABLE_TO_CREATE_DB_FILE -> "login.failed.unable_to_create_db_file"
+
+                ErrorMessage.USER_ID_IS_EMPTY,
+                ErrorMessage.PASSWORD_IS_EMPTY,
+                ErrorMessage.NULL_USER_CREDENTIAL,
+                ErrorMessage.INVALID_USER_PASSWORD -> "login.failed.invalid_user_password"
+
+                else -> if (this is NitriteIOException) "login.failed.io" else "login.failed.security"
+            }
+        )
     }
 }
