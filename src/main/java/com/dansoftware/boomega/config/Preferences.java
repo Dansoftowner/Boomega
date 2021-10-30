@@ -64,6 +64,11 @@ public class Preferences {
         return new Editor();
     }
 
+    @NotNull
+    public Editor getEditor() {
+        return editor();
+    }
+
     public <T> T get(@NotNull PreferenceKey<T> key) {
         return source.get(key);
     }

@@ -169,8 +169,8 @@ public class BaseView extends StackPane implements Context {
     }
 
     @Override
-    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
-        return new WorkbenchDialogContextDialog(workbench.showDialog(buildErrorDialog(title, message, exception, onResult)), ContextDialog.Type.ERROR);
+    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception cause, Consumer<ButtonType> onResult) {
+        return new WorkbenchDialogContextDialog(workbench.showDialog(buildErrorDialog(title, message, cause, onResult)), ContextDialog.Type.ERROR);
     }
 
     @Override

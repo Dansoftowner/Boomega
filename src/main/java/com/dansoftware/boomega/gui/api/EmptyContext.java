@@ -53,7 +53,7 @@ public interface EmptyContext extends Context {
 
     @Override
     @NotNull
-    default ContextDialog showErrorDialog(String title, String message, Exception exception, Consumer<ButtonType> onResult) {
+    default ContextDialog showErrorDialog(String title, String message, Exception cause, Consumer<ButtonType> onResult) {
         return null;
     }
 

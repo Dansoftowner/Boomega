@@ -92,7 +92,7 @@ interface Context {
     fun showErrorDialog(
         title: String?,
         message: String?,
-        exception: Exception?,
+        cause: Exception?,
         onResult: Consumer<ButtonType>
     ): ContextDialog
 
@@ -100,8 +100,8 @@ interface Context {
         this.showErrorDialog(title, message) {}
     }
 
-    fun showErrorDialog(title: String, message: String, e: Exception?) {
-        this.showErrorDialog(title, message, e) {}
+    fun showErrorDialog(title: String, message: String, cause: Exception?) {
+        this.showErrorDialog(title, message, cause) {}
     }
 
     /**
