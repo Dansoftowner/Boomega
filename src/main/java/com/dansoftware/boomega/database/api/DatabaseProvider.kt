@@ -52,7 +52,7 @@ interface DatabaseProvider<M : DatabaseMeta> {
     /**
      * Gives a database meta information object from the given "url" or identifier
      */
-    fun getMeta(url: String): DatabaseMeta
+    fun getMeta(url: String): M
 
     /**
      * Constructs the actual [Database] object that allows to access the database

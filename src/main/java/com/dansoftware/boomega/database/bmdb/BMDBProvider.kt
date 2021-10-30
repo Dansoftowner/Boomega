@@ -61,7 +61,7 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
         PASSWORD_FIELD
     )
 
-    override fun getMeta(url: String): DatabaseMeta {
+    override fun getMeta(url: String): BMDBMeta {
         return BMDBMeta(File(url))
     }
 

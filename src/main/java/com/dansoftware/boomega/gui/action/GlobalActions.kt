@@ -18,12 +18,12 @@
 
 package com.dansoftware.boomega.gui.action
 
-import com.dansoftware.boomega.config.PreferenceKey
+import com.dansoftware.boomega.config.LAST_UPDATE_SEARCH
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
+import com.dansoftware.boomega.gui.dbcreator.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
-import com.dansoftware.boomega.gui.dbcreator.DatabaseOpener
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
@@ -64,7 +64,7 @@ object GlobalActions {
         "database-icon",
         KeyBindings.newEntry
     ) { context, preferences, databaseTracker ->
-        submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker))
+        submitTask(context, ActivityLauncher(LauncherMode.NORMAL, preferences, databaseTracker))
     }
 
     @JvmField
@@ -74,9 +74,9 @@ object GlobalActions {
             "file-icon",
             KeyBindings.openDatabase
         ) { context, preferences, databaseTracker ->
-            DatabaseOpener().showOpenDialog(context.contextWindow)?.also {
+            BMDBDatabaseOpener().showOpenDialog(context.contextWindow)?.also {
                 // launches the database
-                submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, it, preferences, databaseTracker))
+                submitTask(context, ActivityLauncher(LauncherMode.NORMAL, preferences, databaseTracker, it))
             }
         }
 
@@ -89,7 +89,7 @@ object GlobalActions {
         ) { context, preferences, databaseTracker ->
             DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
                 // launches the database
-                submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, it, preferences, databaseTracker))
+                submitTask(context, ActivityLauncher(LauncherMode.NORMAL, preferences, databaseTracker, it))
             }
         }
 
@@ -167,7 +167,7 @@ object GlobalActions {
     @JvmField
     val SEARCH_FOR_UPDATES =
         Action("action.update_search", "update-icon") { context, prefs, _ ->
-            prefs.editor().put(PreferenceKey.LAST_UPDATE_SEARCH, LocalDateTime.now())
+            prefs.editor().put(LAST_UPDATE_SEARCH, LocalDateTime.now())
             CachedExecutor.submit(object : Task<Release?>() {
                 init {
                     onRunning {

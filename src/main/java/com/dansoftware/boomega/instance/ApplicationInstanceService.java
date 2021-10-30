@@ -26,6 +26,7 @@ import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
 import com.dansoftware.boomega.launcher.LauncherMode;
+import com.dansoftware.boomega.main.ArgumentParser;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;
@@ -153,7 +154,7 @@ public class ApplicationInstanceService implements MessageHandler {
         public ActivityLauncherImpl(@Nullable List<String> args,
                                     @NotNull Preferences preferences,
                                     @NotNull DatabaseTracker databaseTracker) {
-            super(LauncherMode.ALREADY_RUNNING, preferences, databaseTracker, args);
+            super(LauncherMode.ALREADY_RUNNING, preferences, databaseTracker, ArgumentParser.parse(args));
             this.loginData = buildLoginData();
         }
 
@@ -168,21 +169,14 @@ public class ApplicationInstanceService implements MessageHandler {
         }
 
         @Override
-        protected LoginData getLoginData() {
+        protected @NotNull LoginData getLoginData() {
             return loginData;
         }
 
-        @Override
-        protected void saveLoginData(LoginData loginData) {
-            getPreferences()
-                    .editor()
-                    .put(PreferenceKey.LOGIN_DATA, loginData)
-                    .tryCommit();
-        }
 
         @Override
-        protected void onActivityLaunched(Context context) {
-            //displaying message '$database launched'
+        protected void onActivityLaunched(@NotNull Context context, DatabaseMeta launched) {
+            //TODO: displaying message '$database launched'
         }
     }
 

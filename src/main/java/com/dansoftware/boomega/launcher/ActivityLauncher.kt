@@ -48,7 +48,7 @@ open class ActivityLauncher(
      * Provides a way to retrieve & save the login-data configuration
      */
     protected open var loginData: LoginData
-        get() = preferences.get(LOGIN_DATA)
+        get() = preferences[LOGIN_DATA]
         set(value) {
             preferences.editor().put(LOGIN_DATA, value).tryCommit()
         }
@@ -104,7 +104,7 @@ open class ActivityLauncher(
         when (mode) {
             LauncherMode.INIT -> handleArgumentInit(initialDatabase)
             LauncherMode.ALREADY_RUNNING -> handleArgumentAlreadyRunning(initialDatabase)
-            LauncherMode.INTERNAL -> handleArgumentInternal(initialDatabase)
+            LauncherMode.NORMAL -> handleArgumentInternal(initialDatabase)
         }
     }
 
@@ -150,7 +150,7 @@ open class ActivityLauncher(
     }
 
     /**
-     * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.INTERNAL]
+     * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.NORMAL]
      */
     private fun handleArgumentInternal(meta: DatabaseMeta) {
         DatabaseActivity.getByDatabase(meta)
@@ -184,7 +184,7 @@ open class ActivityLauncher(
         when (mode) {
             LauncherMode.INIT -> handleNoArgumentInit()
             LauncherMode.ALREADY_RUNNING -> handleNoArgumentAlreadyRunning()
-            LauncherMode.INTERNAL -> handleNoArgumentInternal()
+            LauncherMode.NORMAL -> handleNoArgumentInternal()
         }
     }
 

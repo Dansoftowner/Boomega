@@ -22,10 +22,12 @@ import com.dansoftware.boomega.config.PreferenceKey;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -92,7 +94,7 @@ public abstract class JsonSource implements ConfigSource {
             }
 
             T value = key.getAdapter() == null ? gson.fromJson(jsonElement, key.getType()) :
-                    key.getAdapter().deserialize(jsonElement, key.getType(), null);
+                    key.getAdapter().deserialize(jsonElement, key.getType(), gson::fromJson);
             return Objects.isNull(value) ? key.getDefaultValue().get() : value;
         } catch (RuntimeException e) {
             logger.error("Couldn't parse value for '{}'", key.getJsonKey(), e);
@@ -135,7 +137,17 @@ public abstract class JsonSource implements ConfigSource {
         JsonElement element = null;
         if (value != null)
             element = key.getAdapter() == null ? gson.toJsonTree(value, key.getType()) :
-                    key.getAdapter().serialize(value, value.getClass(), null);
+                    key.getAdapter().serialize(value, value.getClass(), new JsonSerializationContext() {
+                        @Override
+                        public JsonElement serialize(Object src) {
+                            return gson.toJsonTree(src);
+                        }
+
+                        @Override
+                        public JsonElement serialize(Object src, Type typeOfSrc) {
+                            return gson.toJsonTree(src, typeOfSrc);
+                        }
+                    });
         getJsonBase().add(key.getJsonKey(), element);
     }
 

@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.dbcreator;
 
 import com.dansoftware.boomega.database.api.DatabaseMeta;
+import com.dansoftware.boomega.database.bmdb.BMDBMeta;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.apache.commons.collections.CollectionUtils;
@@ -36,9 +37,9 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Gyorffy
  */
-public class DatabaseOpener {
+public class BMDBDatabaseOpener {
 
-    public DatabaseOpener() {
+    public BMDBDatabaseOpener() {
     }
 
     @NotNull
@@ -74,7 +75,7 @@ public class DatabaseOpener {
         List<File> files = createFileChooser().showOpenMultipleDialog(ownerWindow);
         if (CollectionUtils.isNotEmpty(files)) {
             return files.stream()
-                    .map(DatabaseMeta::new)
+                    .map(BMDBMeta::new)
                     .collect(Collectors.toList());
         }
 
@@ -94,7 +95,7 @@ public class DatabaseOpener {
     public DatabaseMeta showOpenDialog(@Nullable Window ownerWindow) {
         File file = createFileChooser().showOpenDialog(ownerWindow);
         if (file != null) {
-            return new DatabaseMeta(file);
+            return new BMDBMeta(file);
         }
 
         return null;

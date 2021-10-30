@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.db;
+package com.dansoftware.boomega.database;
 
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.database.api.data.Record;
+import com.dansoftware.boomega.database.bmdb.NitriteDatabase;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.objects.Cursor;
 import org.dizitart.no2.objects.ObjectRepository;
@@ -48,7 +50,7 @@ public class NitriteDatabaseTest {
     @BeforeEach
     void initialize() {
         given(nitriteClient.getRepository(any(), eq(Record.class))).willReturn(recordRepository);
-        underTest = new NitriteDatabase(nitriteClient);
+        underTest = new NitriteDatabase(nitriteClient, mock(DatabaseMeta.class));
     }
 
     @SuppressWarnings("unchecked")

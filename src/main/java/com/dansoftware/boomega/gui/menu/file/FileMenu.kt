@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.menu.file
 
-import com.dansoftware.boomega.config.PreferenceKey
+import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.action.GlobalActions
@@ -31,7 +31,7 @@ import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.gui.util.separator
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.ActivityLauncher
-import com.dansoftware.boomega.launcher.LauncherMode
+import com.dansoftware.boomega.launcher.normalActivityLauncher
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
@@ -88,11 +88,10 @@ abstract class FileMenu(
                 MenuItem(db.toString()).also { menuItem ->
                     menuItem.setOnAction {
                         startActivityLauncher {
-                            ActivityLauncher(
-                                LauncherMode.INTERNAL,
-                                db,
-                                preferences,
-                                databaseTracker
+                            normalActivityLauncher(
+                                initialDatabase = db,
+                                preferences = preferences,
+                                databaseTracker = databaseTracker
                             )
                         }
                     }
@@ -123,7 +122,7 @@ abstract class FileMenu(
         .graphic("logout-icon")
         .action {
             preferences.editor()
-                .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
+                .put(LOGIN_DATA, preferences[LOGIN_DATA].apply {
                     if (isAutoLogin && selectedDatabase == databaseMeta) {
                         autoLoginCredentials = null
                     }

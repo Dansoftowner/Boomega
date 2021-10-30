@@ -19,13 +19,23 @@
 package com.dansoftware.boomega.main;
 
 import com.dansoftware.boomega.config.Preferences;
-import com.dansoftware.boomega.config.source.InMemorySource;
-import com.dansoftware.boomega.db.InMemoryDatabase;
+import com.dansoftware.boomega.database.api.*;
+import com.dansoftware.boomega.database.api.data.Record;
+import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.util.ReflectionUtils;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.scene.Node;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class InMemoryDatabaseSimulation extends Application {
 
@@ -43,5 +53,148 @@ public class InMemoryDatabaseSimulation extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         new DatabaseActivity(new InMemoryDatabase(), Preferences.empty(), new DatabaseTracker()).show();
+    }
+
+
+    private static class InMemoryDatabaseProvider implements DatabaseProvider<InMemoryDatabaseMeta> {
+
+        @NotNull
+        @Override
+        public String getName() {
+            return "null";
+        }
+
+        @NotNull
+        @Override
+        public Node getIcon() {
+            return new Rectangle();
+        }
+
+        @NotNull
+        @Override
+        public List<DatabaseOption<?>> getAvailableOptions() {
+            return List.of();
+        }
+
+        @NotNull
+        @Override
+        public List<DatabaseField<?>> getFields() {
+            return List.of();
+        }
+
+        @NotNull
+        @Override
+        public InMemoryDatabaseMeta getMeta(@NotNull String url) {
+            return new InMemoryDatabaseMeta();
+        }
+
+        @NotNull
+        @Override
+        public Database getDatabase(@NotNull InMemoryDatabaseSimulation.InMemoryDatabaseMeta meta, @NotNull Map<DatabaseField<?>, ?> credentials, @NotNull Map<DatabaseOption<?>, ?> options) throws DatabaseConstructionException {
+            return new InMemoryDatabase();
+        }
+
+        @NotNull
+        @Override
+        public LoginForm<?> buildUILoginForm(@NotNull Context context, @NotNull ReadOnlyObjectProperty<InMemoryDatabaseMeta> databaseMeta, @NotNull Map<DatabaseOption<?>, ?> options) {
+            return null;
+        }
+
+        @NotNull
+        @Override
+        public RegistrationForm buildUIRegistrationForm(@NotNull Context context, @NotNull Map<DatabaseOption<?>, ?> options) {
+            return null;
+        }
+    }
+
+    private static class InMemoryDatabaseMeta extends DatabaseMeta {
+
+        InMemoryDatabaseMeta() {
+            super(new InMemoryDatabaseProvider());
+        }
+
+        @NotNull
+        @Override
+        public String getUrl() {
+            return "null";
+        }
+
+        @NotNull
+        @Override
+        public String getSimpleName() {
+            return "null";
+        }
+
+        @NotNull
+        @Override
+        protected Set<Action<?>> getSupportedActions() {
+            return Set.of();
+        }
+
+        public Object performAction(DatabaseMeta.Action action) {
+            return null;
+        }
+    }
+
+    private static class InMemoryDatabase implements Database {
+
+        private final List<Record> records = new LinkedList<>();
+
+        @NotNull
+        @Override
+        public DatabaseMeta getMeta() {
+            return new InMemoryDatabaseMeta();
+        }
+
+        @NotNull
+        @Override
+        public List<Record> getRecords() {
+            return List.copyOf(records);
+        }
+
+        @Override
+        public int getTotalRecordCount() {
+            return records.size();
+        }
+
+        @Override
+        public boolean isClosed() {
+            return false;
+        }
+
+        @Override
+        public void insertRecord(@NotNull Record record) {
+            records.add(record);
+        }
+
+        @Override
+        public void updateRecord(@NotNull Record record) {
+
+        }
+
+        @Override
+        public void removeRecord(@NotNull Record record) {
+
+        }
+
+        @Override
+        public void removeRecords(@NotNull List<Record> records) {
+
+        }
+
+        @Override
+        public void close() {
+
+        }
+
+        @Override
+        public void addListener(@NotNull DatabaseChangeListener listener) {
+
+        }
+
+        @Override
+        public void removeListener(@NotNull DatabaseChangeListener listener) {
+
+        }
     }
 }

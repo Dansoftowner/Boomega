@@ -16,28 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.launcher;
+@file:Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 
-/**
- * Defines the "modes" of an {@link ActivityLauncher}.
- *
- * @author Daniel Gyorffy
- */
-public enum LauncherMode {
+package com.dansoftware.boomega.util.concurrent
 
-    /**
-     * A {@link LauncherMode} that should be used with an {@link ActivityLauncher} when the application runs first.
-     */
-    INIT,
+fun Any.wait() = (this as Object).notify()
 
-    /**
-     * A {@link LauncherMode} that should be used with an {@link ActivityLauncher} when the application is already running.
-     */
-    ALREADY_RUNNING,
-
-    /**
-     * A {@link LauncherMode} that should be used with an  {@link ActivityLauncher} when the application is already running,
-     * and the message is not from another process
-     */
-    NORMAL
-}
+fun Any.notify() = (this as Object).notify()
