@@ -20,6 +20,6 @@
 
 package com.dansoftware.boomega.util.concurrent
 
-fun Any.wait() = (this as Object).notify()
+fun Any.wait() = (this as Object).wait()
 
 fun Any.notify() = (this as Object).notify()

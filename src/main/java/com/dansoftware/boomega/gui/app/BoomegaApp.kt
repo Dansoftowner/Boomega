@@ -104,11 +104,6 @@ class BoomegaApp : BaseApplication() {
         exitProcess(0)
     }
 
-    override fun progress(value: Double) {
-        logger.debug("Progress $value/1")
-        super.progress(value)
-    }
-
     private fun handleApplicationArgument() {
         // Showing message on the preloader about the launched database
         parsedArgument.ifPresent {
@@ -233,21 +228,20 @@ class BoomegaApp : BaseApplication() {
      * @return `true` if the first time dialog was shown; `false` otherwise
      */
     private fun showFirstTimeActivity(preferences: Preferences): Boolean {
-        val lck = this::class
-        return synchronized(lck) {
+        val lock = Any()
+        return synchronized(lock) {
             when {
                 FirstTimeActivity.isNeeded(preferences) -> {
                     hidePreloader()
                     logger.debug("First time dialog is needed")
                     Platform.runLater {
-                        logger.debug("In the UI thread")
-                        synchronized(lck) {
+                        synchronized(lock) {
                             FirstTimeActivity(preferences).show()
-                            lck.notify()
+                            lock.notify()
                         }
                     }
                     // waiting till the first time dialog completes
-                    lck.wait()
+                    lock.wait()
                     showPreloader()
                     true
                 }
