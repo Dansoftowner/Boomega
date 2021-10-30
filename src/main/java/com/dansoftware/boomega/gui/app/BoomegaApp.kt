@@ -25,8 +25,8 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
-import com.dansoftware.boomega.gui.preloader.Preloader
-import com.dansoftware.boomega.gui.preloader.Preloader.MessageNotification.Priority
+import com.dansoftware.boomega.gui.preloader.BoomegaPreloader
+import com.dansoftware.boomega.gui.preloader.BoomegaPreloader.MessageNotification.Priority
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.window.BaseWindow
@@ -50,7 +50,7 @@ import kotlin.system.exitProcess
 /**
  * The Boomega javafx application implementation
  */
-class BoomegaApp : BaseApplication() {
+class BoomegaApp : BaseBoomegaApplication() {
 
     /**
      * The queue that stores the actions should be invoked after an activity is launched
@@ -106,9 +106,9 @@ class BoomegaApp : BaseApplication() {
 
     private fun handleApplicationArgument() {
         // Showing message on the preloader about the launched database
-        parsedArgument.ifPresent {
+        launchedDatabase?.let {
             notifyPreloader(
-                Preloader.MessageNotification(
+                BoomegaPreloader.MessageNotification(
                     message = i18n("preloader.file.open", it.simpleName),
                     priority = Priority.HIGH
                 )

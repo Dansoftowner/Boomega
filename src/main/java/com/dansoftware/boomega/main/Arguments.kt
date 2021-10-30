@@ -16,28 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.launcher;
+@file:JvmName("Arguments")
+
+package com.dansoftware.boomega.main
+
+import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.bmdb.BMDBMeta
+import java.io.File
 
 /**
- * Defines the "modes" of an {@link ActivityLauncher}.
- *
- * @author Daniel Gyorffy
+ * Parses the application arguments and gives the database-representation object ([DatabaseMeta])
  */
-public enum LauncherMode {
+fun parseArguments(args: List<String>?) = parseArgument(args?.getOrNull(0))
 
-    /**
-     * Should be used only once during the program execution when the application starts.
-     */
-    INITIAL,
-
-    /**
-     * Should be used when the application is already running, for internal operations
-     */
-    INTERNAL,
-
-    /**
-     * Should be used when the application is already running and the request is from an external process.
-     */
-    EXTERNAL
-
+/**
+ * Parses a single application argument into a [DatabaseMeta]
+ */
+fun parseArgument(arg: String?): DatabaseMeta? {
+    return arg?.takeIf { it.isNotBlank() }?.let {
+        val file = File(it)
+        BMDBMeta(file)
+    }
 }

@@ -31,7 +31,7 @@ import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.gui.util.separator
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.ActivityLauncher
-import com.dansoftware.boomega.launcher.normalActivityLauncher
+import com.dansoftware.boomega.launcher.internalActivityLauncher
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
@@ -88,7 +88,7 @@ abstract class FileMenu(
                 MenuItem(db.toString()).also { menuItem ->
                     menuItem.setOnAction {
                         startActivityLauncher {
-                            normalActivityLauncher(
+                            internalActivityLauncher(
                                 initialDatabase = db,
                                 preferences = preferences,
                                 databaseTracker = databaseTracker

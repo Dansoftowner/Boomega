@@ -21,7 +21,7 @@
 package com.dansoftware.boomega.main
 
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler
-import com.dansoftware.boomega.gui.app.BaseApplication
+import com.dansoftware.boomega.gui.app.BaseBoomegaApplication
 import com.dansoftware.boomega.gui.app.BoomegaApp
 import com.dansoftware.boomega.instance.ApplicationInstanceService
 
@@ -37,5 +37,5 @@ private fun init(args: Array<String>) {
 }
 
 private fun launch(args: Array<String>) {
-    BaseApplication.launchApp(BoomegaApp::class.java, *args)
+    BaseBoomegaApplication.launchApp(BoomegaApp::class.java, *args)
 }

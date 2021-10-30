@@ -24,8 +24,11 @@ import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
-import com.dansoftware.boomega.main.ArgumentParser
+import com.dansoftware.boomega.main.parseArguments
 
+/**
+ * Builds an [ActivityLauncher] should be used for launching the proper activity when the application starts
+ */
 inline fun initActivityLauncher(
     preferences: Preferences,
     databaseTracker: DatabaseTracker,
@@ -34,16 +37,19 @@ inline fun initActivityLauncher(
     crossinline setLoginData: (LoginData) -> Unit = { preferences.editor.put(LOGIN_DATA, it).tryCommit() },
     crossinline onLaunched: (context: Context, launchedDatabase: DatabaseMeta?) -> Unit = { _, _ -> }
 ): ActivityLauncher = activityLauncher(
-    LauncherMode.INIT,
+    LauncherMode.INITIAL,
     preferences,
     databaseTracker,
-    ArgumentParser.parse(applicationArgs),
+    parseArguments(applicationArgs),
     getLoginData,
     setLoginData,
     onLaunched
 )
 
-inline fun normalActivityLauncher(
+/**
+ * Builds an [ActivityLauncher] should be used for "internal" operations after the app is already opened
+ */
+inline fun internalActivityLauncher(
     preferences: Preferences,
     databaseTracker: DatabaseTracker,
     initialDatabase: DatabaseMeta?,
@@ -51,7 +57,7 @@ inline fun normalActivityLauncher(
     crossinline setLoginData: (LoginData) -> Unit = { preferences.editor.put(LOGIN_DATA, it).tryCommit() },
     crossinline onLaunched: (context: Context, launchedDatabase: DatabaseMeta?) -> Unit = { _, _ -> }
 ): ActivityLauncher = activityLauncher(
-    LauncherMode.NORMAL,
+    LauncherMode.INTERNAL,
     preferences,
     databaseTracker,
     initialDatabase,
@@ -60,6 +66,9 @@ inline fun normalActivityLauncher(
     onLaunched
 )
 
+/**
+ * Constructs an activity launcher from the given options
+ */
 inline fun activityLauncher(
     mode: LauncherMode,
     preferences: Preferences,

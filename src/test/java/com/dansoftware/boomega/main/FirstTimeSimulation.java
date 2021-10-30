@@ -2,7 +2,7 @@ package com.dansoftware.boomega.main;
 
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler;
-import com.dansoftware.boomega.gui.app.BaseApplication;
+import com.dansoftware.boomega.gui.app.BaseBoomegaApplication;
 import com.dansoftware.boomega.gui.app.BoomegaApp;
 
 public class FirstTimeSimulation {
@@ -14,6 +14,6 @@ public class FirstTimeSimulation {
     }
 
     public static void main(String... args) {
-        BaseApplication.launchApp(BoomegaApp.class, args);
+        BaseBoomegaApplication.launchApp(BoomegaApp.class, args);
     }
 }

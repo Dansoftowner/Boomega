@@ -64,7 +64,7 @@ object GlobalActions {
         "database-icon",
         KeyBindings.newEntry
     ) { context, preferences, databaseTracker ->
-        submitTask(context, ActivityLauncher(LauncherMode.NORMAL, preferences, databaseTracker))
+        submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker))
     }
 
     @JvmField
@@ -76,7 +76,7 @@ object GlobalActions {
         ) { context, preferences, databaseTracker ->
             BMDBDatabaseOpener().showOpenDialog(context.contextWindow)?.also {
                 // launches the database
-                submitTask(context, ActivityLauncher(LauncherMode.NORMAL, preferences, databaseTracker, it))
+                submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker, it))
             }
         }
 
@@ -89,7 +89,7 @@ object GlobalActions {
         ) { context, preferences, databaseTracker ->
             DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
                 // launches the database
-                submitTask(context, ActivityLauncher(LauncherMode.NORMAL, preferences, databaseTracker, it))
+                submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker, it))
             }
         }
 

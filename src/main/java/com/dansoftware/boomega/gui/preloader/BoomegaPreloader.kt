@@ -28,7 +28,7 @@ import javafx.stage.Stage
 import javafx.stage.StageStyle
 import org.slf4j.LoggerFactory
 
-class Preloader : javafx.application.Preloader() {
+class BoomegaPreloader : javafx.application.Preloader() {
 
     private val progressProperty = SimpleDoubleProperty()
     private val messageProperty = SimpleStringProperty()
@@ -110,7 +110,7 @@ class Preloader : javafx.application.Preloader() {
 
     companion object {
 
-        private val logger = LoggerFactory.getLogger(Preloader::class.java)
+        private val logger = LoggerFactory.getLogger(BoomegaPreloader::class.java)
         private const val STYLESHEET = "/com/dansoftware/boomega/gui/theme/preloader.css"
 
         init {

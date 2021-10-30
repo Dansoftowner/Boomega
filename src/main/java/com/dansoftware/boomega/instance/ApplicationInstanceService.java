@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.instance;
 
-import com.dansoftware.boomega.config.PreferenceKey;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
@@ -26,7 +25,7 @@ import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.entry.DatabaseTracker;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
 import com.dansoftware.boomega.launcher.LauncherMode;
-import com.dansoftware.boomega.main.ArgumentParser;
+import com.dansoftware.boomega.main.Arguments;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;
@@ -42,6 +41,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.dansoftware.boomega.config.CommonPreferences.LOGIN_DATA;
 
 /**
  * Responsible for listening to application instances
@@ -154,14 +155,14 @@ public class ApplicationInstanceService implements MessageHandler {
         public ActivityLauncherImpl(@Nullable List<String> args,
                                     @NotNull Preferences preferences,
                                     @NotNull DatabaseTracker databaseTracker) {
-            super(LauncherMode.ALREADY_RUNNING, preferences, databaseTracker, ArgumentParser.parse(args));
+            super(LauncherMode.EXTERNAL, preferences, databaseTracker, Arguments.parseArguments(args));
             this.loginData = buildLoginData();
         }
 
         private LoginData buildLoginData() {
             //removing all already opened databases from the LoginData
             Set<DatabaseMeta> databaseUsing = DatabaseTracker.getGlobal().getUsingDatabases();
-            LoginData loginData = getPreferences().get(PreferenceKey.LOGIN_DATA);
+            LoginData loginData = getPreferences().get(LOGIN_DATA);
             loginData.getSavedDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);
             loginData.setAutoLoginCredentials(null);

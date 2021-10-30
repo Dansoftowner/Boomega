@@ -38,7 +38,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 open class ActivityLauncher(
-    val mode: LauncherMode = LauncherMode.INIT,
+    val mode: LauncherMode = LauncherMode.INITIAL,
     val preferences: Preferences,
     val databaseTracker: DatabaseTracker,
     val initialDatabase: DatabaseMeta? = null
@@ -102,14 +102,14 @@ open class ActivityLauncher(
      */
     private fun handleArgument(mode: LauncherMode = this.mode, initialDatabase: DatabaseMeta) {
         when (mode) {
-            LauncherMode.INIT -> handleArgumentInit(initialDatabase)
-            LauncherMode.ALREADY_RUNNING -> handleArgumentAlreadyRunning(initialDatabase)
-            LauncherMode.NORMAL -> handleArgumentInternal(initialDatabase)
+            LauncherMode.INITIAL -> handleArgumentInit(initialDatabase)
+            LauncherMode.EXTERNAL -> handleArgumentAlreadyRunning(initialDatabase)
+            LauncherMode.INTERNAL -> handleArgumentInternal(initialDatabase)
         }
     }
 
     /**
-     * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.INIT]
+     * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.INITIAL]
      */
     private fun handleArgumentInit(meta: DatabaseMeta) {
         onNewDatabaseAdded(meta)
@@ -139,7 +139,7 @@ open class ActivityLauncher(
     }
 
     /**
-     * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.ALREADY_RUNNING]
+     * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.EXTERNAL]
      */
     private fun handleArgumentAlreadyRunning(meta: DatabaseMeta) {
         DatabaseActivity.getByDatabase(meta)
@@ -150,7 +150,7 @@ open class ActivityLauncher(
     }
 
     /**
-     * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.NORMAL]
+     * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.INTERNAL]
      */
     private fun handleArgumentInternal(meta: DatabaseMeta) {
         DatabaseActivity.getByDatabase(meta)
@@ -182,9 +182,9 @@ open class ActivityLauncher(
 
     private fun handleNoArgument(mode: LauncherMode = this.mode) {
         when (mode) {
-            LauncherMode.INIT -> handleNoArgumentInit()
-            LauncherMode.ALREADY_RUNNING -> handleNoArgumentAlreadyRunning()
-            LauncherMode.NORMAL -> handleNoArgumentInternal()
+            LauncherMode.INITIAL -> handleNoArgumentInit()
+            LauncherMode.EXTERNAL -> handleNoArgumentAlreadyRunning()
+            LauncherMode.INTERNAL -> handleNoArgumentInternal()
         }
     }
 
