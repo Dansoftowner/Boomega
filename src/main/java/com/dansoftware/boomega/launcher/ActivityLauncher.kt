@@ -94,6 +94,8 @@ open class ActivityLauncher(
         initialDatabase?.let {
             logger.debug("Argument found")
             handleArgument(initialDatabase = it)
+        } ?: run {
+            handleNoArgument()
         }
     }
 
