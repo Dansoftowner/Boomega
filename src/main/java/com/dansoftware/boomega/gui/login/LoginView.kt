@@ -28,6 +28,7 @@ import javafx.application.Platform
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ObservableStringValue
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -51,7 +52,7 @@ class LoginView(
         get() = TODO()
 
     init {
-        content = LoginViewBase(TODO())
+        content = LoginViewBase(this, tracker, preferences, databaseLoginListener)
         playAnimation()
     }
 
@@ -67,9 +68,7 @@ class LoginView(
         return createdDatabase
     }
 
-    fun titleProperty(): ObservableStringValue {
-       TODO()
-    }
+    fun titleProperty(): ObservableStringValue = SimpleStringProperty() // TODO: WTH?
 /*
     private class LoginBoxController(
         override val context: Context,

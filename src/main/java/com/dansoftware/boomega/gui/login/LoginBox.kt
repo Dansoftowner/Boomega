@@ -20,14 +20,25 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
+import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.api.LoginForm
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.dbcreator.BMDBDatabaseOpener
+import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
+import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.refresh
+import com.dansoftware.boomega.gui.util.selectedItem
+import com.dansoftware.boomega.gui.util.selectedItemProperty
 import com.dansoftware.boomega.i18n.i18n
-import javafx.beans.property.*
+import javafx.beans.binding.Bindings
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ObservableStringValue
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -35,25 +46,28 @@ import javafx.scene.Group
 import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.File
 
-class LoginBox(private val controller: Controller) : VBox(10.0) {
+class LoginBox(
+    private val context: Context,
+    private val databaseTracker: DatabaseTracker,
+    private val databaseLoginListener: DatabaseLoginListener
+) : VBox(10.0) {
 
     private val itemSelected: BooleanProperty = SimpleBooleanProperty()
-    private val usernameInput: StringProperty = SimpleStringProperty()
-    private val passwordInput: StringProperty = SimpleStringProperty()
     private val remember: BooleanProperty = SimpleBooleanProperty()
-    private val databaseChooser: ObjectProperty<ComboBox<DatabaseMeta>> = SimpleObjectProperty()
 
-    var selectedItem: DatabaseMeta?
-        get() = databaseChooser.get().selectionModel.selectedItem
+    private val loginForm: ObjectProperty<LoginForm<*>?> = SimpleObjectProperty()
+
+    private val databaseChooser: DatabaseCombo = buildDatabaseChooser()
+
+    private var selectedItem: DatabaseMeta?
+        get() = databaseChooser.selectedItem
         set(value) {
-            select(value)
+            databaseChooser.selectionModel.select(value)
         }
 
     init {
@@ -61,46 +75,35 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         this.maxWidth = 650.0
         this.prefWidth = 550.0
         this.buildUI()
-        controller.loginBox = this
     }
 
-    fun titleProperty(): ObservableStringValue = databaseChooser.get().selectionModel.selectedItemProperty().asString()
+    fun titleProperty(): ObservableStringValue = databaseChooser.selectedItemProperty().asString()
 
     fun refresh() {
-        databaseChooser.get().refresh()
-    }
-
-    fun addItem(item: DatabaseMeta) {
-        databaseChooser.get().items.add(item)
-    }
-
-    fun removeItem(item: DatabaseMeta) {
-        databaseChooser.get().items.remove(item)
-    }
-
-    fun select(databaseMeta: DatabaseMeta?) {
-        databaseChooser.get().selectionModel.select(databaseMeta)
-    }
-
-    fun addSelectedItemListener(listener: (DatabaseMeta?) -> Unit) {
-        databaseChooser.get().selectionModel.selectedItemProperty().addListener { _, _, it -> listener(it) }
+        databaseChooser.refresh()
     }
 
     fun fillForm(loginData: LoginData) {
-        databaseChooser.get().let { databaseChooser ->
-            databaseChooser.items.addAll(loginData.savedDatabases)
-            loginData.selectedDatabase?.let(databaseChooser.selectionModel::select)
-            /*loginData.autoLoginCredentials?.run {
+        databaseChooser.items.addAll(loginData.savedDatabases)
+        loginData.selectedDatabase?.let(databaseChooser.selectionModel::select)
+
+        if (loginData.isAutoLogin) {
+            loginData.autoLoginCredentials!!.run {
 
             }
-            loginData.autoLoginDatabase?.let {
-                remember.set(true)
-                loginData.autoLoginCredentials?.run {
-                    usernameInput.set(username)
-                    passwordInput.set(password)
-                }
-            }*/
         }
+
+        /*loginData.autoLoginCredentials?.run {
+
+        }
+        loginData.autoLoginDatabase?.let {
+            remember.set(true)
+            loginData.autoLoginCredentials?.run {
+                usernameInput.set(username)
+                passwordInput.set(password)
+            }
+        }*/
+
     }
 
     private fun buildUI() {
@@ -122,22 +125,24 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
     }
 
     private fun buildDatabaseChooserArea() = HBox(5.0).apply {
-        children.add(buildComboBox())
+        children.add(buildDatabaseChooser())
         children.add(buildFileChooserButton())
         children.add(buildDatabaseManagerButton())
         setMargin(this, Insets(0.0, 20.0, 0.0, 20.0))
     }
 
-    private fun buildComboBox() = ComboBox<DatabaseMeta>().apply {
-        databaseChooser.set(this)
-        minHeight = 35.0
-        minWidth = 355.0
-        maxWidth = Double.MAX_VALUE
-        promptText = i18n("login.source.combo.promt")
-        buttonCell = ComboBoxButtonCell(controller.databaseTracker)
-        setCellFactory { DatabaseChooserItem(controller.databaseTracker) }
+    private fun buildDatabaseChooser() = DatabaseCombo(databaseTracker).apply {
+        loginForm.bind(
+            Bindings.createObjectBinding({
+                @Suppress("UNCHECKED_CAST")
+                selectedItem?.provider?.buildUILoginForm(
+                    context,
+                    selectedItemProperty() as ObjectProperty<DatabaseMeta>,
+                    emptyMap() // TODO: database options
+                )
+            })
+        )
         itemSelected.bind(selectionModel.selectedItemProperty().isNotNull)
-        HBox.setHgrow(this, Priority.ALWAYS)
     }
 
     private fun buildFileChooserButton() = Button().apply {
@@ -147,7 +152,9 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         minHeight = 35.0
         minWidth = 40.0
         setOnAction {
-            controller.openFile()
+            BMDBDatabaseOpener().showOpenDialog(context.contextWindow)?.let {
+                databaseTracker.saveDatabase(it)
+            }
         }
     }
 
@@ -158,7 +165,7 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         minHeight = 35.0
         minWidth = 40.0
         setOnAction {
-            controller.openDatabaseManager()
+            DatabaseManagerActivity().show(databaseTracker, context.contextWindow)
         }
     }
 
@@ -169,36 +176,24 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         maxWidth = Double.MAX_VALUE
         graphic = icon("database-plus-icon")
         setOnAction {
-            controller.openDatabaseCreator()
+            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow)
         }
     }
 
     private fun buildForm() = VBox(10.0).apply {
-        children.add(Separator())
-        children.add(buildUsernameInput())
-        children.add(buildPasswordInput())
-        children.add(buildCheckBox())
-        children.add(buildLoginButton())
+        setMargin(this, Insets(0.0, 20.0, 20.0, 20.0))
         managedProperty().bind(itemSelected)
         visibleProperty().bind(itemSelected)
-        setMargin(this, Insets(0.0, 20.0, 20.0, 20.0))
+
+        children.add(Separator())
+        children.add(buildCheckBox())
+        children.add(buildLoginButton())
+
+        loginForm.addListener { _, _, newForm ->
+            children[1] = newForm
+        }
     }
 
-    private fun buildUsernameInput() = TextField().apply {
-        minHeight = 35.0
-        prefColumnCount = 10
-        promptText = i18n("credentials.username")
-        usernameInput.bindBidirectional(textProperty())
-        textProperty().bindBidirectional(usernameInput)
-    }
-
-    private fun buildPasswordInput() = PasswordField().apply {
-        minHeight = 35.0
-        prefColumnCount = 10
-        promptText = i18n("credentials.password")
-        passwordInput.bindBidirectional(textProperty())
-        textProperty().bindBidirectional(passwordInput)
-    }
 
     private fun buildCheckBox() = CheckBox().apply {
         alignment = Pos.CENTER_RIGHT
@@ -213,68 +208,17 @@ class LoginBox(private val controller: Controller) : VBox(10.0) {
         text = i18n("login.form.login")
         isDefaultButton = true
         setOnAction {
-            databaseChooser.get().selectionModel.selectedItem?.let { dbMeta ->
-                controller.login(
-                    dbMeta, Credentials(
-                        usernameInput.get()?.trim() ?: "",
-                        passwordInput.get()?.trim() ?: ""
-                    ), remember.get()
-                )
+            // TODO: what about already launched databases? Should send front request to database activity
+            try {
+                databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
+            } catch (e: DatabaseConstructionException) {
+                context.showErrorDialog(i18n("login.failed"), e.localizedMessage ?: "", e)
             }
         }
     }
 
-    private open class DatabaseChooserItem(
-        private val databaseTracker: DatabaseTracker
-    ) : ListCell<DatabaseMeta?>() {
 
-        companion object {
-            private const val NOT_EXISTS_CLASS = "state-indicator-file-not-exists"
-            private const val USED_CLASS = "state-indicator-used"
-        }
-
-        init {
-            maxWidth = 650.0
-        }
-
-        override fun updateItem(item: DatabaseMeta?, empty: Boolean) {
-            super.updateItem(item, empty)
-            when {
-                item == null || empty -> {
-                    text = null
-                    graphic = null
-                }
-                else -> {
-                    text = item.toString()
-                    val dbFile = File(item.url)
-                    when {
-                        dbFile.exists().not() || dbFile.isDirectory -> {
-                            tooltip = Tooltip(i18n("file.not.exists"))
-                            graphic = icon("warning-icon").apply { styleClass.add(NOT_EXISTS_CLASS) }
-                        }
-                        databaseTracker.isDatabaseUsed(TODO()/*item*/) -> {
-                            tooltip = Tooltip(i18n("database.currently.used"))
-                            graphic = icon("play-icon").apply { styleClass.add(USED_CLASS) }
-                        }
-                        else -> {
-                            graphic = null
-                            tooltip = null
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private class ComboBoxButtonCell(databaseTracker: DatabaseTracker) : DatabaseChooserItem(databaseTracker) {
-        override fun updateItem(item: DatabaseMeta?, empty: Boolean) {
-            super.updateItem(item, empty)
-            if (item === null) {
-                text = i18n("login.source.combo.promt")
-            }
-        }
-    }
-
+    @Deprecated("BS")
     interface Controller {
         var loginBox: LoginBox?
 

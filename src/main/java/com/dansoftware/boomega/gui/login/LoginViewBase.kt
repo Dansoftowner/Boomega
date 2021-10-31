@@ -18,6 +18,9 @@
 
 package com.dansoftware.boomega.gui.login
 
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import javafx.beans.value.ObservableStringValue
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
@@ -25,9 +28,14 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 
-class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
+class LoginViewBase(
+    private val context: Context,
+    private val databaseTracker: DatabaseTracker,
+    private val preferences: Preferences,
+    private val databaseLoginListener: DatabaseLoginListener
+) : VBox() {
 
-    private val loginBox = LoginBox(controller)
+    private val loginBox = LoginBox(context, databaseTracker, databaseLoginListener)
 
     init {
         styleClass.add("login-form")
@@ -38,7 +46,7 @@ class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
     fun titleProperty(): ObservableStringValue = loginBox.titleProperty()
 
     private fun buildUI() {
-        children.add(LoginToolbar(controller.context, controller.databaseTracker, controller.preferences))
+        children.add(LoginToolbar(context, databaseTracker, preferences))
         children.add(StackPane(Group(loginBox)).also { setVgrow(it, Priority.ALWAYS) })
     }
 
@@ -48,16 +56,16 @@ class LoginViewBase(private val controller: LoginBox.Controller) : VBox() {
                 event.acceptTransferModes(*TransferMode.COPY_OR_MOVE)
         }
         setOnDragDropped { event ->
-          /*  if (event.dragboard.hasFiles()) {
-                event.dragboard.files
-                    .filter(File::isFile)
-                    .map(::DatabaseMeta)
-                    .toList()
-                    .apply {
-                        forEach(controller.databaseTracker::saveDatabase)
-                        lastOrNull()?.let { loginBox.selectedItem = it }
-                    }
-            }*/
+            /*  if (event.dragboard.hasFiles()) {
+                  event.dragboard.files
+                      .filter(File::isFile)
+                      .map(::DatabaseMeta)
+                      .toList()
+                      .apply {
+                          forEach(controller.databaseTracker::saveDatabase)
+                          lastOrNull()?.let { loginBox.selectedItem = it }
+                      }
+              }*/
         }
     }
 
