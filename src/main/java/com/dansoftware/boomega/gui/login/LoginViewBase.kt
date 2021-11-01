@@ -35,7 +35,7 @@ class LoginViewBase(
     private val databaseLoginListener: DatabaseLoginListener
 ) : VBox() {
 
-    private val loginBox = LoginBox(context, databaseTracker, databaseLoginListener)
+    private val loginBox = LoginBox(context, preferences, databaseTracker, databaseLoginListener)
 
     init {
         styleClass.add("login-form")
@@ -56,6 +56,8 @@ class LoginViewBase(
                 event.acceptTransferModes(*TransferMode.COPY_OR_MOVE)
         }
         setOnDragDropped { event ->
+            // TODO: drag support
+
             /*  if (event.dragboard.hasFiles()) {
                   event.dragboard.files
                       .filter(File::isFile)

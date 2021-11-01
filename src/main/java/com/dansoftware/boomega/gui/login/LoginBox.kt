@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.login
 
+import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.database.api.DatabaseConstructionException
@@ -35,10 +36,7 @@ import com.dansoftware.boomega.gui.util.selectedItem
 import com.dansoftware.boomega.gui.util.selectedItemProperty
 import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.binding.Bindings
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.ObjectProperty
-import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.*
 import javafx.beans.value.ObservableStringValue
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -53,6 +51,7 @@ import org.slf4j.LoggerFactory
 
 class LoginBox(
     private val context: Context,
+    private val preferences: Preferences,
     private val databaseTracker: DatabaseTracker,
     private val databaseLoginListener: DatabaseLoginListener
 ) : VBox(10.0) {
@@ -64,17 +63,18 @@ class LoginBox(
 
     private val databaseChooser: DatabaseCombo = buildDatabaseChooser()
 
-    private var selectedItem: DatabaseMeta?
+    private var selectedDatabase: DatabaseMeta?
         get() = databaseChooser.selectedItem
         set(value) {
             databaseChooser.selectionModel.select(value)
         }
 
     init {
-        this.styleClass.add("login-box")
-        this.maxWidth = 650.0
-        this.prefWidth = 550.0
-        this.buildUI()
+        styleClass.add("login-box")
+        maxWidth = 650.0
+        prefWidth = 550.0
+        buildUI()
+        fillForm(preferences[LOGIN_DATA])
     }
 
     fun titleProperty(): ObservableStringValue = databaseChooser.selectedItemProperty().asString()
@@ -83,13 +83,13 @@ class LoginBox(
         databaseChooser.refresh()
     }
 
-    fun fillForm(loginData: LoginData) {
+    private fun fillForm(loginData: LoginData) {
         databaseChooser.items.addAll(loginData.savedDatabases)
         loginData.selectedDatabase?.let(databaseChooser.selectionModel::select)
 
         if (loginData.isAutoLogin) {
             loginData.autoLoginCredentials!!.run {
-
+                // TODO
             }
         }
 
@@ -114,6 +114,20 @@ class LoginBox(
         children.add(buildDataSourceButton())
     }
 
+    private fun buildDatabaseChooser() = DatabaseCombo(databaseTracker).apply {
+        loginForm.bind(
+            Bindings.createObjectBinding({
+                @Suppress("UNCHECKED_CAST")
+                selectedItem?.provider?.buildUILoginForm(
+                    context,
+                    selectedItemProperty() as ReadOnlyObjectProperty<DatabaseMeta>,
+                    emptyMap() // TODO: database options
+                )
+            }, selectionModel.selectedItemProperty())
+        )
+        itemSelected.bind(selectionModel.selectedItemProperty().isNotNull)
+    }
+
     private fun buildHeader() = StackPane().apply {
         styleClass.add("header")
         padding = Insets(20.0)
@@ -125,25 +139,12 @@ class LoginBox(
     }
 
     private fun buildDatabaseChooserArea() = HBox(5.0).apply {
-        children.add(buildDatabaseChooser())
+        children.add(databaseChooser)
         children.add(buildFileChooserButton())
         children.add(buildDatabaseManagerButton())
         setMargin(this, Insets(0.0, 20.0, 0.0, 20.0))
     }
 
-    private fun buildDatabaseChooser() = DatabaseCombo(databaseTracker).apply {
-        loginForm.bind(
-            Bindings.createObjectBinding({
-                @Suppress("UNCHECKED_CAST")
-                selectedItem?.provider?.buildUILoginForm(
-                    context,
-                    selectedItemProperty() as ObjectProperty<DatabaseMeta>,
-                    emptyMap() // TODO: database options
-                )
-            })
-        )
-        itemSelected.bind(selectionModel.selectedItemProperty().isNotNull)
-    }
 
     private fun buildFileChooserButton() = Button().apply {
         tooltip = Tooltip(i18n("login.source.open"))
@@ -190,6 +191,7 @@ class LoginBox(
         children.add(buildLoginButton())
 
         loginForm.addListener { _, _, newForm ->
+            logger.debug("New Login form")
             children[1] = newForm
         }
     }
@@ -210,8 +212,11 @@ class LoginBox(
         setOnAction {
             // TODO: what about already launched databases? Should send front request to database activity
             try {
-                databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
+                if (!databaseLoginListener.onDatabaseLoginRequest(selectedDatabase!!))
+                    databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
+                context.close()
             } catch (e: DatabaseConstructionException) {
+                logger.debug("Couldn't construct database", e)
                 context.showErrorDialog(i18n("login.failed"), e.localizedMessage ?: "", e)
             }
         }

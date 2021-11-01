@@ -25,10 +25,6 @@ import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.onScenePresent
 import javafx.application.Platform
-import javafx.beans.property.ObjectProperty
-import javafx.beans.property.ReadOnlyObjectProperty
-import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ObservableStringValue
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -46,11 +42,6 @@ class LoginView(
     databaseLoginListener: DatabaseLoginListener
 ) : BaseView() {
 
-    private val createdDatabase: ObjectProperty<Database> = SimpleObjectProperty()
-
-    val loginData: LoginData
-        get() = TODO()
-
     init {
         content = LoginViewBase(this, tracker, preferences, databaseLoginListener)
         playAnimation()
@@ -64,11 +55,7 @@ class LoginView(
         }
     }
 
-    fun createdDatabaseProperty(): ReadOnlyObjectProperty<Database> {
-        return createdDatabase
-    }
-
-    fun titleProperty(): ObservableStringValue = SimpleStringProperty() // TODO: WTH?
+    fun titleProperty(): ObservableStringValue = (content as LoginViewBase).titleProperty()
 /*
     private class LoginBoxController(
         override val context: Context,

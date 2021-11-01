@@ -21,17 +21,17 @@ package com.dansoftware.boomega.gui.entry;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.logindata.LoginData;
 import com.dansoftware.boomega.database.api.Database;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener;
 import com.dansoftware.boomega.gui.login.LoginActivity;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +51,8 @@ import java.util.stream.Collectors;
  * @author Daniel Gyorffy
  */
 public class EntryActivity implements DatabaseLoginListener {
+
+    private static Logger logger = LoggerFactory.getLogger(EntryActivity.class);
 
     private static final List<WeakReference<EntryActivity>> instances =
             Collections.synchronizedList(new LinkedList<>());
@@ -73,6 +75,20 @@ public class EntryActivity implements DatabaseLoginListener {
         this.preferences = preferences;
         this.loginData = loginData;
         this.databaseTracker = databaseTracker;
+    }
+
+    @Override
+    public boolean onDatabaseLoginRequest(@NotNull DatabaseMeta databaseMeta) {
+        logger.debug("Database login request");
+        Optional<Context> databaseActivity =
+                DatabaseActivity.getByDatabase(databaseMeta)
+                        .map(DatabaseActivity::getContext);
+        if (databaseActivity.isPresent()) {
+            logger.debug("Found database activity");
+            databaseActivity.get().toFrontRequest();
+            return true;
+        }
+        return false;
     }
 
     @Override

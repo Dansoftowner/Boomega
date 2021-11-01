@@ -105,7 +105,7 @@ open class ActivityLauncher(
     private fun handleArgument(mode: LauncherMode = this.mode, initialDatabase: DatabaseMeta) {
         when (mode) {
             LauncherMode.INITIAL -> handleArgumentInit(initialDatabase)
-            LauncherMode.EXTERNAL -> handleArgumentAlreadyRunning(initialDatabase)
+            LauncherMode.EXTERNAL -> handleArgumentExternal(initialDatabase)
             LauncherMode.INTERNAL -> handleArgumentInternal(initialDatabase)
         }
     }
@@ -143,7 +143,7 @@ open class ActivityLauncher(
     /**
      * Handles the argument (the initial database) assuming the launcher-mode is [LauncherMode.EXTERNAL]
      */
-    private fun handleArgumentAlreadyRunning(meta: DatabaseMeta) {
+    private fun handleArgumentExternal(meta: DatabaseMeta) {
         DatabaseActivity.getByDatabase(meta)
             .map(DatabaseActivity::context)
             .ifPresentOrElse({ Platform.runLater(it::toFrontRequest) }) {
@@ -185,7 +185,7 @@ open class ActivityLauncher(
     private fun handleNoArgument(mode: LauncherMode = this.mode) {
         when (mode) {
             LauncherMode.INITIAL -> handleNoArgumentInit()
-            LauncherMode.EXTERNAL -> handleNoArgumentAlreadyRunning()
+            LauncherMode.EXTERNAL -> handleNoArgumentExternal()
             LauncherMode.INTERNAL -> handleNoArgumentInternal()
         }
     }
@@ -210,7 +210,7 @@ open class ActivityLauncher(
      * Handles the situation when there is no application-argument
      * assuming that the launcher-mode is {@link LauncherMode#ALREADY_RUNNING}
      */
-    private fun handleNoArgumentAlreadyRunning() {
+    private fun handleNoArgumentExternal() {
         //no argument
         //just focusing on a random window
         logger.debug("no argument found, focusing on a random window...")
@@ -238,7 +238,10 @@ open class ActivityLauncher(
     }
 
     private fun autoLogin() {
-        val database = constructDatabase(loginData.selectedDatabase!!, loginData.autoLoginCredentials!!) { e ->
+        val database = constructDatabase(
+            loginData.selectedDatabase!!,
+            loginData.autoLoginCredentials!!
+        ) { e ->
             logger.debug("failed signing into the database")
             Platform.runLater {
                 showEntryActivity {

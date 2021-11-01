@@ -32,8 +32,8 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.geometry.Insets
 import javafx.scene.control.PasswordField
-import javafx.scene.control.Separator
 import javafx.scene.control.TextField
+import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 
 class BMDBLoginForm(
@@ -57,16 +57,17 @@ class BMDBLoginForm(
 
     private fun buildUI() {
         children.add(
-            VBox().apply {
-                children.add(Separator())
+            VBox(5.0).apply {
                 children.add(buildUsernameInput())
                 children.add(buildPasswordInput())
+                prefWidthProperty().bind(this@BMDBLoginForm.widthProperty())
                 VBox.setMargin(this, Insets(0.0, 20.0, 20.0, 20.0))
             }
         )
     }
 
     private fun buildUsernameInput() = TextField().apply {
+        VBox.setVgrow(this, Priority.ALWAYS)
         minHeight = 35.0
         prefColumnCount = 10
         promptText = i18n("credentials.username")
@@ -74,6 +75,7 @@ class BMDBLoginForm(
     }
 
     private fun buildPasswordInput() = PasswordField().apply {
+        VBox.setVgrow(this, Priority.ALWAYS)
         minHeight = 35.0
         prefColumnCount = 10
         promptText = i18n("credentials.password")

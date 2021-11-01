@@ -19,8 +19,14 @@
 package com.dansoftware.boomega.gui.login;
 
 import com.dansoftware.boomega.database.api.Database;
+import com.dansoftware.boomega.database.api.DatabaseMeta;
 import org.jetbrains.annotations.NotNull;
 
 public interface DatabaseLoginListener {
+
     void onDatabaseOpened(@NotNull Database database);
+
+    default boolean onDatabaseLoginRequest(@NotNull DatabaseMeta databaseMeta) {
+        return false;
+    }
 }

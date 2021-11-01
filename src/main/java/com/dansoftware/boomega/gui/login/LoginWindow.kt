@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
@@ -29,8 +28,6 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableStringValue
 import javafx.beans.value.ObservableValue
-import javafx.event.EventHandler
-import javafx.stage.WindowEvent
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -51,12 +48,11 @@ private class LoginWindow(
     TitleProperty("window.login.title", " - ", root.titleProperty()),
     getPreferredGeneralMenuBar(root, preferences, databaseTracker),
     root
-), EventHandler<WindowEvent> {
+) {
 
     init {
         Objects.requireNonNull(preferences)
         Objects.requireNonNull(root, "LoginView shouldn't be null")
-        this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this)
         this.exitDialog = true
         this.isMaximized = true
         this.minWidth = 530.0
@@ -66,11 +62,6 @@ private class LoginWindow(
 
     private fun initKeyBindings() {
         GlobalActions.applyOnScene(scene, root, preferences, databaseTracker)
-    }
-
-    override fun handle(event: WindowEvent) {
-        logger.debug("Putting loginData to Preferences")
-        preferences.editor().put(PreferenceKey.LOGIN_DATA, root.loginData)
     }
 
     companion object {
@@ -100,9 +91,9 @@ private class LoginWindow(
                     changingString.addListener(this)
                 }
 
-                private fun copyValue(separator: String, newValue: String) {
+                private fun copyValue(separator: String, newValue: String?) {
                     when (newValue) {
-                        "null" -> this.set("")
+                        null, "null" -> this.set("")
                         else -> this.set(separator.plus(newValue))
                     }
                 }
