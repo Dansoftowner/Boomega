@@ -23,24 +23,32 @@ import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.google.gson.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.lang.reflect.Type
 
 class LoginDataDeserializer : JsonDeserializer<LoginData> {
 
     override fun deserialize(jsonSrc: JsonElement, typeOfT: Type, context: JsonDeserializationContext): LoginData {
+        logger.debug("Deserializing login data...")
         val json = jsonSrc.asJsonObject
         val databases = deserializeDatabases(json.getAsJsonArray(SAVED_DATABASES))
-        val isAutoLogin = json[AUTO_LOGIN].asBoolean
-        val selectedDatabaseIndex = json[SELECTED_DATABASE_INDEX].asInt
-        val selectedDatabase = databases[selectedDatabaseIndex]
+        val isAutoLogin = json[AUTO_LOGIN]?.asBoolean ?: false
+        val selectedDatabaseIndex = json[SELECTED_DATABASE_INDEX]?.asInt?.takeUnless { it == -1 }
+        val selectedDatabase = selectedDatabaseIndex?.let { databases[it] }
         val autoLoginCredentials =
-            json[AUTO_LOGIN_CREDENTIALS].asJsonObject.takeIf { isAutoLogin }?.let {
-                deserializeCredentials(
-                    context,
-                    selectedDatabase.provider,
-                    it
-                )
+            selectedDatabase?.let {
+                json[AUTO_LOGIN_CREDENTIALS].asJsonObject.takeIf { isAutoLogin }?.let {
+                    deserializeCredentials(
+                        context,
+                        selectedDatabase.provider,
+                        it
+                    )
+                }
             }
+        logger.debug("Found {} saved database(s)", databases.size)
+        logger.debug("Auto login: {}", isAutoLogin)
+        logger.debug("Selected database index: {}", selectedDatabaseIndex)
         return LoginData(databases, selectedDatabase, autoLoginCredentials)
     }
 
@@ -68,6 +76,9 @@ class LoginDataDeserializer : JsonDeserializer<LoginData> {
         SupportedDatabases.find { it.javaClass.name == className }
 
     companion object {
+
+        private val logger: Logger = LoggerFactory.getLogger(LoginDataSerializer::class.java)
+
         private const val SAVED_DATABASES = "svdbs"
         private const val SELECTED_DATABASE_INDEX = "slctdb"
         private const val AUTO_LOGIN = "autolgn"

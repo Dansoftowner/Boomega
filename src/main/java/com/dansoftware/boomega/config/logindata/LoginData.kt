@@ -47,7 +47,7 @@ class LoginData(
             selectedDatabase = savedDatabases[value]
         }
 
-    val isAutoLogin: Boolean get() = autoLoginCredentials !== null
+    val isAutoLogin: Boolean get() = selectedDatabase !== null && autoLoginCredentials !== null
 
     constructor() : this(emptyList(), null, emptyMap())
 
