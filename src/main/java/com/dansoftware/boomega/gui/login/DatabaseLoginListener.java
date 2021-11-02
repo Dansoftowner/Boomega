@@ -22,11 +22,24 @@ import com.dansoftware.boomega.database.api.Database;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A database login listener is notified whenever a {@link LoginActivity}
+ * authenticates a database.
+ */
 public interface DatabaseLoginListener {
 
+    /**
+     * Called when the login activity has successfully authenticated a database
+     *
+     * @param database the launched database
+     */
     void onDatabaseOpened(@NotNull Database database);
 
-    default boolean onDatabaseLoginRequest(@NotNull DatabaseMeta databaseMeta) {
-        return false;
-    }
+    /**
+     * Called when the login activity opens a database that is already in use.
+     * This method is intended to handle these situations
+     *
+     * @param databaseMeta the database-meta
+     */
+    default void onUsedDatabaseOpened(@NotNull DatabaseMeta databaseMeta) { }
 }

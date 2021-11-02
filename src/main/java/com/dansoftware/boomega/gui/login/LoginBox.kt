@@ -24,7 +24,6 @@ import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.LoginForm
-import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.dbcreator.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
@@ -58,9 +57,7 @@ class LoginBox(
 
     private val itemSelected: BooleanProperty = SimpleBooleanProperty()
     private val remember: BooleanProperty = SimpleBooleanProperty()
-
     private val loginForm: ObjectProperty<LoginForm<*>?> = SimpleObjectProperty()
-
     private val databaseChooser: DatabaseCombo = buildDatabaseChooser()
 
     private var selectedDatabase: DatabaseMeta?
@@ -210,32 +207,21 @@ class LoginBox(
         text = i18n("login.form.login")
         isDefaultButton = true
         setOnAction {
-            // TODO: what about already launched databases? Should send front request to database activity
             try {
-                if (!databaseLoginListener.onDatabaseLoginRequest(selectedDatabase!!))
-                    databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
-                context.close()
+                when {
+                    databaseTracker.isDatabaseUsed(selectedDatabase) ->
+                        databaseLoginListener.onUsedDatabaseOpened(selectedDatabase!!)
+                    else -> {
+                        databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
+                        context.close()
+                    }
+                }
+
             } catch (e: DatabaseConstructionException) {
                 logger.debug("Couldn't construct database", e)
                 context.showErrorDialog(i18n("login.failed"), e.localizedMessage ?: "", e)
             }
         }
-    }
-
-
-    @Deprecated("BS")
-    interface Controller {
-        var loginBox: LoginBox?
-
-        val context: Context
-        val preferences: Preferences
-        val databaseTracker: DatabaseTracker
-        val loginData: LoginData
-
-        fun openDatabaseManager()
-        fun openFile()
-        fun openDatabaseCreator()
-        fun login(databaseMeta: DatabaseMeta, credentials: Credentials, remember: Boolean)
     }
 
     companion object {

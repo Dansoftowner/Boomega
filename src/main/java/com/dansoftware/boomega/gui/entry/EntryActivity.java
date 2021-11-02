@@ -78,7 +78,7 @@ public class EntryActivity implements DatabaseLoginListener {
     }
 
     @Override
-    public boolean onDatabaseLoginRequest(@NotNull DatabaseMeta databaseMeta) {
+    public void onUsedDatabaseOpened(@NotNull DatabaseMeta databaseMeta) {
         logger.debug("Database login request");
         Optional<Context> databaseActivity =
                 DatabaseActivity.getByDatabase(databaseMeta)
@@ -86,9 +86,7 @@ public class EntryActivity implements DatabaseLoginListener {
         if (databaseActivity.isPresent()) {
             logger.debug("Found database activity");
             databaseActivity.get().toFrontRequest();
-            return true;
         }
-        return false;
     }
 
     @Override
