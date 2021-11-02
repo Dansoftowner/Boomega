@@ -45,18 +45,26 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
     }
 
     override fun isActionSupported(action: Action<*>): Boolean {
-        return when(action) {
+        return when (action) {
             Action.SizeInBytes -> performAction(Action.Exists)
             else -> super.isActionSupported(action)
         }
     }
 
-    @Suppress( "UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST")
     override fun <T> performAction(action: Action<T>): T {
         return when (action) {
             Action.SizeInBytes -> (if (performAction(Action.Exists)) file.length() else -1) as T
             Action.OpenInExternalApplication -> file.revealInExplorer() as T
             Action.Exists -> file.exists().and(!file.isDirectory) as T
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return file == (other as? BMDBMeta)?.file
+    }
+
+    override fun hashCode(): Int {
+        return file.hashCode()
     }
 }

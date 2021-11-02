@@ -65,45 +65,15 @@ public class DatabaseTracker {
     private final ObservableSet<DatabaseMeta> usingDatabasesUnmodifiable =
             FXCollections.unmodifiableObservableSet(usingDatabases);
 
-    private void iterateObservers(Consumer<Observer> observerConsumer) {
-        Consumer<Observer> safeConsumer = observer -> {
-            try {
-                observerConsumer.accept(observer);
-            } catch (Exception e) {
-                logger.error("exception caught from observer", e);
-            }
-        };
-
-        observers.stream()
-                .map(WeakReference::get)
-                .filter(Objects::nonNull)
-                .forEach(safeConsumer);
-    }
-
-    /**
-     * @deprecated use {@link #registerClosedDatabase(DatabaseMeta)} instead
-     */
-    @Deprecated
-    public void closingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        registerClosedDatabase(databaseMeta);
-    }
-
     /**
      * Marks the database as closed.
      *
      * @param databaseMeta the meta database
      */
     public void registerClosedDatabase(@NotNull DatabaseMeta databaseMeta) {
+        logger.debug("Registering database as closed: '{}'", databaseMeta.getUrl());
         usingDatabases.remove(databaseMeta);
         iterateObservers(observer -> observer.onClosingDatabase(databaseMeta));
-    }
-
-    /**
-     * @deprecated use {@link #registerUsedDatabase(DatabaseMeta)} instead
-     */
-    @Deprecated
-    public void usingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        registerUsedDatabase(databaseMeta);
     }
 
     /**
@@ -113,18 +83,11 @@ public class DatabaseTracker {
      */
     public void registerUsedDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
+        logger.debug("Registering database as used: '{}'", databaseMeta.getUrl());
 
         if (usingDatabases.add(databaseMeta)) {
             iterateObservers(observer -> observer.onUsingDatabase(databaseMeta));
         }
-    }
-
-    /**
-     * @deprecated use {@link #saveDatabase(DatabaseMeta)} instead
-     */
-    @Deprecated
-    public void addDatabase(@NotNull DatabaseMeta databaseMeta) {
-        saveDatabase(databaseMeta);
     }
 
     /**
@@ -134,6 +97,7 @@ public class DatabaseTracker {
      */
     public void saveDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
+        logger.debug("Registering database: '{}'", databaseMeta.getUrl());
 
         if (savedDatabases.add(databaseMeta)) {
             iterateObservers(observer -> observer.onDatabaseAdded(databaseMeta));
@@ -145,14 +109,15 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public void removeDatabase(@Nullable DatabaseMeta databaseMeta) {
+    public void removeDatabase(@NotNull DatabaseMeta databaseMeta) {
+        Objects.requireNonNull(databaseMeta);
+        logger.debug("Unregistering database: '{}'", databaseMeta.getUrl());
         if (savedDatabases.remove(databaseMeta))
             logger.debug("Removed from DatabaseTracker '{}'", databaseMeta);
         else
             logger.debug("DatabaseMeta '{}' not found in savedDatabases", databaseMeta);
 
-        if (databaseMeta != null)
-            iterateObservers(observer -> observer.onDatabaseRemoved(databaseMeta));
+        iterateObservers(observer -> observer.onDatabaseRemoved(databaseMeta));
     }
 
     /**
@@ -187,6 +152,21 @@ public class DatabaseTracker {
         return observers.stream()
                 .filter(ref -> ref.get() == observer)
                 .findAny();
+    }
+
+    private void iterateObservers(Consumer<Observer> observerConsumer) {
+        Consumer<Observer> safeConsumer = observer -> {
+            try {
+                observerConsumer.accept(observer);
+            } catch (Exception e) {
+                logger.error("exception caught from observer", e);
+            }
+        };
+
+        observers.stream()
+                .map(WeakReference::get)
+                .filter(Objects::nonNull)
+                .forEach(safeConsumer);
     }
 
     public boolean isDatabaseSaved(DatabaseMeta databaseMeta) {
