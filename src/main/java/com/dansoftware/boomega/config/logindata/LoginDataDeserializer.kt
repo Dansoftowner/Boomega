@@ -38,7 +38,7 @@ class LoginDataDeserializer : JsonDeserializer<LoginData> {
         val selectedDatabase = selectedDatabaseIndex?.let { databases[it] }
         val autoLoginCredentials =
             selectedDatabase?.let {
-                json[AUTO_LOGIN_CREDENTIALS].asJsonObject.takeIf { isAutoLogin }?.let {
+                json[AUTO_LOGIN_CREDENTIALS]?.asJsonObject?.takeIf { isAutoLogin }?.let {
                     deserializeCredentials(
                         context,
                         selectedDatabase.provider,
@@ -49,7 +49,7 @@ class LoginDataDeserializer : JsonDeserializer<LoginData> {
         logger.debug("Found {} saved database(s)", databases.size)
         logger.debug("Auto login: {}", isAutoLogin)
         logger.debug("Selected database index: {}", selectedDatabaseIndex)
-        return LoginData(databases, selectedDatabase, autoLoginCredentials)
+        return LoginData(databases, selectedDatabase, autoLoginCredentials, isAutoLogin)
     }
 
     private fun deserializeDatabases(jsonArray: JsonArray): List<DatabaseMeta> {

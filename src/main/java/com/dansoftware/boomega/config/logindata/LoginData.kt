@@ -26,7 +26,8 @@ import javafx.collections.ObservableList
 class LoginData(
     savedDatabases: List<DatabaseMeta>,
     selectedDatabase: DatabaseMeta?,
-    autoLoginCredentials: Map<DatabaseField<*>, Any>?
+    autoLoginCredentials: Map<DatabaseField<*>, Any>?,
+    val isAutoLogin: Boolean = selectedDatabase !== null && autoLoginCredentials !== null
 ) {
     val savedDatabases: ObservableList<DatabaseMeta> =
         FXCollections.observableArrayList(savedDatabases)
@@ -47,7 +48,6 @@ class LoginData(
             selectedDatabase = savedDatabases[value]
         }
 
-    val isAutoLogin: Boolean get() = selectedDatabase !== null && autoLoginCredentials !== null
 
     constructor() : this(emptyList(), null, emptyMap())
 
