@@ -111,7 +111,7 @@ class LoginBox(
         children.add(buildDataSourceButton())
     }
 
-    private fun buildDatabaseChooser() = DatabaseCombo(databaseTracker).apply {
+    private fun buildDatabaseChooser() = DatabaseCombo(preferences, databaseTracker).apply {
         loginForm.bind(
             Bindings.createObjectBinding({
                 @Suppress("UNCHECKED_CAST")

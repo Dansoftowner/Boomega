@@ -36,6 +36,7 @@ class LoginData(
         set(value) {
             if (value !in savedDatabases)
                 savedDatabases.add(selectedDatabase)
+            selectedDatabaseIndex = savedDatabases.indexOf(value)
             field = value
         }
 
