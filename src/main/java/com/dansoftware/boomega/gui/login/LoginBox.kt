@@ -111,7 +111,7 @@ class LoginBox(
         children.add(buildDataSourceButton())
     }
 
-    private fun buildDatabaseChooser() = DatabaseCombo(databaseTracker).apply {
+    private fun buildDatabaseChooser() = DatabaseCombo(preferences, databaseTracker).apply {
         loginForm.bind(
             Bindings.createObjectBinding({
                 @Suppress("UNCHECKED_CAST")
@@ -212,6 +212,7 @@ class LoginBox(
                     databaseTracker.isDatabaseUsed(selectedDatabase) ->
                         databaseLoginListener.onUsedDatabaseOpened(selectedDatabase!!)
                     else -> {
+                        preferences.updateLoginData { it.isAutoLogin = remember.get() }
                         databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
                         context.close()
                     }

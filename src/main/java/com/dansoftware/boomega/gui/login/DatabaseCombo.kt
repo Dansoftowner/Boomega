@@ -18,19 +18,23 @@
 
 package com.dansoftware.boomega.gui.login
 
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.checkExists
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.selectedItem
+import com.dansoftware.boomega.gui.util.selectedItemProperty
 import com.dansoftware.boomega.gui.util.styleClass
 import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import javafx.scene.control.ComboBox
 import javafx.scene.control.ListCell
 import javafx.scene.control.Tooltip
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 
-class DatabaseCombo(databaseTracker: DatabaseTracker) : ComboBox<DatabaseMeta?>() {
+class DatabaseCombo(preferences: Preferences, databaseTracker: DatabaseTracker) : ComboBox<DatabaseMeta?>() {
 
     init {
         HBox.setHgrow(this, Priority.ALWAYS)
@@ -40,9 +44,16 @@ class DatabaseCombo(databaseTracker: DatabaseTracker) : ComboBox<DatabaseMeta?>(
         promptText = i18n("login.source.combo.promt")
         buttonCell = ButtonCell(databaseTracker)
         setCellFactory { Cell(databaseTracker) }
+        selectedItemProperty().addListener { _, _, newItem ->
+            preferences.updateLoginData {
+                it.selectedDatabase = newItem
+            }
+        }
     }
 
-    private open class Cell(private val databaseTracker: DatabaseTracker) : ListCell<DatabaseMeta?>() {
+    private open class Cell(
+        private val databaseTracker: DatabaseTracker
+    ) : ListCell<DatabaseMeta?>() {
 
         init {
             maxWidth = 650.0

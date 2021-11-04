@@ -77,7 +77,7 @@ class LoginDataDeserializer : JsonDeserializer<LoginData> {
 
     companion object {
 
-        private val logger: Logger = LoggerFactory.getLogger(LoginDataSerializer::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(LoginDataDeserializer::class.java)
 
         private const val SAVED_DATABASES = "svdbs"
         private const val SELECTED_DATABASE_INDEX = "slctdb"

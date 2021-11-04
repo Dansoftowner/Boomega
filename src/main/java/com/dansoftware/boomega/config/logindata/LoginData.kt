@@ -27,7 +27,7 @@ class LoginData(
     savedDatabases: List<DatabaseMeta>,
     selectedDatabase: DatabaseMeta?,
     autoLoginCredentials: Map<DatabaseField<*>, Any>?,
-    val isAutoLogin: Boolean = selectedDatabase !== null && autoLoginCredentials !== null
+    var isAutoLogin: Boolean = selectedDatabase !== null && autoLoginCredentials !== null
 ) {
     val savedDatabases: ObservableList<DatabaseMeta> =
         FXCollections.observableArrayList(savedDatabases)
@@ -36,6 +36,7 @@ class LoginData(
         set(value) {
             if (value !in savedDatabases)
                 savedDatabases.add(selectedDatabase)
+            selectedDatabaseIndex = savedDatabases.indexOf(value)
             field = value
         }
 
