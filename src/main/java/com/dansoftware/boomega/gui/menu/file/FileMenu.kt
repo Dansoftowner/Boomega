@@ -18,13 +18,15 @@
 
 package com.dansoftware.boomega.gui.menu.file
 
-import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.login.isAutoLoginOn
+import com.dansoftware.boomega.gui.login.removeAutoLogin
+import com.dansoftware.boomega.gui.login.updateLoginData
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.graphic
 import com.dansoftware.boomega.gui.util.menuItem
@@ -121,12 +123,9 @@ abstract class FileMenu(
     private fun databaseCloseMenuItem() = MenuItem(i18n("menubar.menu.file.dbclose"))
         .graphic("logout-icon")
         .action {
-            preferences.editor()
-                .put(LOGIN_DATA, preferences[LOGIN_DATA].apply {
-                    if (isAutoLogin && selectedDatabase == databaseMeta) {
-                        autoLoginCredentials = null
-                    }
-                }).tryCommit()
+            preferences.updateLoginData {
+                if (it.isAutoLoginOn(databaseMeta)) it.removeAutoLogin()
+            }
             GlobalActions.NEW_ENTRY.invoke(context, preferences, databaseTracker)
             context.close()
         }

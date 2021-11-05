@@ -18,17 +18,18 @@
 
 package com.dansoftware.boomega.gui.databaseview
 
-import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.gui.login.isAutoLoginOn
+import com.dansoftware.boomega.gui.login.removeAutoLogin
+import com.dansoftware.boomega.gui.login.updateLoginData
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.byteCountToDisplaySize
-import com.dansoftware.boomega.util.revealInExplorer
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Orientation
@@ -86,12 +87,9 @@ class DatabaseViewToolbar(
         graphic = icon("logout-icon")
         tooltip = Tooltip(I18N.getValue("menubar.menu.file.dbclose"))
         setOnAction {
-            preferences.editor()
-                .put(PreferenceKey.LOGIN_DATA, preferences.get(PreferenceKey.LOGIN_DATA).apply {
-                    if (isAutoLogin && selectedDatabase == view.databaseMeta) {
-                        autoLoginCredentials = null
-                    }
-                }).tryCommit()
+            preferences.updateLoginData {
+                if (it.isAutoLoginOn(view.databaseMeta)) it.removeAutoLogin()
+            }
             GlobalActions.NEW_ENTRY.invoke(view, preferences, databaseTracker)
             view.close()
         }
