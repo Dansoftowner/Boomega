@@ -87,7 +87,7 @@ abstract class FileMenu(
             private val recentMenu = this
 
             private val menuItemFactory: (DatabaseMeta) -> MenuItem = { db ->
-                MenuItem(db.toString()).also { menuItem ->
+                MenuItem(db.toString(), db.provider.icon).also { menuItem ->
                     menuItem.setOnAction {
                         startActivityLauncher {
                             internalActivityLauncher(
