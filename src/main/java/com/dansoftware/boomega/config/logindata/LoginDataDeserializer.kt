@@ -31,32 +31,26 @@ class LoginDataDeserializer : JsonDeserializer<LoginData> {
 
     override fun deserialize(jsonSrc: JsonElement, typeOfT: Type, context: JsonDeserializationContext): LoginData {
         logger.debug("Deserializing login data...")
+
         val json = jsonSrc.asJsonObject
-        val databases = deserializeDatabases(json.getAsJsonArray(SAVED_DATABASES))
-        val isAutoLogin = json[AUTO_LOGIN]?.asBoolean ?: false
-        val selectedDatabaseIndex = json[SELECTED_DATABASE_INDEX]?.asInt?.takeUnless { it == -1 }
+        val databases = getSavedDatabases(json)
+        val isAutoLogin = getAutoLogin(json)
+        val selectedDatabaseIndex = getSelectedDatabaseIndex(json)
         val selectedDatabase = selectedDatabaseIndex?.let { databases[it] }
-        val autoLoginCredentials =
-            selectedDatabase?.let {
-                json[AUTO_LOGIN_CREDENTIALS]?.asJsonObject?.takeIf { isAutoLogin }?.let {
-                    deserializeCredentials(
-                        context,
-                        selectedDatabase.provider,
-                        it
-                    )
-                }
-            }
+        val autoLoginCredentials = getAutoLoginCredentials(context, json, selectedDatabase, isAutoLogin)
+
         logger.debug("Found {} saved database(s)", databases.size)
         logger.debug("Auto login: {}", isAutoLogin)
         logger.debug("Selected database index: {}", selectedDatabaseIndex)
+
         return LoginData(databases, selectedDatabase, autoLoginCredentials, isAutoLogin)
     }
 
-    private fun deserializeDatabases(jsonArray: JsonArray): List<DatabaseMeta> {
-        return jsonArray.map(JsonElement::getAsJsonObject).map {
+    private fun deserializeDatabases(jsonArray: JsonArray?): List<DatabaseMeta> {
+        return jsonArray?.map(JsonElement::getAsJsonObject)?.map {
             val provider = getDatabaseProvider(it[DATABASE_PROVIDER].asString)
             provider!!.getMeta(it[DATABASE_URL].asString)
-        }
+        } ?: emptyList()
     }
 
     private fun deserializeCredentials(
@@ -75,9 +69,47 @@ class LoginDataDeserializer : JsonDeserializer<LoginData> {
     private fun getDatabaseProvider(className: String) =
         SupportedDatabases.find { it.javaClass.name == className }
 
+    private fun getSavedDatabases(json: JsonObject) =
+        deserializeDatabases(
+            json[SAVED_DATABASES]
+                ?.takeUnless { it.isJsonNull }
+                ?.asJsonArray
+        )
+
+    private fun getAutoLogin(json: JsonObject) =
+        json[AUTO_LOGIN]
+            ?.takeUnless { it.isJsonNull }
+            ?.asBoolean
+            ?: false
+
+    private fun getSelectedDatabaseIndex(json: JsonObject) =
+        json[SELECTED_DATABASE_INDEX]
+            ?.takeUnless { it.isJsonNull }
+            ?.asInt
+            ?.takeUnless { it == -1 }
+
+    private fun getAutoLoginCredentials(
+        context: JsonDeserializationContext,
+        json: JsonObject,
+        selectedDatabase: DatabaseMeta?,
+        isAutoLogin: Boolean
+    ) = selectedDatabase?.let {
+        json[AUTO_LOGIN_CREDENTIALS]
+            ?.takeUnless { it.isJsonNull }
+            ?.asJsonObject
+            ?.takeIf { isAutoLogin }
+            ?.let {
+                deserializeCredentials(
+                    context,
+                    selectedDatabase.provider,
+                    it
+                )
+            }
+    }
+
     companion object {
 
-        private val logger: Logger = LoggerFactory.getLogger(LoginDataSerializer::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(LoginDataDeserializer::class.java)
 
         private const val SAVED_DATABASES = "svdbs"
         private const val SELECTED_DATABASE_INDEX = "slctdb"
