@@ -21,10 +21,11 @@ package com.dansoftware.boomega.database.bmdb
 import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBLoginForm
-import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.styleClass
 import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
+import javafx.scene.image.ImageView
 import org.dizitart.no2.exceptions.ErrorMessage
 import org.dizitart.no2.exceptions.NitriteException
 import org.dizitart.no2.exceptions.NitriteIOException
@@ -49,7 +50,7 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
         get() = "BMDB local database"
 
     override val icon: Node
-        get() = icon("file-icon")
+        get() = ImageView().styleClass("bmdb-icon")
 
     override val availableOptions: List<DatabaseOption<*>> = listOf(
         COMPRESSED,
