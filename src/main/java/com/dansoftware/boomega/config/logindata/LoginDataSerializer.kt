@@ -21,6 +21,8 @@ package com.dansoftware.boomega.config.logindata
 import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.google.gson.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.lang.reflect.Type
 
 class LoginDataSerializer : JsonSerializer<LoginData> {
@@ -30,6 +32,8 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
         typeOfSrc: Type,
         context: JsonSerializationContext
     ): JsonElement {
+        logger.debug("Serializing login-data....")
+
         // { "svdbs" : [ ... ], "autolgn": true,  "scltdb": 2, "crdntls": { ... } }
         val json = JsonObject()
         json.add(SAVED_DATABASES, serializeDatabases(src.savedDatabases.toList()))
@@ -71,6 +75,9 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
     }
 
     companion object {
+
+        private val logger: Logger = LoggerFactory.getLogger(LoginDataSerializer::class.java)
+
         private const val SAVED_DATABASES = "svdbs"
         private const val SELECTED_DATABASE_INDEX = "slctdb"
         private const val AUTO_LOGIN = "autolgn"

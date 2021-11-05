@@ -21,8 +21,10 @@ package com.dansoftware.boomega.gui.login
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
+import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 
-inline fun Preferences.updateLoginData(action: (LoginData) -> Unit) {
-    this.editor.put(LOGIN_DATA, this[LOGIN_DATA].also { action(it) }).tryCommit()
-
+inline fun Preferences.updateLoginData(crossinline action: (LoginData) -> Unit) {
+    SingleThreadExecutor.submit {
+        editor.put(LOGIN_DATA, this[LOGIN_DATA].also { action(it) }).tryCommit()
+    }
 }

@@ -197,8 +197,7 @@ class LoginBox(
     private fun buildCheckBox() = CheckBox().apply {
         alignment = Pos.CENTER_RIGHT
         text = i18n("login.form.remember")
-        remember.bindBidirectional(selectedProperty())
-        selectedProperty().bindBidirectional(remember)
+        Bindings.bindBidirectional(selectedProperty(), remember)
     }
 
     private fun buildLoginButton() = Button().apply {
@@ -213,6 +212,7 @@ class LoginBox(
                         databaseLoginListener.onUsedDatabaseOpened(selectedDatabase!!)
                     else -> {
                         databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
+                        preferences.updateLoginData { it.isAutoLogin = remember.get() }
                         context.close()
                     }
                 }
