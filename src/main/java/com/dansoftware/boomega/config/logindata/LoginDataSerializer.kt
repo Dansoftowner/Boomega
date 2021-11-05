@@ -78,10 +78,10 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
 
         private val logger: Logger = LoggerFactory.getLogger(LoginDataSerializer::class.java)
 
-        private const val SAVED_DATABASES = "svdbs"
+        private const val SAVED_DATABASES = "svdbs_2_0"
         private const val SELECTED_DATABASE_INDEX = "slctdb"
         private const val AUTO_LOGIN = "autolgn"
-        private const val AUTO_LOGIN_CREDENTIALS = "crdntls"
+        private const val AUTO_LOGIN_CREDENTIALS = "crdntls_2_0"
         private const val DATABASE_PROVIDER = "provider"
         private const val DATABASE_URL = "dburl"
     }
