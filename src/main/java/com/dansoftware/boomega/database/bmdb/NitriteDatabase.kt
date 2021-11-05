@@ -50,13 +50,11 @@ open class NitriteDatabase(
     override val isClosed: Boolean
         get() = nitriteClient.isClosed
 
-    init {
-
-    }
-
     @Synchronized
     override fun insertRecord(record: Record) {
-        recordRepository.insert(NitriteRecord(record))
+        val nitriteRecord = NitriteRecord(record)
+        recordRepository.insert(nitriteRecord)
+        record.id = nitriteRecord.id!!.idValue
         notifyListeners(DatabaseChangeType.INSERT, listOf(record))
     }
 
@@ -74,9 +72,7 @@ open class NitriteDatabase(
 
     @Synchronized
     override fun removeRecords(records: List<Record>) {
-        records.map(::NitriteRecord).forEach {
-            recordRepository.remove(it)
-        }
+        records.map(::NitriteRecord).forEach(recordRepository::remove)
         notifyListeners(DatabaseChangeType.DELETE, unmodifiableList(records))
     }
 
@@ -92,7 +88,7 @@ open class NitriteDatabase(
 
     @Synchronized
     override fun removeListener(listener: DatabaseChangeListener) {
-       listeners.remove(listener)
+        listeners.remove(listener)
     }
 
     private fun notifyListeners(eventType: DatabaseChangeType, items: List<Record>) {
@@ -102,88 +98,5 @@ open class NitriteDatabase(
     companion object {
         private val logger = LoggerFactory.getLogger(NitriteDatabase::class.java)
         private const val REPOSITORY_KEY = "BoomegaRecords"
-
-        /*@JvmStatic
-        fun builder() = Builder()*/
     }
-
-  /*  class Builder {
-
-        private val nitriteBuilder: NitriteBuilder = Nitrite.builder()
-
-        private var databaseMeta: DatabaseMeta? = null
-        private var onFailed: FailListener? = null
-
-        fun onFailed(onFailed: FailListener) = apply {
-            this.onFailed = onFailed
-        }
-
-        fun compressed() = apply {
-            nitriteBuilder.compressed()
-        }
-
-        fun autoCommitBufferSize(size: Int) = apply {
-            nitriteBuilder.autoCommitBufferSize(size)
-        }
-
-        fun filePath(file: File) = apply {
-            nitriteBuilder.filePath(file)
-        }
-
-        fun databaseMeta(databaseMeta: DatabaseMeta) = apply {
-            this.databaseMeta = databaseMeta
-            databaseMeta.file?.let { filePath(it) }
-        }
-
-        fun build(): NitriteDatabase? =
-            createDatabase { nitriteBuilder.openOrCreate() }
-
-        fun build(credentials: Credentials): NitriteDatabase? {
-            return if (credentials.isAnonymous) build()
-            else createDatabase {
-                nitriteBuilder.openOrCreate(credentials.username, credentials.password)
-            }
-        }
-
-        fun touch() {
-            build()?.close()
-        }
-
-        fun touch(credentials: Credentials) {
-            build(credentials)?.close()
-        }
-
-        private fun createDatabase(buildNitrite: () -> Nitrite): NitriteDatabase? {
-            return try {
-                databaseMeta?.let { NitriteDatabase(buildNitrite(), it) } ?: NitriteDatabase(buildNitrite())
-            } catch (e: NitriteException) {
-                onFailed?.run { onFail(e.message(), e) }
-                null
-            }
-        }
-
-        @Suppress("NullableBooleanElvis")
-        private fun NitriteException.message(): String {
-            return i18n(
-                when (errorMessage) {
-                    ErrorMessage.NO_USER_MAP_FOUND -> "login.failed.null_user_credential"
-                    ErrorMessage.USER_MAP_SHOULD_NOT_EXISTS -> "login.failed.authentication_required"
-                    ErrorMessage.DATABASE_OPENED_IN_OTHER_PROCESS -> "login.failed.database_opened_in_other_process"
-                    ErrorMessage.UNABLE_TO_CREATE_DB_FILE -> "login.failed.unable_to_create_db_file"
-
-                    ErrorMessage.USER_ID_IS_EMPTY,
-                    ErrorMessage.PASSWORD_IS_EMPTY,
-                    ErrorMessage.NULL_USER_CREDENTIAL,
-                    ErrorMessage.INVALID_USER_PASSWORD -> "login.failed.invalid_user_password"
-
-                    else -> if (this is NitriteIOException) "login.failed.io" else "login.failed.security"
-                }
-            )
-        }
-
-        fun interface FailListener {
-            fun onFail(message: @NonNls String, throwable: Throwable)
-        }
-    }*/
-
 }
