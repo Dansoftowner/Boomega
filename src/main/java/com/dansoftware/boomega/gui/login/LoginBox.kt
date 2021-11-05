@@ -187,12 +187,13 @@ class LoginBox(
         children.add(buildCheckBox())
         children.add(buildLoginButton())
 
+        val baseSize = children.size
         loginForm.addListener { _, _, newForm ->
             logger.debug("New Login form")
-            children[1] = newForm
+            if (children.size > baseSize) children[1] = newForm
+            else children.add(1, newForm)
         }
     }
-
 
     private fun buildCheckBox() = CheckBox().apply {
         alignment = Pos.CENTER_RIGHT

@@ -48,7 +48,6 @@ class DatabaseCombo(preferences: Preferences, databaseTracker: DatabaseTracker) 
                  preferences.updateLoginData { it.selectedDatabase = newItem }
             }
         }
-
     }
 
     private open class Cell(
