@@ -21,12 +21,13 @@ package com.dansoftware.boomega.database.bmdb
 import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.database.api.data.Record.Type
 import com.dansoftware.boomega.database.api.data.ServiceConnection
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.objects.Id
 import java.time.LocalDate
 import java.util.*
 
-class NitriteRecord(private val baseRecord: Record? = null) {
+class NitriteRecord @JvmOverloads constructor(@field:JsonIgnore private val baseRecord: Record? = null) {
 
     @field:Id
     var id: NitriteId? = baseRecord?.id?.let(NitriteId::createId)
@@ -137,7 +138,8 @@ class NitriteRecord(private val baseRecord: Record? = null) {
             numberOfCopies = numberOfCopies,
             authors = authors,
             subject = subject,
-            magazineName = magazineName
+            magazineName = magazineName,
+            serviceConnection = serviceConnection
         )
     }
 
