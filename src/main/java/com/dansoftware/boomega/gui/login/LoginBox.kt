@@ -34,6 +34,7 @@ import com.dansoftware.boomega.gui.util.refresh
 import com.dansoftware.boomega.gui.util.selectedItem
 import com.dansoftware.boomega.gui.util.selectedItemProperty
 import com.dansoftware.boomega.i18n.i18n
+import javafx.application.Platform.runLater
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.beans.value.ObservableStringValue
@@ -53,20 +54,23 @@ class LoginBox(
     private val preferences: Preferences,
     private val databaseTracker: DatabaseTracker,
     private val databaseLoginListener: DatabaseLoginListener
-) : VBox(10.0) {
+) : VBox(10.0), DatabaseTracker.Observer {
 
     private val itemSelected: BooleanProperty = SimpleBooleanProperty()
     private val remember: BooleanProperty = SimpleBooleanProperty()
     private val loginForm: ObjectProperty<LoginForm<*>?> = SimpleObjectProperty()
     private val databaseChooser: DatabaseCombo = buildDatabaseChooser()
 
-    private var selectedDatabase: DatabaseMeta?
+    var selectedDatabase: DatabaseMeta?
         get() = databaseChooser.selectedItem
         set(value) {
             databaseChooser.selectionModel.select(value)
+            databaseChooser.refresh()
         }
 
     init {
+        // for tracking the databases
+        databaseTracker.registerObserver(this)
         styleClass.add("login-box")
         maxWidth = 650.0
         prefWidth = 550.0
@@ -187,11 +191,12 @@ class LoginBox(
         children.add(buildCheckBox())
         children.add(buildLoginButton())
 
-        val baseSize = children.size
         loginForm.addListener { _, _, newForm ->
             logger.debug("New Login form")
-            if (children.size > baseSize) children[1] = newForm
-            else children.add(1, newForm)
+
+            if (children[1] is LoginForm<*>)
+                children.removeAt(1)
+            children.add(1, newForm)
         }
     }
 
@@ -222,6 +227,26 @@ class LoginBox(
                 logger.debug("Couldn't construct database", e)
                 context.showErrorDialog(i18n("login.failed"), e.localizedMessage ?: "", e)
             }
+        }
+    }
+
+    override fun onUsingDatabase(databaseMeta: DatabaseMeta) {
+        runLater(::refresh)
+    }
+
+    override fun onClosingDatabase(databaseMeta: DatabaseMeta) {
+        runLater(::refresh)
+    }
+
+    override fun onDatabaseAdded(databaseMeta: DatabaseMeta) {
+        runLater {
+            databaseChooser.items.add(databaseMeta)
+        }
+    }
+
+    override fun onDatabaseRemoved(databaseMeta: DatabaseMeta) {
+        runLater {
+            databaseChooser.items.remove(databaseMeta)
         }
     }
 
