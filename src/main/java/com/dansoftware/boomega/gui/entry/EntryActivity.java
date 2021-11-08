@@ -52,28 +52,24 @@ import java.util.stream.Collectors;
  */
 public class EntryActivity implements DatabaseLoginListener {
 
-    private static Logger logger = LoggerFactory.getLogger(EntryActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(EntryActivity.class);
 
     private static final List<WeakReference<EntryActivity>> instances =
             Collections.synchronizedList(new LinkedList<>());
 
     private Context subContext;
     private final Preferences preferences;
-    private final LoginData loginData;
     private final DatabaseTracker databaseTracker;
 
     /**
      * Creates an {@link EntryActivity} with the {@link LoginData}.
      *
-     * @param loginData       the login-data object that will be passed to the {@link LoginActivity}
      * @param databaseTracker the {@link DatabaseTracker} object for observing other databases
      */
     public EntryActivity(@NotNull Preferences preferences,
-                         @NotNull LoginData loginData,
                          @NotNull DatabaseTracker databaseTracker) {
         instances.add(new WeakReference<>(this));
         this.preferences = preferences;
-        this.loginData = loginData;
         this.databaseTracker = databaseTracker;
     }
 
@@ -101,7 +97,7 @@ public class EntryActivity implements DatabaseLoginListener {
      */
     public void show() {
         if (!this.isShowing()) {
-            var loginActivity = new LoginActivity(this, preferences, loginData, databaseTracker);
+            var loginActivity = new LoginActivity(this, preferences, databaseTracker);
             this.subContext = loginActivity.getContext();
             loginActivity.show();
         }

@@ -298,7 +298,7 @@ open class ActivityLauncher(
         }
     }
 
-    private fun EntryActivity() = EntryActivity(preferences, loginData, databaseTracker)
+    private fun EntryActivity() = EntryActivity(preferences, databaseTracker)
     private fun DatabaseActivity(database: Database) = DatabaseActivity(database, preferences, databaseTracker)
 
     companion object {

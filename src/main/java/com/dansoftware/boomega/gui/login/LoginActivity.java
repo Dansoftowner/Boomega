@@ -51,12 +51,11 @@ public class LoginActivity {
 
     public LoginActivity(@NotNull DatabaseLoginListener databaseLoginListener,
                          @NotNull Preferences preferences,
-                         @NotNull LoginData loginData,
                          @NotNull DatabaseTracker tracker) {
         this.showing = new SimpleBooleanProperty();
         this.preferences = Objects.requireNonNull(preferences);
         this.databaseTracker = Objects.requireNonNull(tracker);
-        this.loginView = new LoginView(preferences, tracker, loginData, databaseLoginListener);
+        this.loginView = new LoginView(preferences, tracker, databaseLoginListener);
         instances.add(new WeakReference<>(this));
     }
 

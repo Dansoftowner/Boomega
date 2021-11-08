@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory
 class LoginView(
     preferences: Preferences,
     tracker: DatabaseTracker,
-    loginData: LoginData,
     databaseLoginListener: DatabaseLoginListener
 ) : BaseView() {
 
