@@ -20,17 +20,17 @@ package com.dansoftware.boomega.launcher
 
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.entry.EntryActivity
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
 import com.dansoftware.boomega.gui.login.LoginActivity
+import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.gui.login.quick.QuickLoginActivity
 import com.dansoftware.boomega.i18n.i18n
 import javafx.application.Platform

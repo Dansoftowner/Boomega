@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.dbcreator
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import javafx.stage.Window
 import java.util.*
 

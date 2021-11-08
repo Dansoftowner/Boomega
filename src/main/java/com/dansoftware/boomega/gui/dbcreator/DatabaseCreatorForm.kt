@@ -18,10 +18,10 @@
 
 package com.dansoftware.boomega.gui.dbcreator
 
-import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.SpaceValidator
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.stage

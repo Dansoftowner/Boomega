@@ -19,10 +19,10 @@
 package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
-import com.dansoftware.boomega.gui.action.MenuItems
+import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.i18n.i18n
 import javafx.scene.control.Menu
@@ -39,10 +39,10 @@ class PluginMenu(
     }
 
     private fun pluginManagerMenuItem() =
-        MenuItems.of(GlobalActions.OPEN_PLUGIN_MANAGER, context, preferences, databaseTracker).apply {
+        menuItemOf(GlobalActions.OPEN_PLUGIN_MANAGER, context, preferences, databaseTracker).apply {
             isDisable = true // TODO: unlock plugin manager
         }
 
     private fun pluginDirectoryItem() =
-        MenuItems.of(GlobalActions.OPEN_PLUGIN_DIR, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.OPEN_PLUGIN_DIR, context, preferences, databaseTracker)
 }

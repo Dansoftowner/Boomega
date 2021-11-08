@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.entry;
+package com.dansoftware.boomega.database.tracking;
 
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import javafx.collections.FXCollections;

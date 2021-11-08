@@ -19,11 +19,11 @@
 package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
-import com.dansoftware.boomega.gui.action.MenuItems
+import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
@@ -72,7 +72,7 @@ class LoginToolbar(
     }
 
     private fun buildUpdateSearchMenuItem() =
-        MenuItems.of(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
 
     private fun buildPluginManagerMenuItem() =
         MenuItem(I18N.getValue("action.open_plugin_manager"), icon("puzzle-icon")).action {

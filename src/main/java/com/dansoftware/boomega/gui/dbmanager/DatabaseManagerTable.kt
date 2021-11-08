@@ -18,8 +18,8 @@
 package com.dansoftware.boomega.gui.dbmanager
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.byteCountToDisplaySize

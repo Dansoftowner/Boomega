@@ -18,15 +18,9 @@
 
 package com.dansoftware.boomega.config;
 
-import com.dansoftware.boomega.config.logindata.LoginData;
-import com.dansoftware.boomega.config.logindata.LoginDataAdapter;
-import com.dansoftware.boomega.gui.theme.Theme;
-import com.dansoftware.boomega.gui.theme.config.ThemeAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.function.Supplier;
 
 /**
@@ -80,34 +74,4 @@ public class PreferenceKey<T> {
     public static <T> PreferenceKey<T> createKey(@NotNull Class<T> type, @NotNull Supplier<@NotNull T> defaultValue) {
         return new PreferenceKey<>(type.getName(), type, defaultValue);
     }
-
-    /**
-     * Key for accessing the default locale.
-     */
-    @Deprecated
-    public static final PreferenceKey<@NotNull Locale> LOCALE = new PreferenceKey<>("locale", Locale.class, Locale::getDefault);
-
-    /**
-     * Key for accessing the login data
-     */
-    @Deprecated
-    public static final PreferenceKey<@NotNull LoginData> LOGIN_DATA = new PreferenceKey<>("loginData", LoginData.class, new LoginDataAdapter(), LoginData::new);
-
-    /**
-     * Key for accessing that the automatic update-searching is turned on or off
-     */
-    @Deprecated
-    public static final PreferenceKey<@NotNull Boolean> SEARCH_UPDATES = new PreferenceKey<>("searchUpdates", Boolean.class, () -> Boolean.TRUE);
-
-    /**
-     * Key for accessing the configured theme
-     */
-    @Deprecated
-    public static final PreferenceKey<@NotNull Theme> THEME = new PreferenceKey<>("theme", Theme.class, new ThemeAdapter(), Theme::getDefault);
-
-    /**
-     * Key for accessing the time of the last update-search
-     */
-    @Deprecated
-    public static final PreferenceKey<@Nullable LocalDateTime> LAST_UPDATE_SEARCH = new PreferenceKey<>("searchUpdates.last", LocalDateTime.class, () -> null);
 }

@@ -19,10 +19,10 @@
 package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
-import com.dansoftware.boomega.gui.action.MenuItems
+import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.i18n.i18n
 import javafx.scene.control.Menu
@@ -38,5 +38,5 @@ class ClipboardMenu(
     }
 
     private fun clipboardViewItem() =
-        MenuItems.of(GlobalActions.OPEN_CLIPBOARD_VIEWER, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.OPEN_CLIPBOARD_VIEWER, context, preferences, databaseTracker)
 }

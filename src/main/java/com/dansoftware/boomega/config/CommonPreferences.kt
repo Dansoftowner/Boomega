@@ -20,8 +20,8 @@
 
 package com.dansoftware.boomega.config
 
-import com.dansoftware.boomega.config.logindata.LoginData
-import com.dansoftware.boomega.config.logindata.LoginDataAdapter
+import com.dansoftware.boomega.gui.login.config.LoginData
+import com.dansoftware.boomega.gui.login.config.LoginDataAdapter
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.theme.config.ThemeAdapter
 import java.time.LocalDateTime

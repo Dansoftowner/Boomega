@@ -18,8 +18,8 @@
 
 package com.dansoftware.boomega.gui.preferences.pane
 
-import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.config.THEME
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.window.BaseWindow
@@ -90,7 +90,7 @@ class AppearancePane(preferences: Preferences) : PreferencesPane(preferences) {
                     try {
                         Theme.default = it
                         logger.debug("Default theme set: '{}'", it.javaClass.name)
-                        preferences.editor().put(PreferenceKey.THEME, it)
+                        preferences.editor().put(THEME, it)
                     } catch (e: Exception) {
                         logger.error("Couldn't set the theme", e)
                         // TODO: error dialog

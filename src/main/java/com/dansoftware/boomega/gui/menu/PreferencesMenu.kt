@@ -18,12 +18,13 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.config.PreferenceKey
+import com.dansoftware.boomega.config.LOCALE
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.config.THEME
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
-import com.dansoftware.boomega.gui.action.MenuItems
+import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.util.graphic
 import com.dansoftware.boomega.gui.util.menuItem
@@ -54,7 +55,7 @@ class PreferencesMenu(
     }
 
     private fun settingsMenu() =
-        MenuItems.of(GlobalActions.OPEN_SETTINGS, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.OPEN_SETTINGS, context, preferences, databaseTracker)
 
     private fun themeMenu() = object : Menu(i18n("menubar.menu.preferences.theme")) {
 
@@ -78,7 +79,7 @@ class PreferencesMenu(
                         try {
                             Theme.default = theme
                             logger.debug("Default theme set: '{}'", theme.javaClass.name)
-                            preferences.editor().put(PreferenceKey.THEME, theme)
+                            preferences.editor().put(THEME, theme)
                             // we explicitly set it selected for avoiding some buggy behaviour
                             isSelected = true
                         } catch (e: Exception) {
@@ -99,7 +100,7 @@ class PreferencesMenu(
                     it.toggleGroup = toggleGroup
                     it.isSelected = Locale.getDefault() == locale
                     it.setOnAction {
-                        preferences.editor().put(PreferenceKey.LOCALE, locale)
+                        preferences.editor().put(LOCALE, locale)
                         context.showConfirmationDialog(
                             i18n("app.lang.restart.title"),
                             i18n("app.lang.restart.msg")

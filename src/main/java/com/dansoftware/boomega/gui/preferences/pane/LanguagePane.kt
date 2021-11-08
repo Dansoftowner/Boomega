@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.preferences.pane
 
-import com.dansoftware.boomega.config.PreferenceKey
+import com.dansoftware.boomega.config.LOCALE
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.icon
@@ -58,12 +58,12 @@ class LanguagePane(
 
                 I18N.getAvailableLocales().forEach {
                     this.items.add(it)
-                    if (it == preferences.get(PreferenceKey.LOCALE))
+                    if (it == preferences.get(LOCALE))
                         this.selectionModel.select(it)
                 }
 
                 this.selectionModel.selectedItemProperty().addListener { _, _, locale ->
-                    preferences.editor().put(PreferenceKey.LOCALE, locale)
+                    preferences.editor().put(LOCALE, locale)
                     context.showConfirmationDialog(
                         I18N.getValue("app.lang.restart.title"),
                         I18N.getValue("app.lang.restart.msg")

@@ -20,8 +20,8 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 
 inline fun Preferences.updateLoginData(crossinline action: (LoginData) -> Unit) {

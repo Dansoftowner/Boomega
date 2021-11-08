@@ -19,10 +19,10 @@
 package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
-import com.dansoftware.boomega.gui.action.MenuItems
+import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.gui.util.separator
@@ -52,16 +52,16 @@ class MacOsApplicationMenu(
     }
 
     private fun updateSearcherMenuItem() =
-        MenuItems.of(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
 
     private fun infoMenuItem() =
-        MenuItems.of(GlobalActions.OPEN_APP_INFO, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.OPEN_APP_INFO, context, preferences, databaseTracker)
 
     private fun closeWindowMenuItem() =
         MenuItem(i18n("menubar.menu.file.closewindow")).action { context.close() }
 
     private fun restartMenuItem() =
-        MenuItems.of(GlobalActions.RESTART_APPLICATION, context, preferences, databaseTracker)
+        menuItemOf(GlobalActions.RESTART_APPLICATION, context, preferences, databaseTracker)
 
     private fun quitMenuItem() =
         MenuItem(i18n("menubar.menu.file.quit")).action { Platform.exit() }

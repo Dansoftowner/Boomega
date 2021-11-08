@@ -19,8 +19,8 @@
 package com.dansoftware.boomega.gui.menu.help
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 
 /**
  * The help-menu used on macOS

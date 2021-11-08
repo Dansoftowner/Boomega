@@ -21,9 +21,9 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.ReadOnlyDatabase
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.BaseView
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.google.GoogleBooksImportModule
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import com.dansoftware.boomega.plugin.Plugins

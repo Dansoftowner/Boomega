@@ -20,8 +20,8 @@ package com.dansoftware.boomega.gui.app
 
 import com.dansoftware.boomega.config.*
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.login.updateLoginData

@@ -1,6 +1,6 @@
 package com.dansoftware.boomega.gui.firsttime.segment.lang
 
-import com.dansoftware.boomega.config.PreferenceKey
+import com.dansoftware.boomega.config.LOCALE
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.i18n.I18N
 import javafx.geometry.Insets
@@ -22,7 +22,7 @@ class LanguageSegmentView(private val preferences: Preferences) : StackPane() {
     private fun buildListView() = ListView<LanguageEntry>().apply {
         selectionModel.selectedItemProperty().addListener { _, oldItem, newItem ->
             newItem?.let {
-                preferences.editor().put(PreferenceKey.LOCALE, it.locale)
+                preferences.editor().put(LOCALE, it.locale)
                 Locale.setDefault(it.locale)
             } ?: selectionModel.select(oldItem) //we don't allow the user to choose no items
         }

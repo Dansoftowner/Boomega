@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.config.logindata
+package com.dansoftware.boomega.gui.login.config
 
 import com.dansoftware.boomega.database.SupportedDatabases
 import com.dansoftware.boomega.database.api.DatabaseField

@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.login
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.checkExists
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.onScenePresent
 import com.dansoftware.boomega.gui.util.selectedItemProperty

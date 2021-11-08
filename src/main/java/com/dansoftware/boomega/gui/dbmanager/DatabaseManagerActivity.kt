@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.dbmanager
 
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import javafx.stage.Window
 
 /**

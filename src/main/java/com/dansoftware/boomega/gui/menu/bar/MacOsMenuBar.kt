@@ -19,8 +19,8 @@
 package com.dansoftware.boomega.gui.menu.bar
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
-import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.menu.*
 import com.dansoftware.boomega.gui.menu.file.MacOsFileMenu
 import com.dansoftware.boomega.gui.menu.help.MacOsHelpMenu
