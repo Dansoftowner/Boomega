@@ -53,15 +53,15 @@ object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls()
     }
 
     fun listAllClasses(): List<Class<*>> = LinkedList<Class<*>>().run {
-        Arrays.stream(urLs)
+        urLs.asSequence()
             .map(URL::toExternalForm)
-            .peek { logger.debug("Plugin file found: {}", it) }
+            .onEach { logger.debug("Plugin file found: {}", it) }
             .filter { it.startsWith("file:/") }
             .map { it.substring(6) }
             .filter { it.endsWith(".jar") }
             .map(::JarFile)
             .forEach { jar ->
-                jar.entries().toList()
+                jar.entries().asSequence()
                     .filter { it.isDirectory.not() && it.name.endsWith(".class") }
                     .map(JarEntry::getName)
                     .map { it.substring(0, it.length - 6) }

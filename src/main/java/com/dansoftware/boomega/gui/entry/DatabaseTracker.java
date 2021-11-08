@@ -53,6 +53,9 @@ public class DatabaseTracker {
     private final List<WeakReference<Observer>> observers =
             Collections.synchronizedList(new LinkedList<>());
 
+    private final Set<Observer> strongObservers =
+            Collections.synchronizedSet(new HashSet<>());
+
     private final ObservableSet<DatabaseMeta> savedDatabases =
             FXCollections.synchronizedObservableSet(FXCollections.observableSet());
 
@@ -70,10 +73,12 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public void registerClosedDatabase(@NotNull DatabaseMeta databaseMeta) {
+    public boolean registerClosedDatabase(@NotNull DatabaseMeta databaseMeta) {
         logger.debug("Registering database as closed: '{}'", databaseMeta.getUrl());
-        usingDatabases.remove(databaseMeta);
-        iterateObservers(observer -> observer.onClosingDatabase(databaseMeta));
+        boolean removed = usingDatabases.remove(databaseMeta);
+        if (removed)
+            iterateObservers(observer -> observer.onClosingDatabase(databaseMeta));
+        return removed;
     }
 
     /**
@@ -81,13 +86,15 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public void registerUsedDatabase(@NotNull DatabaseMeta databaseMeta) {
+    public boolean registerUsedDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
         logger.debug("Registering database as used: '{}'", databaseMeta.getUrl());
 
-        if (usingDatabases.add(databaseMeta)) {
+        boolean inserted = usingDatabases.add(databaseMeta);
+        if (inserted)
             iterateObservers(observer -> observer.onUsingDatabase(databaseMeta));
-        }
+
+        return inserted;
     }
 
     /**
@@ -95,13 +102,15 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public void saveDatabase(@NotNull DatabaseMeta databaseMeta) {
+    public boolean saveDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
         logger.debug("Registering database: '{}'", databaseMeta.getUrl());
 
-        if (savedDatabases.add(databaseMeta)) {
+        boolean inserted = savedDatabases.add(databaseMeta);
+        if (inserted)
             iterateObservers(observer -> observer.onDatabaseAdded(databaseMeta));
-        }
+
+        return inserted;
     }
 
     /**
@@ -109,15 +118,17 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public void removeDatabase(@NotNull DatabaseMeta databaseMeta) {
+    public boolean removeDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta);
         logger.debug("Unregistering database: '{}'", databaseMeta.getUrl());
-        if (savedDatabases.remove(databaseMeta))
+        boolean removed = savedDatabases.remove(databaseMeta);
+        if (removed)
             logger.debug("Removed from DatabaseTracker '{}'", databaseMeta);
         else
             logger.debug("DatabaseMeta '{}' not found in savedDatabases", databaseMeta);
 
         iterateObservers(observer -> observer.onDatabaseRemoved(databaseMeta));
+        return removed;
     }
 
     /**
@@ -133,6 +144,12 @@ public class DatabaseTracker {
         Objects.requireNonNull(observer);
         if (findWeakReference(observer).isEmpty())
             observers.add(new WeakReference<>(observer));
+    }
+
+    public void registerObserverStrongly(@NotNull Observer observer) {
+        Objects.requireNonNull(observer);
+        strongObservers.add(observer);
+        registerObserver(observer);
     }
 
     /**

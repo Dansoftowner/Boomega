@@ -19,12 +19,12 @@
 package com.dansoftware.boomega.gui.app
 
 import com.dansoftware.boomega.config.*
-import com.dansoftware.boomega.config.logindata.LoginData
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.entry.DatabaseTracker
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.login.updateLoginData
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader.MessageNotification.Priority
 import com.dansoftware.boomega.gui.theme.Theme
@@ -76,15 +76,14 @@ class BoomegaApp : BaseBoomegaApplication() {
         logger.debug("Theme is: {}", Theme.default)
         logger.debug("Locale is: {}", Locale.getDefault())
 
-        val databaseTracker = DatabaseTracker.getGlobal()
-        val loginData = readLoginData(preferences, databaseTracker)
+        val databaseTracker = buildDatabaseTracker(preferences)
         progress(0.9)
 
         // searching for updates
         val update = searchForUpdates(preferences)
         progress(1.0)
 
-        launchGUI(preferences, databaseTracker, loginData, update)
+        launchGUI(preferences, databaseTracker, update)
     }
 
     override fun stop() {
@@ -195,19 +194,6 @@ class BoomegaApp : BaseBoomegaApplication() {
     }
 
     /**
-     * Reads the [LoginData] from the [Preferences] and updates the [DatabaseTracker].
-     *
-     * @return the read [LoginData]
-     */
-    private fun readLoginData(preferences: Preferences, databaseTracker: DatabaseTracker): LoginData {
-        //adding the saved databases from the login-data to the database tracker
-        notifyPreloader("preloader.logindata")
-        val loginData = preferences[LOGIN_DATA]
-        loginData.savedDatabases.forEach(databaseTracker::saveDatabase)
-        return loginData
-    }
-
-    /**
      * Searches for updates if necessary
      */
     private fun searchForUpdates(preferences: Preferences): Release? {
@@ -219,6 +205,24 @@ class BoomegaApp : BaseBoomegaApplication() {
                 updateSearcher.trySearch { e -> logger.error("Couldn't search for updates", e) }
             }
             else -> null
+        }
+    }
+
+    private fun buildDatabaseTracker(preferences: Preferences): DatabaseTracker {
+        return DatabaseTracker.getGlobal().apply {
+            notifyPreloader("preloader.logindata")
+            // Filling up the database tracker
+            preferences[LOGIN_DATA].savedDatabases.forEach(::saveDatabase)
+
+            registerObserverStrongly(object : DatabaseTracker.Observer {
+                override fun onDatabaseAdded(databaseMeta: DatabaseMeta) {
+                    preferences.updateLoginData { it.savedDatabases.add(databaseMeta) }
+                }
+
+                override fun onDatabaseRemoved(databaseMeta: DatabaseMeta) {
+                    preferences.updateLoginData { it.savedDatabases.remove(databaseMeta) }
+                }
+            })
         }
     }
 
@@ -256,7 +260,6 @@ class BoomegaApp : BaseBoomegaApplication() {
     private fun launchGUI(
         preferences: Preferences,
         databaseTracker: DatabaseTracker,
-        loginData: LoginData,
         update: Release?
     ) {
         notifyPreloader("preloader.gui.build")
@@ -264,7 +267,6 @@ class BoomegaApp : BaseBoomegaApplication() {
             preferences = preferences,
             databaseTracker = databaseTracker,
             applicationArgs = applicationArgs,
-            getLoginData = { loginData },
             onLaunched = { context, launched ->
                 update?.let {
                     val updateActivity = UpdateActivity(context, it)

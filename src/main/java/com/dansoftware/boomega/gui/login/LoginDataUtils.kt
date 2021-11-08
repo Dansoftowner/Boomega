@@ -21,10 +21,20 @@ package com.dansoftware.boomega.gui.login
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.logindata.LoginData
+import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 
 inline fun Preferences.updateLoginData(crossinline action: (LoginData) -> Unit) {
     SingleThreadExecutor.submit {
-        editor.put(LOGIN_DATA, this[LOGIN_DATA].also { action(it) }).commit()
+        editor.put(LOGIN_DATA, this[LOGIN_DATA].also { action(it) }).tryCommit()
     }
+}
+
+fun LoginData.removeAutoLogin() {
+    isAutoLogin = false
+    autoLoginCredentials = null
+}
+
+fun LoginData.isAutoLoginOn(database: DatabaseMeta): Boolean {
+    return isAutoLogin && selectedDatabase == database
 }

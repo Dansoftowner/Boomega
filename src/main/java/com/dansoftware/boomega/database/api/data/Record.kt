@@ -61,9 +61,12 @@ class Record(
     var subject: String? = null,
 
     @field:RecordFieldTarget(Type.MAGAZINE)
-    var magazineName: String? = null
+    var magazineName: String? = null,
+
+    serviceConnection: ServiceConnection? = null
 ) {
-    var serviceConnection: ServiceConnection? = null
+    @field:RecordFieldTarget(Type.BOOK, Type.MAGAZINE)
+    var serviceConnection: ServiceConnection? = serviceConnection
         get() = field ?: ServiceConnection().also { field = it }
 
     constructor() : this(Type.BOOK)

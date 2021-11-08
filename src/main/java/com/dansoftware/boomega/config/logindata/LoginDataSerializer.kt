@@ -32,7 +32,8 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
         typeOfSrc: Type,
         context: JsonSerializationContext
     ): JsonElement {
-        logger.debug("Serializing login data...")
+        logger.debug("Serializing login-data....")
+
         // { "svdbs" : [ ... ], "autolgn": true,  "scltdb": 2, "crdntls": { ... } }
         val json = JsonObject()
         json.add(SAVED_DATABASES, serializeDatabases(src.savedDatabases.toList()))
@@ -44,9 +45,6 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
                 ?.takeIf { src.isAutoLogin }
                 ?.let { serializeCredentials(context, it) }
         )
-        logger.debug("Saving {} databases", src.savedDatabases.size)
-        logger.debug("Auto login: {}", src.isAutoLogin)
-        logger.debug("Selected database index: {}", src.selectedDatabaseIndex)
         return json
     }
 
@@ -80,10 +78,10 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
 
         private val logger: Logger = LoggerFactory.getLogger(LoginDataSerializer::class.java)
 
-        private const val SAVED_DATABASES = "svdbs"
+        private const val SAVED_DATABASES = "svdbs_2_0"
         private const val SELECTED_DATABASE_INDEX = "slctdb"
         private const val AUTO_LOGIN = "autolgn"
-        private const val AUTO_LOGIN_CREDENTIALS = "crdntls"
+        private const val AUTO_LOGIN_CREDENTIALS = "crdntls_2_0"
         private const val DATABASE_PROVIDER = "provider"
         private const val DATABASE_URL = "dburl"
     }
