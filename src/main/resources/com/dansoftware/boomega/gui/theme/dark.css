@@ -48,6 +48,32 @@
     -fx-background-color: whitesmoke;
 }
 
+.rounded-tab-pane > .tab-header-area > .tab-header-background {
+    /*-fx-background-color: #1a1a23;*/
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: #3c3d40;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.16), 10, 0.12, -1, 2);
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region > .tab:hover > .tab-container > .tab-label {
+    -fx-text-fill: #d4d4d4;
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-label {
+    -fx-text-fill: #d4d4d4;
+}
+
+.rounded-tab-pane > .tab-header-area > .headers-region > .tab:selected:hover > .tab-container > .tab-label {
+    -fx-text-fill: #d4d4d4;
+}
+
 /*******************************************************************************
  *                                                                             *
  *                                  Glyph icons                                *
@@ -433,30 +459,6 @@
 
 .database-view-toolbar {
     -fx-border-color: #393939;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .tab-header-background {
-    /*-fx-background-color: #1a1a23;*/
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab:selected {
-    -fx-background-color: #3c3d40;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.16), 10, 0.12, -1, 2);
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab:hover > .tab-container > .tab-label {
-    -fx-text-fill: #d4d4d4;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-label {
-    -fx-text-fill: #d4d4d4;
-}
-
-.database-view .tab-view > .tab-pane > .tab-header-area > .headers-region > .tab:selected:hover > .tab-container > .tab-label {
-    -fx-text-fill: #d4d4d4;
 }
 
 .database-view .tab-view .module-view .tile:hover {

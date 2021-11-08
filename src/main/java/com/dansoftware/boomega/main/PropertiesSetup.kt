@@ -43,8 +43,7 @@ object PropertiesSetup {
     private const val DEFAULT_DIRECTORY_PATH = "boomega.dir.default.path"
 
     private const val APP_NAME_VALUE = "Boomega"
-    private const val BOOMEGA_VERSION_VALUE = "0.7.5"
-    private const val BOOMEGA_BUILD_INFO_VALUE = "Built on 2021 July 19th"
+    private const val BOOMEGA_VERSION_VALUE = "0.8.0"
     private const val BOOMEGA_FILE_EXTENSION_VALUE = "bmdb"
     private const val BOOMEGA_DOCUMENTS_FOLDER = "BoomegaDocuments"
 
@@ -106,7 +105,6 @@ object PropertiesSetup {
     private fun putAppSpecificProperties() {
         System.setProperty(APP_NAME, APP_NAME_VALUE)
         System.setProperty(BOOMEGA_VERSION, BOOMEGA_VERSION_VALUE)
-        System.setProperty(BOOMEGA_BUILD_INFO, BOOMEGA_BUILD_INFO_VALUE)
         System.setProperty(BOOMEGA_FILE_EXTENSION, BOOMEGA_FILE_EXTENSION_VALUE)
         System.setProperty(PLUGIN_DIRECTORY_PATH, getPluginDirPath())
         System.setProperty(CONFIG_FILE_PATH, getConfigFilePath())
