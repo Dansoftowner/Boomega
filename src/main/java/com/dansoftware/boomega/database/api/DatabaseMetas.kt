@@ -28,7 +28,7 @@ inline fun DatabaseMeta.checkExists(
 ) {
     when {
         isActionSupported(DatabaseMeta.Action.Exists) -> {
-            if (performAction(DatabaseMeta.Action.Exists)) ifExists(this)
+            if (this[DatabaseMeta.Action.Exists]) ifExists(this)
             else ifNotExists(this)
         }
         else -> ifUnknown(this)
