@@ -31,6 +31,8 @@ abstract class DatabaseMeta(provider: DatabaseProvider<*>) {
         return url
     }
 
+    operator fun <T> get(action: Action<T>): T = performAction(action)
+
     abstract fun <T> performAction(action: Action<T>): T
 
     open fun isActionSupported(action: Action<*>): Boolean {

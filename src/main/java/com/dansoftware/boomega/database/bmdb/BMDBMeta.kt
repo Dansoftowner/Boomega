@@ -32,7 +32,7 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
         get() = file.name
 
     override val supportedActions: Set<Action<*>>
-        get() = setOf(Action.SizeInBytes, Action.OpenInExternalApplication, Action.Exists)
+        get() = setOf(Action.OpenInExternalApplication, Action.Exists)
 
     private val stringFormat by lazy {
         String.format("%s (%s)", name, file.shortenedPath(maxBack = 1))
@@ -46,7 +46,7 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
 
     override fun isActionSupported(action: Action<*>): Boolean {
         return when (action) {
-            Action.SizeInBytes -> performAction(Action.Exists)
+            Action.SizeInBytes -> this[Action.Exists]
             else -> super.isActionSupported(action)
         }
     }
@@ -54,7 +54,7 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
     @Suppress("UNCHECKED_CAST")
     override fun <T> performAction(action: Action<T>): T {
         return when (action) {
-            Action.SizeInBytes -> (if (performAction(Action.Exists)) file.length() else -1) as T
+            Action.SizeInBytes -> (if (this[Action.Exists]) file.length() else -1) as T
             Action.OpenInExternalApplication -> file.revealInExplorer() as T
             Action.Exists -> file.exists().and(!file.isDirectory) as T
         }
