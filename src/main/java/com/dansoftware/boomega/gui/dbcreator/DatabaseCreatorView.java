@@ -44,6 +44,6 @@ public class DatabaseCreatorView extends BaseView {
     }
 
     public DatabaseMeta getCreatedDatabase() {
-        return this.form.createdDatabaseProperty().get();
+        return this.form.getCreatedDatabase();
     }
 }

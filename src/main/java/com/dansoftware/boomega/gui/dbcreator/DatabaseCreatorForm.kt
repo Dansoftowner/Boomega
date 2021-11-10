@@ -20,16 +20,16 @@ package com.dansoftware.boomega.gui.dbcreator
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
+import com.dansoftware.boomega.database.api.LoginForm
+import com.dansoftware.boomega.database.api.RegistrationForm
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.util.SpaceValidator
-import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.gui.util.stage
-import com.dansoftware.boomega.gui.util.window
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.hasValidPath
 import com.dansoftware.boomega.util.shortenedPath
+import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.geometry.Insets
 import javafx.scene.control.*
@@ -41,6 +41,57 @@ import javafx.stage.DirectoryChooser
 import org.jetbrains.annotations.Nls
 import java.io.File
 
+
+class DatabaseCreatorForm(
+    private val context: Context,
+    private val databaseTracker: DatabaseTracker,
+    private val databaseType: ObjectProperty<DatabaseProvider<*>>
+) : BorderPane() {
+
+    private val registrationForm: ObjectProperty<RegistrationForm<*>> =
+        SimpleObjectProperty<RegistrationForm<*>>().apply {
+            bind(
+                Bindings.createObjectBinding(
+                    // TODO: database options
+                    { databaseType.get().buildUIRegistrationForm(context, emptyMap()) },
+                    databaseType
+                )
+            )
+        }
+
+    var createdDatabase: DatabaseMeta? = null
+        private set
+
+    init {
+        buildUI()
+    }
+
+    private fun buildUI() {
+        center = buildCenter()
+        bottom = buildBottom()
+    }
+
+    private fun buildCenter() = ScrollPane().apply {
+        isFitToWidth = true
+        contentProperty().bind(registrationForm)
+    }
+
+    private fun buildBottom() = Button().run {
+        maxWidth = Double.MAX_VALUE
+        minHeight = 35.0
+        text = i18n("database.creator.create")
+        isDefaultButton = true
+        setOnAction {
+            val database = registrationForm.get().registrate()
+            databaseTracker.saveDatabase(database)
+            createdDatabase = database
+        }
+        StackPane(this).padding(Insets(10.0))
+    }
+}
+
+
+/*
 class DatabaseCreatorForm(
     private val context: Context,
     private val databaseTracker: DatabaseTracker,
@@ -213,12 +264,14 @@ class DatabaseCreatorForm(
     private fun create() {
         validateInputs { databaseMeta, credentials ->
             createdDatabase.set(databaseMeta)
-          /*  NitriteDatabase.builder()
+          */
+/*  NitriteDatabase.builder()
                 .databaseMeta(databaseMeta)
                 .onFailed { message, t ->
                     createdDatabase.set(null)
                     context.showErrorDialog(i18n("database.create_failed"), message, t as Exception?) {}
-                }.touch(credentials)*/
+                }.touch(credentials)*//*
+
             databaseTracker.saveDatabase(databaseMeta)
             this.stage?.close()
         }
@@ -295,7 +348,9 @@ class DatabaseCreatorForm(
             else -> true
         }.takeIf { it }?.let {
             onSuccess(
-                TODO()/*DatabaseMeta(databaseName.get(), databaseFile)*/,
+                TODO()*/
+/*DatabaseMeta(databaseName.get(), databaseFile)*//*
+,
                 Credentials(username.get(), password.get())
             )
         }
@@ -307,4 +362,4 @@ class DatabaseCreatorForm(
     private fun showErrorDialog(@Nls title: String, @Nls msg: String, vararg args: Any?): ButtonType? =
         context.showErrorDialogAndWait(i18n(title), i18n(msg, *args))
 
-}
+}*/

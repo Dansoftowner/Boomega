@@ -70,6 +70,8 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
     }
 
     override fun registrate(): BMDBMeta {
+        // TODO: validating inputs
+        // TODO: touching database file if necessary
         return BMDBMeta(databaseName.get(), databaseFile)
     }
 
@@ -81,6 +83,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             padding = Insets(10.0)
             hgap = 5.0
             vgap = 5.0
+            prefWidthProperty().bind(this@BMDBRegistrationForm.widthProperty())
             buildUI()
         }
 

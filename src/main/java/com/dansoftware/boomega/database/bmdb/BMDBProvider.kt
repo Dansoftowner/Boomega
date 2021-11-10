@@ -21,6 +21,7 @@ package com.dansoftware.boomega.database.bmdb
 import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBLoginForm
+import com.dansoftware.boomega.gui.database.bmdb.BMDBRegistrationForm
 import com.dansoftware.boomega.gui.util.styleClass
 import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.property.ReadOnlyObjectProperty
@@ -97,7 +98,7 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
         context: Context,
         options: Map<DatabaseOption<*>, Any>
     ): RegistrationForm<BMDBMeta> {
-        TODO("Not yet implemented")
+        return BMDBRegistrationForm(context, options)
     }
 
     @Suppress("NullableBooleanElvis")
