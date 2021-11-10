@@ -183,6 +183,7 @@ object GlobalActions {
                         logger.error("Update search failed", it)
                     }
                     onSucceeded { githubRelease ->
+                        context.stopProgress()
                         githubRelease?.let { UpdateActivity(context, it).show() }
                             ?: context.showInformationDialog(
                                 I18N.getValue("update.up_to_date.title"),
