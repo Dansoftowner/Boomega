@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.database.api
 
 open class DatabaseConstructionException(
+    val title: String? = null,
     private val localizedMessage: String? = null,
     override val message: String? = null,
     override val cause: Throwable? = null

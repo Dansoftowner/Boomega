@@ -83,8 +83,10 @@ class DatabaseCreatorForm(
         isDefaultButton = true
         setOnAction {
             val database = registrationForm.get().registrate()
-            databaseTracker.saveDatabase(database)
-            createdDatabase = database
+            database?.let {
+                databaseTracker.saveDatabase(database)
+                createdDatabase = database
+            }
         }
         StackPane(this).padding(Insets(10.0))
     }

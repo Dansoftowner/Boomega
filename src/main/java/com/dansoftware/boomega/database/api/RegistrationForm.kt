@@ -25,5 +25,5 @@ abstract class RegistrationForm<M : DatabaseMeta>(
     protected val context: Context,
     protected val options: Map<DatabaseOption<*>, Any>
 ) : Region() {
-    abstract fun registrate(): DatabaseMeta
+    abstract fun registrate(): M?
 }
