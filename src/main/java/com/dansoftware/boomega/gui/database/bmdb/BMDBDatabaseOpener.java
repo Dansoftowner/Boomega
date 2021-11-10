@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.dbcreator;
+package com.dansoftware.boomega.gui.database.bmdb;
 
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.database.bmdb.BMDBMeta;

@@ -23,7 +23,7 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
-import com.dansoftware.boomega.gui.dbcreator.BMDBDatabaseOpener
+import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.info.InformationActivity
