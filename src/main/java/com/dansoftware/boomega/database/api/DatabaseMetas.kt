@@ -24,16 +24,13 @@ package com.dansoftware.boomega.database.api
 inline fun DatabaseMeta.checkExists(
     ifNotExists: (DatabaseMeta) -> Unit,
     ifExists: (DatabaseMeta) -> Unit = { },
-    ifExistsOrUnknown: (DatabaseMeta) -> Unit = { }
+    ifUnknown: (DatabaseMeta) -> Unit = { }
 ) {
     when {
-        isActionSupported(DatabaseMeta.Action.Exists) ->
-            if (!performAction(DatabaseMeta.Action.Exists)) {
-                ifNotExists(this)
-            } else {
-                ifExists(this)
-                ifExistsOrUnknown(this)
-            }
-        else -> ifExistsOrUnknown(this)
+        isActionSupported(DatabaseMeta.Action.Exists) -> {
+            if (performAction(DatabaseMeta.Action.Exists)) ifExists(this)
+            else ifNotExists(this)
+        }
+        else -> ifUnknown(this)
     }
 }

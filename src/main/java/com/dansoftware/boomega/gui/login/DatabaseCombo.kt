@@ -32,6 +32,8 @@ import javafx.scene.control.ListCell
 import javafx.scene.control.Tooltip
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class DatabaseCombo(preferences: Preferences, databaseTracker: DatabaseTracker) : ComboBox<DatabaseMeta?>() {
 
@@ -45,7 +47,7 @@ class DatabaseCombo(preferences: Preferences, databaseTracker: DatabaseTracker) 
         setCellFactory { Cell(databaseTracker) }
         onScenePresent {
             selectedItemProperty().addListener { _, _, newItem ->
-                 preferences.updateLoginData { it.selectedDatabase = newItem }
+                preferences.updateLoginData { it.selectedDatabase = newItem }
             }
         }
     }
@@ -69,11 +71,9 @@ class DatabaseCombo(preferences: Preferences, databaseTracker: DatabaseTracker) 
                 else -> {
                     updateUi(item)
                     item.checkExists(
-                        ifNotExists = ::updateUiIfNotExists,
-                        ifExistsOrUnknown = {
-                            if (databaseTracker.isDatabaseUsed(it))
-                                updateUiIfDatabaseIsUsed()
-                        }
+                        ifNotExists = { databaseNotExistsUi() },
+                        ifUnknown = ::checkDatabaseIsUsed,
+                        ifExists = ::checkDatabaseIsUsed
                     )
                 }
             }
@@ -85,16 +85,20 @@ class DatabaseCombo(preferences: Preferences, databaseTracker: DatabaseTracker) 
             tooltip = null
         }
 
-        private fun updateUiIfNotExists(meta: DatabaseMeta) {
+        private fun databaseNotExistsUi() {
             tooltip = Tooltip(i18n("file.not.exists"))
             graphic = icon("warning-icon").styleClass(NOT_EXISTS_CLASS)
         }
 
-        private fun updateUiIfDatabaseIsUsed() {
+        private fun databaseIsUsedUI() {
             tooltip = Tooltip(i18n("database.currently.used"))
             graphic = icon("play-icon").styleClass(USED_CLASS)
         }
 
+        private fun checkDatabaseIsUsed(meta: DatabaseMeta) {
+            if (databaseTracker.isDatabaseUsed(meta))
+                databaseIsUsedUI()
+        }
 
         companion object {
             private const val NOT_EXISTS_CLASS = "state-indicator-file-not-exists"
@@ -110,6 +114,10 @@ class DatabaseCombo(preferences: Preferences, databaseTracker: DatabaseTracker) 
                 text = i18n("login.source.combo.promt")
             }
         }
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(DatabaseCombo::class.java)
     }
 
 }

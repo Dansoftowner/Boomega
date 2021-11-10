@@ -32,7 +32,7 @@ class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
         get() = file.name
 
     override val supportedActions: Set<Action<*>>
-        get() = setOf(Action.SizeInBytes, Action.OpenInExternalApplication)
+        get() = setOf(Action.SizeInBytes, Action.OpenInExternalApplication, Action.Exists)
 
     private val stringFormat by lazy {
         String.format("%s (%s)", name, file.shortenedPath(maxBack = 1))
