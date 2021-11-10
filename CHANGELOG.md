@@ -4,6 +4,7 @@
 
 ### Enhancements/features
 
+* 💥 Refactored database api for allowing integrating other database managements systems into the app
 * ✨ MacOS specific menu-bar
 * ✨ [#161](https://github.com/Dansoftowner/Boomega/issues/161): 'Maximize' item in window menu
 * 💄 Look and feel updates
