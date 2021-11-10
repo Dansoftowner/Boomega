@@ -147,6 +147,15 @@ object GlobalActions {
         }
 
     @JvmField
+    val MAXIMIZE_WINDOW =
+        Action(
+            "action.maximize_window",
+            "maximize-window-icon"
+        ) { context, _, _ ->
+            context.contextWindow.also { if (it is Stage) it.isMaximized = it.isMaximized.not() }
+        }
+
+    @JvmField
     val OPEN_CLIPBOARD_VIEWER =
         Action("action.open_clipboard_view", "clipboard-icon") { context, _, _ ->
             ClipboardViewActivity.show(context.contextWindow)

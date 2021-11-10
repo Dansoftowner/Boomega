@@ -5,6 +5,7 @@
 ### Enhancements/features
 
 * ✨ MacOS specific menu-bar
+* ✨ [#161](https://github.com/Dansoftowner/Boomega/issues/161): 'Maximize' item in window menu
 * 💄 Look and feel updates
 * 💄 New application icon
 

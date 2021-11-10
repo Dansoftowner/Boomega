@@ -118,7 +118,8 @@ private val iconPack = mapOf<String, () -> Text>(
     "right-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_RIGHT),
     "center-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_CENTER),
     "top-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_TOP),
-    "bottom-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_BOTTOM)
+    "bottom-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_BOTTOM),
+    "maximize-window-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.WINDOW_MAXIMIZE)
 )
 
 fun icon(identifier: String): Text = (

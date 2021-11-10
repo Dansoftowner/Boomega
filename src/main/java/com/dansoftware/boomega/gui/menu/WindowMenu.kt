@@ -29,6 +29,7 @@ import com.dansoftware.boomega.i18n.i18n
 import javafx.collections.ListChangeListener
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.Menu
+import javafx.scene.control.MenuItem
 import javafx.stage.Stage
 import javafx.stage.Window
 import java.lang.ref.WeakReference
@@ -83,7 +84,7 @@ class WindowMenu(
     }
 
     init {
-        this.menuItem(fullScreenMenuItem()).separator()
+        this.menuItem(maximizeMenuItem()).menuItem(fullScreenMenuItem()).separator()
         windowsChangeOperator.onWindowsAdded(Window.getWindows())
         Window.getWindows().addListener(WeakWindowsChangeListener(WeakReference(windowListChangeListener)))
     }
@@ -93,13 +94,28 @@ class WindowMenu(
             GlobalActions.FULL_SCREEN, context, preferences, databaseTracker,
             ::CheckMenuItem
         ).apply {
-                context.onWindowPresent { window ->
-                    if (window is Stage)
-                        window.fullScreenProperty().addListener { _, _, isFullScreen ->
-                            selectedProperty().set(isFullScreen)
-                        }
+            context.onWindowPresent { window ->
+                if (window is Stage)
+                    window.fullScreenProperty().addListener { _, _, isFullScreen ->
+                        selectedProperty().set(isFullScreen)
+                    }
+            }
+        }
+
+    private fun maximizeMenuItem() =
+        menuItemOf(
+            GlobalActions.MAXIMIZE_WINDOW, context, preferences, databaseTracker,
+            ::CheckMenuItem
+        ).apply {
+            context.onWindowPresent { window ->
+                if (window is Stage) {
+                    window.maximizedProperty().addListener { _, _, isMaximized ->
+                        selectedProperty().set(isMaximized)
+                    }
                 }
             }
+        }
+
 
     private class WeakWindowsChangeListener(val weakReference: WeakReference<ListChangeListener<Window>>) :
         ListChangeListener<Window> {
