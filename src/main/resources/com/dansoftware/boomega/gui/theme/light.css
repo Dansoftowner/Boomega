@@ -352,6 +352,7 @@
  *                                                                             *
  ******************************************************************************/
 
-.header-toolbar {
+.header-toolbar,
+.database-creator-toolbar .tool-bar {
     -fx-background-color: #e5e5e5;
 }
