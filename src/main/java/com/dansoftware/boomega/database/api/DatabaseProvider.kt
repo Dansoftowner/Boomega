@@ -81,7 +81,7 @@ interface DatabaseProvider<M : DatabaseMeta> {
         context: Context,
         databaseMeta: ReadOnlyObjectProperty<M>,
         options: Map<DatabaseOption<*>, Any>
-    ): LoginForm<*>
+    ): LoginForm<M>
 
     /**
      * Builds a basic UI registration form
@@ -93,5 +93,5 @@ interface DatabaseProvider<M : DatabaseMeta> {
     fun buildUIRegistrationForm(
         context: Context,
         options: Map<DatabaseOption<*>, Any>
-    ): RegistrationForm
+    ): RegistrationForm<M>
 }

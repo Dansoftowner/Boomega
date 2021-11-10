@@ -96,7 +96,7 @@ object BMDBProvider : DatabaseProvider<BMDBMeta> {
     override fun buildUIRegistrationForm(
         context: Context,
         options: Map<DatabaseOption<*>, Any>
-    ): RegistrationForm {
+    ): RegistrationForm<BMDBMeta> {
         TODO("Not yet implemented")
     }
 
