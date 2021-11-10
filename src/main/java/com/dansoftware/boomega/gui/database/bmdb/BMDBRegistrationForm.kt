@@ -16,38 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.dbcreator
+package com.dansoftware.boomega.gui.database.bmdb
 
-import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.api.DatabaseProvider
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.database.api.*
+import com.dansoftware.boomega.database.bmdb.BMDBMeta
 import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.SpaceValidator
 import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.gui.util.stage
 import com.dansoftware.boomega.gui.util.window
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.hasValidPath
 import com.dansoftware.boomega.util.shortenedPath
-import javafx.beans.property.*
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
 import javafx.geometry.Insets
 import javafx.scene.control.*
-import javafx.scene.layout.BorderPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
-import javafx.scene.layout.StackPane
 import javafx.stage.DirectoryChooser
-import org.jetbrains.annotations.Nls
 import java.io.File
+import java.lang.IllegalStateException
 
-class DatabaseCreatorForm(
-    private val context: Context,
-    private val databaseTracker: DatabaseTracker,
-    private val databaseType: ObjectProperty<DatabaseProvider<*>>
-) : BorderPane() {
-
-    private val createdDatabase: ObjectProperty<DatabaseMeta> = SimpleObjectProperty()
+class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any>) : RegistrationForm<BMDBMeta>(context, options) {
 
     private val databaseName: StringProperty = SimpleStringProperty()
     private val databaseDir: StringProperty = SimpleStringProperty()
@@ -55,7 +48,6 @@ class DatabaseCreatorForm(
     private val username: StringProperty = SimpleStringProperty()
     private val password: StringProperty = SimpleStringProperty()
     private val passwordRepeat: StringProperty = SimpleStringProperty()
-
     private val fullPath: StringProperty = SimpleStringProperty().apply {
         bind(
             databaseDir.concat(File.separator)
@@ -65,42 +57,25 @@ class DatabaseCreatorForm(
         )
     }
 
-    private val directoryChooser = DirectoryChooser()
+    private val databaseFile get() = File(fullPath.get())
 
     init {
         buildUI()
     }
 
-    fun createdDatabaseProperty() = createdDatabase
-
     private fun buildUI() {
-        center = buildCenter()
-        bottom = buildBottom()
+        children.add(
+            Grid()
+        )
     }
 
-    private fun buildCenter() = ScrollPane(buildGrid()).apply {
-        isFitToWidth = true
+    override fun registrate(): BMDBMeta {
+        return BMDBMeta(databaseName.get(), databaseFile)
     }
 
-    private fun buildBottom() = StackPane(buildCreateButton()).apply {
-        padding = Insets(10.0)
-    }
+    private inner class Grid : GridPane() {
 
-    private fun openDirectory() {
-        directoryChooser.showDialog(this.window)?.let { dir ->
-            databaseDir.set(dir.absolutePath)
-        }
-    }
-
-    private fun buildCreateButton() = Button().apply {
-        maxWidth = Double.MAX_VALUE
-        minHeight = 35.0
-        text = i18n("database.creator.create")
-        isDefaultButton = true
-        setOnAction { create() }
-    }
-
-    private fun buildGrid() = object : GridPane() {
+        private val directoryChooser = DirectoryChooser()
 
         init {
             padding = Insets(10.0)
@@ -207,104 +182,11 @@ class DatabaseCreatorForm(
             managedProperty().bind(authentication)
             passwordRepeat.bind(textProperty())
         }
-    }
 
-
-    private fun create() {
-        validateInputs { databaseMeta, credentials ->
-            createdDatabase.set(databaseMeta)
-          /*  NitriteDatabase.builder()
-                .databaseMeta(databaseMeta)
-                .onFailed { message, t ->
-                    createdDatabase.set(null)
-                    context.showErrorDialog(i18n("database.create_failed"), message, t as Exception?) {}
-                }.touch(credentials)*/
-            databaseTracker.saveDatabase(databaseMeta)
-            this.stage?.close()
+        private fun openDirectory() {
+            directoryChooser.showDialog(this.window)?.let { dir ->
+                databaseDir.set(dir.absolutePath)
+            }
         }
     }
-
-    private fun validateInputs(onSuccess: (DatabaseMeta, Credentials) -> Unit) {
-        val databaseFile = fullPath.get().let(::File)
-        val databaseDirFile = databaseDir.get().let(::File)
-        when {
-            databaseName.get()?.isBlank() ?: true -> {
-                showErrorDialog(
-                    "database.creator.missing_name.title",
-                    "database.creator.missing_name.msg"
-                )
-                false
-            }
-            databaseDir.get()?.isBlank() ?: true -> {
-                showErrorDialog(
-                    "database.creator.missing_dir.title",
-                    "database.creator.missing_dir.msg"
-                )
-                false
-            }
-            databaseDirFile.hasValidPath.not() -> {
-                showErrorDialog(
-                    "database.creator.invalid_dir.title",
-                    "database.creator.invalid_dir.msg",
-                    databaseDirFile
-                )
-                false
-            }
-            databaseFile.exists() -> {
-                showErrorDialog(
-                    "database.creator.file_already_exists.title",
-                    "database.creator.file_already_exists.msg",
-                    databaseFile.shortenedPath(1)
-                )
-                false
-            }
-            authentication.get() && username.get()?.isBlank() ?: true -> {
-                showErrorDialog(
-                    "database.creator.empty_user_name.title",
-                    "database.creator.empty_user_name.msg"
-                )
-                false
-            }
-            authentication.get() && password.get()?.isBlank() ?: true -> {
-                showErrorDialog(
-                    "database.creator.empty_password.title",
-                    "database.creator.empty_password.msg"
-                )
-                false
-            }
-            authentication.get() && password.get() != passwordRepeat.get() -> {
-                showErrorDialog(
-                    "database.creator.passwords_not_match.title",
-                    "database.creator.passwords_not_match.msg"
-                )
-                false
-            }
-            databaseDirFile.exists().not() -> {
-                showInfoDialog(
-                    "database.creator.dir_not_exist.title",
-                    "database.creator.dir_not_exist.msg",
-                    databaseDirFile.name
-                )
-                try {
-                    databaseDirFile.mkdirs();
-                } catch (e: java.lang.SecurityException) {
-                    //TODO: handle
-                }
-                true
-            }
-            else -> true
-        }.takeIf { it }?.let {
-            onSuccess(
-                TODO()/*DatabaseMeta(databaseName.get(), databaseFile)*/,
-                Credentials(username.get(), password.get())
-            )
-        }
-    }
-
-    private fun showInfoDialog(@Nls title: String, @Nls msg: String, vararg args: Any?): ButtonType? =
-        context.showInformationDialogAndWait(i18n(title, *args), i18n(msg))
-
-    private fun showErrorDialog(@Nls title: String, @Nls msg: String, vararg args: Any?): ButtonType? =
-        context.showErrorDialogAndWait(i18n(title), i18n(msg, *args))
-
 }

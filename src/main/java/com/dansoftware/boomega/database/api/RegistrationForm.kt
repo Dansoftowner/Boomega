@@ -21,9 +21,9 @@ package com.dansoftware.boomega.database.api
 import com.dansoftware.boomega.gui.api.Context
 import javafx.scene.layout.Region
 
-abstract class RegistrationForm(
+abstract class RegistrationForm<M : DatabaseMeta>(
     protected val context: Context,
     protected val options: Map<DatabaseOption<*>, Any>
 ) : Region() {
-    abstract fun buildMeta(): DatabaseMeta
+    abstract fun registrate(): DatabaseMeta
 }

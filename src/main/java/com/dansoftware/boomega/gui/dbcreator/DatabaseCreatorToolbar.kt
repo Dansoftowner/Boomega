@@ -18,23 +18,66 @@
 
 package com.dansoftware.boomega.gui.dbcreator
 
+import com.dansoftware.boomega.database.SupportedDatabases
+import com.dansoftware.boomega.database.api.DatabaseProvider
+import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.selectedItem
+import com.dansoftware.boomega.gui.util.selectedItemProperty
 import com.dansoftware.boomega.i18n.I18N
+import javafx.beans.binding.Bindings
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.Property
+import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
+import javafx.scene.control.ListCell
 import javafx.scene.control.ToolBar
 
-class DatabaseCreatorToolbar : ToolBar() {
+class DatabaseCreatorToolbar(private val databaseType: ObjectProperty<DatabaseProvider<*>>) : BiToolBar() {
 
     init {
-        styleClass.add("header-toolbar")
+        styleClass.add("database-creator-toolbar")
         buildUI()
     }
 
     private fun buildUI() {
-        items.add(icon("database-plus-icon"))
-        items.add(buildLabel())
+        leftItems.add(icon("database-plus-icon"))
+        leftItems.add(buildLabel())
+        rightItems.add(DatabaseTypeChooser(databaseType))
     }
 
     private fun buildLabel() =
         Label(I18N.getValue("database.creator.title"))
+
+    private class DatabaseTypeChooser(databaseType: ObjectProperty<DatabaseProvider<*>>) :
+        ComboBox<DatabaseProvider<*>>() {
+
+        private val listCell
+            get() = object : ListCell<DatabaseProvider<*>>() {
+                override fun updateItem(item: DatabaseProvider<*>?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (item == null || empty) {
+                        graphic = null
+                        text = null
+                    } else {
+                        graphic = item.icon
+                        text = item.name
+                    }
+                }
+            }
+
+        init {
+            setCellFactory { listCell }
+            buttonCell = listCell
+            databaseType.bind(selectedItemProperty())
+            items.addAll(SupportedDatabases)
+            selectedItem = items[0]
+
+            // For preventing the user to select nothing
+            selectedItemProperty().addListener { _, oldItem, newItem ->
+                if (newItem == null) selectionModel.select(oldItem)
+            }
+        }
+
+    }
 }

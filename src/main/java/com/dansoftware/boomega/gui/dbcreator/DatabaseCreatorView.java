@@ -19,8 +19,10 @@
 package com.dansoftware.boomega.gui.dbcreator;
 
 import com.dansoftware.boomega.database.api.DatabaseMeta;
+import com.dansoftware.boomega.database.api.DatabaseProvider;
 import com.dansoftware.boomega.database.tracking.DatabaseTracker;
 import com.dansoftware.boomega.gui.base.BaseView;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,8 +38,9 @@ public class DatabaseCreatorView extends BaseView {
     private final DatabaseCreatorForm form;
 
     public DatabaseCreatorView(@NotNull DatabaseTracker databaseTracker) {
-        this.form = new DatabaseCreatorForm(this, databaseTracker);
-        this.setContent(new VBox(new DatabaseCreatorToolbar(), form));
+        var databaseType = new SimpleObjectProperty<DatabaseProvider<?>>();
+        this.form = new DatabaseCreatorForm(this, databaseTracker, databaseType);
+        this.setContent(new VBox(new DatabaseCreatorToolbar(databaseType), form));
     }
 
     public DatabaseMeta getCreatedDatabase() {
