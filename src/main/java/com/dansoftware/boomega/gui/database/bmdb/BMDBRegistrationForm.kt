@@ -64,8 +64,6 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
 
     private val databaseDirFile: File get() = File(databaseDir.get())
 
-
-
     init {
         buildUI()
     }
@@ -78,6 +76,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
 
     override fun registrate(): BMDBMeta? {
         validateInputs { database, credentials ->
+            databaseDirFile.mkdirs()
             BMDBProvider.getDatabase(database, credentials, emptyMap()).close() // TODO: database options
             return BMDBMeta(databaseName.get(), databaseFile)
         }

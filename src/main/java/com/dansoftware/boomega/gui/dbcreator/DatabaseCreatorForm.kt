@@ -91,7 +91,8 @@ class DatabaseCreatorForm(
         } catch (e: DatabaseConstructionException) {
             context.showErrorDialog(
                 title = e.title ?: i18n("database.create_failed"),
-                message = e.localizedMessage ?: ""
+                message = e.localizedMessage ?: "",
+                cause = e
             )
             null
         }

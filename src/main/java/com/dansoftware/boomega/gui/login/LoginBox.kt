@@ -178,7 +178,9 @@ class LoginBox(
         maxWidth = Double.MAX_VALUE
         graphic = icon("database-plus-icon")
         setOnAction {
-            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow)
+            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
+                selectedDatabase = it
+            }
         }
     }
 
