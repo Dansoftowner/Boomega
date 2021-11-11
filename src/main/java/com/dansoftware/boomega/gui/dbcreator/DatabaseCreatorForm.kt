@@ -18,28 +18,22 @@
 
 package com.dansoftware.boomega.gui.dbcreator
 
+import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
-import com.dansoftware.boomega.database.api.LoginForm
 import com.dansoftware.boomega.database.api.RegistrationForm
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.util.*
+import com.dansoftware.boomega.gui.util.padding
 import com.dansoftware.boomega.i18n.i18n
-import com.dansoftware.boomega.util.hasValidPath
-import com.dansoftware.boomega.util.shortenedPath
 import javafx.beans.binding.Bindings
-import javafx.beans.property.*
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.geometry.Insets
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.ScrollPane
 import javafx.scene.layout.BorderPane
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
-import javafx.stage.DirectoryChooser
-import org.jetbrains.annotations.Nls
-import java.io.File
 
 
 class DatabaseCreatorForm(
@@ -48,12 +42,12 @@ class DatabaseCreatorForm(
     private val databaseType: ObjectProperty<DatabaseProvider<*>>
 ) : BorderPane() {
 
-    private val registrationForm: ObjectProperty<RegistrationForm<*>> =
-        SimpleObjectProperty<RegistrationForm<*>>().apply {
+    private val registrationForm: ObjectProperty<RegistrationForm<*>?> =
+        SimpleObjectProperty<RegistrationForm<*>?>().apply {
             bind(
                 Bindings.createObjectBinding(
                     // TODO: database options
-                    { databaseType.get().buildUIRegistrationForm(context, emptyMap()) },
+                    { databaseType.get()?.buildUIRegistrationForm(context, emptyMap()) },
                     databaseType
                 )
             )
@@ -82,14 +76,25 @@ class DatabaseCreatorForm(
         text = i18n("database.creator.create")
         isDefaultButton = true
         setOnAction {
-            val database = registrationForm.get().registrate()
-            database?.let {
-                databaseTracker.saveDatabase(database)
-                createdDatabase = database
+            constructDatabase()?.let {
+                databaseTracker.saveDatabase(it)
+                createdDatabase = it
+                context.close()
             }
         }
         StackPane(this).padding(Insets(10.0))
     }
+
+    private fun constructDatabase() =
+        try {
+            registrationForm.get()!!.registrate()
+        } catch (e: DatabaseConstructionException) {
+            context.showErrorDialog(
+                title = e.title ?: i18n("database.create_failed"),
+                message = e.localizedMessage ?: ""
+            )
+            null
+        }
 }
 
 

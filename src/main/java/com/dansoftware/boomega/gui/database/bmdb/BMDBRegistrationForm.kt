@@ -62,7 +62,8 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
 
     private val databaseFile get() = File(fullPath.get())
 
-    private val databaseDirFile get() = File(databaseDir.get())
+    private val databaseDirFile: File get() = File(databaseDir.get())
+
 
 
     init {
@@ -218,7 +219,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
 
     private class Validation(
         private val condition: () -> Boolean,
-        private val exception: DatabaseConstructionException
+        private val exception: Exception
     ) {
         fun validate() {
             if (condition()) throw exception
@@ -249,7 +250,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
                 )
             ),
             Validation(
-                databaseDirFile::exists,
+                databaseFile::exists,
                 DatabaseConstructionException(
                     i18n("database.creator.file_already_exists.title"),
                     i18n("database.creator.file_already_exists.msg", databaseFile.shortenedPath(1))
