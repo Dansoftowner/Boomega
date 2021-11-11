@@ -87,7 +87,7 @@ object GlobalActions {
             "database-plus-icon",
             KeyBindings.createDatabase
         ) { context, preferences, databaseTracker ->
-            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow).ifPresent {
+            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow)?.let {
                 // launches the database
                 submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker, it))
             }
