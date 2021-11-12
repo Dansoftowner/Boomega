@@ -24,13 +24,15 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.scene.Node
+import javafx.scene.image.ImageView
 import javafx.scene.text.Text
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 private val logger: Logger = LoggerFactory.getLogger("IconUtils")
 
-private val iconPack = mapOf<String, () -> Text>(
+private val iconPack = mapOf<String, () -> Node>(
     "info-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.INFORMATION),
     "info-outline-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.INFORMATION_OUTLINE),
     "warning-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.ALERT),
@@ -119,10 +121,11 @@ private val iconPack = mapOf<String, () -> Text>(
     "center-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_CENTER),
     "top-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_TOP),
     "bottom-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_BOTTOM),
-    "maximize-window-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.WINDOW_MAXIMIZE)
+    "maximize-window-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.WINDOW_MAXIMIZE),
+    "bmdb-icon" to fun() = ImageView().styleClass("bmdb-icon")
 )
 
-fun icon(identifier: String): Text = (
+fun icon(identifier: String) = (
         iconPack[identifier]?.invoke() ?: Text().apply {
             logger.error("Couldn't find icon for '{}'", identifier)
         }

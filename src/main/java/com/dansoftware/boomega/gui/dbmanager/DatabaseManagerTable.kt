@@ -58,6 +58,7 @@ class DatabaseManagerTable(
     private fun buildUI() {
         placeholder = Label(i18n("database.manager.table.place.holder"))
         columns.add(StateColumn(databaseTracker))
+        columns.add(TypeColumn())
         columns.add(NameColumn())
         columns.add(PathColumn())
         columns.add(SizeColumn())
@@ -135,12 +136,36 @@ class DatabaseManagerTable(
 
                             when {
                                 databaseMeta.isActionSupported(DatabaseMeta.Action.Exists) &&
-                                        !databaseMeta.performAction(DatabaseMeta.Action.Exists) -> {
+                                        !databaseMeta[DatabaseMeta.Action.Exists] -> {
                                     graphic = icon("warning-icon").styleClass(NOT_EXISTS_CLASS)
                                     tooltip = Tooltip(i18n("file.not.exists"))
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private class TypeColumn : TableColumn<DatabaseMeta, String>(i18n("database.manager.table.column.type")),
+        Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
+        init {
+            isReorderable = false
+            cellFactory = this
+        }
+
+        override fun call(tableColumn: TableColumn<DatabaseMeta, String>): TableCell<DatabaseMeta, String> {
+            return object : TableCell<DatabaseMeta, String>() {
+                override fun updateItem(item: String?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty) {
+                        graphic = null
+                        text = null
+                    } else {
+                        val databaseMeta = tableView.items[index]
+                        graphic = databaseMeta.provider.icon
+                        text = databaseMeta.provider.name
                     }
                 }
             }
