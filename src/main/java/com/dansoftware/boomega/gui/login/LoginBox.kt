@@ -198,7 +198,11 @@ class LoginBox(
 
             if (children[1] is LoginForm<*>)
                 children.removeAt(1)
-            children.add(1, newForm)
+
+            // For some reason, an NPE might appear we don't care about
+            try {
+                children.add(1, newForm)
+            } catch(ignored: NullPointerException) { }
         }
     }
 
@@ -213,23 +217,25 @@ class LoginBox(
         maxWidth = Double.MAX_VALUE
         text = i18n("login.form.login")
         isDefaultButton = true
-        setOnAction {
-            try {
-                when {
-                    databaseTracker.isDatabaseUsed(selectedDatabase) ->
-                        databaseLoginListener.onUsedDatabaseOpened(selectedDatabase!!)
-                    else -> {
-                        preferences.updateLoginData { it.isAutoLogin = remember.get() }
-                        databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
-                        preferences.updateLoginData { it.isAutoLogin = remember.get() }
-                        context.close()
-                    }
-                }
+        setOnAction { login() }
+    }
 
-            } catch (e: DatabaseConstructionException) {
-                logger.debug("Couldn't construct database", e)
-                context.showErrorDialog(i18n("login.failed"), e.localizedMessage ?: "", e)
+    private fun login() {
+        try {
+            when {
+                databaseTracker.isDatabaseUsed(selectedDatabase) ->
+                    databaseLoginListener.onUsedDatabaseOpened(selectedDatabase!!)
+                else -> {
+                    preferences.updateLoginData { it.isAutoLogin = remember.get() }
+                    databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
+                    preferences.updateLoginData { it.isAutoLogin = remember.get() }
+                    context.close()
+                }
             }
+
+        } catch (e: DatabaseConstructionException) {
+            logger.debug("Couldn't construct database", e)
+            context.showErrorDialog(i18n("login.failed"), e.localizedMessage ?: "", e)
         }
     }
 
