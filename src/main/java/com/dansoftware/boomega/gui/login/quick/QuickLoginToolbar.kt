@@ -21,9 +21,12 @@ package com.dansoftware.boomega.gui.login.quick
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
+import javafx.geometry.Pos
+import javafx.scene.Group
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import javafx.scene.layout.StackPane
 
 class QuickLoginToolbar(private val databaseMeta: DatabaseMeta) : HBox() {
 
@@ -36,10 +39,23 @@ class QuickLoginToolbar(private val databaseMeta: DatabaseMeta) : HBox() {
     private fun buildUI() {
         children.add(icon("login-icon"))
         children.add(buildLabel())
+        children.add(buildDatabaseTypeLabel())
     }
 
     private fun buildLabel() =
         Label("${I18N.getValue("login.quick.title")} - $databaseMeta").also {
             setHgrow(it, Priority.ALWAYS)
+        }
+
+    private fun buildDatabaseTypeLabel() =
+        StackPane().apply {
+            setHgrow(this, Priority.ALWAYS)
+            val box = HBox(5.0).run {
+                children.add(databaseMeta.provider.icon)
+                children.add(Label(databaseMeta.provider.name))
+                Group(this)
+            }
+            StackPane.setAlignment(box, Pos.CENTER_RIGHT)
+            children.add(box)
         }
 }

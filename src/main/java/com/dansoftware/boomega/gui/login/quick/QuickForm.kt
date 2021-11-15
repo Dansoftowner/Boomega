@@ -18,23 +18,18 @@
 
 package com.dansoftware.boomega.gui.login.quick
 
+import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.db.Credentials
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
 import com.dansoftware.boomega.i18n.i18n
-import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.geometry.Insets
 import javafx.scene.control.Button
-import javafx.scene.control.PasswordField
-import javafx.scene.control.TextField
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-// TODO: use new database api in quick form
 
 class QuickForm(
     private val context: Context,
@@ -42,8 +37,11 @@ class QuickForm(
     private val loginListener: DatabaseLoginListener
 ) : VBox(10.0) {
 
-    private val usernameInput: StringProperty = SimpleStringProperty()
-    private val passwordInput: StringProperty = SimpleStringProperty()
+    private val loginForm = databaseMeta.provider.buildUILoginForm(
+        context,
+        SimpleObjectProperty(databaseMeta),
+        emptyMap() // TODO: database options
+    )
 
     init {
         setMargin(this, Insets(10.0))
@@ -52,21 +50,8 @@ class QuickForm(
     }
 
     private fun buildUI() {
-        children.add(buildUsernameInputField())
-        children.add(buildPasswordInputField())
+        children.add(loginForm)
         children.add(buildLoginButton())
-    }
-
-    private fun buildUsernameInputField() = TextField().apply {
-        minHeight = 35.0
-        promptText = i18n("credentials.username")
-        usernameInput.bind(textProperty())
-    }
-
-    private fun buildPasswordInputField() = PasswordField().apply {
-        minHeight = 35.0
-        promptText = i18n("credentials.password")
-        passwordInput.bind(textProperty())
     }
 
     private fun buildLoginButton() = Button().apply {
@@ -80,20 +65,12 @@ class QuickForm(
     }
 
     private fun login() {
-        Credentials(
-            usernameInput.get().trim(),
-            passwordInput.get().trim()
-        ).let { credentials ->
-            /*NitriteDatabase.builder()
-                .databaseMeta(databaseMeta)
-                .onFailed { message, t ->
-                    context.showErrorDialog(i18n("login.failed"), message, t as Exception?)
-                    logger.error("Failed to create/open the database", t)
-                }.build(credentials)?.let {
-                    logger.debug("Quick login in was successful")
-                    loginListener.onDatabaseOpened(it)
-                    context.close()
-                }*/
+        try {
+            loginListener.onDatabaseOpened(loginForm.login())
+            context.close()
+        } catch (e: DatabaseConstructionException) {
+            logger.debug("Couldn't construct database", e)
+            context.showErrorDialog(i18n("login.failed"), e.localizedMessage ?: "", e)
         }
     }
 
