@@ -118,22 +118,24 @@ dependencies {
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
 
+    // Common utilities
     implementation 'commons-io:commons-io:2.8.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-collections:commons-collections:3.2.2'
+
     implementation 'org.jetbrains:annotations:22.0.0'
 
     implementation 'org.apache.poi:poi-ooxml:5.0.0' // Microsoft Documents
-    implementation 'org.yaml:snakeyaml:1.21'
-    implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT'
+    implementation 'org.yaml:snakeyaml:1.21' // YAML
+    implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
     implementation 'org.jsoup:jsoup:1.14.2' // HTML parsing
     implementation 'com.google.code.gson:gson:2.8.8' // JSON Parsing
-    implementation 'org.dizitart:nitrite:3.4.3' // NoSql database
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.3'
-    implementation 'com.github.oshi:oshi-core:5.8.1'
+
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.3' // Caching utilities
+    implementation 'com.github.oshi:oshi-core:5.8.1' // Operating system & hardware information
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
-    implementation 'it.sauronsoftware:junique:1.0.4'
-    implementation 'io.github.g00fy2:versioncompare:1.4.1'
+    implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
+    implementation 'io.github.g00fy2:versioncompare:1.4.1' // Comparing version strings
 
     implementation 'org.jfxtras:jmetro:11.6.15'
     implementation 'net.kurobako:gesturefx:0.7.1'
@@ -144,6 +146,13 @@ dependencies {
     implementation 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
     implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
     implementation 'org.controlsfx:controlsfx:11.1.0'
+
+    // Embedded NoSql database management
+    implementation 'org.dizitart:nitrite:3.4.3'
+
+    // Relational database management
+    implementation 'org.hibernate:hibernate-core:5.6.1.Final'
+    implementation 'mysql:mysql-connector-java:8.0.25'
 
     //implementation from the local file system
     implementation fileTree(dir: 'external-libraries', include: '*.jar')
