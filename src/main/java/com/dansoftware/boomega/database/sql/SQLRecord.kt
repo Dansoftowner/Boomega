@@ -96,7 +96,7 @@ class SQLRecord @JvmOverloads constructor(@field:Transient private val baseRecor
             baseRecord?.numberOfCopies = value
         }
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     var authors: List<String>? = baseRecord?.authors
         set(value) {
             field = value
@@ -115,10 +115,16 @@ class SQLRecord @JvmOverloads constructor(@field:Transient private val baseRecor
             baseRecord?.magazineName = value
         }
 
-    @ElementCollection
-    var serviceConnection: ServiceConnection? = baseRecord?.serviceConnection
+    // TODO: make service connection work
+    @Transient
+    /*@ElementCollection
+    @Column(name = "serviceConnection")*/
+    private var serviceConnectionImpl: MutableMap<String, Any?> = HashMap(baseRecord?.serviceConnection ?: emptyMap())
+
+    var serviceConnection: ServiceConnection?
+        get() = ServiceConnection(serviceConnectionImpl)
         set(value) {
-            field = value
+            serviceConnectionImpl.putAll(value as? Map<String, Any?> ?: emptyMap())
             baseRecord?.serviceConnection = value?.copy()
         }
 

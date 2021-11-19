@@ -96,13 +96,13 @@ public class InMemoryDatabaseSimulation extends Application {
 
         @NotNull
         @Override
-        public LoginForm<?> buildUILoginForm(@NotNull Context context, @NotNull ReadOnlyObjectProperty<InMemoryDatabaseMeta> databaseMeta, @NotNull Map<DatabaseOption<?>, ?> options) {
+        public LoginForm<InMemoryDatabaseMeta> buildUILoginForm(@NotNull Context context, @NotNull ReadOnlyObjectProperty<InMemoryDatabaseMeta> databaseMeta, @NotNull Map<DatabaseOption<?>, ?> options) {
             return null;
         }
 
         @NotNull
         @Override
-        public RegistrationForm buildUIRegistrationForm(@NotNull Context context, @NotNull Map<DatabaseOption<?>, ?> options) {
+        public RegistrationForm<InMemoryDatabaseMeta> buildUIRegistrationForm(@NotNull Context context, @NotNull Map<DatabaseOption<?>, ?> options) {
             return null;
         }
     }

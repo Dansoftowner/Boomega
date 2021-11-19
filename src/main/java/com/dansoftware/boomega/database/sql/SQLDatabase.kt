@@ -29,7 +29,7 @@ import javax.persistence.criteria.CriteriaQuery
 
 class SQLDatabase(
     override val meta: DatabaseMeta,
-    hibernateOptions: Map<String, String>
+    hibernateOptions: Map<String, String?>
 ) : Database {
 
     private val listeners: MutableSet<DatabaseChangeListener> = HashSet()
@@ -71,7 +71,7 @@ class SQLDatabase(
 
     override fun updateRecord(record: Record) {
         transaction {
-            it.update(record)
+            it.update(SQLRecord(record))
         }
         notifyListeners(DatabaseChangeType.UPDATE, listOf(record))
     }

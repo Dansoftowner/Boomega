@@ -28,12 +28,22 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
 
     // TODO: i18n
 
-    // TODO: username, password
-
     val MYSQL_VERSION_FIELD = DatabaseField(
-        Version::class.java,
-        "mysql.version",
-        "MySQL verison"
+        valueType = Version::class.java,
+        id = "mysql.version",
+        name = "MySQL verison"
+    )
+
+    val USERNAME_FIELD = DatabaseField(
+        valueType = String::class.java,
+        id = "usernm",
+        name = "Username"
+    )
+
+    val PASSWORD_FIELD = DatabaseField(
+        valueType = String::class.java,
+        id = "psswrd",
+        name = "Password"
     )
 
     override val name: String
@@ -47,7 +57,11 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
 
     // TODO
     override val fields: List<DatabaseField<*>>
-        get() = emptyList()
+        get() = listOf(
+            MYSQL_VERSION_FIELD,
+            USERNAME_FIELD,
+            PASSWORD_FIELD
+        )
 
     override fun getMeta(url: String): MySQLMeta {
         return MySQLMeta(url)
@@ -62,10 +76,11 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
             meta,
             hibernateOptions = mapOf(
                 "hibernate.connection.driver_class" to "com.mysql.cj.jdbc.Driver",
-                "hibernate.dialect" to (credentials[MYSQL_VERSION_FIELD] as Version).hibernateDialect,
+                "hibernate.dialect" to (credentials[MYSQL_VERSION_FIELD] as? Version ?: Version._8).hibernateDialect,
                 "hibernate.hbm2ddl.auto" to "update",
                 "hibernate.connection.url" to "jdbc:mysql://${meta.url}",
-                // TODO: username, password
+                "hibernate.connection.username" to credentials[USERNAME_FIELD]?.toString()?.takeUnless { it.isBlank() },
+                "hibernate.connection.password" to credentials[PASSWORD_FIELD]?.toString()?.takeUnless { it.isBlank() }
             )
         )
     }
