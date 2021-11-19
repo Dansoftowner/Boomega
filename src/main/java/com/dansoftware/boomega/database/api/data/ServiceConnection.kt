@@ -24,7 +24,7 @@ package com.dansoftware.boomega.database.api.data
  *
  * @author Daniel Gyorffy
  */
-class ServiceConnection {
+class ServiceConnection(info: Map<String, Any?> = emptyMap()) : Map<String, Any?> by HashMap(info) {
 
     private val infoMap: MutableMap<String, Any?> = HashMap()
 
@@ -34,21 +34,7 @@ class ServiceConnection {
             infoMap[GOOGLE_BOOK_HANDLE] = value
         }
 
-    constructor()
-
-    constructor(info: Map<String, Any?>) {
-        infoMap.putAll(info)
-    }
-
-    operator fun get(key: String) = infoMap[key]
-
     fun getString(key: String) = this[key].toString()
-
-    fun put(key: String, value: Any?) = infoMap.put(key, value).let { this }
-
-    fun remove(key: String) = infoMap.remove(key)
-
-    fun isEmpty() = infoMap.isEmpty()
 
     fun entries(): List<Pair<String, String>> = infoMap.map { Pair(it.key, it.value.toString()) }
 

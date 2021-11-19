@@ -20,6 +20,7 @@ package com.dansoftware.boomega.database
 
 import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.database.bmdb.BMDBProvider
+import com.dansoftware.boomega.database.sql.MySQLProvider
 import com.dansoftware.boomega.util.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -35,7 +36,8 @@ private fun loadProviders() =
         .toList()
 
 private fun loadBuiltInProviders() = sequenceOf<DatabaseProvider<*>>(
-    BMDBProvider
+    BMDBProvider,
+    MySQLProvider
 )
 
 private fun loadProvidersFromPlugins() = sequenceOf<DatabaseProvider<*>>() // TODO: load from plugins
