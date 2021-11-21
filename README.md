@@ -133,8 +133,8 @@ The detailed user guide is available [here](docs/USER_GUIDE.md).
 </table>
 
 ## ⌨️ Source code
-[![Java version](https://img.shields.io/badge/java-16-orange?logo=java&logoColor=white)](https://jdk.java.net/16/)
-[![Kotlin version](https://img.shields.io/badge/kotlin-1.5-purple?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
+[![Java version](https://img.shields.io/badge/java-17-orange?logo=java&logoColor=white)](https://jdk.java.net/17/)
+[![Kotlin version](https://img.shields.io/badge/kotlin-1.6-purple?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
 [![Top language](https://img.shields.io/github/languages/top/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
 [![Gradle](https://img.shields.io/badge/gradle-7.0-green?logo=gradle&logoColor=white)](https://gradle.org/)
 [![Gui](https://img.shields.io/badge/gui-javafx-blue)](https://openjfx.io/)
@@ -145,7 +145,7 @@ The detailed user guide is available [here](docs/USER_GUIDE.md).
   * `dev` - for developing the app further
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
-* The app targets `Java 16+` but the project is `unmodularized`
+* The app targets `Java 17+` but the project is `unmodularized`
 * The build tool used is [Gradle](https://gradle.org/)
 * _Want to contribute?_ See the [contribution guideline](CONTRIBUTING.md).
 
@@ -153,7 +153,7 @@ The detailed user guide is available [here](docs/USER_GUIDE.md).
 The recommended IDE for building this project is `IntelliJ Idea`.
 
 ### Build requirements
-* JDK 16+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
+* JDK 17+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
 
 ### Build manually (without using an IDE)
 If you want to run the project, simply use `gradlew run`. <br/>
