@@ -24,7 +24,6 @@ import com.dansoftware.boomega.db.data.ServiceConnection;
 import com.dansoftware.boomega.gui.control.BaseTable;
 import com.dansoftware.boomega.gui.control.ReadOnlyRating;
 import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;
-import com.dansoftware.boomega.i18n.I18N;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
@@ -53,13 +52,14 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static com.dansoftware.boomega.gui.control.BaseTable.ColumnType.*;
+import static com.dansoftware.boomega.i18n.I18NUtils.i18n;
 
 public class RecordTable extends BaseTable<Record> {
 
     public static final ColumnType INDEX_COLUMN =
             new ColumnType(
                     "index",
-                    "record.table.column.index",
+                    i18n("record.table.column.index"),
                     RecordTable.class,
                     table -> new IndexColumn(table.startIndex),
                     DEFAULT_VISIBLE
@@ -197,14 +197,14 @@ public class RecordTable extends BaseTable<Record> {
             VBox vBox = new VBox(5.0);
             vBox.getStyleClass().add("record-table-place-holder");
             vBox.getChildren().add(new StackPane(new ImageView()));
-            vBox.getChildren().add(new StackPane(new Label(I18N.getValue("record.table.place.holder"))));
+            vBox.getChildren().add(new StackPane(new Label(i18n("record.table.place.holder"))));
             return vBox;
         }
 
         @Nullable
         @Override
         protected Node contentIfNoColumns() {
-            return new Label(I18N.getValue("record.table.place.holder.nocolumn"));
+            return new Label(i18n("record.table.place.holder.nocolumn"));
         }
     }
 
