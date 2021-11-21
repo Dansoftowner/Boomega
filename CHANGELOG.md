@@ -4,6 +4,7 @@
 
 ### Enhancements/features
 
+* ⬆️Migrate to JDK 17
 * ✨ MacOS specific menu-bar
 * 💄 Look and feel updates
 * 💄 New application icon
