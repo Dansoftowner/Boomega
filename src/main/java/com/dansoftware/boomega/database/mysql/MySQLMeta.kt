@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.database.sql
+package com.dansoftware.boomega.database.mysql
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
 
-class MySQLMeta(override val url: String) : DatabaseMeta(MySQLProvider) {
+class MySQLMeta(val host: String, val version: MySQLVersion) : DatabaseMeta(MySQLProvider) {
+
+    override val url: String
+        get() = "$host|$version"
 
     override val simpleName: String
         get() = url
@@ -33,6 +36,6 @@ class MySQLMeta(override val url: String) : DatabaseMeta(MySQLProvider) {
     }
 
     override fun toString(): String {
-        return url
+        return host
     }
 }

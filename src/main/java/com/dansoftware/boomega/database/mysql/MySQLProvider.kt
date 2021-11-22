@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.database.sql
+package com.dansoftware.boomega.database.mysql
 
 import com.dansoftware.boomega.database.api.*
+import com.dansoftware.boomega.database.sql.SQLDatabase
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.database.mysql.MySQLLoginForm
+import com.dansoftware.boomega.gui.database.mysql.MySQLRegistrationForm
 import com.dansoftware.boomega.gui.util.icon
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
@@ -29,7 +32,7 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
     // TODO: i18n
 
     val MYSQL_VERSION_FIELD = DatabaseField(
-        valueType = Version::class.java,
+        valueType = MySQLVersion::class.java,
         id = "mysql.version",
         name = "MySQL verison"
     )
@@ -64,7 +67,22 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
         )
 
     override fun getMeta(url: String): MySQLMeta {
-        return MySQLMeta(url)
+        return splitURL(url) { validUrl, version ->
+            MySQLMeta(validUrl, version)
+        }
+    }
+
+    private inline fun <T> splitURL(url: String, onCalculated: (url: String, version: MySQLVersion) -> T): T {
+        val versionSeparatorIndex = url.indexOf("|")
+        return onCalculated(
+            url.takeIf {
+                versionSeparatorIndex < 0
+            } ?: url.substring(0, versionSeparatorIndex),
+
+            MySQLVersion._8.takeIf {
+                versionSeparatorIndex < 0
+            } ?: MySQLVersion.find(url.substring(versionSeparatorIndex + 1, url.length))
+        )
     }
 
     override fun getDatabase(
@@ -76,9 +94,9 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
             meta,
             hibernateOptions = mapOf(
                 "hibernate.connection.driver_class" to "com.mysql.cj.jdbc.Driver",
-                "hibernate.dialect" to (credentials[MYSQL_VERSION_FIELD] as? Version ?: Version._8).hibernateDialect,
+                "hibernate.dialect" to (credentials[MYSQL_VERSION_FIELD] as? MySQLVersion ?: MySQLVersion._8).hibernateDialect,
                 "hibernate.hbm2ddl.auto" to "update",
-                "hibernate.connection.url" to "jdbc:mysql://${meta.url}",
+                "hibernate.connection.url" to "jdbc:mysql://${meta.host}",
                 "hibernate.connection.username" to credentials[USERNAME_FIELD]?.toString()?.takeUnless { it.isBlank() },
                 "hibernate.connection.password" to credentials[PASSWORD_FIELD]?.toString()?.takeUnless { it.isBlank() }
             )
@@ -90,42 +108,14 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
         databaseMeta: ReadOnlyObjectProperty<MySQLMeta>,
         options: Map<DatabaseOption<*>, Any>
     ): LoginForm<MySQLMeta> {
-        TODO("Not yet implemented")
+        return MySQLLoginForm(context, databaseMeta, options)
     }
 
     override fun buildUIRegistrationForm(
         context: Context,
         options: Map<DatabaseOption<*>, Any>
     ): RegistrationForm<MySQLMeta> {
-        TODO("Not yet implemented")
+        return MySQLRegistrationForm(context, options)
     }
 
-    enum class Version(val hibernateDialect: String) {
-
-        /**
-         * Represents MySQL versions prior to 5.x
-         */
-        _5_X_PRIOR("org.hibernate.dialect.MySQLDialect"),
-
-        /**
-         * Represents MySQL 5.x
-         */
-        _5_X("org.hibernate.dialect.MySQL5Dialect"),
-
-        /**
-         * Represents MySQL 5.5
-         */
-        _5_5("org.hibernate.dialect.MySQL55Dialect"),
-
-        /**
-         * Represents MySQL 5.7
-         */
-        _5_7("org.hibernate.dialect.MySQL57Dialect"),
-
-        /**
-         * Represents MySQL 8.x+
-         */
-        _8("org.hibernate.dialect.MySQL8Dialect")
-
-    }
 }
