@@ -30,7 +30,7 @@ import javafx.beans.binding.Bindings
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
-import javafx.geometry.Insets
+import javafx.scene.Node
 import javafx.scene.control.PasswordField
 import javafx.scene.control.TextField
 import javafx.scene.layout.Priority
@@ -45,26 +45,18 @@ class BMDBLoginForm(
     private val username: StringProperty = SimpleStringProperty()
     private val password: StringProperty = SimpleStringProperty()
 
-    override val fields: Map<DatabaseField<*>, Any>
+    private val fields: Map<DatabaseField<*>, Any>
         get() = mapOf(
             BMDBProvider.USERNAME_FIELD to username.get(),
             BMDBProvider.PASSWORD_FIELD to password.get()
         )
 
-    init {
-        buildUI()
-    }
+    override val node: Node
+        get() = VBox(5.0).apply {
+            children.add(buildUsernameInput())
+            children.add(buildPasswordInput())
+        }
 
-    private fun buildUI() {
-        children.add(
-            VBox(5.0).apply {
-                children.add(buildUsernameInput())
-                children.add(buildPasswordInput())
-                prefWidthProperty().bind(this@BMDBLoginForm.widthProperty())
-                VBox.setMargin(this, Insets(0.0, 20.0, 20.0, 20.0))
-            }
-        )
-    }
 
     private fun buildUsernameInput() = TextField().apply {
         VBox.setVgrow(this, Priority.ALWAYS)

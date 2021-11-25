@@ -36,6 +36,7 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.geometry.Insets
+import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
@@ -64,15 +65,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
 
     private val databaseDirFile: File get() = File(databaseDir.get())
 
-    init {
-        buildUI()
-    }
-
-    private fun buildUI() {
-        children.add(
-            Grid()
-        )
-    }
+    override val node: Node get() = Grid()
 
     override fun registrate(): BMDBMeta? {
         validateInputs { database, credentials ->
@@ -106,7 +99,6 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             padding = Insets(10.0)
             hgap = 5.0
             vgap = 5.0
-            prefWidthProperty().bind(this@BMDBRegistrationForm.widthProperty())
             buildUI()
         }
 

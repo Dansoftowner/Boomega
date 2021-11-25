@@ -193,15 +193,16 @@ class LoginBox(
         children.add(buildCheckBox())
         children.add(buildLoginButton())
 
+        val baseSize = children.size
         loginForm.addListener { _, _, newForm ->
-            logger.debug("New Login form")
+            logger.debug("Neww Login form")
 
-            if (children[1] is LoginForm<*>)
+            if (baseSize < children.size)
                 children.removeAt(1)
 
             // For some reason, an NPE might appear we don't care about
             try {
-                children.add(1, newForm)
+                children.add(1, newForm!!.node)
             } catch(ignored: NullPointerException) { }
         }
     }

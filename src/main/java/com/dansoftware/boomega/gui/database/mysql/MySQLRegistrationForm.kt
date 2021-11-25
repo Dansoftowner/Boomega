@@ -27,6 +27,7 @@ import com.dansoftware.boomega.gui.util.selectedItemProperty
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.scene.Node
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
@@ -43,21 +44,14 @@ class MySQLRegistrationForm(
     private val databaseName = SimpleStringProperty()
     private val version = SimpleObjectProperty<MySQLVersion>()
 
-    init {
-        buildUI()
-    }
-
-    // TODO: grid pane structure
-    private fun buildUI() {
-        children.add(
-            VBox(5.0,
-                HBox(5.0, Label("Host:"), buildHostField()),
-                HBox(5.0, Label("Port:"), buildPortField()),
-                HBox(5.0, Label("Database name:"), buildDatabaseNameField()),
-                HBox(5.0, Label("Version:"), buildVersionChooser())
-            )
+    override val node: Node
+        get() = VBox(
+            5.0,
+            HBox(5.0, Label("Host:"), buildHostField()),
+            HBox(5.0, Label("Port:"), buildPortField()),
+            HBox(5.0, Label("Database name:"), buildDatabaseNameField()),
+            HBox(5.0, Label("Version:"), buildVersionChooser())
         )
-    }
 
     private fun buildHostField() = TextField().apply {
         // TODO: prompt text

@@ -50,7 +50,7 @@ class QuickForm(
     }
 
     private fun buildUI() {
-        children.add(loginForm)
+        children.add(loginForm.node)
         children.add(buildLoginButton())
     }
 

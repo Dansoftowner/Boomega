@@ -20,15 +20,15 @@ package com.dansoftware.boomega.database.api
 
 import com.dansoftware.boomega.gui.api.Context
 import javafx.beans.property.ReadOnlyObjectProperty
-import javafx.scene.layout.Region
+import javafx.scene.Node
 
 abstract class LoginForm<M : DatabaseMeta>(
     protected val context: Context,
     protected val databaseMeta: ReadOnlyObjectProperty<M>,
     protected val options: Map<DatabaseOption<*>, Any>
-) : Region() {
+) {
 
-    abstract val fields: Map<DatabaseField<*>, Any>
+    abstract val node: Node
 
     abstract fun login(): Database
 }

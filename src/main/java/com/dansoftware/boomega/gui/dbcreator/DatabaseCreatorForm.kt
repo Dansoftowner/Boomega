@@ -67,7 +67,7 @@ class DatabaseCreatorForm(
 
     private fun buildCenter() = ScrollPane().apply {
         isFitToWidth = true
-        contentProperty().bind(registrationForm)
+        contentProperty().bind(Bindings.createObjectBinding({ registrationForm.get()?.node }, registrationForm))
     }
 
     private fun buildBottom() = Button().run {
