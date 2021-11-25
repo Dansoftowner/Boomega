@@ -56,11 +56,11 @@ class MySQLMeta : DatabaseMeta {
     val socket get() = "$host:$port"
 
     /**
-     * The full url of the database
+     * The full mysql uri of the database
      */
-    val url get() = "$socket/$databaseName"
+    val uri get() = "$socket/$databaseName"
 
-    override val identifier: String get() = "$url|$version"
+    override val identifier: String get() = "$uri|$version"
     override val simpleName: String get() = databaseName
 
     override val supportedActions: Set<Action<*>>
@@ -91,6 +91,6 @@ class MySQLMeta : DatabaseMeta {
     }
 
     override fun toString(): String {
-        return url
+        return uri
     }
 }
