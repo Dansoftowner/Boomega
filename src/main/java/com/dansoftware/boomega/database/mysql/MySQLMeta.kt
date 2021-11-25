@@ -20,22 +20,72 @@ package com.dansoftware.boomega.database.mysql
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
 
-class MySQLMeta(val host: String, val version: MySQLVersion) : DatabaseMeta(MySQLProvider) {
+/**
+ * Represents the meta-information of a mysql database
+ */
+class MySQLMeta : DatabaseMeta {
 
-    override val url: String
-        get() = "$host|$version"
+    /**
+     * The host of the mysql server
+     */
+    val host: String
 
-    override val simpleName: String
-        get() = url
+    /**
+     * The port of the mysql server
+     */
+    val port: Int
+
+    /**
+     * The name of the mysql database
+     */
+    val databaseName: String
+
+    /**
+     * The version of the mysql database
+     */
+    val version: MySQLVersion
+
+    /**
+     * The host and the port of the mysql server concatenated
+     */
+    val socket get() = "$host:$port"
+
+    /**
+     * The full url of the database
+     */
+    val url get() = "$socket/$databaseName"
+
+    override val identifier: String get() = "$url|$version"
+    override val simpleName: String get() = databaseName
 
     override val supportedActions: Set<Action<*>>
         get() = setOf()
+
+    constructor(url: String, version: MySQLVersion = MySQLVersion._8) : super(MySQLProvider) {
+        val parts = url.replace('/', ':').split(':')
+        this.host = parts[0]
+        this.port = parts[1].toInt()
+        this.databaseName = parts[2]
+        this.version = version
+    }
+
+    constructor(
+        host: String,
+        port: Int,
+        databaseName: String,
+        version: MySQLVersion
+    ) : super(MySQLProvider) {
+        this.host = host
+        this.port = port
+        this.databaseName = databaseName
+        this.version = version
+    }
 
     override fun <T> performAction(action: Action<T>): T {
         throw UnsupportedOperationException()
     }
 
     override fun toString(): String {
-        return host
+        return url
     }
 }

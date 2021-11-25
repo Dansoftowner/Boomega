@@ -25,7 +25,7 @@ import java.io.File
 
 class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
 
-    override val url: String
+    override val identifier: String
         get() = file.absolutePath
 
     override val simpleName: String

@@ -153,7 +153,7 @@ class LoginDataSerializer : JsonSerializer<LoginData> {
         val serializedEntries = savedDatabases.map {
             JsonObject().apply {
                 addProperty(DATABASE_PROVIDER, it.provider.javaClass.name)
-                addProperty(DATABASE_URL, it.url)
+                addProperty(DATABASE_URL, it.identifier)
             }
         }
         serializedEntries.forEach(array::add)

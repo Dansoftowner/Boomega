@@ -43,8 +43,6 @@ class MySQLRegistrationForm(
     private val databaseName = SimpleStringProperty()
     private val version = SimpleObjectProperty<MySQLVersion>()
 
-    private val socket get() = "${host.get()}:${port.get()}/${databaseName.get()}"
-
     init {
         buildUI()
     }
@@ -84,6 +82,6 @@ class MySQLRegistrationForm(
     }
 
     override fun registrate(): MySQLMeta {
-        return MySQLMeta(socket, version.get())
+        return MySQLMeta(host.get(), port.get().toInt(), databaseName.get(), version.get())
     }
 }

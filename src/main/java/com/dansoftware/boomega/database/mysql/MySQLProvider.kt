@@ -96,7 +96,7 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
                 "hibernate.connection.driver_class" to "com.mysql.cj.jdbc.Driver",
                 "hibernate.dialect" to (credentials[MYSQL_VERSION_FIELD] as? MySQLVersion ?: MySQLVersion._8).hibernateDialect,
                 "hibernate.hbm2ddl.auto" to "update",
-                "hibernate.connection.url" to "jdbc:mysql://${meta.host}",
+                "hibernate.connection.url" to "jdbc:mysql://${meta.url}",
                 "hibernate.connection.username" to credentials[USERNAME_FIELD]?.toString()?.takeUnless { it.isBlank() },
                 "hibernate.connection.password" to credentials[PASSWORD_FIELD]?.toString()?.takeUnless { it.isBlank() }
             )

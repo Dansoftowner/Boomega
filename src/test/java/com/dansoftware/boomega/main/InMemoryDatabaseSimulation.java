@@ -115,7 +115,7 @@ public class InMemoryDatabaseSimulation extends Application {
 
         @NotNull
         @Override
-        public String getUrl() {
+        public String getIdentifier() {
             return "null";
         }
 

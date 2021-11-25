@@ -74,7 +74,7 @@ public class DatabaseTracker {
      * @param databaseMeta the meta database
      */
     public boolean registerClosedDatabase(@NotNull DatabaseMeta databaseMeta) {
-        logger.debug("Registering database as closed: '{}'", databaseMeta.getUrl());
+        logger.debug("Registering database as closed: '{}'", databaseMeta.getIdentifier());
         boolean removed = usingDatabases.remove(databaseMeta);
         if (removed)
             iterateObservers(observer -> observer.onClosingDatabase(databaseMeta));
@@ -88,7 +88,7 @@ public class DatabaseTracker {
      */
     public boolean registerUsedDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
-        logger.debug("Registering database as used: '{}'", databaseMeta.getUrl());
+        logger.debug("Registering database as used: '{}'", databaseMeta.getIdentifier());
 
         boolean inserted = usingDatabases.add(databaseMeta);
         if (inserted)
@@ -104,7 +104,7 @@ public class DatabaseTracker {
      */
     public boolean saveDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
-        logger.debug("Registering database: '{}'", databaseMeta.getUrl());
+        logger.debug("Registering database: '{}'", databaseMeta.getIdentifier());
 
         boolean inserted = savedDatabases.add(databaseMeta);
         if (inserted)
@@ -120,7 +120,7 @@ public class DatabaseTracker {
      */
     public boolean removeDatabase(@NotNull DatabaseMeta databaseMeta) {
         Objects.requireNonNull(databaseMeta);
-        logger.debug("Unregistering database: '{}'", databaseMeta.getUrl());
+        logger.debug("Unregistering database: '{}'", databaseMeta.getIdentifier());
         boolean removed = savedDatabases.remove(databaseMeta);
         if (removed)
             logger.debug("Removed from DatabaseTracker '{}'", databaseMeta);

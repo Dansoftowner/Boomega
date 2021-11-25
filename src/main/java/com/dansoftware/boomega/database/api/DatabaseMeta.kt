@@ -23,12 +23,12 @@ abstract class DatabaseMeta(provider: DatabaseProvider<*>) {
     @Suppress("UNCHECKED_CAST")
     val provider: DatabaseProvider<DatabaseMeta> = provider as DatabaseProvider<DatabaseMeta>
 
-    abstract val url: String
+    abstract val identifier: String
     abstract val simpleName: String
     protected abstract val supportedActions: Set<Action<*>>
 
     override fun toString(): String {
-        return url
+        return identifier
     }
 
     operator fun <T> get(action: Action<T>): T = performAction(action)

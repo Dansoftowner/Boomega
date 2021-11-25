@@ -158,10 +158,10 @@ open class ActivityLauncher(
         DatabaseActivity.getByDatabase(meta)
             .map(DatabaseActivity::context)
             .ifPresentOrElse({
-                logger.debug("Found gui-context for database: '{}'", meta.url)
+                logger.debug("Found gui-context for database: '{}'", meta.identifier)
                 Platform.runLater(it::toFrontRequest)
             }) {
-                logger.debug("Didn't found GUI for database: '{}'", meta.url)
+                logger.debug("Didn't found GUI for database: '{}'", meta.identifier)
                 onNewDatabaseAdded(meta)
 
                 val database = constructDatabase(meta) {
