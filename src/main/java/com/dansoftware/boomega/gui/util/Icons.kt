@@ -122,7 +122,8 @@ private val iconPack = mapOf<String, () -> Node>(
     "top-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_TOP),
     "bottom-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_BOTTOM),
     "maximize-window-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.WINDOW_MAXIMIZE),
-    "bmdb-icon" to fun() = ImageView().styleClass("bmdb-icon")
+    "bmdb-icon" to fun() = ImageView(),
+    "mysql-icon" to fun() = ImageView()
 )
 
 fun icon(identifier: String) = (

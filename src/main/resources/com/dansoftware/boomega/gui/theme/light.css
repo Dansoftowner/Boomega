@@ -267,6 +267,10 @@
     -fx-image: url("/com/dansoftware/boomega/image/logo/boomega_b_8.png");
 }
 
+.mysql-icon {
+    -fx-image: url("/com/dansoftware/boomega/image/util/mysql.png");
+}
+
 /*******************************************************************************
  *                                                                             *
  *                                 Plugin manager                              *

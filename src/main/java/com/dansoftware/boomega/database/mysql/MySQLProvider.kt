@@ -53,7 +53,7 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
         get() = "MySQL"
 
     override val icon: Node
-        get() = icon("database-icon")
+        get() = icon("mysql-icon")
 
     override val availableOptions: List<DatabaseOption<*>>
         get() = emptyList()
