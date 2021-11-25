@@ -19,11 +19,16 @@
 package com.dansoftware.boomega.database.mysql
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.api.DatabaseProvider
 
 /**
  * Represents the meta-information of a mysql database
  */
 class MySQLMeta : DatabaseMeta {
+
+    @Suppress("UNCHECKED_CAST")
+    override val provider: DatabaseProvider<DatabaseMeta>
+        get() = MySQLProvider as DatabaseProvider<DatabaseMeta>
 
     /**
      * The host of the mysql server
@@ -61,7 +66,7 @@ class MySQLMeta : DatabaseMeta {
     override val supportedActions: Set<Action<*>>
         get() = setOf()
 
-    constructor(url: String, version: MySQLVersion = MySQLVersion._8) : super(MySQLProvider) {
+    constructor(url: String, version: MySQLVersion = MySQLVersion._8) {
         val parts = url.replace('/', ':').split(':')
         this.host = parts[0]
         this.port = parts[1].toInt()
@@ -74,7 +79,7 @@ class MySQLMeta : DatabaseMeta {
         port: Int,
         databaseName: String,
         version: MySQLVersion
-    ) : super(MySQLProvider) {
+    ) {
         this.host = host
         this.port = port
         this.databaseName = databaseName

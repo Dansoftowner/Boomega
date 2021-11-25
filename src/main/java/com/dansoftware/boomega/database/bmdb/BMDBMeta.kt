@@ -19,11 +19,16 @@
 package com.dansoftware.boomega.database.bmdb
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.util.revealInExplorer
 import com.dansoftware.boomega.util.shortenedPath
 import java.io.File
 
-class BMDBMeta(val name: String, val file: File) : DatabaseMeta(BMDBProvider) {
+class BMDBMeta(val name: String, val file: File) : DatabaseMeta() {
+
+    @Suppress("UNCHECKED_CAST")
+    override val provider: DatabaseProvider<DatabaseMeta>
+        get() = BMDBProvider as DatabaseProvider<DatabaseMeta>
 
     override val identifier: String
         get() = file.absolutePath

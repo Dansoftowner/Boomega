@@ -18,10 +18,10 @@
 
 package com.dansoftware.boomega.database.api
 
-abstract class DatabaseMeta(provider: DatabaseProvider<*>) {
+abstract class DatabaseMeta() {
 
     @Suppress("UNCHECKED_CAST")
-    val provider: DatabaseProvider<DatabaseMeta> = provider as DatabaseProvider<DatabaseMeta>
+    abstract val provider: DatabaseProvider<DatabaseMeta>
 
     abstract val identifier: String
     abstract val simpleName: String
