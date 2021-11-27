@@ -23,13 +23,20 @@ abstract class DatabaseMeta() {
     @Suppress("UNCHECKED_CAST")
     abstract val provider: DatabaseProvider<DatabaseMeta>
 
-    abstract val identifier: String
-    abstract val simpleName: String
-    protected abstract val supportedActions: Set<Action<*>>
+    /**
+     * The simple name of the database
+     */
+    abstract val name: String
 
-    override fun toString(): String {
-        return identifier
-    }
+    /**
+     * The unique identifier (usually some kind of URI) of the database
+     */
+    abstract val identifier: String
+
+    /**
+     * The [Action]s supported by the database-meta
+     */
+    protected abstract val supportedActions: Set<Action<*>>
 
     operator fun <T> get(action: Action<T>): T = performAction(action)
 
@@ -37,6 +44,10 @@ abstract class DatabaseMeta() {
 
     open fun isActionSupported(action: Action<*>): Boolean {
         return action in supportedActions
+    }
+
+    override fun toString(): String {
+        return identifier
     }
 
     sealed class Action<T> {

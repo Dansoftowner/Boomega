@@ -109,9 +109,6 @@ public class InMemoryDatabaseSimulation extends Application {
 
     private static class InMemoryDatabaseMeta extends DatabaseMeta {
 
-        InMemoryDatabaseMeta() {
-            super(new InMemoryDatabaseProvider());
-        }
 
         @NotNull
         @Override
@@ -121,7 +118,7 @@ public class InMemoryDatabaseSimulation extends Application {
 
         @NotNull
         @Override
-        public String getSimpleName() {
+        public String getName() {
             return "null";
         }
 
@@ -133,6 +130,12 @@ public class InMemoryDatabaseSimulation extends Application {
 
         public Object performAction(DatabaseMeta.Action action) {
             return null;
+        }
+
+        @NotNull
+        @Override
+        public DatabaseProvider getProvider() {
+            return new InMemoryDatabaseProvider();
         }
     }
 

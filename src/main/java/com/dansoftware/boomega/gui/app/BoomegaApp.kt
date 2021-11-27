@@ -108,7 +108,7 @@ class BoomegaApp : BaseBoomegaApplication() {
         launchedDatabase?.let {
             notifyPreloader(
                 BoomegaPreloader.MessageNotification(
-                    message = i18n("preloader.file.open", it.simpleName),
+                    message = i18n("preloader.file.open", it.name),
                     priority = Priority.HIGH
                 )
             )
@@ -118,7 +118,7 @@ class BoomegaApp : BaseBoomegaApplication() {
         postLaunchQueue.offer { context, launched ->
             launched?.let {
                 context.showInformationNotification(
-                    title = i18n("database.file.launched", launched.simpleName),
+                    title = i18n("database.file.launched", launched.name),
                     message = null
                 )
             }
