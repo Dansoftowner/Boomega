@@ -27,7 +27,6 @@ import javafx.beans.binding.Bindings
 import javafx.beans.binding.IntegerBinding
 import javafx.collections.ObservableList
 import javafx.scene.control.*
-import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.util.Callback
@@ -178,7 +177,7 @@ class DatabaseManagerTable(
     private class NameColumn : TableColumn<DatabaseMeta, String>(i18n("database.manager.table.column.name")) {
         init {
             isReorderable = false
-            cellValueFactory = PropertyValueFactory("name")
+            setCellValueFactory { constantObservable { it.value.name } }
         }
     }
 
@@ -188,7 +187,7 @@ class DatabaseManagerTable(
     private class PathColumn() : TableColumn<DatabaseMeta, String>(i18n("database.manager.table.column.path")) {
         init {
             isReorderable = false
-            cellValueFactory = PropertyValueFactory("file")
+            setCellValueFactory { constantObservable { it.value.uri } }
         }
     }
 
