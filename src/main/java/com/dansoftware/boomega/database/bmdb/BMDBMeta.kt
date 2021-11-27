@@ -24,23 +24,20 @@ import com.dansoftware.boomega.util.revealInExplorer
 import com.dansoftware.boomega.util.shortenedPath
 import java.io.File
 
-class BMDBMeta(val name: String, val file: File) : DatabaseMeta() {
+class BMDBMeta(override val name: String, val file: File) : DatabaseMeta() {
 
     @Suppress("UNCHECKED_CAST")
     override val provider: DatabaseProvider<DatabaseMeta>
         get() = BMDBProvider as DatabaseProvider<DatabaseMeta>
 
-    override val identifier: String
+    override val uri: String
         get() = file.absolutePath
-
-    override val simpleName: String
-        get() = file.name
 
     override val supportedActions: Set<Action<*>>
         get() = setOf(Action.OpenInExternalApplication, Action.Exists)
 
     private val stringFormat by lazy {
-        String.format("%s (%s)", name, file.shortenedPath(maxBack = 1))
+        String.format("%s (%s)", this.name, file.shortenedPath(maxBack = 1))
     }
 
     constructor(file: File) : this(file.nameWithoutExtension, file)

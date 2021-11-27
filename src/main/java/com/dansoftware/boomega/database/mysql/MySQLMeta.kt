@@ -43,7 +43,7 @@ class MySQLMeta : DatabaseMeta {
     /**
      * The name of the mysql database
      */
-    val databaseName: String
+    override val name: String
 
     /**
      * The version of the mysql database
@@ -58,31 +58,43 @@ class MySQLMeta : DatabaseMeta {
     /**
      * The full mysql uri of the database
      */
-    val uri get() = "$socket/$databaseName"
+    override val uri get() = "$socket/$name"
 
+    /**
+     * The unique identifier of the mysql database.
+     *
+     * The difference between this and the [uri] is that it
+     * also encodes the version of the mysql database besides the uri.
+     */
     override val identifier: String get() = "$uri|$version"
-    override val simpleName: String get() = databaseName
 
     override val supportedActions: Set<Action<*>>
         get() = setOf()
 
-    constructor(url: String, version: MySQLVersion = MySQLVersion._8) {
-        val parts = url.replace('/', ':').split(':')
-        this.host = parts[0]
-        this.port = parts[1].toInt()
-        this.databaseName = parts[2]
-        this.version = version
-    }
+    constructor(
+        uri: String,
+        version: MySQLVersion = MySQLVersion._8
+    ) : this(uri.split(":", "/"), version)
+
+    private constructor(
+        parts: List<String>,
+        version: MySQLVersion
+    ) : this(
+        parts[0],
+        parts[1].toInt(),
+        parts[2],
+        version
+    )
 
     constructor(
         host: String,
         port: Int,
-        databaseName: String,
+        name: String,
         version: MySQLVersion
     ) {
         this.host = host
         this.port = port
-        this.databaseName = databaseName
+        this.name = name
         this.version = version
     }
 
