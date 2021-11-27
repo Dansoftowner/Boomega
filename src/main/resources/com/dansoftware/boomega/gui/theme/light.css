@@ -264,7 +264,7 @@
 }
 
 .bmdb-icon {
-    -fx-image: url("/com/dansoftware/boomega/image/logo/boomega_b_8.png");
+    -fx-image: url("/com/dansoftware/boomega/image/util/bookshelf_16.png");
 }
 
 .mysql-icon {
