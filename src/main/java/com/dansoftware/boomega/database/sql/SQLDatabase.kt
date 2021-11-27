@@ -78,7 +78,7 @@ class SQLDatabase(
 
     override fun removeRecord(record: Record) {
         transaction {
-            it.remove(record)
+            it.remove(SQLRecord(record))
         }
         notifyListeners(DatabaseChangeType.DELETE, listOf(record))
     }
