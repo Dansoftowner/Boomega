@@ -102,6 +102,18 @@ class MySQLMeta : DatabaseMeta {
         throw UnsupportedOperationException()
     }
 
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this === other -> true
+            other is MySQLMeta -> this.uri == other.uri
+            else -> false
+        }
+    }
+
+    override fun hashCode(): Int {
+        return uri.hashCode()
+    }
+
     override fun toString(): String {
         return uri
     }
