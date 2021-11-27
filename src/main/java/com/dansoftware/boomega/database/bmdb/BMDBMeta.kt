@@ -63,7 +63,11 @@ class BMDBMeta(override val name: String, val file: File) : DatabaseMeta() {
     }
 
     override fun equals(other: Any?): Boolean {
-        return file == (other as? BMDBMeta)?.file
+        return when {
+            this === other -> true
+            other is BMDBMeta -> this.file == other.file
+            else -> false
+        }
     }
 
     override fun hashCode(): Int {
