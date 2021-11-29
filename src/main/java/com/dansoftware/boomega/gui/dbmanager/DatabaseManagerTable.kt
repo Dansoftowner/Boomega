@@ -243,6 +243,16 @@ class DatabaseManagerTable(
 
         override fun call(tableColumn: TableColumn<DatabaseMeta, String>): TableCell<DatabaseMeta, String> {
             return object : TableCell<DatabaseMeta, String>() {
+
+                private val buttonDisableProperty get() =
+                    tableRow.selectedProperty().not().or(
+                        Bindings.createBooleanBinding({
+                            !tableView.items[index].isActionSupported(
+                                DatabaseMeta.Action.OpenInExternalApplication
+                            )
+                        }, selectedProperty())
+                    )
+
                 override fun updateItem(item: String?, empty: Boolean) {
                     super.updateItem(item, empty)
                     when {
@@ -255,18 +265,20 @@ class DatabaseManagerTable(
                                 contentDisplay = ContentDisplay.GRAPHIC_ONLY
                                 graphic = icon("folder-open-icon")
                                 maxWidth = Double.MAX_VALUE
-                                disableProperty().bind(tableRow.selectedProperty().not())
-                                setOnAction {
-                                    tableView
-                                        .selectionModel
-                                        .selectedItems
-                                        .asSequence()
-                                        .filter { it.isActionSupported(DatabaseMeta.Action.OpenInExternalApplication) }
-                                        .forEach { it.performAction(DatabaseMeta.Action.OpenInExternalApplication) }
-                                }
+                                disableProperty().bind(buttonDisableProperty)
+                                setOnAction { openDatabases() }
                             }
                         }
                     }
+                }
+
+                private fun openDatabases() {
+                    tableView
+                        .selectionModel
+                        .selectedItems
+                        .asSequence()
+                        .filter { it.isActionSupported(DatabaseMeta.Action.OpenInExternalApplication) }
+                        .forEach { it[DatabaseMeta.Action.OpenInExternalApplication] }
                 }
             }
         }
