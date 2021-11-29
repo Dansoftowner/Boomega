@@ -26,6 +26,8 @@ import com.dansoftware.boomega.gui.database.mysql.MySQLRegistrationForm
 import com.dansoftware.boomega.gui.util.icon
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
+import org.hibernate.HibernateException
+import org.hibernate.service.spi.ServiceException
 
 object MySQLProvider : DatabaseProvider<MySQLMeta> {
 
@@ -90,17 +92,21 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
         credentials: Map<DatabaseField<*>, Any?>,
         options: Map<DatabaseOption<*>, Any>
     ): Database {
-        return SQLDatabase(
-            meta,
-            hibernateOptions = mapOf(
-                "hibernate.connection.driver_class" to "com.mysql.cj.jdbc.Driver",
-                "hibernate.dialect" to (credentials[MYSQL_VERSION_FIELD] as? MySQLVersion ?: MySQLVersion._8).hibernateDialect,
-                "hibernate.hbm2ddl.auto" to "update",
-                "hibernate.connection.url" to "jdbc:mysql://${meta.uri}",
-                "hibernate.connection.username" to credentials[USERNAME_FIELD]?.toString()?.takeUnless { it.isBlank() },
-                "hibernate.connection.password" to credentials[PASSWORD_FIELD]?.toString()?.takeUnless { it.isBlank() }
+        return try {
+            SQLDatabase(
+                meta,
+                hibernateOptions = mapOf(
+                    "hibernate.connection.driver_class" to "com.mysql.cj.jdbc.Driver",
+                    "hibernate.dialect" to (credentials[MYSQL_VERSION_FIELD] as? MySQLVersion ?: MySQLVersion._8).hibernateDialect,
+                    "hibernate.hbm2ddl.auto" to "update",
+                    "hibernate.connection.url" to "jdbc:mysql://${meta.uri}",
+                    "hibernate.connection.username" to credentials[USERNAME_FIELD].toString(),
+                    "hibernate.connection.password" to credentials[PASSWORD_FIELD].toString()
+                )
             )
-        )
+        } catch(e: HibernateException) {
+            throw DatabaseConstructionException(localizedMessage = e.specificMessage(), cause = e)
+        }
     }
 
     override fun buildUILoginForm(
@@ -116,6 +122,14 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
         options: Map<DatabaseOption<*>, Any>
     ): RegistrationForm<MySQLMeta> {
         return MySQLRegistrationForm(context, options)
+    }
+
+    private fun HibernateException.specificMessage(): String {
+        // TODO: i18n
+        return when(this) {
+            is ServiceException -> "Unable to create connection with the server"
+            else -> "Failed to log into the database"
+        }
     }
 
 }
