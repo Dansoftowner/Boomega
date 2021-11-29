@@ -84,7 +84,7 @@ public class InMemoryDatabaseSimulation extends Application {
 
         @NotNull
         @Override
-        public InMemoryDatabaseMeta getMeta(@NotNull String url) {
+        public InMemoryDatabaseMeta getMeta(@NotNull String identifier) {
             return new InMemoryDatabaseMeta();
         }
 
@@ -136,6 +136,12 @@ public class InMemoryDatabaseSimulation extends Application {
         @Override
         public DatabaseProvider getProvider() {
             return new InMemoryDatabaseProvider();
+        }
+
+        @NotNull
+        @Override
+        public String getUri() {
+            return "null";
         }
     }
 

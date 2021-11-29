@@ -50,9 +50,9 @@ interface DatabaseProvider<M : DatabaseMeta> {
     val fields: List<DatabaseField<*>>
 
     /**
-     * Gives a database meta information object from the given "url" or identifier
+     * Gives a database meta information object from the given identifier
      */
-    fun getMeta(url: String): M
+    fun getMeta(identifier: String): M
 
     /**
      * Constructs the actual [Database] object that allows to access the database

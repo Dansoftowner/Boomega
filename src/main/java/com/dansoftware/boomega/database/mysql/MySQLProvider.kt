@@ -66,8 +66,8 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
             PASSWORD_FIELD
         )
 
-    override fun getMeta(url: String): MySQLMeta {
-        return splitURL(url) { validUrl, version ->
+    override fun getMeta(identifier: String): MySQLMeta {
+        return splitURL(identifier) { validUrl, version ->
             MySQLMeta(validUrl, version)
         }
     }
