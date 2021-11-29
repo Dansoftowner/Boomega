@@ -29,6 +29,9 @@ import javafx.scene.Node
 import org.hibernate.HibernateException
 import org.hibernate.service.spi.ServiceException
 
+/**
+ * Represents the MySQL RDBMS.
+ */
 object MySQLProvider : DatabaseProvider<MySQLMeta> {
 
     // TODO: i18n

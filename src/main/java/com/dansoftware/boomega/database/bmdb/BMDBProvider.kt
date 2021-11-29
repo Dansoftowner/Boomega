@@ -31,19 +31,38 @@ import org.dizitart.no2.exceptions.NitriteException
 import org.dizitart.no2.exceptions.NitriteIOException
 import java.io.File
 
+/**
+ * Represents the internal Boomega database management system.
+ */
 object BMDBProvider : DatabaseProvider<BMDBMeta> {
 
     // TODO: i18n
 
-    val USERNAME_FIELD =
-        DatabaseField(valueType = String::class.java, id = "usrnm", name = "Username")
-    val PASSWORD_FIELD =
-        DatabaseField(valueType = String::class.java, id = "psswrd", name = "Password")
+    val USERNAME_FIELD = DatabaseField(
+        valueType = String::class.java,
+        id = "usrnm",
+        name = "Username"
+    )
 
-    val COMPRESSED =
-        DatabaseOption(id = "cmprsd", name = "Compress", type = Boolean::class.java, defaultValue = true)
-    val AUTO_COMMIT_BUFFER_SIZE =
-        DatabaseOption(id = "bfs", name = "Auto commit buffer size", type = Int::class.java, defaultValue = 1024)
+    val PASSWORD_FIELD = DatabaseField(
+        valueType = String::class.java,
+        id = "psswrd",
+        name = "Password"
+    )
+
+    val COMPRESSED = DatabaseOption(
+        id = "cmprsd",
+        name = "Compress",
+        type = Boolean::class.java,
+        defaultValue = true
+    )
+
+    val AUTO_COMMIT_BUFFER_SIZE = DatabaseOption(
+        id = "bfs",
+        name = "Auto commit buffer size",
+        type = Int::class.java,
+        defaultValue = 1024
+    )
 
     override val name: String
         get() = "BMDB"

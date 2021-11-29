@@ -27,6 +27,11 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder
 import org.hibernate.service.ServiceRegistry
 import javax.persistence.criteria.CriteriaQuery
 
+/**
+ * A [Database] implementation that connects to a database using Hibernate.
+ *
+ * @param hibernateOptions the options provided for Hibernate
+ */
 class SQLDatabase(
     override val meta: DatabaseMeta,
     hibernateOptions: Map<String, String?>

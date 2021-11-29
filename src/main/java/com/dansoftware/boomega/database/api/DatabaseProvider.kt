@@ -23,7 +23,8 @@ import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
 
 /**
- * A flexible abstraction of a particular database-system.
+ * A database provider represents a particular Database Management System (DBMS).
+ * It provides meta information of a DBMS and gives a way to construct [Database] objects.
  */
 interface DatabaseProvider<M : DatabaseMeta> {
 
@@ -33,7 +34,7 @@ interface DatabaseProvider<M : DatabaseMeta> {
     val name: String
 
     /**
-     * Gives the database's icon
+     * Gives the icon of the database system
      */
     val icon: Node
 
@@ -55,7 +56,7 @@ interface DatabaseProvider<M : DatabaseMeta> {
     fun getMeta(identifier: String): M
 
     /**
-     * Constructs the actual [Database] object that allows to access the database
+     * Constructs the actual [Database] object that allows to access a particular database
      *
      * @param credentials the credentials specified for [DatabaseField]s
      * @param options the initial database options
