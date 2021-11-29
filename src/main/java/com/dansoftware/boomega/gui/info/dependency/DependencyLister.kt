@@ -81,6 +81,11 @@ object DependencyLister {
             LicenseInfo.apache20License()
         ),
         DependencyInfo(
+            "Hibernate",
+            "https://hibernate.org/",
+            LicenseInfo.lgpLv2()
+        ),
+        DependencyInfo(
             "JavaFX",
             "https://openjfx.io/",
             LicenseInfo.gnu2ClassPath()
@@ -160,6 +165,11 @@ object DependencyLister {
             "MDFX",
             "https://github.com/JPro-one/markdown-javafx-renderer",
             LicenseInfo.apache20License()
+        ),
+        DependencyInfo(
+            "MySQL Connector/J",
+            "https://mvnrepository.com/artifact/mysql/mysql-connector-java",
+            LicenseInfo("GPL 2.0", "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html")
         ),
         DependencyInfo(
             "Nitrite Database",

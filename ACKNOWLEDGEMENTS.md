@@ -59,6 +59,10 @@
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
     <tr>
+        <td><a href="https://hibernate.org/">Hibernate</a></td>
+        <td><a href="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">GNU Library or Lesser General Public License version 2.0</a></td>
+    </tr>
+    <tr>
         <td><a href="https://openjfx.io/">JavaFX</a></td>
         <td><a href="http://openjdk.java.net/legal/gplv2+ce.html">GPL v2 + Classpath</a></td>
     </tr>
@@ -113,6 +117,10 @@
     <tr>
         <td><a href="https://github.com/JPro-one/markdown-javafx-renderer">MDFX</a></td>
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
+    </tr>
+    <tr>
+        <td><a href="https://mvnrepository.com/artifact/mysql/mysql-connector-java">MySQL Connector/J</a></td>
+        <td><a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPL 2.0</a></td>
     </tr>
     <tr>
         <td><a href="https://github.com/nitrite/nitrite-java">Nitrite Database</a></td>
