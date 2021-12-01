@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.LoginForm
@@ -29,15 +30,14 @@ import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.login.config.LoginData
-import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.gui.util.refresh
-import com.dansoftware.boomega.gui.util.selectedItem
-import com.dansoftware.boomega.gui.util.selectedItemProperty
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.application.Platform.runLater
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.beans.value.ObservableStringValue
+import javafx.concurrent.Task
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Group
@@ -56,6 +56,7 @@ class LoginBox(
     private val databaseLoginListener: DatabaseLoginListener
 ) : VBox(10.0), DatabaseTracker.Observer {
 
+    private val loginIsInProcess: BooleanProperty = SimpleBooleanProperty()
     private val itemSelected: BooleanProperty = SimpleBooleanProperty()
     private val remember: BooleanProperty = SimpleBooleanProperty()
     private val loginForm: ObjectProperty<LoginForm<*>?> = SimpleObjectProperty()
@@ -132,11 +133,13 @@ class LoginBox(
     private fun buildHeader() = StackPane().apply {
         styleClass.add("header")
         padding = Insets(20.0)
-        HBox(10.0).run {
-            children.add(ImageView().apply { styleClass.add("logo") })
-            children.add(StackPane(Label(System.getProperty("app.name"))))
-            Group(this)
-        }.let(children::add)
+        children.add(
+            HBox(10.0).run {
+                children.add(ImageView().apply { styleClass.add("logo") })
+                children.add(StackPane(Label(System.getProperty("app.name"))))
+                Group(this)
+            }
+        )
     }
 
     private fun buildDatabaseChooserArea() = HBox(5.0).apply {
@@ -203,7 +206,8 @@ class LoginBox(
             // For some reason, an NPE might appear we don't care about
             try {
                 children.add(1, newForm!!.node)
-            } catch(ignored: NullPointerException) { }
+            } catch (ignored: NullPointerException) {
+            }
         }
     }
 
@@ -218,26 +222,55 @@ class LoginBox(
         maxWidth = Double.MAX_VALUE
         text = i18n("login.form.login")
         isDefaultButton = true
-        setOnAction { login() }
+        disableProperty().bind(loginIsInProcess)
+        setOnAction { loginRequest() }
     }
 
-    private fun login() {
-        try {
-            when {
-                databaseTracker.isDatabaseUsed(selectedDatabase) ->
-                    databaseLoginListener.onUsedDatabaseOpened(selectedDatabase!!)
-                else -> {
+    private fun loginRequest() {
+        when {
+            databaseTracker.isDatabaseUsed(selectedDatabase) ->
+                databaseLoginListener.onUsedDatabaseOpened(selectedDatabase!!)
+            else -> {
+                login { database ->
                     preferences.updateLoginData { it.isAutoLogin = remember.get() }
-                    databaseLoginListener.onDatabaseOpened(loginForm.get()!!.login())
+                    databaseLoginListener.onDatabaseOpened(database)
                     preferences.updateLoginData { it.isAutoLogin = remember.get() }
                     context.close()
                 }
             }
-
-        } catch (e: DatabaseConstructionException) {
-            logger.debug("Couldn't construct database", e)
-            context.showErrorDialog(i18n("login.failed"), e.localizedMessage ?: "", e)
         }
+    }
+
+    private inline fun login(crossinline onDatabaseCreated: (Database) -> Unit) {
+        CachedExecutor.submit(
+            object : Task<Database>() {
+                init {
+                    loginIsInProcess.bind(runningProperty())
+                    onRunning {
+                        context.showIndeterminateProgress()
+                    }
+                    onFailed {
+                        context.stopProgress()
+                        when (it) {
+                            is DatabaseConstructionException ->
+                                context.showErrorDialog(i18n("login.failed"), it.localizedMessage ?: "", it)
+                            is Exception ->
+                                // TODO: message
+                                context.showErrorDialog(i18n("login.failed"), message = "", it)
+                        }
+
+                    }
+                    onSucceeded {
+                        context.stopProgress()
+                        onDatabaseCreated(value)
+                    }
+                }
+
+                override fun call(): Database {
+                    return loginForm.get()!!.login()
+                }
+            }
+        )
     }
 
     override fun onUsingDatabase(databaseMeta: DatabaseMeta) {
