@@ -39,6 +39,7 @@ import javafx.scene.control.TextField
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 
+// TODO: i18n
 class MySQLRegistrationForm(
     context: Context,
     options: Map<DatabaseOption<*>, Any>
@@ -62,12 +63,11 @@ class MySQLRegistrationForm(
         }
 
         private fun buildUI() {
-            // TODO: i18n
             children.add(buildLabel("Host:", 0, 0))
             children.add(buildHostField())
             children.add(buildLabel("Port:", 1, 0))
             children.add(buildPortField())
-            children.add(buildLabel("Name:", 0, 2))
+            children.add(buildLabel("Database name:", 0, 2))
             children.add(buildNameField())
             children.add(buildLabel("MySQL version:", 1, 2))
             children.add(buildVersionChooser())
@@ -78,34 +78,31 @@ class MySQLRegistrationForm(
         }
 
         private fun buildHostField() = TextField().apply {
-            // TODO: prompt text
-            // TODO: validation
             setConstraints(this, 0, 1)
             setHgrow(this, Priority.SOMETIMES)
-            Bindings.bindBidirectional(host, textProperty())
             textProperty().addListener { _, _, newValue ->
                 pseudoClassStateChanged(PseudoClass.getPseudoClass("error"), isValidHostAddress(newValue).not())
             }
+            Bindings.bindBidirectional(host, textProperty())
+            promptText = "e.g. localhost, remotemysql.com, 193.121.203.12"
             minHeight = 35.0
         }
 
         private fun buildPortField() = TextField().apply {
-            // TODO: prompt text
-            // TODO: validation
             setConstraints(this, 1, 1)
             Bindings.bindBidirectional(port, textProperty())
             textProperty().addListener { _, _, newValue ->
                 pseudoClassStateChanged(PseudoClass.getPseudoClass("error"), isValidPortNumber(newValue).not())
             }
+            promptText = "e.g. 3306"
             minHeight = 35.0
         }
 
         private fun buildNameField() = TextField().apply {
-            // TODO: prompt text
-            // TODO: validation
             setConstraints(this, 0, 3)
             setHgrow(this, Priority.SOMETIMES)
             Bindings.bindBidirectional(databaseName, textProperty())
+            promptText = "e.g. MyDatabase"
             minHeight = 35.0
         }
 
@@ -113,7 +110,7 @@ class MySQLRegistrationForm(
             setConstraints(this, 1, 3)
             maxWidth = Double.MAX_VALUE
             items.addAll(MySQLVersion.values())
-            selectionModel.select(MySQLVersion.DEFAULT)
+            selectionModel.select(MySQLVersion.default)
             version.bind(selectedItemProperty())
         }
     }
