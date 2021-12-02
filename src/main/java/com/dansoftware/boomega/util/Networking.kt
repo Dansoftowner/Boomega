@@ -24,6 +24,42 @@ import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
 
+/**
+ * Regular expression representing a host address
+ */
+val HOST_PATTERN by lazy {
+    Regex(
+        "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|localhost|((www\\.)?[a-zA-Z0-9]+\\.[a-zA-Z]+)"
+    )
+}
+
+/**
+ * Regular expression representing a port number.
+ *
+ * > NOTE: it can't check whether the port number is in range of 0 and 65 535.
+ * > You can use the [isValidPortNumber] for full verification.
+ */
+val PORT_PATTERN by lazy { Regex("\\d{1,5}") }
+
+/**
+ * Checks whether the given host address is in valid format or not
+ */
+fun isValidHostAddress(host: String) = HOST_PATTERN.matches(host)
+
+/**
+ * Checks whether the port number (given as string) is in valid format or not
+ */
+fun isValidPortNumber(portString: String) =
+    PORT_PATTERN.matches(portString) && isValidPortNumber(portString.toInt())
+
+/**
+ * Checks whether the given port number is in range of `1` and `65 535`
+ */
+fun isValidPortNumber(port: Int) = port in 1..65_535
+
+/**
+ * Checks whether the server (that the url points to) is reachable or not
+ */
 fun isServerReachable(url: String) =
     try {
         URL(url).openConnection().connect()

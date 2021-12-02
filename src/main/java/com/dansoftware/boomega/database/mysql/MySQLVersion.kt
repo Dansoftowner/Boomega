@@ -51,6 +51,8 @@ enum class MySQLVersion(
     override fun toString() = versionNumber
 
     companion object {
+        val DEFAULT = _8
+
         fun find(versionNumber: String) =
             values().find { it.versionNumber == versionNumber } ?: _8
     }

@@ -25,9 +25,13 @@ import com.dansoftware.boomega.database.mysql.MySQLVersion
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.selectedItemProperty
 import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.util.isValidHostAddress
+import com.dansoftware.boomega.util.isValidPortNumber
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.css.PseudoClass
+import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
@@ -46,38 +50,14 @@ class MySQLRegistrationForm(
     private val version = SimpleObjectProperty<MySQLVersion>()
 
     override val node: Node
-        get() = Grid()/* VBox(
-            5.0,
-            HBox(5.0, Label("Host:"), buildHostField()),
-            HBox(5.0, Label("Port:"), buildPortField()),
-            HBox(5.0, Label("Database name:"), buildDatabaseNameField()),
-            HBox(5.0, Label("Version:"), buildVersionChooser())
-        )*/
+        get() = Grid()
 
-    private fun buildHostField() = TextField().apply {
-        // TODO: prompt text
-        // TODO: validation
-        Bindings.bindBidirectional(textProperty(), host)
-    }
-
-    private fun buildPortField() = TextField().apply {
-        // TODO: prompt
-        // TODO: validation
-        Bindings.bindBidirectional(textProperty(), port)
-    }
-
-    private fun buildDatabaseNameField() = TextField().apply {
-        Bindings.bindBidirectional(textProperty(), databaseName)
-    }
-
-    private fun buildVersionChooser() = ComboBox<MySQLVersion>().apply {
-        items.addAll(MySQLVersion.values())
-        selectionModel.select(0)
-        version.bind(selectedItemProperty())
-    }
 
     private inner class Grid : GridPane() {
         init {
+            padding = Insets(10.0)
+            hgap = 5.0
+            vgap = 5.0
             buildUI()
         }
 
@@ -87,8 +67,10 @@ class MySQLRegistrationForm(
             children.add(buildHostField())
             children.add(buildLabel("Port:", 1, 0))
             children.add(buildPortField())
-            children.add(buildLabel("Name:", 0, 1))
+            children.add(buildLabel("Name:", 0, 2))
             children.add(buildNameField())
+            children.add(buildLabel("MySQL version:", 1, 2))
+            children.add(buildVersionChooser())
         }
 
         private fun buildLabel(i18n: String, column: Int, row: Int) = Label(i18n(i18n)).apply {
@@ -101,6 +83,9 @@ class MySQLRegistrationForm(
             setConstraints(this, 0, 1)
             setHgrow(this, Priority.SOMETIMES)
             Bindings.bindBidirectional(host, textProperty())
+            textProperty().addListener { _, _, newValue ->
+                pseudoClassStateChanged(PseudoClass.getPseudoClass("error"), isValidHostAddress(newValue).not())
+            }
             minHeight = 35.0
         }
 
@@ -108,22 +93,29 @@ class MySQLRegistrationForm(
             // TODO: prompt text
             // TODO: validation
             setConstraints(this, 1, 1)
-            setHgrow(this, Priority.SOMETIMES)
             Bindings.bindBidirectional(port, textProperty())
+            textProperty().addListener { _, _, newValue ->
+                pseudoClassStateChanged(PseudoClass.getPseudoClass("error"), isValidPortNumber(newValue).not())
+            }
             minHeight = 35.0
         }
 
         private fun buildNameField() = TextField().apply {
             // TODO: prompt text
             // TODO: validation
-            setConstraints(this, 1, 1)
+            setConstraints(this, 0, 3)
             setHgrow(this, Priority.SOMETIMES)
             Bindings.bindBidirectional(databaseName, textProperty())
             minHeight = 35.0
         }
 
-
-
+        private fun buildVersionChooser() = ComboBox<MySQLVersion>().apply {
+            setConstraints(this, 1, 3)
+            maxWidth = Double.MAX_VALUE
+            items.addAll(MySQLVersion.values())
+            selectionModel.select(MySQLVersion.DEFAULT)
+            version.bind(selectedItemProperty())
+        }
     }
 
     override fun registrate(): MySQLMeta {
