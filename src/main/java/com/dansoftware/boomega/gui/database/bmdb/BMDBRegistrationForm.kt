@@ -67,28 +67,28 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
 
     override val node: Node get() = Grid()
 
-    override fun registrate(): BMDBMeta? {
-        validateInputs { database, credentials ->
+    override fun registrate(): BMDBMeta {
+        return validateInputs { database, credentials ->
             databaseDirFile.mkdirs()
             BMDBProvider.getDatabase(database, credentials, emptyMap()).close() // TODO: database options
-            return BMDBMeta(databaseName.get(), databaseFile)
         }
-        return null
     }
 
-    private inline fun validateInputs(onValidated: (BMDBMeta, credentials: Map<DatabaseField<*>, Any>) -> Unit) {
+    private inline fun validateInputs(onValidated: (BMDBMeta, credentials: Map<DatabaseField<*>, Any>) -> Unit): BMDBMeta {
         validations.forEach(Validation::validate)
         if (databaseDirFile.exists().not())
             context.showInformationDialogAndWait(
                 i18n("database.creator.dir_not_exist.title", databaseDirFile.name),
                 i18n("database.creator.dir_not_exist.msg")
             )
+        val meta = BMDBMeta(databaseName.get(), databaseFile)
         onValidated(
-            BMDBMeta(databaseFile), mapOf(
+            meta, mapOf(
                 BMDBProvider.USERNAME_FIELD to username.get(),
                 BMDBProvider.PASSWORD_FIELD to password.get()
             )
         )
+        return meta
     }
 
     private inner class Grid : GridPane() {
