@@ -24,6 +24,7 @@ import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.database.api.RegistrationForm
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.not
 import com.dansoftware.boomega.gui.util.padding
 import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.binding.Bindings
@@ -74,6 +75,9 @@ class DatabaseCreatorForm(
         minHeight = 35.0
         text = i18n("database.creator.create")
         isDefaultButton = true
+        registrationForm.addListener { _, _, form ->
+            disableProperty().bind(form!!.persistable.not())
+        }
         setOnAction {
             constructDatabase()?.let {
                 databaseTracker.saveDatabase(it)

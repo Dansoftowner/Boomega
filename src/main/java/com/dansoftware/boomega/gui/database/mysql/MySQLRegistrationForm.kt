@@ -24,13 +24,14 @@ import com.dansoftware.boomega.database.mysql.MySQLMeta
 import com.dansoftware.boomega.database.mysql.MySQLVersion
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.selectedItemProperty
+import com.dansoftware.boomega.gui.util.validateImmediate
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.isValidHostAddress
 import com.dansoftware.boomega.util.isValidPortNumber
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import javafx.css.PseudoClass
+import javafx.beans.value.ObservableBooleanValue
 import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.ComboBox
@@ -38,6 +39,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
+import net.synedra.validatorfx.Validator
 
 /**
  * Registration form for mysql
@@ -51,6 +53,11 @@ class MySQLRegistrationForm(
     private val port = SimpleStringProperty()
     private val databaseName = SimpleStringProperty()
     private val version = SimpleObjectProperty<MySQLVersion>()
+
+    private val validator = Validator()
+
+    override val persistable: ObservableBooleanValue =
+        host.isNotEmpty.and(port.isNotEmpty).and(databaseName.isNotEmpty)
 
     override val node: Node
         get() = Grid()
@@ -84,22 +91,22 @@ class MySQLRegistrationForm(
         private fun buildHostField() = TextField().apply {
             setConstraints(this, 0, 1)
             setHgrow(this, Priority.SOMETIMES)
-            textProperty().addListener { _, _, newValue ->
-                pseudoClassStateChanged(PseudoClass.getPseudoClass("error"), isValidHostAddress(newValue).not())
-            }
             Bindings.bindBidirectional(host, textProperty())
             promptText = i18n("database.creator.sql.host.prompt")
             minHeight = 35.0
+            validateImmediate(validator, { isValidHostAddress(it).not() }) {
+                it.warn("Invalid host address!") // TODO: i18n
+            }
         }
 
         private fun buildPortField() = TextField().apply {
             setConstraints(this, 1, 1)
             Bindings.bindBidirectional(port, textProperty())
-            textProperty().addListener { _, _, newValue ->
-                pseudoClassStateChanged(PseudoClass.getPseudoClass("error"), isValidPortNumber(newValue).not())
-            }
             promptText = i18n("database.creator.sql.port.prompt")
             minHeight = 35.0
+            validateImmediate(validator, { isValidPortNumber(it).not() }) {
+                it.warn("Invalid port!") // TODO: i18n
+            }
         }
 
         private fun buildNameField() = TextField().apply {

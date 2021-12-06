@@ -19,6 +19,8 @@
 package com.dansoftware.boomega.database.api
 
 import com.dansoftware.boomega.gui.api.Context
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.value.ObservableBooleanValue
 import javafx.scene.Node
 
 abstract class RegistrationForm<M : DatabaseMeta>(
@@ -27,6 +29,8 @@ abstract class RegistrationForm<M : DatabaseMeta>(
 ) {
 
     abstract val node: Node
+    open val persistable: ObservableBooleanValue
+        get() = SimpleBooleanProperty(true)
 
     abstract fun registrate(): M?
 }

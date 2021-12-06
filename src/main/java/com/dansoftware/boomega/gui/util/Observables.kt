@@ -23,6 +23,7 @@ package com.dansoftware.boomega.gui.util
 
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
+import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
 import javafx.collections.ObservableList
@@ -39,3 +40,5 @@ inline fun ObservableList<*>.emptyBinding(): BooleanBinding {
 inline fun <T> ObservableValue<T>.onValuePresent(crossinline action: (newValue: T) -> Unit) {
     addListener { _, _, newValue -> action(newValue) }
 }
+
+inline fun ObservableBooleanValue.not() = Bindings.createBooleanBinding({ this.get().not() }, this)
