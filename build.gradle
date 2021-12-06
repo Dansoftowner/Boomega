@@ -146,6 +146,7 @@ dependencies {
     implementation 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
     implementation 'org.fxmisc.richtext:richtextfx:0.10.7'
     implementation 'org.controlsfx:controlsfx:11.1.0'
+    implementation 'net.synedra:validatorfx:0.2.1'
 
     // Embedded NoSql database management
     implementation 'org.dizitart:nitrite:3.4.3'

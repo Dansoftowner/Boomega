@@ -61,6 +61,11 @@ object DependencyLister {
             LicenseInfo("BSD 3-Clause License", "https://github.com/controlsfx/controlsfx/blob/master/license.txt")
         ),
         DependencyInfo(
+            "ValidatorFX",
+            "https://github.com/effad/ValidatorFX",
+            LicenseInfo("BSD 3-Clause License", "https://github.com/effad/ValidatorFX/blob/master/LICENSE")
+        ),
+        DependencyInfo(
             "FontAwesomeFX",
             "https://bitbucket.org/Jerady/fontawesomefx/src/master/",
             LicenseInfo.apache20License()

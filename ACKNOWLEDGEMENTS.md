@@ -43,6 +43,10 @@
         <td><a href="https://github.com/controlsfx/controlsfx/blob/master/license.txt">BSD 3-Clause License</a></td>
     </tr>
     <tr>
+        <td><a href="https://github.com/effad/ValidatorFX/">ValidatorFX</a></td>
+        <td><a href="https://github.com/effad/ValidatorFX/blob/master/LICENSE">BSD 3-Clause License</a></td>
+    </tr>
+    <tr>
         <td><a href="https://bitbucket.org/Jerady/fontawesomefx/src/master/">FontAwesomeFX</a></td>
         <td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
     </tr>
