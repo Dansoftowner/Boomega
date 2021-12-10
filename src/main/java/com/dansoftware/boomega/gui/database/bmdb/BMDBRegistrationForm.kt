@@ -27,6 +27,7 @@ import com.dansoftware.boomega.database.bmdb.BMDBProvider
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.SpaceValidator
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.validateImmediate
 import com.dansoftware.boomega.gui.util.window
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.hasValidPath
@@ -35,16 +36,22 @@ import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
+import javafx.beans.value.ObservableBooleanValue
 import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 import javafx.stage.DirectoryChooser
+import net.synedra.validatorfx.Validator
 import java.io.File
+
+// TODO: validation not working properly (username/passwords)
 
 class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any>) :
     RegistrationForm<BMDBMeta>(context, options) {
+
+    private val validator = Validator()
 
     private val databaseName: StringProperty = SimpleStringProperty()
     private val databaseDir: StringProperty = SimpleStringProperty()
@@ -65,31 +72,22 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
 
     private val databaseDirFile: File get() = File(databaseDir.get())
 
+    override val persistable: ObservableBooleanValue
+        get() = validator.containsErrorsProperty().not()
+
     override val node: Node get() = Grid()
 
     override fun registrate(): BMDBMeta {
-        return validateInputs { database, credentials ->
-            databaseDirFile.mkdirs()
-            BMDBProvider.getDatabase(database, credentials, emptyMap()).close() // TODO: database options
-        }
-    }
-
-    private inline fun validateInputs(onValidated: (BMDBMeta, credentials: Map<DatabaseField<*>, Any>) -> Unit): BMDBMeta {
-        validations.forEach(Validation::validate)
-        if (databaseDirFile.exists().not())
-            context.showInformationDialogAndWait(
-                i18n("database.creator.dir_not_exist.title", databaseDirFile.name),
-                i18n("database.creator.dir_not_exist.msg")
-            )
+        databaseDirFile.mkdirs()
         val meta = BMDBMeta(databaseName.get(), databaseFile)
-        onValidated(
-            meta, mapOf(
-                BMDBProvider.USERNAME_FIELD to username.get(),
-                BMDBProvider.PASSWORD_FIELD to password.get()
-            )
+        val credentials = mapOf<DatabaseField<*>, Any>(
+            BMDBProvider.USERNAME_FIELD to username.get(),
+            BMDBProvider.PASSWORD_FIELD to password.get()
         )
+        BMDBProvider.getDatabase(meta, credentials, emptyMap()).close() // TODO: database options
         return meta
     }
+
 
     private inner class Grid : GridPane() {
 
@@ -112,8 +110,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             children.add(buildFullPathField())
             children.add(buildAuthenticationCheck())
             children.add(buildUsernameInput())
-            children.add(buildPasswordInput())
-            children.add(buildRepeatPasswordInput())
+            buildPasswordInputs()
         }
 
         private fun buildSeparator(row: Int) = Separator().apply {
@@ -131,6 +128,12 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             databaseName.bind(textProperty())
             minHeight = 35.0
             textFormatter = SpaceValidator()
+            validateImmediate(validator) { it, _ ->
+                when {
+                    databaseName.get().isEmpty() -> it.error(i18n("database.creator.missing_name.title"))
+                    databaseFile.exists() -> it.error(i18n("database.creator.file_already_exists.title"))
+                }
+            }
         }
 
         private fun buildDirField() = TextField().apply {
@@ -140,6 +143,18 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             text = System.getProperty("boomega.dir.default.path");
             databaseDir.bindBidirectional(textProperty())
             textProperty().bindBidirectional(databaseDir)
+            validateImmediate(validator) { it, _ ->
+                when {
+                    databaseDirFile.hasValidPath.not() -> it.error(i18n("database.creator.invalid_dir.title"))
+                    databaseDir.get().isBlank() -> it.error(i18n("database.creator.missing_dir.title"))
+                    databaseDirFile.exists().not() -> it.warn(
+                        i18n(
+                            "database.creator.dir_not_exist.title",
+                            databaseDirFile.name
+                        )
+                    )
+                }
+            }
         }
 
         private fun buildDirOpenButton() = Button().apply {
@@ -177,6 +192,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             visibleProperty().bind(authentication)
             managedProperty().bind(authentication)
             username.bind(textProperty())
+            buildUsernameValidation(this)
         }
 
         private fun buildPasswordInput() = PasswordField().apply {
@@ -201,6 +217,54 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             passwordRepeat.bind(textProperty())
         }
 
+        private fun buildPasswordInputs() {
+            val passwordInput = buildPasswordInput()
+            val repeatPasswordInput = buildRepeatPasswordInput()
+            children.add(passwordInput)
+            children.add(repeatPasswordInput)
+            buildPasswordValidation(passwordInput, repeatPasswordInput)
+        }
+
+        private fun buildPasswordValidation(passwordField: TextField, repeatField: TextField) {
+            val check = validator.createCheck()
+                .dependsOn("pswd", passwordField.textProperty())
+                .dependsOn("rpswd", repeatField.textProperty())
+                .decorates(passwordField)
+                .decorates(repeatField)
+                .withMethod {
+
+                    val pswd: String = it["pswd"]
+                    val rpswd: String = it["rpswd"]
+                    when {
+                        authentication.get() && pswd != rpswd ->
+                            it.error(i18n("database.creator.passwords_not_match.title"))
+                        authentication.get() && (pswd.isBlank() || rpswd.isBlank()) ->
+                            it.error(i18n("database.creator.empty_password.title"))
+                    }
+                }
+            authentication.addListener { _, _, isRequired ->
+                if (isRequired) validator.remove(check)
+                else validator.add(check)
+            }
+        }
+
+        private fun buildUsernameValidation(usernameField: TextField) {
+            val check = validator.createCheck()
+                .dependsOn("usrname", usernameField.textProperty())
+                .decorates(usernameField)
+                .withMethod {
+                    val value: String = it["usrname"]
+                    when {
+                        authentication.get() && value.isBlank() ->
+                            it.error(i18n("database.creator.empty_user_name.title"))
+                    }
+                }
+            authentication.addListener { _, _, isRequired ->
+                if (isRequired) validator.remove(check)
+                else validator.add(check)
+            }
+        }
+
         private fun openDirectory() {
             directoryChooser.showDialog(this.window)?.let { dir ->
                 databaseDir.set(dir.absolutePath)
@@ -208,7 +272,8 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
         }
     }
 
-    private class Validation(
+    // TODO: remove comment
+    /*private class Validation(
         private val condition: () -> Boolean,
         private val exception: Exception
     ) {
@@ -269,7 +334,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
                 )
             )
         )
-    }
+    }*/
 
 
 }
