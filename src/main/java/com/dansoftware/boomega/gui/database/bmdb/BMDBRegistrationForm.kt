@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.database.bmdb
 
-import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseOption
 import com.dansoftware.boomega.database.api.RegistrationForm
@@ -31,7 +30,6 @@ import com.dansoftware.boomega.gui.util.validateImmediate
 import com.dansoftware.boomega.gui.util.window
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.hasValidPath
-import com.dansoftware.boomega.util.shortenedPath
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
@@ -236,15 +234,21 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
                     val pswd: String = it["pswd"]
                     val rpswd: String = it["rpswd"]
                     when {
-                        authentication.get() && pswd != rpswd ->
+                        pswd != rpswd ->
                             it.error(i18n("database.creator.passwords_not_match.title"))
-                        authentication.get() && (pswd.isBlank() || rpswd.isBlank()) ->
+                        pswd.isBlank() || rpswd.isBlank() ->
                             it.error(i18n("database.creator.empty_password.title"))
                     }
                 }
+                .immediate()
             authentication.addListener { _, _, isRequired ->
-                if (isRequired) validator.remove(check)
-                else validator.add(check)
+                when {
+                    !isRequired -> validator.remove(check)
+                    else -> {
+                        validator.add(check)
+                        check.recheck()
+                    }
+                }
             }
         }
 
@@ -255,13 +259,19 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
                 .withMethod {
                     val value: String = it["usrname"]
                     when {
-                        authentication.get() && value.isBlank() ->
+                        value.isBlank() ->
                             it.error(i18n("database.creator.empty_user_name.title"))
                     }
                 }
+                .immediate()
             authentication.addListener { _, _, isRequired ->
-                if (isRequired) validator.remove(check)
-                else validator.add(check)
+                when {
+                    !isRequired -> validator.remove(check)
+                    else -> {
+                        validator.add(check)
+                        check.recheck()
+                    }
+                }
             }
         }
 
