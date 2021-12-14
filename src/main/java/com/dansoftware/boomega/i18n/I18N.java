@@ -118,6 +118,7 @@ public class I18N {
     private static void registerBasePacks() {
         putPack(Locale.ENGLISH, new EnglishLanguagePack());
         putPack(new Locale("hu"), new HungarianLanguagePack());
+        putPack(new Locale("tr_TR"), new TurkishLanguagePack());
     }
 
     private static void registerPluginPacks() {
