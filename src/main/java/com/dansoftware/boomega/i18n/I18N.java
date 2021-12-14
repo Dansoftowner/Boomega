@@ -116,9 +116,8 @@ public class I18N {
     }
 
     private static void registerBasePacks() {
-        putPack(Locale.ENGLISH, new EnglishLanguagePack());
-        putPack(new Locale("hu"), new HungarianLanguagePack());
-        putPack(new Locale("tr_TR"), new TurkishLanguagePack());
+        for (var pack : internalLanguagePacks())
+            putPack(pack.getLocale(), pack);
     }
 
     private static void registerPluginPacks() {
@@ -143,5 +142,13 @@ public class I18N {
 
     public static Optional<Collator> getABCCollator(@Nullable Locale locale) {
         return getLanguagePackForLocale(locale).map(LanguagePack::getABCCollator);
+    }
+
+    private static List<InternalLanguagePack> internalLanguagePacks() {
+        return List.of(
+                new EnglishLanguagePack(),
+                new HungarianLanguagePack(),
+                new TurkishLanguagePack()
+        );
     }
 }
