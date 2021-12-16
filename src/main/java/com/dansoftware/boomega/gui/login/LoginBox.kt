@@ -125,13 +125,15 @@ class LoginBox(
     private fun buildDatabaseChooser() = DatabaseCombo(preferences, databaseTracker).apply {
         loginForm.bind(
             Bindings.createObjectBinding({
-                loginFormCache.get(selectedItem?.provider) {
-                    @Suppress("UNCHECKED_CAST")
-                    selectedItem?.provider?.buildUILoginForm(
-                        context,
-                        selectedItemProperty() as ReadOnlyObjectProperty<DatabaseMeta>,
-                        emptyMap() // TODO: database options
-                    )
+                selectedItem?.provider?.let {
+                    loginFormCache.get(it) {
+                        @Suppress("UNCHECKED_CAST")
+                        selectedItem?.provider?.buildUILoginForm(
+                            context,
+                            selectedItemProperty() as ReadOnlyObjectProperty<DatabaseMeta>,
+                            emptyMap() // TODO: database options
+                        )
+                    }
                 }
             }, selectionModel.selectedItemProperty())
         )

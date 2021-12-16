@@ -22,7 +22,6 @@ import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.database.api.RegistrationForm
-import com.dansoftware.boomega.database.bmdb.BMDBProvider
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.asObjectProperty
@@ -33,7 +32,6 @@ import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
-import javafx.beans.property.SimpleObjectProperty
 import javafx.geometry.Insets
 import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
@@ -56,9 +54,11 @@ class DatabaseCreatorForm(
     private val registrationForm: ObjectProperty<RegistrationForm<*>?> =
         Bindings.createObjectBinding(
             {
-                registrationFormCache.get(databaseType.get()) {
-                    // TODO: database options
-                    databaseType.get()?.buildUIRegistrationForm(context, emptyMap())
+                databaseType.get()?.let {
+                    registrationFormCache.get(it) {
+                        // TODO: database options
+                        databaseType.get()?.buildUIRegistrationForm(context, emptyMap())
+                    }
                 }
             },
             databaseType
