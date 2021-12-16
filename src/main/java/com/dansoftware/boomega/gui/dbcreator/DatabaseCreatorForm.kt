@@ -22,11 +22,15 @@ import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.database.api.RegistrationForm
+import com.dansoftware.boomega.database.bmdb.BMDBProvider
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.asObjectProperty
 import com.dansoftware.boomega.gui.util.not
 import com.dansoftware.boomega.gui.util.padding
 import com.dansoftware.boomega.i18n.i18n
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -35,6 +39,7 @@ import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.StackPane
+import java.util.concurrent.TimeUnit
 
 class DatabaseCreatorForm(
     private val context: Context,
@@ -42,16 +47,22 @@ class DatabaseCreatorForm(
     private val databaseType: ObjectProperty<DatabaseProvider<*>>
 ) : BorderPane() {
 
+    private val registrationFormCache: Cache<DatabaseProvider<*>, RegistrationForm<*>> =
+        Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .maximumSize(10)
+            .build()
+
     private val registrationForm: ObjectProperty<RegistrationForm<*>?> =
-        SimpleObjectProperty<RegistrationForm<*>?>().apply {
-            bind(
-                Bindings.createObjectBinding(
+        Bindings.createObjectBinding(
+            {
+                registrationFormCache.get(databaseType.get()) {
                     // TODO: database options
-                    { databaseType.get()?.buildUIRegistrationForm(context, emptyMap()) },
-                    databaseType
-                )
-            )
-        }
+                    databaseType.get()?.buildUIRegistrationForm(context, emptyMap())
+                }
+            },
+            databaseType
+        ).asObjectProperty()
 
     var createdDatabase: DatabaseMeta? = null
         private set

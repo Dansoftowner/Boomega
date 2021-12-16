@@ -59,8 +59,7 @@ class MySQLRegistrationForm(
     override val persistable: ObservableBooleanValue =
         host.isNotEmpty.and(port.isNotEmpty).and(databaseName.isNotEmpty)
 
-    override val node: Node
-        get() = Grid()
+    override val node: Node = Grid()
 
     private inner class Grid : GridPane() {
 

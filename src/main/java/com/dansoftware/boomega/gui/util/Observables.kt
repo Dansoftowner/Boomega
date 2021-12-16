@@ -23,12 +23,11 @@ package com.dansoftware.boomega.gui.util
 
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
-import javafx.beans.value.ObservableBooleanValue
-import javafx.beans.value.ObservableStringValue
-import javafx.beans.value.ObservableValue
-import javafx.beans.value.ObservableValueBase
+import javafx.beans.value.*
 import javafx.collections.ObservableList
 
 inline fun <T> constantObservable(crossinline value: () -> T): ObservableValue<T> =
@@ -50,4 +49,9 @@ inline fun ObservableBooleanValue.not(): BooleanBinding =
 inline fun ObservableStringValue.asStringProperty(): StringProperty =
     SimpleStringProperty().apply {
         bind(this@asStringProperty)
+    }
+
+inline fun <O> ObservableObjectValue<O>.asObjectProperty(): ObjectProperty<O> =
+    SimpleObjectProperty<O>().apply {
+        bind(this@asObjectProperty)
     }
