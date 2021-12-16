@@ -159,3 +159,15 @@ inline infix fun <T : Node> T.bindFullVisibilityTo(to: ObservableBooleanValue) {
     visibleProperty().bind(to)
     managedProperty().bind(to)
 }
+
+/**
+ * A [TextField] implementation accepts only numbers
+ */
+class NumberTextField : TextField() {
+    init {
+        textProperty().addListener { _, oldValue, newValue ->
+            if (newValue.isNotEmpty() && newValue.matches("\\d+".toRegex()).not())
+                textProperty().set(oldValue)
+        }
+    }
+}

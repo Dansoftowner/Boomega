@@ -23,6 +23,7 @@ import com.dansoftware.boomega.database.api.RegistrationForm
 import com.dansoftware.boomega.database.mysql.MySQLMeta
 import com.dansoftware.boomega.database.mysql.MySQLVersion
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.NumberTextField
 import com.dansoftware.boomega.gui.util.selectedItemProperty
 import com.dansoftware.boomega.gui.util.validateImmediate
 import com.dansoftware.boomega.i18n.i18n
@@ -98,11 +99,12 @@ class MySQLRegistrationForm(
             }
         }
 
-        private fun buildPortField() = TextField().apply {
+        private fun buildPortField() = NumberTextField().apply {
             setConstraints(this, 1, 1)
             Bindings.bindBidirectional(port, textProperty())
             promptText = i18n("database.creator.sql.port.prompt")
             minHeight = 35.0
+
             validateImmediate(validator, { isValidPortNumber(it).not() }) {
                 it.warn("Invalid port!") // TODO: i18n
             }
