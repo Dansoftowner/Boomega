@@ -56,17 +56,17 @@ class LoginBox(
     private val databaseLoginListener: DatabaseLoginListener
 ) : VBox(10.0), DatabaseTracker.Observer {
 
-    private val loginIsInProcess: BooleanProperty = SimpleBooleanProperty()
-    private val itemSelected: BooleanProperty = SimpleBooleanProperty()
-    private val remember: BooleanProperty = SimpleBooleanProperty()
-    private val loginForm: ObjectProperty<LoginForm<*>?> = SimpleObjectProperty()
-    private val databaseChooser: DatabaseCombo = buildDatabaseChooser()
-
     private val loginFormCache: Cache<DatabaseProvider<*>, LoginForm<*>> =
         Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.MINUTES)
             .maximumSize(10)
             .build()
+
+    private val loginIsInProcess: BooleanProperty = SimpleBooleanProperty()
+    private val itemSelected: BooleanProperty = SimpleBooleanProperty()
+    private val remember: BooleanProperty = SimpleBooleanProperty()
+    private val loginForm: ObjectProperty<LoginForm<*>?> = SimpleObjectProperty()
+    private val databaseChooser: DatabaseCombo = buildDatabaseChooser()
 
     var selectedDatabase: DatabaseMeta?
         get() = databaseChooser.selectedItem
