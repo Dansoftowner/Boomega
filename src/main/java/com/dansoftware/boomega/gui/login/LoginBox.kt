@@ -20,10 +20,7 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.api.Database
-import com.dansoftware.boomega.database.api.DatabaseConstructionException
-import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.api.LoginForm
+import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
@@ -33,6 +30,8 @@ import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import javafx.application.Platform.runLater
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
@@ -48,6 +47,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.TimeUnit
 
 class LoginBox(
     private val context: Context,
@@ -61,6 +61,12 @@ class LoginBox(
     private val remember: BooleanProperty = SimpleBooleanProperty()
     private val loginForm: ObjectProperty<LoginForm<*>?> = SimpleObjectProperty()
     private val databaseChooser: DatabaseCombo = buildDatabaseChooser()
+
+    private val loginFormCache: Cache<DatabaseProvider<*>, LoginForm<*>> =
+        Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .maximumSize(10)
+            .build()
 
     var selectedDatabase: DatabaseMeta?
         get() = databaseChooser.selectedItem
@@ -119,12 +125,14 @@ class LoginBox(
     private fun buildDatabaseChooser() = DatabaseCombo(preferences, databaseTracker).apply {
         loginForm.bind(
             Bindings.createObjectBinding({
-                @Suppress("UNCHECKED_CAST")
-                selectedItem?.provider?.buildUILoginForm(
-                    context,
-                    selectedItemProperty() as ReadOnlyObjectProperty<DatabaseMeta>,
-                    emptyMap() // TODO: database options
-                )
+                loginFormCache.get(selectedItem?.provider) {
+                    @Suppress("UNCHECKED_CAST")
+                    selectedItem?.provider?.buildUILoginForm(
+                        context,
+                        selectedItemProperty() as ReadOnlyObjectProperty<DatabaseMeta>,
+                        emptyMap() // TODO: database options
+                    )
+                }
             }, selectionModel.selectedItemProperty())
         )
         itemSelected.bind(selectionModel.selectedItemProperty().isNotNull)
@@ -198,7 +206,7 @@ class LoginBox(
 
         val baseSize = children.size
         loginForm.addListener { _, _, newForm ->
-            logger.debug("Neww Login form")
+            logger.debug("New Login form")
 
             if (baseSize < children.size)
                 children.removeAt(1)
