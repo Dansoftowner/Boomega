@@ -153,7 +153,7 @@ inline fun <T : Label> T.textAlignment(value: TextAlignment) = apply {
 }
 
 /**
- * Binds the node's [Node.visibleProperty] and [Node.disableProperty] to the given observable value
+ * Binds the node's [Node.visibleProperty] and [Node.managedProperty] to the given observable value
  */
 inline infix fun <T : Node> T.bindFullVisibilityTo(to: ObservableBooleanValue) {
     visibleProperty().bind(to)
