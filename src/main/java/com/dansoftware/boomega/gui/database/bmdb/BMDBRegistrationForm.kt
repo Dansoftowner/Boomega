@@ -24,10 +24,7 @@ import com.dansoftware.boomega.database.api.RegistrationForm
 import com.dansoftware.boomega.database.bmdb.BMDBMeta
 import com.dansoftware.boomega.database.bmdb.BMDBProvider
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.util.SpaceValidator
-import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.gui.util.validateImmediate
-import com.dansoftware.boomega.gui.util.window
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.hasValidPath
 import javafx.beans.property.BooleanProperty
@@ -44,12 +41,10 @@ import javafx.stage.DirectoryChooser
 import net.synedra.validatorfx.Validator
 import java.io.File
 
-// TODO: validation not working properly (username/passwords)
-
-class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any>) :
-    RegistrationForm<BMDBMeta>(context, options) {
-
-    private val validator = Validator()
+class BMDBRegistrationForm(
+    context: Context,
+    options: Map<DatabaseOption<*>, Any>
+) : RegistrationForm<BMDBMeta>(context, options) {
 
     private val databaseName: StringProperty = SimpleStringProperty()
     private val databaseDir: StringProperty = SimpleStringProperty()
@@ -57,23 +52,25 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
     private val username: StringProperty = SimpleStringProperty()
     private val password: StringProperty = SimpleStringProperty()
     private val passwordRepeat: StringProperty = SimpleStringProperty()
-    private val fullPath: StringProperty = SimpleStringProperty().apply {
-        bind(
-            databaseDir.concat(File.separator)
-                .concat(databaseName)
-                .concat(".")
-                .concat(System.getProperty("boomega.file.extension"))
-        )
-    }
+    private val fullPath: StringProperty =
+        databaseDir.concat(File.separator)
+            .concat(databaseName)
+            .concat(".")
+            .concat(System.getProperty("boomega.file.extension"))
+            .asStringProperty()
 
     private val databaseFile get() = File(fullPath.get())
-
     private val databaseDirFile: File get() = File(databaseDir.get())
 
-    override val persistable: ObservableBooleanValue
-        get() = validator.containsErrorsProperty().not()
+    private val generalValidator = Validator()
+    private val credentialsValidator = Validator()
 
-    override val node: Node get() = Grid()
+    override val persistable: ObservableBooleanValue
+        get() = generalValidator.containsErrorsProperty()
+            .or(credentialsValidator.containsErrorsProperty().and(authentication))
+            .not()
+
+    override val node: Node = Grid()
 
     override fun registrate(): BMDBMeta {
         databaseDirFile.mkdirs()
@@ -85,7 +82,6 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
         BMDBProvider.getDatabase(meta, credentials, emptyMap()).close() // TODO: database options
         return meta
     }
-
 
     private inner class Grid : GridPane() {
 
@@ -111,11 +107,6 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             buildPasswordInputs()
         }
 
-        private fun buildSeparator(row: Int) = Separator().apply {
-            setRowIndex(this, row)
-            setColumnSpan(this, 3)
-        }
-
         private fun buildLabel(i18n: String, column: Int, row: Int) = Label(i18n(i18n)).apply {
             setConstraints(this, column, row)
         }
@@ -126,7 +117,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             databaseName.bind(textProperty())
             minHeight = 35.0
             textFormatter = SpaceValidator()
-            validateImmediate(validator) { it, _ ->
+            validateImmediate(generalValidator) { it, _ ->
                 when {
                     databaseName.get().isEmpty() -> it.error(i18n("database.creator.missing_name.title"))
                     databaseFile.exists() -> it.error(i18n("database.creator.file_already_exists.title"))
@@ -141,7 +132,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             text = System.getProperty("boomega.dir.default.path");
             databaseDir.bindBidirectional(textProperty())
             textProperty().bindBidirectional(databaseDir)
-            validateImmediate(validator) { it, _ ->
+            validateImmediate(generalValidator) { it, _ ->
                 when {
                     databaseDirFile.hasValidPath.not() -> it.error(i18n("database.creator.invalid_dir.title"))
                     databaseDir.get().isBlank() -> it.error(i18n("database.creator.missing_dir.title"))
@@ -224,7 +215,7 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
         }
 
         private fun buildPasswordValidation(passwordField: TextField, repeatField: TextField) {
-            val check = validator.createCheck()
+            credentialsValidator.createCheck()
                 .dependsOn("pswd", passwordField.textProperty())
                 .dependsOn("rpswd", repeatField.textProperty())
                 .decorates(passwordField)
@@ -241,19 +232,10 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
                     }
                 }
                 .immediate()
-            authentication.addListener { _, _, isRequired ->
-                when {
-                    !isRequired -> validator.remove(check)
-                    else -> {
-                        validator.add(check)
-                        check.recheck()
-                    }
-                }
-            }
         }
 
         private fun buildUsernameValidation(usernameField: TextField) {
-            val check = validator.createCheck()
+            credentialsValidator.createCheck()
                 .dependsOn("usrname", usernameField.textProperty())
                 .decorates(usernameField)
                 .withMethod {
@@ -264,15 +246,6 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
                     }
                 }
                 .immediate()
-            authentication.addListener { _, _, isRequired ->
-                when {
-                    !isRequired -> validator.remove(check)
-                    else -> {
-                        validator.add(check)
-                        check.recheck()
-                    }
-                }
-            }
         }
 
         private fun openDirectory() {
@@ -281,70 +254,4 @@ class BMDBRegistrationForm(context: Context, options: Map<DatabaseOption<*>, Any
             }
         }
     }
-
-    // TODO: remove comment
-    /*private class Validation(
-        private val condition: () -> Boolean,
-        private val exception: Exception
-    ) {
-        fun validate() {
-            if (condition()) throw exception
-        }
-    }
-
-    private val validations by lazy {
-        listOf(
-            Validation(
-                { databaseName.get()?.isEmpty() ?: false },
-                DatabaseConstructionException(
-                    i18n("database.creator.missing_name.title"),
-                    i18n("database.creator.missing_name.msg")
-                )
-            ),
-            Validation(
-                { databaseDir.get()?.isBlank() ?: true },
-                DatabaseConstructionException(
-                    i18n("database.creator.missing_dir.title"),
-                    i18n("database.creator.missing_dir.msg")
-                )
-            ),
-            Validation(
-                { databaseDirFile.hasValidPath.not() },
-                DatabaseConstructionException(
-                    i18n("database.creator.invalid_dir.title"),
-                    i18n("database.creator.invalid_dir.msg", databaseDirFile)
-                )
-            ),
-            Validation(
-                databaseFile::exists,
-                DatabaseConstructionException(
-                    i18n("database.creator.file_already_exists.title"),
-                    i18n("database.creator.file_already_exists.msg", databaseFile.shortenedPath(1))
-                )
-            ),
-            Validation(
-                { authentication.get() && username.get()?.isBlank() ?: true },
-                DatabaseConstructionException(
-                    i18n("database.creator.empty_user_name.title"),
-                    i18n("database.creator.empty_user_name.msg")
-                )
-            ),
-            Validation(
-                { authentication.get() && password.get()?.isBlank() ?: true },
-                DatabaseConstructionException(
-                    i18n("database.creator.empty_password.title"),
-                    i18n("database.creator.empty_password.msg")
-                )
-            ),
-            Validation(
-                { authentication.get() && password.get() != passwordRepeat.get() },
-                DatabaseConstructionException(
-                    i18n("database.creator.passwords_not_match.title"),
-                    i18n("database.creator.passwords_not_match.msg")
-                )
-            )
-        )
-    }*/
-
-
 }
