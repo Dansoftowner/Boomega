@@ -36,30 +36,40 @@ import java.io.File
  */
 object BMDBProvider : DatabaseProvider<BMDBMeta> {
 
-    // TODO: i18n
-
+    /**
+     * Represents the username credential value.
+     */
     val USERNAME_FIELD = DatabaseField(
         valueType = String::class.java,
         id = "usrnm",
-        name = "Username"
+        name = i18n("credentials.username")
     )
 
+    /**
+     * Represents the password credential value.
+     */
     val PASSWORD_FIELD = DatabaseField(
         valueType = String::class.java,
         id = "psswrd",
-        name = "Password"
+        name = i18n("credentials.password")
     )
 
+    /**
+     * Represents the "compressed" configuration
+     */
     val COMPRESSED = DatabaseOption(
         id = "cmprsd",
-        name = "Compress",
+        name = i18n("database.bmdb.option.compress"),
         type = Boolean::class.java,
         defaultValue = true
     )
 
+    /**
+     * Represents the "auto commit buffer size" configuration
+     */
     val AUTO_COMMIT_BUFFER_SIZE = DatabaseOption(
         id = "bfs",
-        name = "Auto commit buffer size",
+        name = i18n("database.bmdb.option.buffer"),
         type = Int::class.java,
         defaultValue = 1024
     )

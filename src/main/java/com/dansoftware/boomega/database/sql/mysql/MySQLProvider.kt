@@ -24,6 +24,7 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.mysql.MySQLLoginForm
 import com.dansoftware.boomega.gui.database.mysql.MySQLRegistrationForm
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.scene.Node
 import org.hibernate.HibernateException
@@ -34,24 +35,32 @@ import org.hibernate.service.spi.ServiceException
  */
 object MySQLProvider : DatabaseProvider<MySQLMeta> {
 
-    // TODO: i18n
-
+    /**
+     * Represents the mysql-version value can be supplied
+     * on authentication
+     */
     val MYSQL_VERSION_FIELD = DatabaseField(
         valueType = MySQLVersion::class.java,
         id = "mysql.version",
-        name = "MySQL verison"
+        name = i18n("database.mysql.version")
     )
 
+    /**
+     * Represents the username credential value
+     */
     val USERNAME_FIELD = DatabaseField(
         valueType = String::class.java,
         id = "usernm",
-        name = "Username"
+        name = i18n("credentials.username")
     )
 
+    /**
+     * Represents the password credential value
+     */
     val PASSWORD_FIELD = DatabaseField(
         valueType = String::class.java,
         id = "psswrd",
-        name = "Password"
+        name = i18n("credentials.password")
     )
 
     override val name: String
@@ -63,7 +72,6 @@ object MySQLProvider : DatabaseProvider<MySQLMeta> {
     override val availableOptions: List<DatabaseOption<*>>
         get() = emptyList()
 
-    // TODO
     override val fields: List<DatabaseField<*>>
         get() = listOf(
             MYSQL_VERSION_FIELD,
