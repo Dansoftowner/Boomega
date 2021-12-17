@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.database.mysql
+package com.dansoftware.boomega.database.sql.mysql
 
 import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.database.sql.SQLDatabase

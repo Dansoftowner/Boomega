@@ -20,8 +20,8 @@ package com.dansoftware.boomega.gui.database.mysql
 
 import com.dansoftware.boomega.database.api.DatabaseOption
 import com.dansoftware.boomega.database.api.RegistrationForm
-import com.dansoftware.boomega.database.mysql.MySQLMeta
-import com.dansoftware.boomega.database.mysql.MySQLVersion
+import com.dansoftware.boomega.database.sql.mysql.MySQLMeta
+import com.dansoftware.boomega.database.sql.mysql.MySQLVersion
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.NumberTextField
 import com.dansoftware.boomega.gui.util.selectedItemProperty

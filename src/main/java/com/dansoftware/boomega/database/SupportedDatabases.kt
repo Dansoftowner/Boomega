@@ -20,7 +20,7 @@ package com.dansoftware.boomega.database
 
 import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.database.bmdb.BMDBProvider
-import com.dansoftware.boomega.database.mysql.MySQLProvider
+import com.dansoftware.boomega.database.sql.mysql.MySQLProvider
 import com.dansoftware.boomega.util.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

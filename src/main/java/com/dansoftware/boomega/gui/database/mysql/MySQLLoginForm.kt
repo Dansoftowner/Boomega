@@ -22,8 +22,8 @@ import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseOption
 import com.dansoftware.boomega.database.api.LoginForm
-import com.dansoftware.boomega.database.mysql.MySQLMeta
-import com.dansoftware.boomega.database.mysql.MySQLProvider
+import com.dansoftware.boomega.database.sql.mysql.MySQLMeta
+import com.dansoftware.boomega.database.sql.mysql.MySQLProvider
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.i18n
 import javafx.beans.binding.Bindings
