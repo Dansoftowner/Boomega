@@ -24,6 +24,7 @@ import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.bmdb.BMDBProvider
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
@@ -164,12 +165,18 @@ open class ActivityLauncher(
                 logger.debug("Didn't found GUI for database: '{}'", meta.identifier)
                 onNewDatabaseAdded(meta)
 
-                val database = constructDatabase(meta) {
+                val fallbackDatabaseConstruction = {
                     Platform.runLater {
                         showQuickLoginActivity(meta, loginListener = {
                             showDatabaseActivity(it)
                         })
                     }
+                }
+
+                val database = when {
+                    // TODO: allow somehow to configure databases where anonymous login is allowed
+                    meta.provider.equals(BMDBProvider) -> constructDatabase(meta) { fallbackDatabaseConstruction() }
+                    else -> fallbackDatabaseConstruction().let { null }
                 }
 
                 database?.let {
