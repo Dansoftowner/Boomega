@@ -59,9 +59,14 @@ class LoginDataDeserializer : JsonDeserializer<LoginData> {
     }
 
     private fun deserializeDatabases(jsonArray: JsonArray?): List<DatabaseMeta> {
-        return jsonArray?.map(JsonElement::getAsJsonObject)?.map {
-            val provider = getDatabaseProvider(it[DATABASE_PROVIDER].asString)
-            provider!!.getMeta(it[DATABASE_URL].asString)
+        return jsonArray?.map(JsonElement::getAsJsonObject)?.mapNotNull {
+            try {
+                val provider = getDatabaseProvider(it[DATABASE_PROVIDER].asString)
+                provider!!.getMeta(it[DATABASE_URL].asString)
+            } catch (e: RuntimeException) {
+                logger.error("Couldn't construct database-meta", e)
+                null
+            }
         } ?: emptyList()
     }
 
