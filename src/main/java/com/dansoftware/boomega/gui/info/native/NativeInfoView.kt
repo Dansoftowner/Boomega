@@ -18,12 +18,20 @@
 
 package com.dansoftware.boomega.gui.info.native
 
+import com.dansoftware.boomega.gui.control.HighlightableLabel
+import com.dansoftware.boomega.gui.util.addRow
+import com.dansoftware.boomega.gui.util.colspan
 import javafx.geometry.Insets
 import javafx.scene.control.Label
+import javafx.scene.control.Separator
 import javafx.scene.layout.GridPane
 import oshi.SystemInfo
+import oshi.software.os.OperatingSystem
 
 class NativeInfoView : GridPane() {
+
+    private val systemInfo = SystemInfo()
+    private val OperatingSystem.currentProcess get() = getProcess(processId)
 
     init {
         padding = Insets(10.0)
@@ -31,14 +39,52 @@ class NativeInfoView : GridPane() {
     }
 
     private fun buildUI() {
-        children.addAll(
-            Label("PID: "),
-            buildPIDValueLabel()
-        )
+        addRow(Label("PID: "), buildPIDLabel())
+        addRow(Label("UID: "), buildUIDLabel())
+        addRow(Label("PRI: "), buildPRILabel())
+        addRow(Label("(Owner)Username: "), buildUsernameLabel())
+        addRow(Label("Elevated: "), buildElevatedLabel())
+        addRow(Label("Command line: "), buildCommandLabel())
+        addRow(Separator().colspan(2))
+        addRow(Label("OS Manufacturer: "), buildOSManufacturerLabel())
+        addRow(Label("Bitness: "), buildBitnessLabel())
     }
 
-    private fun buildPIDValueLabel() = Label().apply {
-        text = SystemInfo().operatingSystem.processId.toString()
-        setColumnIndex(this, 1)
+    private fun buildPIDLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.processId.toString()
     }
+
+    private fun buildUIDLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.currentProcess.userID
+    }
+
+    private fun buildPRILabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.currentProcess.parentProcessID.toString()
+    }
+
+    private fun buildElevatedLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.isElevated.toString()
+    }
+
+    private fun buildCommandLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.currentProcess.commandLine
+    }
+
+    private fun buildUsernameLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.currentProcess.user
+    }
+
+    private fun buildOSManufacturerLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.manufacturer.toString()
+    }
+
+    private fun buildBitnessLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.bitness.toString()
+    }
+
+    private fun buildFileSystemLabel() = Label().apply {
+//        text = systemInfo.operatingSystem.
+    }
+
+
 }
