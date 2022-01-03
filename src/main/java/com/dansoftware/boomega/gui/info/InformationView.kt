@@ -21,18 +21,19 @@ package com.dansoftware.boomega.gui.info
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.info.dependency.DependencyViewerActivity
+import com.dansoftware.boomega.gui.info.native.NativeInfoWindow
+import com.dansoftware.boomega.gui.util.hgrow
 import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.padding
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.getDisplayName
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.SystemBrowser
 import javafx.geometry.Insets
 import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.control.Button
-import javafx.scene.control.Label
-import javafx.scene.control.Separator
-import javafx.scene.control.Tooltip
+import javafx.scene.control.*
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -42,12 +43,6 @@ import jfxtras.styles.jmetro.JMetroStyleClass
 import java.util.*
 
 class InformationView(val context: Context) : VBox(5.0) {
-
-    companion object {
-        const val GITHUB_REPO_URL = "https://github.com/Dansoftowner/Boomega"
-        const val LICENSE_URL = "https://github.com/Dansoftowner/Boomega/blob/master/LICENSE"
-        const val LICENSE_NAME = "GNU General Public License v3.0"
-    }
 
     init {
         styleClass.add("information-view")
@@ -62,9 +57,9 @@ class InformationView(val context: Context) : VBox(5.0) {
         children.add(Separator())
         buildJavaInfo()
         children.add(Separator())
-        buildLogInfo()
+        children.add(buildLogInfo())
         children.add(Separator())
-        buildBottom()
+        children.add(buildBottom())
     }
 
     private fun buildProgramInfo() {
@@ -110,62 +105,69 @@ class InformationView(val context: Context) : VBox(5.0) {
         children.add(KeyValuePair("java.home", System.getProperty("java.home")))
         children.add(KeyValuePair("java.vm", System.getProperty("java.vm.name").let { vmName ->
             System.getProperty("java.vm.vendor").let {
-                if (it?.isBlank()?.not() ?: false) {
-                    "$vmName ${I18N.getValues().getString("java.vm.by")} $it"
-                } else null
+                if (it?.isBlank()?.not() ?: false) "$vmName ${i18n("java.vm.by")} $it" else null
             } ?: vmName
         }))
         children.add(KeyValuePair("java.version", System.getProperty("java.version")))
         children.add(KeyValuePair("javafx.version", System.getProperty("javafx.version")))
     }
 
-    private fun buildLogInfo() {
-        children.add(KeyValuePair("info.logs.loc", System.getProperty("log.file.path.full")))
-    }
+    private fun buildLogInfo() =
+        KeyValuePair("info.logs.loc", System.getProperty("log.file.path.full"))
 
     private fun buildBottom() =
         StackPane(
             Group(
                 HBox(10.0).apply {
-                    children.add(buildGithubButton())
-                    children.add(buildDependencyButton())
+                    children.addAll(
+                        buildGithubButton(),
+                        buildDependencyButton(),
+                        buildNativeInfoButton()
+                    )
                 }
             )
-        ).also { children.add(it) }
+        )
 
-    private fun buildDependencyButton() =
-        Button(
-            I18N.getValues().getString("info.show.dependencies"),
-            icon("code-braces-icon")
-        ).also {
-            it.setOnAction {
-                DependencyViewerActivity(this.context).show()
-            }
+    private fun buildDependencyButton() = Button().apply {
+        text = i18n("info.show.dependencies")
+        graphic = icon("code-braces-icon")
+        setOnAction {
+            DependencyViewerActivity(context).show()
         }
+    }
 
-    private fun buildGithubButton() =
-        Button(
-            I18N.getValues().getString("info.show.github"),
-            icon("github-icon")
-        ).also {
-            it.setOnAction {
-                SystemBrowser.browse(GITHUB_REPO_URL)
-            }
+    private fun buildGithubButton() = Button().apply {
+        text = i18n("info.show.github")
+        graphic = icon("github-icon")
+        setOnAction {
+            SystemBrowser.browse(GITHUB_REPO_URL)
         }
+    }
+
+    private fun buildNativeInfoButton() = Button().apply {
+        contentDisplay = ContentDisplay.GRAPHIC_ONLY
+        tooltip = Tooltip("Native info")
+        graphic = icon("os-icon")
+        setOnAction {
+            NativeInfoWindow().show()
+        }
+    }
 
     private class KeyValuePair(i18n: String, value: Node) : HBox() {
 
-        constructor(i18n: String, value: String?) : this(i18n, HighlightableLabel(value).also {
-            setHgrow(it, Priority.ALWAYS)
-        })
-
         init {
-            children.add(Label(I18N.getValues().getString(i18n)))
-            children.add(Label(":").also {
-                it.padding = Insets(0.0, 5.0, 0.0, 0.0)
-            })
+            children.add(Label(i18n(i18n)))
+            children.add(Label(":").padding(Insets(0.0, 5.0, 0.0, 0.0)))
             children.add(value)
         }
 
+        constructor(i18n: String, value: String?) : this(i18n, HighlightableLabel(value).hgrow(Priority.ALWAYS))
+
+    }
+
+    companion object {
+        const val GITHUB_REPO_URL = "https://github.com/Dansoftowner/Boomega"
+        const val LICENSE_URL = "https://github.com/Dansoftowner/Boomega/blob/master/LICENSE"
+        const val LICENSE_NAME = "GNU General Public License v3.0"
     }
 }

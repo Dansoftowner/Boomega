@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.info
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.TitledOverlayBox
 import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import javafx.geometry.Insets
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
@@ -31,21 +31,21 @@ import javafx.scene.input.ClipboardContent
 
 class InformationViewOverlay(context: Context) :
     TitledOverlayBox(
-        I18N.getValues().getString("info.view.title"),
+        i18n("info.view.title"),
         icon("info-icon"),
         InformationView(context),
         resizableH = true,
         resizableV = false,
-        Button().also {
-            it.contentDisplay = ContentDisplay.GRAPHIC_ONLY
-            it.graphic = icon("copy-icon")
-            it.tooltip = Tooltip(I18N.getValues().getString("info.copy"))
-            it.setOnAction {
+        Button().apply {
+            padding = Insets(0.0)
+            contentDisplay = ContentDisplay.GRAPHIC_ONLY
+            graphic = icon("copy-icon")
+            tooltip = Tooltip(i18n("info.copy"))
+            setOnAction {
                 ClipboardContent().also { clipboardContent ->
                     clipboardContent.putString(getApplicationInfoCopy())
                     Clipboard.getSystemClipboard().setContent(clipboardContent)
                 }
             }
-            it.padding = Insets(0.0)
         }
     )

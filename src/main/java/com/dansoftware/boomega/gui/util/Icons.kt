@@ -20,6 +20,7 @@
 
 package com.dansoftware.boomega.gui.util
 
+import com.dansoftware.boomega.util.os.OsInfo
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
@@ -123,11 +124,20 @@ private val iconPack = mapOf<String, () -> Node>(
     "bottom-align-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.FORMAT_ALIGN_BOTTOM),
     "maximize-window-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.WINDOW_MAXIMIZE),
     "bmdb-icon" to fun() = ImageView(),
-    "mysql-icon" to fun() = ImageView()
+    "mysql-icon" to fun() = ImageView(),
+    "windows-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.WINDOWS),
+    "linux-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.LINUX),
+    "macos-icon" to fun() = MaterialDesignIconView(MaterialDesignIcon.DESKTOP_MAC),
+    "os-icon" to fun() = osIcon()
 )
 
-fun icon(identifier: String) = (
-        iconPack[identifier]?.invoke() ?: Text().apply {
-            logger.error("Couldn't find icon for '{}'", identifier)
-        }
-).styleClass(identifier)
+fun icon(identifier: String) =
+    iconPack[identifier]?.invoke() ?: Text().apply {
+        logger.error("Couldn't find icon for '{}'", identifier)
+    }.styleClass(identifier)
+
+private fun osIcon(): Node = when {
+    OsInfo.isLinux() -> icon("linux-icon")
+    OsInfo.isMac() -> icon("macos-icon")
+    else -> icon("windows-icon")
+}
