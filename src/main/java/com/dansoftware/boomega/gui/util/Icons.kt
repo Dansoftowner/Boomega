@@ -131,10 +131,11 @@ private val iconPack = mapOf<String, () -> Node>(
     "os-icon" to fun() = osIcon()
 )
 
-fun icon(identifier: String) =
-    iconPack[identifier]?.invoke() ?: Text().apply {
-        logger.error("Couldn't find icon for '{}'", identifier)
-    }.styleClass(identifier)
+fun icon(identifier: String) = (
+        iconPack[identifier]?.invoke() ?: Text().apply {
+            logger.error("Couldn't find icon for '{}'", identifier)
+        }
+).styleClass(identifier)
 
 private fun osIcon(): Node = when {
     OsInfo.isLinux() -> icon("linux-icon")
