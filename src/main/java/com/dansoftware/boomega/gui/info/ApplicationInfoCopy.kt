@@ -9,9 +9,9 @@ internal fun getApplicationInfoCopy(): String =
     """Version: ${System.getProperty("boomega.version")}
        |${System.getProperty("boomega.build.info")} 
        ------
-       |OS: ${OsInfo.getName()}
-       |OS Version: ${OsInfo.getVersion()}
-       |OS Build: ${OsInfo.getBuildNumber()}
+       |OS: ${OsInfo.name}
+       |OS Version: ${OsInfo.version}
+       |OS Build: ${OsInfo.buildNumber}
        ------
        |Java VM: ${System.getProperty("java.vm.name")}
        |Java VM version: ${System.getProperty("java.vm.version")}

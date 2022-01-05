@@ -20,7 +20,6 @@ package com.dansoftware.boomega.util.os
 
 import oshi.PlatformEnum
 import oshi.SystemInfo
-import oshi.software.os.OSProcess
 
 /**
  * Provides utility methods for detecting the type of the particular operating system.
@@ -29,54 +28,48 @@ import oshi.software.os.OSProcess
  */
 @Suppress("unused")
 object OsInfo {
-    private val platformType: PlatformEnum
-    private val version: String
-    private val buildNumber: String
-    private val name: String
 
-    init {
-        val operatingSystem = SystemInfo().operatingSystem
-        val osVersionInfo = operatingSystem.versionInfo
+    private val systemInfo = SystemInfo()
+    private val os = systemInfo.operatingSystem
+    private val osVersionInfo = os.versionInfo
 
-        platformType = SystemInfo.getCurrentPlatform()
-        version = osVersionInfo.version
-        buildNumber = osVersionInfo.buildNumber
-        name = operatingSystem.family
-    }
-
-    // TODO: do these with lazy init
-
-    @JvmStatic
-    fun isWindows(): Boolean = hasType(PlatformEnum.WINDOWS)
-
-    @JvmStatic
-    fun isLinux(): Boolean = hasType(PlatformEnum.LINUX)
-
-    @JvmStatic
-    fun isMac(): Boolean = hasType(PlatformEnum.MACOS)
-
-    @JvmStatic
-    fun isWindows10(): Boolean = hasTypeAndVersion(PlatformEnum.WINDOWS, "10")
-
-    @JvmStatic
-    fun getName(): String = name
-
-    @JvmStatic
-    fun getVersion(): String = version
-
-    @JvmStatic
-    fun getBuildNumber(): String = buildNumber
-
-    @JvmStatic
-    fun getPlatformVersion(): String = version
-
-    @JvmStatic
-    fun getPlatformType(): PlatformEnum = platformType
+    @JvmStatic val platformType: PlatformEnum by lazy(SystemInfo::getCurrentPlatform)
+    @JvmStatic val version: String by lazy(osVersionInfo::getBuildNumber)
+    @JvmStatic val buildNumber: String by lazy(osVersionInfo::getBuildNumber)
+    @JvmStatic val name: String by lazy(os::getFamily)
+    @JvmStatic val isWindows: Boolean by lazy { hasType(PlatformEnum.WINDOWS) }
+    @JvmStatic val isLinux: Boolean by lazy { hasType(PlatformEnum.LINUX) }
+    @JvmStatic val isMacOS: Boolean by lazy { hasType(PlatformEnum.MACOS) }
+    @JvmStatic val isWindows10: Boolean by lazy { hasTypeAndVersion(PlatformEnum.WINDOWS, "10") }
 
     @JvmStatic
     fun hasTypeAndVersion(platformType: PlatformEnum, versionStarts: String): Boolean =
         hasType(platformType) && version.startsWith(versionStarts)
 
     @JvmStatic
-    fun hasType(platformType: PlatformEnum): Boolean = OsInfo.platformType == platformType
+    fun hasType(platformType: PlatformEnum): Boolean = this.platformType == platformType
+
+    @JvmStatic
+    @JvmName("isWin")
+    @Deprecated(
+        "Use the new isWindows property",
+        ReplaceWith("isWindows", "com.dansoftware.boomega.util.os.OsInfo.isWindows")
+    )
+    fun isWindows(): Boolean = isWindows
+
+    @JvmStatic
+    @JvmName("isLin")
+    @Deprecated(
+        message = "Use the new isLinux property",
+        ReplaceWith("isLinux", "com.dansoftware.boomega.util.os.OsInfo.isLinux")
+    )
+    fun isLinux(): Boolean = isLinux
+
+    @JvmStatic
+    @Deprecated(
+        message = "Use the new isMacOS property",
+        ReplaceWith("isMacOS", "com.dansoftware.boomega.util.os.OsInfo.isMacOS")
+    )
+    fun isMac(): Boolean = isMacOS
+
 }
