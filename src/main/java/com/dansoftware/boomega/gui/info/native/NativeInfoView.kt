@@ -27,6 +27,8 @@ import javafx.scene.control.Separator
 import javafx.scene.layout.GridPane
 import oshi.SystemInfo
 import oshi.software.os.OperatingSystem
+import java.text.SimpleDateFormat
+import java.util.*
 
 class NativeInfoView : GridPane() {
 
@@ -44,6 +46,8 @@ class NativeInfoView : GridPane() {
         addRow(Label("PRI: "), buildPRILabel())
         addRow(Label("(Owner)Username: "), buildUsernameLabel())
         addRow(Label("Elevated: "), buildElevatedLabel())
+        addRow(Label("Priority: "), buildPriorityLabel())
+        addRow(Label("Start time: "), buildStartTimeLabel())
         addRow(Label("Command line: "), buildCommandLabel())
         addRow(Separator().colspan(2))
         addRow(Label("OS Manufacturer: "), buildOSManufacturerLabel())
@@ -51,6 +55,7 @@ class NativeInfoView : GridPane() {
     }
 
     private fun buildPIDLabel() = HighlightableLabel().apply {
+        // TODO: clean this
         text = systemInfo.operatingSystem.processId.toString()
     }
 
@@ -64,6 +69,18 @@ class NativeInfoView : GridPane() {
 
     private fun buildElevatedLabel() = HighlightableLabel().apply {
         text = systemInfo.operatingSystem.isElevated.toString()
+    }
+
+    private fun buildPriorityLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.currentProcess.priority.toString()
+    }
+
+    private fun buildStartTimeLabel() = HighlightableLabel().apply {
+        text = systemInfo.operatingSystem.currentProcess.startTime.formatMillisToDate("yyyy-MM-DD HH:mm")
+    }
+
+    private fun buildBytesReadLabel() = HighlightableLabel().apply {
+        //text = systemInfo.operatingSystem.currentProcess
     }
 
     private fun buildCommandLabel() = HighlightableLabel().apply {
@@ -86,5 +103,8 @@ class NativeInfoView : GridPane() {
 //        text = systemInfo.operatingSystem.
     }
 
+    private fun Long.formatMillisToDate(format: String): String {
+        return SimpleDateFormat(format).format(Date(this))
+    }
 
 }

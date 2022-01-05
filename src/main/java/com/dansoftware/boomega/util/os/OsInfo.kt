@@ -20,6 +20,7 @@ package com.dansoftware.boomega.util.os
 
 import oshi.PlatformEnum
 import oshi.SystemInfo
+import oshi.software.os.OSProcess
 
 /**
  * Provides utility methods for detecting the type of the particular operating system.
@@ -42,6 +43,8 @@ object OsInfo {
         buildNumber = osVersionInfo.buildNumber
         name = operatingSystem.family
     }
+
+    // TODO: do these with lazy init
 
     @JvmStatic
     fun isWindows(): Boolean = hasType(PlatformEnum.WINDOWS)
