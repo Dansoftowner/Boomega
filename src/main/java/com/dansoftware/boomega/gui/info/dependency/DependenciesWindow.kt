@@ -37,5 +37,6 @@ class DependenciesWindow(dependencyList: List<DependencyInfo> = DependencyLister
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)
         isResizable = false
+        scene = Scene(DependencyTable(dependencyList))
     }
 }
