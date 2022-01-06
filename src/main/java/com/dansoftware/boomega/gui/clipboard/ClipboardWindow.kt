@@ -22,10 +22,10 @@ import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
 import javafx.stage.Window
 
-class ClipboardWindow(owner: Window?, view: ClipboardView) : BaseWindow<ClipboardView>(I18N.getValue("window.clipboard.title"), view) {
+class ClipboardWindow(owner: Window?) : BaseWindow<ClipboardView>(I18N.getValue("window.clipboard.title"), ClipboardView()) {
     init {
         width = 1200.0
         initOwner(owner)
-        setOnCloseRequest { view.releaseListeners() }
+        setOnCloseRequest { content!!.releaseListeners() }
     }
 }

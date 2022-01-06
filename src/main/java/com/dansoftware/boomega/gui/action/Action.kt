@@ -28,7 +28,7 @@ open class Action(
     private val i18nName: String,
     val iconStyleClass: String,
     val keyBinding: KeyBinding?,
-    private val operation: (Context, Preferences, DatabaseTracker) -> Unit
+    private val operation: (Context, Preferences, DatabaseTracker) -> Unit = { _, _, _ -> }
 ) {
 
     private var displayNameBacking: String? = null
@@ -39,7 +39,7 @@ open class Action(
     constructor(
         i18nName: String,
         iconStyleClass: String,
-        operation: (Context, Preferences, DatabaseTracker) -> Unit
+        operation: (Context, Preferences, DatabaseTracker) -> Unit = { _, _, _ -> }
     ) : this(i18nName, iconStyleClass, null, operation)
 
     open fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {

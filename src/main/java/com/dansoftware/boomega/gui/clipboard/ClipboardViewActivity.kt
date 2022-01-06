@@ -21,12 +21,13 @@ package com.dansoftware.boomega.gui.clipboard
 import javafx.stage.Window
 import javafx.stage.WindowEvent
 
+@Deprecated("", level = DeprecationLevel.ERROR)
 object ClipboardViewActivity {
     private var showing: Boolean = false
 
     fun show(owner: Window?) {
         if (showing.not()) {
-            ClipboardWindow(owner, ClipboardView()).apply {
+            ClipboardWindow(owner).apply {
                 addEventHandler(WindowEvent.WINDOW_HIDDEN) { showing = false }
                 show()
             }
