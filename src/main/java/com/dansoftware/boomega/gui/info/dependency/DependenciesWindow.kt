@@ -18,8 +18,10 @@
 
 package com.dansoftware.boomega.gui.info.dependency
 
+import com.dansoftware.boomega.gui.info.dependency.meta.DependencyInfo
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
+import javafx.scene.Scene
 import javafx.stage.Modality
 import javafx.stage.Window
 
@@ -28,8 +30,9 @@ import javafx.stage.Window
  *
  * @author Daniel Gyorffy
  */
-class DependenciesWindow(dependencyTable: DependencyTable, owner: Window?) :
-    BaseWindow<DependencyTable>(I18N.getValue("window.dependencies.title"), dependencyTable) {
+class DependenciesWindow(dependencyList: List<DependencyInfo> = DependencyLister.listDependencies(), owner: Window?) :
+    BaseWindow<DependencyTable>(I18N.getValue("window.dependencies.title"), DependencyTable(dependencyList)) {
+
     init {
         initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)

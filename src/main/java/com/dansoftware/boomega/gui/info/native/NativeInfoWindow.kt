@@ -21,12 +21,17 @@ package com.dansoftware.boomega.gui.info.native
 import javafx.scene.Scene
 import javafx.stage.Modality
 import javafx.stage.Stage
+import javafx.stage.Window
 
-class NativeInfoWindow : Stage() {
+/**
+ * @see NativeInfoView
+ */
+class NativeInfoWindow(owner: Window? = null) : Stage() {
     init {
         title = "Native info"
         scene = Scene(NativeInfoView())
         isResizable = false
+        initOwner(owner)
         initModality(Modality.APPLICATION_MODAL)
     }
 }
