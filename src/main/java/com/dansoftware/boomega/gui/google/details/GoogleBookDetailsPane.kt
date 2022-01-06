@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.google.details
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
-import com.dansoftware.boomega.gui.imgviewer.ImageViewerActivity
+import com.dansoftware.boomega.gui.imgviewer.ImageViewerWindow
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.putToSystemClipboard
@@ -160,9 +160,9 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                                 setOnMouseClicked { event ->
                                     when {
                                         event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
-                                            ImageViewerActivity(
-                                                Image(volume.get()?.volumeInfo?.imageLinks?.getLargest()),
-                                                context.contextWindow
+                                            ImageViewerWindow(
+                                                content = Image(volume.get()?.volumeInfo?.imageLinks?.getLargest()),
+                                                owner = context.contextWindow
                                             ).show()
                                     }
                                 }

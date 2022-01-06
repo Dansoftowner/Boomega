@@ -24,7 +24,6 @@ import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
-import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.util.action
@@ -60,15 +59,17 @@ class LoginToolbar(
 
     private fun buildInfoItem() = Button().apply {
         graphic = icon("info-icon")
-        setOnAction { InformationActivity(context).show() }
+        setOnAction { GlobalActions.OPEN_APP_INFO.invoke(context, preferences, databaseTracker) }
     }
 
     private fun buildQuickOptionsControl() = MenuButton().apply {
         contentDisplay = ContentDisplay.GRAPHIC_ONLY
         graphic = icon("settings-icon")
-        items.add(buildUpdateSearchMenuItem())
-        items.add(buildPluginManagerMenuItem())
-        items.add(buildSettingsMenuItem())
+        items.addAll(
+            buildUpdateSearchMenuItem(),
+            buildPluginManagerMenuItem(),
+            buildSettingsMenuItem()
+        )
     }
 
     private fun buildUpdateSearchMenuItem() =

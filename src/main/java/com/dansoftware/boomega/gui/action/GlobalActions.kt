@@ -26,7 +26,7 @@ import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
 import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorWindow
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
-import com.dansoftware.boomega.gui.info.InformationActivity
+import com.dansoftware.boomega.gui.info.InformationViewOverlay
 import com.dansoftware.boomega.gui.info.contact.ContactOverlay
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
@@ -215,7 +215,7 @@ object GlobalActions {
     @JvmField
     val OPEN_APP_INFO =
         Action("action.open_app_info", "info-icon") { context, _, _ ->
-            InformationActivity(context).show()
+            context.showOverlay(InformationViewOverlay(context), false)
         }
 
     /* <-------------------------------------------------------------------- */

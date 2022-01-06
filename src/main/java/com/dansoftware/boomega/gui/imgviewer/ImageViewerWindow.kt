@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.imgviewer
 
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
+import javafx.scene.image.Image
 import javafx.stage.Modality
 import javafx.stage.Window
 
@@ -28,8 +29,8 @@ import javafx.stage.Window
  *
  * @author Daniel Gyorffy
  */
-class ImageViewerWindow(owner: Window?, content: ImageViewer) :
-    BaseWindow<ImageViewer>(I18N.getValue("window.image.viewer"), content) {
+class ImageViewerWindow(content: Image, owner: Window?) :
+    BaseWindow<ImageViewer>(I18N.getValue("window.image.viewer"), ImageViewer(content)) {
 
     init {
         initOwner(owner)

@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.firsttime
 
 import com.dansoftware.boomega.config.Preferences
-import java.util.*
 
 /**
  * Used for showing [FirstTimeDialog] with a [FirstTimeDialogWindow].
@@ -27,9 +26,6 @@ import java.util.*
  * @author Daniel Gyorffy
  */
 class FirstTimeActivity(private val preferences: Preferences) {
-    init {
-        Objects.requireNonNull(preferences, "Preferences shouldn't be null")
-    }
 
     fun show() {
         val window = FirstTimeDialogWindow(FirstTimeDialog(preferences))
