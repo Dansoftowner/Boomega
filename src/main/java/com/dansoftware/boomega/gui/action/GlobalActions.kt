@@ -27,7 +27,8 @@ import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.info.InformationActivity
-import com.dansoftware.boomega.gui.info.contact.ContactActivity
+import com.dansoftware.boomega.gui.info.contact.ContactOverlay
+import com.dansoftware.boomega.gui.info.contact.ContactView
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
@@ -209,7 +210,7 @@ object GlobalActions {
     @JvmField
     val OPEN_CONTACT_INFO =
         Action("action.open_contact_info", "contact-mail-icon") { context, _, _ ->
-            ContactActivity(context).show()
+            context.showOverlay(ContactOverlay())
         }
 
     @JvmField

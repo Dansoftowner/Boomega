@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.info
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.HighlightableLabel
-import com.dansoftware.boomega.gui.info.dependency.DependencyViewerActivity
+import com.dansoftware.boomega.gui.info.dependency.DependenciesWindow
 import com.dansoftware.boomega.gui.info.native.NativeInfoWindow
 import com.dansoftware.boomega.gui.util.hgrow
 import com.dansoftware.boomega.gui.util.icon
@@ -132,7 +132,7 @@ class InformationView(val context: Context) : VBox(5.0) {
         text = i18n("info.show.dependencies")
         graphic = icon("code-braces-icon")
         setOnAction {
-            DependencyViewerActivity(context).show()
+            DependenciesWindow(owner = context.contextWindow).show()
         }
     }
 
@@ -149,7 +149,7 @@ class InformationView(val context: Context) : VBox(5.0) {
         tooltip = Tooltip("Native info")
         graphic = icon("os-icon")
         setOnAction {
-            NativeInfoWindow().show()
+            NativeInfoWindow(owner = context.contextWindow).show()
         }
     }
 
