@@ -52,7 +52,8 @@ import org.slf4j.LoggerFactory
  */
 abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Parent, C : Context {
 
-    private var content: C? = null
+    protected var content: C? = null
+        private set
     protected var exitDialog: Boolean = false
 
     init {

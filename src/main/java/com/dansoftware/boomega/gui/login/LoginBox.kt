@@ -24,7 +24,7 @@ import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
-import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
+import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorWindow
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.gui.util.*
@@ -191,7 +191,7 @@ class LoginBox(
         maxWidth = Double.MAX_VALUE
         graphic = icon("database-plus-icon")
         setOnAction {
-            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow)?.let {
+            DatabaseCreatorWindow(databaseTracker, owner = context.contextWindow).showAndGetResult()?.let {
                 selectedDatabase = it
             }
         }

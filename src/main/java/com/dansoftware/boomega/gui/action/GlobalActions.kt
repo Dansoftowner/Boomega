@@ -24,11 +24,10 @@ import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.ClipboardViewActivity
 import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
-import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorActivity
+import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorWindow
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.info.InformationActivity
 import com.dansoftware.boomega.gui.info.contact.ContactOverlay
-import com.dansoftware.boomega.gui.info.contact.ContactView
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.preferences.PreferencesActivity
@@ -88,7 +87,7 @@ object GlobalActions {
             "database-plus-icon",
             KeyBindings.createDatabase
         ) { context, preferences, databaseTracker ->
-            DatabaseCreatorActivity().show(databaseTracker, context.contextWindow)?.let {
+            DatabaseCreatorWindow(databaseTracker, owner = context.contextWindow).showAndGetResult()?.let {
                 // launches the database
                 submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker, it))
             }

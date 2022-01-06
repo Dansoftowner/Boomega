@@ -18,8 +18,11 @@
 
 package com.dansoftware.boomega.gui.dbcreator
 
+import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.i18n
+import javafx.scene.Scene
 import javafx.stage.Modality
 import javafx.stage.Window
 
@@ -27,8 +30,8 @@ import javafx.stage.Window
  * A DatabaseCreatorWindow is a javaFX [Stage] that should be
  * used to display [DatabaseCreatorView] gui-objects.
  */
-class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) :
-    BaseWindow<DatabaseCreatorView>(i18n("window.dbcreator.title"), view) {
+class DatabaseCreatorWindow(databaseTracker: DatabaseTracker, owner: Window? = null) :
+    BaseWindow<DatabaseCreatorView>(i18n("window.dbcreator.title"), DatabaseCreatorView(databaseTracker)) {
 
     init {
         initModality(Modality.APPLICATION_MODAL)
@@ -36,5 +39,15 @@ class DatabaseCreatorWindow(view: DatabaseCreatorView, owner: Window?) :
         width = 741.0
         height = 435.0
         centerOnScreen()
+    }
+
+    /**
+     * Waits the current thread until a result is available
+     *
+     * @return the [DatabaseMeta] representing the registered database
+     */
+    fun showAndGetResult(): DatabaseMeta? {
+        showAndWait()
+        return content!!.createdDatabase
     }
 }
