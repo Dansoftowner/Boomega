@@ -60,7 +60,7 @@ class UpdatePane(preferences: Preferences) : PreferencesPane(preferences) {
             title = i18n("preferences.update.last"),
             customControl = Label(
                 preferences.get(LAST_UPDATE_SEARCH)
-                    ?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"))
+                    ?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             ).asCentered(Pos.CENTER_RIGHT)
         )
 
