@@ -23,7 +23,7 @@ import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
-import com.dansoftware.boomega.gui.preferences.PreferencesActivity
+import com.dansoftware.boomega.gui.preferences.PreferencesWindow
 
 object OpenSettingsAction : Action(
     "action.settings",
@@ -31,6 +31,6 @@ object OpenSettingsAction : Action(
     KeyBindings.openSettings
 ) {
     override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
-        PreferencesActivity(preferences).show(context.contextWindow)
+        PreferencesWindow(preferences, owner = context.contextWindow).show()
     }
 }

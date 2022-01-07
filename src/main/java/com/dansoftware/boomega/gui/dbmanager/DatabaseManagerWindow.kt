@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.dbmanager
 
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.i18n
 import javafx.stage.Modality
@@ -26,8 +27,8 @@ import javafx.stage.Window
 /**
  * A DBManagerWindow is used for displaying a [DatabaseManagerView] in a window.
  */
-class DatabaseManagerWindow(view: DatabaseManagerView, owner: Window?) :
-    BaseWindow<DatabaseManagerView>(i18n("window.dbmanager.title"), view) {
+class DatabaseManagerWindow(databaseTracker: DatabaseTracker, owner: Window?) :
+    BaseWindow<DatabaseManagerView>(i18n("window.dbmanager.title"), DatabaseManagerView(databaseTracker)) {
 
     init {
         initModality(Modality.APPLICATION_MODAL)

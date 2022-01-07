@@ -22,7 +22,7 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
+import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerWindow
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 
 object OpenDatabaseManagerAction : Action(
@@ -32,6 +32,6 @@ object OpenDatabaseManagerAction : Action(
 ) {
 
     override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
-        DatabaseManagerActivity().show(databaseTracker, context.contextWindow)
+        DatabaseManagerWindow(databaseTracker = databaseTracker, owner = context.contextWindow).show()
     }
 }

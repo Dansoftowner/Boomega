@@ -18,13 +18,14 @@
 
 package com.dansoftware.boomega.gui.preferences
 
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
 import javafx.stage.Modality
 import javafx.stage.Window
 
-class PreferencesWindow(view: PreferencesView, owner: Window?) :
-    BaseWindow<PreferencesView>(I18N.getValue("window.preferences.title"), view) {
+class PreferencesWindow(preferences: Preferences, owner: Window?) :
+    BaseWindow<PreferencesView>(I18N.getValue("window.preferences.title"), PreferencesView(preferences)) {
 
     init {
         initOwner(owner)

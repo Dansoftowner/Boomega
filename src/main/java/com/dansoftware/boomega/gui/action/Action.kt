@@ -42,7 +42,7 @@ open class Action(
         operation: (Context, Preferences, DatabaseTracker) -> Unit = { _, _, _ -> }
     ) : this(i18nName, iconStyleClass, null, operation)
 
-    open fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+    open operator fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
         operation(context, preferences, databaseTracker)
     }
 }

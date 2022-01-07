@@ -21,11 +21,11 @@ package com.dansoftware.boomega.gui.login
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.GlobalActions
+import com.dansoftware.boomega.gui.action.impl.OpenSettingsAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
-import com.dansoftware.boomega.gui.preferences.PreferencesActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
@@ -82,6 +82,6 @@ class LoginToolbar(
 
     private fun buildSettingsMenuItem() =
         MenuItem(I18N.getValue("action.settings"), icon("settings-icon")).action {
-            PreferencesActivity(preferences).show(context.contextWindow)
+            OpenSettingsAction(context, preferences, databaseTracker)
         }
 }

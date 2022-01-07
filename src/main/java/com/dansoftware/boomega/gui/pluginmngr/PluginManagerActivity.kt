@@ -22,8 +22,7 @@ import com.dansoftware.boomega.plugin.PluginDirectory
 import javafx.stage.Window
 import java.io.File
 
-
-@Deprecated("")
+@Deprecated("", level = DeprecationLevel.ERROR)
 class PluginManagerActivity {
 
     fun show() = show(null)

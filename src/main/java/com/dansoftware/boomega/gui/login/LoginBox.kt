@@ -22,10 +22,10 @@ import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.gui.action.impl.OpenDatabaseManagerAction
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorWindow
-import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
 import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
@@ -180,7 +180,7 @@ class LoginBox(
         minHeight = 35.0
         minWidth = 40.0
         setOnAction {
-            DatabaseManagerActivity().show(databaseTracker, context.contextWindow)
+            OpenDatabaseManagerAction(context, preferences, databaseTracker)
         }
     }
 
