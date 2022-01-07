@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+package com.dansoftware.boomega.gui.action.impl
 
-package com.dansoftware.boomega.util
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.gui.action.Action
+import com.dansoftware.boomega.gui.api.Context
+import javafx.stage.Stage
 
-import java.util.function.Consumer
-import java.util.function.Supplier
-
-inline operator fun <T> Consumer<T>.invoke(value: T) {
-    accept(value)
+object MaximizeWindowAction : Action(
+    "action.maximize_window",
+    "maximize-window-icon"
+) {
+    override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+        context.contextWindow.also { if (it is Stage) it.isMaximized = it.isMaximized.not() }
+    }
 }
-
-inline operator fun <T> Supplier<T>.invoke(): T {
-    return get()
-}
-
-inline fun Runnable.toKFunction(): () -> Unit = { run() }

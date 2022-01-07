@@ -20,15 +20,35 @@
 
 package com.dansoftware.boomega.gui.util
 
+import com.dansoftware.boomega.gui.api.Context
 import javafx.application.Platform
 import javafx.concurrent.Service
 import javafx.concurrent.Task
+import java.util.concurrent.ExecutorService
 
 fun runOnUiThread(action: Runnable) {
     when {
         Platform.isFxApplicationThread() -> action.run()
         else -> Platform.runLater(action)
     }
+}
+
+/**
+ * Submits a common UI task to the executor-service.
+ * It shows indeterminate progress on the given [Context] while the task is running.
+ */
+inline fun ExecutorService.submitFXTask(context: Context, crossinline callFunction: () -> Unit) {
+    submit(object : Task<Unit>() {
+        init {
+            this.setOnRunning { context.showIndeterminateProgress() }
+            this.setOnFailed { context.stopProgress() }
+            this.setOnSucceeded { context.stopProgress() }
+        }
+
+        override fun call() {
+            callFunction()
+        }
+    })
 }
 
 inline fun <T> Task<T>.onSucceeded(crossinline action: (T) -> Unit) {

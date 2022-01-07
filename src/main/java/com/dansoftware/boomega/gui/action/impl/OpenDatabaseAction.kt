@@ -22,26 +22,32 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.clipboard.ClipboardWindow
-import javafx.stage.WindowEvent
+import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
+import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.util.submitFXTask
+import com.dansoftware.boomega.launcher.ActivityLauncher
+import com.dansoftware.boomega.launcher.LauncherMode
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.dansoftware.boomega.util.toKFunction
 
-object OpenClipboardViewer : Action(
-    "action.open_clipboard_view",
-    "clipboard-icon"
+object OpenDatabaseAction : Action(
+    "action.open_database",
+    "file-icon",
+    KeyBindings.openDatabase
 ) {
 
-    @Volatile
-    private var showingWindow: ClipboardWindow? = null
-
     override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
-        when (showingWindow) {
-            null -> {
-                showingWindow = ClipboardWindow(context.contextWindow).apply {
-                    addEventHandler(WindowEvent.WINDOW_HIDDEN) { showingWindow = null }
-                    show()
-                }
-            }
-            else -> showingWindow!!.toFront()
+        BMDBDatabaseOpener().showOpenDialog(context.contextWindow)?.also {
+            // launches the database
+            CachedExecutor.submitFXTask(
+                context,
+                ActivityLauncher(
+                    LauncherMode.INTERNAL,
+                    preferences,
+                    databaseTracker,
+                    it
+                ).toKFunction()
+            )
         }
     }
 }

@@ -18,205 +18,145 @@
 
 package com.dansoftware.boomega.gui.action
 
-import com.dansoftware.boomega.config.LAST_UPDATE_SEARCH
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.gui.action.impl.OpenClipboardViewer
+import com.dansoftware.boomega.gui.action.impl.*
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
-import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorWindow
-import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerActivity
-import com.dansoftware.boomega.gui.info.InformationViewOverlay
-import com.dansoftware.boomega.gui.info.contact.ContactOverlay
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
-import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
-import com.dansoftware.boomega.gui.preferences.PreferencesActivity
-import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
-import com.dansoftware.boomega.gui.util.onFailed
-import com.dansoftware.boomega.gui.util.onRunning
-import com.dansoftware.boomega.gui.util.onSucceeded
-import com.dansoftware.boomega.gui.util.typeEquals
-import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.launcher.ActivityLauncher
-import com.dansoftware.boomega.launcher.LauncherMode
-import com.dansoftware.boomega.main.ApplicationRestart
-import com.dansoftware.boomega.update.Release
-import com.dansoftware.boomega.update.UpdateSearcher
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
-import com.dansoftware.boomega.util.open
-import javafx.concurrent.Task
 import javafx.scene.Scene
-import javafx.scene.control.ButtonType
 import javafx.scene.input.KeyEvent
-import javafx.stage.Stage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.time.LocalDateTime
 
+@Deprecated("")
 object GlobalActions {
 
     private val logger: Logger = LoggerFactory.getLogger(GlobalActions::class.java)
 
+    @Deprecated(
+        "Use the NewEntryAction object instead",
+        replaceWith = ReplaceWith("NewEntryAction", "com.dansoftware.boomega.gui.action.impl.NewEntryAction")
+    )
     @JvmField
-    val NEW_ENTRY = Action(
-        "action.new_entry",
-        "database-icon",
-        KeyBindings.newEntry
-    ) { context, preferences, databaseTracker ->
-        submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker))
-    }
+    val NEW_ENTRY = NewEntryAction
 
+    @Deprecated(
+        "Use the OpenDatabaseAction object instead",
+        replaceWith = ReplaceWith("OpenDatabaseAction", "com.dansoftware.boomega.gui.action.impl.OpenDatabaseAction")
+    )
     @JvmField
-    val OPEN_DATABASE =
-        Action(
-            "action.open_database",
-            "file-icon",
-            KeyBindings.openDatabase
-        ) { context, preferences, databaseTracker ->
-            BMDBDatabaseOpener().showOpenDialog(context.contextWindow)?.also {
-                // launches the database
-                submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker, it))
-            }
-        }
+    val OPEN_DATABASE = OpenDatabaseAction
 
+    @Deprecated(
+        "Use the OpenDatabaseAction object instead",
+        replaceWith = ReplaceWith(
+            "CreateDatabaseAction",
+            "com.dansoftware.boomega.gui.action.impl.CreateDatabaseAction"
+        )
+    )
     @JvmField
-    val CREATE_DATABASE =
-        Action(
-            "action.create_database",
-            "database-plus-icon",
-            KeyBindings.createDatabase
-        ) { context, preferences, databaseTracker ->
-            DatabaseCreatorWindow(databaseTracker, owner = context.contextWindow).showAndGetResult()?.let {
-                // launches the database
-                submitTask(context, ActivityLauncher(LauncherMode.INTERNAL, preferences, databaseTracker, it))
-            }
-        }
+    val CREATE_DATABASE = CreateDatabaseAction
 
+    @Deprecated(
+        "Use the OpenDatabaseManagerAction object instead",
+        replaceWith = ReplaceWith(
+            "OpenDatabaseManagerAction",
+            "com.dansoftware.boomega.gui.action.impl.OpenDatabaseManagerAction"
+        )
+    )
     @JvmField
-    val OPEN_DATABASE_MANAGER =
-        Action(
-            "action.open_database_manager",
-            "database-icon",
-            KeyBindings.openDatabaseManager
-        ) { context, _, databaseTracker ->
-            DatabaseManagerActivity().show(databaseTracker, context.contextWindow)
-        }
+    val OPEN_DATABASE_MANAGER = OpenDatabaseManagerAction
 
+    @Deprecated(
+        "Use the RestartApplicationAction object instead",
+        replaceWith = ReplaceWith(
+            "RestartApplicationAction",
+            "com.dansoftware.boomega.gui.action.impl.RestartApplicationAction"
+        )
+    )
     @JvmField
-    val RESTART_APPLICATION = run {
-        val dialogShownContexts: MutableSet<Context> = HashSet()
-        Action(
-            "action.restart",
-            "update-icon",
-            KeyBindings.restartApplication
-        ) { context, _, _ ->
-            if (!dialogShownContexts.contains(context)) {
-                context.showConfirmationDialog(
-                    I18N.getValue("app.restart.dialog.title"),
-                    I18N.getValue("app.restart.dialog.msg")
-                ) {
-                    when {
-                        it.typeEquals(ButtonType.YES) -> ApplicationRestart.restart()
-                    }
-                    dialogShownContexts.remove(context)
-                }
-                dialogShownContexts.add(context)
-            }
-        }
-    }
+    val RESTART_APPLICATION = RestartApplicationAction
 
+    @Deprecated(
+        "Use the OpenSettingsAction object instead",
+        replaceWith = ReplaceWith("OpenSettingsAction", "com.dansoftware.boomega.gui.action.impl.OpenSettingsAction")
+    )
     @JvmField
-    val OPEN_SETTINGS =
-        Action(
-            "action.settings",
-            "settings-icon",
-            KeyBindings.openSettings
-        ) { context, preferences, _ ->
-            PreferencesActivity(preferences).show(context.contextWindow)
-        }
+    val OPEN_SETTINGS = OpenSettingsAction
 
+    @Deprecated(
+        "Use the FullScreenAction object instead",
+        replaceWith = ReplaceWith("FullScreenAction", "com.dansoftware.boomega.gui.action.impl.FullScreenAction")
+    )
     @JvmField
-    val FULL_SCREEN =
-        Action(
-            "action.full_screen",
-            "full-screen-icon",
-            KeyBindings.fullScreen
-        ) { context, _, _ ->
-            context.contextWindow.also { if (it is Stage) it.isFullScreen = it.isFullScreen.not() }
-        }
+    val FULL_SCREEN = FullScreenAction
 
+    @Deprecated(
+        "Use the MaximizeWindowAction object instead",
+        replaceWith = ReplaceWith(
+            "MaximizeWindowAction",
+            "com.dansoftware.boomega.gui.action.impl.MaximizeWindowAction"
+        )
+    )
     @JvmField
-    val MAXIMIZE_WINDOW =
-        Action(
-            "action.maximize_window",
-            "maximize-window-icon"
-        ) { context, _, _ ->
-            context.contextWindow.also { if (it is Stage) it.isMaximized = it.isMaximized.not() }
-        }
+    val MAXIMIZE_WINDOW = MaximizeWindowAction
 
+    @Deprecated(
+        "Use the OpenClipboardViewer object instead",
+        replaceWith = ReplaceWith("OpenClipboardViewer", "com.dansoftware.boomega.gui.action.impl.OpenClipboardViewer")
+    )
     @JvmField
-    val OPEN_CLIPBOARD_VIEWER = OpenClipboardViewer
+    val OPEN_CLIPBOARD_VIEWER = OpenClipboardViewerAction
 
+    @Deprecated(
+        "Use the OpenPluginManagerAction object instead",
+        replaceWith = ReplaceWith(
+            "OpenPluginManagerAction",
+            "com.dansoftware.boomega.gui.action.impl.OpenPluginManagerAction"
+        )
+    )
     @JvmField
-    val OPEN_PLUGIN_MANAGER =
-        Action("action.open_plugin_manager", "puzzle-icon") { context, _, _ ->
-            PluginManagerActivity().show(context.contextWindow)
-        }
+    val OPEN_PLUGIN_MANAGER = OpenPluginManagerAction
 
+    @Deprecated(
+        "Use the OpenPluginDirAction object instead",
+        replaceWith = ReplaceWith("OpenPluginDirAction", "com.dansoftware.boomega.gui.action.impl.OpenPluginDirAction")
+    )
     @JvmField
-    val OPEN_PLUGIN_DIR =
-        Action("action.open_plugin_dir", "folder-open-icon") { _, _, _ ->
-            File(System.getProperty("boomega.plugin.dir")).open()
-        }
+    val OPEN_PLUGIN_DIR = OpenPluginDirAction
 
+    @Deprecated(
+        "Use the SearchForUpdatesAction object instead",
+        replaceWith = ReplaceWith(
+            "SearchForUpdatesAction",
+            "com.dansoftware.boomega.gui.action.impl.SearchForUpdatesAction"
+        )
+    )
     @JvmField
-    val SEARCH_FOR_UPDATES =
-        Action("action.update_search", "update-icon") { context, prefs, _ ->
-            prefs.editor().put(LAST_UPDATE_SEARCH, LocalDateTime.now())
-            CachedExecutor.submit(object : Task<Release?>() {
-                init {
-                    onRunning {
-                        context.showIndeterminateProgress()
-                    }
-                    onFailed {
-                        context.stopProgress()
-                        context.showErrorDialog(
-                            I18N.getValue("update.failed.title"),
-                            I18N.getValue("update.failed.msg"),
-                            it as? Exception
-                        ) {}
-                        logger.error("Update search failed", it)
-                    }
-                    onSucceeded { githubRelease ->
-                        context.stopProgress()
-                        githubRelease?.let { UpdateActivity(context, it).show() }
-                            ?: context.showInformationDialog(
-                                I18N.getValue("update.up_to_date.title"),
-                                I18N.getValue("update.up_to_date.msg")
-                            ) {}
-                    }
-                }
+    val SEARCH_FOR_UPDATES = SearchForUpdatesAction
 
-                override fun call() =
-                    UpdateSearcher.default.search()
-            })
-        }
-
+    @Deprecated(
+        "Use the OpenContactInfoAction object instead",
+        replaceWith = ReplaceWith(
+            "OpenContactInfoAction",
+            "com.dansoftware.boomega.gui.action.impl.OpenContactInfoAction"
+        )
+    )
     @JvmField
-    val OPEN_CONTACT_INFO =
-        Action("action.open_contact_info", "contact-mail-icon") { context, _, _ ->
-            context.showOverlay(ContactOverlay())
-        }
+    val OPEN_CONTACT_INFO = OpenContactInfoAction
 
+    @Deprecated(
+        "Use the OpenAppInfoAction object instead",
+        replaceWith = ReplaceWith("OpenAppInfoAction", "com.dansoftware.boomega.gui.action.impl.OpenAppInfoAction")
+    )
     @JvmField
-    val OPEN_APP_INFO =
-        Action("action.open_app_info", "info-icon") { context, _, _ ->
-            context.showOverlay(InformationViewOverlay(context), false)
-        }
+    val OPEN_APP_INFO = OpenAppInfoAction
 
     /* <-------------------------------------------------------------------- */
 
+    @Deprecated(
+        "Use the AvailableActions instead",
+        replaceWith = ReplaceWith("AvailableActions", "com.dansoftware.boomega.gui.action.AvailableActions")
+    )
     val allActions: List<Action> by lazy {
         javaClass.declaredFields
             .filter { Action::class.java.isAssignableFrom(it.type) }
@@ -226,6 +166,13 @@ object GlobalActions {
     /**
      * Applies the key-binding actions on the given scene.
      */
+    @Deprecated(
+        "Use AvailableActions.applyOnScene instead",
+        replaceWith = ReplaceWith(
+            "AvailableActions.applyOnScene",
+            "com.dansoftware.boomega.gui.action.AvailableActions"
+        )
+    )
     fun applyOnScene(
         scene: Scene,
         context: Context,
@@ -243,19 +190,5 @@ object GlobalActions {
 
     private fun listKeyBindActions(): List<Action> {
         return allActions.filter { it.keyBinding !== null }
-    }
-
-    private fun submitTask(context: Context, runnable: Runnable) {
-        CachedExecutor.submit(object : Task<Unit>() {
-            init {
-                this.setOnRunning { context.showIndeterminateProgress() }
-                this.setOnFailed { context.stopProgress() }
-                this.setOnSucceeded { context.stopProgress() }
-            }
-
-            override fun call() {
-                runnable.run()
-            }
-        })
     }
 }
