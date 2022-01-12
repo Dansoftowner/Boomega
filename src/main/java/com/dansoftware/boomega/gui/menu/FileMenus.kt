@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menu.file
+package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.gui.action.GlobalActions
+import com.dansoftware.boomega.gui.action.impl.*
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.login.isAutoLoginOn
@@ -35,6 +35,7 @@ import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.internalActivityLauncher
 import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
+import javafx.application.Platform
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
@@ -64,19 +65,19 @@ abstract class FileMenu(
      * Menu item that allows the user to show a new entry point (LoginActivity)
      */
     private fun newEntryMenuItem(): MenuItem =
-        menuItemOf(GlobalActions.NEW_ENTRY, context, preferences, databaseTracker)
+        menuItemOf(NewEntryAction, context, preferences, databaseTracker)
 
     /**
      * Menu item that allows the user to open a database file from the file system
      */
     private fun openMenuItem() =
-        menuItemOf(GlobalActions.OPEN_DATABASE, context, preferences, databaseTracker)
+        menuItemOf(OpenDatabaseAction, context, preferences, databaseTracker)
 
     private fun databaseCreatorMenuItem() =
-        menuItemOf(GlobalActions.CREATE_DATABASE, context, preferences, databaseTracker)
+        menuItemOf(CreateDatabaseAction, context, preferences, databaseTracker)
 
     private fun databaseManagerMenuItem() =
-        menuItemOf(GlobalActions.OPEN_DATABASE_MANAGER, context, preferences, databaseTracker)
+        menuItemOf(OpenDatabaseManagerAction, context, preferences, databaseTracker)
 
     /**
      * Menu that allows the user to access the recent databases
@@ -126,7 +127,7 @@ abstract class FileMenu(
             preferences.updateLoginData {
                 if (it.isAutoLoginOn(databaseMeta)) it.removeAutoLogin()
             }
-            GlobalActions.NEW_ENTRY.invoke(context, preferences, databaseTracker)
+            NewEntryAction.invoke(context, preferences, databaseTracker)
             context.close()
         }
 
@@ -150,3 +151,41 @@ abstract class FileMenu(
         })
     }
 }
+
+/**
+ * The file menu used on all operating systems **except on macOS**.
+ */
+class RegularFileMenu(
+    private val context: Context,
+    databaseMeta: DatabaseMeta,
+    private val preferences: Preferences,
+    private val databaseTracker: DatabaseTracker
+) : FileMenu(context, databaseMeta, preferences, databaseTracker) {
+    init {
+        this.separator()
+            .menuItem(closeWindowMenuItem())
+            .menuItem(restartMenuItem())
+            .menuItem(quitMenuItem())
+    }
+
+    private fun closeWindowMenuItem() = MenuItem(i18n("menubar.menu.file.closewindow"))
+        .action { context.close() }
+        .graphic("close-icon")
+
+    private fun restartMenuItem() =
+        menuItemOf(RestartApplicationAction, context, preferences, databaseTracker)
+
+    private fun quitMenuItem() = MenuItem(i18n("menubar.menu.file.quit"))
+        .action { Platform.exit() }
+        .graphic("close-box-multiple-icon")
+}
+
+/**
+ * The file-menu used on macOS.
+ */
+class MacOsFileMenu(
+    context: Context,
+    databaseMeta: DatabaseMeta,
+    preferences: Preferences,
+    databaseTracker: DatabaseTracker
+) : FileMenu(context, databaseMeta, preferences, databaseTracker)

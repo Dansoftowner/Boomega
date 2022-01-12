@@ -22,7 +22,7 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.menu.*
-import com.dansoftware.boomega.gui.menu.file.RegularFileMenu
+import com.dansoftware.boomega.gui.menu.RegularFileMenu
 import com.dansoftware.boomega.gui.menu.help.RegularHelpMenu
 
 /**

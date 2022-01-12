@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menu.file
+package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.gui.api.Context
-
-/**
- * The file-menu used on macOS.
- */
-class MacOsFileMenu(
-    context: Context,
-    databaseMeta: DatabaseMeta,
-    preferences: Preferences,
-    databaseTracker: DatabaseTracker
-) : FileMenu(context, databaseMeta, preferences, databaseTracker)
+// TODO: place menu-bar implementations here
