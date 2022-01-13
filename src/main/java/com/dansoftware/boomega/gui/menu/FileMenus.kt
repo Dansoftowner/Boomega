@@ -153,9 +153,9 @@ abstract class FileMenu(
 }
 
 /**
- * The file menu used on all operating systems **except on macOS**.
+ * The file menu can be used on most desktop environments **except on macOS**.
  */
-class RegularFileMenu(
+class CommonFileMenu(
     private val context: Context,
     databaseMeta: DatabaseMeta,
     private val preferences: Preferences,

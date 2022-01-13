@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.menu.help
+package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.gui.action.GlobalActions
+import com.dansoftware.boomega.gui.action.impl.OpenAppInfoAction
+import com.dansoftware.boomega.gui.action.impl.OpenContactInfoAction
+import com.dansoftware.boomega.gui.action.impl.SearchForUpdatesAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.i18n
@@ -40,5 +42,35 @@ abstract class HelpMenu(
     }
 
     private fun contactMenuItem() =
-        menuItemOf(GlobalActions.OPEN_CONTACT_INFO, context, preferences, databaseTracker)
+        menuItemOf(OpenContactInfoAction, context, preferences, databaseTracker)
 }
+
+/**
+ * The help menu used on all operating systems **except on macOS**.
+ */
+class CommonHelpMenu(
+    private val context: Context,
+    private val preferences: Preferences,
+    private val databaseTracker: DatabaseTracker
+) : HelpMenu(context, preferences, databaseTracker) {
+
+    init {
+        items.add(0, updateSearcherMenuItem())
+        items.add(infoMenuItem())
+    }
+
+    private fun infoMenuItem() =
+        menuItemOf(OpenAppInfoAction, context, preferences, databaseTracker)
+
+    private fun updateSearcherMenuItem() =
+        menuItemOf(SearchForUpdatesAction, context, preferences, databaseTracker)
+}
+
+/**
+ * The help-menu used on macOS
+ */
+class MacOsHelpMenu(
+    context: Context,
+    preferences: Preferences,
+    databaseTracker: DatabaseTracker
+) : HelpMenu(context, preferences, databaseTracker)
