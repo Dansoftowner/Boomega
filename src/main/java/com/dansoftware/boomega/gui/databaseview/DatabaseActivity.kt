@@ -22,7 +22,7 @@ import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.menu.bar.getPreferredApplicationMenuBar
+import com.dansoftware.boomega.gui.menu.getPreferredApplicationMenuBar
 import javafx.stage.WindowEvent
 import java.lang.ref.WeakReference
 import java.util.*

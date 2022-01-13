@@ -18,4 +18,120 @@
 
 package com.dansoftware.boomega.gui.menu
 
-// TODO: place menu-bar implementations here
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.databaseview.DatabaseView
+import com.dansoftware.boomega.util.os.OsInfo
+import javafx.beans.binding.Bindings
+import javafx.scene.control.MenuBar
+
+/**
+ * Provides the preferred menu-bar for a [DatabaseView] depending on what platform the app is running on.
+ */
+fun getPreferredApplicationMenuBar(
+    databaseView: DatabaseView,
+    preferences: Preferences,
+    tracker: DatabaseTracker
+): MenuBar =
+    when {
+        OsInfo.isMacOS -> MacOsMenuBar(databaseView, preferences, tracker)
+        else -> CommonMenuBar(databaseView, preferences, tracker)
+    }
+
+/**
+ * Provides the preferred minimal/simplified menu-bar depending on what platform the app is running on.
+ * It might be _null_ if general menu-bars shouldn't be used on the platform.
+ */
+fun getPreferredGeneralMenuBar(
+    context: Context,
+    preferences: Preferences,
+    databaseTracker: DatabaseTracker
+): MenuBar? =
+    when {
+        OsInfo.isMacOS -> MinimalMacOsMenuBar(context, preferences, databaseTracker)
+        else -> null
+    }
+
+/**
+ * The menu-bar can be used on most desktop environments **except on macOS**.
+ *
+ * @see MacOsMenuBar
+ */
+class CommonMenuBar(
+    databaseView: DatabaseView,
+    preferences: Preferences,
+    tracker: DatabaseTracker
+) : MenuBar() {
+
+    init {
+        initDisablePolicy(databaseView)
+        this.menus.addAll(
+            CommonFileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
+            ModuleMenu(databaseView),
+            PreferencesMenu(databaseView, preferences, tracker),
+            ClipboardMenu(databaseView, preferences, tracker),
+            WindowMenu(databaseView, preferences, tracker),
+            PluginMenu(databaseView, preferences, tracker),
+            CommonHelpMenu(databaseView, preferences, tracker)
+        )
+    }
+}
+
+/**
+ * The complete menu-bar can be used on MacOS
+ */
+class MacOsMenuBar(
+    databaseView: DatabaseView,
+    preferences: Preferences,
+    tracker: DatabaseTracker
+) : MenuBar() {
+    init {
+        initDisablePolicy(databaseView)
+        menus.addAll(
+            MacOsApplicationMenu(databaseView, preferences, tracker),
+            MacOsFileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
+            ModuleMenu(databaseView),
+            PreferencesMenu(databaseView, preferences, tracker),
+            ClipboardMenu(databaseView, preferences, tracker),
+            WindowMenu(databaseView, preferences, tracker),
+            PluginMenu(databaseView, preferences, tracker),
+            MacOsHelpMenu(databaseView, preferences, tracker)
+        )
+    }
+}
+
+/**
+ * The simplified MacOS menu-bar with some basic menus:
+ * - [MacOsApplicationMenu]
+ * - [PreferencesMenu]
+ * - [ClipboardMenu]
+ * - [PluginMenu]
+ * - [WindowMenu]
+ */
+class MinimalMacOsMenuBar(
+    context: Context,
+    preferences: Preferences,
+    databaseTracker: DatabaseTracker
+) : MenuBar() {
+    init {
+        initDisablePolicy(context)
+        menus.addAll(
+            MacOsApplicationMenu(context, preferences, databaseTracker),
+            PreferencesMenu(context, preferences, databaseTracker),
+            ClipboardMenu(context, preferences, databaseTracker),
+            PluginMenu(context, preferences, databaseTracker),
+            WindowMenu(context, preferences, databaseTracker)
+        )
+    }
+}
+
+private fun MenuBar.initDisablePolicy(context: Context) {
+    properties["overlays.visible.listener"] = // for keeping it in the memory
+        Bindings.isEmpty(context.blockingOverlaysShown).and(Bindings.isEmpty(context.nonBlockingOverlaysShown))
+            .also { observable ->
+                observable.addListener { _, _, isEmpty ->
+                    this.isDisable = isEmpty.not()
+                }
+            }
+}
