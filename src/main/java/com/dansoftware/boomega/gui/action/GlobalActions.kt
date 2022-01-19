@@ -102,7 +102,7 @@ object GlobalActions {
 
     @Deprecated(
         "Use the OpenClipboardViewer object instead",
-        replaceWith = ReplaceWith("OpenClipboardViewer", "com.dansoftware.boomega.gui.action.impl.OpenClipboardViewer")
+        replaceWith = ReplaceWith("OpenClipboardViewerAction", "com.dansoftware.boomega.gui.action.impl.OpenClipboardViewerAction")
     )
     @JvmField
     val OPEN_CLIPBOARD_VIEWER = OpenClipboardViewerAction
