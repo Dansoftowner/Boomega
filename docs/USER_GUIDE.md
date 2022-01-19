@@ -28,7 +28,7 @@
 
 Boomega is an open-source book explorer/catalog application.
 Can be used for searching books on online services (e.g. [Google Books](https://books.google.com/googlebooks/about/index.html))
-and for registering/saving books to local database files.
+and for registering/saving books to various databases (e.g. local databases, MySQL etc...).
 
 
 ## Getting Boomega
