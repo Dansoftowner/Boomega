@@ -5,6 +5,8 @@
 ### Enhancements/features
 
 * 💥 Refactored database api for allowing integrating other database managements systems into the app
+* ✨ MySQL support
+* ✨ Exporting to txt tables
 * ⬆️Migrate to JDK 17
 * ✨ MacOS specific menu-bar
 * ✨ [#161](https://github.com/Dansoftowner/Boomega/issues/161): 'Maximize' item in window menu
