@@ -102,14 +102,14 @@ dependencies {
 
     //logging
     implementation 'org.slf4j:slf4j-api:1.7.32'
-    implementation 'ch.qos.logback:logback-classic:1.2.5'
-    implementation 'ch.qos.logback:logback-core:1.2.5'
+    implementation 'ch.qos.logback:logback-classic:1.2.10'
+    implementation 'ch.qos.logback:logback-core:1.2.10'
 
     //Testing
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    testImplementation 'org.assertj:assertj-core:3.20.2'
-    testImplementation 'org.mockito:mockito-core:3.12.4'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation 'org.assertj:assertj-core:3.22.0'
+    testImplementation 'org.mockito:mockito-core:4.2.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.2.0'
 
     implementation 'com.github.Dansoftowner:jUserDirectories:1.0'
     implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.7'
@@ -126,14 +126,14 @@ dependencies {
     implementation 'org.jetbrains:annotations:22.0.0'
 
     implementation 'org.apache.poi:poi-ooxml:5.0.0' // Microsoft Documents
-    implementation 'org.yaml:snakeyaml:1.21' // YAML
+    implementation 'org.yaml:snakeyaml:1.29' // YAML
     implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
     implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
     implementation 'com.google.code.gson:gson:2.8.9' // JSON Parsing
 
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4' // Caching utilities
-    implementation 'com.github.oshi:oshi-core:5.8.3' // Operating system & hardware information
-    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.5' // Caching utilities
+    implementation 'com.github.oshi:oshi-core:5.8.6' // Operating system & hardware information
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
     implementation 'io.github.g00fy2:versioncompare:1.4.1' // Comparing version strings
 
@@ -145,14 +145,14 @@ dependencies {
     implementation 'com.dlsc.formsfx:formsfx-core:11.4.2'
     implementation 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
     implementation 'org.fxmisc.richtext:richtextfx:0.10.7'
-    implementation 'org.controlsfx:controlsfx:11.1.0'
+    implementation 'org.controlsfx:controlsfx:11.1.1'
     implementation 'net.synedra:validatorfx:0.2.1'
 
     // Embedded NoSql database management
     implementation 'org.dizitart:nitrite:3.4.3'
 
     // Relational database management
-    implementation 'org.hibernate:hibernate-core:5.6.1.Final'
+    implementation 'org.hibernate:hibernate-core:5.6.3.Final'
     implementation 'mysql:mysql-connector-java:8.0.25'
 
     //implementation from the local file system
