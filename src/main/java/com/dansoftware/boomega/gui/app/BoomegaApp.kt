@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.app
 
 import com.dansoftware.boomega.config.*
+import com.dansoftware.boomega.config.source.JsonFileSource
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
@@ -33,6 +34,7 @@ import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.instance.ApplicationInstanceService
 import com.dansoftware.boomega.launcher.initActivityLauncher
+import com.dansoftware.boomega.main.DefaultPreferences
 import com.dansoftware.boomega.plugin.PluginClassLoader
 import com.dansoftware.boomega.plugin.Plugins
 import com.dansoftware.boomega.update.Release
@@ -43,19 +45,22 @@ import javafx.application.Platform
 import javafx.util.Duration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.properties.Delegates
 import kotlin.system.exitProcess
 
 /**
  * The Boomega javafx application implementation
  */
-class BoomegaApp : BaseBoomegaApplication() {
+open class BoomegaApp : BaseBoomegaApplication() {
 
     /**
      * The queue that stores the actions should be invoked after an activity is launched
      */
     private val postLaunchQueue: Queue<(context: Context, launchedDatabase: DatabaseMeta?) -> Unit> = LinkedList()
+    private lateinit var cachedPreferences: Preferences
 
     override fun init() {
 
@@ -89,8 +94,7 @@ class BoomegaApp : BaseBoomegaApplication() {
     override fun stop() {
         //writing all configurations
         logger.info("Saving configurations")
-        val preferences = Preferences.getPreferences()
-        preferences.editor.commit()
+        cachedPreferences.editor.commit()
 
         logger.info("Shutting down application instance service")
         ApplicationInstanceService.release()
@@ -144,10 +148,18 @@ class BoomegaApp : BaseBoomegaApplication() {
         logger.info("Plugins loaded successfully!")
     }
 
+    /**
+     * Provides the [Preferences] object should be used in the launched application
+     */
+    protected open fun buildPreferences(): Preferences {
+        return DefaultPreferences
+    }
+
     private fun readConfigurations(): Preferences {
         notifyPreloader("preloader.preferences.read")
         return try {
-            Preferences.getPreferences().also {
+            buildPreferences().also {
+                cachedPreferences = it
                 logger.info("Configurations has been read successfully!")
             }
         } catch (e: RuntimeException) {

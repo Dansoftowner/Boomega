@@ -39,7 +39,6 @@ object PropertiesSetup {
     private const val LOG_FILE_PATH = "log.file.path"
     private const val LOG_FILE_FULL_PATH = "log.file.path.full"
     private const val PLUGIN_DIRECTORY_PATH = "boomega.plugin.dir"
-    private const val CONFIG_FILE_PATH = "boomega.config.file.path"
     private const val DEFAULT_DIRECTORY_PATH = "boomega.dir.default.path"
 
     private const val APP_NAME_VALUE = "Boomega"
@@ -107,7 +106,6 @@ object PropertiesSetup {
         System.setProperty(BOOMEGA_VERSION, BOOMEGA_VERSION_VALUE)
         System.setProperty(BOOMEGA_FILE_EXTENSION, BOOMEGA_FILE_EXTENSION_VALUE)
         System.setProperty(PLUGIN_DIRECTORY_PATH, getPluginDirPath())
-        System.setProperty(CONFIG_FILE_PATH, getConfigFilePath())
         System.setProperty(DEFAULT_DIRECTORY_PATH, getDefaultDirectoryFilePath())
     }
 
@@ -118,20 +116,15 @@ object PropertiesSetup {
         ).absolutePath
 
     /**
-     * Returns the config file's path
-     */
-    private fun getConfigFilePath() = joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg")
-
-    /**
      * Returns the plugin directory's path
      */
     private fun getPluginDirPath(): String = when {
-        OsInfo.isWindows() -> {
+        OsInfo.isWindows -> {
             val appdata = System.getenv("APPDATA")?.takeIf { it.isNotBlank() } ?: userDirectoryPath
             File(File(appdata), "Dansoftware\\boomega\\plugin").absolutePath
         }
-        OsInfo.isLinux() -> "$userDirectoryPath/boomega/plugin"
-        OsInfo.isMac() -> "$userDirectoryPath/boomega/plugin"
+        OsInfo.isLinux -> "$userDirectoryPath/boomega/plugin"
+        OsInfo.isMacOS -> "$userDirectoryPath/boomega/plugin"
         else -> "plugin"
     }
 }

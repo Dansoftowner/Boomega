@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.config.source;
+package com.dansoftware.boomega.main
 
-import java.io.File;
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.config.source.JsonFileSource
+import com.dansoftware.boomega.util.joinToFilePath
+import com.dansoftware.boomega.util.userDirectoryPath
+import java.io.File
 
 /**
- * The default source used by the application.
- * Accesses the default configuration file.
+ * The default preferences used by the app
  */
-public class DefaultSource extends JsonFileSource {
-    public DefaultSource() {
-        super(new File(System.getProperty("boomega.config.file.path")));
-    }
-}
+object DefaultPreferences : Preferences(JsonFileSource(File(joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg"))))

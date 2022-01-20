@@ -155,8 +155,6 @@ public abstract class JsonSource implements ConfigSource {
      * Should return the {@link JsonObject} that stores the configurations.
      * This method will be called everytime when the {@link JsonSource}
      * wants to access this object.
-     *
-     * @return the object
      */
     protected abstract JsonObject getJsonBase();
 

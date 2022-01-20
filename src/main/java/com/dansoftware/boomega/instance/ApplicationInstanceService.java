@@ -26,6 +26,7 @@ import com.dansoftware.boomega.gui.login.config.LoginData;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
 import com.dansoftware.boomega.launcher.LauncherMode;
 import com.dansoftware.boomega.main.Arguments;
+import com.dansoftware.boomega.main.DefaultPreferences;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;
@@ -134,7 +135,7 @@ public class ApplicationInstanceService implements MessageHandler {
         }
 
         logger.debug("starting an ActivityLauncher...");
-        new ActivityLauncherImpl(args, Preferences.getPreferences(), DatabaseTracker.getGlobal()).launch();
+        new ActivityLauncherImpl(args, DefaultPreferences.INSTANCE, DatabaseTracker.getGlobal()).launch();
         return null;
     }
 

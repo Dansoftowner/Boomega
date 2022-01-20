@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.config;
 
 import com.dansoftware.boomega.config.source.ConfigSource;
-import com.dansoftware.boomega.config.source.DefaultSource;
 import com.dansoftware.boomega.config.source.InMemorySource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,10 +31,6 @@ import java.util.function.Consumer;
 
 /**
  * A Preferences object is a bridge between the application and the particular configuration-source (represented by {@link ConfigSource}).
- *
- * <p>
- * If we want to create a {@link Preferences} object that reads from the default config-file we can use the
- * static {@link #getPreferences()} method.
  *
  * <p>
  * For modifying the data we can use an {@link Editor} object that can be instantiated by the {@link #editor()} method.
@@ -95,24 +90,6 @@ public class Preferences {
 
     public ConfigSource getSource() {
         return source;
-    }
-
-    @NotNull
-    public static synchronized Preferences getPreferences() {
-        if (Objects.isNull(defaultPrefs)) {
-            setDefault(buildDefaultPrefs());
-        }
-        return defaultPrefs;
-    }
-
-    public static synchronized void setDefault(@NotNull Preferences preferences) {
-        Objects.requireNonNull(preferences, "The default preferences object shouldn't be null");
-        defaultPrefs = preferences;
-        logger.debug("Default preferences/config source set: '{}'", preferences.getSource().getClass().getName());
-    }
-
-    private static Preferences buildDefaultPrefs() {
-        return new Preferences(new DefaultSource());
     }
 
     public static Preferences empty() {
