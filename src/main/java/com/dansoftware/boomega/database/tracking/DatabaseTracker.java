@@ -210,10 +210,6 @@ public class DatabaseTracker {
         return usingDatabasesUnmodifiable;
     }
 
-    public static DatabaseTracker getGlobal() {
-        return globalInstance == null ? (globalInstance = new DatabaseTracker()) : globalInstance;
-    }
-
     public interface Observer {
         default void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
         }

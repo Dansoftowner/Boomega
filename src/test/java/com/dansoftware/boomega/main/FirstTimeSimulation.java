@@ -1,6 +1,7 @@
 package com.dansoftware.boomega.main;
 
 import com.dansoftware.boomega.config.Preferences;
+import com.dansoftware.boomega.database.tracking.DatabaseTracker;
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler;
 import com.dansoftware.boomega.gui.app.BaseBoomegaApplication;
 import com.dansoftware.boomega.gui.app.BoomegaApp;
@@ -22,6 +23,12 @@ public class FirstTimeSimulation {
         @Override
         protected Preferences buildPreferences() {
             return Preferences.empty();
+        }
+
+        @NotNull
+        @Override
+        protected DatabaseTracker buildDatabaseTracker() {
+            return new DatabaseTracker();
         }
     }
 }

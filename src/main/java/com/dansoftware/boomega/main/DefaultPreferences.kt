@@ -25,6 +25,6 @@ import com.dansoftware.boomega.util.userDirectoryPath
 import java.io.File
 
 /**
- * The default preferences used by the app
+ * The default preferences used by the real-time app
  */
 object DefaultPreferences : Preferences(JsonFileSource(File(joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg"))))

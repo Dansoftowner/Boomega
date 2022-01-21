@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,26 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:JvmName("Main")
-
 package com.dansoftware.boomega.main
 
-import com.dansoftware.boomega.exception.UncaughtExceptionHandler
-import com.dansoftware.boomega.gui.app.BaseBoomegaApplication
-import com.dansoftware.boomega.gui.app.BoomegaApp
-import com.dansoftware.boomega.instance.ApplicationInstanceService
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 
-fun main(args: Array<String>) {
-    init(args)
-    launch(args)
-}
-
-private fun init(args: Array<String>) {
-    PropertiesSetup.setupSystemProperties()
-    Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler())
-    ApplicationInstanceService.open(args)
-}
-
-private fun launch(args: Array<String>) {
-    BaseBoomegaApplication.launchApp(RealtimeApp::class.java, *args)
-}
+/**
+ * The default database tracker used by the real-time app
+ */
+object DefaultDatabaseTracker : DatabaseTracker()

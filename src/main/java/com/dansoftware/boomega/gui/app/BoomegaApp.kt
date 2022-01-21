@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.app
 
 import com.dansoftware.boomega.config.*
-import com.dansoftware.boomega.config.source.JsonFileSource
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
@@ -32,29 +31,23 @@ import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.i18n
-import com.dansoftware.boomega.instance.ApplicationInstanceService
 import com.dansoftware.boomega.launcher.initActivityLauncher
-import com.dansoftware.boomega.main.DefaultPreferences
-import com.dansoftware.boomega.plugin.PluginClassLoader
-import com.dansoftware.boomega.plugin.Plugins
 import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.notify
 import com.dansoftware.boomega.util.concurrent.wait
 import javafx.application.Platform
-import javafx.util.Duration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.File
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.properties.Delegates
-import kotlin.system.exitProcess
 
 /**
- * The Boomega javafx application implementation
+ * The flexible Boomega application implementation
+ *
+ * @see [com.dansoftware.boomega.main.RealtimeApp]
  */
-open class BoomegaApp : BaseBoomegaApplication() {
+abstract class BoomegaApp : BaseBoomegaApplication() {
 
     /**
      * The queue that stores the actions should be invoked after an activity is launched
@@ -62,12 +55,34 @@ open class BoomegaApp : BaseBoomegaApplication() {
     private val postLaunchQueue: Queue<(context: Context, launchedDatabase: DatabaseMeta?) -> Unit> = LinkedList()
     private lateinit var cachedPreferences: Preferences
 
+    /**
+     * Provides the [Preferences] object should be used in the launched application
+     */
+    protected abstract fun buildPreferences(): Preferences
+
+    /**
+     * Provides the [DatabaseTracker] object should be used in the launched application
+     */
+    protected abstract fun buildDatabaseTracker(): DatabaseTracker
+
+    /**
+     * Executes before the base initialization process starts
+     */
+    protected open fun preInit() { }
+
+    /**
+     * Queues the given action to be executed after the application launches successfully
+     */
+    protected fun postLaunch(action: (context: Context, launchedDatabase: DatabaseMeta?) -> Unit) {
+        postLaunchQueue.offer(action)
+    }
+
     override fun init() {
 
         handleApplicationArgument()
         progress(0.2)
 
-        loadPlugins()
+        preInit()
         progress(0.4)
 
         val preferences = readConfigurations()
@@ -81,7 +96,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
         logger.debug("Theme is: {}", Theme.default)
         logger.debug("Locale is: {}", Locale.getDefault())
 
-        val databaseTracker = buildDatabaseTracker(preferences)
+        val databaseTracker = configureDatabaseTracker(preferences)
         progress(0.9)
 
         // searching for updates
@@ -95,16 +110,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
         //writing all configurations
         logger.info("Saving configurations")
         cachedPreferences.editor.commit()
-
-        logger.info("Shutting down application instance service")
-        ApplicationInstanceService.release()
-
-        logger.info("Closing down PluginClassLoader")
-        PluginClassLoader.close()
-
-        //We wait 5 seconds for the background processes to terminate, then we shut down explicitly the application
-        //ExploitativeExecutor.INSTANCE.awaitTermination(1500, TimeUnit.MILLISECONDS);
-        exitProcess(0)
     }
 
     private fun handleApplicationArgument() {
@@ -119,7 +124,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
         }
 
         // Showing a notification after the application starts about the launched database
-        postLaunchQueue.offer { context, launched ->
+        postLaunch { context, launched ->
             launched?.let {
                 context.showInformationNotification(
                     title = i18n("database.file.launched", launched.name),
@@ -127,32 +132,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
                 )
             }
         }
-    }
-
-    /**
-     * Loads plugins into the memory
-     */
-    private fun loadPlugins() {
-        notifyPreloader("preloader.plugins.load")
-        Plugins.getInstance().load()
-        val pluginFilesRead = Plugins.getInstance().pluginFileCount()
-        if (pluginFilesRead > 0) {
-            postLaunchQueue.offer { context, _ ->
-                context.showInformationNotification(
-                    title = i18n("plugins.read.count.title", pluginFilesRead),
-                    message = null,
-                    Duration.minutes(1.0)
-                )
-            }
-        }
-        logger.info("Plugins loaded successfully!")
-    }
-
-    /**
-     * Provides the [Preferences] object should be used in the launched application
-     */
-    protected open fun buildPreferences(): Preferences {
-        return DefaultPreferences
     }
 
     private fun readConfigurations(): Preferences {
@@ -164,7 +143,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
             }
         } catch (e: RuntimeException) {
             logger.error("Couldn't read configurations ", e)
-            postLaunchQueue.offer { context, _ ->
+            postLaunch { context, _ ->
                 context.showErrorNotification(
                     title = i18n("preferences.read.failed.title"),
                     message = null,
@@ -220,8 +199,12 @@ open class BoomegaApp : BaseBoomegaApplication() {
         }
     }
 
-    private fun buildDatabaseTracker(preferences: Preferences): DatabaseTracker {
-        return DatabaseTracker.getGlobal().apply {
+    /**
+     * Binds the preferences login-data to the database tracker changes
+     */
+    private fun configureDatabaseTracker(preferences: Preferences): DatabaseTracker {
+        // TODO: find a more elegant way dealing with this
+        return buildDatabaseTracker().apply {
             notifyPreloader("preloader.logindata")
             // Filling up the database tracker
             preferences[LOGIN_DATA].savedDatabases.forEach(::saveDatabase)
