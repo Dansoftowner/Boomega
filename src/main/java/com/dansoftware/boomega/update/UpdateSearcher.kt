@@ -18,34 +18,28 @@
 
 package com.dansoftware.boomega.update
 
-import com.google.gson.Gson
-import com.google.gson.stream.JsonReader
 import io.github.g00fy2.versioncompare.Version
-import java.net.URL
 import java.util.function.Consumer
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 /**
- * Searches for the latest release in the given github-repository.
+ * Searches for the latest release.
  *
- * @param githubRepo the object representing the github repository
+ * @param releasesProvider the object that provides the list of releases
  * @param baseVersion the version the update-searcher should compare the release versions to
  */
-open class UpdateSearcher(private val githubRepo: GithubRepository, private val baseVersion: String) {
+open class UpdateSearcher(private val releasesProvider: ReleasesProvider, private val baseVersion: String) {
 
     /**
-     * Searches for the latest github release
+     * Searches for the latest release
      *
      * @return the [Release], _null_ if there is no newer release
      */
     open fun search(): Release? {
-        val gson = Gson()
-        JsonReader(URL(githubRepo.releasesApiUrl(1)).openStream().bufferedReader()).use { reader ->
-            val releases: Releases = gson.fromJson(reader, Releases::class.java)
-            return releases.getOrNull(0)?.takeIf {
-                Version(it.version!!.removePrefix("v")).isHigherThan(baseVersion.removePrefix("v"))
-            }
+        val releases: Releases = releasesProvider.getReleases()
+        return releases.getOrNull(0)?.takeIf {
+            Version(it.version!!.removePrefix("v")).isHigherThan(baseVersion.removePrefix("v"))
         }
     }
 
@@ -62,9 +56,6 @@ open class UpdateSearcher(private val githubRepo: GithubRepository, private val 
     }
 
     companion object {
-        @JvmField
-        val BOOMEGA_REPOSITORY = GithubRepository("Dansoftowner", "Boomega")
-
         @JvmStatic
         var default by DefaultSearcherDelegate()
     }
@@ -72,7 +63,7 @@ open class UpdateSearcher(private val githubRepo: GithubRepository, private val 
     private class DefaultSearcherDelegate : ReadWriteProperty<Companion, UpdateSearcher> {
 
         private val default by lazy {
-            UpdateSearcher(BOOMEGA_REPOSITORY, System.getProperty("boomega.version"))
+            UpdateSearcher(GithubReleasesProvider(GithubRepository("Dansoftowner", "Boomega")), System.getProperty("boomega.version"))
         }
 
         private var custom: UpdateSearcher? = null
