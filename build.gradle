@@ -105,6 +105,9 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.10'
     implementation 'ch.qos.logback:logback-core:1.2.10'
 
+    // DI framework
+    implementation 'com.google.inject:guice:5.1.0'
+
     //Testing
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'org.assertj:assertj-core:3.22.0'
