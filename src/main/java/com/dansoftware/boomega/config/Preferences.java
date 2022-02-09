@@ -25,8 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -37,14 +38,14 @@ import java.util.function.Consumer;
  *
  * @author Daniel Gyorffy
  */
+@Singleton
 public class Preferences {
 
     private static final Logger logger = LoggerFactory.getLogger(Preferences.class);
 
-    private static Preferences defaultPrefs;
-
     private final ConfigSource source;
 
+    @Inject
     public Preferences(@NotNull ConfigSource source) {
         this.source = source;
     }

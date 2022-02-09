@@ -56,16 +56,6 @@ abstract class BoomegaApp : BaseBoomegaApplication() {
     private lateinit var cachedPreferences: Preferences
 
     /**
-     * Provides the [Preferences] object should be used in the launched application
-     */
-    protected abstract fun buildPreferences(): Preferences
-
-    /**
-     * Provides the [DatabaseTracker] object should be used in the launched application
-     */
-    protected abstract fun buildDatabaseTracker(): DatabaseTracker
-
-    /**
      * Executes before the base initialization process starts
      */
     protected open fun preInit() { }
@@ -137,7 +127,7 @@ abstract class BoomegaApp : BaseBoomegaApplication() {
     private fun readConfigurations(): Preferences {
         notifyPreloader("preloader.preferences.read")
         return try {
-            buildPreferences().also {
+            com.dansoftware.boomega.di.preferences.also {
                 cachedPreferences = it
                 logger.info("Configurations has been read successfully!")
             }
@@ -204,7 +194,7 @@ abstract class BoomegaApp : BaseBoomegaApplication() {
      */
     private fun configureDatabaseTracker(preferences: Preferences): DatabaseTracker {
         // TODO: find a more elegant way dealing with this
-        return buildDatabaseTracker().apply {
+        return com.dansoftware.boomega.di.databaseTracker.apply {
             notifyPreloader("preloader.logindata")
             // Filling up the database tracker
             preferences[LOGIN_DATA].savedDatabases.forEach(::saveDatabase)

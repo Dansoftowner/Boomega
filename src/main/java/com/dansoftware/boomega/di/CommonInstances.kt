@@ -15,16 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+@file:JvmName("CommonInstances")
 
-package com.dansoftware.boomega.main
+package com.dansoftware.boomega.di
 
 import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.config.source.JsonFileSource
-import com.dansoftware.boomega.util.joinToFilePath
-import com.dansoftware.boomega.util.userDirectoryPath
-import java.io.File
+import com.dansoftware.boomega.database.tracking.DatabaseTracker
 
-/**
- * The default preferences used by the real-time app
- */
-object DefaultPreferences : Preferences(JsonFileSource(File(joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg"))))
+val preferences: Preferences get() = DIService[Preferences::class.java]
+
+val databaseTracker: DatabaseTracker get() = DIService[DatabaseTracker::class.java]

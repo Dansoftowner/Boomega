@@ -20,9 +20,9 @@
 
 package com.dansoftware.boomega.main
 
+import com.dansoftware.boomega.di.DIService
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler
 import com.dansoftware.boomega.gui.app.BaseBoomegaApplication
-import com.dansoftware.boomega.gui.app.BoomegaApp
 import com.dansoftware.boomega.instance.ApplicationInstanceService
 
 fun main(args: Array<String>) {
@@ -30,12 +30,13 @@ fun main(args: Array<String>) {
     launch(args)
 }
 
+private fun launch(args: Array<String>) {
+    BaseBoomegaApplication.launchApp(RealtimeApp::class.java, *args)
+}
+
 private fun init(args: Array<String>) {
     PropertiesSetup.setupSystemProperties()
     Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler())
+    DIService.initModules(PreferencesModule())
     ApplicationInstanceService.open(args)
-}
-
-private fun launch(args: Array<String>) {
-    BaseBoomegaApplication.launchApp(RealtimeApp::class.java, *args)
 }

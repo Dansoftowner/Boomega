@@ -28,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
@@ -44,6 +46,11 @@ public class JsonFileSource extends JsonSource {
     private final Gson gson;
 
     private final boolean created;
+
+    @Inject
+    public JsonFileSource(@NotNull @Named("configFilePath") String filePath) {
+        this(new File(filePath));
+    }
 
     public JsonFileSource(@NotNull File file) {
         this.file = file;

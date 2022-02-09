@@ -18,8 +18,6 @@
 
 package com.dansoftware.boomega.main
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.app.BoomegaApp
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.instance.ApplicationInstanceService
@@ -35,9 +33,6 @@ import kotlin.system.exitProcess
  * from the disk, closes down the [ApplicationInstanceService] etc...
  */
 class RealtimeApp : BoomegaApp() {
-
-    override fun buildPreferences(): Preferences = DefaultPreferences
-    override fun buildDatabaseTracker(): DatabaseTracker = DefaultDatabaseTracker
 
     override fun stop() {
         super.stop()

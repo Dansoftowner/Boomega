@@ -21,13 +21,12 @@ package com.dansoftware.boomega.instance;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.database.tracking.DatabaseTracker;
+import com.dansoftware.boomega.di.CommonInstances;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.login.config.LoginData;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
 import com.dansoftware.boomega.launcher.LauncherMode;
 import com.dansoftware.boomega.main.Arguments;
-import com.dansoftware.boomega.main.DefaultDatabaseTracker;
-import com.dansoftware.boomega.main.DefaultPreferences;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;
@@ -136,7 +135,7 @@ public class ApplicationInstanceService implements MessageHandler {
         }
 
         logger.debug("starting an ActivityLauncher...");
-        new ActivityLauncherImpl(args, DefaultPreferences.INSTANCE, DefaultDatabaseTracker.INSTANCE).launch();
+        new ActivityLauncherImpl(args, CommonInstances.getPreferences(), CommonInstances.getDatabaseTracker()).launch();
         return null;
     }
 
@@ -163,7 +162,7 @@ public class ApplicationInstanceService implements MessageHandler {
 
         private LoginData buildLoginData() {
             //removing all already opened databases from the LoginData
-            Set<DatabaseMeta> databaseUsing = DefaultDatabaseTracker.INSTANCE.getUsingDatabases();
+            Set<DatabaseMeta> databaseUsing = CommonInstances.getDatabaseTracker().getUsingDatabases();
             LoginData loginData = getPreferences().get(LOGIN_DATA);
             loginData.getSavedDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);

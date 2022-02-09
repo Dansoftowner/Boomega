@@ -18,9 +18,20 @@
 
 package com.dansoftware.boomega.main
 
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.config.source.ConfigSource
+import com.dansoftware.boomega.config.source.JsonFileSource
+import com.dansoftware.boomega.util.joinToFilePath
+import com.dansoftware.boomega.util.userDirectoryPath
+import com.google.inject.AbstractModule
+import com.google.inject.Provides
+import javax.inject.Named
 
-/**
- * The default database tracker used by the real-time app
- */
-object DefaultDatabaseTracker : DatabaseTracker()
+class PreferencesModule : AbstractModule() {
+    override fun configure() {
+        bind(ConfigSource::class.java).to(JsonFileSource::class.java)
+    }
+
+    @Provides
+    @Named("configFilePath")
+    fun provideConfigFilePath() = joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg")
+}

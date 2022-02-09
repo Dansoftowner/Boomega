@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Singleton;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.Consumer;
@@ -34,16 +35,11 @@ import java.util.function.Consumer;
  * Used for tracking the opened/unopened databases (in form of {@link DatabaseMeta} objects).
  *
  * <p>
- * Other objects are using {@link DatabaseTracker}s for updating their content when something is changed
+ * Some components might use {@link DatabaseTracker}s for updating their content when something is changed
  * (a database is launched, removed etc...). This can be achieved by implementing the {@link DatabaseTracker.Observer}
  * interface.
- *
- * <p>
- * {@link DatabaseTracker} is not singleton, but it has a global instance that can be
- * used through the static {@link #getGlobal()} method.
- *
- * @author Daniel Gyorffy
  */
+@Singleton
 public class DatabaseTracker {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseTracker.class);
