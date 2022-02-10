@@ -20,8 +20,9 @@ package com.dansoftware.boomega.update
 
 import io.github.g00fy2.versioncompare.Version
 import java.util.function.Consumer
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 
 /**
  * Searches for the latest release.
@@ -29,7 +30,11 @@ import kotlin.reflect.KProperty
  * @param releasesProvider the object that provides the list of releases
  * @param baseVersion the version the update-searcher should compare the release versions to
  */
-open class UpdateSearcher(private val releasesProvider: ReleasesProvider, private val baseVersion: String) {
+@Singleton
+open class UpdateSearcher @Inject constructor(
+    private val releasesProvider: ReleasesProvider,
+    @param:Named("appVersion") private val baseVersion: String
+) {
 
     /**
      * Searches for the latest release
@@ -52,29 +57,6 @@ open class UpdateSearcher(private val releasesProvider: ReleasesProvider, privat
         } catch (e: Exception) {
             onException?.accept(e)
             null
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        var default by DefaultSearcherDelegate()
-    }
-
-    private class DefaultSearcherDelegate : ReadWriteProperty<Companion, UpdateSearcher> {
-
-        private val default by lazy {
-            UpdateSearcher(GithubReleasesProvider(GithubRepository("Dansoftowner", "Boomega")), System.getProperty("boomega.version"))
-        }
-
-        private var custom: UpdateSearcher? = null
-
-        override fun getValue(thisRef: Companion, property: KProperty<*>): UpdateSearcher {
-            return custom ?: default
-        }
-
-        @Synchronized
-        override fun setValue(thisRef: Companion, property: KProperty<*>, value: UpdateSearcher) {
-            custom = value
         }
     }
 }

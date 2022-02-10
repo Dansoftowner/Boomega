@@ -18,7 +18,13 @@
 
 package com.dansoftware.boomega.update
 
+import javax.inject.Inject
+import javax.inject.Named
+
 /**
  * Represents a Github repository
  */
-class GithubRepository(val owner: String, val name: String)
+class GithubRepository @Inject constructor(
+    @Named("GithubRepositoryOwner") val owner: String,
+    @Named("GithubRepositoryName") val name: String
+)

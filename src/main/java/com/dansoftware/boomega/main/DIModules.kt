@@ -20,10 +20,13 @@ package com.dansoftware.boomega.main
 
 import com.dansoftware.boomega.config.source.ConfigSource
 import com.dansoftware.boomega.config.source.JsonFileSource
+import com.dansoftware.boomega.update.GithubReleasesProvider
+import com.dansoftware.boomega.update.ReleasesProvider
 import com.dansoftware.boomega.util.joinToFilePath
 import com.dansoftware.boomega.util.userDirectoryPath
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
+import com.google.inject.name.Names
 import javax.inject.Named
 
 class PreferencesModule : AbstractModule() {
@@ -34,4 +37,20 @@ class PreferencesModule : AbstractModule() {
     @Provides
     @Named("configFilePath")
     fun provideConfigFilePath() = joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg")
+}
+
+class UpdateModule : AbstractModule() {
+    override fun configure() {
+        bind(ReleasesProvider::class.java).to(GithubReleasesProvider::class.java)
+        bind(String::class.java)
+            .annotatedWith(Names.named("GithubRepositoryOwner"))
+            .toInstance("Dansoftowner")
+        bind(String::class.java)
+            .annotatedWith(Names.named("GithubRepositoryName"))
+            .toInstance("Boomega")
+    }
+
+    @Provides
+    @Named("appVersion")
+    fun provideAppVersion() = System.getProperty("app.version")
 }

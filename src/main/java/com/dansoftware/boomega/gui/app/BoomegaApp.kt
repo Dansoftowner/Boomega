@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.app
 import com.dansoftware.boomega.config.*
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
@@ -181,7 +182,7 @@ abstract class BoomegaApp : BaseBoomegaApplication() {
         return when {
             preferences[SEARCH_UPDATES] -> {
                 notifyPreloader("preloader.update.search")
-                val updateSearcher = UpdateSearcher.default
+                val updateSearcher = DIService[UpdateSearcher::class.java]
                 preferences.editor[LAST_UPDATE_SEARCH] = LocalDateTime.now()
                 updateSearcher.trySearch { e -> logger.error("Couldn't search for updates", e) }
             }
@@ -194,7 +195,7 @@ abstract class BoomegaApp : BaseBoomegaApplication() {
      */
     private fun configureDatabaseTracker(preferences: Preferences): DatabaseTracker {
         // TODO: find a more elegant way dealing with this
-        return com.dansoftware.boomega.di.databaseTracker.apply {
+        return DIService[DatabaseTracker::class.java].apply {
             notifyPreloader("preloader.logindata")
             // Filling up the database tracker
             preferences[LOGIN_DATA].savedDatabases.forEach(::saveDatabase)
