@@ -48,7 +48,7 @@ import java.util.*
  *
  * @see [com.dansoftware.boomega.main.RealtimeApp]
  */
-abstract class BoomegaApp : BaseBoomegaApplication() {
+open class BoomegaApp : BaseBoomegaApplication() {
 
     /**
      * The queue that stores the actions should be invoked after an activity is launched
