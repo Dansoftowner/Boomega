@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.entry;
 
+import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.database.tracking.DatabaseTracker;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public class DatabaseTrackerTest {
 
     @BeforeEach
     void init() {
-        databaseTracker = new DatabaseTracker();
+        databaseTracker = new DatabaseTracker(Preferences.empty());
     }
 
     @Test

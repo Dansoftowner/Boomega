@@ -87,7 +87,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
         logger.debug("Theme is: {}", Theme.default)
         logger.debug("Locale is: {}", Locale.getDefault())
 
-        val databaseTracker = configureDatabaseTracker(preferences)
+        val databaseTracker = DIService[DatabaseTracker::class.java]
         progress(0.9)
 
         // searching for updates
@@ -128,7 +128,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
     private fun readConfigurations(): Preferences {
         notifyPreloader("preloader.preferences.read")
         return try {
-            com.dansoftware.boomega.di.preferences.also {
+            DIService[Preferences::class.java].also {
                 cachedPreferences = it
                 logger.info("Configurations has been read successfully!")
             }
@@ -187,28 +187,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
                 updateSearcher.trySearch { e -> logger.error("Couldn't search for updates", e) }
             }
             else -> null
-        }
-    }
-
-    /**
-     * Binds the preferences login-data to the database tracker changes
-     */
-    private fun configureDatabaseTracker(preferences: Preferences): DatabaseTracker {
-        // TODO: find a more elegant way dealing with this
-        return DIService[DatabaseTracker::class.java].apply {
-            notifyPreloader("preloader.logindata")
-            // Filling up the database tracker
-            preferences[LOGIN_DATA].savedDatabases.forEach(::saveDatabase)
-
-            registerObserverStrongly(object : DatabaseTracker.Observer {
-                override fun onDatabaseAdded(databaseMeta: DatabaseMeta) {
-                    preferences.updateLoginData { it.savedDatabases.add(databaseMeta) }
-                }
-
-                override fun onDatabaseRemoved(databaseMeta: DatabaseMeta) {
-                    preferences.updateLoginData { it.savedDatabases.remove(databaseMeta) }
-                }
-            })
         }
     }
 

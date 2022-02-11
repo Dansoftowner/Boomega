@@ -18,14 +18,19 @@
 
 package com.dansoftware.boomega.database.tracking;
 
+import com.dansoftware.boomega.config.CommonPreferences;
+import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
+import com.dansoftware.boomega.gui.login.LoginDataUtilsKt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
+import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -44,8 +49,6 @@ public class DatabaseTracker {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseTracker.class);
 
-    private static DatabaseTracker globalInstance;
-
     private final List<WeakReference<Observer>> observers =
             Collections.synchronizedList(new LinkedList<>());
 
@@ -63,6 +66,32 @@ public class DatabaseTracker {
 
     private final ObservableSet<DatabaseMeta> usingDatabasesUnmodifiable =
             FXCollections.unmodifiableObservableSet(usingDatabases);
+
+    @Inject
+    public DatabaseTracker(@NotNull Preferences preferences) {
+        preferences.get(CommonPreferences.LOGIN_DATA).getSavedDatabases().forEach(this::saveDatabase);
+        initPreferencesHandling(Objects.requireNonNull(preferences));
+    }
+
+    private void initPreferencesHandling(@NotNull Preferences preferences) {
+        registerObserverStrongly(new Observer() {
+            @Override
+            public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
+                LoginDataUtilsKt.updateLoginData(preferences, (loginData) -> {
+                    loginData.getSavedDatabases().add(databaseMeta);
+                    return Unit.INSTANCE;
+                });
+            }
+
+            @Override
+            public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
+                LoginDataUtilsKt.updateLoginData(preferences, (loginData) -> {
+                    loginData.getSavedDatabases().remove(databaseMeta);
+                    return Unit.INSTANCE;
+                });
+            }
+        });
+    }
 
     /**
      * Marks the database as closed.

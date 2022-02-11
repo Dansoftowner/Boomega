@@ -52,7 +52,7 @@ public class InMemoryDatabaseSimulation extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        new DatabaseActivity(new InMemoryDatabase(), Preferences.empty(), new DatabaseTracker()).show();
+        new DatabaseActivity(new InMemoryDatabase(), Preferences.empty(), new DatabaseTracker(Preferences.empty())).show();
     }
 
 
