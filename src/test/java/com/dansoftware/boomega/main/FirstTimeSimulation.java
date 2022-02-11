@@ -12,7 +12,7 @@ public class FirstTimeSimulation {
     static {
         PropertiesSetup.setupSystemProperties();
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
-        DIService.INSTANCE.initModules(new AbstractModule() {
+        DIService.initModules(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(Preferences.class).toInstance(Preferences.empty());
