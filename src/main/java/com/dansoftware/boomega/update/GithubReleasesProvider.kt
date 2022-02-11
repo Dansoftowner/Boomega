@@ -21,8 +21,9 @@ package com.dansoftware.boomega.update
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import java.net.URL
+import javax.inject.Inject
 
-class GithubReleasesProvider(private val githubRepository: GithubRepository) : ReleasesProvider {
+class GithubReleasesProvider @Inject constructor(private val githubRepository: GithubRepository) : ReleasesProvider {
 
     private val githubReleasesApiUrl get() = URL(githubRepository.releasesApiUrl(1))
 

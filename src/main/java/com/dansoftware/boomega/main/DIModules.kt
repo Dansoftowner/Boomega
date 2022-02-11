@@ -25,9 +25,13 @@ import com.dansoftware.boomega.update.ReleasesProvider
 import com.dansoftware.boomega.util.joinToFilePath
 import com.dansoftware.boomega.util.userDirectoryPath
 import com.google.inject.AbstractModule
+import com.google.inject.Module
 import com.google.inject.Provides
 import com.google.inject.name.Names
+import com.google.inject.util.Modules
 import javax.inject.Named
+
+object RealtimeAppModule : Module by Modules.combine(PreferencesModule(), UpdateModule())
 
 class PreferencesModule : AbstractModule() {
     override fun configure() {
@@ -43,14 +47,13 @@ class UpdateModule : AbstractModule() {
     override fun configure() {
         bind(ReleasesProvider::class.java).to(GithubReleasesProvider::class.java)
         bind(String::class.java)
+            .annotatedWith(Names.named("appVersion"))
+            .toInstance(System.getProperty("boomega.version"))
+        bind(String::class.java)
             .annotatedWith(Names.named("GithubRepositoryOwner"))
             .toInstance("Dansoftowner")
         bind(String::class.java)
             .annotatedWith(Names.named("GithubRepositoryName"))
             .toInstance("Boomega")
     }
-
-    @Provides
-    @Named("appVersion")
-    fun provideAppVersion() = System.getProperty("app.version")
 }

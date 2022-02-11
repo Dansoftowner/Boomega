@@ -29,12 +29,14 @@ object DIService {
         private set
 
     @Synchronized
+    @JvmStatic
     fun initModules(vararg modules: Module) {
         check(this.modules == null) { "Modules has been specified once" }
         this.modules = listOf(*modules)
         injector = Guice.createInjector(*modules)
     }
 
+    @JvmStatic
     operator fun <T> get(type: Class<T>): T =
         injector.getInstance(type)
 }

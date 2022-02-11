@@ -37,6 +37,6 @@ private fun launch(args: Array<String>) {
 private fun init(args: Array<String>) {
     PropertiesSetup.setupSystemProperties()
     Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler())
-    DIService.initModules(PreferencesModule(), UpdateModule())
+    DIService.initModules(RealtimeAppModule)
     ApplicationInstanceService.open(args)
 }
