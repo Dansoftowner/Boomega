@@ -27,12 +27,12 @@ import javax.inject.Singleton
 /**
  * Searches for the latest release.
  *
- * @param releasesProvider the object that provides the list of releases
+ * @param releasesFetcher the object that provides the list of releases
  * @param baseVersion the version the update-searcher should compare the release versions to
  */
 @Singleton
 open class UpdateSearcher @Inject constructor(
-    private val releasesProvider: ReleasesProvider,
+    private val releasesFetcher: ReleasesFetcher,
     @param:Named("appVersion") private val baseVersion: String
 ) {
 
@@ -42,7 +42,7 @@ open class UpdateSearcher @Inject constructor(
      * @return the [Release], _null_ if there is no newer release
      */
     open fun search(): Release? {
-        val releases: Releases = releasesProvider.getReleases()
+        val releases: Releases = releasesFetcher.fetchReleases()
         return releases.getOrNull(0)?.takeIf {
             Version(it.version!!.removePrefix("v")).isHigherThan(baseVersion.removePrefix("v"))
         }

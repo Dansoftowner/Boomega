@@ -20,8 +20,8 @@ package com.dansoftware.boomega.main
 
 import com.dansoftware.boomega.config.source.ConfigSource
 import com.dansoftware.boomega.config.source.JsonFileSource
-import com.dansoftware.boomega.update.GithubReleasesProvider
-import com.dansoftware.boomega.update.ReleasesProvider
+import com.dansoftware.boomega.update.GithubReleasesFetcher
+import com.dansoftware.boomega.update.ReleasesFetcher
 import com.dansoftware.boomega.util.joinToFilePath
 import com.dansoftware.boomega.util.userDirectoryPath
 import com.google.inject.AbstractModule
@@ -31,7 +31,10 @@ import com.google.inject.name.Names
 import com.google.inject.util.Modules
 import javax.inject.Named
 
-object RealtimeAppModule : Module by Modules.combine(PreferencesModule(), UpdateModule())
+class RealtimeAppModule : Module by Modules.combine(
+    PreferencesModule(),
+    UpdateModule()
+)
 
 class PreferencesModule : AbstractModule() {
     override fun configure() {
@@ -45,7 +48,7 @@ class PreferencesModule : AbstractModule() {
 
 class UpdateModule : AbstractModule() {
     override fun configure() {
-        bind(ReleasesProvider::class.java).to(GithubReleasesProvider::class.java)
+        bind(ReleasesFetcher::class.java).to(GithubReleasesFetcher::class.java)
         bind(String::class.java)
             .annotatedWith(Names.named("appVersion"))
             .toInstance(System.getProperty("boomega.version"))

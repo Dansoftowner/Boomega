@@ -21,6 +21,6 @@ package com.dansoftware.boomega.update
 /**
  * Intended to provide the list of releases for the update-searcher.
  */
-interface ReleasesProvider {
-    fun getReleases(): Releases
+interface ReleasesFetcher {
+    fun fetchReleases(): Releases
 }

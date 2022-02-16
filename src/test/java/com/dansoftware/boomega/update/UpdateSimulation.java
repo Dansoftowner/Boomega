@@ -26,7 +26,7 @@ public class UpdateSimulation {
             protected void configure() {
                 bind(ConfigSource.class).to(DummyConfigSource.class);
 
-                bind(ReleasesProvider.class).to(DummyReleasesProvider.class);
+                bind(ReleasesFetcher.class).to(DummyReleasesFetcher.class);
                 bind(String.class).annotatedWith(Names.named("appVersion")).toInstance("0.0.0");
             }
         });
@@ -43,11 +43,11 @@ public class UpdateSimulation {
         }
     }
 
-    private static class DummyReleasesProvider implements ReleasesProvider {
+    private static class DummyReleasesFetcher implements ReleasesFetcher {
 
         @NotNull
         @Override
-        public Releases getReleases() {
+        public Releases fetchReleases() {
             var releases = new Releases();
             releases.add(buildSimpleRelease());
             return releases;

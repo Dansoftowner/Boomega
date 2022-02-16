@@ -21,7 +21,7 @@ package com.dansoftware.boomega.instance;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.database.tracking.DatabaseTracker;
-import com.dansoftware.boomega.di.CommonInstances;
+import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.login.config.LoginData;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
@@ -135,7 +135,7 @@ public class ApplicationInstanceService implements MessageHandler {
         }
 
         logger.debug("starting an ActivityLauncher...");
-        new ActivityLauncherImpl(args, CommonInstances.getPreferences(), CommonInstances.getDatabaseTracker()).launch();
+        new ActivityLauncherImpl(args, DIService.get(Preferences.class), DIService.get(DatabaseTracker.class)).launch();
         return null;
     }
 
@@ -162,7 +162,7 @@ public class ApplicationInstanceService implements MessageHandler {
 
         private LoginData buildLoginData() {
             //removing all already opened databases from the LoginData
-            Set<DatabaseMeta> databaseUsing = CommonInstances.getDatabaseTracker().getUsingDatabases();
+            Set<DatabaseMeta> databaseUsing = DIService.get(DatabaseTracker.class).getUsingDatabases();
             LoginData loginData = getPreferences().get(LOGIN_DATA);
             loginData.getSavedDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);

@@ -23,11 +23,11 @@ import com.google.gson.stream.JsonReader
 import java.net.URL
 import javax.inject.Inject
 
-class GithubReleasesProvider @Inject constructor(private val githubRepository: GithubRepository) : ReleasesProvider {
+class GithubReleasesFetcher @Inject constructor(private val githubRepository: GithubRepository) : ReleasesFetcher {
 
     private val githubReleasesApiUrl get() = URL(githubRepository.releasesApiUrl(1))
 
-    override fun getReleases(): Releases {
+    override fun fetchReleases(): Releases {
         val gson = Gson()
         return JsonReader(githubReleasesApiUrl.openStream().bufferedReader()).use { reader ->
             gson.fromJson(reader, Releases::class.java)
