@@ -18,11 +18,12 @@
 
 package com.dansoftware.boomega.export
 
+import com.dansoftware.boomega.di.DIService
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.export.excel.ExcelExporter
 import com.dansoftware.boomega.export.json.JsonExporter
 import com.dansoftware.boomega.export.txtable.TXTableExporter
-import com.dansoftware.boomega.plugin.Plugins
+import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.plugin.api.RecordExporterPlugin
 import okhttp3.internal.toImmutableList
 import org.slf4j.Logger
@@ -50,7 +51,7 @@ private fun loadBuiltInExporters() = sequenceOf(
 )
 
 private fun loadExportersFromPlugins() =
-    Plugins.getInstance()
+    DIService[PluginService::class.java]
         .of(RecordExporterPlugin::class.java)
         .asSequence()
         .map(RecordExporterPlugin::exporter)

@@ -18,8 +18,9 @@
 
 package com.dansoftware.boomega.i18n;
 
-import com.dansoftware.boomega.plugin.Plugins;
+import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.plugin.api.LanguagePlugin;
+import com.dansoftware.boomega.plugin.api.PluginService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -122,7 +123,7 @@ public class I18N {
 
     private static void registerPluginPacks() {
         logger.debug("Checking plugins for language-packs...");
-        Plugins.getInstance().of(LanguagePlugin.class).stream()
+        DIService.get(PluginService.class).of(LanguagePlugin.class).stream()
                 .map(LanguagePlugin::getLanguagePack)
                 .peek(pack -> logger.debug("Found LanguagePack for locale '{}'", pack.getLocale()))
                 .forEach(pack -> putPack(pack.getLocale(), pack));

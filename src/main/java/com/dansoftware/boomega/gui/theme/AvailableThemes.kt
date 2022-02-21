@@ -18,7 +18,8 @@
 
 package com.dansoftware.boomega.gui.theme
 
-import com.dansoftware.boomega.plugin.Plugins
+import com.dansoftware.boomega.di.DIService
+import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.plugin.api.ThemePlugin
 import okhttp3.internal.toImmutableList
 import org.slf4j.Logger
@@ -56,6 +57,8 @@ private fun builtInThemes(): Sequence<Theme> =
  */
 private fun pluginThemes(): Sequence<Theme> {
     logger.debug("Checking plugins for themes...")
-    return Plugins.getInstance().of(ThemePlugin::class.java).asSequence()
+    return DIService[PluginService::class.java]
+        .of(ThemePlugin::class.java)
+        .asSequence()
         .map(ThemePlugin::theme)
 }

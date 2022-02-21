@@ -22,12 +22,13 @@ import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.ReadOnlyDatabase
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.google.GoogleBooksImportModule
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
-import com.dansoftware.boomega.plugin.Plugins
 import com.dansoftware.boomega.plugin.api.ModulePlugin
+import com.dansoftware.boomega.plugin.api.PluginService
 import javafx.stage.WindowEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -120,7 +121,7 @@ class DatabaseView(
 
     private fun loadPluginModules(): Sequence<Module> {
         logger.debug("Checking plugins for modules...")
-        return Plugins.getInstance().of(ModulePlugin::class.java).asSequence()
+        return DIService[PluginService::class.java].of(ModulePlugin::class.java).asSequence()
             .map { it.getModule(this, preferences, databaseTracker, databaseReadOnly) }
     }
 

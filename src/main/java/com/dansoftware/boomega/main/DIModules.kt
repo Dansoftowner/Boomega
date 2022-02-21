@@ -20,6 +20,8 @@ package com.dansoftware.boomega.main
 
 import com.dansoftware.boomega.config.source.ConfigSource
 import com.dansoftware.boomega.config.source.JsonFileSource
+import com.dansoftware.boomega.plugin.RealtimePluginService
+import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.update.GithubReleasesFetcher
 import com.dansoftware.boomega.update.ReleasesFetcher
 import com.dansoftware.boomega.util.joinToFilePath
@@ -33,7 +35,8 @@ import javax.inject.Named
 
 class RealtimeAppModule : Module by Modules.combine(
     PreferencesModule(),
-    UpdateModule()
+    UpdateModule(),
+    PluginModule()
 )
 
 class PreferencesModule : AbstractModule() {
@@ -58,5 +61,11 @@ class UpdateModule : AbstractModule() {
         bind(String::class.java)
             .annotatedWith(Names.named("GithubRepositoryName"))
             .toInstance("Boomega")
+    }
+}
+
+class PluginModule : AbstractModule() {
+    override fun configure() {
+        bind(PluginService::class.java).to(RealtimePluginService::class.java)
     }
 }

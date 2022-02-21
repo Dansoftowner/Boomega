@@ -5,7 +5,8 @@ import com.dansoftware.boomega.config.source.InMemorySource;
 import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.gui.app.BaseBoomegaApplication;
 import com.dansoftware.boomega.gui.app.BoomegaApp;
-import com.dansoftware.boomega.main.PropertiesSetup;
+import com.dansoftware.boomega.plugin.DummyPluginService;
+import com.dansoftware.boomega.plugin.api.PluginService;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import org.jetbrains.annotations.NotNull;
@@ -18,13 +19,12 @@ import java.util.List;
 public class UpdateSimulation {
 
     static {
-        // TODO: shouldn't be needed
-        PropertiesSetup.setupSystemProperties();
-
         DIService.initModules(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(ConfigSource.class).to(DummyConfigSource.class);
+
+                bind(PluginService.class).to(DummyPluginService.class);
 
                 bind(ReleasesFetcher.class).to(DummyReleasesFetcher.class);
                 bind(String.class).annotatedWith(Names.named("appVersion")).toInstance("0.0.0");

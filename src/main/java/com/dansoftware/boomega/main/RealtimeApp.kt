@@ -18,11 +18,12 @@
 
 package com.dansoftware.boomega.main
 
+import com.dansoftware.boomega.di.DIService
 import com.dansoftware.boomega.gui.app.BoomegaApp
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.instance.ApplicationInstanceService
 import com.dansoftware.boomega.plugin.PluginClassLoader
-import com.dansoftware.boomega.plugin.Plugins
+import com.dansoftware.boomega.plugin.api.PluginService
 import javafx.util.Duration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -57,17 +58,20 @@ class RealtimeApp : BoomegaApp() {
      */
     private fun loadPlugins() {
         notifyPreloader("preloader.plugins.load")
-        Plugins.getInstance().load()
-        val pluginFilesRead = Plugins.getInstance().pluginFileCount()
-        if (pluginFilesRead > 0) {
+
+        val pluginService = DIService[PluginService::class.java]
+        pluginService.load()
+
+        val pluginFileCount = pluginService.pluginFileCount
+        if (pluginFileCount > 0)
             postLaunch { context, _ ->
                 context.showInformationNotification(
-                    title = i18n("plugins.read.count.title", pluginFilesRead),
+                    title = i18n("plugins.read.count.title", pluginFileCount),
                     message = null,
                     Duration.minutes(1.0)
                 )
             }
-        }
+
         logger.info("Plugins loaded successfully!")
     }
 

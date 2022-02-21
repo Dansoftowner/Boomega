@@ -20,38 +20,68 @@ package com.dansoftware.boomega.plugin;
 
 import com.dansoftware.boomega.plugin.api.BoomegaPlugin;
 import com.dansoftware.boomega.plugin.api.DisabledPlugin;
+import com.dansoftware.boomega.plugin.api.PluginService;
 import com.dansoftware.boomega.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Responsible for loading and accessing the application plugins.
+ * Responsible for loading and accessing the application plugins located in the
+ * plugin directory.
  *
  * @author Daniel Gyoerffy
  */
-public class Plugins {
+public class RealtimePluginService implements PluginService {
 
-    private static final Logger logger = LoggerFactory.getLogger(Plugins.class);
+    private static final Logger logger = LoggerFactory.getLogger(RealtimePluginService.class);
 
-    private static final Plugins INSTANCE = new Plugins();
+    private static final RealtimePluginService INSTANCE = new RealtimePluginService();
 
-    private final List<BoomegaPlugin> plugins = new ArrayList<>();
-    private boolean loaded;
+    private final List<BoomegaPlugin> plugins = new LinkedList<>();
+    private volatile boolean loaded;
 
-    private Plugins() {
+    @Inject
+    private RealtimePluginService() {
     }
 
-    /**
-     * Loads and instantiates all the plugin classes found in the plugin-directory.
-     */
+    @Override
+    public @NotNull List<BoomegaPlugin> getAll() {
+        return Collections.unmodifiableList(plugins);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <P extends BoomegaPlugin> @NotNull List<P> of(@NotNull Class<P> classRef) {
+        load();
+        return plugins.stream()
+                .filter(it -> classRef.isAssignableFrom(it.getClass()))
+                .map(it -> (P) it)
+                .toList();
+    }
+
+    @NotNull
+    @Override
+    public List<BoomegaPlugin> pluginsOfLocation(@NotNull URL url) {
+        return plugins.stream()
+                .filter(it -> it.getClass().getProtectionDomain().getCodeSource().getLocation().equals(url))
+                .toList();
+    }
+
+    @Override
+    public int getPluginFileCount() {
+        return PluginClassLoader.getInstance().getReadPluginsCount();
+    }
+
+    @Override
     public synchronized void load() {
         if (!loaded) {
             plugins.addAll(
@@ -74,56 +104,7 @@ public class Plugins {
                 !classRef.isAnnotationPresent(DisabledPlugin.class);
     }
 
-    /**
-     * @return a read-only list with all the {@link BoomegaPlugin} objects
-     */
-    public List<BoomegaPlugin> getAll() {
-        return Collections.unmodifiableList(plugins);
-    }
-
-    /**
-     * Searches plugins that have the given location
-     *
-     * @param url the location
-     * @return the list of {@link BoomegaPlugin} objects
-     */
-    public List<BoomegaPlugin> getPluginsOfFile(URL url) {
-        return plugins.stream()
-                .filter(it -> it.getClass().getProtectionDomain().getCodeSource().getLocation().equals(url))
-                .toList();
-    }
-
-    /**
-     * Searches plugins with the given type.
-     *
-     * @param classRef the class-reference of the type
-     * @param <P>      the type, subtype of the {@link BoomegaPlugin}
-     * @return the list of plugin objects
-     */
-    @SuppressWarnings("unchecked")
-    public <P extends BoomegaPlugin> List<P> of(Class<P> classRef) {
-        load();
-        return plugins.stream()
-                .filter(it -> classRef.isAssignableFrom(it.getClass()))
-                .map(it -> (P) it)
-                .toList();
-    }
-
-    /**
-     * @return the count of the loaded plugin files
-     */
-    public int pluginFileCount() {
-        return PluginClassLoader.getInstance().getReadPluginsCount();
-    }
-
-    /**
-     * @return the count of the constructed plugin objects
-     */
-    public int pluginObjectCount() {
-        return plugins.size();
-    }
-
-    public static Plugins getInstance() {
+    public static RealtimePluginService getInstance() {
         return INSTANCE;
     }
 }
