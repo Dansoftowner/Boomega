@@ -113,6 +113,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.22.0'
     testImplementation 'org.mockito:mockito-core:4.2.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
 
     implementation 'com.github.Dansoftowner:jUserDirectories:1.0'
     implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.7'
