@@ -58,6 +58,13 @@ compileKotlin {
     }
 }
 
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '17'
+        freeCompilerArgs += '-Xjvm-default=all'
+    }
+}
+
 compileJava {
     options.encoding = 'UTF-8'
 }
