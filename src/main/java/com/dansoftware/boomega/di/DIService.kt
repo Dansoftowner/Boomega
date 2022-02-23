@@ -21,6 +21,7 @@ package com.dansoftware.boomega.di
 import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.Module
+import kotlin.reflect.KClass
 
 object DIService {
     private var modules: List<Module>? = null
@@ -37,6 +38,8 @@ object DIService {
     }
 
     @JvmStatic
-    operator fun <T> get(type: Class<T>): T =
-        injector.getInstance(type)
+    operator fun <T> get(type: Class<T>): T = injector.getInstance(type)
+
+    @JvmStatic
+    operator fun <T : Any> get(type: KClass<T>): T = get(type.java)
 }

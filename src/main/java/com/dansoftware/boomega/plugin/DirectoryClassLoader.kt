@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,40 +18,29 @@
 
 package com.dansoftware.boomega.plugin
 
+import com.dansoftware.boomega.util.toURLS
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
 import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 
 /**
- * The [PluginClassLoader] can load classes from both the class-path and the third-party plugins located
- * in the plugin-directory.
+ * The [DirectoryClassLoader] can load classes from both the class-path and the jar files located in
+ * the given directory.
  *
- * @author Daniel Gyorffy
+ * @param directory the [File] representing the directory
  */
-object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls(), getSystemClassLoader()) {
-
-    @JvmStatic
-    private val logger = LoggerFactory.getLogger(javaClass)
-
-    val readPluginsCount: Int
-        get() = this.urLs.size
-
-    /**
-     * For already existing code bases
-     */
-    @JvmStatic
-    fun getInstance(): PluginClassLoader = this
-
-    fun isEmpty(): Boolean = PluginDirectory.isEmpty()
-
-    override fun close() {
-        super.close()
-        PluginDirectory.clear()
-    }
-
+@Singleton
+class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory: File) : URLClassLoader(
+    directory.listFiles { _, name -> JAR_FILE_PATTERN.matches(name) }.toURLS(),
+    getSystemClassLoader()
+) {
     fun listAllClasses(): List<Class<*>> = LinkedList<Class<*>>().run {
         urLs.asSequence()
             .map(URL::toExternalForm)
@@ -66,9 +55,15 @@ object PluginClassLoader : URLClassLoader(PluginDirectory.getPluginFilesAsUrls()
                     .map(JarEntry::getName)
                     .map { it.substring(0, it.length - 6) }
                     .map { it.replace('/', '.') }
-                    .map { this@PluginClassLoader.findClass(it) }
+                    .map { this@DirectoryClassLoader.findClass(it) }
                     .let { addAll(it) }
             }
         Collections.unmodifiableList(this)
+    }
+
+    companion object {
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(DirectoryClassLoader::class.java)
+        private val JAR_FILE_PATTERN = Regex(".*\\.jar", RegexOption.IGNORE_CASE)
     }
 }

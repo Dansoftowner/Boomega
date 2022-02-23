@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Collections;
@@ -35,22 +37,22 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Responsible for loading and accessing the application plugins located in the
- * plugin directory.
- *
- * @author Daniel Gyoerffy
+ * Real-time implementation of the {@link PluginService} that loads plugins from a directory
+ * using a {@link DirectoryClassLoader}.
  */
+@Singleton
 public class RealtimePluginService implements PluginService {
 
     private static final Logger logger = LoggerFactory.getLogger(RealtimePluginService.class);
 
-    private static final RealtimePluginService INSTANCE = new RealtimePluginService();
-
     private final List<BoomegaPlugin> plugins = new LinkedList<>();
     private volatile boolean loaded;
 
+    private final DirectoryClassLoader classLoader;
+
     @Inject
-    private RealtimePluginService() {
+    private RealtimePluginService(DirectoryClassLoader classLoader) {
+        this.classLoader = classLoader;
     }
 
     @Override
@@ -78,14 +80,14 @@ public class RealtimePluginService implements PluginService {
 
     @Override
     public int getPluginFileCount() {
-        return PluginClassLoader.getInstance().getReadPluginsCount();
+        return classLoader.getURLs().length;
     }
 
     @Override
     public synchronized void load() {
         if (!loaded) {
             plugins.addAll(
-                    PluginClassLoader.getInstance().listAllClasses().stream()
+                    classLoader.listAllClasses().stream()
                             .filter(this::isPluginUsable)
                             .peek(classRef -> logger.debug("Found plugin class: {}", classRef.getName()))
                             .map(ReflectionUtils::tryConstructObject)
@@ -98,13 +100,18 @@ public class RealtimePluginService implements PluginService {
         }
     }
 
+    @Override
+    public void close() {
+        try {
+            classLoader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private boolean isPluginUsable(@NotNull Class<?> classRef) {
         return BoomegaPlugin.class.isAssignableFrom(classRef) &&
                 !Modifier.isAbstract(classRef.getModifiers()) &&
                 !classRef.isAnnotationPresent(DisabledPlugin.class);
-    }
-
-    public static RealtimePluginService getInstance() {
-        return INSTANCE;
     }
 }

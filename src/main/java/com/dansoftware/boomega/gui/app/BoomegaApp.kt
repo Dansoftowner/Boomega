@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,10 @@ package com.dansoftware.boomega.gui.app
 import com.dansoftware.boomega.config.*
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.di.DIService
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
-import com.dansoftware.boomega.gui.login.updateLoginData
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader.MessageNotification.Priority
 import com.dansoftware.boomega.gui.theme.Theme
@@ -33,11 +32,13 @@ import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.initActivityLauncher
+import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.notify
 import com.dansoftware.boomega.util.concurrent.wait
 import javafx.application.Platform
+import javafx.util.Duration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -57,11 +58,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
     private lateinit var cachedPreferences: Preferences
 
     /**
-     * Executes before the base initialization process starts
-     */
-    protected open fun preInit() { }
-
-    /**
      * Queues the given action to be executed after the application launches successfully
      */
     protected fun postLaunch(action: (context: Context, launchedDatabase: DatabaseMeta?) -> Unit) {
@@ -73,7 +69,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
         handleApplicationArgument()
         progress(0.2)
 
-        preInit()
+        loadPlugins()
         progress(0.4)
 
         val preferences = readConfigurations()
@@ -87,7 +83,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
         logger.debug("Theme is: {}", Theme.default)
         logger.debug("Locale is: {}", Locale.getDefault())
 
-        val databaseTracker = DIService[DatabaseTracker::class.java]
+        val databaseTracker = get(DatabaseTracker::class)
         progress(0.9)
 
         // searching for updates
@@ -101,6 +97,9 @@ open class BoomegaApp : BaseBoomegaApplication() {
         //writing all configurations
         logger.info("Saving configurations")
         cachedPreferences.editor.commit()
+
+        logger.info("Closing down plugin service")
+        get(PluginService::class).close()
     }
 
     private fun handleApplicationArgument() {
@@ -128,7 +127,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
     private fun readConfigurations(): Preferences {
         notifyPreloader("preloader.preferences.read")
         return try {
-            DIService[Preferences::class.java].also {
+            get(Preferences::class).also {
                 cachedPreferences = it
                 logger.info("Configurations has been read successfully!")
             }
@@ -182,12 +181,34 @@ open class BoomegaApp : BaseBoomegaApplication() {
         return when {
             preferences[SEARCH_UPDATES] -> {
                 notifyPreloader("preloader.update.search")
-                val updateSearcher = DIService[UpdateSearcher::class.java]
+                val updateSearcher = get(UpdateSearcher::class)
                 preferences.editor[LAST_UPDATE_SEARCH] = LocalDateTime.now()
                 updateSearcher.trySearch { e -> logger.error("Couldn't search for updates", e) }
             }
             else -> null
         }
+    }
+
+    /**
+     * Loads plugins into the memory
+     */
+    private fun loadPlugins() {
+        notifyPreloader("preloader.plugins.load")
+
+        val pluginService = get(PluginService::class)
+        pluginService.load()
+
+        val pluginFileCount = pluginService.pluginFileCount
+        if (pluginFileCount > 0)
+            postLaunch { context, _ ->
+                context.showInformationNotification(
+                    title = i18n("plugins.read.count.title", pluginFileCount),
+                    message = null,
+                    Duration.minutes(1.0)
+                )
+            }
+
+        logger.info("Plugins loaded successfully!")
     }
 
     /**

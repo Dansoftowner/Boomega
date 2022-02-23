@@ -18,20 +18,15 @@
 
 package com.dansoftware.boomega.main
 
-import com.dansoftware.boomega.di.DIService
 import com.dansoftware.boomega.gui.app.BoomegaApp
-import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.instance.ApplicationInstanceService
-import com.dansoftware.boomega.plugin.PluginClassLoader
-import com.dansoftware.boomega.plugin.api.PluginService
-import javafx.util.Duration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
 
 /**
- * The real-time implementation of [BoomegaApp] that handles plugin-loading
- * from the disk, closes down the [ApplicationInstanceService] etc...
+ * The real-time implementation of [BoomegaApp] that performs some real-time operation
+ * like handling the [ApplicationInstanceService].
  */
 class RealtimeApp : BoomegaApp() {
 
@@ -41,38 +36,9 @@ class RealtimeApp : BoomegaApp() {
         logger.info("Shutting down application instance service")
         ApplicationInstanceService.release()
 
-        logger.info("Closing down PluginClassLoader")
-        PluginClassLoader.close()
-
         //We wait 5 seconds for the background processes to terminate, then we shut down explicitly the application
         //ExploitativeExecutor.INSTANCE.awaitTermination(1500, TimeUnit.MILLISECONDS);
         exitProcess(0)
-    }
-
-    override fun preInit() {
-        loadPlugins()
-    }
-
-    /**
-     * Loads plugins into the memory
-     */
-    private fun loadPlugins() {
-        notifyPreloader("preloader.plugins.load")
-
-        val pluginService = DIService[PluginService::class.java]
-        pluginService.load()
-
-        val pluginFileCount = pluginService.pluginFileCount
-        if (pluginFileCount > 0)
-            postLaunch { context, _ ->
-                context.showInformationNotification(
-                    title = i18n("plugins.read.count.title", pluginFileCount),
-                    message = null,
-                    Duration.minutes(1.0)
-                )
-            }
-
-        logger.info("Plugins loaded successfully!")
     }
 
     companion object {

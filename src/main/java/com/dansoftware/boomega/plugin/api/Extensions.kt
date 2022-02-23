@@ -16,11 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.di
+package com.dansoftware.boomega.plugin.api
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import kotlin.reflect.KClass
 
-val preferences: Preferences get() = DIService[Preferences::class.java]
-
-val databaseTracker: DatabaseTracker get() = DIService[DatabaseTracker::class.java]
+inline fun <T : BoomegaPlugin> PluginService.of(kClass: KClass<T>): List<T> = of(kClass.java)

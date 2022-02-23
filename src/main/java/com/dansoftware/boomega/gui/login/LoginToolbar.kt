@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ import com.dansoftware.boomega.gui.action.impl.OpenSettingsAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
-import com.dansoftware.boomega.gui.pluginmngr.PluginManagerActivity
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
@@ -76,9 +75,7 @@ class LoginToolbar(
         menuItemOf(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
 
     private fun buildPluginManagerMenuItem() =
-        MenuItem(I18N.getValue("action.open_plugin_manager"), icon("puzzle-icon")).action {
-            PluginManagerActivity().show(context.contextWindow)
-        }.apply { isDisable = true } // TODO: unlock plugin manager
+        MenuItem(I18N.getValue("action.open_plugin_manager"), icon("puzzle-icon")).action { }.apply { isDisable = true } // TODO: unlock plugin manager
 
     private fun buildSettingsMenuItem() =
         MenuItem(I18N.getValue("action.settings"), icon("settings-icon")).action {

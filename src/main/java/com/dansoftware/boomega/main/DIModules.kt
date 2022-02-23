@@ -31,6 +31,7 @@ import com.google.inject.Module
 import com.google.inject.Provides
 import com.google.inject.name.Names
 import com.google.inject.util.Modules
+import java.io.File
 import javax.inject.Named
 
 class RealtimeAppModule : Module by Modules.combine(
@@ -68,4 +69,8 @@ class PluginModule : AbstractModule() {
     override fun configure() {
         bind(PluginService::class.java).to(RealtimePluginService::class.java)
     }
+
+    @Provides
+    @Named("jarDirectory")
+    fun providePluginDirectory() = File(System.getProperty("boomega.plugin.dir"))
 }

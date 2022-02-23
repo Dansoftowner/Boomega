@@ -41,6 +41,11 @@ interface PluginService {
     fun load()
 
     /**
+     * Closes resources
+     */
+    fun close()
+
+    /**
      * Searchers plugins with the given type.
      *
      * @param type the class-reference of the type
