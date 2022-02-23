@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,10 @@
 
 package com.dansoftware.boomega.gui.theme
 
-import com.dansoftware.boomega.di.DIService
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.plugin.api.ThemePlugin
+import com.dansoftware.boomega.plugin.api.of
 import okhttp3.internal.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -57,8 +58,8 @@ private fun builtInThemes(): Sequence<Theme> =
  */
 private fun pluginThemes(): Sequence<Theme> {
     logger.debug("Checking plugins for themes...")
-    return DIService[PluginService::class.java]
-        .of(ThemePlugin::class.java)
+    return get(PluginService::class)
+        .of(ThemePlugin::class)
         .asSequence()
         .map(ThemePlugin::theme)
 }

@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.i18n;
 
-import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.plugin.api.LanguagePlugin;
 import com.dansoftware.boomega.plugin.api.PluginService;
 import org.apache.commons.lang3.ArrayUtils;
@@ -31,6 +30,8 @@ import java.text.Collator;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Supplier;
+
+import static com.dansoftware.boomega.di.DIService.get;
 
 /**
  * Used for accessing localized messages/values.
@@ -123,7 +124,7 @@ public class I18N {
 
     private static void registerPluginPacks() {
         logger.debug("Checking plugins for language-packs...");
-        DIService.get(PluginService.class).of(LanguagePlugin.class).stream()
+        get(PluginService.class).of(LanguagePlugin.class).stream()
                 .map(LanguagePlugin::getLanguagePack)
                 .peek(pack -> logger.debug("Found LanguagePack for locale '{}'", pack.getLocale()))
                 .forEach(pack -> putPack(pack.getLocale(), pack));

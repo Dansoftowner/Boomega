@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ package com.dansoftware.boomega.instance;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.database.tracking.DatabaseTracker;
-import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.login.config.LoginData;
 import com.dansoftware.boomega.launcher.ActivityLauncher;
@@ -44,6 +43,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.dansoftware.boomega.config.CommonPreferences.LOGIN_DATA;
+import static com.dansoftware.boomega.di.DIService.get;
 
 /**
  * Responsible for listening to application instances
@@ -135,7 +135,7 @@ public class ApplicationInstanceService implements MessageHandler {
         }
 
         logger.debug("starting an ActivityLauncher...");
-        new ActivityLauncherImpl(args, DIService.get(Preferences.class), DIService.get(DatabaseTracker.class)).launch();
+        new ActivityLauncherImpl(args, get(Preferences.class), get(DatabaseTracker.class)).launch();
         return null;
     }
 
@@ -162,7 +162,7 @@ public class ApplicationInstanceService implements MessageHandler {
 
         private LoginData buildLoginData() {
             //removing all already opened databases from the LoginData
-            Set<DatabaseMeta> databaseUsing = DIService.get(DatabaseTracker.class).getUsingDatabases();
+            Set<DatabaseMeta> databaseUsing = get(DatabaseTracker.class).getUsingDatabases();
             LoginData loginData = getPreferences().get(LOGIN_DATA);
             loginData.getSavedDatabases().removeAll(databaseUsing);
             loginData.setSelectedDatabase(null);

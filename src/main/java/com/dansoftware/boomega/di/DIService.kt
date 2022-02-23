@@ -38,8 +38,8 @@ object DIService {
     }
 
     @JvmStatic
-    operator fun <T> get(type: Class<T>): T = injector.getInstance(type)
+    fun <T> get(type: Class<T>): T = injector.getInstance(type)
 
     @JvmStatic
-    operator fun <T : Any> get(type: KClass<T>): T = get(type.java)
+    fun <T : Any> get(type: KClass<T>): T = get(type.java)
 }

@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (C)  2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,14 @@
 
 package com.dansoftware.boomega.export
 
-import com.dansoftware.boomega.di.DIService
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.export.excel.ExcelExporter
 import com.dansoftware.boomega.export.json.JsonExporter
 import com.dansoftware.boomega.export.txtable.TXTableExporter
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.plugin.api.RecordExporterPlugin
+import com.dansoftware.boomega.plugin.api.of
 import okhttp3.internal.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -51,7 +52,7 @@ private fun loadBuiltInExporters() = sequenceOf(
 )
 
 private fun loadExportersFromPlugins() =
-    DIService[PluginService::class.java]
-        .of(RecordExporterPlugin::class.java)
+    get(PluginService::class)
+        .of(RecordExporterPlugin::class)
         .asSequence()
         .map(RecordExporterPlugin::exporter)

@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.action.impl
 import com.dansoftware.boomega.config.LAST_UPDATE_SEARCH
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.di.DIService
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
@@ -71,7 +71,7 @@ object SearchForUpdatesAction : Action(
             }
 
             override fun call() =
-                DIService[UpdateSearcher::class.java].search()
+                get(UpdateSearcher::class).search()
         })
     }
 }
