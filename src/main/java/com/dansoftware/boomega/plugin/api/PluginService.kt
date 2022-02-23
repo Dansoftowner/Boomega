@@ -20,6 +20,9 @@ package com.dansoftware.boomega.plugin.api
 
 import java.net.URL
 
+/**
+ * Gateway for loading & accessing plugins
+ */
 interface PluginService {
 
     /**
