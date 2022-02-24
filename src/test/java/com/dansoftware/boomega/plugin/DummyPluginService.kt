@@ -32,6 +32,8 @@ class DummyPluginService : PluginService {
 
     override fun load() { }
 
+    override fun close() { }
+
     override fun <P : BoomegaPlugin> of(type: Class<P>): List<P> = emptyList()
 
     override fun pluginsOfLocation(url: URL): List<BoomegaPlugin> = emptyList()
