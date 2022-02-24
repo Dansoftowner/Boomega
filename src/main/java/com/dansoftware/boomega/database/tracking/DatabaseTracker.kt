@@ -15,82 +15,60 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.dansoftware.boomega.database.tracking
 
-package com.dansoftware.boomega.database.tracking;
-
-import com.dansoftware.boomega.config.CommonPreferences;
-import com.dansoftware.boomega.config.Preferences;
-import com.dansoftware.boomega.database.api.DatabaseMeta;
-import com.dansoftware.boomega.gui.login.LoginDataUtilsKt;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
-import kotlin.Unit;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.lang.ref.WeakReference;
-import java.util.*;
-import java.util.function.Consumer;
+import com.dansoftware.boomega.config.LOGIN_DATA
+import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.gui.login.updateLoginData
+import javafx.collections.FXCollections
+import javafx.collections.ObservableSet
+import org.slf4j.LoggerFactory
+import java.lang.ref.WeakReference
+import java.util.*
+import java.util.function.Consumer
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
- * Used for tracking the opened/unopened databases (in form of {@link DatabaseMeta} objects).
+ * Used for tracking the opened/unopened databases (in form of [DatabaseMeta] objects).
  *
- * <p>
- * Some components might use {@link DatabaseTracker}s for updating their content when something is changed
- * (a database is launched, removed etc...). This can be achieved by implementing the {@link DatabaseTracker.Observer}
- * interface.
+ * Some components might use [DatabaseTracker]s for updating their content when something is changed
+ * (a database is launched, removed etc...).
+ *
+ * This can be achieved by registering [DatabaseTracker.Observer]s.
+ *
+ * @param preferences the preferences that should be synchronized with the database tracker.
  */
 @Singleton
-public class DatabaseTracker {
+class DatabaseTracker @Inject constructor(preferences: Preferences) {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseTracker.class);
+    private val observers = Collections.synchronizedList(LinkedList<WeakReference<Observer>>())
+    private val strongObservers = Collections.synchronizedSet(HashSet<Observer>())
 
-    private final List<WeakReference<Observer>> observers =
-            Collections.synchronizedList(new LinkedList<>());
+    // TODO: use property delegation implementing this
 
-    private final Set<Observer> strongObservers =
-            Collections.synchronizedSet(new HashSet<>());
+    private val savedDatabasesImpl = FXCollections.synchronizedObservableSet(FXCollections.observableSet<DatabaseMeta>())
+    val savedDatabases: ObservableSet<DatabaseMeta> = FXCollections.unmodifiableObservableSet(savedDatabasesImpl)
 
-    private final ObservableSet<DatabaseMeta> savedDatabases =
-            FXCollections.synchronizedObservableSet(FXCollections.observableSet());
+    private val usingDatabasesImpl = FXCollections.synchronizedObservableSet(FXCollections.observableSet<DatabaseMeta>())
+    val usingDatabases: ObservableSet<DatabaseMeta> = FXCollections.unmodifiableObservableSet(usingDatabasesImpl)
 
-    private final ObservableSet<DatabaseMeta> savedDatabasesUnmodifiable =
-            FXCollections.unmodifiableObservableSet(savedDatabases);
-
-    private final ObservableSet<DatabaseMeta> usingDatabases =
-            FXCollections.synchronizedObservableSet(FXCollections.observableSet());
-
-    private final ObservableSet<DatabaseMeta> usingDatabasesUnmodifiable =
-            FXCollections.unmodifiableObservableSet(usingDatabases);
-
-    @Inject
-    public DatabaseTracker(@NotNull Preferences preferences) {
-        preferences.get(CommonPreferences.LOGIN_DATA).getSavedDatabases().forEach(this::saveDatabase);
-        initPreferencesHandling(Objects.requireNonNull(preferences));
+    init {
+        preferences[LOGIN_DATA].savedDatabases.forEach(::saveDatabase)
+        initPreferencesHandling(preferences)
     }
 
-    private void initPreferencesHandling(@NotNull Preferences preferences) {
-        registerObserverStrongly(new Observer() {
-            @Override
-            public void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
-                LoginDataUtilsKt.updateLoginData(preferences, (loginData) -> {
-                    loginData.getSavedDatabases().add(databaseMeta);
-                    return Unit.INSTANCE;
-                });
+    private fun initPreferencesHandling(preferences: Preferences) {
+        registerObserverStrongly(object : Observer {
+            override fun onDatabaseAdded(databaseMeta: DatabaseMeta) {
+                preferences.updateLoginData { it.savedDatabases.add(databaseMeta) }
             }
 
-            @Override
-            public void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
-                LoginDataUtilsKt.updateLoginData(preferences, (loginData) -> {
-                    loginData.getSavedDatabases().remove(databaseMeta);
-                    return Unit.INSTANCE;
-                });
+            override fun onDatabaseRemoved(databaseMeta: DatabaseMeta) {
+                preferences.updateLoginData { it.savedDatabases.remove(databaseMeta) }
             }
-        });
+        })
     }
 
     /**
@@ -98,12 +76,11 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public boolean registerClosedDatabase(@NotNull DatabaseMeta databaseMeta) {
-        logger.debug("Registering database as closed: '{}'", databaseMeta.getIdentifier());
-        boolean removed = usingDatabases.remove(databaseMeta);
-        if (removed)
-            iterateObservers(observer -> observer.onClosingDatabase(databaseMeta));
-        return removed;
+    fun registerClosedDatabase(databaseMeta: DatabaseMeta): Boolean {
+        logger.debug("Registering database as closed: '{}'", databaseMeta.identifier)
+        val removed = usingDatabasesImpl.remove(databaseMeta)
+        if (removed) iterateObservers { it!!.onClosingDatabase(databaseMeta) }
+        return removed
     }
 
     /**
@@ -111,15 +88,11 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public boolean registerUsedDatabase(@NotNull DatabaseMeta databaseMeta) {
-        Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
-        logger.debug("Registering database as used: '{}'", databaseMeta.getIdentifier());
-
-        boolean inserted = usingDatabases.add(databaseMeta);
-        if (inserted)
-            iterateObservers(observer -> observer.onUsingDatabase(databaseMeta));
-
-        return inserted;
+    fun registerUsedDatabase(databaseMeta: DatabaseMeta): Boolean {
+        logger.debug("Registering database as used: '{}'", databaseMeta.identifier)
+        val inserted = usingDatabasesImpl.add(databaseMeta)
+        if (inserted) iterateObservers { it!!.onUsingDatabase(databaseMeta) }
+        return inserted
     }
 
     /**
@@ -127,15 +100,11 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public boolean saveDatabase(@NotNull DatabaseMeta databaseMeta) {
-        Objects.requireNonNull(databaseMeta, "The DatabaseMeta shouldn't be null");
-        logger.debug("Registering database: '{}'", databaseMeta.getIdentifier());
-
-        boolean inserted = savedDatabases.add(databaseMeta);
-        if (inserted)
-            iterateObservers(observer -> observer.onDatabaseAdded(databaseMeta));
-
-        return inserted;
+    fun saveDatabase(databaseMeta: DatabaseMeta): Boolean {
+        logger.debug("Registering database: '{}'", databaseMeta.identifier)
+        val inserted = savedDatabasesImpl.add(databaseMeta)
+        if (inserted) iterateObservers { observer: Observer? -> observer!!.onDatabaseAdded(databaseMeta) }
+        return inserted
     }
 
     /**
@@ -143,109 +112,93 @@ public class DatabaseTracker {
      *
      * @param databaseMeta the meta database
      */
-    public boolean removeDatabase(@NotNull DatabaseMeta databaseMeta) {
-        Objects.requireNonNull(databaseMeta);
-        logger.debug("Unregistering database: '{}'", databaseMeta.getIdentifier());
-        boolean removed = savedDatabases.remove(databaseMeta);
-        if (removed)
-            logger.debug("Removed from DatabaseTracker '{}'", databaseMeta);
-        else
-            logger.debug("DatabaseMeta '{}' not found in savedDatabases", databaseMeta);
-
-        iterateObservers(observer -> observer.onDatabaseRemoved(databaseMeta));
-        return removed;
+    fun removeDatabase(databaseMeta: DatabaseMeta): Boolean {
+        logger.debug("Unregistering database: '{}'", databaseMeta.identifier)
+        val removed = savedDatabasesImpl.remove(databaseMeta)
+        if (removed) logger.debug("Removed from DatabaseTracker '{}'", databaseMeta)
+        else logger.debug("DatabaseMeta '{}' not found in savedDatabases", databaseMeta)
+        iterateObservers { it!!.onDatabaseRemoved(databaseMeta) }
+        return removed
     }
 
     /**
-     * Registers an {@link Observer} that will be notified on every change.
-     * <p>
-     * Note: the observer will be registered as a <b>weak</b> reference, so if there is no
+     * Registers an [Observer] that will be notified on every change.
+     *
+     * Note: the observer will be registered as a **weak** reference, so if there is no
      * other reference that points to the observer object, the observer will be removed by the GC
-     * </p>
      *
      * @param observer the observer object; shouldn't be null
      */
-    public void registerObserver(@NotNull Observer observer) {
-        Objects.requireNonNull(observer);
-        if (findWeakReference(observer).isEmpty())
-            observers.add(new WeakReference<>(observer));
-    }
-
-    public void registerObserverStrongly(@NotNull Observer observer) {
-        Objects.requireNonNull(observer);
-        strongObservers.add(observer);
-        registerObserver(observer);
+    fun registerObserver(observer: Observer) {
+        if (findWeakReference(observer).isEmpty) observers.add(WeakReference(observer))
     }
 
     /**
-     * Unregisters an {@link Observer}
+     * Registers an [Observer] that will be notified on every change.
+     *
+     * Note: unlike the [registerObserver] method, it registers the observer strongly in memory
+     * meaning that no other reference required to keep the observer alive.
+     */
+    fun registerObserverStrongly(observer: Observer) {
+        Objects.requireNonNull(observer)
+        strongObservers.add(observer)
+        registerObserver(observer)
+    }
+
+    /**
+     * Unregisters an [Observer]
      *
      * @param observer the observer object to be removed
      */
-    public void unregisterObserver(@Nullable Observer observer) {
-        if (observer != null) findWeakReference(observer).ifPresent(observers::remove);
+    fun unregisterObserver(observer: Observer?) {
+        if (observer != null) findWeakReference(observer).ifPresent(observers::remove)
     }
 
-    public boolean hasObserver(@Nullable Observer observer) {
-        return findWeakReference(observer).isPresent();
+    fun hasObserver(observer: Observer?): Boolean {
+        return findWeakReference(observer).isPresent
     }
 
-    private Optional<WeakReference<Observer>> findWeakReference(Observer observer) {
+    private fun findWeakReference(observer: Observer?): Optional<WeakReference<Observer>> {
         return observers.stream()
-                .filter(ref -> ref.get() == observer)
-                .findAny();
+            .filter { ref: WeakReference<Observer> -> ref.get() === observer }
+            .findAny()
     }
 
-    private void iterateObservers(Consumer<Observer> observerConsumer) {
-        Consumer<Observer> safeConsumer = observer -> {
+    private fun iterateObservers(observerConsumer: Consumer<Observer?>) {
+        val safeConsumer = { it: Observer? ->
             try {
-                observerConsumer.accept(observer);
-            } catch (Exception e) {
-                logger.error("exception caught from observer", e);
+                observerConsumer.accept(it)
+            } catch (e: Exception) {
+                logger.error("exception caught from observer", e)
             }
-        };
-
-        observers.stream()
-                .map(WeakReference::get)
-                .filter(Objects::nonNull)
-                .forEach(safeConsumer);
-    }
-
-    public boolean isDatabaseSaved(DatabaseMeta databaseMeta) {
-        return savedDatabases.contains(databaseMeta);
-    }
-
-    public boolean isDatabaseNotSaved(DatabaseMeta databaseMeta) {
-        return !isDatabaseSaved(databaseMeta);
-    }
-
-    public boolean isDatabaseClosed(DatabaseMeta databaseMeta) {
-        return !isDatabaseUsed(databaseMeta);
-    }
-
-    public boolean isDatabaseUsed(DatabaseMeta databaseMeta) {
-        return usingDatabases.contains(databaseMeta);
-    }
-
-    public ObservableSet<DatabaseMeta> getSavedDatabases() {
-        return savedDatabasesUnmodifiable;
-    }
-
-    public ObservableSet<DatabaseMeta> getUsingDatabases() {
-        return usingDatabasesUnmodifiable;
-    }
-
-    public interface Observer {
-        default void onUsingDatabase(@NotNull DatabaseMeta databaseMeta) {
         }
+        observers.mapNotNull { it.get() }.forEach(safeConsumer)
+    }
 
-        default void onClosingDatabase(@NotNull DatabaseMeta databaseMeta) {
-        }
+    fun isDatabaseSaved(databaseMeta: DatabaseMeta?): Boolean {
+        return savedDatabasesImpl.contains(databaseMeta)
+    }
 
-        default void onDatabaseAdded(@NotNull DatabaseMeta databaseMeta) {
-        }
+    fun isDatabaseNotSaved(databaseMeta: DatabaseMeta?): Boolean {
+        return !isDatabaseSaved(databaseMeta)
+    }
 
-        default void onDatabaseRemoved(@NotNull DatabaseMeta databaseMeta) {
-        }
+    fun isDatabaseClosed(databaseMeta: DatabaseMeta?): Boolean {
+        return !isDatabaseUsed(databaseMeta)
+    }
+
+    fun isDatabaseUsed(databaseMeta: DatabaseMeta?): Boolean {
+        return usingDatabasesImpl.contains(databaseMeta)
+    }
+
+    interface Observer {
+        fun onUsingDatabase(databaseMeta: DatabaseMeta) {}
+        fun onClosingDatabase(databaseMeta: DatabaseMeta) {}
+        fun onDatabaseAdded(databaseMeta: DatabaseMeta) {}
+        fun onDatabaseRemoved(databaseMeta: DatabaseMeta) {}
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(DatabaseTracker::class.java)
     }
 }
