@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,7 @@
 
 package com.dansoftware.boomega.plugin.api
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.Database
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.Module
 
@@ -28,10 +26,5 @@ import com.dansoftware.boomega.gui.databaseview.Module
  * Allows to add a custom [Module] to the [com.dansoftware.boomega.gui.databaseview.DatabaseView]
  */
 interface ModulePlugin : BoomegaPlugin {
-    fun getModule(
-        context: Context,
-        preferences: Preferences,
-        databaseTracker: DatabaseTracker,
-        database: Database
-    ): Module
+    fun getModule(context: Context, database: Database): Module
 }
