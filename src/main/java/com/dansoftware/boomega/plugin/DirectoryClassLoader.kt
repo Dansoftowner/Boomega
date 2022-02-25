@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
-import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import javax.inject.Inject
@@ -38,28 +37,30 @@ import javax.inject.Singleton
  */
 @Singleton
 class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory: File) : URLClassLoader(
-    directory.listFiles { _, name -> JAR_FILE_PATTERN.matches(name) }.toURLS(),
+    directory.listFiles { _, name -> JAR_FILE_PATTERN.matches(name) }?.toURLS(),
     getSystemClassLoader()
 ) {
-    fun listAllClasses(): List<Class<*>> = LinkedList<Class<*>>().run {
+
+    /**
+     * Lists all the classes loaded from the jar files
+     */
+    fun listAllClasses(): List<Class<*>> =
         urLs.asSequence()
             .map(URL::toExternalForm)
             .onEach { logger.debug("Plugin file found: {}", it) }
             .filter { it.startsWith("file:/") }
-            .map { it.substring(6) }
+            .map { it.substring(5) } // TODO: debug it on Windows
             .filter { it.endsWith(".jar") }
             .map(::JarFile)
-            .forEach { jar ->
+            .flatMap { jar ->
                 jar.entries().asSequence()
                     .filter { it.isDirectory.not() && it.name.endsWith(".class") }
                     .map(JarEntry::getName)
                     .map { it.substring(0, it.length - 6) }
                     .map { it.replace('/', '.') }
-                    .map { this@DirectoryClassLoader.findClass(it) }
-                    .let { addAll(it) }
+                    .map(::findClass)
             }
-        Collections.unmodifiableList(this)
-    }
+            .toList()
 
     companion object {
         @JvmStatic
