@@ -22,7 +22,7 @@ The [`@DisabledPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/Disabl
 for temporarily disabling a plugin implementation. Like this:
 ```java
 @DisabledPlugin // we don't want Boomega to import this plugin yet
-public class MonokaiThemePlugin extends ThemePlugin {
+public class MonokaiThemePlugin implements ThemePlugin {
     ...
 }
 ```
