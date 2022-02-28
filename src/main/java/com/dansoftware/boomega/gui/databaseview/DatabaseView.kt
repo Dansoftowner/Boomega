@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory
 class DatabaseView(
     private val preferences: Preferences,
     private val database: Database,
-    private val databaseTracker: DatabaseTracker
+    databaseTracker: DatabaseTracker
 ) : BaseView() {
 
     val modules: List<Module> = loadModules()
@@ -123,7 +123,7 @@ class DatabaseView(
     private fun loadPluginModules(): Sequence<Module> {
         logger.debug("Checking plugins for modules...")
         return get(PluginService::class).of(ModulePlugin::class).asSequence()
-            .map { it.getModule(this, preferences, databaseTracker, databaseReadOnly) }
+            .map { it.getModule(this, databaseReadOnly) }
     }
 
     private inner class ShutdownHook : Thread() {
