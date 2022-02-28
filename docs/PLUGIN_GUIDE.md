@@ -36,9 +36,34 @@ All other plugin classes should implement this interface.
 
 The [`@DisabledPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/DisabledPlugin.java) annotation can be used
 for temporarily disabling a plugin implementation. Like this:
+
+<table>
+
+<tr>
+<th>Java</th>
+<th>Kotlin</th>
+</tr>
+
+<tr>
+<td>
+
 ```java
 @DisabledPlugin // we don't want Boomega to import this plugin yet
 public class MonokaiThemePlugin implements ThemePlugin {
     ...
 }
 ```
+
+</td>
+<td>
+
+```kotlin
+@DisabledPlugin // we don't want Boomega to import this plugin yet
+class MonokaiThemePlugin : ThemePlugin {
+    ...
+}
+```
+
+</td>
+</tr>
+</table>
