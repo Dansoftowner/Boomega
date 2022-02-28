@@ -16,6 +16,8 @@ Boomega automatically loads plugin archives (`.jar`s) from the **default plugin 
 
 If you want to load your plugin archive, you should place the file in this directory.
 
+> You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager). 
+
 ## API
 
 The root of the Boomega plugin hierarchy is:
