@@ -2,6 +2,20 @@
 
 > Incomplete and not reliable yet!
 
+## Intro
+
+Boomega allows you to develop plugins for the app in order to add features/expand the functionality to/of the app.  
+Plugins can be written both in **java** and **kotlin**.
+
+## The plugin directory
+
+Boomega automatically loads plugin archives (`.jar`s) from the **default plugin directory**.
+
+* On **Windows**: `C:\Users\<user>\AppData\Roaming\Dansoftware\boomega\plugin`
+* On **Linux** & **MacOS**: `<User directory>/boomega/plugin`
+
+If you want to load your plugin archive, you should place the file in this directory.
+
 ## API
 
 The root of the Boomega plugin hierarchy is:
