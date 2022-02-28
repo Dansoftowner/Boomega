@@ -4,8 +4,10 @@
 
 ## API
 
-The root Boomega plugin interface:
+The root of the Boomega plugin hierarchy is:
 [`com.dansoftware.boomega.plugin.api.BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt).
+
+All other plugin classes should implement this interface.
 
 **BoomegaPlugin subtypes:**
 
