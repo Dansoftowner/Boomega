@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.menu
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.impl.*
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
@@ -34,11 +35,11 @@ import com.dansoftware.boomega.gui.util.separator
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.internalActivityLauncher
-import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import javafx.application.Platform
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
+import java.util.concurrent.ExecutorService
 
 /**
  * The base file menu. Supertype of all kind of os specific file-menus.
@@ -137,7 +138,7 @@ abstract class FileMenu(
         .action { databaseMeta.performAction(DatabaseMeta.Action.OpenInExternalApplication) }
 
     private inline fun startActivityLauncher(crossinline getActivityLauncher: () -> ActivityLauncher) {
-        SingleThreadExecutor.submit(object : Task<Unit>() {
+        get(ExecutorService::class, "singleThreadExecutor").submit(object : Task<Unit>() {
 
             init {
                 this.setOnRunning { context.showIndeterminateProgress() }

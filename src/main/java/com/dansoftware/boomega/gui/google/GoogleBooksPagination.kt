@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.google
 
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsOverlay
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
@@ -26,7 +27,6 @@ import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.service.googlebooks.Volumes
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.ContextMenu
@@ -34,6 +34,7 @@ import javafx.scene.control.MenuItem
 import javafx.scene.control.Pagination
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ExecutorService
 import kotlin.math.ceil
 
 class GoogleBooksPagination(private val context: Context, private val query: GoogleBooksQuery) : Pagination() {
@@ -44,13 +45,13 @@ class GoogleBooksPagination(private val context: Context, private val query: Goo
     init {
         styleClass.add("google-books-pagination")
         setPageFactory {
-            CachedExecutor.submit(SearchTask(query.apply { startIndex = it * query.maxResults }))
+            get(ExecutorService::class, "cachedExecutor").submit(SearchTask(query.apply { startIndex = it * query.maxResults }))
             table
         }
     }
 
     fun refresh() {
-        CachedExecutor.submit(SearchTask(query))
+        get(ExecutorService::class, "cachedExecutor").submit(SearchTask(query))
     }
 
     private fun buildTable() = GoogleBooksTable(0).apply {

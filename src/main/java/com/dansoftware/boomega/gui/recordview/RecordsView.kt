@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.data.Record
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.api.Context
@@ -33,7 +34,6 @@ import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.i18n.i18n
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.boomega.util.open
 import com.dansoftware.boomega.util.revealInExplorer
 import com.google.gson.JsonArray
@@ -57,6 +57,7 @@ import java.io.FileOutputStream
 import java.lang.reflect.Type
 import java.text.Collator
 import java.util.*
+import java.util.concurrent.ExecutorService
 import java.util.stream.Collectors
 
 class RecordsView(
@@ -137,7 +138,7 @@ class RecordsView(
     private fun configureSortingAbc(locale: Locale) {
         @Suppress("UNCHECKED_CAST")
         table.sortingComparator = I18N.getABCCollator(locale).orElse(Collator.getInstance()) as Comparator<String>
-        CachedExecutor.submit {
+        get(ExecutorService::class, "cachedExecutor").submit {
             preferences.editor()[ABC_CONFIG_KEY] = locale
         }
     }
@@ -148,7 +149,7 @@ class RecordsView(
     }
 
     private fun loadRecords(onSucceeded: () -> Unit = {}) {
-        CachedExecutor.submit(buildRecordsLoadTask(onSucceeded))
+        get(ExecutorService::class).submit(buildRecordsLoadTask(onSucceeded))
     }
 
     private fun buildRecordsLoadTask(onSucceeded: () -> Unit) =
@@ -191,7 +192,7 @@ class RecordsView(
     }
 
     fun pasteItemsFromClipboard() {
-        CachedExecutor.submit(buildPasteAction(RecordClipboard.pullContent().items))
+        get(ExecutorService::class, "cachedExecutor").submit(buildPasteAction(RecordClipboard.pullContent().items))
     }
 
     private fun buildPasteAction(items: List<Record>) =
@@ -232,7 +233,7 @@ class RecordsView(
     }
 
     fun insertNewRecord(record: Record = Record(Record.Type.BOOK)) {
-        CachedExecutor.submit(buildInsertAction(record))
+        get(ExecutorService::class, "cachedExecutor").submit(buildInsertAction(record))
     }
 
     private fun buildInsertAction(record: Record): Task<Unit> =
@@ -267,7 +268,7 @@ class RecordsView(
         }
 
     private fun removeItems(items: List<Record>) {
-        CachedExecutor.submit(buildRemoveAction(items))
+        get(ExecutorService::class, "cachedExecutor").submit(buildRemoveAction(items))
     }
 
     private fun buildRemoveAction(items: List<Record>): Task<Unit> =
@@ -290,7 +291,7 @@ class RecordsView(
         }
 
     fun duplicateSelectedItems() {
-        CachedExecutor.submit(buildPasteAction(table.selectedItems.toList()))
+        get(ExecutorService::class, "cachedExecutor").submit(buildPasteAction(table.selectedItems.toList()))
     }
 
     /**
@@ -332,7 +333,7 @@ class RecordsView(
                     }
                     onRunning { context.showIndeterminateProgress() }
                 }
-                CachedExecutor.submit(task)
+                get(ExecutorService::class, "cachedExecutor").submit(task)
             }
         }
     }

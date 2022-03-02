@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.google.details
 
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
@@ -29,7 +30,6 @@ import com.dansoftware.boomega.gui.util.styleClass
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.Volume
 import com.dansoftware.boomega.util.SystemBrowser
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.pnikosis.html2markdown.HTML2Md
@@ -54,6 +54,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.TimeUnit
 
 class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
@@ -106,7 +107,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
     private fun retrieveDescription(volume: Volume?, onAvailable: (String?) -> Unit) {
         descriptionCache.getIfPresent(volume)?.let { onAvailable(it) }
             ?: volume?.volumeInfo?.description.let { description ->
-                CachedExecutor.submit(
+                get(ExecutorService::class, "cachedExecutor").submit(
                     object : Task<String>() {
                         override fun call(): String? = description?.let(HTML2Md::convert)
                     }.apply {

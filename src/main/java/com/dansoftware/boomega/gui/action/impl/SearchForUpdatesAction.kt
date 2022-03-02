@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,11 +31,11 @@ import com.dansoftware.boomega.gui.util.onSucceeded
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.UpdateSearcher
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.concurrent.Task
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
+import java.util.concurrent.ExecutorService
 
 object SearchForUpdatesAction : Action(
     "action.update_search",
@@ -46,7 +46,7 @@ object SearchForUpdatesAction : Action(
 
     override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
         preferences.editor[LAST_UPDATE_SEARCH] = LocalDateTime.now()
-        CachedExecutor.submit(object : Task<Release?>() {
+        get(ExecutorService::class, "cachedExecutor").submit(object : Task<Release?>() {
             init {
                 onRunning {
                     context.showIndeterminateProgress()

@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.recordview
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.data.Record
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.COL_CONFIG_KEY
@@ -28,7 +29,6 @@ import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.DOCKS_CONFIG
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.recordview.dock.DockView
 import com.dansoftware.boomega.gui.util.selectedItems
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
@@ -41,6 +41,7 @@ import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.*
+import java.util.concurrent.ExecutorService
 
 class RecordsViewBase(
     private val context: Context,
@@ -169,7 +170,7 @@ class RecordsViewBase(
      */
     private fun updateDocksConfiguration() {
         val docks = docksList
-        CachedExecutor.submit {
+        get(ExecutorService::class, "cachedExecutor").submit {
             preferences.editor()[DOCKS_CONFIG_KEY] = RecordsView.DockInfo(docks)
         }
     }
@@ -179,7 +180,7 @@ class RecordsViewBase(
      */
     private fun updateTableColumnsConfiguration() {
         val columns = table.showingColumnTypes
-        CachedExecutor.submit {
+        get(ExecutorService::class, "cachedExecutor").submit {
             preferences.editor()[COL_CONFIG_KEY] = RecordsView.TableColumnsInfo(columns)
         }
     }

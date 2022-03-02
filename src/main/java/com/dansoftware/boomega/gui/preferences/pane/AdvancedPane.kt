@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,12 @@
 package com.dansoftware.boomega.gui.preferences.pane
 
 import com.dansoftware.boomega.config.Preferences
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
 import com.dansoftware.boomega.main.ApplicationRestart
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.concurrent.Task
 import javafx.scene.Node
 import javafx.scene.control.Button
@@ -32,6 +32,7 @@ import javafx.scene.control.ButtonType
 import javafx.scene.control.ContentDisplay
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ExecutorService
 
 class AdvancedPane(private val context: Context, preferences: Preferences) : PreferencesPane(preferences) {
 
@@ -90,7 +91,7 @@ class AdvancedPane(private val context: Context, preferences: Preferences) : Pre
                 }
 
             private fun reset() {
-                CachedExecutor.submit(object : Task<Unit>() {
+                get(ExecutorService::class, "cachedExecutor").submit(object : Task<Unit>() {
 
                     init {
                         setOnRunning { context.showIndeterminateProgress() }

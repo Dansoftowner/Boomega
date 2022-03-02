@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,10 +18,11 @@
 
 package com.dansoftware.boomega.util
 
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.util.os.OsInfo
 import java.awt.Desktop
 import java.net.URL
+import java.util.concurrent.ExecutorService
 
 /**
  * SystemBrowser is a utility for communicating with the default browser of the system.
@@ -43,7 +44,7 @@ object SystemBrowser {
     }
 
     fun browse(url: String) {
-        CachedExecutor.submit { browserCore.browse(url) }
+        get(ExecutorService::class, "cachedExecutor").submit { browserCore.browse(url) }
     }
 
     private abstract class BrowserCore {

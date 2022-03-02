@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@ package com.dansoftware.boomega.gui.recordview.edit
 
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.data.Record
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.BooleanBinding
 import javafx.collections.ListChangeListener
@@ -35,6 +35,7 @@ import javafx.scene.control.TabPane
 import jfxtras.styles.jmetro.JMetroStyleClass
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ExecutorService
 import java.util.function.Consumer
 
 class RecordEditor(
@@ -109,7 +110,7 @@ class RecordEditor(
         if (changedProperty().get()) {
             logger.debug("RecordEditor.saveChanges() performs a save")
             fieldsEditor.persist()
-            CachedExecutor.submit(SaveTask())
+            get(ExecutorService::class, "cachedExecutor").submit(SaveTask())
         }
     }
 

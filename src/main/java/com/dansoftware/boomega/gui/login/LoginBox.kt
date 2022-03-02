@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.*
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.impl.OpenDatabaseManagerAction
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
@@ -29,7 +30,6 @@ import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorWindow
 import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import javafx.application.Platform.runLater
@@ -47,6 +47,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.TimeUnit
 
 class LoginBox(
@@ -252,7 +253,7 @@ class LoginBox(
     }
 
     private inline fun login(crossinline onDatabaseCreated: (Database) -> Unit) {
-        CachedExecutor.submit(
+        get(ExecutorService::class, "cachedExecutor").submit(
             object : Task<Database>() {
                 init {
                     loginIsInProcess.bind(runningProperty())

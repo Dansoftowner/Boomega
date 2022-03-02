@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
 package com.dansoftware.boomega.gui.control
 
 import com.dansoftware.boomega.database.api.data.Record
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import javafx.beans.property.*
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
@@ -35,6 +35,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ExecutorService
 import java.util.stream.Collectors
 
 class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.0) {
@@ -212,7 +213,7 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
     }
 
     private fun search(onItemsAvailable: (List<Record>) -> Unit) {
-        object : Task<List<Record>>() {
+        val task = object : Task<List<Record>>() {
 
             init {
                 setOnRunning {
@@ -241,7 +242,8 @@ class RecordFindControl(private val baseItems: ObservableList<Record>) : HBox(5.
                     .filter { filter.get().filter(it) }
                     .collect(Collectors.toList())
             }
-        }.let(CachedExecutor::submit)
+        }
+        get(ExecutorService::class, "cachedExecutor").submit(task)
     }
 
     private abstract class Filter(

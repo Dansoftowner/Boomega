@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 package com.dansoftware.boomega.util
 
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.util.os.OsInfo
 import com.juserdirs.UserDirectories
 import org.apache.commons.io.FileUtils
@@ -28,6 +28,7 @@ import java.awt.Desktop
 import java.io.File
 import java.net.URL
 import java.nio.file.InvalidPathException
+import java.util.concurrent.ExecutorService
 import java.awt.Desktop.getDesktop as desktop
 import java.lang.Runtime.getRuntime as runtime
 
@@ -82,7 +83,7 @@ fun File.revealInExplorer() {
         }
     }
 
-    CachedExecutor.submit {
+    get(ExecutorService::class, "cachedExecutor").submit {
         when {
             desktop().isSupported(Desktop.Action.BROWSE_FILE_DIR) -> desktop().browseFileDirectory(this)
             else -> invokeNativeCommand()
@@ -94,7 +95,7 @@ fun File.revealInExplorer() {
  * Launches the associated application to open the file.
  */
 fun File.open() {
-    CachedExecutor.submit {
+    get(ExecutorService::class, "cachedExecutor").submit {
         if (desktop().isSupported(Desktop.Action.OPEN))
             desktop().open(this)
         else runtime().exec(absoluteFile.absolutePath)

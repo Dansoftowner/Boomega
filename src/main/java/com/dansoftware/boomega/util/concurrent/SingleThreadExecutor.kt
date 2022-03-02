@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,12 @@
 package com.dansoftware.boomega.util.concurrent
 
 import java.util.concurrent.*
+import javax.inject.Named
+import javax.inject.Singleton
 
-object SingleThreadExecutor : ExecutorService {
+@Singleton
+@Named("singleThreadExecutor")
+class SingleThreadExecutor : ExecutorService {
 
     private val back = Executors.newSingleThreadExecutor { runnable -> Thread(runnable).also { it.isDaemon = true } }
 

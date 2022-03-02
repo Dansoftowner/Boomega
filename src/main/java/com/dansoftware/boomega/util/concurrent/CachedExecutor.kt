@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,19 @@
 
 package com.dansoftware.boomega.util.concurrent
 
-import java.util.concurrent.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import javax.inject.Named
+import javax.inject.Singleton
 
 /**
  * A global cached thread pool for the application.
  *
  * @author Daniel Gyorffy
  */
-object CachedExecutor : ExecutorService
+@Singleton
+@Named("cachedExecutor")
+class CachedExecutor : ExecutorService
 by Executors.newCachedThreadPool({ runnable ->
     Thread(runnable).apply {
         isDaemon = true

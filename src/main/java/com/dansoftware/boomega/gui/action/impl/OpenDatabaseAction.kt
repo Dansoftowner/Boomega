@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.action.impl
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
@@ -27,8 +28,8 @@ import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.submitFXTask
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.LauncherMode
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.dansoftware.boomega.util.toKFunction
+import java.util.concurrent.ExecutorService
 
 object OpenDatabaseAction : Action(
     "action.open_database",
@@ -39,7 +40,7 @@ object OpenDatabaseAction : Action(
     override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
         BMDBDatabaseOpener().showOpenDialog(context.contextWindow)?.also {
             // launches the database
-            CachedExecutor.submitFXTask(
+            get(ExecutorService::class, "cachedExecutor").submitFXTask(
                 context,
                 ActivityLauncher(
                     LauncherMode.INTERNAL,

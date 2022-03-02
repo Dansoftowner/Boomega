@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@ import com.dansoftware.boomega.plugin.RealtimePluginService
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.update.GithubReleasesFetcher
 import com.dansoftware.boomega.update.ReleasesFetcher
+import com.dansoftware.boomega.util.concurrent.CachedExecutor
+import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
 import com.dansoftware.boomega.util.joinToFilePath
 import com.dansoftware.boomega.util.userDirectoryPath
 import com.google.inject.AbstractModule
@@ -32,12 +34,14 @@ import com.google.inject.Provides
 import com.google.inject.name.Names
 import com.google.inject.util.Modules
 import java.io.File
+import java.util.concurrent.ExecutorService
 import javax.inject.Named
 
 class RealtimeAppModule : Module by Modules.combine(
     PreferencesModule(),
     UpdateModule(),
-    PluginModule()
+    PluginModule(),
+    ConcurrencyModule()
 )
 
 class PreferencesModule : AbstractModule() {
@@ -73,4 +77,15 @@ class PluginModule : AbstractModule() {
     @Provides
     @Named("jarDirectory")
     fun providePluginDirectory() = File(System.getProperty("boomega.plugin.dir"))
+}
+
+class ConcurrencyModule : AbstractModule() {
+    override fun configure() {
+        bind(ExecutorService::class.java)
+            .annotatedWith(Names.named("singleThreadExecutor"))
+            .to(SingleThreadExecutor::class.java)
+        bind(ExecutorService::class.java)
+            .annotatedWith(Names.named("cachedExecutor"))
+            .to(CachedExecutor::class.java)
+    }
 }

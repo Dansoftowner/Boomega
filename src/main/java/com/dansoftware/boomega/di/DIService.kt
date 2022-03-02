@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,9 @@ package com.dansoftware.boomega.di
 
 import com.google.inject.Guice
 import com.google.inject.Injector
+import com.google.inject.Key
 import com.google.inject.Module
+import com.google.inject.name.Names
 import kotlin.reflect.KClass
 
 object DIService {
@@ -42,4 +44,10 @@ object DIService {
 
     @JvmStatic
     fun <T : Any> get(type: KClass<T>): T = get(type.java)
+
+    @JvmStatic
+    fun <T> get(type: Class<T>, name: String): T = injector.getInstance(Key.get(type, Names.named(name)))
+
+    @JvmStatic
+    fun <T : Any> get(type: KClass<T>, name: String): T = get(type.java, name)
 }

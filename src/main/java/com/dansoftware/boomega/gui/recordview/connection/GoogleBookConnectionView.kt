@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.recordview.connection
 
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.data.Record
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsPane
@@ -32,7 +33,6 @@ import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dansoftware.boomega.service.googlebooks.Volume
-import com.dansoftware.boomega.util.concurrent.CachedExecutor
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import javafx.beans.value.ObservableBooleanValue
@@ -49,6 +49,7 @@ import javafx.util.Duration
 import jfxtras.styles.jmetro.JMetroStyleClass
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.TimeUnit
 
 /**
@@ -105,7 +106,7 @@ class GoogleBookConnectionView(
             buildPreviewTable(items),
             {
                 if (it.typeEquals(ButtonType.YES)) {
-                    CachedExecutor.submit(ConnectionRemoveTask())
+                    get(ExecutorService::class, "cachedExecutor").submit(ConnectionRemoveTask())
                 }
             },
             I18NButtonTypes.CANCEL,
@@ -220,7 +221,7 @@ class GoogleBookConnectionView(
                 logger.debug("Found cache for: '{}'", googleHandle)
                 currentGoogleHandle = googleHandle
                 currentVolume = it
-            } ?: CachedExecutor.submit(this)
+            } ?: get(ExecutorService::class, "cachedExecutor").submit(this)
         }
 
         private fun cacheExisting() {
@@ -342,7 +343,7 @@ class GoogleBookConnectionView(
                     GoogleBookJoinTab(context, items[0]) { tab, record, volume ->
                         context.sendRequest(DatabaseView.TabItemCloseRequest(tab))
                         if (items[0] == record)
-                            CachedExecutor.submit(buildJoinActionTask(volume))
+                            get(ExecutorService::class, "cachedExecutor").submit(buildJoinActionTask(volume))
                     }
                 )
             )

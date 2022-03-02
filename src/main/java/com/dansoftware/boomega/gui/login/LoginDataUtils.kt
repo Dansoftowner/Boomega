@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,15 @@ package com.dansoftware.boomega.gui.login
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.login.config.LoginData
-import com.dansoftware.boomega.util.concurrent.SingleThreadExecutor
+import java.util.concurrent.ExecutorService
 
-inline fun Preferences.updateLoginData(crossinline action: (LoginData) -> Unit) {
-    SingleThreadExecutor.submit {
+inline fun Preferences.updateLoginData(
+    executor: ExecutorService = get(ExecutorService::class, "singleThreadExecutor"),
+    crossinline action: (LoginData) -> Unit
+) {
+    executor.submit {
         editor.put(LOGIN_DATA, this[LOGIN_DATA].also { action(it) }).tryCommit()
     }
 }
