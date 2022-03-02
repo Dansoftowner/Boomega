@@ -72,25 +72,25 @@ open class BoomegaApp : BaseBoomegaApplication() {
         loadPlugins()
         progress(0.4)
 
-        val preferences = readConfigurations()
+        readConfigurations()
         progress(0.6)
 
-        if (showFirstTimeActivity(preferences).not())
-            applyBaseConfigurations(preferences)
-        applyAdditionalConfigurations(preferences)
+        if (showFirstTimeActivity().not())
+            applyBaseConfigurations()
+        applyAdditionalConfigurations()
         progress(0.8)
 
         logger.debug("Theme is: {}", Theme.default)
         logger.debug("Locale is: {}", Locale.getDefault())
 
-        val databaseTracker = get(DatabaseTracker::class)
+        get(DatabaseTracker::class)
         progress(0.9)
 
         // searching for updates
-        val update = searchForUpdates(preferences)
+        val update = searchForUpdates()
         progress(1.0)
 
-        launchGUI(preferences, databaseTracker, update)
+        launchGUI(update)
     }
 
     override fun stop() {
@@ -154,7 +154,8 @@ open class BoomegaApp : BaseBoomegaApplication() {
      * Reads some configurations from the [Preferences] and applies them.
      * It should be only invoked if the [FirstTimeActivity] was not shown.
      */
-    private fun applyBaseConfigurations(preferences: Preferences) {
+    private fun applyBaseConfigurations() {
+        val preferences = get(Preferences::class)
         notifyPreloader("preloader.lang")
         Locale.setDefault(preferences[LOCALE])
         notifyPreloader("preloader.theme")
@@ -164,7 +165,8 @@ open class BoomegaApp : BaseBoomegaApplication() {
     /**
      * Applies some configurations should be applied even if no [FirstTimeActivity] was shown.
      */
-    private fun applyAdditionalConfigurations(preferences: Preferences) {
+    private fun applyAdditionalConfigurations() {
+        val preferences = get(Preferences::class)
         fun applyWindowsOpacity() {
             val opacity = preferences[BaseWindow.GLOBAL_OPACITY_CONFIG_KEY]
             logger.debug("Global window opacity read: {}", opacity)
@@ -177,7 +179,8 @@ open class BoomegaApp : BaseBoomegaApplication() {
     /**
      * Searches for updates if necessary
      */
-    private fun searchForUpdates(preferences: Preferences): Release? {
+    private fun searchForUpdates(): Release? {
+        val preferences = get(Preferences::class)
         return when {
             preferences[SEARCH_UPDATES] -> {
                 notifyPreloader("preloader.update.search")
@@ -216,16 +219,16 @@ open class BoomegaApp : BaseBoomegaApplication() {
      *
      * @return `true` if the first time dialog was shown; `false` otherwise
      */
-    private fun showFirstTimeActivity(preferences: Preferences): Boolean {
+    private fun showFirstTimeActivity(): Boolean {
         val lock = Any()
         return synchronized(lock) {
             when {
-                FirstTimeActivity.isNeeded(preferences) -> {
+                FirstTimeActivity.isNeeded(get(Preferences::class)) -> {
                     hidePreloader()
                     logger.debug("First time dialog is needed")
                     Platform.runLater {
                         synchronized(lock) {
-                            FirstTimeActivity(preferences).show()
+                            FirstTimeActivity(get(Preferences::class)).show()
                             lock.notify()
                         }
                     }
@@ -242,15 +245,11 @@ open class BoomegaApp : BaseBoomegaApplication() {
     /**
      * Launches the main UI environment
      */
-    private fun launchGUI(
-        preferences: Preferences,
-        databaseTracker: DatabaseTracker,
-        update: Release?
-    ) {
+    private fun launchGUI(update: Release?) {
         notifyPreloader("preloader.gui.build")
         initActivityLauncher(
-            preferences = preferences,
-            databaseTracker = databaseTracker,
+            preferences = get(Preferences::class),
+            databaseTracker = get(DatabaseTracker::class),
             applicationArgs = applicationArgs,
             onLaunched = { context, launched ->
                 update?.let {
