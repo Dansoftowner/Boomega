@@ -31,6 +31,7 @@ import com.google.inject.name.Names;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class UpdateSimulation {
             release.setAssets(buildReleaseAssets());
             release.setVersion("1.0.0");
             release.setDescription(description());
+            release.setWebsite("https://github.com/Dansoftowner/Boomega");
             return release;
         }
 
@@ -107,7 +109,17 @@ public class UpdateSimulation {
                 @NotNull
                 @Override
                 public InputStream openStream() {
-                    return new ByteArrayInputStream(new byte[size]);
+                    return new ByteArrayInputStream(new byte[size]) {
+                        @Override
+                        public int read(@NotNull byte[] b) throws IOException {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            return super.read(b);
+                        }
+                    };
                 }
             };
         }
