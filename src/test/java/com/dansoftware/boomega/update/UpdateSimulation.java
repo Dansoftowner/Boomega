@@ -37,15 +37,15 @@ import java.util.List;
 public class UpdateSimulation {
 
     static {
+        System.setProperty("boomega.version", "0.0.0");
         DIService.initModules(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(ConfigSource.class).to(DummyConfigSource.class);
-
                 bind(PluginService.class).to(DummyPluginService.class);
-
                 bind(ReleasesFetcher.class).to(DummyReleasesFetcher.class);
-                bind(String.class).annotatedWith(Names.named("appVersion")).toInstance("0.0.0");
+                bind(String.class).annotatedWith(Names.named("appVersion"))
+                        .toInstance(System.getProperty("boomega.version"));
             }
         });
     }
@@ -66,24 +66,43 @@ public class UpdateSimulation {
 
         private Release buildSimpleRelease() {
             var release = new Release();
-            release.setAssets(List.of(buildSimpleReleaseAsset()));
+            release.setAssets(buildReleaseAssets());
             release.setVersion("1.0.0");
-            release.setDescription("# New dummy release\n* Feature 1\n* Feature 2\n* Feature 3");
+            release.setDescription(description());
             return release;
         }
 
-        private ReleaseAsset buildSimpleReleaseAsset() {
+        private String description() {
+            return """
+                    # New dummy release
+                    
+                    * Feature 1
+                    * Feature 2
+                    * Feature 3
+                    """;
+        }
+
+        private List<ReleaseAsset> buildReleaseAssets() {
+            return List.of(
+                    buildSimpleReleaseAsset("Boomega_1.0.0.exe", "exe", 92 * (int)Math.pow(1024, 2)),
+                    buildSimpleReleaseAsset("Boomega_1.0.0.msi", "msi", 85 * (int)Math.pow(1024, 2)),
+                    buildSimpleReleaseAsset("Boomega_1.0.0.zip", "msi", 102 * (int)Math.pow(1024, 2))
+            );
+        }
+
+
+        private ReleaseAsset buildSimpleReleaseAsset(String name, String contentType, int size) {
             return new ReleaseAsset() {
                 {
-                    setName("boomega");
-                    setContentType("pkg");
-                    setSize(5092);
+                    setName(name);
+                    setContentType(contentType);
+                    setSize(size);
                 }
 
                 @NotNull
                 @Override
                 public InputStream openStream() {
-                    return new ByteArrayInputStream(new byte[5092]);
+                    return new ByteArrayInputStream(new byte[size]);
                 }
             };
         }
