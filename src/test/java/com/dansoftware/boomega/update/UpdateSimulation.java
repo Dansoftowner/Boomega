@@ -23,6 +23,7 @@ import com.dansoftware.boomega.config.source.ConfigSource;
 import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.gui.app.BaseBoomegaApplication;
 import com.dansoftware.boomega.gui.app.BoomegaApp;
+import com.dansoftware.boomega.main.ConcurrencyModule;
 import com.dansoftware.boomega.plugin.DummyPluginService;
 import com.dansoftware.boomega.plugin.api.PluginService;
 import com.google.inject.AbstractModule;
@@ -47,7 +48,7 @@ public class UpdateSimulation {
                 bind(String.class).annotatedWith(Names.named("appVersion"))
                         .toInstance(System.getProperty("boomega.version"));
             }
-        });
+        }, new ConcurrencyModule());
     }
 
     public static void main(String[] args) {
@@ -74,22 +75,26 @@ public class UpdateSimulation {
 
         private String description() {
             return """
-                    # New dummy release
-                    
-                    * Feature 1
-                    * Feature 2
-                    * Feature 3
+                    > Note: it's a fake update
+                    # Boomega v1.0.0
+                                        
+                    * Full support for everything
+                    * New features for everything
+                    * Bug fixes
                     """;
         }
 
         private List<ReleaseAsset> buildReleaseAssets() {
             return List.of(
-                    buildSimpleReleaseAsset("Boomega_1.0.0.exe", "exe", 92 * (int)Math.pow(1024, 2)),
-                    buildSimpleReleaseAsset("Boomega_1.0.0.msi", "msi", 85 * (int)Math.pow(1024, 2)),
-                    buildSimpleReleaseAsset("Boomega_1.0.0.zip", "msi", 102 * (int)Math.pow(1024, 2))
+                    // TODO: what contentType actually stands for?
+                    buildSimpleReleaseAsset("Boomega-1.0.0-all.jar", "jar", MBs(74)),
+                    buildSimpleReleaseAsset("Boomega-1.0.0-linux.tar.xz", "tar.xz", MBs(130)),
+                    buildSimpleReleaseAsset("Boomega-1.0.0-win.exe", "exe", MBs(132)),
+                    buildSimpleReleaseAsset("Boomega-1.0.0-win.msi", "msi", MBs(131)),
+                    buildSimpleReleaseAsset("Boomega-1.0.0-win.zip", "zip", MBs(130)),
+                    buildSimpleReleaseAsset("Boomega-1.0.0-1amd64-linux.deb", "deb", MBs(130))
             );
         }
-
 
         private ReleaseAsset buildSimpleReleaseAsset(String name, String contentType, int size) {
             return new ReleaseAsset() {
@@ -105,6 +110,10 @@ public class UpdateSimulation {
                     return new ByteArrayInputStream(new byte[size]);
                 }
             };
+        }
+
+        private static int MBs(int bytes) {
+            return bytes * (int) Math.pow(1024, 2);
         }
     }
 }
