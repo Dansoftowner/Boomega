@@ -149,7 +149,7 @@ class RecordsView(
     }
 
     private fun loadRecords(onSucceeded: () -> Unit = {}) {
-        get(ExecutorService::class).submit(buildRecordsLoadTask(onSucceeded))
+        get(ExecutorService::class, "cachedExecutor").submit(buildRecordsLoadTask(onSucceeded))
     }
 
     private fun buildRecordsLoadTask(onSucceeded: () -> Unit) =
