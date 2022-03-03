@@ -137,7 +137,6 @@ dependencies {
     implementation 'org.jetbrains:annotations:22.0.0'
 
     implementation 'org.apache.poi:poi-ooxml:5.0.0' // Microsoft Documents
-    implementation 'org.yaml:snakeyaml:1.29' // YAML
     implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
     implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
     implementation 'com.google.code.gson:gson:2.8.9' // JSON Parsing
