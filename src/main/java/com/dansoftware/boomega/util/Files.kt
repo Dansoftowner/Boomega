@@ -77,9 +77,16 @@ fun joinToFilePath(vararg elements: String): String =
 fun File.revealInExplorer() {
     fun invokeNativeCommand() {
         when {
-            OsInfo.isWindows() -> runtime().exec("explorer.exe /select, \"$path\"")
-            OsInfo.isLinux() -> runtime().exec(arrayOf("nautilus", path))
-            OsInfo.isMac() -> runtime().exec(arrayOf("open", "-a", "Finder", path)) // alternatively: open -R <file path>
+            OsInfo.isWindows -> runtime().exec("explorer.exe /select, \"$path\"")
+            OsInfo.isLinux -> runtime().exec(arrayOf("nautilus", path))
+            OsInfo.isMacOS -> runtime().exec(
+                arrayOf(
+                    "open",
+                    "-a",
+                    "Finder",
+                    path
+                )
+            ) // alternatively: open -R <file path>
         }
     }
 
@@ -111,9 +118,9 @@ fun File.open() {
  */
 fun File.isExecutable(): Boolean {
     return extension in when {
-        OsInfo.isWindows() -> listOf("exe", "msi")
-        OsInfo.isMac() -> listOf("dmg", "app")
-        OsInfo.isLinux() -> listOf("deb", "rpm")
+        OsInfo.isWindows -> listOf("exe", "msi")
+        OsInfo.isMacOS -> listOf("dmg", "app")
+        OsInfo.isLinux -> listOf("deb", "rpm")
         else -> emptyList()
     }
 }
@@ -179,8 +186,10 @@ fun byteCountToDisplaySize(size: Long): String {
 }
 
 /**
- * Converts the array of [File]s into an array of [URL]s
+ * Converts the array of [File]s into an array of [URL]s.
+ *
+ * @return an array of [URL]s; or an empty array if the receiver is null
  */
-fun Array<File>.toURLS(): Array<URL> {
-    return Array(size) { this[it].toURI().toURL() }
-}
+fun Array<File>?.toURLS(): Array<URL> = this?.let {
+    Array(size) { this[it].toURI().toURL() }
+} ?: emptyArray()

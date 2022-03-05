@@ -37,7 +37,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory: File) : URLClassLoader(
-    directory.listFiles { _, name -> JAR_FILE_PATTERN.matches(name) }?.toURLS(),
+    directory.listFiles { _, name -> JAR_FILE_PATTERN.matches(name) }.toURLS(),
     getSystemClassLoader()
 ) {
 
