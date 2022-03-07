@@ -73,6 +73,31 @@ public class MonokaiThemePlugin implements ThemePlugin {
 </table>
 
 
-## Plugin project setup
+## Setting up a plugin project
 
-TODO
+The recommended build system to be used for a plugin project is `Gradle`.
+
+### Including the plugin-kit dependency
+
+> Not available yet
+
+### Running test application
+
+For testing your plugins in action, you can run a test application instance easily.
+
+> Not available yet
+
+### Building your archive
+
+If your plugin project doesn't include additional dependencies, you can use the basic gradle `jar` task.
+
+#### Handling dependencies
+
+If your plugin requires dependencies, you might use an additional gradle plugin like [Shadow](https://github.com/johnrengelman/shadow)
+for building a fat jar. But in this case you have to make sure that the fat jar doesn't include the Boomega
+(plugin-kit) binaries, because it might reduce performance when Boomega loads the plugin.
+
+An alternative solution is to simply place the dependency jars also into the plugin directory.
+
+> Note: Don't include dependencies already present in Boomega itself.   
+> You can view the dependencies used by Boomega in the [acknowledgements](/ACKNOWLEDGEMENTS.md#used-libraries).
