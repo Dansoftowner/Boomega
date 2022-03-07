@@ -11,7 +11,7 @@ Plugins can be written both in **java** and **kotlin**.
 
 Boomega automatically loads plugin archives (`.jar`s) from the **default plugin directory**.
 
-* On **Windows**: `C:\Users\<user>\AppData\Roaming\Dansoftware\boomega\plugin`
+* On **Windows**: `<User directory>\AppData\Roaming\Dansoftware\boomega\plugin`
 * On **Linux** & **MacOS**: `<User directory>/boomega/plugin`
 
 If you want to load your plugin archive, you should place the file in this directory.
@@ -35,35 +35,41 @@ All other plugin classes should implement this interface.
 **The DisabledPlugin annotation**
 
 The [`@DisabledPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/DisabledPlugin.java) annotation can be used
-for temporarily disabling a plugin implementation. Like this:
+for preventing Boomega to load a plugin class. 
 
+Example:
 <table>
 
 <tr>
-<th>Java</th>
 <th>Kotlin</th>
+<th>Java</th>
 </tr>
 
 <tr>
-<td>
 
-```java
-@DisabledPlugin // we don't want Boomega to import this plugin yet
-public class MonokaiThemePlugin implements ThemePlugin {
-    ...
-}
-```
-
-</td>
 <td>
 
 ```kotlin
-@DisabledPlugin // we don't want Boomega to import this plugin yet
+@DisabledPlugin // make Boomega ignore this plugin
 class MonokaiThemePlugin : ThemePlugin {
     ...
 }
 ```
 
 </td>
+
+<td>
+
+```java
+@DisabledPlugin // make Boomega ignore this plugin
+public class MonokaiThemePlugin implements ThemePlugin {
+    ...
+}
+```
+
+</td>
+
 </tr>
 </table>
+
+
