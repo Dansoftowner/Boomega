@@ -101,3 +101,13 @@ An alternative solution is to simply place the dependency jars also into the plu
 
 > Note: Don't include dependencies already present in Boomega itself.   
 > You can view the dependencies used by Boomega in the [acknowledgements](/ACKNOWLEDGEMENTS.md#used-libraries).
+
+## Plugin development tutorials & examples
+
+### Language plugins
+
+### Theme plugins
+
+### Record exporting plugins
+
+### Module plugins
