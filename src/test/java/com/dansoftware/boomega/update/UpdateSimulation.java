@@ -30,12 +30,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-// TODO: unfinished
 public class UpdateSimulation {
 
     static {
@@ -83,49 +80,45 @@ public class UpdateSimulation {
                     * Full support for everything
                     * New features for everything
                     * Bug fixes
+                    
+                    | Bug name | Bug id |
+                    | -------- | ------ |
+                    | Can't load preferences | **#144** |
+                    | Crash when open record editor | **#123** |
+                    
+                   
+                    > Boomega (C) - Daniel Gyoerffy
+                    
                     """;
         }
 
         private List<ReleaseAsset> buildReleaseAssets() {
             return List.of(
-                    // TODO: what contentType actually stands for?
-                    buildSimpleReleaseAsset("Boomega-1.0.0-all.jar", "jar", MBs(74)),
-                    buildSimpleReleaseAsset("Boomega-1.0.0-linux.tar.xz", "tar.xz", MBs(130)),
-                    buildSimpleReleaseAsset("Boomega-1.0.0-win.exe", "exe", MBs(132)),
-                    buildSimpleReleaseAsset("Boomega-1.0.0-win.msi", "msi", MBs(131)),
-                    buildSimpleReleaseAsset("Boomega-1.0.0-win.zip", "zip", MBs(130)),
-                    buildSimpleReleaseAsset("Boomega-1.0.0-1amd64-linux.deb", "deb", MBs(130))
+                    new FakeReleaseAsset("Boomega-1.0.0-all.jar", "application/java-archive", MBs(74)),
+                    new FakeReleaseAsset("Boomega-1.0.0-linux.tar.xz", "application/x-xz", MBs(130)),
+                    new FakeReleaseAsset("Boomega-1.0.0-win.exe", "application/octet-stream", MBs(132)),
+                    new FakeReleaseAsset("Boomega-1.0.0-win.msi", "application/octet-stream", MBs(131)),
+                    new FakeReleaseAsset("Boomega-1.0.0-win.zip", "application/zip", MBs(130)),
+                    new FakeReleaseAsset("Boomega-1.0.0-1amd64-linux.deb", "application/vnd.debian.binary-package", MBs(130))
             );
-        }
-
-        private ReleaseAsset buildSimpleReleaseAsset(String name, String contentType, int size) {
-            return new ReleaseAsset() {
-                {
-                    setName(name);
-                    setContentType(contentType);
-                    setSize(size);
-                }
-
-                @NotNull
-                @Override
-                public InputStream openStream() {
-                    return new ByteArrayInputStream(new byte[size]) {
-                        @Override
-                        public int read(@NotNull byte[] b) throws IOException {
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            return super.read(b);
-                        }
-                    };
-                }
-            };
         }
 
         private static int MBs(int bytes) {
             return bytes * (int) Math.pow(1024, 2);
+        }
+    }
+
+    private static class FakeReleaseAsset extends ReleaseAsset {
+        FakeReleaseAsset(String name, String contentType, int size) {
+            setName(name);
+            setContentType(contentType);
+            setSize(size);
+        }
+
+        @NotNull
+        @Override
+        public InputStream openStream() {
+            return new DelayedByteArrayInputStream(new byte[(int)getSize()], 1);
         }
     }
 }
