@@ -18,7 +18,7 @@ If you want to load your plugin archive, you should place the file in this direc
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager). 
 
-## API
+## API overview
 
 The root of the Boomega plugin hierarchy is:
 [`com.dansoftware.boomega.plugin.api.BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt).
@@ -32,7 +32,7 @@ All other plugin classes should implement this interface.
 * [`RecordExporterPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/RecordExporterPlugin.kt) - for adding new record exporting option
 * [`ModulePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ModulePlugin.kt) - for adding new UI modules
 
-**The DisabledPlugin annotation**
+**The DisabledPlugin annotation:**
 
 The [`@DisabledPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/DisabledPlugin.java) annotation can be used
 for preventing Boomega to load a plugin class. 
@@ -73,3 +73,6 @@ public class MonokaiThemePlugin implements ThemePlugin {
 </table>
 
 
+## Plugin project setup
+
+TODO
