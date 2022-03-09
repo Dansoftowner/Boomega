@@ -72,6 +72,7 @@ public class MonokaiThemePlugin implements ThemePlugin {
 </tr>
 </table>
 
+> Your plugin classes will be instantiated only once during the application lifetime.
 
 ## Setting up a plugin project
 
