@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.plugin
 
+import com.dansoftware.boomega.util.os.OsInfo.isWindows
 import com.dansoftware.boomega.util.toURLS
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -47,9 +48,9 @@ class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory:
     fun listAllClasses(): List<Class<*>> =
         urLs.asSequence()
             .map(URL::toExternalForm)
-            .onEach { logger.debug("Plugin file found: {}", it) }
             .filter { it.startsWith("file:/") }
-            .map { it.substring(5) } // TODO: debug it on Windows
+            .map { it.substring(if (isWindows) 6 else 5) } // on Windows, we cut out the whole 'file:/' part, but e.g on Linux, we need the '/' character too
+            .onEach { logger.debug("Plugin file found: {}", it) }
             .filter { it.endsWith(".jar") }
             .map(::JarFile)
             .flatMap { jar ->
