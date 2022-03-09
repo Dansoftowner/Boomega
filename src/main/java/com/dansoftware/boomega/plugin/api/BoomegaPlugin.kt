@@ -56,7 +56,7 @@ interface BoomegaPlugin {
     fun init()
 
     /**
-     * Executed when the user removes the plugin
+     * Executed when the [PluginService] receives a close request
      */
-    fun destroy() //TODO: use it
+    fun destroy()
 }

@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,6 +103,13 @@ public class RealtimePluginService implements PluginService {
     @Override
     public void close() {
         try {
+            for (var pluginObject : plugins) {
+                try {
+                    pluginObject.destroy();
+                } catch (RuntimeException e) {
+                    logger.error("Couldn't close plugin '{}'", pluginObject.getName(), e);
+                }
+            }
             classLoader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
