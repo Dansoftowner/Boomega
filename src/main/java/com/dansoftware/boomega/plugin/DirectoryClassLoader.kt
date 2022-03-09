@@ -44,8 +44,10 @@ class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory:
 
     /**
      * Lists all the classes loaded from the jar files
+     *
+     * @param predicate for filtering classes to be listed
      */
-    fun listAllClasses(): List<Class<*>> =
+    fun listClasses(predicate: (Class<*>) -> Boolean = { true }): List<Class<*>> =
         urLs.asSequence()
             .map(URL::toExternalForm)
             .filter { it.startsWith("file:/") }
@@ -57,9 +59,10 @@ class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory:
                 jar.entries().asSequence()
                     .filter { it.isDirectory.not() && it.name.endsWith(".class") }
                     .map(JarEntry::getName)
-                    .map { it.substring(0, it.length - 6) }
+                    .map { it.substring(0, it.length - 6) } // We cut out the '.class' part
                     .map { it.replace('/', '.') }
                     .map(::findClass)
+                    .filter(predicate)
             }
             .toList()
 

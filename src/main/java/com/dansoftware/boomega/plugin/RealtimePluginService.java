@@ -93,8 +93,7 @@ public class RealtimePluginService implements PluginService {
         pluginDirectory.mkdirs();
         if (!loaded) {
             plugins.addAll(
-                    classLoader.listAllClasses().stream()
-                            .filter(this::isPluginUsable)
+                    classLoader.listClasses(this::isPluginUsable).stream()
                             .peek(classRef -> logger.debug("Found plugin class: {}", classRef.getName()))
                             .map(ReflectionUtils::tryConstructObject)
                             .filter(Objects::nonNull)
