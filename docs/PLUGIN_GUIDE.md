@@ -164,7 +164,7 @@ in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i
 Finally, you can implement the `LanguagePlugin` interface. (Kotlin) example:
 ```kotlin
 class PortugueseLanguagePlugin : LanguagePlugin {
-    override val name: String get() = "Portuguese language plugin "
+    override val name: String = "Portuguese language plugin "
     override val author: PluginAuthor = PluginAuthor("My Name", "myemail@example.com")
     override val version: String = "1.0.0"
     override val description: String? get() = null
