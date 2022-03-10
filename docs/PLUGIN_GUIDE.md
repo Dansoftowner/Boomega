@@ -145,7 +145,7 @@ public class PortugueseLanguagePack extends LanguagePack {
     @Override
     public @NotNull ResourceBundle getValues() {
         // The com/mypackage/MyValues_pt.properties file
-        return getBundle("com.mypackage.MyValues");
+        return super.getBundle("com.mypackage.MyValues");
     }
 
     @Override
