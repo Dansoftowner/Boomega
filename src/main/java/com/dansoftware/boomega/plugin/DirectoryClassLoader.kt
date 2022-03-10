@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.plugin
 
+import com.dansoftware.boomega.util.os.OsInfo.isWindows
 import com.dansoftware.boomega.util.toURLS
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -43,22 +44,25 @@ class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory:
 
     /**
      * Lists all the classes loaded from the jar files
+     *
+     * @param predicate for filtering classes to be listed
      */
-    fun listAllClasses(): List<Class<*>> =
+    fun listClasses(predicate: (Class<*>) -> Boolean = { true }): List<Class<*>> =
         urLs.asSequence()
             .map(URL::toExternalForm)
-            .onEach { logger.debug("Plugin file found: {}", it) }
             .filter { it.startsWith("file:/") }
-            .map { it.substring(5) } // TODO: debug it on Windows
+            .map { it.substring(if (isWindows) 6 else 5) } // on Windows, we cut out the whole 'file:/' part, but e.g on Linux, we need the '/' character too
+            .onEach { logger.debug("Plugin file found: {}", it) }
             .filter { it.endsWith(".jar") }
             .map(::JarFile)
             .flatMap { jar ->
                 jar.entries().asSequence()
                     .filter { it.isDirectory.not() && it.name.endsWith(".class") }
                     .map(JarEntry::getName)
-                    .map { it.substring(0, it.length - 6) }
+                    .map { it.substring(0, it.length - 6) } // We cut out the '.class' part
                     .map { it.replace('/', '.') }
                     .map(::findClass)
+                    .filter(predicate)
             }
             .toList()
 

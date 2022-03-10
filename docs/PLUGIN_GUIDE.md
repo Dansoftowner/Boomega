@@ -14,7 +14,7 @@ Boomega automatically loads plugin archives (`.jar`s) from the **default plugin 
 * On **Windows**: `<User directory>\AppData\Roaming\Dansoftware\boomega\plugin`
 * On **Linux** & **MacOS**: `<User directory>/boomega/plugin`
 
-If you want to load your plugin archive, you should place the file in this directory.
+If you want to load your plugin into Boomega, you should place the file into this directory.
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager). 
 

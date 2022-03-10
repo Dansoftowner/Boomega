@@ -27,7 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -49,10 +51,12 @@ public class RealtimePluginService implements PluginService {
     private volatile boolean loaded;
 
     private final DirectoryClassLoader classLoader;
+    private final File pluginDirectory;
 
     @Inject
-    private RealtimePluginService(DirectoryClassLoader classLoader) {
+    private RealtimePluginService(DirectoryClassLoader classLoader, @Named("jarDirectory") File pluginDirectory) {
         this.classLoader = classLoader;
+        this.pluginDirectory = pluginDirectory;
     }
 
     @Override
@@ -83,12 +87,13 @@ public class RealtimePluginService implements PluginService {
         return classLoader.getURLs().length;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public synchronized void load() {
+        pluginDirectory.mkdirs();
         if (!loaded) {
             plugins.addAll(
-                    classLoader.listAllClasses().stream()
-                            .filter(this::isPluginUsable)
+                    classLoader.listClasses(this::isPluginUsable).stream()
                             .peek(classRef -> logger.debug("Found plugin class: {}", classRef.getName()))
                             .map(ReflectionUtils::tryConstructObject)
                             .filter(Objects::nonNull)

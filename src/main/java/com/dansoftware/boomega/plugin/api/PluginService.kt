@@ -37,11 +37,13 @@ interface PluginService {
 
     /**
      * Loads the plugins into the memory.
+     * Invoked during application startup.
      */
     fun load()
 
     /**
-     * Closes resources
+     * Closes resources.
+     * Invoked when the whole application shuts down.
      */
     fun close()
 
