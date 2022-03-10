@@ -48,7 +48,7 @@ interface BoomegaPlugin {
     /**
      * The icon for the plugin
      */
-    val icon: Image?
+    val icon: Image? get() = null
 
     /**
      * Executed when the plugin object is created by the application
