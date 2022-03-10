@@ -7,6 +7,8 @@
 Boomega allows you to develop plugins for the app in order to add features/expand the functionality to/of the app.  
 Plugins can be written both in **java** and **kotlin**.
 
+> You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
+
 ## The plugin directory
 
 Boomega automatically loads plugin archives (`.jar`s) from the **default plugin directory**.
@@ -16,7 +18,8 @@ Boomega automatically loads plugin archives (`.jar`s) from the **default plugin 
 
 If you want to load your plugin into Boomega, you should place the file into this directory.
 
-> You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager). 
+> You can open the plugin directory from Boomega:
+> **File > Open plugin directory**
 
 ## API overview
 
@@ -72,6 +75,12 @@ public class MonokaiThemePlugin implements ThemePlugin {
 </tr>
 </table>
 
+Every [`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt) should provide this information:
+* `name` - defines the plugin's name
+* `plugin author` - describes the plugin's author (see: [PluginAuthor](/src/main/java/com/dansoftware/boomega/plugin/api/PluginAuthor.kt))
+* `version` - defines the plugin's version
+* _Optional_: `icon` - a JavaFX `Image` to be rendered as the plugin's icon
+
 > Your plugin classes will be instantiated only once during the application lifetime.
 
 ## Setting up a plugin project
@@ -106,6 +115,67 @@ An alternative solution is to simply place the dependency jars also into the plu
 ## Plugin development tutorials & examples
 
 ### Language plugins
+
+If you want to add a new language to Boomega through a plugin, you can implement the
+[`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) interface.
+
+> If you want to contribute a language to be included in the core Boomega itself, look at [this issue](https://github.com/Dansoftowner/Boomega/issues/162).
+
+Firstly, create your own `.properties` file that contains the translations. 
+View the [default resource file](/src/main/resources/com/dansoftware/boomega/i18n/Values.properties) to have an idea.
+
+After you've done this, you have to create your [LanguagePack](/src/main/java/com/dansoftware/boomega/i18n/LanguagePack.java).
+A `LanguagePack` in Boomega provides the `ResourceBundle` (representing the .properties file), 
+a `Collator` (for defining the alphabetical order) and other things needed for defining a language. 
+
+A simple (Java) example:
+```java
+public class PortugueseLanguagePack extends LanguagePack {
+
+    // the Locale representing the language we want to translate to (in this case Portuguese)
+    private static final Locale LOCALE = new Locale("pt");
+
+    // represents the person who translated the language
+    private static final LanguageTranslator AUTHOR = new LanguageTranslator("FirstName" ,"LastName", "myemail@example.com");
+
+    protected PortugueseLanguagePack() {
+        super(LOCALE, AUTHOR);
+    }
+
+    @Override
+    public @NotNull ResourceBundle getValues() {
+        // The com/mypackage/MyValues_pt.properties file
+        return getBundle("com.mypackage.MyValues");
+    }
+
+    @Override
+    protected boolean isRTL() {
+        return false; // Portuguese is not a right-to-left language
+    }
+}
+```
+
+You can view the internal LanguagePack implementations 
+in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i18n) package e.g:
+* [EnglishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/EnglishLanguagePack.java)
+* [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java)
+* [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
+
+Finally, you can implement the `LanguagePlugin` interface. (Kotlin) example:
+```kotlin
+class PortugueseLanguagePlugin : LanguagePlugin {
+    override val name: String get() = "Portuguese language plugin "
+    override val author: PluginAuthor = PluginAuthor("My Name", "myemail@example.com")
+    override val version: String = "1.0.0"
+    override val description: String? get() = null
+
+    override fun init() {}
+    override fun destroy() {}
+
+    // Here you have to return your LanguagePack
+    override val languagePack: LanguagePack get() = PortugueseLanguagePack()
+}
+```
 
 ### Theme plugins
 
