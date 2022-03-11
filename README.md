@@ -1,5 +1,5 @@
 <p align="center">
-  <img align="center" src="img/logo.png" alt="Boomega icon">
+  <img align="center" src="/docs/img/readme/logo.png" alt="Boomega icon">
   <h1 align="center">Boomega <a href="https://github.com/Dansoftowner/Boomega"><img align="center" alt="Unstable stage" src="https://img.shields.io/badge/stage-unstable-red"></a></h1>
 </p>
 
