@@ -20,7 +20,6 @@ package com.dansoftware.boomega.gui.info
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.HighlightableLabel
-import com.dansoftware.boomega.gui.info.dependency.DependenciesWindow
 import com.dansoftware.boomega.gui.info.native.NativeInfoWindow
 import com.dansoftware.boomega.gui.util.hgrow
 import com.dansoftware.boomega.gui.util.icon
@@ -132,7 +131,7 @@ class InformationView(val context: Context) : VBox(5.0) {
         text = i18n("info.show.dependencies")
         graphic = icon("code-braces-icon")
         setOnAction {
-            DependenciesWindow(owner = context.contextWindow).show()
+            SystemBrowser.browse(ACKNOWLEDGEMENTS_URL)
         }
     }
 
@@ -169,5 +168,6 @@ class InformationView(val context: Context) : VBox(5.0) {
         const val GITHUB_REPO_URL = "https://github.com/Dansoftowner/Boomega"
         const val LICENSE_URL = "https://github.com/Dansoftowner/Boomega/blob/master/LICENSE"
         const val LICENSE_NAME = "GNU General Public License v3.0"
+        const val ACKNOWLEDGEMENTS_URL = "https://github.com/Dansoftowner/Boomega/blob/master/ACKNOWLEDGEMENTS.md";
     }
 }
