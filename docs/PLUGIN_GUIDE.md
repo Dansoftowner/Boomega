@@ -2,6 +2,18 @@
 
 > Incomplete and not reliable yet!
 
+#### List of contents
+
+* [Intro](#intro)
+* [The plugin directory](#the-plugin-directory)
+* [API overview](#api-overview)
+* [Setting up a plugin project](#setting-up-a-plugin-project)
+* [Plugin development tutorials & examples](#plugin-development-tutorials--examples)
+  * [Language plugins](#language-plugins)
+  * [Theme plugins](#theme-plugins)
+  * [Record exporting plugins](#record-exporting-plugins)
+  * [Module plugins](#module-plugins)
+
 # Intro
 
 Boomega allows you to develop plugins for the app in order to add features/expand the functionality to/of the app.  
