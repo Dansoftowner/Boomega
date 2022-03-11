@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.i18n;
 
+import com.dansoftware.boomega.util.Person;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,6 +46,12 @@ public class HungarianLanguagePack extends InternalLanguagePack {
         } catch (ParseException e) {
             return Collator.getInstance(LOCALE);
         }
+    }
+
+    @Nullable
+    @Override
+    public Person getTranslator() {
+        return new Person("Györffy", "Dániel", "dansoftwareowner@gmail.com");
     }
 
     @Override

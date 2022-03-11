@@ -18,10 +18,10 @@
 
 package com.dansoftware.boomega.i18n;
 
+import com.dansoftware.boomega.util.Person;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.text.CollationKey;
 import java.text.Collator;
 import java.util.Locale;
 import java.util.Objects;
@@ -35,15 +35,15 @@ import java.util.ResourceBundle;
 public abstract class LanguagePack {
 
     private final Locale locale;
-    private LanguageTranslator languageTranslator;
+    private Person translator;
 
     protected LanguagePack(@NotNull Locale locale) {
         this.locale = Objects.requireNonNull(locale);
     }
 
-    protected LanguagePack(@NotNull Locale locale, @NotNull LanguageTranslator languageTranslator) {
+    protected LanguagePack(@NotNull Locale locale, @NotNull Person translator) {
         this(locale);
-        this.languageTranslator = Objects.requireNonNull(languageTranslator);
+        this.translator = Objects.requireNonNull(translator);
     }
 
     public final @NotNull Locale getLocale() {
@@ -51,8 +51,8 @@ public abstract class LanguagePack {
     }
 
     @Nullable
-    public LanguageTranslator getTranslator() {
-        return languageTranslator;
+    public Person getTranslator() {
+        return translator;
     }
 
     /**
@@ -99,10 +99,22 @@ public abstract class LanguagePack {
      *
      * @param firstName the first name
      * @param lastName  the last name
-     * @return the concatenated name
+     * @return the full name
      */
     @NotNull
     public String displayPersonName(@Nullable String firstName, @Nullable String lastName) {
-        return String.format("%s %s", firstName, lastName);
+        return "%s %s".formatted(firstName, lastName);
+    }
+
+    /**
+     * Concatenates the given person's first & lastnames according to the conventions of the language.
+     *
+     * @param person the person object
+     * @return the full name
+     */
+    public String displayPersonName(@NotNull Person person) {
+        final var firstNames = String.join(" ", person.getFirstNames());
+        final var lastNames = String.join(" ", person.getLastNames());
+        return displayPersonName(firstNames, lastNames);
     }
 }

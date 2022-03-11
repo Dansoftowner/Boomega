@@ -26,7 +26,7 @@ import com.dansoftware.boomega.gui.util.hgrow
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.padding
 import com.dansoftware.boomega.i18n.I18N
-import com.dansoftware.boomega.i18n.getDisplayName
+import com.dansoftware.boomega.i18n.displayName
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.util.SystemBrowser
 import javafx.geometry.Insets
@@ -98,7 +98,7 @@ class InformationView(val context: Context) : VBox(5.0) {
     private fun buildLangTranslatorLabel() =
         KeyValuePair(
             "info.lang.translator",
-            I18N.getLanguagePack().translator?.getDisplayName()
+            I18N.getLanguagePack().translator?.displayName
         )
 
     private fun buildJavaInfo() {

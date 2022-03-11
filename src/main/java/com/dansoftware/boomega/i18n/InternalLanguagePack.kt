@@ -1,5 +1,6 @@
 package com.dansoftware.boomega.i18n
 
+import com.dansoftware.boomega.util.Person
 import java.util.*
 
 /**
@@ -14,9 +15,7 @@ private abstract class InternalLanguagePack(locale: Locale) : LanguagePack(local
         private const val VALUES = "com.dansoftware.boomega.i18n.Values"
     }
 
-    override fun getTranslator(): LanguageTranslator? {
-        return LanguageTranslator("Dániel", "Györffy", "dansoftwareowner@gmail.com")
-    }
+    override fun getTranslator(): Person? = null
 
     override fun getValues(): ResourceBundle = getBundle(VALUES)
 }

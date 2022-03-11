@@ -18,6 +18,9 @@
 
 package com.dansoftware.boomega.i18n;
 
+import com.dansoftware.boomega.util.Person;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Locale;
 
 /**
@@ -29,6 +32,12 @@ public class EnglishLanguagePack extends InternalLanguagePack {
 
     public EnglishLanguagePack() {
         super(Locale.ENGLISH);
+    }
+
+    @Nullable
+    @Override
+    public Person getTranslator() {
+        return new Person("Györffy", "Dániel", "dansoftwareowner@gmail.com");
     }
 
     @Override

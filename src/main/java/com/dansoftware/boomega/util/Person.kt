@@ -1,6 +1,6 @@
 /*
  * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Copyright (c) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.i18n
+package com.dansoftware.boomega.util
 
 /**
- * A [LanguageTranslator] represents a person who translated the app into a particular language
+ * Simple structure representing a person
  */
-data class LanguageTranslator(val firstName: String, val lastName: String, val email: String)
+data class Person(
+    val lastNames: List<String>,
+    val firstNames: List<String>,
+    val email: String? = null
+) {
+    constructor(lastName: String, firstName: String, email: String? = null) : this(
+        listOf(lastName),
+        listOf(firstName),
+        email
+    )
+}

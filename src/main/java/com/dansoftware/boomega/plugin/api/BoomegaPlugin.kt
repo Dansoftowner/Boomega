@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.plugin.api
 
+import com.dansoftware.boomega.util.Person
 import javafx.scene.image.Image
 
 /**
@@ -31,9 +32,9 @@ interface BoomegaPlugin {
     val name: String
 
     /**
-     * @return the plugin's author's information object
+     * @return the person who developed this plugin
      */
-    val author: PluginAuthor
+    val author: Person
 
     /**
      * The plugin's version
