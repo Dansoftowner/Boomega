@@ -12,7 +12,7 @@
 
 <h3 align="center">An advanced book explorer/catalog application written in Java and Kotlin.</h3>
 
-![Screenshot](img/main-activity-preview.png)
+![Screenshot](docs/img/readme/main-activity-preview.png)
 
 ## ✨ Features
 
