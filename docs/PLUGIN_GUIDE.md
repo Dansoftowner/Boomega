@@ -128,7 +128,38 @@ After you've done this, you have to create your [LanguagePack](/src/main/java/co
 A `LanguagePack` in Boomega provides the `ResourceBundle` (representing the .properties file), 
 a `Collator` (for defining the alphabetical order) and other things needed for defining a language. 
 
-A simple (Java) example:
+A simple example:
+
+<table>
+
+<tr>
+<th>Kotlin</th>
+<th>Java</th>
+</tr>
+
+<tr>
+
+<td>
+
+```kotlin
+class PortugueseLanguagePack : LanguagePack(Locale("pt"), AUTHOR) {
+
+    // The com/mypackage/MyValues_pt.properties file
+    override fun getValues(): ResourceBundle = super.getBundle("com.mypackage.MyValues")
+
+    override fun isRTL(): Boolean = false // Portuguese is not a right-to-left language
+
+    companion object {
+        // represents the person who translated the language
+        private val AUTHOR = LanguageTranslator("FirstName", "LastName", "myemail@example.com")
+    }
+}
+```
+
+</td>
+
+<td>
+
 ```java
 public class PortugueseLanguagePack extends LanguagePack {
 
@@ -155,6 +186,11 @@ public class PortugueseLanguagePack extends LanguagePack {
 }
 ```
 
+</td>
+
+</tr>
+</table>
+
 You can view the internal LanguagePack implementations 
 in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i18n) package e.g:
 * [EnglishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/EnglishLanguagePack.java)
@@ -162,6 +198,7 @@ in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i
 * [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
 
 Finally, you can implement the `LanguagePlugin` interface. (Kotlin) example:
+
 ```kotlin
 class PortugueseLanguagePlugin : LanguagePlugin {
     override val name: String = "Portuguese language plugin "
