@@ -151,7 +151,11 @@ class PortugueseLanguagePack : LanguagePack(Locale("pt"), AUTHOR) {
 
     companion object {
         // represents the person who translated the language
-        private val AUTHOR = LanguageTranslator("FirstName", "LastName", "myemail@example.com")
+        private val AUTHOR = Person(
+            lastName = "LastName",
+            firstName = "FirstName",
+            email = "myemail@example.com"
+        )
     }
 }
 ```
@@ -167,7 +171,7 @@ public class PortugueseLanguagePack extends LanguagePack {
     private static final Locale LOCALE = new Locale("pt");
 
     // represents the person who translated the language
-    private static final LanguageTranslator AUTHOR = new LanguageTranslator("FirstName" ,"LastName", "myemail@example.com");
+    private static final Person AUTHOR = new Person("LastName", "FirstName", "myemail@example.com");
 
     protected PortugueseLanguagePack() {
         super(LOCALE, AUTHOR);
