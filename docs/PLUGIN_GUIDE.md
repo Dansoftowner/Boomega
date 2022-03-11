@@ -197,8 +197,7 @@ in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i
 * [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java)
 * [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
 
-Finally, you can implement the `LanguagePlugin` interface. (Kotlin) example:
-
+Finally, you can implement the `LanguagePlugin` interface:
 
 <table>
 
