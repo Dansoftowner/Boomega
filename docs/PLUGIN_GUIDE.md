@@ -199,9 +199,21 @@ in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i
 
 Finally, you can implement the `LanguagePlugin` interface. (Kotlin) example:
 
+
+<table>
+
+<tr>
+<th>Kotlin</th>
+<th>Java</th>
+</tr>
+
+<tr>
+
+<td>
+
 ```kotlin
 class PortugueseLanguagePlugin : LanguagePlugin {
-    override val name: String = "Portuguese language plugin "
+    override val name: String = "Portuguese language plugin"
     override val author: PluginAuthor = PluginAuthor("My Name", "myemail@example.com")
     override val version: String = "1.0.0"
     override val description: String? get() = null
@@ -213,6 +225,31 @@ class PortugueseLanguagePlugin : LanguagePlugin {
     override val languagePack: LanguagePack get() = PortugueseLanguagePack()
 }
 ```
+
+
+</td>
+
+<td>
+
+```java
+public class PortugueseLanguagePlugin implements LanguagePlugin {
+
+    ...
+
+    @NotNull
+    @Override
+    public LanguagePack getLanguagePack() {
+        return new PortugueseLanguagePack();
+    }
+
+}
+```
+
+</td>
+
+</tr>
+</table>
+
 
 ### Theme plugins
 
