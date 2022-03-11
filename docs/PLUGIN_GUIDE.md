@@ -210,16 +210,17 @@ Finally, you can implement the `LanguagePlugin` interface:
 
 ```kotlin
 class PortugueseLanguagePlugin : LanguagePlugin {
-    override val name: String = "Portuguese language plugin"
-    override val author: PluginAuthor = PluginAuthor("My Name", "myemail@example.com")
-    override val version: String = "1.0.0"
-    override val description: String? get() = null
-
-    override fun init() {}
-    override fun destroy() {}
 
     // Here you have to return your LanguagePack
-    override val languagePack: LanguagePack get() = PortugueseLanguagePack()
+    override val languagePack get() = PortugueseLanguagePack()
+   
+    override val name: String = "Portuguese language plugin"
+    override val author = Person(firstName = "FirstName", lastName = "LastName", "myemail@example.com")
+    override val version: String = "1.0.0"
+    override val description: String? get() = null
+    
+    override fun init() { ... }
+    override fun destroy() { ... }
 }
 ```
 
