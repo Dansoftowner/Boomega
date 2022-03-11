@@ -191,12 +191,6 @@ public class PortugueseLanguagePack extends LanguagePack {
 </tr>
 </table>
 
-You can view the internal LanguagePack implementations 
-in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i18n) package e.g:
-* [EnglishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/EnglishLanguagePack.java)
-* [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java)
-* [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
-
 Finally, you can implement the `LanguagePlugin` interface:
 
 <table>
@@ -249,6 +243,11 @@ public class PortugueseLanguagePlugin implements LanguagePlugin {
 </tr>
 </table>
 
+You can view the internal LanguagePack implementations (to understand the concept better)
+in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i18n) package e.g:
+* [EnglishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/EnglishLanguagePack.java)
+* [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java)
+* [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
 
 ## Theme plugins
 
