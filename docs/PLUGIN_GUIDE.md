@@ -2,14 +2,14 @@
 
 > Incomplete and not reliable yet!
 
-## Intro
+# Intro
 
 Boomega allows you to develop plugins for the app in order to add features/expand the functionality to/of the app.  
 Plugins can be written both in **java** and **kotlin**.
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
 
-## The plugin directory
+# The plugin directory
 
 Boomega automatically loads plugin archives (`.jar`s) from the **default plugin directory**.
 
@@ -21,7 +21,7 @@ If you want to load your plugin into Boomega, you should place the file into thi
 > You can open the plugin directory from Boomega:
 > **File > Open plugin directory**
 
-## API overview
+# API overview
 
 The root of the Boomega plugin hierarchy is:
 [`com.dansoftware.boomega.plugin.api.BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt).
@@ -83,25 +83,25 @@ Every [`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/Boomeg
 
 > Your plugin classes will be instantiated only once during the application lifetime.
 
-## Setting up a plugin project
+# Setting up a plugin project
 
 The recommended build system to be used for a plugin project is `Gradle`.
 
-### Including the plugin-kit dependency
+## Including the plugin-kit dependency
 
 > Not available yet
 
-### Running test application
+## Running test application
 
 For testing your plugins in action, you can run a test application instance easily.
 
 > Not available yet
 
-### Building your archive
+## Building your archive
 
 If your plugin project doesn't include additional dependencies, you can use the basic gradle `jar` task.
 
-#### Handling dependencies
+### Handling dependencies
 
 If your plugin requires dependencies, you might use an additional gradle plugin like [Shadow](https://github.com/johnrengelman/shadow)
 for building a fat jar. But in this case you have to make sure that the fat jar doesn't include the Boomega
@@ -112,9 +112,9 @@ An alternative solution is to simply place the dependency jars also into the plu
 > Note: Don't include dependencies already present in Boomega itself.   
 > You can view the dependencies used by Boomega in the [acknowledgements](/ACKNOWLEDGEMENTS.md#used-libraries).
 
-## Plugin development tutorials & examples
+# Plugin development tutorials & examples
 
-### Language plugins
+## Language plugins
 
 If you want to add a new language to Boomega through a plugin, you can implement the
 [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) interface.
@@ -250,8 +250,8 @@ public class PortugueseLanguagePlugin implements LanguagePlugin {
 </table>
 
 
-### Theme plugins
+## Theme plugins
 
-### Record exporting plugins
+## Record exporting plugins
 
-### Module plugins
+## Module plugins
