@@ -212,11 +212,6 @@ object DependencyLister {
             LicenseInfo.mitLicense()
         ),
         DependencyInfo(
-            "SnakeYaml",
-            "https://bitbucket.org/asomov/snakeyaml",
-            LicenseInfo.apache20License()
-        ),
-        DependencyInfo(
             "Version Compare",
             "https://github.com/G00fY2/version-compare",
             LicenseInfo.apache20License()
