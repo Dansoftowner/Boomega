@@ -88,12 +88,19 @@ public class MonokaiThemePlugin implements ThemePlugin {
 </table>
 
 Every [`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt) should provide this information:
-* `name` - defines the plugin's name
-* `plugin author` - describes the plugin's author (see: [PluginAuthor](/src/main/java/com/dansoftware/boomega/plugin/api/PluginAuthor.kt))
-* `version` - defines the plugin's version
-* _Optional_: `icon` - a JavaFX `Image` to be rendered as the plugin's icon
+* `name`: `String` - defines the plugin's name
+* `author`: [`Person`](/src/main/java/com/dansoftware/boomega/util/Person.kt) - information about the plugin's author
+* `version`: `String` - defines the plugin's version
+* _Optional_: `icon`: [`Image`](https://openjfx.io/javadoc/17/javafx.graphics/javafx/scene/image/Image.html) - the plugin's icon (as  a JavaFX image)
 
-> Your plugin classes will be instantiated only once during the application lifetime.
+## Plugin lifecycle
+
+When the application starts running, it searches for all `BoomegaPlugin` implementations. After a `BoomegaPlugin` is instantiated,
+Boomega invokes the `init()` method on it. 
+**Every plugin class will be instantiated only once during the application lifetime**, meaning they behave practically as 
+singletons.
+
+TODO
 
 # Setting up a plugin project
 
