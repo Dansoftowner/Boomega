@@ -242,7 +242,7 @@ class PortugueseLanguagePlugin : LanguagePlugin {
     override val name: String = "Portuguese language plugin"
     override val author = Person(firstName = "FirstName", lastName = "LastName", "myemail@example.com")
     override val version: String = "1.0.0"
-    override val description: String? get() = null
+    override val description: String? = "Adds support for the Portuguese language."
     
     override fun init() { ... }
     override fun destroy() { ... }
