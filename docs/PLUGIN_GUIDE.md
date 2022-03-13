@@ -18,7 +18,7 @@
 
 # Intro
 
-Boomega allows you to develop plugins for the app in order to add features/expand the functionality to/of the app.  
+Boomega allows you to develop plugins for the app in order to add more features/functionality to the app.  
 Plugins can be written both in **java** and **kotlin**.
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
@@ -26,7 +26,7 @@ Plugins can be written both in **java** and **kotlin**.
 ### How is it work
 
 On the JVM (Java Virtual Machine) it's possible to load classes dynamically at runtime with the help of Class Loaders.  
-Since Boomega is a JVM application, it takes full advantage of this. 
+Since Boomega is a JVM application, it takes full advantage of this.
 
 # The plugin directory
 
