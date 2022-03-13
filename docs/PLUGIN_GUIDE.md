@@ -35,7 +35,7 @@ Boomega automatically loads plugin archives (`.jar`s) from the **default plugin 
 * On **Windows**: `<User directory>\AppData\Roaming\Dansoftware\boomega\plugin`
 * On **Linux** & **MacOS**: `<User directory>/boomega/plugin`
 
-If you want to load your plugin into Boomega, you should place the file into this directory.
+If you want to load your plugin into Boomega, you should place the jar file into this directory.
 
 > You can open the plugin directory from Boomega:
 > **File > Open plugin directory**
@@ -49,7 +49,7 @@ All other plugin classes should implement this interface.
 
 **BoomegaPlugin subtypes:**
 
-* [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) - for adding a new language support
+* [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) - for adding support for a new language
 * [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt) - for adding a new UI theme
 * [`RecordExporterPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/RecordExporterPlugin.kt) - for adding new record exporting option
 * [`ModulePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ModulePlugin.kt) - for adding new UI modules
