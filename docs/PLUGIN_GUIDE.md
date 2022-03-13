@@ -150,8 +150,8 @@ Firstly, create your own `.properties` file that contains the translations.
 View the [default resource file](/src/main/resources/com/dansoftware/boomega/i18n/Values.properties) to have an idea.
 
 After you've done this, you have to create your [LanguagePack](/src/main/java/com/dansoftware/boomega/i18n/LanguagePack.java).
-A `LanguagePack` in Boomega provides the `ResourceBundle` (representing the .properties file), 
-a `Collator` (for defining the alphabetical order) and other things needed for defining a language. 
+A `LanguagePack` in Boomega provides the `ResourceBundle` (representing the .properties file)
+and other things needed for defining a language. 
 
 A simple example:
 
