@@ -5,8 +5,10 @@
 #### List of contents
 
 * [Intro](#intro)
+  * [How is it work](#how-is-it-work)
 * [The plugin directory](#the-plugin-directory)
 * [API overview](#api-overview)
+  * [Plugin lifecycle](#plugin-lifecycle)
 * [Setting up a plugin project](#setting-up-a-plugin-project)
 * [Plugin development tutorials & examples](#plugin-development-tutorials--examples)
   * [Language plugins](#language-plugins)
@@ -20,6 +22,11 @@ Boomega allows you to develop plugins for the app in order to add features/expan
 Plugins can be written both in **java** and **kotlin**.
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
+
+### How is it work
+
+On the JVM (Java Virtual Machine) it's possible to load classes dynamically at runtime with the help of Class Loaders.  
+Since Boomega is a JVM application, it takes full advantage of this. 
 
 # The plugin directory
 
@@ -99,8 +106,7 @@ When the application starts running, it searches for all `BoomegaPlugin` impleme
 Boomega invokes the `init()` method on it. 
 **Every plugin class will be instantiated only once during the application lifetime**, meaning they behave practically as 
 singletons.
-
-TODO
+When the application shuts down, the `destroy()` method is invoked on the plugin instance.
 
 # Setting up a plugin project
 
