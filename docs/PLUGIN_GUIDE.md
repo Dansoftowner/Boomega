@@ -214,10 +214,9 @@ An alternative solution is to simply place the dependency jars also into the plu
 
 ## Language plugins
 
-If you want to add a new language to Boomega through a plugin, you can implement the
+You are free to contrubute a new language to be included in the core Boomega itself (look at [this issue](https://github.com/Dansoftowner/Boomega/issues/162)).  
+However, you can also add a new language as a separate plugin by implementing the
 [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) interface.
-
-> If you want to contribute a language to be included in the core Boomega itself, look at [this issue](https://github.com/Dansoftowner/Boomega/issues/162).
 
 Firstly, create your own `.properties` file that contains the translations. View
 the [default resource file](/src/main/resources/com/dansoftware/boomega/i18n/Values.properties) to have an idea.
