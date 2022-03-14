@@ -30,6 +30,7 @@ import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.StringProperty
 import javafx.event.EventHandler
+import javafx.geometry.NodeOrientation
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.ButtonType
@@ -60,6 +61,7 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
         setupIconPack()
         buildExitDialogEvent()
         buildFullScreenExitHint()
+        buildRTLSupport()
         addEventHandler(WindowEvent.WINDOW_SHOWING) { Theme.registerListener(this) }
         opacityProperty().bind(globalOpacity)
     }
@@ -128,7 +130,7 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
                 logger.debug("The given menu-bar is null")
                 content
             }
-            OsInfo.isMac() -> content.also {
+            OsInfo.isMacOS -> content.also {
                 logger.debug("MacOS detected: adding event handler...")
                 addEventHandler(WindowEvent.WINDOW_SHOWN, object : EventHandler<WindowEvent> {
                     override fun handle(event: WindowEvent) {
@@ -170,6 +172,13 @@ abstract class BaseWindow<C> : Stage, Theme.DefaultThemeListener where C : Paren
 
     private fun buildFullScreenExitHint() {
         fullScreenExitHint = I18N.getValue("window.fullscreen.hint")
+    }
+
+    private fun buildRTLSupport() {
+        sceneProperty().addListener { _, _, scene ->
+            if (I18N.isRTL())
+                scene.nodeOrientation = NodeOrientation.RIGHT_TO_LEFT
+        }
     }
 
     private inner class WindowCloseRequestHandler : EventHandler<WindowEvent> {

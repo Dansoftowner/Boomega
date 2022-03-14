@@ -104,6 +104,10 @@ public class I18N {
         return MessageFormat.format(resourceBundle.getString(key), args);
     }
 
+    public static boolean isRTL() {
+        return getLanguagePack().isRTL();
+    }
+
     /**
      * Recognizes the required {@link LanguagePack} for the default {@link LanguagePack}.
      */
