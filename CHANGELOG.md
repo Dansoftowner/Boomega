@@ -2,8 +2,12 @@
 
 **Date:** UNKNOWN
 
+> **Warning:** Your data saved in databases created in previous versions will not show up in this release
+> due to new retrieving stategy.
+
 ### Enhancements/features
 
+* 🚧 Turkish language support (incomplete)
 * 💥 Refactored database api for allowing integrating other database managements systems into the app
 * ✨ MySQL support
 * ✨ Exporting to txt tables
@@ -11,7 +15,12 @@
 * ✨ MacOS specific menu-bar
 * ✨ [#161](https://github.com/Dansoftowner/Boomega/issues/161): 'Maximize' item in window menu
 * 💄 Look and feel updates
+* ✨ Native system info view
+
+### Changes
 * 💄 New application icon
+* ➖ Removed embedded third-party software viewer
+* ♻️ Plugin API improvements, simplified plugin management
 
 ### Bug fixes/improvements
 
@@ -19,9 +28,7 @@
 * 🐛 [#113](https://github.com/Dansoftowner/Boomega/issues/113): Incorrect login data saving strategy
 * 🐛 Native MacOS menubar insertion fails
 * 🐛 Progress indication does not stop after searching for updates
-
-> **Warning:** Your data saved in databases created in previous versions might not show up
-> due to new retrieving process.
+* 🐛 Crash on startup if the plugin directory doesn't exist yet
 
 # Boomega 0.7.5 (pre-release)
 
