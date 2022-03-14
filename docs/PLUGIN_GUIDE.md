@@ -23,7 +23,7 @@ Plugins can be written both in **java** and **kotlin**.
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
 
-### How is it work
+### How is it work?
 
 On the JVM (Java Virtual Machine) it's possible to load classes dynamically at runtime with the help of Class Loaders.  
 Since Boomega is a JVM application, it takes full advantage of this.
