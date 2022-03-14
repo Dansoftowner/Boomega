@@ -36,7 +36,6 @@ import java.util.List;
 public class UpdateSimulation {
 
     static {
-        System.setProperty("boomega.version", "0.0.0");
         DIService.initModules(new AbstractModule() {
             @Override
             protected void configure() {
@@ -66,7 +65,7 @@ public class UpdateSimulation {
         private Release buildSimpleRelease() {
             var release = new Release();
             release.setAssets(buildReleaseAssets());
-            release.setVersion("1.0.0");
+            release.setVersion(System.getProperty("update.next_version"));
             release.setDescription(description());
             release.setWebsite("https://github.com/Dansoftowner/Boomega");
             return release;
@@ -75,32 +74,36 @@ public class UpdateSimulation {
         private String description() {
             return """
                     > Note: it's a fake update
-                    # Boomega v1.0.0
+                    # Boomega v%s
                                         
                     * Full support for everything
                     * New features for everything
                     * Bug fixes
-                    
+                                        
                     | Bug name | Bug id |
                     | -------- | ------ |
                     | Can't load preferences | **#144** |
                     | Crash when open record editor | **#123** |
-                    
-                   
+                                        
+                                       
                     > Boomega (C) - Daniel Gyoerffy
-                    
-                    """;
+                                        
+                    """.formatted(System.getProperty("update.next_version"));
         }
 
         private List<ReleaseAsset> buildReleaseAssets() {
             return List.of(
-                    new FakeReleaseAsset("Boomega-1.0.0-all.jar", "application/java-archive", MBs(74)),
-                    new FakeReleaseAsset("Boomega-1.0.0-linux.tar.xz", "application/x-xz", MBs(130)),
-                    new FakeReleaseAsset("Boomega-1.0.0-win.exe", "application/octet-stream", MBs(132)),
-                    new FakeReleaseAsset("Boomega-1.0.0-win.msi", "application/octet-stream", MBs(131)),
-                    new FakeReleaseAsset("Boomega-1.0.0-win.zip", "application/zip", MBs(130)),
-                    new FakeReleaseAsset("Boomega-1.0.0-1amd64-linux.deb", "application/vnd.debian.binary-package", MBs(130))
+                    new FakeReleaseAsset(fileName("all", "jar"), "application/java-archive", MBs(74)),
+                    new FakeReleaseAsset(fileName("1amd64-linux", "deb"), "application/vnd.debian.binary-package", MBs(130)),
+                    new FakeReleaseAsset(fileName("linux", "tar.xz"), "application/x-xz", MBs(130)),
+                    new FakeReleaseAsset(fileName("win", "exe"), "application/octet-stream", MBs(132)),
+                    new FakeReleaseAsset(fileName("win", "msi"), "application/octet-stream", MBs(131)),
+                    new FakeReleaseAsset(fileName("win", "zip"), "application/zip", MBs(130))
             );
+        }
+
+        private String fileName(String postfix, String extension) {
+            return "Boomega-%s-%s.%s".formatted(System.getProperty("update.next_version"), postfix, extension);
         }
 
         private static int MBs(int bytes) {
@@ -118,7 +121,7 @@ public class UpdateSimulation {
         @NotNull
         @Override
         public InputStream openStream() {
-            return new DelayedByteArrayInputStream(new byte[(int)getSize()], 1);
+            return new DelayedByteArrayInputStream(new byte[(int) getSize()], 1);
         }
     }
 }
