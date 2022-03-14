@@ -21,8 +21,20 @@ package com.dansoftware.boomega.config;
 import com.dansoftware.boomega.config.source.InMemorySource;
 
 public class DummyConfigSource extends InMemorySource {
+
+    private final boolean created;
+
+    public DummyConfigSource() {
+        this(false);
+    }
+
+    public DummyConfigSource(boolean created) {
+        this.created = created;
+    }
+
+
     @Override
     public boolean isCreated() {
-        return false;
+        return created;
     }
 }
