@@ -9,6 +9,7 @@
 * [The plugin directory](#the-plugin-directory)
 * [API overview](#api-overview)
     * [Plugin lifecycle](#plugin-lifecycle)
+    * [Required plugin metadata](#required-plugin-metadata)
 * [Setting up a plugin project](#setting-up-a-plugin-project)
 * [Plugin development tutorials & examples](#plugin-development-tutorials--examples)
     * [Language plugins](#language-plugins)
@@ -98,6 +99,15 @@ public class MonokaiThemePlugin implements ThemePlugin {
 </tr>
 </table>
 
+## Plugin lifecycle
+
+When the application starts running, it searches for all `BoomegaPlugin` implementations and instantiates them. **Every
+plugin class will be instantiated only once during the application lifetime**, meaning they behave practically as
+singletons. After a `BoomegaPlugin` is instantiated, Boomega invokes the `init()` method on it. When the application
+shuts down, the `destroy()` method is invoked on the plugin instance.
+
+## Required plugin metadata
+
 Every [`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt) should provide this
 information:
 
@@ -107,12 +117,66 @@ information:
 * _Optional_: `icon`: [`Image`](https://openjfx.io/javadoc/17/javafx.graphics/javafx/scene/image/Image.html) - the
   plugin's icon (as a JavaFX image)
 
-## Plugin lifecycle
+Example:
+<table>
 
-When the application starts running, it searches for all `BoomegaPlugin` implementations and instantiates them. **Every
-plugin class will be instantiated only once during the application lifetime**, meaning they behave practically as
-singletons. After a `BoomegaPlugin` is instantiated, Boomega invokes the `init()` method on it. When the application
-shuts down, the `destroy()` method is invoked on the plugin instance.
+<tr>
+<th>Kotlin</th>
+<th>Java</th>
+</tr>
+
+<tr>
+
+<td>
+
+```kotlin
+class MonokaiThemePlugin : ThemePlugin {
+
+  // General BoomegaPlugin meta-data
+  override val name: String = "Mononokai Theme Plugin"
+  override val author = Person(firstName = "FirstName", lastName = "LastName", "myemail@example.com")
+  override val version: String = "1.0.0"
+  override val description: String? = "Adds a Monokai Theme scheme."
+
+  ...
+}
+```
+
+</td>
+
+<td>
+
+```java
+public class MonokaiThemePlugin implements ThemePlugin {
+  
+  @Override
+  public @NotNull String getName() {
+        return "Monokai Theme Plugin";
+  }
+  
+  @Override
+  public @NotNull Person getAuthor() {
+        return new Person("LastName", "FirstName", "myemail@example.com");
+  }
+  
+  @Override
+  public @NotNull String getVersion() {
+        return "1.0.0";
+  }
+  
+  @Override
+  public @Nullable String getDescription() {
+        return "Adds a Monokai Theme scheme.";
+  }
+  
+  ...
+}
+```
+
+</td>
+
+</tr>
+</table>
 
 # Setting up a plugin project
 
@@ -247,21 +311,11 @@ Finally, you can implement the `LanguagePlugin` interface:
 ```kotlin
 class PortugueseLanguagePlugin : LanguagePlugin {
 
+    ...
+  
     // Here you have to return your LanguagePack
     override val languagePack get() = PortugueseLanguagePack()
-
-    override val name: String = "Portuguese language plugin"
-    override val author = Person(firstName = "FirstName", lastName = "LastName", "myemail@example.com")
-    override val version: String = "1.0.0"
-    override val description: String? = "Adds support for the Portuguese language."
-
-    override fun init() {
-        ...
-    }
   
-    override fun destroy() {
-        ...
-    }
 }
 ```
 
@@ -272,13 +326,14 @@ class PortugueseLanguagePlugin : LanguagePlugin {
 ```java
 public class PortugueseLanguagePlugin implements LanguagePlugin {
 
+    ...
+    
     @NotNull
     @Override
     public LanguagePack getLanguagePack() {
         return new PortugueseLanguagePack();
     }
-
-    ...
+    
 }
 ```
 
