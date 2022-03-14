@@ -16,6 +16,7 @@
 * ✨ [#161](https://github.com/Dansoftowner/Boomega/issues/161): 'Maximize' item in window menu
 * 💄 Look and feel updates
 * ✨ Native system info view
+* ✨ RTL language support on UI implemented
 
 ### Changes
 * 💄 New application icon
