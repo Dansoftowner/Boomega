@@ -5,16 +5,16 @@
 #### List of contents
 
 * [Intro](#intro)
-  * [How is it work](#how-is-it-work)
+    * [How is it work](#how-is-it-work)
 * [The plugin directory](#the-plugin-directory)
 * [API overview](#api-overview)
-  * [Plugin lifecycle](#plugin-lifecycle)
+    * [Plugin lifecycle](#plugin-lifecycle)
 * [Setting up a plugin project](#setting-up-a-plugin-project)
 * [Plugin development tutorials & examples](#plugin-development-tutorials--examples)
-  * [Language plugins](#language-plugins)
-  * [Theme plugins](#theme-plugins)
-  * [Record exporting plugins](#record-exporting-plugins)
-  * [Module plugins](#module-plugins)
+    * [Language plugins](#language-plugins)
+    * [Theme plugins](#theme-plugins)
+    * [Record exporting plugins](#record-exporting-plugins)
+    * [Module plugins](#module-plugins)
 
 # Intro
 
@@ -43,21 +43,24 @@ If you want to load your plugin into Boomega, you should place the jar file into
 # API overview
 
 The root of the Boomega plugin hierarchy is:
-[`com.dansoftware.boomega.plugin.api.BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt).
+[`com.dansoftware.boomega.plugin.api.BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt)
+.
 
 All other plugin classes should implement this interface.
 
 **BoomegaPlugin subtypes:**
 
-* [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) - for adding support for a new language
+* [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) - for adding support for a new
+  language
 * [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt) - for adding a new UI theme
-* [`RecordExporterPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/RecordExporterPlugin.kt) - for adding new record exporting option
+* [`RecordExporterPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/RecordExporterPlugin.kt) - for adding new
+  record exporting option
 * [`ModulePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ModulePlugin.kt) - for adding new UI modules
 
 **The DisabledPlugin annotation:**
 
 The [`@DisabledPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/DisabledPlugin.java) annotation can be used
-for preventing Boomega to load a plugin class. 
+for preventing Boomega to load a plugin class.
 
 Example:
 <table>
@@ -83,6 +86,7 @@ class MonokaiThemePlugin : ThemePlugin {
 <td>
 
 ```java
+
 @DisabledPlugin // make Boomega ignore this plugin
 public class MonokaiThemePlugin implements ThemePlugin {
     ...
@@ -94,23 +98,27 @@ public class MonokaiThemePlugin implements ThemePlugin {
 </tr>
 </table>
 
-Every [`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt) should provide this information:
+Every [`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt) should provide this
+information:
+
 * `name`: `String` - defines the plugin's name
 * `author`: [`Person`](/src/main/java/com/dansoftware/boomega/util/Person.kt) - information about the plugin's author
 * `version`: `String` - defines the plugin's version
-* _Optional_: `icon`: [`Image`](https://openjfx.io/javadoc/17/javafx.graphics/javafx/scene/image/Image.html) - the plugin's icon (as  a JavaFX image)
+* _Optional_: `icon`: [`Image`](https://openjfx.io/javadoc/17/javafx.graphics/javafx/scene/image/Image.html) - the
+  plugin's icon (as a JavaFX image)
 
 ## Plugin lifecycle
 
-When the application starts running, it searches for all `BoomegaPlugin` implementations. After a `BoomegaPlugin` is instantiated,
-Boomega invokes the `init()` method on it. 
-**Every plugin class will be instantiated only once during the application lifetime**, meaning they behave practically as 
-singletons.
-When the application shuts down, the `destroy()` method is invoked on the plugin instance.
+When the application starts running, it searches for all `BoomegaPlugin` implementations and instantiates them. **Every
+plugin class will be instantiated only once during the application lifetime**, meaning they behave practically as
+singletons. After a `BoomegaPlugin` is instantiated, Boomega invokes the `init()` method on it. When the application
+shuts down, the `destroy()` method is invoked on the plugin instance.
 
 # Setting up a plugin project
 
-The recommended build system to be used for a plugin project is `Gradle`.
+Use JDK 17 with JavaFX binaries ([Liberica (full-)JDK](https://bell-sw.com/pages/downloads/#/java-17-current) recommended).  
+The recommended build system to be used for a plugin project is `Gradle`.  
+The recommended IDE is [Intellj Idea](https://www.jetbrains.com/idea/).
 
 ## Including the plugin-kit dependency
 
@@ -128,7 +136,8 @@ If your plugin project doesn't include additional dependencies, you can use the 
 
 ### Handling dependencies
 
-If your plugin requires dependencies, you might use an additional gradle plugin like [Shadow](https://github.com/johnrengelman/shadow)
+If your plugin requires dependencies, you might use an additional gradle plugin
+like [Shadow](https://github.com/johnrengelman/shadow)
 for building a fat jar. But in this case you have to make sure that the fat jar doesn't include the Boomega
 (plugin-kit) binaries, because it might reduce performance when Boomega loads the plugin.
 
@@ -146,12 +155,13 @@ If you want to add a new language to Boomega through a plugin, you can implement
 
 > If you want to contribute a language to be included in the core Boomega itself, look at [this issue](https://github.com/Dansoftowner/Boomega/issues/162).
 
-Firstly, create your own `.properties` file that contains the translations. 
-View the [default resource file](/src/main/resources/com/dansoftware/boomega/i18n/Values.properties) to have an idea.
+Firstly, create your own `.properties` file that contains the translations. View
+the [default resource file](/src/main/resources/com/dansoftware/boomega/i18n/Values.properties) to have an idea.
 
-After you've done this, you have to create your [LanguagePack](/src/main/java/com/dansoftware/boomega/i18n/LanguagePack.java).
-A `LanguagePack` in Boomega provides the `ResourceBundle` (representing the .properties file)
-and other things needed for defining a language. 
+After you've done this, you have to create
+your [LanguagePack](/src/main/java/com/dansoftware/boomega/i18n/LanguagePack.java). A `LanguagePack` in Boomega provides
+the `ResourceBundle` (representing the .properties file)
+and other things needed for defining a language.
 
 A simple example:
 
@@ -203,7 +213,8 @@ public class PortugueseLanguagePack extends LanguagePack {
     }
 
     @Override
-    public @NotNull ResourceBundle getValues() {
+    public @NotNull
+    ResourceBundle getValues() {
         // The com/mypackage/MyValues_pt.properties file
         return super.getBundle("com.mypackage.MyValues");
     }
@@ -238,17 +249,21 @@ class PortugueseLanguagePlugin : LanguagePlugin {
 
     // Here you have to return your LanguagePack
     override val languagePack get() = PortugueseLanguagePack()
-   
+
     override val name: String = "Portuguese language plugin"
     override val author = Person(firstName = "FirstName", lastName = "LastName", "myemail@example.com")
     override val version: String = "1.0.0"
     override val description: String? = "Adds support for the Portuguese language."
-    
-    override fun init() { ... }
-    override fun destroy() { ... }
+
+    override fun init() {
+        ...
+    }
+  
+    override fun destroy() {
+        ...
+    }
 }
 ```
-
 
 </td>
 
@@ -257,14 +272,13 @@ class PortugueseLanguagePlugin : LanguagePlugin {
 ```java
 public class PortugueseLanguagePlugin implements LanguagePlugin {
 
-    ...
-
     @NotNull
     @Override
     public LanguagePack getLanguagePack() {
         return new PortugueseLanguagePack();
     }
 
+    ...
 }
 ```
 
@@ -275,6 +289,7 @@ public class PortugueseLanguagePlugin implements LanguagePlugin {
 
 You can view the internal LanguagePack implementations (to understand the concept better)
 in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i18n) package e.g:
+
 * [EnglishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/EnglishLanguagePack.java)
 * [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java)
 * [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
