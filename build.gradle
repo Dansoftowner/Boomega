@@ -169,6 +169,26 @@ dependencies {
     implementation fileTree(dir: 'external-libraries', include: '*.jar')
 }
 
+/* ----------------------- Simulation executions -------------------------- */
+
+task runUpdateSimulation(type: JavaExec) {
+    group = "simulation"
+    description = "Run a fake update simulation"
+    classpath = sourceSets.test.runtimeClasspath
+    jvmArgs = applicationDefaultJvmArgs
+    systemProperty('boomega.version', '0.0.0')
+    systemProperty('update.next_version', '1.0.0')
+    mainClass.set('com.dansoftware.boomega.update.UpdateSimulation')
+}
+
+task runFirstTimeSimulation(type: JavaExec) {
+    group = "simulation"
+    description = "Run a fake first-time running simulation"
+    classpath = sourceSets.test.runtimeClasspath
+    jvmArgs = applicationDefaultJvmArgs
+    mainClass.set('com.dansoftware.boomega.main.FirstTimeSimulation')
+}
+
 
 shadowJar {
     exclude 'javafx/**'
