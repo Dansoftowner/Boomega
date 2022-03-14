@@ -20,7 +20,10 @@
 # Intro
 
 Boomega allows you to develop plugins for the app in order to add more features/functionality to the app.  
-Plugins can be written both in **java** and **kotlin**.
+Plugins can be written both in **java** and **kotlin**.   
+
+The recommended language for writing plugins is **kotlin** because most of the 
+API entities are designed in kotlin. Although, this guide will provide you both kotlin and java examples. 
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
 
