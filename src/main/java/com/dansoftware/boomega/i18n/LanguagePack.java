@@ -28,9 +28,8 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
- * A {@link LanguagePack} provides {@link ResourceBundle}s for a particular {@link Locale}.
- *
- * @author Daniel Gyorffy
+ * Provides the {@link ResourceBundle} and other components required
+ * for defining a language.
  */
 public abstract class LanguagePack {
 
@@ -41,6 +40,7 @@ public abstract class LanguagePack {
         this.locale = Objects.requireNonNull(locale);
     }
 
+    @SuppressWarnings("unused")
     protected LanguagePack(@NotNull Locale locale, @NotNull Person translator) {
         this(locale);
         this.translator = Objects.requireNonNull(translator);
@@ -56,18 +56,14 @@ public abstract class LanguagePack {
     }
 
     /**
-     * Gives the bundle for the language this {@link LanguagePack} represents.
-     *
-     * @return the {@link ResourceBundle} object.
+     * Gives the bundle of internationalized values.
      */
     @NotNull
     public abstract ResourceBundle getValues();
 
     /**
-     * Gives a {@link Collator} that can be used to compare strings based on the
+     * Gives a {@link Collator} that can be used to compare strings based on
      * the rules of the language's alphabetic order
-     *
-     * @return the {@link Collator} object
      */
     @NotNull
     public Collator getABCCollator() {
@@ -75,10 +71,9 @@ public abstract class LanguagePack {
     }
 
     /**
-     * Returns {@code true} if the language represented by this pack is a <i>RIGHT TO LEFT</i>
-     * language like arabic or hebrew or not.
-     *
-     * @return {@code true} if the language is RTL; {@code false} otherwise
+     * @return {@code true} if the language represented by this pack is a
+     *          <i>RIGHT TO LEFT</i> language (like arabic or hebrew);
+     *          or {@code false} otherwise.
      */
     protected abstract boolean isRTL();
 
