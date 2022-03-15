@@ -19,20 +19,12 @@
 package com.dansoftware.boomega.gui.font;
 
 import javafx.scene.text.Font;
-import org.apache.commons.lang3.ClassPathUtils;
-import org.apache.xmlgraphics.util.ClasspathResource;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Utility for loading the custom javaFX fonts.
