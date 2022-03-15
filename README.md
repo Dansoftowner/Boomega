@@ -23,12 +23,14 @@
 * Custom notes with **Markdown** support
 * **Google Books** synchronization
 * Customizable key-bindings
-* Plugin support (see [plugin guide](docs/PLUGIN_GUIDE.md))
+* Plugin support
 * ...and more!
 
 ## 📄 Documentation
 
-The detailed user guide is available [here](docs/USER_GUIDE.md).
+* [User guide](docs/USER_GUIDE.md) - Detailed documentation
+* [Plugin guide](docs/PLUGIN_GUIDE.md) - Guide for writing Boomega Plugins
+* [Default key-bindings](docs/DEFAULT_KEYBINDINGS.md)
 
 ## ⬇️ Download
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?logo=linux&logoColor=white)]()
@@ -42,7 +44,7 @@ The detailed user guide is available [here](docs/USER_GUIDE.md).
   <td align="center">
         <b>
           <h1>
-            <img style="margin-right: 10px" src="img/windows.png" alt="">
+            <img style="margin-right: 10px" src="docs/img/readme/windows.png" alt="">
             Windows
           </h1>
         </b>
@@ -52,7 +54,7 @@ The detailed user guide is available [here](docs/USER_GUIDE.md).
   <td align="center"> 
       <b>
           <h1>
-            <img style="margin-right: 10px" src="img/linux.png" alt="">
+            <img style="margin-right: 10px" src="docs/img/readme/linux.png" alt="">
             Linux
           </h1>
         </b>
@@ -62,7 +64,7 @@ The detailed user guide is available [here](docs/USER_GUIDE.md).
   <td align="center">
         <b>
           <h1>
-            <img style="margin-right: 10px" src="img/mac.png" alt="">
+            <img style="margin-right: 10px" src="docs/img/readme/mac.png" alt="">
             MacOS 
           </h1>
         </b>
