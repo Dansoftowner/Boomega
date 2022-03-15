@@ -75,7 +75,7 @@ compileTestJava {
 }
 
 javafx {
-    version = "17.0.1"
+    version = "18"
     modules = [ 'javafx.base', 'javafx.controls', 'javafx.graphics', 'javafx.media', 'javafx.web' ]
 }
 
