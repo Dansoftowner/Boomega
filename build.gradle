@@ -24,6 +24,7 @@ plugins {
     id 'java'
     id 'application'
     id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+    id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'com.github.ben-manes.versions' version '0.39.0' // for detecting dependency updates
     id 'com.github.johnrengelman.shadow' version '7.0.0' // building fat jars
     id 'org.panteleyev.jpackageplugin' version '1.3.1' // for jpackage
@@ -73,6 +74,11 @@ compileTestJava {
     options.encoding = 'UTF-8'
 }
 
+javafx {
+    version = "17.0.1"
+    modules = [ 'javafx.base', 'javafx.controls', 'javafx.graphics', 'javafx.media', 'javafx.web' ]
+}
+
 repositories {
     mavenCentral()
 
@@ -92,11 +98,6 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }
-}
-
-configurations {
-    //we exclude the javafx group
-    implementation.exclude group: 'org.openjfx'
 }
 
 test {
@@ -271,7 +272,7 @@ task jlink(type: Exec) {
             '--no-man-pages',
             // required modules
             '--add-modules',
-            'java.se,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.web'
+            'java.se,javafx.base,javafx.controls,javafx.graphics,javafx.media,javafx.web'
     ]
 }
 
