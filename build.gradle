@@ -19,6 +19,7 @@
 import org.gradle.internal.jvm.Jvm
 
 import java.nio.file.Files
+import java.util.stream.Collectors
 
 plugins {
     id 'java'
@@ -215,6 +216,7 @@ def jlinkExecutable = new File(Jvm.current().getJavaHome(), "bin${File.separator
 
 
 task cleanDistributionTemp(type: Delete) {
+    group = 'distribution'
     doFirst {
         delete distributionTempDir
     }
@@ -225,12 +227,14 @@ task cleanDistributionTemp(type: Delete) {
 }
 
 task cleanDistributionBuild(type: Delete) {
+    group = 'distribution'
     doFirst {
         delete distributionBuildDir
     }
 }
 
 task cleanDistributionInput(type: Delete) {
+    group = 'distribution'
     doFirst {
         delete distributionInputDir
     }
@@ -241,6 +245,7 @@ task cleanDistributionInput(type: Delete) {
 }
 
 task buildDistributionInput {
+    group = 'distribution'
     dependsOn shadowJar
     dependsOn cleanDistributionInput
     doLast {
@@ -252,6 +257,7 @@ task buildDistributionInput {
 }
 
 task cleanDistributionRuntime {
+    group = 'distribution'
     doFirst {
         delete distributionRuntimeDir
     }
@@ -259,7 +265,14 @@ task cleanDistributionRuntime {
 
 // builds a java-runtime using jlink
 task jlink(type: Exec) {
+    group = 'distribution'
     dependsOn cleanDistributionRuntime
+
+    String javaFxModulePath = sourceSets.main.runtimeClasspath.asPath.split(';')
+            .stream()
+            .filter { it.contains('org.openjfx') }
+            .collect(Collectors.joining(';'))
+
     workingDir = distributionDir.toString()
     executable = jlinkExecutable.toString()
     args = [
@@ -270,6 +283,8 @@ task jlink(type: Exec) {
             '--compress', '2',
             '--no-header-files',
             '--no-man-pages',
+            '--module-path',
+            javaFxModulePath,
             // required modules
             '--add-modules',
             'java.se,javafx.base,javafx.controls,javafx.graphics,javafx.media,javafx.web'
@@ -277,6 +292,7 @@ task jlink(type: Exec) {
 }
 
 task preparteDistribution {
+    group = 'distribution'
     dependsOn cleanDistributionTemp
     dependsOn cleanDistributionBuild
     dependsOn buildDistributionInput
@@ -284,6 +300,7 @@ task preparteDistribution {
 }
 
 jpackage {
+    group = 'distribution'
     dependsOn preparteDistribution
 
     appName = project.name
