@@ -155,7 +155,7 @@
 The recommended IDE for building this project is `IntelliJ Idea`.
 
 ### Build requirements
-* JDK 17+ with JavaFX binaries ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended)
+* JDK 17 (recommended: [OpenJDK](https://jdk.java.net/17/))
 
 ### Build manually (without using an IDE)
 If you want to run the project, simply use `gradlew run`. <br/>
