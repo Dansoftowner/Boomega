@@ -4,7 +4,7 @@ For creating installers/native application images, run `gradlew jpackage`.
 
 ## Requirements
 
-- Running Gradle on a JDK 17 runtime (usually by pointing the `JAVA_HOME` environmental variable to it)
+- Running Gradle on a [JDK 17](https://jdk.java.net/17/) runtime (usually by pointing the `JAVA_HOME` environmental variable to it)
 
 Required third-party software (by the `jpackage tool`):
 * On **Windows**: install [Wix Toolset](https://wixtoolset.org/)
