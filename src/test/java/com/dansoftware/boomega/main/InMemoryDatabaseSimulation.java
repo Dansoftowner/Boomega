@@ -18,13 +18,18 @@
 
 package com.dansoftware.boomega.main;
 
+import com.dansoftware.boomega.config.DummyConfigSource;
 import com.dansoftware.boomega.config.Preferences;
+import com.dansoftware.boomega.config.source.ConfigSource;
 import com.dansoftware.boomega.database.api.*;
 import com.dansoftware.boomega.database.api.data.Record;
 import com.dansoftware.boomega.database.tracking.DatabaseTracker;
+import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
-import com.dansoftware.boomega.util.ReflectionUtils;
+import com.dansoftware.boomega.plugin.DummyPluginService;
+import com.dansoftware.boomega.plugin.api.PluginService;
+import com.google.inject.AbstractModule;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.Node;
@@ -40,10 +45,13 @@ import java.util.Set;
 public class InMemoryDatabaseSimulation extends Application {
 
     static {
-        try {
-            ReflectionUtils.forName(Main.class);
-        } catch (ClassNotFoundException ignored) {
-        }
+        DIService.initModules(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(ConfigSource.class).to(DummyConfigSource.class);
+                bind(PluginService.class).to(DummyPluginService.class);
+            }
+        }, new ConcurrencyModule());
     }
 
     public static void main(String[] args) {

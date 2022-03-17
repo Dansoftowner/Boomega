@@ -33,7 +33,7 @@ and for registering/saving books to various databases (e.g. local databases, MyS
 
 ## Getting Boomega
 
-**You can download Boomega [here](../README.md#arrow_down-download) or from the [releases](https://github.com/Dansoftowner/Boomega/releases) page.**
+**You can download Boomega [here](../README.md#-download) or from the [releases](https://github.com/Dansoftowner/Boomega/releases) page.**
 
 ### Platform support
 
@@ -58,7 +58,7 @@ MacOS-specific binaries are currently not available (help wanted), but you can s
 
 ### Running it as a jar
 
-You can run the cross-platform jar file with a **Java 16+**
+You can run the cross-platform jar file with a **Java 17**
 runtime that has JavaFX binaries bundled inside it (e.g a custom runtime built with `jlink`, [Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) \ [Liberica](https://bell-sw.com/pages/libericajdk/)) or you have to
 put the javafx modules to the `module-path` (see: [openjfx docs](https://openjfx.io/openjfx-docs/#install-javafx)).
 

@@ -55,7 +55,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
      * The queue that stores the actions should be invoked after an activity is launched
      */
     private val postLaunchQueue: Queue<(context: Context, launchedDatabase: DatabaseMeta?) -> Unit> = LinkedList()
-    private lateinit var cachedPreferences: Preferences
 
     /**
      * Queues the given action to be executed after the application launches successfully
@@ -83,7 +82,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
         logger.debug("Theme is: {}", Theme.default)
         logger.debug("Locale is: {}", Locale.getDefault())
 
-        get(DatabaseTracker::class)
         progress(0.9)
 
         // searching for updates
@@ -96,7 +94,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
     override fun stop() {
         //writing all configurations
         logger.info("Saving configurations")
-        cachedPreferences.editor.commit()
+        get(Preferences::class).editor.commit()
 
         logger.info("Closing down plugin service")
         get(PluginService::class).close()
@@ -128,7 +126,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
         notifyPreloader("preloader.preferences.read")
         return try {
             get(Preferences::class).also {
-                cachedPreferences = it
                 logger.info("Configurations has been read successfully!")
             }
         } catch (e: RuntimeException) {

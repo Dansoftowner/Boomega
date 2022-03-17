@@ -183,9 +183,10 @@ public class MonokaiThemePlugin implements ThemePlugin {
 
 # Setting up a plugin project
 
-Use JDK 17 with JavaFX binaries ([Liberica (full-)JDK](https://bell-sw.com/pages/downloads/#/java-17-current) recommended).  
-The recommended build system to be used for a plugin project is `Gradle`.  
-The recommended IDE is [Intellj Idea](https://www.jetbrains.com/idea/).
+**Requirements:**
+- JDK 17 (recommended: [OpenJDK](https://jdk.java.net/17/))
+- Gradle
+- Recommended: [Intellj Idea](https://www.jetbrains.com/idea/)
 
 ## Including the plugin-kit dependency
 

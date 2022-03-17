@@ -175,9 +175,9 @@ dependencies {
 
 task runUpdateSimulation(type: JavaExec) {
     group = "simulation"
-    description = "Run a fake update simulation"
     classpath = sourceSets.test.runtimeClasspath
     jvmArgs = applicationDefaultJvmArgs
+    description = "Runs a fake update simulation"
     systemProperty('boomega.version', '0.0.0')
     systemProperty('update.next_version', '1.0.0')
     mainClass.set('com.dansoftware.boomega.update.UpdateSimulation')
@@ -185,24 +185,53 @@ task runUpdateSimulation(type: JavaExec) {
 
 task runFirstTimeSimulation(type: JavaExec) {
     group = "simulation"
-    description = "Run a fake first-time running simulation"
     classpath = sourceSets.test.runtimeClasspath
     jvmArgs = applicationDefaultJvmArgs
+    description = "Runs a fake first-time running simulation"
     mainClass.set('com.dansoftware.boomega.main.FirstTimeSimulation')
 }
 
+task runInMemoryDatabaseSimulation(type: JavaExec) {
+    group = "simulation"
+    classpath = sourceSets.test.runtimeClasspath
+    jvmArgs = applicationDefaultJvmArgs
+    description = 'Runs a fake database activity that doesn\'t save data anywhere'
+    mainClass.set('com.dansoftware.boomega.main.InMemoryDatabaseSimulation')
+}
 
-shadowJar {
-    exclude 'javafx/**'
-    exclude 'javafx.properties'
-    exclude 'javafx-swt.jar'
-    exclude 'junit/**'
-    exclude 'module-info.class'
-
-    manifest.attributes('Main-Class': mainClassName)
+task runPreloaderSimulation(type: JavaExec) {
+    group = "simulation"
+    classpath = sourceSets.test.runtimeClasspath
+    jvmArgs = applicationDefaultJvmArgs
+    description = "Shows the preloader"
+    mainClass.set('com.dansoftware.boomega.main.PreloaderSimulation')
 }
 
 /* -------------------------- Distribution -------------------------- */
+
+shadowJar {
+
+    manifest.attributes('Main-Class': mainClassName)
+    configurations = [project.configurations.compileClasspath]
+
+    // excluding JavaFX assets
+    dependencies {exclude(dependency('org.openjfx::.*')) }
+    exclude 'javafx/**'
+    exclude 'javafx.properties'
+    exclude 'javafx-swt.jar'
+    exclude '*.so'
+    exclude '*.dylib'
+
+    // excluding random assets shouldn't be included (?)
+    exclude 'LICENSE.txt'
+    exclude 'NOTICE.txt'
+    exclude 'README.md'
+    exclude 'about.css'
+    exclude 'about.fxml'
+    exclude '.gitkeep'
+    exclude 'junit/**'
+    exclude 'module-info.class'
+}
 
 def distributionDir = new File(projectDir, "distribution")
 def distributionInputDir = new File(distributionDir, "input")
@@ -340,7 +369,26 @@ jpackage {
     }
 }
 
+/* ---------------- Other ----------------- */
 
+task runAsJar(type: Exec) {
+    group = 'application'
+    description = 'Runs the app from the output jar file'
+
+    dependsOn jlink
+    dependsOn shadowJar // We run the jar on the JRE built by jlink
+
+    executable = new File(
+            distributionRuntimeDir,
+            "bin${File.separator}java"
+    )
+
+    args = [
+            *applicationDefaultJvmArgs,
+            '-jar',
+            tasks.shadowJar.archiveFile.get().asFile.absolutePath
+    ]
+}
 
 
 
