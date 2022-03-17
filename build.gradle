@@ -191,18 +191,30 @@ task runFirstTimeSimulation(type: JavaExec) {
     mainClass.set('com.dansoftware.boomega.main.FirstTimeSimulation')
 }
 
+/* -------------------------- Distribution -------------------------- */
 
 shadowJar {
-    exclude 'javafx/**'
-    exclude 'javafx.properties'
-    exclude 'javafx-swt.jar'
-    exclude 'junit/**'
-    exclude 'module-info.class'
 
     manifest.attributes('Main-Class': mainClassName)
-}
+    configurations = [project.configurations.compileClasspath]
 
-/* -------------------------- Distribution -------------------------- */
+    // excluding JavaFX assets
+    dependencies {exclude(dependency('org.openjfx::.*')) }
+    exclude 'javafx.properties'
+    exclude 'javafx-swt.jar'
+    exclude '*.so'
+    exclude '*.dylib'
+
+    // excluding random assets shouldn't be included (?)
+    exclude 'LICENSE.txt'
+    exclude 'NOTICE.txt'
+    exclude 'README.md'
+    exclude 'about.css'
+    exclude 'about.fxml'
+    exclude '.gitkeep'
+    exclude 'junit/**'
+    exclude 'module-info.class'
+}
 
 def distributionDir = new File(projectDir, "distribution")
 def distributionInputDir = new File(distributionDir, "input")
