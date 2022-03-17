@@ -216,6 +216,7 @@ shadowJar {
 
     // excluding JavaFX assets
     dependencies {exclude(dependency('org.openjfx::.*')) }
+    exclude 'javafx/**'
     exclude 'javafx.properties'
     exclude 'javafx-swt.jar'
     exclude '*.so'
