@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.theme
 
 import com.dansoftware.boomega.i18n.i18n
+import com.dansoftware.boomega.util.res
 import javafx.scene.Parent
 import javafx.scene.Scene
 import jfxtras.styles.jmetro.Style
@@ -53,8 +54,7 @@ open class DarkTheme : JMetroTheme(Style.DARK) {
 
     companion object {
 
-        @Suppress("JAVA_CLASS_ON_COMPANION")
-        private val STYLE_SHEET get() = javaClass.getResource("dark.css")!!.toExternalForm()
+        private val STYLE_SHEET = res("dark.css", DarkTheme::class)!!.toExternalForm()
 
         /**
          * A global instance of the [DarkTheme]
