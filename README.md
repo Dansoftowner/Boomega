@@ -147,12 +147,12 @@
   * `dev` - for developing the app further
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
-* The app targets `Java 17+` but the project is `unmodularized`
+* The app targets `Java 17` but the project is **unmodularized**
 * The build tool used is [Gradle](https://gradle.org/)
 * _Want to contribute?_ See the [contribution guideline](CONTRIBUTING.md).
 
 ## 🔨 Build
-The recommended IDE for building this project is `IntelliJ Idea`.
+The recommended IDE for building this project is [IntelliJ Idea](https://www.jetbrains.com/idea/).
 
 ### Build requirements
 * JDK 17 (recommended: [OpenJDK](https://jdk.java.net/17/))
@@ -164,7 +164,7 @@ To build executable binaries, use `gradlew jpackage` ([see distribution guidelin
 
 ## 🏋️ Acknowledgements
 
-[Jump to list](ACKNOWLEDGEMENTS.md)
+All acknowledgements (e.g. third-party libraries) are listed in [this document](ACKNOWLEDGEMENTS.md).
 
 ## 💙 Support
 
