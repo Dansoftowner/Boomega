@@ -369,7 +369,23 @@ jpackage {
     }
 }
 
+/* ---------------- Other ----------------- */
 
+task runAsJar(type: Exec) {
+    group = 'application'
+    description = 'Runs the app from the output jar file'
+
+    // We run the jar on the JRE built by jlink
+    dependsOn jlink
+
+    workingDir = distributionInputDir
+    executable = new File(distributionRuntimeDir, 'bin/java')
+    args = [
+            *applicationDefaultJvmArgs,
+            '-jar',
+            tasks.shadowJar.archiveFileName.get()
+    ]
+}
 
 
 
