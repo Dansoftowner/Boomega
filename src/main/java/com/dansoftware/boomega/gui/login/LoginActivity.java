@@ -43,18 +43,12 @@ public class LoginActivity {
 
     private static final List<WeakReference<LoginActivity>> instances = new LinkedList<>();
 
-    private final Preferences preferences;
-    private final DatabaseTracker databaseTracker;
     private final BooleanProperty showing;
     private LoginView loginView;
 
-    public LoginActivity(@NotNull DatabaseLoginListener databaseLoginListener,
-                         @NotNull Preferences preferences,
-                         @NotNull DatabaseTracker tracker) {
+    public LoginActivity(@NotNull DatabaseLoginListener databaseLoginListener) {
         this.showing = new SimpleBooleanProperty();
-        this.preferences = Objects.requireNonNull(preferences);
-        this.databaseTracker = Objects.requireNonNull(tracker);
-        this.loginView = new LoginView(preferences, tracker, databaseLoginListener);
+        this.loginView = new LoginView(databaseLoginListener);
         instances.add(new WeakReference<>(this));
     }
 
@@ -70,7 +64,7 @@ public class LoginActivity {
     }
 
     private LoginWindow buildWindow() {
-        final var loginWindow = new LoginWindow(loginView, preferences, databaseTracker);
+        final var loginWindow = new LoginWindow(loginView);
         loginWindow.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> {
             this.loginView = null;
             this.showing.unbind();

@@ -52,8 +52,6 @@ import java.util.concurrent.TimeUnit
 
 class LoginBox(
     private val context: Context,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker,
     private val databaseLoginListener: DatabaseLoginListener
 ) : VBox(10.0), DatabaseTracker.Observer {
 
@@ -75,6 +73,9 @@ class LoginBox(
             databaseChooser.selectionModel.select(value)
             databaseChooser.refresh()
         }
+
+    private val databaseTracker = get(DatabaseTracker::class)
+    private val preferences = get(Preferences::class)
 
     init {
         // for tracking the databases

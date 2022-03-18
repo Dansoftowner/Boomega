@@ -20,8 +20,11 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.GlobalActions
+import com.dansoftware.boomega.gui.action.impl.OpenAppInfoAction
 import com.dansoftware.boomega.gui.action.impl.OpenSettingsAction
+import com.dansoftware.boomega.gui.action.impl.SearchForUpdatesAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
@@ -35,10 +38,11 @@ import javafx.scene.control.*
  * The toolbar that appears on the top of the login-view.
  */
 class LoginToolbar(
-    private val context: Context,
-    private val databaseTracker: DatabaseTracker,
-    private val preferences: Preferences
+    private val context: Context
 ) : BiToolBar() {
+
+    private val preferences = get(Preferences::class)
+    private val databaseTracker = get(DatabaseTracker::class)
 
     init {
         leftToolBar.padding = Insets(0.0, 10.0, 0.0, 10.0)
@@ -58,7 +62,7 @@ class LoginToolbar(
 
     private fun buildInfoItem() = Button().apply {
         graphic = icon("info-icon")
-        setOnAction { GlobalActions.OPEN_APP_INFO.invoke(context, preferences, databaseTracker) }
+        setOnAction { OpenAppInfoAction.invoke(context, preferences, databaseTracker) }
     }
 
     private fun buildQuickOptionsControl() = MenuButton().apply {
@@ -72,7 +76,7 @@ class LoginToolbar(
     }
 
     private fun buildUpdateSearchMenuItem() =
-        menuItemOf(GlobalActions.SEARCH_FOR_UPDATES, context, preferences, databaseTracker)
+        menuItemOf(SearchForUpdatesAction, context, preferences, databaseTracker)
 
     private fun buildPluginManagerMenuItem() =
         MenuItem(I18N.getValue("action.open_plugin_manager"), icon("puzzle-icon")).action { }.apply { isDisable = true } // TODO: unlock plugin manager

@@ -35,13 +35,11 @@ import org.slf4j.LoggerFactory
  * @author Daniel Gyorffy
  */
 class LoginView(
-    preferences: Preferences,
-    tracker: DatabaseTracker,
     databaseLoginListener: DatabaseLoginListener
 ) : BaseView() {
 
     init {
-        content = LoginViewBase(this, tracker, preferences, databaseLoginListener)
+        content = LoginViewBase(this, databaseLoginListener)
         playAnimation()
     }
 

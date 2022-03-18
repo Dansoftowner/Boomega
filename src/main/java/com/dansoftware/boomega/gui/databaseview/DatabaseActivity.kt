@@ -21,6 +21,7 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.menu.getPreferredApplicationMenuBar
 import javafx.stage.WindowEvent
@@ -28,9 +29,7 @@ import java.lang.ref.WeakReference
 import java.util.*
 
 class DatabaseActivity(
-    private val database: Database,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker
+    private val database: Database
 ) {
 
     private val databaseView by lazy { buildDatabaseView() }
@@ -38,7 +37,7 @@ class DatabaseActivity(
 
     init {
         instances.add(WeakReference(this))
-        databaseTracker.registerUsedDatabase(database.meta)
+        get(DatabaseTracker::class).registerUsedDatabase(database.meta)
     }
 
     fun show(): Boolean {
@@ -48,16 +47,16 @@ class DatabaseActivity(
     }
 
     private fun buildDatabaseWindow(): DatabaseWindow {
-        val menuBar = getPreferredApplicationMenuBar(databaseView, preferences, databaseTracker)
+        val menuBar = getPreferredApplicationMenuBar(databaseView, get(Preferences::class), get(DatabaseTracker::class))
         val window = DatabaseWindow(databaseView, menuBar)
         window.addEventHandler(WindowEvent.WINDOW_HIDDEN) {
             database.close()
-            databaseTracker.registerClosedDatabase(database.meta)
+            get(DatabaseTracker::class).registerClosedDatabase(database.meta)
         }
         return window
     }
 
-    private fun buildDatabaseView() = DatabaseView(preferences, database, databaseTracker)
+    private fun buildDatabaseView() = DatabaseView(get(Preferences::class), database, get(DatabaseTracker::class))
 
     companion object {
 

@@ -305,9 +305,6 @@ open class ActivityLauncher(
         }
     }
 
-    private fun EntryActivity() = EntryActivity(preferences, databaseTracker)
-    private fun DatabaseActivity(database: Database) = DatabaseActivity(database, preferences, databaseTracker)
-
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(ActivityLauncher::class.java)
     }

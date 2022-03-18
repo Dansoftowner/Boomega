@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.login
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.bmdb.BMDBMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import javafx.beans.value.ObservableStringValue
 import javafx.scene.Group
@@ -32,12 +33,10 @@ import java.io.File
 
 class LoginViewBase(
     private val context: Context,
-    private val databaseTracker: DatabaseTracker,
-    private val preferences: Preferences,
     private val databaseLoginListener: DatabaseLoginListener
 ) : VBox() {
 
-    private val loginBox = LoginBox(context, preferences, databaseTracker, databaseLoginListener)
+    private val loginBox = LoginBox(context, databaseLoginListener)
 
     init {
         styleClass.add("login-form")
@@ -48,7 +47,7 @@ class LoginViewBase(
     fun titleProperty(): ObservableStringValue = loginBox.titleProperty()
 
     private fun buildUI() {
-        children.add(LoginToolbar(context, databaseTracker, preferences))
+        children.add(LoginToolbar(context))
         children.add(StackPane(Group(loginBox)).also { setVgrow(it, Priority.ALWAYS) })
     }
 
@@ -62,7 +61,7 @@ class LoginViewBase(
                 event.dragboard.files.asSequence()
                     .filter(File::isFile)
                     .map(::BMDBMeta)
-                    .onEach(databaseTracker::saveDatabase)
+                    .onEach(get(DatabaseTracker::class)::saveDatabase)
                     .lastOrNull()
                     ?.let {
                         loginBox.selectedDatabase = it

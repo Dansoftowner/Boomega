@@ -20,6 +20,8 @@ package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
+import com.dansoftware.boomega.gui.action.AvailableActions
 import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.menu.getPreferredGeneralMenuBar
 import com.dansoftware.boomega.gui.window.BaseWindow
@@ -41,18 +43,14 @@ import java.util.*
  * configurations.
  */
 private class LoginWindow(
-    private val root: LoginView,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker
+    private val root: LoginView
 ) : BaseWindow<LoginView>(
     TitleProperty("window.login.title", " - ", root.titleProperty()),
-    getPreferredGeneralMenuBar(root, preferences, databaseTracker),
+    getPreferredGeneralMenuBar(root, get(Preferences::class), get(DatabaseTracker::class)),
     root
 ) {
 
     init {
-        Objects.requireNonNull(preferences)
-        Objects.requireNonNull(root, "LoginView shouldn't be null")
         this.exitDialog = true
         this.isMaximized = true
         this.minWidth = 530.0
@@ -61,7 +59,7 @@ private class LoginWindow(
     }
 
     private fun initKeyBindings() {
-        GlobalActions.applyOnScene(scene, root, preferences, databaseTracker)
+        AvailableActions.applyOnScene(scene, root, get(Preferences::class), get(DatabaseTracker::class))
     }
 
     companion object {

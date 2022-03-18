@@ -59,19 +59,9 @@ public class EntryActivity implements DatabaseLoginListener {
             Collections.synchronizedList(new LinkedList<>());
 
     private Context subContext;
-    private final Preferences preferences;
-    private final DatabaseTracker databaseTracker;
 
-    /**
-     * Creates an {@link EntryActivity} with the {@link LoginData}.
-     *
-     * @param databaseTracker the {@link DatabaseTracker} object for observing other databases
-     */
-    public EntryActivity(@NotNull Preferences preferences,
-                         @NotNull DatabaseTracker databaseTracker) {
+    public EntryActivity() {
         instances.add(new WeakReference<>(this));
-        this.preferences = preferences;
-        this.databaseTracker = databaseTracker;
     }
 
     @Override
@@ -88,7 +78,7 @@ public class EntryActivity implements DatabaseLoginListener {
 
     @Override
     public void onDatabaseOpened(@NotNull Database database) {
-        var mainActivity = new DatabaseActivity(database, preferences, databaseTracker);
+        var mainActivity = new DatabaseActivity(database);
         this.subContext = mainActivity.getContext();
         mainActivity.show();
     }
@@ -98,7 +88,7 @@ public class EntryActivity implements DatabaseLoginListener {
      */
     public void show() {
         if (!this.isShowing()) {
-            var loginActivity = new LoginActivity(this, preferences, databaseTracker);
+            var loginActivity = new LoginActivity(this);
             this.subContext = loginActivity.getContext();
             loginActivity.show();
         }
