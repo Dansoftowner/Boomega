@@ -5,8 +5,7 @@ You can look at the [issues](https://github.com/Dansoftowner/Boomega/issues) lis
 Also, you can look for `// TODO:` messages in the source code.
 
 ## Environment
-You can use any JDK `16` with `JavaFX` modules for building the app ([Zulu](https://www.azul.com/downloads/zulu-community/?package=jdk-fx) or [Liberica](https://bell-sw.com/pages/libericajdk/) recommended).
-
+You can use any JDK `17` (recommended: [OpenJDK](https://jdk.java.net/17/)).  
 The recommended IDE for this project is Intellij.
 
 ## Writing code
