@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class InMemoryDatabaseSimulation extends Application {
+public class InMemoryDatabaseSimulation {
 
     static {
         DIService.initModules(new AbstractModule() {
@@ -55,14 +55,15 @@ public class InMemoryDatabaseSimulation extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        Application.launch(AppImpl.class);
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        new DatabaseActivity(new InMemoryDatabase(), Preferences.empty(), new DatabaseTracker(Preferences.empty())).show();
+    public static class AppImpl extends Application {
+        @Override
+        public void start(Stage primaryStage) {
+            new DatabaseActivity(new InMemoryDatabase()).show();
+        }
     }
-
 
     private static class InMemoryDatabaseProvider implements DatabaseProvider<InMemoryDatabaseMeta> {
 
