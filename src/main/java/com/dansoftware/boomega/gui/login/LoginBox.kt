@@ -55,6 +55,9 @@ class LoginBox(
     private val databaseLoginListener: DatabaseLoginListener
 ) : VBox(10.0), DatabaseTracker.Observer {
 
+    private val databaseTracker = get(DatabaseTracker::class)
+    private val preferences = get(Preferences::class)
+
     private val loginFormCache: Cache<DatabaseProvider<*>, LoginForm<*>> =
         Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.MINUTES)
@@ -73,9 +76,6 @@ class LoginBox(
             databaseChooser.selectionModel.select(value)
             databaseChooser.refresh()
         }
-
-    private val databaseTracker = get(DatabaseTracker::class)
-    private val preferences = get(Preferences::class)
 
     init {
         // for tracking the databases
