@@ -58,6 +58,7 @@ class NativeInfoView : GridPane() {
         addRow(Label("Bytes read: "), label(byteCountToDisplaySize(currentProcess.bytesRead)))
         addRow(Label("Bytes written: "), label(byteCountToDisplaySize(currentProcess.bytesWritten)))
         addRow(Label("Command line: "), label(currentProcess.commandLine))
+        addRow(Label("Working directory: "), label(currentProcess.currentWorkingDirectory))
         addRow(Separator().colspan(2))
         addRow(Label("OS Name: "), label(os.family))
         addRow(Label("OS Manufacturer: "), label(os.manufacturer))
