@@ -26,8 +26,8 @@ plugins {
     id 'application'
     id 'org.jetbrains.kotlin.jvm' version "$KOTLIN_VERSION"
     id 'org.openjfx.javafxplugin' version '0.0.12'
-    id 'com.github.ben-manes.versions' version '0.39.0' // for detecting dependency updates
-    id 'com.github.johnrengelman.shadow' version '7.0.0' // building fat jars
+    id 'com.github.ben-manes.versions' version '0.42.0' // for detecting dependency updates
+    id 'com.github.johnrengelman.shadow' version '7.1.2' // building fat jars
     id 'org.panteleyev.jpackageplugin' version '1.3.1' // for jpackage
 }
 
@@ -104,12 +104,12 @@ dependencies {
     //Testing
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'org.assertj:assertj-core:3.22.0'
-    testImplementation 'org.mockito:mockito-core:4.3.1'
+    testImplementation 'org.mockito:mockito-core:4.4.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.3.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
 
     implementation 'com.github.Dansoftowner:jUserDirectories:1.0'
-    implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.7'
+    implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.8'
     implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
@@ -122,13 +122,13 @@ dependencies {
 
     implementation 'org.jetbrains:annotations:23.0.0'
 
-    implementation 'org.apache.poi:poi-ooxml:5.2.0' // Microsoft Documents
+    implementation 'org.apache.poi:poi-ooxml:5.2.1' // Microsoft Documents
     implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
     implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
     implementation 'com.google.code.gson:gson:2.9.0' // JSON Parsing
 
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.5' // Caching utilities
-    implementation 'com.github.oshi:oshi-core:6.1.3' // Operating system & hardware information
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6' // Caching utilities
+    implementation 'com.github.oshi:oshi-core:6.1.5' // Operating system & hardware information
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
     implementation 'io.github.g00fy2:versioncompare:1.5.0' // Comparing version strings
@@ -136,13 +136,13 @@ dependencies {
     implementation 'org.jfxtras:jmetro:11.6.15'
     implementation 'net.kurobako:gesturefx:0.7.1'
     implementation 'io.github.typhon0:AnimateFX:1.2.2'
-    implementation 'com.sandec:mdfx:0.2.3'
+    implementation 'com.sandec:mdfx:0.2.6'
     implementation "de.jangassen:nsmenufx:3.1.0"
     implementation 'com.dlsc.formsfx:formsfx-core:11.5.0'
     implementation 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
     implementation 'org.fxmisc.richtext:richtextfx:0.10.9'
     implementation 'org.controlsfx:controlsfx:11.1.1'
-    implementation 'net.synedra:validatorfx:0.2.1'
+    implementation 'net.synedra:validatorfx:0.3.1'
 
     // Embedded NoSql database management
     implementation 'org.dizitart:nitrite:3.4.3'
