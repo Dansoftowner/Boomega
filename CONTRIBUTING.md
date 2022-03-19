@@ -26,8 +26,7 @@ Also, check out:
 
 ### Adding dependencies
 
-If you add new dependencies to the project, please also mention that in the [acknowledgements](ACKNOWLEDGEMENTS.md) page,
-and in the [DependencyLister.kt](src/main/java/com/dansoftware/boomega/gui/info/dependency/DependencyLister.kt).
+If you add new dependencies to the project, please also mention that in the [acknowledgements](ACKNOWLEDGEMENTS.md) page.
 
 ## Commit messages
 
