@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import com.dansoftware.boomega.plugin.api.PluginService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.PropertyKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,12 +35,16 @@ import java.util.function.Supplier;
 import static com.dansoftware.boomega.di.DIService.get;
 
 /**
- * Used for accessing localized messages/values.
+ * Used as a central gateway for accessing localized messages/values.
+ * Also, it provides other utilities regarding localization/internationalization.
  */
 public class I18N {
 
     private static final Logger logger = LoggerFactory.getLogger(I18N.class);
 
+    /**
+     * Stores all the loaded language packs
+     */
     private static final Map<Locale, List<LanguagePack>> loadedLanguagePacks = new LinkedHashMap<>();
 
     /**
@@ -52,22 +57,36 @@ public class I18N {
     }
 
     private I18N() {
+        // Not instantiable
     }
 
-    public static LanguagePack getLanguagePack() {
-        return languagePack;
-    }
-
-    public static Set<Locale> getAvailableLocales() {
-        return loadedLanguagePacks.keySet();
-    }
-
+    /**
+     * Gives the default locale used by the system, just like the {@link Locale#getDefault()}
+     * method, except that it returns the default {@link Locale#ENGLISH} locale, if the system default
+     * is not supported by any language-packs.
+     *
+     * @return the preferred locale used by the environment
+     */
     public static Locale defaultLocale() {
         Set<Locale> available = getAvailableLocales();
         Locale systemDefault = Locale.getDefault();
         return available.contains(systemDefault) ? systemDefault : Locale.ENGLISH;
     }
 
+    /**
+     * Gives all the available {@link Collator}s for all the {@link Locale}s
+     * supported by the app.
+     * <p>
+     *
+     * These collators can be used for ordering strings according to the language's
+     * alphabetic order (ABC).
+     * <p>
+     *
+     * Each key in the resulting {@link Map} is a {@link Locale} representing the language;
+     * and each value is a {@link Supplier} that can return the actual {@link Collator}.
+     *
+     * @return the map of locale and collator (wrapped in a {@link Supplier}) pairs
+     */
     public static Map<Locale, Supplier<Collator>> getAvailableCollators() {
         var map = new HashMap<Locale, Supplier<Collator>>();
         loadedLanguagePacks.forEach((locale, languagePacks) ->
@@ -80,7 +99,10 @@ public class I18N {
     }
 
     @NotNull
-    public static String getValue(@NotNull String key, @Nullable Object... args) {
+    public static String getValue(
+            @PropertyKey(resourceBundle = "com.dansoftware.boomega.i18n.Values") String key,
+            @Nullable Object... args
+    ) {
         try {
             return getValue(getValues(), key, args);
         } catch (MissingResourceException e) {
@@ -146,15 +168,23 @@ public class I18N {
         }}).get(0));
     }
 
-    public static Optional<Collator> getABCCollator(@Nullable Locale locale) {
-        return getLanguagePackForLocale(locale).map(LanguagePack::getABCCollator);
-    }
-
     private static List<InternalLanguagePack> internalLanguagePacks() {
         return List.of(
                 new EnglishLanguagePack(),
                 new HungarianLanguagePack(),
                 new TurkishLanguagePack()
         );
+    }
+
+    public static Optional<Collator> getABCCollator(@Nullable Locale locale) {
+        return getLanguagePackForLocale(locale).map(LanguagePack::getABCCollator);
+    }
+
+    public static LanguagePack getLanguagePack() {
+        return languagePack;
+    }
+
+    public static Set<Locale> getAvailableLocales() {
+        return loadedLanguagePacks.keySet();
     }
 }

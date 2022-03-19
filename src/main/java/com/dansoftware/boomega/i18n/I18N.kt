@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,11 @@ package com.dansoftware.boomega.i18n
 
 import com.dansoftware.boomega.util.Person
 import org.jetbrains.annotations.Nls
+import org.jetbrains.annotations.PropertyKey
 
-fun i18n(@Nls key: String, vararg args: Any?) = I18N.getValue(key, *args)
+fun i18n(
+    @PropertyKey(resourceBundle = "com.dansoftware.boomega.i18n.Values") key: String,
+    vararg args: Any?
+) = I18N.getValue(key, *args)
 
-val Person.displayName get() = I18N.getLanguagePack().displayPersonName(this)
+val Person.displayName: String get() = I18N.getLanguagePack().displayPersonName(this)
