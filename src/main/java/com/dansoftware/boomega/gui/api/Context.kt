@@ -29,6 +29,8 @@ import javafx.scene.layout.Region
 import javafx.stage.Stage
 import javafx.stage.Window
 import javafx.util.Duration
+import org.jetbrains.annotations.Blocking
+import org.jetbrains.annotations.NonBlocking
 import java.util.function.Consumer
 
 /**
@@ -50,11 +52,13 @@ interface Context {
      * @param region   the {@link Region} GUI element to be shown
      * @param blocking {@code false} if clicking outside of the popup should close it.
      */
+    @NonBlocking
     fun showOverlay(region: Region, blocking: Boolean)
 
     /**
      * @see [showOverlay]
      */
+    @NonBlocking
     fun showOverlay(region: Region) {
         showOverlay(region, false)
     }
@@ -74,6 +78,7 @@ interface Context {
      * @param message  the message of the dialog
      * @param onResult the action when the user clicks the OK button
      */
+    @NonBlocking
     fun showErrorDialog(
         title: String?,
         message: String?,
@@ -89,6 +94,7 @@ interface Context {
      * @param Exception? the Exception? that caused the dialog
      * @param onResult  the action when the user clicks the OK button
      */
+    @NonBlocking
     fun showErrorDialog(
         title: String?,
         message: String?,
@@ -96,10 +102,12 @@ interface Context {
         onResult: Consumer<ButtonType>
     ): ContextDialog
 
+    @NonBlocking
     fun showErrorDialog(title: String, message: String) {
         this.showErrorDialog(title, message) {}
     }
 
+    @NonBlocking
     fun showErrorDialog(title: String, message: String, cause: Exception?) {
         this.showErrorDialog(title, message, cause) {}
     }
@@ -111,18 +119,21 @@ interface Context {
      * @param message  the message
      * @param onResult the action that handles the button click-s on the dialog
      */
+    @NonBlocking
     fun showInformationDialog(
         title: String?,
         message: String?,
         onResult: Consumer<ButtonType>
     ): ContextDialog
 
+    @NonBlocking
     fun showConfirmationDialog(
         title: String?,
         message: String?,
         onResult: Consumer<ButtonType>
     ): ContextDialog
 
+    @NonBlocking
     fun showDialog(
         title: String?,
         content: Node,
@@ -130,31 +141,43 @@ interface Context {
         vararg buttonTypes: ButtonType
     ): ContextDialog
 
+    @Blocking
     fun showErrorDialogAndWait(title: String?, message: String?): ButtonType
 
+    @Blocking
     fun showErrorDialogAndWait(title: String?, message: String?, e: Exception?): ButtonType
 
+    @Blocking
     fun showInformationDialogAndWait(title: String?, message: String?): ButtonType
 
+    @Blocking
     fun showConfirmationDialogAndWait(title: String?, message: String?): ButtonType
 
+    @Blocking
     fun showDialogAndWait(title: String?, content: Node, vararg buttonTypes: ButtonType): ButtonType
 
-
+    @NonBlocking
     fun showErrorNotification(title: String?, message: String?)
 
+    @NonBlocking
     fun showErrorNotification(title: String?, message: String?, onClicked: EventHandler<MouseEvent>)
 
+    @NonBlocking
     fun showErrorNotification(title: String?, message: String?, duration: Duration)
 
+    @NonBlocking
     fun showErrorNotification(title: String?, message: String?, duration: Duration, onClicked: EventHandler<MouseEvent>)
 
+    @NonBlocking
     fun showWarningNotification(title: String?, message: String?)
 
+    @NonBlocking
     fun showWarningNotification(title: String?, message: String?, onClicked: EventHandler<MouseEvent>)
 
+    @NonBlocking
     fun showWarningNotification(title: String?, message: String?, duration: Duration)
 
+    @NonBlocking
     fun showWarningNotification(
         title: String?,
         message: String?,
@@ -162,10 +185,13 @@ interface Context {
         onClicked: EventHandler<MouseEvent>
     )
 
+    @NonBlocking
     fun showInformationNotification(title: String?, message: String?)
 
+    @NonBlocking
     fun showInformationNotification(title: String?, message: String?, onClicked: EventHandler<MouseEvent>)
 
+    @NonBlocking
     fun showInformationNotification(
         title: String?,
         message: String?,
@@ -173,8 +199,10 @@ interface Context {
         vararg hyperlinks: Hyperlink
     )
 
+    @NonBlocking
     fun showInformationNotification(title: String?, message: String?, duration: Duration)
 
+    @NonBlocking
     fun showInformationNotification(
         title: String?,
         message: String?,
@@ -182,13 +210,14 @@ interface Context {
         onClicked: EventHandler<MouseEvent>
     )
 
-
+    @NonBlocking
     fun showIndeterminateProgress()
 
+    @NonBlocking
     fun stopProgress()
 
+    @NonBlocking
     fun showProgress(done: Long, max: Long, type: ProgressType)
-
 
     fun sendRequest(request: Request) {}
 
