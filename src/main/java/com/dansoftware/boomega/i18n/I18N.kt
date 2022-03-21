@@ -21,12 +21,17 @@
 package com.dansoftware.boomega.i18n
 
 import com.dansoftware.boomega.util.Person
-import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.PropertyKey
 
+/**
+ * Alias for [I18N.getValue].
+ */
 fun i18n(
     @PropertyKey(resourceBundle = "com.dansoftware.boomega.i18n.Values") key: String,
     vararg args: Any?
 ) = I18N.getValue(key, *args)
 
+/**
+ * The full name of a person formatted by the conventions of the configured language
+ */
 val Person.displayName: String get() = I18N.getLanguagePack().displayPersonName(this)

@@ -97,6 +97,19 @@ public class I18N {
     }
 
     @NotNull
+    public static ResourceBundle getValues() {
+        recognizeLanguagePack();
+        return languagePack.getValues();
+    }
+
+    /**
+     * Gets the internationalized value from the default resource bundle.
+     *
+     * @param key  the property-key
+     * @param args only has a role if the property is a pattern-string (see {@link MessageFormat}).
+     * @return the property-value
+     */
+    @NotNull
     public static String getValue(
             @PropertyKey(resourceBundle = "com.dansoftware.boomega.i18n.Values") String key,
             @Nullable Object... args
@@ -114,38 +127,46 @@ public class I18N {
         return getFormat(resourceBundle, key, args);
     }
 
-    @NotNull
-    public static ResourceBundle getValues() {
-        recognizeLanguagePack();
-        return languagePack.getValues();
-    }
-
     private static String getFormat(@NotNull ResourceBundle resourceBundle, @NotNull String key, Object... args) {
         return MessageFormat.format(resourceBundle.getString(key), args);
     }
 
+    /**
+     * @return {@code true} if the configured language is an RTL (right-to-left) language (e.g. Hebrew);
+     *         {@link false} otherwise.
+     * @see LanguagePack#isRTL()
+     */
     public static boolean isRTL() {
         return getLanguagePack().isRTL();
     }
 
     /**
-     * Recognizes the required {@link LanguagePack} for the default {@link LanguagePack}.
+     * Recognizes the required {@link LanguagePack} for the default {@link Locale}.
      */
     private static void recognizeLanguagePack() {
         if (languagePack == null || !languagePack.getLocale().equals(Locale.getDefault()))
             languagePack = getLanguagePackForLocale(Locale.getDefault()).orElseGet(EnglishLanguagePack::new);
     }
 
+    /**
+     * Loads the internal & plugin language packs.
+     */
     private static void loadPacks() {
         registerBasePacks();
         registerPluginPacks();
     }
 
+    /**
+     * Registers the internal language-packs.
+     */
     private static void registerBasePacks() {
-        for (var pack : internalLanguagePacks())
+        for (var pack : listInternalLanguagePacks())
             putPack(pack.getLocale(), pack);
     }
 
+    /**
+     * Registers the language-packs loaded from plugins.
+     */
     private static void registerPluginPacks() {
         logger.debug("Checking plugins for language-packs...");
         get(PluginService.class).of(LanguagePlugin.class).stream()
@@ -154,19 +175,26 @@ public class I18N {
                 .forEach(pack -> putPack(pack.getLocale(), pack));
     }
 
+    /**
+     * Registers a language-pack for a locale
+     */
     private static void putPack(Locale locale, LanguagePack pack) {
         List<LanguagePack> list = loadedLanguagePacks.getOrDefault(locale, new ArrayList<>());
         list.add(pack);
         loadedLanguagePacks.put(locale, list);
     }
 
+    /**
+     * Maps the given locale to the language-pack
+     */
     private static Optional<LanguagePack> getLanguagePackForLocale(Locale locale) {
-        return Optional.ofNullable(loadedLanguagePacks.getOrDefault(locale, new ArrayList<>() {{
-            add(null);
-        }}).get(0));
+        return loadedLanguagePacks.get(locale).stream().findFirst();
     }
 
-    private static List<InternalLanguagePack> internalLanguagePacks() {
+    /**
+     * @return the list of internal/base language-packs
+     */
+    private static List<InternalLanguagePack> listInternalLanguagePacks() {
         return List.of(
                 new EnglishLanguagePack(),
                 new HungarianLanguagePack(),
@@ -174,14 +202,23 @@ public class I18N {
         );
     }
 
+    /**
+     * Gets the default ABC collator for the given locale.
+     */
     public static Optional<Collator> getABCCollator(@Nullable Locale locale) {
         return getLanguagePackForLocale(locale).map(LanguagePack::getABCCollator);
     }
 
+    /**
+     * @return the configured language-pack
+     */
     public static LanguagePack getLanguagePack() {
         return languagePack;
     }
 
+    /**
+     * @return the set of supported locales (locales that have language-pack pack(s))
+     */
     public static Set<Locale> getAvailableLocales() {
         return loadedLanguagePacks.keySet();
     }
