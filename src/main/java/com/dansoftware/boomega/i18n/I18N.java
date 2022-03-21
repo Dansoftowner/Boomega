@@ -31,6 +31,7 @@ import java.text.Collator;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.dansoftware.boomega.di.DIService.get;
 
@@ -77,25 +78,22 @@ public class I18N {
      * Gives all the available {@link Collator}s for all the {@link Locale}s
      * supported by the app.
      * <p>
-     *
+     * <p>
      * These collators can be used for ordering strings according to the language's
      * alphabetic order (ABC).
      * <p>
-     *
+     * <p>
      * Each key in the resulting {@link Map} is a {@link Locale} representing the language;
      * and each value is a {@link Supplier} that can return the actual {@link Collator}.
      *
      * @return the map of locale and collator (wrapped in a {@link Supplier}) pairs
      */
     public static Map<Locale, Supplier<Collator>> getAvailableCollators() {
-        var map = new HashMap<Locale, Supplier<Collator>>();
-        loadedLanguagePacks.forEach((locale, languagePacks) ->
-                languagePacks.stream()
-                        .map(languagePack -> (Supplier<Collator>) languagePack::getABCCollator)
-                        .findFirst()
-                        .ifPresent(collatorSupplier -> map.put(locale, collatorSupplier))
-        );
-        return map;
+        return loadedLanguagePacks.values()
+                .stream()
+                .map(list -> list.isEmpty() ? null : list.get(0))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(LanguagePack::getLocale, it -> it::getABCCollator));
     }
 
     @NotNull
