@@ -96,6 +96,9 @@ public class I18N {
                 .collect(Collectors.toMap(LanguagePack::getLocale, it -> it::getABCCollator));
     }
 
+    /**
+     * Gets the resource-bundle currently used for localization.
+     */
     @NotNull
     public static ResourceBundle getValues() {
         recognizeLanguagePack();
