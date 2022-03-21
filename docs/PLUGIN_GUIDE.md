@@ -345,7 +345,44 @@ public class PortugueseLanguagePlugin implements LanguagePlugin {
 </tr>
 </table>
 
-You can view the internal LanguagePack implementations (to understand the concept better)
+### Specifying the alphabetic order
+
+Knowing the alphabetical order for Boomega is crucial for several features (e.g. sorting records in a table-view).  
+Defining `ABC`s is possible with the help of 
+[Collators](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/Collator.html).
+By overriding the `LanguagePack.getABCCollator()` method you can specify the `Collator` for your language-pack.  
+*If you don't specify any collator for your pack, the default collator will be used which is `Collator.getInstance()`.*
+
+Look at these snippets from the [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java):
+```java
+public class HungarianLanguagePack extends LanguagePack {
+
+  @Override
+  public @NotNull Collator getABCCollator() {
+    return new NullHandlingCollator(new ABCCollator());
+  }
+
+  private static final class ABCCollator extends RuleBasedCollator {
+    ABCCollator() throws ParseException {
+      super(
+                     """
+                      < a,A < á,Á < b,B < c,C < cs,Cs,CS < d,D < dz,Dz,DZ < dzs,Dzs,DZS \
+                      < e,E < é,É < f,F < g,G < gy,Gy,GY < h,H < i,I < í,Í < j,J \
+                      < k,K < l,L < ly,Ly,LY < m,M < n,N < ny,Ny,NY < o,O < ó,Ó \
+                      < ö,Ö < ő,Ő < p,P < q,Q < r,R < s,S < sz,Sz,SZ < t,T \
+                      < ty,Ty,TY < u,U < ú,Ú < ü,Ü < ű,Ű < v,V < w,W < x,X < y,Y < z,Z < zs,Zs,ZS\
+                      """
+      );
+    }
+  }
+}
+```
+
+TODO
+
+### Other examples
+
+You can view the internal LanguagePack implementations (for understanding the concepts better)
 in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i18n) package e.g:
 
 * [EnglishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/EnglishLanguagePack.java)
