@@ -30,19 +30,20 @@ API entities are written in it. Although, this guide will provide you both kotli
 
 ### How is it work?
 
-On the JVM (Java Virtual Machine) it's possible to load classes dynamically at runtime with the help of Class Loaders.  
+On the JVM (Java Virtual Machine) it's possible to load classes dynamically at runtime with the help
+of [Class Loaders](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html).  
 Since Boomega is a JVM application, it takes full advantage of this.
 
 # The plugin directory
 
 Boomega automatically loads plugin archives (`.jar`s) from the **default plugin directory**.
 
-* On **Windows**: `<User directory>\AppData\Roaming\Dansoftware\boomega\plugin`
-* On **Linux** & **MacOS**: `<User directory>/boomega/plugin`
+* Path on **Windows**: `<User directory>\AppData\Roaming\Dansoftware\boomega\plugin`
+* Path on **Linux** & **macOS**: `<User directory>/boomega/plugin`
 
 If you want to load your plugin into Boomega, you should place the jar file into this directory.
 
-> You can open the plugin directory from Boomega:
+> You can open the plugin directory from the Boomega menu-bar:
 > **File > Open plugin directory**
 
 # API overview
