@@ -13,6 +13,7 @@
 * [Setting up a plugin project](#setting-up-a-plugin-project)
 * [Plugin development tutorials & examples](#plugin-development-tutorials--examples)
     * [Language plugins](#language-plugins)
+      * [Specifying the alphabetical order](#specifying-the-alphabetical-order)
     * [Theme plugins](#theme-plugins)
     * [Record exporting plugins](#record-exporting-plugins)
     * [Module plugins](#module-plugins)
@@ -345,7 +346,7 @@ public class PortugueseLanguagePlugin implements LanguagePlugin {
 </tr>
 </table>
 
-### Specifying the alphabetic order
+### Specifying the alphabetical order
 
 Knowing the alphabetical order for Boomega is crucial for several features (e.g. sorting records in a table-view).  
 Defining `ABC`s is possible with the help of 
@@ -382,7 +383,8 @@ public class HungarianLanguagePack extends LanguagePack {
 ```
 
 Notice that it wraps the base collator into a [NullHandlingCollator](/src/main/java/com/dansoftware/boomega/i18n/NullHandlingCollator.kt) 
-for preventing possible null-pointer exceptions when comparing `null` values with the collator in the future.
+for preventing possible null-pointer exceptions when comparing `null` values with the collator in the future. You should 
+also follow this practice in your own language-pack.
 
 ### Other examples
 
