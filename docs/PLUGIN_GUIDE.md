@@ -20,11 +20,11 @@
 
 # Intro
 
-Boomega allows you to develop plugins for the app in order to add more features/functionality to the app.  
+Boomega allows you to develop plugins in order to add more features/functionality to the app.  
 Plugins can be written both in **java** and **kotlin**.   
 
-The recommended language for writing plugins is **kotlin** because most of the 
-API entities are designed in kotlin. Although, this guide will provide you both kotlin and java examples. 
+The recommended language for writing plugins is **kotlin** because most of the Plugin
+API entities are written in it. Although, this guide will provide you both kotlin and java examples. 
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
 
@@ -187,7 +187,7 @@ public class MonokaiThemePlugin implements ThemePlugin {
 **Requirements:**
 - JDK 17 (recommended: [OpenJDK](https://jdk.java.net/17/))
 - Gradle
-- Recommended: [Intellj Idea](https://www.jetbrains.com/idea/)
+- Recommended IDE: [Intellj Idea](https://www.jetbrains.com/idea/)
 
 ## Including the plugin-kit dependency
 
@@ -219,7 +219,8 @@ An alternative solution is to simply place the dependency jars also into the plu
 
 ## Language plugins
 
-You are free to contrubute a new language to be included in the core Boomega itself (look at [this issue](https://github.com/Dansoftowner/Boomega/issues/162)).  
+You are free to contrubute a new language to be included in the core Boomega itself (look
+at [this issue](https://github.com/Dansoftowner/Boomega/issues/162) for more help).  
 However, you can also add a new language as a separate plugin by implementing the
 [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) interface.
 
@@ -299,7 +300,7 @@ public class PortugueseLanguagePack extends LanguagePack {
 </tr>
 </table>
 
-Finally, you can implement the `LanguagePlugin` interface:
+**Finally, you can implement the `LanguagePlugin` interface:**
 
 <table>
 
