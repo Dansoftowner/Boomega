@@ -353,32 +353,36 @@ Defining `ABC`s is possible with the help of
 By overriding the `LanguagePack.getABCCollator()` method you can specify the `Collator` for your language-pack.  
 *If you don't specify any collator for your pack, the default collator will be used which is `Collator.getInstance()`.*
 
-Look at these snippets from the [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java):
+Look at this simplified snippet from the internal [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java):
 ```java
 public class HungarianLanguagePack extends LanguagePack {
 
+  ...
+    
   @Override
   public @NotNull Collator getABCCollator() {
     return new NullHandlingCollator(new ABCCollator());
   }
 
+  ...
+  
   private static final class ABCCollator extends RuleBasedCollator {
     ABCCollator() throws ParseException {
-      super(
-                     """
-                      < a,A < á,Á < b,B < c,C < cs,Cs,CS < d,D < dz,Dz,DZ < dzs,Dzs,DZS \
-                      < e,E < é,É < f,F < g,G < gy,Gy,GY < h,H < i,I < í,Í < j,J \
-                      < k,K < l,L < ly,Ly,LY < m,M < n,N < ny,Ny,NY < o,O < ó,Ó \
-                      < ö,Ö < ő,Ő < p,P < q,Q < r,R < s,S < sz,Sz,SZ < t,T \
-                      < ty,Ty,TY < u,U < ú,Ú < ü,Ü < ű,Ű < v,V < w,W < x,X < y,Y < z,Z < zs,Zs,ZS\
-                      """
+      super("""
+            < a,A < á,Á < b,B < c,C < cs,Cs,CS < d,D < dz,Dz,DZ < dzs,Dzs,DZS \
+            < e,E < é,É < f,F < g,G < gy,Gy,GY < h,H < i,I < í,Í < j,J \
+            < k,K < l,L < ly,Ly,LY < m,M < n,N < ny,Ny,NY < o,O < ó,Ó \
+            < ö,Ö < ő,Ő < p,P < q,Q < r,R < s,S < sz,Sz,SZ < t,T \
+            < ty,Ty,TY < u,U < ú,Ú < ü,Ü < ű,Ű < v,V < w,W < x,X < y,Y < z,Z < zs,Zs,ZS\
+            """
       );
     }
   }
 }
 ```
 
-TODO
+Notice that it wraps the base collator into a [NullHandlingCollator](/src/main/java/com/dansoftware/boomega/i18n/NullHandlingCollator.kt) 
+for preventing possible null-pointer exceptions when comparing `null` values with the collator in the future.
 
 ### Other examples
 
