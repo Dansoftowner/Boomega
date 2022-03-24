@@ -409,12 +409,20 @@ The Boomega UI elements have unique style-classes and identifiers. Look at the i
 * [dark.css](/src/main/resources/com/dansoftware/boomega/gui/theme/dark.css) - the dark-theme styles. Used by [`DarkTheme`](/src/main/java/com/dansoftware/boomega/gui/theme/DarkTheme.kt)
 
 Note that these stylesheets are partial, because these internal themes use [JMetro JavaFX Theme](https://pixelduke.com/java-javafx-theme-jmetro/)
-as a basis. So if you write your stylesheets from scratch you may have to implement more styles.
+as a basis. So if you write your stylesheets from scratch you may have to work more.
 
 ### The `Theme` class
 
 In Boomega, a [`Theme`](/src/main/java/com/dansoftware/boomega/gui/theme/Theme.kt) is responsible for applying the styles
 on the UI (usually by simply adding the stylesheets to the JavaFX elements).
+
+These methods are responsible for this:
+* `apply(javafx.scene.Scene)` - applies the styles on a JavaFX [Scene](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/Scene.html)
+* `apply(javafx.scene.Parent)` - applies the styles on a JavaFX [Parent](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/Parent.html)
+
+Also, the theme should also provide a way to "reset" the UI:
+* `deApply(javafx.scene.Scene)` - removes the styles from a JavaFX [Scene](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/Scene.html)
+* `deApply(javafx.scene.Parent)` - removes the styles from a JavaFX [Parent](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/Parent.html)
 
 A simple example:
 
@@ -501,6 +509,21 @@ public class NordTheme extends Theme {
 
 </tr>
 </table>
+
+#### Other examples
+You can view the internal `Theme` implementations (for understanding the concepts better)
+in the [`com.dansoftware.boomega.gui.theme`](/src/main/java/com/dansoftware/boomega/gui/theme) package e.g:
+
+* [DarkTheme](/src/main/java/com/dansoftware/boomega/gui/theme/DarkTheme.kt)
+* [LightTheme](/src/main/java/com/dansoftware/boomega/gui/theme/LightTheme.kt)
+* [OsSynchronizedTheme](/src/main/java/com/dansoftware/boomega/gui/theme/OsSynchronizedTheme.kt)
+
+You are free to contribute your own theme to be included in the core Boomega itself. However, if you want to add your
+theme as a plugin, let's go to the next section!
+
+### The `ThemePlugin` interface
+
+TODO
 
 
 ## Record exporting plugins
