@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import jfxtras.styles.jmetro.JMetro
 import jfxtras.styles.jmetro.Style
+import org.jetbrains.annotations.MustBeInvokedByOverriders
 import kotlin.reflect.KClass
 
 /**
@@ -30,18 +31,22 @@ import kotlin.reflect.KClass
  */
 abstract class JMetroTheme(val style: Style) : Theme() {
 
+    @MustBeInvokedByOverriders
     override fun apply(scene: Scene) {
         JMetro(style).scene = scene
     }
 
+    @MustBeInvokedByOverriders
     override fun apply(region: Parent) {
         JMetro(style).parent = region
     }
 
+    @MustBeInvokedByOverriders
     override fun deApply(scene: Scene) {
         scene.stylesheets.removeAll(jMetroStyleSheets)
     }
 
+    @MustBeInvokedByOverriders
     override fun deApply(region: Parent) {
         region.stylesheets.removeAll(jMetroStyleSheets)
     }

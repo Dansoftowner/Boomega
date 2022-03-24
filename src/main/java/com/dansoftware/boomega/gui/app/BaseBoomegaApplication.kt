@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import com.dansoftware.boomega.main.parseArguments
 import com.sun.javafx.application.LauncherImpl
 import javafx.application.Application
 import javafx.stage.Stage
+import org.jetbrains.annotations.PropertyKey
 
 /**
  * The base [Application] implementation.
@@ -55,7 +56,7 @@ abstract class BaseBoomegaApplication : Application() {
      *
      * @param i18n the non-internationalized message
      */
-    protected fun notifyPreloader(i18n: String) {
+    protected fun notifyPreloader(@PropertyKey(resourceBundle = "com.dansoftware.boomega.i18n.Values") i18n: String) {
         notifyPreloader(MessageNotification(i18n(i18n)))
     }
 

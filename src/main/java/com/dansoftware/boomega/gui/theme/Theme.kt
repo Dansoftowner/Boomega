@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.theme
 
 import javafx.scene.Parent
 import javafx.scene.Scene
+import org.jetbrains.annotations.MustBeInvokedByOverriders
 import java.lang.ref.WeakReference
 import java.util.Collections.synchronizedList
 import kotlin.properties.ReadWriteProperty
@@ -70,6 +71,7 @@ abstract class Theme {
      * **Shouldn't be called by other components!**
      * **If it is overridden by a subclass, the overriding method should also call this super function!**
      */
+    @MustBeInvokedByOverriders
     open fun init() {
         isInitialized = true
     }
@@ -81,6 +83,7 @@ abstract class Theme {
      * **Shouldn't be called by other components!**
      * **If it is overridden by a subclass, the overriding method should also call this super function!**
      */
+    @MustBeInvokedByOverriders
     open fun destroy() {
         isInitialized = false
     }
