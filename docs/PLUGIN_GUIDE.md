@@ -38,7 +38,7 @@ Since Boomega is a JVM application, it takes full advantage of this.
 
 Boomega automatically loads plugin archives (`.jar`s) from the **default plugin directory**.
 
-* Path on **Windows**: `<User directory>\AppData\Roaming\Dansoftware\boomega\plugin`
+* Path on **Windows**: `%APPDATA%\Dansoftware\boomega\plugin`
 * Path on **Linux** & **macOS**: `<User directory>/boomega/plugin`
 
 If you want to load your plugin into Boomega, you should place the jar file into this directory.
@@ -220,7 +220,7 @@ An alternative solution is to simply place the dependency jars also into the plu
 
 ## Language plugins
 
-You are free to contrubute a new language to be included in the core Boomega itself (look
+You are free to contribute a new language to be included in the core Boomega itself (look
 at [this issue](https://github.com/Dansoftowner/Boomega/issues/162) for more help).  
 However, you can also add a new language as a separate plugin by implementing the
 [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) interface.
@@ -398,6 +398,18 @@ in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i
 * [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
 
 ## Theme plugins
+
+For adding UI Themes to the app through plugins, you have to implement the [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt)
+interface.  
+
+For creating your custom themes, you should have knowledge in [JavaFX CSS](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/doc-files/cssref.html).
+The Boomega UI elements have unique style-classes and identifiers. Look at the internal Boomega style-sheets to get in touch:
+* [base.css](/src/main/resources/com/dansoftware/boomega/gui/theme/base.css) - global UI style configuration (used in both the `light` and `dark` theme)
+* [light.css](/src/main/resources/com/dansoftware/boomega/gui/theme/light.css) - the light-theme styles. Used by [`LightTheme`](/src/main/java/com/dansoftware/boomega/gui/theme/LightTheme.kt)
+* [dark.css](/src/main/resources/com/dansoftware/boomega/gui/theme/dark.css) - the dark-theme styles. Used by [`DarkTheme`](/src/main/java/com/dansoftware/boomega/gui/theme/DarkTheme.kt)
+
+Note that these stylesheets are partial, because these internal themes use [JMetro JavaFX Theme](https://pixelduke.com/java-javafx-theme-jmetro/)
+as a basis. So if you write your stylesheets from scratch you may have to implement more styles.
 
 ## Record exporting plugins
 
