@@ -191,7 +191,7 @@ public class I18N {
      * Maps the given locale to the language-pack
      */
     private static Optional<LanguagePack> getLanguagePackForLocale(Locale locale) {
-        return loadedLanguagePacks.get(locale).stream().findFirst();
+        return loadedLanguagePacks.getOrDefault(locale, Collections.emptyList()).stream().findFirst();
     }
 
     /**

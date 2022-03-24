@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,10 +65,10 @@ open class BoomegaApp : BaseBoomegaApplication() {
 
     override fun init() {
 
-        handleApplicationArgument()
+        loadPlugins()
         progress(0.2)
 
-        loadPlugins()
+        handleApplicationArgument()
         progress(0.4)
 
         readConfigurations()
