@@ -15,6 +15,8 @@
     * [Language plugins](#language-plugins)
       * [Specifying the alphabetical order](#specifying-the-alphabetical-order)
     * [Theme plugins](#theme-plugins)
+      * [Stylesheets](#stylesheets)
+      * [The Theme class](#the-theme-class)
     * [Record exporting plugins](#record-exporting-plugins)
     * [Module plugins](#module-plugins)
 
@@ -412,7 +414,7 @@ as a basis. So if you write your stylesheets from scratch you may have to implem
 ### The `Theme` class
 
 In Boomega, a [`Theme`](/src/main/java/com/dansoftware/boomega/gui/theme/Theme.kt) is responsible for applying the styles
-on the UI.
+on the UI (usually by simply adding the stylesheets to the JavaFX elements).
 
 A simple example:
 
