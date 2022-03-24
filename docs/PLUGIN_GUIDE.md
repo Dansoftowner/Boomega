@@ -399,9 +399,7 @@ in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i
 
 ## Theme plugins
 
-For adding UI Themes to the app through plugins, you have to implement the [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt)
-interface.  
-
+### Stylesheets
 For creating your custom themes, you should have knowledge in [JavaFX CSS](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/doc-files/cssref.html).
 The Boomega UI elements have unique style-classes and identifiers. Look at the internal Boomega style-sheets to get in touch:
 * [base.css](/src/main/resources/com/dansoftware/boomega/gui/theme/base.css) - global UI style configuration (used in both the `light` and `dark` theme)
@@ -410,6 +408,98 @@ The Boomega UI elements have unique style-classes and identifiers. Look at the i
 
 Note that these stylesheets are partial, because these internal themes use [JMetro JavaFX Theme](https://pixelduke.com/java-javafx-theme-jmetro/)
 as a basis. So if you write your stylesheets from scratch you may have to implement more styles.
+
+### The `Theme` class
+
+In Boomega, a [`Theme`](/src/main/java/com/dansoftware/boomega/gui/theme/Theme.kt) is responsible for applying the styles
+on the UI.
+
+A simple example:
+
+<table>
+
+<tr>
+<th>Kotlin</th>
+<th>Java</th>
+</tr>
+
+<tr>
+
+<td>
+
+```kotlin
+...
+import com.dansoftware.boomega.util.res
+
+class NordTheme : Theme() {
+
+  override val name: String = "Nord theme"
+
+  // Path of the css file located next to this class (lot of ways to resolve the path)
+  private val styleSheet: String = res("nord.css", NordTheme::class)!!.toExternalForm()
+
+  override fun apply(scene: Scene) {
+    scene.stylesheets.add(styleSheet)
+  }
+
+  override fun apply(region: Parent) {
+    region.stylesheets.add(styleSheet)
+  }
+
+  override fun deApply(scene: Scene) {
+    scene.stylesheets.remove(styleSheet)
+  }
+
+  override fun deApply(region: Parent) {
+    region.stylesheets.remove(styleSheet)
+  }
+}
+```
+
+</td>
+
+<td>
+
+```java
+public class NordTheme extends Theme {
+
+  // Path of the css file located next to this class (lot of ways to resolve the path)
+  private static final String STYLESHEET =
+          NordTheme.class.getResource("nord.css").toExternalForm();
+
+  @NotNull
+  @Override
+  public String getName() {
+    return "Nord theme";
+  }
+
+  @Override
+  public void apply(@NotNull Scene scene) {
+    scene.getStylesheets().add(STYLESHEET);
+  }
+
+  @Override
+  public void apply(@NotNull Parent region) {
+    region.getStylesheets().add(STYLESHEET);
+  }
+
+  @Override
+  public void deApply(@NotNull Scene scene) {
+    scene.getStylesheets().remove(STYLESHEET);
+  }
+
+  @Override
+  public void deApply(@NotNull Parent region) {
+    region.getStylesheets().remove(STYLESHEET);
+  }
+}
+```
+
+</td>
+
+</tr>
+</table>
+
 
 ## Record exporting plugins
 
