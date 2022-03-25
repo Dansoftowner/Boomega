@@ -20,14 +20,15 @@
       * [The ThemePlugin interface](#the-themeplugin-interface)
     * [Record exporting plugins](#record-exporting-plugins)
     * [Module plugins](#module-plugins)
+    * [Database provider plugins](#database-provider-plugins)
 
 # Intro
 
 Boomega allows you to develop plugins in order to add more features/functionality to the app.  
-Plugins can be written both in **java** and **kotlin**.   
+Plugins can be written in both **java** and **kotlin**.   
 
 The recommended language for writing plugins is **kotlin** because most of the Plugin
-API entities are written in it. Although, this guide will provide you both kotlin and java examples. 
+API entities are written in it. This guide will provide you both kotlin and java examples tough.
 
 > You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
 
@@ -65,6 +66,7 @@ All other plugin classes should implement this interface.
 * [`RecordExporterPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/RecordExporterPlugin.kt) - for adding new
   record exporting option
 * [`ModulePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ModulePlugin.kt) - for adding new UI modules
+* [`DatabaseProviderPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/DatabaseProviderPlugin.kt) - for adding custom database support
 
 **The DisabledPlugin annotation:**
 
@@ -190,7 +192,7 @@ public class MonokaiThemePlugin implements ThemePlugin {
 
 **Requirements:**
 - JDK 17 (recommended: [OpenJDK](https://jdk.java.net/17/))
-- Gradle
+- Recommended build system: Gradle
 - Recommended IDE: [Intellj Idea](https://www.jetbrains.com/idea/)
 
 ## Including the plugin-kit dependency
@@ -426,8 +428,8 @@ Also, the theme should also provide a way to "reset" the UI:
 * `deApply(Parent)` - should remove the styles from a JavaFX [Parent](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/Parent.html)
 
 Optional:
-* `init()` - executed when the Theme is set as `default`
-* `destroy()` - executed when the Theme is not default anymore
+* `init()` - executed when the `Theme` is set as `default`
+* `destroy()` - executed when the `Theme` is not default anymore
 
 A simple example:
 
@@ -578,3 +580,5 @@ public class NordThemePlugin implements ThemePlugin {
 ## Record exporting plugins
 
 ## Module plugins
+
+## Database provider plugins
