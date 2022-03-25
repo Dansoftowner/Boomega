@@ -17,6 +17,7 @@
     * [Theme plugins](#theme-plugins)
       * [Stylesheets](#stylesheets)
       * [The Theme class](#the-theme-class)
+      * [The ThemePlugin interface](#the-themeplugin-interface)
     * [Record exporting plugins](#record-exporting-plugins)
     * [Module plugins](#module-plugins)
 
@@ -353,7 +354,7 @@ public class PortugueseLanguagePlugin implements LanguagePlugin {
 ### Specifying the alphabetical order
 
 Knowing the alphabetical order for Boomega is crucial for several features (e.g. sorting records in a table-view).  
-Defining `ABC`s is possible with the help of 
+Defining `ABC`s in Java is possible with the help of 
 [Collators](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/Collator.html).
 By overriding the `LanguagePack.getABCCollator()` method you can specify the `Collator` for your language-pack.  
 *If you don't specify any collator for your pack, the default collator will be used which is `Collator.getInstance()`.*
@@ -423,6 +424,10 @@ Methods need to be implemented:
 Also, the theme should also provide a way to "reset" the UI:
 * `deApply(Scene)` - should remove the styles from a JavaFX [Scene](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/Scene.html)
 * `deApply(Parent)` - should remove the styles from a JavaFX [Parent](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/Parent.html)
+
+Optional:
+* `init()` - executed when the Theme is set as `default`
+* `destroy()` - executed when the Theme is not default anymore
 
 A simple example:
 
@@ -524,7 +529,8 @@ theme as a plugin, let's go to the next section!
 ### The `ThemePlugin` interface
 
 To make Boomega recognize your theme, you have to implement
-the [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt) interface.
+the [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt) interface and provide your newly 
+created `Theme`.
 
 <table>
 
