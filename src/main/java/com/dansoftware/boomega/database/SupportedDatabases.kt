@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +21,21 @@ package com.dansoftware.boomega.database
 import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.database.bmdb.BMDBProvider
 import com.dansoftware.boomega.database.sql.mysql.MySQLProvider
+import com.dansoftware.boomega.di.DIService.get
+import com.dansoftware.boomega.plugin.api.DatabaseProviderPlugin
+import com.dansoftware.boomega.plugin.api.PluginService
+import com.dansoftware.boomega.plugin.api.of
 import com.dansoftware.boomega.util.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.*
 
 private val logger: Logger = LoggerFactory.getLogger("SupportedExporters")
 
-object SupportedDatabases : List<DatabaseProvider<*>> by LinkedList(loadProviders()).toImmutableList()
+/**
+ * The list of available [DatabaseProvider]s can be used by the app.
+ * Includes both the internal providers and providers read from plugins.
+ */
+object SupportedDatabases : List<DatabaseProvider<*>> by loadProviders().toImmutableList()
 
 private fun loadProviders() =
     loadBuiltInProviders().plus(loadProvidersFromPlugins())
@@ -40,4 +47,8 @@ private fun loadBuiltInProviders() = sequenceOf<DatabaseProvider<*>>(
     MySQLProvider
 )
 
-private fun loadProvidersFromPlugins() = sequenceOf<DatabaseProvider<*>>() // TODO: load from plugins
+private fun loadProvidersFromPlugins() =
+    get(PluginService::class)
+        .of(DatabaseProviderPlugin::class)
+        .asSequence()
+        .map(DatabaseProviderPlugin::databaseProvider)
