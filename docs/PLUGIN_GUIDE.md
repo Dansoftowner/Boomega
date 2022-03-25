@@ -523,7 +523,50 @@ theme as a plugin, let's go to the next section!
 
 ### The `ThemePlugin` interface
 
-TODO
+To make Boomega recognize your theme, you have to implement
+the [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt) interface.
+
+<table>
+
+<tr>
+<th>Kotlin</th>
+<th>Java</th>
+</tr>
+
+<tr>
+
+<td>
+
+```kotlin
+class NordThemePlugin : ThemePlugin {
+    ...
+    
+    // Here, you have to return your instantiated theme
+    override val theme get() = NordTheme()
+}
+```
+
+</td>
+
+<td>
+
+```java
+public class NordThemePlugin implements ThemePlugin {
+    ...
+    
+    @NotNull
+    @Override
+    public Theme getTheme() {
+        // Here, you have to return your instantiated theme
+        return new NordTheme();
+    }
+}
+```
+
+</td>
+
+</tr>
+</table>
 
 
 ## Record exporting plugins
