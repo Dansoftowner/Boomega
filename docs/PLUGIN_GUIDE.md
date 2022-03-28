@@ -576,9 +576,30 @@ public class NordThemePlugin implements ThemePlugin {
 </tr>
 </table>
 
-
-## Record exporting plugins
+## Database provider plugins
 
 ## Module plugins
 
-## Database provider plugins
+## Record exporting plugins
+
+> Incomplete and not reliable because the API is not reliable yet
+
+Boomega allows users to export their [Record](/src/main/java/com/dansoftware/boomega/database/api/data/Record.kt)s into
+some output formats (like JSON and Excel spreadsheet). The list options are expandable by writing plugins.
+
+### The `RecordExporter` interface
+
+The entities directly responsible for exporting records into a specific format
+are [RecordExporter](/src/main/java/com/dansoftware/boomega/export/api/RecordExporter.kt)s.
+
+Simple example:
+
+
+### The `RecordExporterPlugin` interface
+
+If you want to add your record-exporter through a plugin, you have to implement
+the [RecordExporterPlugin](/src/main/java/com/dansoftware/boomega/plugin/api/RecordExporterPlugin.kt) interface.
+
+Here you have to supply your previously created record-exporter.
+
+Simple example:
