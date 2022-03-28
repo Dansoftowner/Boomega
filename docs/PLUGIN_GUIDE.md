@@ -228,9 +228,9 @@ An alternative solution is to simply place the dependency jars also into the plu
 
 ## Language plugins
 
-You are free to contribute a new language to be included in the core Boomega itself (look
-at [this issue](https://github.com/Dansoftowner/Boomega/issues/162) for more help).  
-However, it's possible to add a language through plugins.
+You are free to contribute a new language to be included in the core Boomega itself (this tutorial can be helpful in
+that case too & it might be useful to look at [this issue](https://github.com/Dansoftowner/Boomega/issues/162)).  
+However, it's possible to add languages through plugins.
 
 ### Property files
 
@@ -350,7 +350,7 @@ public class HungarianLanguagePack extends LanguagePack {
 
 Notice that it wraps the base collator into a [NullHandlingCollator](/src/main/java/com/dansoftware/boomega/i18n/NullHandlingCollator.kt)
 for preventing possible null-pointer exceptions when comparing `null` values with the collator in the future. You should
-also follow this practice in your own language-pack.
+also follow this practice with your own collator.
 
 #### Other examples
 
@@ -364,9 +364,7 @@ in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i
 ### The `LanguagePlugin` interface
 
 To make your language-pack recognized by Boomega you have to supply it in your 
-[LanguagePlugin](/src/main/java/com/dansoftware/boomega/i18n/LanguagePack.java) implementation.
-
-**Finally, you can implement the `LanguagePlugin` interface:**
+[LanguagePlugin](/src/main/java/com/dansoftware/boomega/i18n/LanguagePack.java) implementation:
 
 <table>
 
@@ -542,7 +540,7 @@ theme as a plugin, let's go to the next section!
 ### The `ThemePlugin` interface
 
 To make Boomega recognize your theme, you have to implement
-the [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt) interface and provide your newly 
+the [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt) interface and provide your previously 
 created `Theme`.
 
 <table>
