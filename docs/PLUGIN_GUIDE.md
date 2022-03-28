@@ -13,14 +13,17 @@
 * [Setting up a plugin project](#setting-up-a-plugin-project)
 * [Plugin development tutorials & examples](#plugin-development-tutorials--examples)
     * [Language plugins](#language-plugins)
-      * [Specifying the alphabetical order](#specifying-the-alphabetical-order)
+      * [Property files](#property-files) 
+      * [The LanguagePack class](#the-languagepack-class) 
+        * [Specifying the alphabetical order](#specifying-the-alphabetical-order)
+      * [The LanguagePlugin interface](#the-languageplugin-interface)
     * [Theme plugins](#theme-plugins)
       * [Stylesheets](#stylesheets)
       * [The Theme class](#the-theme-class)
       * [The ThemePlugin interface](#the-themeplugin-interface)
-    * [Record exporting plugins](#record-exporting-plugins)
-    * [Module plugins](#module-plugins)
     * [Database provider plugins](#database-provider-plugins)
+    * [Module plugins](#module-plugins)
+    * [Record exporting plugins](#record-exporting-plugins)
 
 # Intro
 
@@ -227,13 +230,16 @@ An alternative solution is to simply place the dependency jars also into the plu
 
 You are free to contribute a new language to be included in the core Boomega itself (look
 at [this issue](https://github.com/Dansoftowner/Boomega/issues/162) for more help).  
-However, you can also add a new language as a separate plugin by implementing the
-[`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) interface.
+However, it's possible to add a language through plugins.
+
+### Property files
 
 Firstly, create your own `.properties` file that contains the translations. View
 the [default resource file](/src/main/resources/com/dansoftware/boomega/i18n/Values.properties) to have an idea.
 
-After you've done this, you have to create
+### The `LanguagePack` class
+
+After you've created the properties-file, you have to create
 your [LanguagePack](/src/main/java/com/dansoftware/boomega/i18n/LanguagePack.java). A `LanguagePack` in Boomega provides
 the `ResourceBundle` (representing the .properties file)
 and other things needed for defining a language.
@@ -306,6 +312,60 @@ public class PortugueseLanguagePack extends LanguagePack {
 </tr>
 </table>
 
+### Specifying the alphabetical order
+
+Knowing the alphabetical order for Boomega is crucial for several features (e.g. sorting records in a table-view).  
+Defining `ABC`s in Java is possible with the help of
+[Collators](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/Collator.html).
+By overriding the `LanguagePack.getABCCollator()` method you can specify the `Collator` for your language-pack.  
+*If you don't specify any collator for your pack, the default collator will be used which is `Collator.getInstance()`.*
+
+Look at this simplified snippet from the internal [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java):
+```java
+public class HungarianLanguagePack extends LanguagePack {
+
+  ...
+    
+  @Override
+  public @NotNull Collator getABCCollator() {
+    return new NullHandlingCollator(new ABCCollator());
+  }
+
+  ...
+  
+  private static final class ABCCollator extends RuleBasedCollator {
+    ABCCollator() throws ParseException {
+      super("""
+            < a,A < á,Á < b,B < c,C < cs,Cs,CS < d,D < dz,Dz,DZ < dzs,Dzs,DZS \
+            < e,E < é,É < f,F < g,G < gy,Gy,GY < h,H < i,I < í,Í < j,J \
+            < k,K < l,L < ly,Ly,LY < m,M < n,N < ny,Ny,NY < o,O < ó,Ó \
+            < ö,Ö < ő,Ő < p,P < q,Q < r,R < s,S < sz,Sz,SZ < t,T \
+            < ty,Ty,TY < u,U < ú,Ú < ü,Ü < ű,Ű < v,V < w,W < x,X < y,Y < z,Z < zs,Zs,ZS\
+            """
+      );
+    }
+  }
+}
+```
+
+Notice that it wraps the base collator into a [NullHandlingCollator](/src/main/java/com/dansoftware/boomega/i18n/NullHandlingCollator.kt)
+for preventing possible null-pointer exceptions when comparing `null` values with the collator in the future. You should
+also follow this practice in your own language-pack.
+
+#### Other examples
+
+You can view the internal LanguagePack implementations (for understanding the concepts better)
+in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i18n) package e.g:
+
+* [EnglishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/EnglishLanguagePack.java)
+* [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java)
+* [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
+
+### The `LanguagePlugin` interface
+
+To make your language-pack recognized by Boomega you have to supply it in your 
+[LanguagePlugin](/src/main/java/com/dansoftware/boomega/i18n/LanguagePack.java) implementation.
+
 **Finally, you can implement the `LanguagePlugin` interface:**
 
 <table>
@@ -352,55 +412,6 @@ public class PortugueseLanguagePlugin implements LanguagePlugin {
 
 </tr>
 </table>
-
-### Specifying the alphabetical order
-
-Knowing the alphabetical order for Boomega is crucial for several features (e.g. sorting records in a table-view).  
-Defining `ABC`s in Java is possible with the help of 
-[Collators](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/Collator.html).
-By overriding the `LanguagePack.getABCCollator()` method you can specify the `Collator` for your language-pack.  
-*If you don't specify any collator for your pack, the default collator will be used which is `Collator.getInstance()`.*
-
-Look at this simplified snippet from the internal [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java):
-```java
-public class HungarianLanguagePack extends LanguagePack {
-
-  ...
-    
-  @Override
-  public @NotNull Collator getABCCollator() {
-    return new NullHandlingCollator(new ABCCollator());
-  }
-
-  ...
-  
-  private static final class ABCCollator extends RuleBasedCollator {
-    ABCCollator() throws ParseException {
-      super("""
-            < a,A < á,Á < b,B < c,C < cs,Cs,CS < d,D < dz,Dz,DZ < dzs,Dzs,DZS \
-            < e,E < é,É < f,F < g,G < gy,Gy,GY < h,H < i,I < í,Í < j,J \
-            < k,K < l,L < ly,Ly,LY < m,M < n,N < ny,Ny,NY < o,O < ó,Ó \
-            < ö,Ö < ő,Ő < p,P < q,Q < r,R < s,S < sz,Sz,SZ < t,T \
-            < ty,Ty,TY < u,U < ú,Ú < ü,Ü < ű,Ű < v,V < w,W < x,X < y,Y < z,Z < zs,Zs,ZS\
-            """
-      );
-    }
-  }
-}
-```
-
-Notice that it wraps the base collator into a [NullHandlingCollator](/src/main/java/com/dansoftware/boomega/i18n/NullHandlingCollator.kt) 
-for preventing possible null-pointer exceptions when comparing `null` values with the collator in the future. You should 
-also follow this practice in your own language-pack.
-
-### Other examples
-
-You can view the internal LanguagePack implementations (for understanding the concepts better)
-in the [`com.dansoftware.boomega.i18n`](/src/main/java/com/dansoftware/boomega/i18n) package e.g:
-
-* [EnglishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/EnglishLanguagePack.java)
-* [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java)
-* [TurkishLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/TurkishLanguagePack.java)
 
 ## Theme plugins
 
