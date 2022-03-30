@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,20 @@ import javafx.scene.Node
  */
 abstract class Module {
 
+    /**
+     * The user-visible localized name of the module.
+     */
     abstract val name: String
+
+    /**
+     * The javafx node that serves as a symbol/icon for the module.
+     * Returns a new instance each time its called.
+     */
     abstract val icon: Node
+
+    /**
+     * The unique identifier of the module.
+     */
     abstract val id: String
 
     /**
@@ -73,6 +85,12 @@ abstract class Module {
      */
     protected abstract fun destroy(): Boolean
 
+    /**
+     * Sends a custom [Message] to the module.
+     * There is no warranty that the given [message]
+     * will have an impact. It depends on the particular
+     * [Module] implementation what this method does.
+     */
     open fun sendMessage(message: Message) {
     }
 
