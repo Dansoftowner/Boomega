@@ -589,6 +589,22 @@ public class NordThemePlugin implements ThemePlugin {
 
 ## Module plugins
 
+A `Module` in Boomega provides a particular UI 
+area where specific tasks can be achieved.
+
+On the Boomega Home Screen, each module has its own `tile` displayed there:
+
+![Tiles on the Boomega Home Screen](/docs/img/pluginguide/ModulesOnBoomegaHomeScreen.jpg)
+
+As you can see, the `Records-View` and the `Google Books Import View` are present in Boomega as modules.
+
+You have the ability to ...
+
+### The `Module` class
+
+The [`Module`](/src/main/java/com/dansoftware/boomega/gui/databaseview/Module.kt) class is the entity that represents a
+given 
+
 ## Record exporting plugins
 
 > Incomplete and not reliable because the API is not reliable yet
