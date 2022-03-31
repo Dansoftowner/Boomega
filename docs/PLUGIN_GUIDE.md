@@ -598,12 +598,16 @@ On the Boomega Home Screen, each module has its own `tile` displayed there:
 
 As you can see, the `Records-View` and the `Google Books Import View` are present in Boomega as modules.
 
-You have the ability to ...
+You have the ability to add your custom modules to the app by plugins.
 
 ### The `Module` class
 
-The [`Module`](/src/main/java/com/dansoftware/boomega/gui/databaseview/Module.kt) class is the entity that represents a
-given 
+If you want to create your own, you should extend the [`Module`](/src/main/java/com/dansoftware/boomega/gui/databaseview/Module.kt) class.
+
+The properties (in Kotlin) and methods you must override are:
+
+* `name`: `String` - The user-visible name of the module
+* `icon`: [`Node`](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/Node.html) - The javafx node that serves as a symbol/icon for the module
 
 ## Record exporting plugins
 
