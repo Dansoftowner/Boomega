@@ -26,7 +26,7 @@ import javafx.scene.Node
 abstract class Module {
 
     /**
-     * The user-visible localized name of the module.
+     * The user-visible name of the module.
      */
     abstract val name: String
 
