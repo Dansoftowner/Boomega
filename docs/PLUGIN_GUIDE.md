@@ -596,12 +596,12 @@ area where specific tasks can be achieved.
 
 On the Boomega Home Screen, each module has its own `tile` displayed there:
 
-![Tiles on the Boomega Home Screen](/docs/img/pluginguide/ModulesOnBoomegaHomeScreen.jpg)
+![Tiles on the Boomega Home Screen](/docs/img/pluginguide/module_plugins/ModulesOnBoomegaHomeScreen.jpg)
 
 As you can see, the `Records-View` and the `Google Books Import View` are present in Boomega as modules.
 
 And when you click on a tile, it opens a tab for the module's content:
-![Tabs displayed for modules](/docs/img/pluginguide/TabsOpenedForModules.jpg)
+![Tabs displayed for modules](/docs/img/pluginguide/module_plugins/TabsOpenedForModules.jpg)
 
 You have the ability to add your custom modules to the app by plugins.
 
@@ -636,7 +636,7 @@ class HelloModule : Module() {
     override val name: String = "Hello"
     override val icon: Node get() = MaterialDesignIconView(MaterialDesignIcon.EMOTICON_HAPPY)
 
-    override fun buildContent(): Node = Label("Hello")
+    override fun buildContent(): Node = StackPane(Label("Hello"))
     override fun destroy(): Boolean = true
 }
 ```
@@ -669,7 +669,7 @@ public class HelloModule extends Module {
     @NotNull
     @Override
     protected Node buildContent() {
-        return new Label("Hello");
+        return new StackPane(new Label("Hello"));
     }
 
     @Override
@@ -729,11 +729,14 @@ public class HelloModule extends ModulePlugin {
 </tr>
 </table>
 
-You might have noticed that the getModule() method takes two arguments:
-...
+You might have noticed that the `getModule` method takes two arguments:
+- context: [`Context`](/src/main/java/com/dansoftware/boomega/gui/api/Context.kt) - you can use it for interacting with the UI (making alerts, notifications, etc..)
+- database: [`Database`](/src/main/java/com/dansoftware/boomega/database/api/Database.kt) - the object can be used to communicate with the opened database; might be just read-only
+
+If your module doesn't need these, you can simply ignore them.
 
 Result:
-...
+
 
 
 ## Record exporting plugins
