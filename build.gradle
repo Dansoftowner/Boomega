@@ -133,16 +133,16 @@ dependencies {
     implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
     implementation 'io.github.g00fy2:versioncompare:1.5.0' // Comparing version strings
 
-    implementation 'org.jfxtras:jmetro:11.6.15'
-    implementation 'net.kurobako:gesturefx:0.7.1'
-    implementation 'io.github.typhon0:AnimateFX:1.2.2'
-    implementation 'com.sandec:mdfx:0.2.6'
-    implementation "de.jangassen:nsmenufx:3.1.0"
-    implementation 'com.dlsc.formsfx:formsfx-core:11.5.0'
-    implementation 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
-    implementation 'org.fxmisc.richtext:richtextfx:0.10.9'
-    implementation 'org.controlsfx:controlsfx:11.1.1'
-    implementation 'net.synedra:validatorfx:0.3.1'
+    implementation('org.jfxtras:jmetro:11.6.15') { exclude group: 'org.openjfx' }
+    implementation('io.github.typhon0:AnimateFX:1.2.2') { exclude group: 'org.openjfx' }
+    implementation('com.sandec:mdfx:0.2.6') { exclude group: 'org.openjfx' }
+    implementation('de.jangassen:nsmenufx:3.1.0') { exclude group: 'org.openjfx' }
+    implementation('com.dlsc.formsfx:formsfx-core:11.5.0') { exclude group: 'org.openjfx' }
+    implementation('net.kurobako:gesturefx:0.7.1') { exclude group: 'org.openjfx' }
+    implementation('com.dlsc.workbenchfx:workbenchfx-core:11.1.0') { exclude group: 'org.openjfx' }
+    implementation('org.fxmisc.richtext:richtextfx:0.10.9') { exclude group: 'org.openjfx' }
+    implementation('org.controlsfx:controlsfx:11.1.1') { exclude group: 'org.openjfx' }
+    implementation('net.synedra:validatorfx:0.3.1') { exclude group: 'org.openjfx' }
 
     // Embedded NoSql database management
     implementation 'org.dizitart:nitrite:3.4.3'
