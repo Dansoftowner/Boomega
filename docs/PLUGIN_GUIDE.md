@@ -33,7 +33,8 @@ Plugins can be written in both **java** and **kotlin**.
 The recommended language for writing plugins is **kotlin** because most of the Plugin
 API entities are written in it. This guide will provide you both kotlin and java examples tough.
 
-> You can view the loaded plugins and their impact on the app in the [plugin manager](/docs/USER_GUIDE.md#plugin-manager).
+> You can view the loaded plugins and their impact on the app.
+> Read about the [plugin manager](/docs/USER_GUIDE.md#plugin-manager) in the user guide.
 
 ### How is it work?
 
