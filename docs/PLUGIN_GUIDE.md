@@ -21,9 +21,12 @@
       * [Stylesheets](#stylesheets)
       * [The Theme class](#the-theme-class)
       * [The ThemePlugin interface](#the-themeplugin-interface)
-    * [Database provider plugins](#database-provider-plugins)
     * [Module plugins](#module-plugins)
+      * [What are modules in Boomega?](#what-are-modules-in-boomega)
+      * [The Module class](#the-module-class)
+      * [The ModulePlugin interface](#the-moduleplugin-interface)
     * [Record exporting plugins](#record-exporting-plugins)
+    * [Database provider plugins](#database-provider-plugins)
 
 # Intro
 
@@ -686,7 +689,7 @@ public class HelloModule extends Module {
 We've just created a module that will display the text "Hello" on the screen.
 But we have one more step to take.
 
-### Implementing the `ModulePlugin` interface
+### The `ModulePlugin` interface
 
 To make Boomega recognize the plugin, you have to implement the [`ModulePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ModulePlugin.kt) interface:
 
