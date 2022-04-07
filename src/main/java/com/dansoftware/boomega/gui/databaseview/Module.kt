@@ -94,5 +94,9 @@ abstract class Module {
     open fun sendMessage(message: Message) {
     }
 
+    /**
+     * Marker interface for the message objects can be used with the Module.
+     * @see sendMessage
+     */
     interface Message
 }
