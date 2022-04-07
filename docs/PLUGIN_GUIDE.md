@@ -586,8 +586,6 @@ public class NordThemePlugin implements ThemePlugin {
 </tr>
 </table>
 
-## Database provider plugins
-
 ## Module plugins
 
 ### What are modules in Boomega?
@@ -604,7 +602,7 @@ As you can see, the `Records-View` and the `Google Books Import View` are presen
 And when you click on a tile, it opens a tab for the module's content:
 ![Tabs displayed for modules](/docs/img/pluginguide/module_plugins/TabsOpenedForModules.jpg)
 
-You have the ability to add your custom modules to the app by plugins.
+**You have the ability to add your custom modules to the app by plugins.**
 
 ### The `Module` class
 
@@ -736,9 +734,10 @@ You might have noticed that the `getModule` method takes two arguments:
 
 If your module doesn't need these, you can simply ignore them.
 
-Result:
-
-
+---
+**Result:**  
+![Result on the home screen](/docs/img/pluginguide/module_plugins/ResultOnHomeScreen.png)   
+![Result opened](/docs/img/pluginguide/module_plugins/ResultOpened.png)
 
 ## Record exporting plugins
 
@@ -763,3 +762,5 @@ the [RecordExporterPlugin](/src/main/java/com/dansoftware/boomega/plugin/api/Rec
 Here you have to supply your previously created record-exporter.
 
 Simple example:
+
+## Database provider plugins
