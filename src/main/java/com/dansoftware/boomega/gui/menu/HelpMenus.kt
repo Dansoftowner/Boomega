@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.impl.OpenAppInfoAction
 import com.dansoftware.boomega.gui.action.impl.OpenContactInfoAction
 import com.dansoftware.boomega.gui.action.impl.SearchForUpdatesAction
@@ -31,46 +29,27 @@ import javafx.scene.control.Menu
 /**
  * The base help menu. Supertype of all kind of os specific help-menus.
  */
-abstract class HelpMenu(
-    private val context: Context,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker
-) : Menu(i18n("menubar.menu.help")) {
+abstract class HelpMenu(private val context: Context) : Menu(i18n("menubar.menu.help")) {
 
     init {
         items.add(contactMenuItem())
     }
 
     private fun contactMenuItem() =
-        menuItemOf(OpenContactInfoAction, context, preferences, databaseTracker)
+        menuItemOf(OpenContactInfoAction, context)
 }
 
 /**
  * The help menu used on all operating systems **except on macOS**.
  */
-class CommonHelpMenu(
-    private val context: Context,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker
-) : HelpMenu(context, preferences, databaseTracker) {
-
+class CommonHelpMenu(context: Context) : HelpMenu(context) {
     init {
-        items.add(0, updateSearcherMenuItem())
-        items.add(infoMenuItem())
+        items.add(0, menuItemOf(SearchForUpdatesAction, context))
+        items.add(menuItemOf(OpenAppInfoAction, context))
     }
-
-    private fun infoMenuItem() =
-        menuItemOf(OpenAppInfoAction, context, preferences, databaseTracker)
-
-    private fun updateSearcherMenuItem() =
-        menuItemOf(SearchForUpdatesAction, context, preferences, databaseTracker)
 }
 
 /**
  * The help-menu used on macOS
  */
-class MacOsHelpMenu(
-    context: Context,
-    preferences: Preferences,
-    databaseTracker: DatabaseTracker
-) : HelpMenu(context, preferences, databaseTracker)
+class MacOsHelpMenu(context: Context) : HelpMenu(context)

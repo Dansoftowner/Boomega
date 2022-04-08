@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.bmdb.BMDBMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
@@ -47,7 +46,6 @@ class LoginViewBase(
     fun titleProperty(): ObservableStringValue = loginBox.titleProperty()
 
     private fun buildUI() {
-        children.add(LoginToolbar(context))
         children.add(StackPane(Group(loginBox)).also { setVgrow(it, Priority.ALWAYS) })
     }
 

@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.AvailableActions
-import com.dansoftware.boomega.gui.action.GlobalActions
 import com.dansoftware.boomega.gui.menu.getPreferredGeneralMenuBar
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.I18N
@@ -46,7 +45,7 @@ private class LoginWindow(
     private val root: LoginView
 ) : BaseWindow<LoginView>(
     TitleProperty("window.login.title", " - ", root.titleProperty()),
-    getPreferredGeneralMenuBar(root, get(Preferences::class), get(DatabaseTracker::class)),
+    getPreferredGeneralMenuBar(root),
     root
 ) {
 

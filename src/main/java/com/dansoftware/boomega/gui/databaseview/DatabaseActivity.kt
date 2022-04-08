@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ class DatabaseActivity(
     }
 
     private fun buildDatabaseWindow(): DatabaseWindow {
-        val menuBar = getPreferredApplicationMenuBar(databaseView, get(Preferences::class), get(DatabaseTracker::class))
+        val menuBar = getPreferredApplicationMenuBar(databaseView)
         val window = DatabaseWindow(databaseView, menuBar)
         window.addEventHandler(WindowEvent.WINDOW_HIDDEN) {
             database.close()

@@ -16,19 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Contains typical menu-items used by different Menus.
+ */
+@file:JvmName("CommonMenuItems")
+
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.gui.action.impl.OpenPluginDirAction
-import com.dansoftware.boomega.gui.action.impl.OpenPluginManagerAction
-import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.util.menuItem
+import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.graphic
 import com.dansoftware.boomega.i18n.i18n
-import javafx.scene.control.Menu
+import javafx.application.Platform
+import javafx.scene.control.MenuItem
 
-class PluginMenu(context: Context) : Menu(i18n("menubar.menu.plugin")) {
-    init {
-        this.menuItem(menuItemOf(OpenPluginManagerAction, context))
-            .menuItem(menuItemOf(OpenPluginDirAction, context))
-    }
-}
+// TODO create actions instead of these
+
+/**
+ * Menu-item that closes the current window
+ */
+fun closeWindowMenuItem(context: Context) = MenuItem(i18n("menubar.menu.file.closewindow"))
+    .action { context.close() }
+    .graphic("close-icon")
+
+/**
+ * Menu-item that shuts down the whole applicaton
+ */
+fun quitMenuItem() = MenuItem(i18n("menubar.menu.file.quit"))
+    .action { Platform.exit() }
+    .graphic("close-box-multiple-icon")

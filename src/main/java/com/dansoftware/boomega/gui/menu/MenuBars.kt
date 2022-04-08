@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.util.os.OsInfo
@@ -29,99 +27,102 @@ import javafx.scene.control.MenuBar
 /**
  * Provides the preferred menu-bar for a [DatabaseView] depending on what platform the app is running on.
  */
-fun getPreferredApplicationMenuBar(
-    databaseView: DatabaseView,
-    preferences: Preferences,
-    tracker: DatabaseTracker
-): MenuBar =
+fun getPreferredApplicationMenuBar(databaseView: DatabaseView): MenuBar =
     when {
-        OsInfo.isMacOS -> MacOsMenuBar(databaseView, preferences, tracker)
-        else -> CommonMenuBar(databaseView, preferences, tracker)
+        OsInfo.isMacOS -> MacOsFullMenuBar(databaseView)
+        else -> FullMenuBar(databaseView)
     }
 
 /**
  * Provides the preferred minimal/simplified menu-bar depending on what platform the app is running on.
  * It might be _null_ if general menu-bars shouldn't be used on the platform.
  */
-fun getPreferredGeneralMenuBar(
-    context: Context,
-    preferences: Preferences,
-    databaseTracker: DatabaseTracker
-): MenuBar? =
+fun getPreferredGeneralMenuBar(context: Context): MenuBar =
     when {
-        OsInfo.isMacOS -> MinimalMacOsMenuBar(context, preferences, databaseTracker)
-        else -> null
+        OsInfo.isMacOS -> MacOsGeneralMenuBar(context)
+        else -> GeneralMenuBar(context)
     }
+
+/**
+ * The general menu-bar that requires no opened database.
+ * Can be used on most operating systems (expect on macOS).
+ *
+ * @see MacOsGeneralMenuBar
+ */
+class GeneralMenuBar(context: Context) : MenuBar() {
+    init {
+        menus.addAll(
+            CommonFileMenu(context),
+            PreferencesMenu(context),
+            ClipboardMenu(context),
+            WindowMenu(context),
+            PluginMenu(context),
+            CommonHelpMenu(context)
+        )
+    }
+}
+
+/**
+ * The general menu-bar that requires no opened database.
+ * Should be used on macOS.
+ *
+ * @see GeneralMenuBar
+ */
+class MacOsGeneralMenuBar(context: Context) : MenuBar() {
+    init {
+        menus.addAll(
+            MacOsApplicationMenu(context),
+            MacOsCommonFileMenu(context),
+            PreferencesMenu(context),
+            ClipboardMenu(context),
+            WindowMenu(context),
+            PluginMenu(context),
+            MacOsHelpMenu(context)
+        )
+    }
+}
+
 
 /**
  * The menu-bar can be used on most desktop environments **except on macOS**.
+ * It can be only used with a [DatabaseView].
  *
- * @see MacOsMenuBar
+ * @see MacOsFullMenuBar
  */
-class CommonMenuBar(
-    databaseView: DatabaseView,
-    preferences: Preferences,
-    tracker: DatabaseTracker
-) : MenuBar() {
+class FullMenuBar(databaseView: DatabaseView) : MenuBar() {
 
     init {
         initDisablePolicy(databaseView)
-        this.menus.addAll(
-            CommonFileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
+        menus.addAll(
+            ActualFileMenu(databaseView, databaseView.databaseMeta),
             ModuleMenu(databaseView),
-            PreferencesMenu(databaseView, preferences, tracker),
-            ClipboardMenu(databaseView, preferences, tracker),
-            WindowMenu(databaseView, preferences, tracker),
-            PluginMenu(databaseView, preferences, tracker),
-            CommonHelpMenu(databaseView, preferences, tracker)
+            PreferencesMenu(databaseView),
+            ClipboardMenu(databaseView),
+            WindowMenu(databaseView),
+            PluginMenu(databaseView),
+            CommonHelpMenu(databaseView)
         )
     }
 }
 
 /**
- * The complete menu-bar can be used on MacOS
+ * The menu-bar can be used on most desktop environments **except on macOS**.
+ * It can be only used with a [DatabaseView].
+ *
+ * @see FullMenuBar
  */
-class MacOsMenuBar(
-    databaseView: DatabaseView,
-    preferences: Preferences,
-    tracker: DatabaseTracker
-) : MenuBar() {
+class MacOsFullMenuBar(databaseView: DatabaseView) : MenuBar() {
     init {
         initDisablePolicy(databaseView)
         menus.addAll(
-            MacOsApplicationMenu(databaseView, preferences, tracker),
-            MacOsFileMenu(databaseView, databaseView.databaseMeta, preferences, tracker),
+            MacOsApplicationMenu(databaseView),
+            MacOsActualFileMenu(databaseView, databaseView.databaseMeta),
             ModuleMenu(databaseView),
-            PreferencesMenu(databaseView, preferences, tracker),
-            ClipboardMenu(databaseView, preferences, tracker),
-            WindowMenu(databaseView, preferences, tracker),
-            PluginMenu(databaseView, preferences, tracker),
-            MacOsHelpMenu(databaseView, preferences, tracker)
-        )
-    }
-}
-
-/**
- * The simplified MacOS menu-bar with some basic menus:
- * - [MacOsApplicationMenu]
- * - [PreferencesMenu]
- * - [ClipboardMenu]
- * - [PluginMenu]
- * - [WindowMenu]
- */
-class MinimalMacOsMenuBar(
-    context: Context,
-    preferences: Preferences,
-    databaseTracker: DatabaseTracker
-) : MenuBar() {
-    init {
-        initDisablePolicy(context)
-        menus.addAll(
-            MacOsApplicationMenu(context, preferences, databaseTracker),
-            PreferencesMenu(context, preferences, databaseTracker),
-            ClipboardMenu(context, preferences, databaseTracker),
-            PluginMenu(context, preferences, databaseTracker),
-            WindowMenu(context, preferences, databaseTracker)
+            PreferencesMenu(databaseView),
+            ClipboardMenu(databaseView),
+            WindowMenu(databaseView),
+            PluginMenu(databaseView),
+            MacOsHelpMenu(databaseView)
         )
     }
 }

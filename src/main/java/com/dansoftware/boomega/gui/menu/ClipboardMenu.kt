@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.impl.OpenClipboardViewerAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
@@ -27,16 +25,8 @@ import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.i18n.i18n
 import javafx.scene.control.Menu
 
-class ClipboardMenu(
-    private val context: Context,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker
-) : Menu(i18n("menubar.menu.clipboard")) {
-
+class ClipboardMenu(context: Context) : Menu(i18n("menubar.menu.clipboard")) {
     init {
-        this.menuItem(clipboardViewItem())
+        this.menuItem(menuItemOf(OpenClipboardViewerAction, context))
     }
-
-    private fun clipboardViewItem() =
-        menuItemOf(OpenClipboardViewerAction, context, preferences, databaseTracker)
 }

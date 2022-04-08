@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.main.parseArguments
@@ -30,8 +31,8 @@ import com.dansoftware.boomega.main.parseArguments
  * Builds an [ActivityLauncher] should be used for launching the proper activity when the application starts
  */
 inline fun initActivityLauncher(
-    preferences: Preferences,
-    databaseTracker: DatabaseTracker,
+    preferences: Preferences = get(Preferences::class),
+    databaseTracker: DatabaseTracker = get(DatabaseTracker::class),
     applicationArgs: List<String>,
     crossinline getLoginData: () -> LoginData = { preferences[LOGIN_DATA] },
     crossinline setLoginData: (LoginData) -> Unit = { preferences.editor.put(LOGIN_DATA, it).tryCommit() },
@@ -50,8 +51,8 @@ inline fun initActivityLauncher(
  * Builds an [ActivityLauncher] should be used for "internal" operations after the app is already opened
  */
 inline fun internalActivityLauncher(
-    preferences: Preferences,
-    databaseTracker: DatabaseTracker,
+    preferences: Preferences = get(Preferences::class),
+    databaseTracker: DatabaseTracker = get(DatabaseTracker::class),
     initialDatabase: DatabaseMeta?,
     crossinline getLoginData: () -> LoginData = { preferences[LOGIN_DATA] },
     crossinline setLoginData: (LoginData) -> Unit = { preferences.editor.put(LOGIN_DATA, it).tryCommit() },
@@ -71,8 +72,8 @@ inline fun internalActivityLauncher(
  */
 inline fun activityLauncher(
     mode: LauncherMode,
-    preferences: Preferences,
-    databaseTracker: DatabaseTracker,
+    preferences: Preferences = get(Preferences::class),
+    databaseTracker: DatabaseTracker = get(DatabaseTracker::class),
     initialDatabase: DatabaseMeta?,
     crossinline getLoginData: () -> LoginData = { preferences[LOGIN_DATA] },
     crossinline setLoginData: (LoginData) -> Unit = { preferences.editor.put(LOGIN_DATA, it).tryCommit() },

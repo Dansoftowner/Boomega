@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,8 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.gui.action.GlobalActions
+import com.dansoftware.boomega.gui.action.impl.FullScreenAction
+import com.dansoftware.boomega.gui.action.impl.MaximizeWindowAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.menuItem
@@ -29,16 +28,11 @@ import com.dansoftware.boomega.i18n.i18n
 import javafx.collections.ListChangeListener
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.Menu
-import javafx.scene.control.MenuItem
 import javafx.stage.Stage
 import javafx.stage.Window
 import java.lang.ref.WeakReference
 
-class WindowMenu(
-    private val context: Context,
-    private val preferences: Preferences,
-    private val databaseTracker: DatabaseTracker
-) : Menu(i18n("menubar.menu.window")) {
+class WindowMenu(private val context: Context) : Menu(i18n("menubar.menu.window")) {
 
     private val windowsChangeOperator by lazy {
         object {
@@ -90,10 +84,7 @@ class WindowMenu(
     }
 
     private fun fullScreenMenuItem() =
-        menuItemOf(
-            GlobalActions.FULL_SCREEN, context, preferences, databaseTracker,
-            ::CheckMenuItem
-        ).apply {
+        menuItemOf(FullScreenAction, context, ::CheckMenuItem).apply {
             context.onWindowPresent { window ->
                 if (window is Stage)
                     window.fullScreenProperty().addListener { _, _, isFullScreen ->
@@ -103,10 +94,7 @@ class WindowMenu(
         }
 
     private fun maximizeMenuItem() =
-        menuItemOf(
-            GlobalActions.MAXIMIZE_WINDOW, context, preferences, databaseTracker,
-            ::CheckMenuItem
-        ).apply {
+        menuItemOf(MaximizeWindowAction, context, ::CheckMenuItem).apply {
             context.onWindowPresent { window ->
                 if (window is Stage) {
                     window.maximizedProperty().addListener { _, _, isMaximized ->

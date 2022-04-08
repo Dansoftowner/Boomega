@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package com.dansoftware.boomega.gui.action
 
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import com.dansoftware.boomega.i18n.I18N
@@ -42,7 +43,10 @@ open class Action(
         operation: (Context, Preferences, DatabaseTracker) -> Unit = { _, _, _ -> }
     ) : this(i18nName, iconStyleClass, null, operation)
 
+    // TODO: remove this completely
     open operator fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
         operation(context, preferences, databaseTracker)
     }
+
+    operator fun invoke(context: Context) = invoke(context, get(Preferences::class), get(DatabaseTracker::class))
 }
