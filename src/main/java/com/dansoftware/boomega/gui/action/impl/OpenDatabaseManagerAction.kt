@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,20 +18,20 @@
 
 package com.dansoftware.boomega.gui.action.impl
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.dbmanager.DatabaseManagerWindow
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.i18n.i18n
 
 object OpenDatabaseManagerAction : Action(
-    "action.open_database_manager",
+    i18n("action.open_database_manager"),
     "database-icon",
     KeyBindings.openDatabaseManager
 ) {
-
-    override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
-        DatabaseManagerWindow(databaseTracker = databaseTracker, owner = context.contextWindow).show()
+    override fun invoke(context: Context) {
+        DatabaseManagerWindow(owner = context.contextWindow).show()
     }
 }

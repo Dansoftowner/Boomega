@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (c) 2020-2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import com.dansoftware.boomega.gui.util.onFailed
 import com.dansoftware.boomega.gui.util.onRunning
 import com.dansoftware.boomega.gui.util.onSucceeded
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.UpdateSearcher
 import javafx.concurrent.Task
@@ -38,14 +39,14 @@ import java.time.LocalDateTime
 import java.util.concurrent.ExecutorService
 
 object SearchForUpdatesAction : Action(
-    "action.update_search",
+    i18n("action.update_search"),
     "update-icon"
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(SearchForUpdatesAction::class.java)
 
-    override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
-        preferences.editor[LAST_UPDATE_SEARCH] = LocalDateTime.now()
+    override fun invoke(context: Context) {
+        get(Preferences::class).editor[LAST_UPDATE_SEARCH] = LocalDateTime.now()
         get(ExecutorService::class, "cachedExecutor").submit(object : Task<Release?>() {
             init {
                 onRunning {

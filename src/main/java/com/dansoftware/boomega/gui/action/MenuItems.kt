@@ -33,7 +33,8 @@ inline fun <M : MenuItem> menuItemOf(
     action: Action,
     context: Context,
     menuItemFactory: (String) -> M
-) = menuItemFactory(action.displayName)
+) = menuItemFactory(action.name)
     .action { action.invoke(context) }
     .keyBinding(action.keyBinding)
     .graphic(action.iconStyleClass)
+    .apply { isDisable = action.isDisabled }

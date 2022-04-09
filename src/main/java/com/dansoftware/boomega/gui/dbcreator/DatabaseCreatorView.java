@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ public class DatabaseCreatorView extends BaseView {
 
     private final DatabaseCreatorForm form;
 
-    public DatabaseCreatorView(@NotNull DatabaseTracker databaseTracker) {
+    public DatabaseCreatorView() {
         var databaseType = new SimpleObjectProperty<DatabaseProvider<?>>();
-        this.form = new DatabaseCreatorForm(this, databaseTracker, databaseType);
+        this.form = new DatabaseCreatorForm(this, databaseType);
         this.setContent(new VBox(new DatabaseCreatorToolbar(databaseType), form));
     }
 

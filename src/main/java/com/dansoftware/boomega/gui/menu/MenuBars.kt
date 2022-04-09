@@ -51,6 +51,7 @@ fun getPreferredGeneralMenuBar(context: Context): MenuBar =
  */
 class GeneralMenuBar(context: Context) : MenuBar() {
     init {
+        initDisablePolicy(context)
         menus.addAll(
             CommonFileMenu(context),
             PreferencesMenu(context),
@@ -70,6 +71,7 @@ class GeneralMenuBar(context: Context) : MenuBar() {
  */
 class MacOsGeneralMenuBar(context: Context) : MenuBar() {
     init {
+        initDisablePolicy(context)
         menus.addAll(
             MacOsApplicationMenu(context),
             MacOsCommonFileMenu(context),
@@ -94,7 +96,7 @@ class FullMenuBar(databaseView: DatabaseView) : MenuBar() {
     init {
         initDisablePolicy(databaseView)
         menus.addAll(
-            ActualFileMenu(databaseView, databaseView.databaseMeta),
+            FullFileMenu(databaseView, databaseView.databaseMeta),
             ModuleMenu(databaseView),
             PreferencesMenu(databaseView),
             ClipboardMenu(databaseView),
@@ -116,7 +118,7 @@ class MacOsFullMenuBar(databaseView: DatabaseView) : MenuBar() {
         initDisablePolicy(databaseView)
         menus.addAll(
             MacOsApplicationMenu(databaseView),
-            MacOsActualFileMenu(databaseView, databaseView.databaseMeta),
+            MacOsFullFileMenu(databaseView, databaseView.databaseMeta),
             ModuleMenu(databaseView),
             PreferencesMenu(databaseView),
             ClipboardMenu(databaseView),

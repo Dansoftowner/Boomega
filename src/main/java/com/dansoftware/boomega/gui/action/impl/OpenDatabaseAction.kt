@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (c) 2020-2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,35 +18,32 @@
 
 package com.dansoftware.boomega.gui.action.impl
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.database.bmdb.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.submitFXTask
-import com.dansoftware.boomega.launcher.ActivityLauncher
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.LauncherMode
+import com.dansoftware.boomega.launcher.activityLauncher
 import com.dansoftware.boomega.util.toKFunction
 import java.util.concurrent.ExecutorService
 
 object OpenDatabaseAction : Action(
-    "action.open_database",
+    i18n("action.open_database"),
     "file-icon",
     KeyBindings.openDatabase
 ) {
 
-    override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+    override fun invoke(context: Context) {
         BMDBDatabaseOpener().showOpenDialog(context.contextWindow)?.also {
             // launches the database
             get(ExecutorService::class, "cachedExecutor").submitFXTask(
                 context,
-                ActivityLauncher(
+                activityLauncher(
                     LauncherMode.INTERNAL,
-                    preferences,
-                    databaseTracker,
-                    it
+                    initialDatabase = it
                 ).toKFunction()
             )
         }

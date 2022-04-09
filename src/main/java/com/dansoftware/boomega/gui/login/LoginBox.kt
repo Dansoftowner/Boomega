@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (c) 2020-2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -182,7 +182,7 @@ class LoginBox(
         minHeight = 35.0
         minWidth = 40.0
         setOnAction {
-            OpenDatabaseManagerAction(context, preferences, databaseTracker)
+            OpenDatabaseManagerAction(context)
         }
     }
 
@@ -193,7 +193,7 @@ class LoginBox(
         maxWidth = Double.MAX_VALUE
         graphic = icon("database-plus-icon")
         setOnAction {
-            DatabaseCreatorWindow(databaseTracker, owner = context.contextWindow).showAndGetResult()?.let {
+            DatabaseCreatorWindow(owner = context.contextWindow).showAndGetResult()?.let {
                 selectedDatabase = it
             }
         }

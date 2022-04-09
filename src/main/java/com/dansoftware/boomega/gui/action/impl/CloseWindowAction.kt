@@ -18,34 +18,12 @@
 
 package com.dansoftware.boomega.gui.action.impl
 
-import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.dbcreator.DatabaseCreatorWindow
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
-import com.dansoftware.boomega.gui.util.submitFXTask
 import com.dansoftware.boomega.i18n.i18n
-import com.dansoftware.boomega.launcher.LauncherMode
-import com.dansoftware.boomega.launcher.activityLauncher
-import com.dansoftware.boomega.util.toKFunction
-import java.util.concurrent.ExecutorService
 
-object CreateDatabaseAction : Action(
-    i18n("action.create_database"),
-    "database-plus-icon",
-    KeyBindings.createDatabase
-) {
-
+object CloseWindowAction : Action(i18n("menubar.menu.file.closewindow"), "close-icon") {
     override fun invoke(context: Context) {
-        DatabaseCreatorWindow(owner = context.contextWindow).showAndGetResult()?.let {
-            // launches the database
-            get(ExecutorService::class, "cachedExecutor").submitFXTask(
-                context,
-                activityLauncher(
-                    mode = LauncherMode.INTERNAL,
-                    initialDatabase = it
-                ).toKFunction()
-            )
-        }
+        context.close()
     }
 }

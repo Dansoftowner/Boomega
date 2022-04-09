@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,12 +18,9 @@
 
 package com.dansoftware.boomega.gui.dbmanager;
 
-import com.dansoftware.boomega.database.api.DatabaseMeta;
-import com.dansoftware.boomega.database.tracking.DatabaseTracker;
 import com.dansoftware.boomega.gui.base.BaseView;
 import javafx.beans.binding.IntegerBinding;
 import javafx.scene.layout.VBox;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * A DBManagerView is a gui element that shows a {@link DatabaseManagerTable}
@@ -38,13 +35,8 @@ public class DatabaseManagerView extends BaseView {
 
     private final DatabaseManagerTable table;
 
-    /**
-     * Creates a {@link DatabaseManagerView} with a list of database-information ({@link DatabaseMeta}) objects.
-     *
-     * @param databaseTracker the database-tracker
-     */
-    public DatabaseManagerView(@NotNull DatabaseTracker databaseTracker) {
-        this.table = new DatabaseManagerTable(this, databaseTracker);
+    public DatabaseManagerView() {
+        this.table = new DatabaseManagerTable(this);
         buildUI();
     }
 

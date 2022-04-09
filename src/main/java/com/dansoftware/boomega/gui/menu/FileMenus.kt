@@ -31,46 +31,59 @@ import com.dansoftware.boomega.gui.login.updateLoginData
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.graphic
 import com.dansoftware.boomega.gui.util.menuItem
-import com.dansoftware.boomega.gui.util.separator
 import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.launcher.ActivityLauncher
 import com.dansoftware.boomega.launcher.internalActivityLauncher
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
+import javafx.scene.control.SeparatorMenuItem
 import java.util.concurrent.ExecutorService
 
 /**
  * The base file menu. Supertype of all kind of os specific file-menus.
  */
-abstract class BaseFileMenu(private val context: Context) : Menu(i18n("menubar.menu.file")) {
+@Suppress("LeakingThis")
+abstract class BaseFileMenu(private val context: Context, openedDatabase: DatabaseMeta?) : Menu(i18n("menubar.menu.file")) {
 
     init {
-        this.menuItem(newEntryMenuItem())
-            .menuItem(openMenuItem())
-            .menuItem(databaseCreatorMenuItem())
-            .menuItem(databaseManagerMenuItem())
-            .menuItem(recentDatabasesMenuItem())
+        addSectionItems(firstSectionItems(context, openedDatabase), true)
+        addSectionItems(secondSectionItems(context, openedDatabase), true)
+        addSectionItems(thirdSectionItems(context, openedDatabase), false)
+    }
 
+    private fun addSectionItems(sectionItems: List<MenuItem>, separator: Boolean) {
+        items.addAll(sectionItems)
+        if (separator && sectionItems.isNotEmpty()) items.add(SeparatorMenuItem())
     }
 
     /**
-     * Menu item that allows the user to show a new entry point (LoginActivity)
+     * Returns the list of menu-items should be placed in the first section
      */
-    private fun newEntryMenuItem(): MenuItem =
-        menuItemOf(NewEntryAction, context)
+    open fun firstSectionItems(context: Context, openedDatabase: DatabaseMeta?): List<MenuItem> = listOf(
+        menuItemOf(NewEntryAction, context),
+        menuItemOf(OpenDatabaseAction, context),
+        menuItemOf(CreateDatabaseAction, context),
+        menuItemOf(OpenDatabaseManagerAction, context),
+        recentDatabasesMenuItem()
+    )
 
     /**
-     * Menu item that allows the user to open a database file from the file system
+     * Returns the list of menu-items should be placed in the second section
      */
-    private fun openMenuItem() =
-        menuItemOf(OpenDatabaseAction, context)
+    open fun secondSectionItems(context: Context, openedDatabase: DatabaseMeta?): List<MenuItem> = listOf(
+        databaseCloseMenuItem(context, openedDatabase!!),
+        revealInExplorerMenuItem(openedDatabase)
+    )
 
-    private fun databaseCreatorMenuItem() =
-        menuItemOf(CreateDatabaseAction, context)
-
-    private fun databaseManagerMenuItem() =
-        menuItemOf(OpenDatabaseManagerAction, context)
+    /**
+     * Returns the list of menu-items should be placed in the third section
+     */
+    open fun thirdSectionItems(context: Context, openedDatabase: DatabaseMeta?): List<MenuItem> = listOf(
+        menuItemOf(CloseWindowAction, context),
+        menuItemOf(RestartApplicationAction, context),
+        menuItemOf(QuitAppAction, context)
+    )
 
     /**
      * Menu that allows the user to access the recent databases
@@ -114,6 +127,22 @@ abstract class BaseFileMenu(private val context: Context) : Menu(i18n("menubar.m
             }
         }
 
+    private fun databaseCloseMenuItem(context: Context, databaseMeta: DatabaseMeta) =
+        MenuItem(i18n("menubar.menu.file.dbclose"))
+            .graphic("logout-icon")
+            .action {
+                get(Preferences::class).updateLoginData {
+                    if (it.isAutoLoginOn(databaseMeta)) it.removeAutoLogin()
+                }
+                NewEntryAction.invoke(context)
+                context.close()
+            }
+
+    private fun revealInExplorerMenuItem(databaseMeta: DatabaseMeta) = MenuItem(i18n("menubar.menu.file.reveal"))
+        .graphic("folder-open-icon")
+        .apply { isDisable = databaseMeta.isActionSupported(DatabaseMeta.Action.OpenInExternalApplication) }
+        .action { databaseMeta.performAction(DatabaseMeta.Action.OpenInExternalApplication) }
+
     private inline fun startActivityLauncher(crossinline getActivityLauncher: () -> ActivityLauncher) {
         get(ExecutorService::class, "singleThreadExecutor").submit(object : Task<Unit>() {
 
@@ -136,13 +165,8 @@ abstract class BaseFileMenu(private val context: Context) : Menu(i18n("menubar.m
  *
  * @see MacOsCommonFileMenu
  */
-open class CommonFileMenu(context: Context) : BaseFileMenu(context) {
-    init {
-        separator()
-            .menuItem(closeWindowMenuItem(context))
-            .menuItem(menuItemOf(RestartApplicationAction, context))
-            .menuItem(quitMenuItem())
-    }
+open class CommonFileMenu(context: Context) : BaseFileMenu(context, null) {
+    override fun secondSectionItems(context: Context, openedDatabase: DatabaseMeta?): List<MenuItem> = emptyList()
 }
 
 /**
@@ -153,54 +177,25 @@ open class CommonFileMenu(context: Context) : BaseFileMenu(context) {
  *
  * @see CommonFileMenu
  */
-open class MacOsCommonFileMenu(context: Context) : BaseFileMenu(context)
+open class MacOsCommonFileMenu(context: Context) : BaseFileMenu(context, null) {
+    override fun secondSectionItems(context: Context, openedDatabase: DatabaseMeta?): List<MenuItem> = emptyList()
+    override fun thirdSectionItems(context: Context, openedDatabase: DatabaseMeta?): List<MenuItem> = emptyList()
+}
 
 /**
  * The file menu should be used with a specific opened database.
  * Can be used on most operating systems (except on macOS).
  *
- * @see MacOsActualFileMenu
+ * @see MacOsFullFileMenu
  */
-open class ActualFileMenu(
-    context: Context,
-    databaseMeta: DatabaseMeta
-) : CommonFileMenu(context) {
-    init {
-        items.add(5, databaseCloseMenuItem(context, databaseMeta))
-        items.add(7, revealInExplorerMenuItem(databaseMeta))
-    }
-}
+open class FullFileMenu(context: Context, openedDatabase: DatabaseMeta) : BaseFileMenu(context, openedDatabase)
 
 /**
  * The file menu should be used with a specific opened database.
  * Should be used on macOS only .
  *
- * @see ActualFileMenu
+ * @see FullFileMenu
  */
-class MacOsActualFileMenu(context: Context, databaseMeta: DatabaseMeta) : MacOsCommonFileMenu(context) {
-    init {
-        items.add(5, databaseCloseMenuItem(context, databaseMeta))
-        items.add(7, revealInExplorerMenuItem(databaseMeta))
-    }
+class MacOsFullFileMenu(context: Context, openedDatabase: DatabaseMeta) : BaseFileMenu(context, openedDatabase) {
+    override fun thirdSectionItems(context: Context, openedDatabase: DatabaseMeta?): List<MenuItem> = emptyList()
 }
-
-/**
- * The menu-item used by the [ActualFileMenu] and the [MacOsActualFileMenu] for closing an opened database.
- */
-private fun databaseCloseMenuItem(context: Context, databaseMeta: DatabaseMeta) = MenuItem(i18n("menubar.menu.file.dbclose"))
-    .graphic("logout-icon")
-    .action {
-        get(Preferences::class).updateLoginData {
-            if (it.isAutoLoginOn(databaseMeta)) it.removeAutoLogin()
-        }
-        NewEntryAction.invoke(context)
-        context.close()
-    }
-
-/**
- * The menu-time used by the [ActualFileMenu] and the [MacOsActualFileMenu] for opening an opened database's location.
- */
-private fun revealInExplorerMenuItem(databaseMeta: DatabaseMeta) = MenuItem(i18n("menubar.menu.file.reveal"))
-    .graphic("folder-open-icon")
-    .apply { isDisable = databaseMeta.isActionSupported(DatabaseMeta.Action.OpenInExternalApplication) }
-    .action { databaseMeta.performAction(DatabaseMeta.Action.OpenInExternalApplication) }

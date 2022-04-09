@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,25 +18,24 @@
 
 package com.dansoftware.boomega.gui.action.impl
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.I18N
+import com.dansoftware.boomega.i18n.i18n
 import com.dansoftware.boomega.main.ApplicationRestart
 import javafx.scene.control.ButtonType
 
 object RestartApplicationAction : Action(
-    "action.restart",
+    i18n("action.restart"),
     "update-icon",
     KeyBindings.restartApplication
 )  {
 
     private val dialogShownContexts: MutableSet<Context> = HashSet()
 
-    override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+    override fun invoke(context: Context) {
         if (!dialogShownContexts.contains(context)) {
             context.showConfirmationDialog(
                 I18N.getValue("app.restart.dialog.title"),

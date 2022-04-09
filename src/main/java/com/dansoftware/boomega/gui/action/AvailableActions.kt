@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
 
 package com.dansoftware.boomega.gui.action
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.impl.*
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.util.toImmutableList
@@ -31,16 +29,11 @@ object AvailableActions : List<Action> by LinkedList(loadActions()).toImmutableL
 
     private val keyBindActions get() = filter { it.keyBinding !== null }
 
-    fun applyOnScene(
-        scene: Scene,
-        context: Context,
-        preferences: Preferences,
-        databaseTracker: DatabaseTracker
-    ) {
+    fun applyOnScene(scene: Scene, context: Context) {
         keyBindActions.forEach { action ->
             scene.addEventHandler(KeyEvent.KEY_PRESSED) {
                 if (action.keyBinding!!.match(it)) {
-                    action.invoke(context, preferences, databaseTracker)
+                    action.invoke(context)
                 }
             }
         }
@@ -65,5 +58,7 @@ private fun loadBuiltInActions() = sequenceOf(
     OpenPluginManagerAction,
     OpenSettingsAction,
     RestartApplicationAction,
-    SearchForUpdatesAction
+    SearchForUpdatesAction,
+    QuitAppAction,
+    CloseWindowAction
 )

@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,16 @@
 
 package com.dansoftware.boomega.gui.action.impl
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.i18n.i18n
 import javafx.stage.Stage
 
 object MaximizeWindowAction : Action(
-    "action.maximize_window",
+    i18n("action.maximize_window"),
     "maximize-window-icon"
 ) {
-    override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+    override fun invoke(context: Context) {
         context.contextWindow.also { if (it is Stage) it.isMaximized = it.isMaximized.not() }
     }
 }

@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2022  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,22 +18,21 @@
 
 package com.dansoftware.boomega.gui.action.impl
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.ClipboardWindow
+import com.dansoftware.boomega.i18n.i18n
 import javafx.stage.WindowEvent
 
 object OpenClipboardViewerAction : Action(
-    "action.open_clipboard_view",
+    i18n("action.open_clipboard_view"),
     "clipboard-icon"
 ) {
 
     @Volatile
     private var showingWindow: ClipboardWindow? = null
 
-    override fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
+    override fun invoke(context: Context) {
         when (showingWindow) {
             null -> {
                 showingWindow = ClipboardWindow(context.contextWindow).apply {

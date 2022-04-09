@@ -18,9 +18,7 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.gui.action.impl.OpenAppInfoAction
-import com.dansoftware.boomega.gui.action.impl.RestartApplicationAction
-import com.dansoftware.boomega.gui.action.impl.SearchForUpdatesAction
+import com.dansoftware.boomega.gui.action.impl.*
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.menuItem
@@ -38,8 +36,8 @@ class MacOsApplicationMenu(context: Context) : Menu(System.getProperty("app.name
         this.menuItem(menuItemOf(OpenAppInfoAction, context))
             .menuItem(menuItemOf(SearchForUpdatesAction, context))
             .separator()
-            .menuItem(closeWindowMenuItem(context))
+            .menuItem(menuItemOf(CloseWindowAction, context))
             .menuItem(menuItemOf(RestartApplicationAction, context))
-            .menuItem(quitMenuItem())
+            .menuItem(menuItemOf(QuitAppAction, context))
     }
 }

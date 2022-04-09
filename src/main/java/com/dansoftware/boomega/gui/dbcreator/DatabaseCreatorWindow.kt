@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@ import javafx.stage.Window
  * A DatabaseCreatorWindow is a javaFX [Stage] that should be
  * used to display [DatabaseCreatorView] gui-objects.
  */
-class DatabaseCreatorWindow(databaseTracker: DatabaseTracker, owner: Window? = null) :
-    BaseWindow<DatabaseCreatorView>(i18n("window.dbcreator.title"), DatabaseCreatorView(databaseTracker)) {
+class DatabaseCreatorWindow(owner: Window? = null) :
+    BaseWindow<DatabaseCreatorView>(i18n("window.dbcreator.title"), DatabaseCreatorView()) {
 
     init {
         initModality(Modality.APPLICATION_MODAL)

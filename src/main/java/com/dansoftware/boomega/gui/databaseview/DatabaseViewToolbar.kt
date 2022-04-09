@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.databaseview
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.gui.action.GlobalActions
+import com.dansoftware.boomega.gui.action.impl.NewEntryAction
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.login.isAutoLoginOn
 import com.dansoftware.boomega.gui.login.removeAutoLogin
@@ -90,7 +90,7 @@ class DatabaseViewToolbar(
             preferences.updateLoginData {
                 if (it.isAutoLoginOn(view.databaseMeta)) it.removeAutoLogin()
             }
-            GlobalActions.NEW_ENTRY.invoke(view, preferences, databaseTracker)
+            NewEntryAction.invoke(view)
             view.close()
         }
     }

@@ -74,7 +74,7 @@ inline fun activityLauncher(
     mode: LauncherMode,
     preferences: Preferences = get(Preferences::class),
     databaseTracker: DatabaseTracker = get(DatabaseTracker::class),
-    initialDatabase: DatabaseMeta?,
+    initialDatabase: DatabaseMeta? = null,
     crossinline getLoginData: () -> LoginData = { preferences[LOGIN_DATA] },
     crossinline setLoginData: (LoginData) -> Unit = { preferences.editor.put(LOGIN_DATA, it).tryCommit() },
     crossinline onLaunched: (context: Context, launchedDatabase: DatabaseMeta?) -> Unit = { _, _ -> }

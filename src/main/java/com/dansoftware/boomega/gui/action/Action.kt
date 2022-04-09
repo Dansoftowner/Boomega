@@ -18,35 +18,25 @@
 
 package com.dansoftware.boomega.gui.action
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
-import com.dansoftware.boomega.i18n.I18N
 
 open class Action(
-    private val i18nName: String,
+    val name: String,
     val iconStyleClass: String,
     val keyBinding: KeyBinding?,
-    private val operation: (Context, Preferences, DatabaseTracker) -> Unit = { _, _, _ -> }
+    private val operation: (Context) -> Unit = { _ -> }
 ) {
 
-    private var displayNameBacking: String? = null
-
-    val displayName: String
-        get() = displayNameBacking ?: I18N.getValue(i18nName).also { displayNameBacking = it }
+    open val isDisabled get() = false
 
     constructor(
-        i18nName: String,
+        name: String,
         iconStyleClass: String,
-        operation: (Context, Preferences, DatabaseTracker) -> Unit = { _, _, _ -> }
-    ) : this(i18nName, iconStyleClass, null, operation)
+        operation: (Context) -> Unit = { _ -> }
+    ) : this(name, iconStyleClass, null, operation)
 
-    // TODO: remove this completely
-    open operator fun invoke(context: Context, preferences: Preferences, databaseTracker: DatabaseTracker) {
-        operation(context, preferences, databaseTracker)
+    open operator fun invoke(context: Context) {
+        operation(context)
     }
-
-    operator fun invoke(context: Context) = invoke(context, get(Preferences::class), get(DatabaseTracker::class))
 }

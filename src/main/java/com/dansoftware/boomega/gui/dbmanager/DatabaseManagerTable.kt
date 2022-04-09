@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package com.dansoftware.boomega.gui.dbmanager
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.i18n
@@ -38,31 +39,30 @@ import org.slf4j.LoggerFactory
  * @see DatabaseManagerView
  * @author Daniel Gyoerffy
  */
-class DatabaseManagerTable(
-    private val context: Context,
-    private val databaseTracker: DatabaseTracker
-) : TableView<DatabaseMeta>(), DatabaseTracker.Observer {
+class DatabaseManagerTable(private val context: Context) : TableView<DatabaseMeta>(), DatabaseTracker.Observer {
 
     private val itemsCount = Bindings.size(items)
     private val selectedItemsCount = Bindings.size(selectionModel.selectedItems)
 
     init {
         VBox.setVgrow(this, Priority.ALWAYS)
-        databaseTracker.registerObserver(this)
-        items.addAll(databaseTracker.savedDatabases)
+        get(DatabaseTracker::class).apply {
+            registerObserver(this@DatabaseManagerTable)
+            items.addAll(savedDatabases)
+        }
         selectionModel.selectionMode = SelectionMode.MULTIPLE
         buildUI()
     }
 
     private fun buildUI() {
         placeholder = Label(i18n("database.manager.table.place.holder"))
-        columns.add(StateColumn(databaseTracker))
+        columns.add(StateColumn())
         columns.add(TypeColumn())
         columns.add(NameColumn())
         columns.add(PathColumn())
         columns.add(SizeColumn())
         columns.add(FileOpenerColumn())
-        columns.add(DeleteColumn(context, databaseTracker))
+        columns.add(DeleteColumn(context))
     }
 
     fun selectedItemsCount(): IntegerBinding {
@@ -93,9 +93,7 @@ class DatabaseManagerTable(
     /**
      * The state-column shows an error-mark (red circle) if the particular database does not exist.
      */
-    private class StateColumn(
-        private val databaseTracker: DatabaseTracker
-    ) : TableColumn<DatabaseMeta, String>(),
+    private class StateColumn() : TableColumn<DatabaseMeta, String>(),
         Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
         init {
@@ -123,7 +121,7 @@ class DatabaseManagerTable(
                             val databaseMeta = tableView.items[index]!!
 
                             when {
-                                databaseTracker.isDatabaseUsed(databaseMeta) -> {
+                                get(DatabaseTracker::class).isDatabaseUsed(databaseMeta) -> {
                                     graphic = icon("play-icon").styleClass(USED_CLASS)
                                     tableRow.tooltip = Tooltip(i18n("database.currently.used"))
                                 }
@@ -287,7 +285,7 @@ class DatabaseManagerTable(
     /**
      * The delete-column provides a [Button] to delete the selected database(s).
      */
-    private class DeleteColumn(private val context: Context, private val databaseTracker: DatabaseTracker) :
+    private class DeleteColumn(private val context: Context) :
         TableColumn<DatabaseMeta, String>(i18n("database.manager.table.column.delete")),
         Callback<TableColumn<DatabaseMeta, String>, TableCell<DatabaseMeta, String>> {
 
@@ -314,7 +312,7 @@ class DatabaseManagerTable(
                                 maxWidth = Double.MAX_VALUE
                                 disableProperty().bind(tableRow.selectedProperty().not())
                                 setOnAction {
-                                    val dialog = DBDeleteDialog(context, databaseTracker)
+                                    val dialog = DBDeleteDialog(context)
                                     dialog.show(tableView.selectedItems.copy())
                                 }
                             }
@@ -329,14 +327,14 @@ class DatabaseManagerTable(
      * A DBDeleteDialog is used for showing database-deleting dialog.
      * It's used by the [DeleteColumn].
      */
-    private class DBDeleteDialog(private val context: Context, private val databaseTracker: DatabaseTracker) {
+    private class DBDeleteDialog(private val context: Context) {
         fun show(itemsToRemove: ObservableList<DatabaseMeta>) {
             context.showDialog(
                 title = i18n("database.manager.confirm_delete.title", itemsToRemove.size),
                 content = ListView(itemsToRemove),
                 onResult = {
                     if (it.typeEquals(ButtonType.YES)) {
-                        itemsToRemove.forEach(databaseTracker::removeDatabase)
+                        itemsToRemove.forEach(get(DatabaseTracker::class)::removeDatabase)
                     }
                 },
                 I18NButtonTypes.YES,

@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.database.api.RegistrationForm
 import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.asObjectProperty
 import com.dansoftware.boomega.gui.util.not
@@ -41,7 +42,6 @@ import java.util.concurrent.TimeUnit
 
 class DatabaseCreatorForm(
     private val context: Context,
-    private val databaseTracker: DatabaseTracker,
     private val databaseType: ObjectProperty<DatabaseProvider<*>>
 ) : BorderPane() {
 
@@ -91,7 +91,7 @@ class DatabaseCreatorForm(
         }
         setOnAction {
             constructDatabase()?.let {
-                databaseTracker.saveDatabase(it)
+                get(DatabaseTracker::class).saveDatabase(it)
                 createdDatabase = it
                 context.close()
             }

@@ -18,9 +18,6 @@
 
 package com.dansoftware.boomega.gui.login
 
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.AvailableActions
 import com.dansoftware.boomega.gui.menu.getPreferredGeneralMenuBar
 import com.dansoftware.boomega.gui.window.BaseWindow
@@ -58,7 +55,7 @@ private class LoginWindow(
     }
 
     private fun initKeyBindings() {
-        AvailableActions.applyOnScene(scene, root, get(Preferences::class), get(DatabaseTracker::class))
+        AvailableActions.applyOnScene(scene, root)
     }
 
     companion object {
