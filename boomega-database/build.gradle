@@ -1,0 +1,22 @@
+plugins {
+    id 'org.openjfx.javafxplugin' version "$JAVAFX_PLUGIN_VERSION"
+}
+
+javafx {
+    modules = [ 'javafx.graphics', 'javafx.controls' ]
+}
+
+dependencies {
+    implementation project(':boomega-plugin')
+    implementation project(':boomega-utils')
+    implementation project(':boomega-gui')
+    implementation project(':boomega-i18n')
+    implementation project(':boomega-preferences')
+
+    // Embedded NoSql database management
+    implementation 'org.dizitart:nitrite:3.4.3'
+
+    // Relational database management
+    implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    implementation 'mysql:mysql-connector-java:8.0.28'
+}

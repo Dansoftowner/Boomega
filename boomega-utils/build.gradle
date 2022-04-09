@@ -1,0 +1,9 @@
+dependencies {
+    api "com.google.inject:guice:5.1.0" // DI framework
+    api 'com.github.oshi:oshi-core:6.1.5' // Operating system & hardware information
+
+    api 'com.github.Dansoftowner:jUserDirectories:1.0'
+    implementation 'commons-io:commons-io:2.11.0'
+
+    api 'org.jetbrains:annotations:23.0.0'
+}

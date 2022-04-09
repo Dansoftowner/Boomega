@@ -1,0 +1,52 @@
+<!--
+  ~ Boomega - A modern book explorer & catalog application
+  ~ Copyright (C) 2020-2022  Daniel Gyoerffy
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!-- The configuration for Logback -->
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+     ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <filter class="com.dansoftware.boomega.log.DebugLogFilter" />
+    </appender>
+
+    <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.file.path}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${log.file.path}.%d{yyyy-MM-dd-HH-mm}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+        <filter class="com.dansoftware.boomega.log.DebugLogFilter" />
+    </appender>
+
+    <root level="debug" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ROLLING-FILE"/>
+    </root>
+
+
+</configuration>

@@ -1,0 +1,18 @@
+plugins {
+    id 'org.openjfx.javafxplugin' version "$JAVAFX_PLUGIN_VERSION"
+}
+
+javafx {
+    modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls' ]
+}
+
+dependencies {
+    implementation project(':boomega-utils')
+    implementation project(':boomega-i18n')
+    implementation project(':boomega-preferences')
+
+    api('net.synedra:validatorfx:0.3.1') { exclude group: 'org.openjfx' }
+    api('org.controlsfx:controlsfx:11.1.1') { exclude group: 'org.openjfx' }
+
+    implementation fileTree(dir: '../external-libraries', include: 'fontawesomefx-11.0.jar')
+}

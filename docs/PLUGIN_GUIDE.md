@@ -60,7 +60,7 @@ If you want to load your plugin into Boomega, you should place the jar file into
 # API overview
 
 The root of the Boomega plugin hierarchy is:
-[`com.dansoftware.boomega.plugin.api.BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt)
+[`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt)
 .
 
 All other plugin classes should implement this interface.
@@ -459,7 +459,7 @@ A simple example:
 
 ```kotlin
 ...
-import com.dansoftware.boomega.util.res
+import res
 
 class NordTheme : Theme() {
 

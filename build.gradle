@@ -16,360 +16,55 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.gradle.internal.jvm.Jvm
-
-import java.nio.file.Files
-import java.util.stream.Collectors
-
 plugins {
     id 'java'
-    id 'application'
     id 'org.jetbrains.kotlin.jvm' version "$KOTLIN_VERSION"
-    id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'com.github.ben-manes.versions' version '0.42.0' // for detecting dependency updates
-    id 'com.github.johnrengelman.shadow' version '7.1.2' // building fat jars
-    id 'org.panteleyev.jpackageplugin' version '1.3.1' // for jpackage
 }
 
-group 'com.dansoftware.boomega'
-version BOOMEGA_VERSION
-
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" }
-    maven { url "https://sandec.jfrog.io/artifactory/repo" } // repository for MDFX
-    maven { url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2" } // repository for JUnique
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+allprojects {
+    group 'com.dansoftware.boomega'
+    version BOOMEGA_VERSION
 }
 
-[compileJava, compileTestJava].forEach {
-    it.sourceCompatibility = JAVA_VERSION
-    it.targetCompatibility = JAVA_VERSION
-    it.options.encoding = 'UTF-8'
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    apply plugin: 'com.github.ben-manes.versions'
 
-[compileKotlin, compileTestKotlin].forEach {
-    it.kotlinOptions {
-        jvmTarget = JAVA_VERSION
-        freeCompilerArgs += '-Xjvm-default=all'
-    }
-}
-
-test {
-    useJUnitPlatform()
-}
-
-mainClassName = 'com.dansoftware.boomega.main.Main'
-applicationDefaultJvmArgs = [
-        '-Dhttps.protocols=TLSv1.2,TLSv1.1,TLSv1', // See #144: https://github.com/Dansoftowner/Boomega/issues/144
-        '--add-exports', 'javafx.base/com.sun.javafx=ALL-UNNAMED',
-        '--add-exports', 'javafx.base/com.sun.javafx.runtime=ALL-UNNAMED',
-        '--add-exports', 'javafx.graphics/com.sun.javafx.application=ALL-UNNAMED',
-        '--add-exports', 'javafx.base/com.sun.javafx=ALL-UNNAMED',
-        '--add-exports', 'javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED',
-        '--add-exports', 'javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED',
-        '--add-exports', 'javafx.graphics/com.sun.glass.ui=ALL-UNNAMED',
-        '--add-exports', 'javafx.graphics/com.sun.javafx.text=ALL-UNNAMED',
-        '--add-exports', 'javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED',
-        '--add-exports', 'javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED',
-        '--add-opens', 'javafx.graphics/com.sun.javafx.text=ALL-UNNAMED',
-        '--add-opens', 'java.base/java.io=ALL-UNNAMED',
-        '--add-opens', 'javafx.graphics/javafx.scene.text=ALL-UNNAMED',
-        '--add-opens', 'java.base/java.time=ALL-UNNAMED'
-]
-
-javafx {
-    version = JAVAFX_VERSION
-    modules = [
-            'javafx.base',
-            'javafx.controls',
-            'javafx.graphics',
-            'javafx.media',
-            'javafx.web'
-    ]
-}
-
-dependencies {
-    //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION"
-
-    //logging
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-    implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'ch.qos.logback:logback-core:1.2.11'
-
-    // DI framework
-    implementation 'com.google.inject:guice:5.1.0'
-
-    //Testing
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-    testImplementation 'org.assertj:assertj-core:3.22.0'
-    testImplementation 'org.mockito:mockito-core:4.4.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:4.3.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
-
-    implementation 'com.github.Dansoftowner:jUserDirectories:1.0'
-    implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.8'
-    implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
-    implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
-    implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
-    implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
-
-    // Common utilities
-    implementation 'commons-io:commons-io:2.11.0'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'commons-collections:commons-collections:3.2.2'
-
-    implementation 'org.jetbrains:annotations:23.0.0'
-
-    implementation 'org.apache.poi:poi-ooxml:5.2.1' // Microsoft Documents
-    implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
-    implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
-    implementation 'com.google.code.gson:gson:2.9.0' // JSON Parsing
-
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6' // Caching utilities
-    implementation 'com.github.oshi:oshi-core:6.1.5' // Operating system & hardware information
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
-    implementation 'io.github.g00fy2:versioncompare:1.5.0' // Comparing version strings
-
-    implementation('org.jfxtras:jmetro:11.6.15') { exclude group: 'org.openjfx' }
-    implementation('io.github.typhon0:AnimateFX:1.2.2') { exclude group: 'org.openjfx' }
-    implementation('com.sandec:mdfx:0.2.6') { exclude group: 'org.openjfx' }
-    implementation('de.jangassen:nsmenufx:3.1.0') { exclude group: 'org.openjfx' }
-    implementation('com.dlsc.formsfx:formsfx-core:11.5.0') { exclude group: 'org.openjfx' }
-    implementation('net.kurobako:gesturefx:0.7.1') { exclude group: 'org.openjfx' }
-    implementation('com.dlsc.workbenchfx:workbenchfx-core:11.1.0') { exclude group: 'org.openjfx' }
-    implementation('org.fxmisc.richtext:richtextfx:0.10.9') { exclude group: 'org.openjfx' }
-    implementation('org.controlsfx:controlsfx:11.1.1') { exclude group: 'org.openjfx' }
-    implementation('net.synedra:validatorfx:0.3.1') { exclude group: 'org.openjfx' }
-
-    // Embedded NoSql database management
-    implementation 'org.dizitart:nitrite:3.4.3'
-
-    // Relational database management
-    implementation 'org.hibernate:hibernate-core:5.6.5.Final'
-    implementation 'mysql:mysql-connector-java:8.0.28'
-
-    //implementation from the local file system
-    implementation fileTree(dir: 'external-libraries', include: '*.jar')
-}
-
-/* ----------------------- Simulation executions -------------------------- */
-
-task runUpdateSimulation(type: JavaExec) {
-    group = "simulation"
-    classpath = sourceSets.test.runtimeClasspath
-    jvmArgs = applicationDefaultJvmArgs
-    description = "Runs a fake update simulation"
-    systemProperty('boomega.version', '0.0.0')
-    systemProperty('update.next_version', '1.0.0')
-    mainClass.set('com.dansoftware.boomega.update.UpdateSimulation')
-}
-
-task runFirstTimeSimulation(type: JavaExec) {
-    group = "simulation"
-    classpath = sourceSets.test.runtimeClasspath
-    jvmArgs = applicationDefaultJvmArgs
-    description = "Runs a fake first-time running simulation"
-    mainClass.set('com.dansoftware.boomega.main.FirstTimeSimulation')
-}
-
-task runInMemoryDatabaseSimulation(type: JavaExec) {
-    group = "simulation"
-    classpath = sourceSets.test.runtimeClasspath
-    jvmArgs = applicationDefaultJvmArgs
-    description = 'Runs a fake database activity that doesn\'t save data anywhere'
-    mainClass.set('com.dansoftware.boomega.main.InMemoryDatabaseSimulation')
-}
-
-task runPreloaderSimulation(type: JavaExec) {
-    group = "simulation"
-    classpath = sourceSets.test.runtimeClasspath
-    jvmArgs = applicationDefaultJvmArgs
-    description = "Shows the preloader"
-    mainClass.set('com.dansoftware.boomega.main.PreloaderSimulation')
-}
-
-/* -------------------------- Distribution -------------------------- */
-
-shadowJar {
-
-    manifest.attributes('Main-Class': mainClassName)
-    configurations = [project.configurations.compileClasspath]
-
-    // excluding JavaFX assets
-    dependencies { exclude(dependency('org.openjfx::.*')) }
-    exclude 'javafx/**'
-    exclude 'javafx.properties'
-    exclude 'javafx-swt.jar'
-    exclude '*.so'
-    exclude '*.dylib'
-
-    // excluding random assets shouldn't be included (?)
-    exclude 'LICENSE.txt'
-    exclude 'NOTICE.txt'
-    exclude 'README.md'
-    exclude 'about.css'
-    exclude 'about.fxml'
-    exclude '.gitkeep'
-    exclude 'junit/**'
-    exclude 'module-info.class'
-}
-
-def distributionDir = new File(projectDir, "distribution")
-def distributionInputDir = new File(distributionDir, "input")
-def distributionBuildDir = new File(distributionDir, "build")
-def distributionTempDir = new File(distributionDir, "temp")
-def distributionRuntimeDir = new File(distributionDir, "java-runtime")
-def distributionIconDir = new File(distributionDir, "icon")
-def distributionFileAssociationsDir = new File(distributionDir, "file-associations")
-
-def jlinkExecutable = new File(Jvm.current().getJavaHome(), "bin${File.separator}jlink")
-
-
-task cleanDistributionTemp(type: Delete) {
-    group = 'distribution'
-    doFirst {
-        delete distributionTempDir
+    repositories {
+        mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 
-    doLast {
-        distributionTempDir.mkdir()
-    }
-}
-
-task cleanDistributionBuild(type: Delete) {
-    group = 'distribution'
-    doFirst {
-        delete distributionBuildDir
-    }
-}
-
-task cleanDistributionInput(type: Delete) {
-    group = 'distribution'
-    doFirst {
-        delete distributionInputDir
+    [compileJava, compileTestJava].forEach {
+        it.sourceCompatibility = JAVA_VERSION
+        it.targetCompatibility = JAVA_VERSION
+        it.options.encoding = 'UTF-8'
     }
 
-    doLast {
-        distributionInputDir.mkdir()
-    }
-}
-
-task buildDistributionInput {
-    group = 'distribution'
-    dependsOn shadowJar
-    dependsOn cleanDistributionInput
-    doLast {
-        Files.copy(
-                tasks.shadowJar.archiveFile.get().asFile.toPath(),
-                new File(distributionInputDir, tasks.shadowJar.archiveFileName.get()).toPath()
-        )
-    }
-}
-
-task cleanDistributionRuntime {
-    group = 'distribution'
-    doFirst {
-        delete distributionRuntimeDir
-    }
-}
-
-// builds a java-runtime using jlink
-task jlink(type: Exec) {
-    group = 'distribution'
-    dependsOn cleanDistributionRuntime
-
-    String javaFxModulePath = sourceSets.main.runtimeClasspath.asPath.split(';')
-            .stream()
-            .filter { it.contains('org.openjfx') }
-            .collect(Collectors.joining(';'))
-
-    workingDir = distributionDir.toString()
-    executable = jlinkExecutable.toString()
-    args = [
-            '--output',
-            distributionRuntimeDir,
-            // reducing the file sizes
-            '--strip-debug',
-            '--compress', '2',
-            '--no-header-files',
-            '--no-man-pages',
-            '--module-path',
-            javaFxModulePath,
-            // required modules
-            '--add-modules',
-            'java.se,javafx.base,javafx.controls,javafx.graphics,javafx.media,javafx.web'
-    ]
-}
-
-task preparteDistribution {
-    group = 'distribution'
-    dependsOn cleanDistributionTemp
-    dependsOn cleanDistributionBuild
-    dependsOn buildDistributionInput
-    dependsOn jlink
-}
-
-jpackage {
-    group = 'distribution'
-    dependsOn preparteDistribution
-
-    appName = project.name
-    appVersion = project.version
-    vendor = 'Dansoftware'
-    javaOptions = applicationDefaultJvmArgs
-
-    input = distributionInputDir.toString()
-    destination = distributionBuildDir.toString()
-    temp = distributionTempDir.toString()
-    mainJar = shadowJar.archiveFileName.get().toString()
-    runtimeImage = distributionRuntimeDir.toString()
-
-    licenseFile = "LICENSE"
-
-    winMenu = true
-    winDirChooser = true
-    winShortcut = true
-
-    linuxDebMaintainer = "dansoftwareowner@gmail.com"
-    linuxMenuGroup = project.name
-    linuxShortcut = true
-
-    windows {
-        icon = "${distributionIconDir}/Boomega.ico"
-        fileAssociations = ["${distributionFileAssociationsDir}/file-associations-win.properties"]
+    [compileKotlin, compileTestKotlin].forEach {
+        it.kotlinOptions {
+            jvmTarget = JAVA_VERSION
+            freeCompilerArgs += '-Xjvm-default=all'
+        }
     }
 
-    linux {
-        icon = "${distributionIconDir}/Boomega.png"
-        fileAssociations = ["${distributionFileAssociationsDir}/file-associations-linux.properties"]
+    test {
+        useJUnitPlatform()
     }
 
-    mac {
-        icon = "${distributionIconDir}/Boomega.icns"
-        fileAssociations = ["${distributionFileAssociationsDir}/file-associations-mac.properties"]
+    dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION"
+
+        //logging
+        implementation 'org.slf4j:slf4j-api:1.7.36'
+
+        //Testing
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+        testImplementation 'org.assertj:assertj-core:3.22.0'
+        testImplementation 'org.mockito:mockito-core:4.4.0'
+        testImplementation 'org.mockito:mockito-junit-jupiter:4.3.1'
+        testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
     }
-}
-
-/* ---------------- Other ----------------- */
-
-task runAsJar(type: Exec) {
-    group = 'application'
-    description = 'Runs the app from the output jar file'
-
-    dependsOn jlink
-    dependsOn shadowJar // We run the jar on the JRE built by jlink
-
-    executable = new File(
-            distributionRuntimeDir,
-            "bin${File.separator}java"
-    )
-
-    args = [
-            *applicationDefaultJvmArgs,
-            '-jar',
-            tasks.shadowJar.archiveFile.get().asFile.absolutePath
-    ]
 }
