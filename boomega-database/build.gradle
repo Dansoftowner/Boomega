@@ -1,7 +1,3 @@
-plugins {
-    id 'org.openjfx.javafxplugin' version "$JAVAFX_PLUGIN_VERSION"
-}
-
 javafx {
     modules = [ 'javafx.graphics', 'javafx.controls' ]
 }

@@ -19,6 +19,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version "$KOTLIN_VERSION"
+    id 'org.openjfx.javafxplugin' version "$JAVAFX_PLUGIN_VERSION"
     id 'com.github.ben-manes.versions' version '0.42.0' // for detecting dependency updates
 }
 
@@ -31,6 +32,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'com.github.ben-manes.versions'
+    apply plugin: 'org.openjfx.javafxplugin'
 
     repositories {
         mavenCentral()
