@@ -18,9 +18,6 @@
 
 package com.dansoftware.boomega.gui.recordview
 
-import com.dansoftware.boomega.config.ConfigAdapter
-import com.dansoftware.boomega.config.PreferenceKey
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.di.DIService.get

@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.preferences.pane
 
 import com.dansoftware.boomega.config.LOCALE
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.typeEquals

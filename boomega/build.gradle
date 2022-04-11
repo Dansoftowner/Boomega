@@ -65,11 +65,13 @@ javafx {
 
 dependencies {
 
+    implementation project(':boomega-plugin')
+    implementation project(':boomega-gui')
+    implementation project(':boomega-gui:api')
+    implementation project(':boomega-gui:utils')
     implementation project(':boomega-i18n')
     implementation project(':boomega-utils')
-    implementation project(':boomega-plugin')
     implementation project(':boomega-database')
-    implementation project(':boomega-gui')
     implementation project(':boomega-preferences')
 
     // logging

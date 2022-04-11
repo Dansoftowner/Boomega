@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.i18n;
 
 import com.dansoftware.boomega.i18n.api.LanguagePack;
-import com.dansoftware.boomega.util.Person;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

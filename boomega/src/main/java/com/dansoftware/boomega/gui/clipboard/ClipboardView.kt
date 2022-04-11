@@ -23,7 +23,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 
-class ClipboardView : VBox(), com.dansoftware.boomega.gui.api.EmptyContext {
+class ClipboardView : VBox(), EmptyContext {
 
     val table = buildTable()
     val toolbar = ClipboardViewToolbar(this)

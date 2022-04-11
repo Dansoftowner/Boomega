@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.firsttime;
 
 import com.dansoftware.boomega.config.Preferences;
-import com.dansoftware.boomega.gui.api.*;
+import com.dansoftware.boomega.gui.api.EmptyContext;
 import com.dansoftware.boomega.i18n.api.I18N;
 import com.dansoftware.sgmdialog.SegmentDialog;
 import javafx.event.ActionEvent;

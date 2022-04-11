@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.window
 
-import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.util.typeEquals

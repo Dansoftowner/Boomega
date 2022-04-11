@@ -5,9 +5,10 @@ javafx {
 dependencies {
     implementation project(':boomega-plugin')
     implementation project(':boomega-utils')
-    implementation project(':boomega-gui')
     implementation project(':boomega-i18n')
     implementation project(':boomega-preferences')
+    implementation project(':boomega-gui:api')
+    implementation project(':boomega-gui:utils')
 
     // Embedded NoSql database management
     implementation 'org.dizitart:nitrite:3.4.3'

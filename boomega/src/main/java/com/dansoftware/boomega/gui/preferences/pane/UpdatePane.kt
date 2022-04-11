@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.preferences.pane
 
 import com.dansoftware.boomega.config.LAST_UPDATE_SEARCH
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.SEARCH_UPDATES
 import com.dansoftware.boomega.gui.util.asCentered
 import com.dansoftware.boomega.gui.util.icon

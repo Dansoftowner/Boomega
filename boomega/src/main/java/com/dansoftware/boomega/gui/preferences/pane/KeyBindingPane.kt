@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.preferences.pane
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.control.KeyBindDetectionField
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
 import com.dansoftware.boomega.gui.keybinding.KeyBindings

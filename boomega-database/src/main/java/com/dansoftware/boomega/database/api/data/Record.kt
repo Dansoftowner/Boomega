@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.database.api.data
 
-import com.dansoftware.boomega.i18n.api.I18N
+import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.util.format
 import java.time.LocalDate
 import java.util.*
@@ -138,7 +138,7 @@ class Record(
         MAGAZINE("record.type.magazine");
 
         override fun toString(): String {
-            return I18N.getValue(i18N)
+            return i18n(i18N)
         }
     }
 

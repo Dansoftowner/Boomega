@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.preferences
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.api.I18N
 import javafx.stage.Modality

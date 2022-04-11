@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.firsttime.segment.theme
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.THEME
 import com.dansoftware.boomega.gui.theme.DarkTheme
 import com.dansoftware.boomega.gui.theme.LightTheme

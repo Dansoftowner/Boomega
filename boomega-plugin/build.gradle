@@ -1,5 +1,5 @@
 javafx {
-    modules = [ 'javafx.graphics' ]
+    modules = [ 'javafx.graphics', 'javafx.controls' ]
 }
 
 dependencies {

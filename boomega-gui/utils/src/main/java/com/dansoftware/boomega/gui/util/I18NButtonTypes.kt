@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.util
 
-import com.dansoftware.boomega.i18n.api.I18N
 import javafx.scene.control.ButtonBar
 import javafx.scene.control.ButtonType
 
@@ -59,5 +58,5 @@ object I18NButtonTypes {
     val RETRY = createButtonType("Dialog.retry.button", ButtonBar.ButtonData.YES)
 
     private fun createButtonType(key: String, buttonData: ButtonBar.ButtonData) =
-        ButtonType(I18N.getValues().getString(key), buttonData)
+        ButtonType(com.dansoftware.boomega.i18n.api.I18N.getValues().getString(key), buttonData)
 }

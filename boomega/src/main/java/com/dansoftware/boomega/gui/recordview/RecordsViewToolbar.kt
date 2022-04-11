@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.recordview
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.export.SupportedExporters
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar

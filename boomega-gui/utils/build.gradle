@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':boomega-gui:api')
+    implementation fileTree(dir: '../../external-libraries', include: 'fontawesomefx-11.0.jar')
+}

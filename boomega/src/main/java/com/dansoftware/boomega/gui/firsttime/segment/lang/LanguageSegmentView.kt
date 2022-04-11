@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.firsttime.segment.lang
 
 import com.dansoftware.boomega.config.LOCALE
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.i18n.api.I18N
 import javafx.geometry.Insets
 import javafx.scene.control.ListView

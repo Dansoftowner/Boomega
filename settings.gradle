@@ -1,8 +1,10 @@
 rootProject.name = 'Boomega'
 include 'boomega',
+        'boomega-plugin',
         'boomega-i18n',
         'boomega-utils',
-        'boomega-plugin',
         'boomega-database',
         'boomega-gui',
+        'boomega-gui:api',
+        'boomega-gui:utils',
         'boomega-preferences'

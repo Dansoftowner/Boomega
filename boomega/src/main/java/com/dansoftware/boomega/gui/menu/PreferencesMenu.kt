@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.menu
 
 import com.dansoftware.boomega.config.LOCALE
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.config.THEME
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.impl.OpenSettingsAction

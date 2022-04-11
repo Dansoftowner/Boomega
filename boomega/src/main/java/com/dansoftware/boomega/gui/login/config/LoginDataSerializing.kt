@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.login.config
 
-import com.dansoftware.boomega.config.ConfigAdapter
 import com.dansoftware.boomega.database.SupportedDatabases
 import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta

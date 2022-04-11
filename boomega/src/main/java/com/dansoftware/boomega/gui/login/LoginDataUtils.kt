@@ -19,7 +19,6 @@
 package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.config.LOGIN_DATA
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.login.config.LoginData
