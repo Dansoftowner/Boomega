@@ -21,13 +21,13 @@ package com.dansoftware.boomega.gui.info
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.HighlightableLabel
 import com.dansoftware.boomega.gui.info.native.NativeInfoWindow
+import com.dansoftware.boomega.gui.util.SystemBrowser
 import com.dansoftware.boomega.gui.util.hgrow
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.padding
 import com.dansoftware.boomega.i18n.api.I18N
 import com.dansoftware.boomega.i18n.api.displayName
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.util.SystemBrowser
 import javafx.geometry.Insets
 import javafx.scene.Cursor
 import javafx.scene.Group

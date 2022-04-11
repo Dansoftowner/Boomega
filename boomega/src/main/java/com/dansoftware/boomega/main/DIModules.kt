@@ -18,8 +18,6 @@
 
 package com.dansoftware.boomega.main
 
-import com.dansoftware.boomega.config.source.ConfigSource
-import com.dansoftware.boomega.config.source.JsonFileSource
 import com.dansoftware.boomega.plugin.RealtimePluginService
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.update.GithubReleasesFetcher

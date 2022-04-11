@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.updatedialog.segment.detail
 
-import com.dansoftware.boomega.util.SystemBrowser
+import com.dansoftware.boomega.gui.util.SystemBrowser
 import com.sandec.mdfx.MarkdownView
 import javafx.scene.Cursor
 import javafx.scene.Node

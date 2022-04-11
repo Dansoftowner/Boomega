@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.util
+package com.dansoftware.boomega.gui.util
 
 import com.dansoftware.boomega.di.DIService.get
-import com.dansoftware.boomega.util.os.OsInfo
 import com.dansoftware.boomega.util.os.OsInfo.isLinux
 import com.dansoftware.boomega.util.os.OsInfo.isMacOS
 import com.dansoftware.boomega.util.os.OsInfo.isWindows

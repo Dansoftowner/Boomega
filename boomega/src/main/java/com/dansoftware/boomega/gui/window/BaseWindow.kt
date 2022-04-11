@@ -20,10 +20,10 @@ package com.dansoftware.boomega.gui.window
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.theme.Theme
+import com.dansoftware.boomega.gui.util.resImg
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.api.I18N
 import com.dansoftware.boomega.util.os.OsInfo
-import com.dansoftware.boomega.util.resImg
 import de.jangassen.MenuToolkit
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty

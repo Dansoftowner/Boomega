@@ -22,7 +22,7 @@ import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.recordview.util.MultipleSelectionPlaceHolder
-import com.dansoftware.boomega.util.SystemBrowser
+import com.dansoftware.boomega.gui.util.SystemBrowser
 import com.dansoftware.mdeditor.MarkdownEditorControl
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty

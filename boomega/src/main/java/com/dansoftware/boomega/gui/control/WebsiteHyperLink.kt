@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.control
 
-import com.dansoftware.boomega.util.SystemBrowser
+import com.dansoftware.boomega.gui.util.SystemBrowser
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.event.ActionEvent

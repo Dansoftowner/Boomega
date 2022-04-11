@@ -23,13 +23,9 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerWindow
-import com.dansoftware.boomega.gui.util.action
-import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.gui.util.putToSystemClipboard
-import com.dansoftware.boomega.gui.util.styleClass
+import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.service.googlebooks.Volume
-import com.dansoftware.boomega.util.SystemBrowser
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.pnikosis.html2markdown.HTML2Md

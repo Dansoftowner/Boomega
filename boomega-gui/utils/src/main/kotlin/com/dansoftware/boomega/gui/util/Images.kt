@@ -20,10 +20,23 @@
 
 package com.dansoftware.boomega.gui.util
 
+import com.dansoftware.boomega.util.resStream
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.scene.image.Image
+import java.io.BufferedInputStream
 import java.util.function.Consumer
+import kotlin.reflect.KClass
+
+/**
+ * Gives the resource loaded into an [Image] object
+ */
+@JvmOverloads
+fun resImg(path: String, clazz: KClass<*> = R::class): Image? {
+    return resStream(path, clazz)
+        ?.let(::BufferedInputStream)
+        ?.use(::Image)
+}
 
 fun loadImage(resource: String, onImageReady: Consumer<Image>) {
     val image = Image(resource, true)
@@ -36,3 +49,5 @@ fun loadImage(resource: String, onImageReady: Consumer<Image>) {
         }
     })
 }
+
+private class R

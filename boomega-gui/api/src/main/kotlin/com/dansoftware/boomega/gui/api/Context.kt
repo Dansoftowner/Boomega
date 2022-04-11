@@ -37,7 +37,7 @@ import java.util.function.Consumer
  * A Context is an abstract structure that allows to interact with a particular GUI environment
  * <i>(making alerts, showing notifications, etc...)</i>.
  *
- * @author Daniel Gyorffy
+ * @author Daniel Gyoerffy
  */
 interface Context {
 
