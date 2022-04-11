@@ -23,8 +23,6 @@ import com.dansoftware.boomega.plugin.api.BoomegaPlugin
 
 /**
  * Allows to add a custom [LanguagePack] to the application.
- *
- * @author Daniel Gyoerffy
  */
 interface LanguagePlugin : BoomegaPlugin {
     val languagePack: LanguagePack
