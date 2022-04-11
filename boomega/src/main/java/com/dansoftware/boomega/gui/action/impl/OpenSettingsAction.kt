@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.action.impl
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context

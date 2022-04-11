@@ -27,6 +27,7 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.clipboard.RecordClipboard
 import com.dansoftware.boomega.gui.control.BaseTable
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.keybinding.addKeyBindingDetection
 import com.dansoftware.boomega.gui.recordview.dock.Dock
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.api.I18N

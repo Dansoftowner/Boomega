@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
-import com.dansoftware.boomega.gui.util.addKeyBindingDetection
+import com.dansoftware.boomega.gui.keybinding.addKeyBindingDetection
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import javafx.beans.property.IntegerProperty
 import javafx.scene.layout.BorderPane

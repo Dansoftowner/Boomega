@@ -47,7 +47,7 @@ class KeyBinding(
         title,
         description,
         when {
-            OsInfo.isMac() -> macKeyCombination
+            OsInfo.isMacOS -> macKeyCombination
             else -> winLinuxKeyCombination
         }
     )
@@ -64,8 +64,8 @@ class KeyBinding(
         title,
         description,
         when {
-            OsInfo.isLinux() -> linuxKeyCombination
-            OsInfo.isMac() -> macKeyCombination
+            OsInfo.isLinux -> linuxKeyCombination
+            OsInfo.isMacOS -> macKeyCombination
             else -> winKeyCombination
         }
     )
