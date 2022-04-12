@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.launcher
+package com.dansoftware.boomega.gui.launch
 
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.database.api.Database

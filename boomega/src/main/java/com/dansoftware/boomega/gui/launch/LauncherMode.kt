@@ -15,15 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package com.dansoftware.boomega.launcher;
+package com.dansoftware.boomega.gui.launch
 
 /**
- * Defines the "modes" of an {@link ActivityLauncher}.
- *
- * @author Daniel Gyorffy
+ * Defines the "modes" of an [ActivityLauncher].
  */
-public enum LauncherMode {
+enum class LauncherMode {
 
     /**
      * Should be used only once during the program execution when the application starts.
@@ -39,5 +36,4 @@ public enum LauncherMode {
      * Should be used when the application is already running and the request is from an external process.
      */
     EXTERNAL
-
 }

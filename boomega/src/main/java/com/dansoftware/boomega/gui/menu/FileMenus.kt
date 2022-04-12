@@ -24,6 +24,8 @@ import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.impl.*
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.launch.ActivityLauncher
+import com.dansoftware.boomega.gui.launch.internalActivityLauncher
 import com.dansoftware.boomega.gui.login.isAutoLoginOn
 import com.dansoftware.boomega.gui.login.removeAutoLogin
 import com.dansoftware.boomega.gui.login.updateLoginData
@@ -31,8 +33,6 @@ import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.graphic
 import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.launcher.ActivityLauncher
-import com.dansoftware.boomega.launcher.internalActivityLauncher
 import javafx.concurrent.Task
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem

@@ -25,13 +25,13 @@ import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.launch.initActivityLauncher
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader.MessageNotification.Priority
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.launcher.initActivityLauncher
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.update.Release
 import com.dansoftware.boomega.update.UpdateSearcher
@@ -245,7 +245,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
     private fun launchGUI(update: Release?) {
         notifyPreloader("preloader.gui.build")
         initActivityLauncher(
-            preferences = get(com.dansoftware.boomega.config.Preferences::class),
+            preferences = get(Preferences::class),
             databaseTracker = get(DatabaseTracker::class),
             applicationArgs = applicationArgs,
             onLaunched = { context, launched ->

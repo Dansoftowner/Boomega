@@ -18,15 +18,15 @@
 
 package com.dansoftware.boomega.gui.action.impl
 
+import com.dansoftware.boomega.database.bmdb.gui.BMDBDatabaseOpener
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.Action
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.database.bmdb.gui.BMDBDatabaseOpener
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
+import com.dansoftware.boomega.gui.launch.LauncherMode
+import com.dansoftware.boomega.gui.launch.activityLauncher
 import com.dansoftware.boomega.gui.util.submitFXTask
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.launcher.LauncherMode
-import com.dansoftware.boomega.launcher.activityLauncher
 import com.dansoftware.boomega.util.toKFunction
 import java.util.concurrent.ExecutorService
 
