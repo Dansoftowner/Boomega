@@ -7,5 +7,6 @@ include 'boomega',
         'boomega-database',
         'boomega-preferences',
         'boomega-plugin',
+        'boomega-update',
         'boomega-i18n',
         'boomega-utils'
