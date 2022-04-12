@@ -1,4 +1,5 @@
 dependencies {
+    implementation project(':boomega-di')
     implementation project(':boomega-plugin')
     implementation project(':boomega-utils')
 }

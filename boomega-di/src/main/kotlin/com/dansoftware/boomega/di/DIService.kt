@@ -19,9 +19,9 @@
 package com.dansoftware.boomega.di
 
 import com.google.inject.Guice
-import com.google.inject.Module
 import com.google.inject.Injector
 import com.google.inject.Key
+import com.google.inject.Module
 import com.google.inject.name.Names
 import kotlin.reflect.KClass
 

@@ -3,6 +3,7 @@ javafx {
 }
 
 dependencies {
+    implementation project(':boomega-di')
     implementation project(':boomega-plugin')
     implementation project(':boomega-utils')
     implementation project(':boomega-i18n')
@@ -11,9 +12,9 @@ dependencies {
     implementation project(':boomega-gui:utils')
 
     // Embedded NoSql database management
-    implementation 'org.dizitart:nitrite:3.4.3'
+    implementation 'org.dizitart:nitrite:3.4.4'
 
     // Relational database management
-    implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    implementation 'org.hibernate:hibernate-core:5.6.7.Final'
     implementation 'mysql:mysql-connector-java:8.0.28'
 }

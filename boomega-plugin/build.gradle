@@ -3,5 +3,6 @@ javafx {
 }
 
 dependencies {
+    implementation project(':boomega-di')
     implementation project(':boomega-utils')
 }
