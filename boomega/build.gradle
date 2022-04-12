@@ -75,6 +75,7 @@ dependencies {
     implementation project(':boomega-database')
     implementation project(':boomega-preferences')
     implementation project(':boomega-update')
+    implementation project(':boomega-rest')
 
     // logging
     implementation 'ch.qos.logback:logback-classic:1.2.11'
@@ -95,7 +96,6 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
 
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6' // Caching utilities
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
 
     implementation('org.jfxtras:jmetro:11.6.15') { exclude group: 'org.openjfx' }
