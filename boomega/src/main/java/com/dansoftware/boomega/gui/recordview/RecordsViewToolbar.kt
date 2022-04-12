@@ -21,8 +21,8 @@ package com.dansoftware.boomega.gui.recordview
 import com.dansoftware.boomega.export.SupportedExporters
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
-import com.dansoftware.boomega.gui.control.KeyBindingTooltip
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
+import com.dansoftware.boomega.gui.keybinding.KeyBindingTooltip
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.recordview.config.RecordsViewConfigurationOverlay
 import com.dansoftware.boomega.gui.util.*

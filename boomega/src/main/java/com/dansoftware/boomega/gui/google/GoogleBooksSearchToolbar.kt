@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.control.BiToolBar
-import com.dansoftware.boomega.gui.control.KeyBindingTooltip
+import com.dansoftware.boomega.gui.keybinding.KeyBindingTooltip
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n

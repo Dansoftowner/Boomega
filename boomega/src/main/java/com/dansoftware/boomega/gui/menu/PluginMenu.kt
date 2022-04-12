@@ -18,8 +18,8 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.gui.action.impl.OpenPluginDirAction
-import com.dansoftware.boomega.gui.action.impl.OpenPluginManagerAction
+import com.dansoftware.boomega.gui.action.OpenPluginDirAction
+import com.dansoftware.boomega.gui.action.OpenPluginManagerAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.menuItem

@@ -20,6 +20,7 @@ package com.dansoftware.boomega.database.tracking;
 
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

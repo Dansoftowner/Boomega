@@ -19,9 +19,9 @@
 package com.dansoftware.boomega.gui.login
 
 import com.dansoftware.boomega.database.bmdb.BMDBMeta
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import javafx.beans.value.ObservableStringValue
 import javafx.scene.Group
 import javafx.scene.input.TransferMode

@@ -22,7 +22,6 @@ import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.control.RecordFindControl
 import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.COL_CONFIG_KEY
 import com.dansoftware.boomega.gui.recordview.RecordsView.Companion.DOCKS_CONFIG_KEY
 import com.dansoftware.boomega.gui.recordview.dock.Dock

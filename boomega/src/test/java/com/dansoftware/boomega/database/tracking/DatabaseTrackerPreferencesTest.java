@@ -24,6 +24,7 @@ import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.source.ConfigSource;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.di.DIService;
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;

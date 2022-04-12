@@ -1,4 +1,5 @@
 dependencies {
     implementation project(':boomega-gui:api')
+    implementation('org.fxmisc.richtext:richtextfx:0.10.9') { exclude group: 'org.openjfx' }
     implementation fileTree(dir: '../../external-libraries', include: 'fontawesomefx-11.0.jar')
 }

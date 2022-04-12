@@ -19,9 +19,9 @@
 package com.dansoftware.boomega.gui.databaseview
 
 import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
-import com.dansoftware.boomega.gui.action.impl.NewEntryAction
+import com.dansoftware.boomega.gui.action.NewEntryAction
 import com.dansoftware.boomega.gui.control.BiToolBar
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import com.dansoftware.boomega.gui.login.isAutoLoginOn
 import com.dansoftware.boomega.gui.login.removeAutoLogin
 import com.dansoftware.boomega.gui.login.updateLoginData

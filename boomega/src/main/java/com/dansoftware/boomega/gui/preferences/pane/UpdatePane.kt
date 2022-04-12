@@ -18,12 +18,12 @@
 
 package com.dansoftware.boomega.gui.preferences.pane
 
-import com.dansoftware.boomega.config.LAST_UPDATE_SEARCH
-import com.dansoftware.boomega.config.SEARCH_UPDATES
 import com.dansoftware.boomega.gui.util.asCentered
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.I18N
 import com.dansoftware.boomega.i18n.api.i18n
+import com.dansoftware.boomega.update.LAST_UPDATE_SEARCH
+import com.dansoftware.boomega.update.SEARCH_UPDATES
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Label

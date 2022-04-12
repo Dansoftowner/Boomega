@@ -24,9 +24,9 @@ import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseField
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.bmdb.BMDBProvider
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import com.dansoftware.boomega.gui.entry.EntryActivity
 import com.dansoftware.boomega.gui.login.DatabaseLoginListener
 import com.dansoftware.boomega.gui.login.LoginActivity

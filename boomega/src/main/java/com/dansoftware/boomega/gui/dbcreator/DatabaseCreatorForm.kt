@@ -22,9 +22,9 @@ import com.dansoftware.boomega.database.api.DatabaseConstructionException
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.DatabaseProvider
 import com.dansoftware.boomega.database.api.RegistrationForm
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import com.dansoftware.boomega.gui.util.asObjectProperty
 import com.dansoftware.boomega.gui.util.not
 import com.dansoftware.boomega.gui.util.padding

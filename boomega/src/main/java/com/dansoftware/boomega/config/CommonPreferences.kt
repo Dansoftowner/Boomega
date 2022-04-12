@@ -22,17 +22,6 @@ package com.dansoftware.boomega.config
 
 import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.gui.login.config.LoginDataAdapter
-import com.dansoftware.boomega.gui.theme.Theme
-import com.dansoftware.boomega.gui.theme.config.ThemeAdapter
-import java.time.LocalDateTime
-import java.util.*
-
-/**
- * Key for accessing the default locale.
- */
-@JvmField
-val LOCALE =
-    PreferenceKey("locale", Locale::class.java, Locale::getDefault)
 
 /**
  * Key for accessing the login data
@@ -44,31 +33,3 @@ val LOGIN_DATA = PreferenceKey(
     LoginDataAdapter(),
     ::LoginData
 )
-
-/**
- * Key for accessing that the automatic update-searching is turned on or off
- */
-@JvmField
-val SEARCH_UPDATES =
-    PreferenceKey("searchUpdates", Boolean::class.java) { true }
-
-/**
- * Key for accessing the configured theme
- */
-@JvmField
-val THEME = PreferenceKey(
-    "theme",
-    Theme::class.java,
-    ThemeAdapter(),
-    Theme::default
-)
-
-/**
- * Key for accessing the time of the last update-search
- */
-@JvmField
-val LAST_UPDATE_SEARCH: PreferenceKey<LocalDateTime?> =
-    PreferenceKey(
-        "searchUpdates.last",
-        LocalDateTime::class.java
-    ) { null }

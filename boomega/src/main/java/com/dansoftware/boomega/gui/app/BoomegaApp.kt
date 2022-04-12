@@ -18,22 +18,26 @@
 
 package com.dansoftware.boomega.gui.app
 
-import com.dansoftware.boomega.config.*
+import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.launch.initActivityLauncher
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader.MessageNotification.Priority
+import com.dansoftware.boomega.gui.theme.THEME
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.window.BaseWindow
+import com.dansoftware.boomega.i18n.LOCALE
 import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.plugin.api.PluginService
+import com.dansoftware.boomega.update.LAST_UPDATE_SEARCH
 import com.dansoftware.boomega.update.Release
+import com.dansoftware.boomega.update.SEARCH_UPDATES
 import com.dansoftware.boomega.update.UpdateSearcher
 import com.dansoftware.boomega.util.concurrent.notify
 import com.dansoftware.boomega.util.concurrent.wait
@@ -225,7 +229,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
                     logger.debug("First time dialog is needed")
                     Platform.runLater {
                         synchronized(lock) {
-                            FirstTimeActivity(get(com.dansoftware.boomega.config.Preferences::class)).show()
+                            FirstTimeActivity(get(Preferences::class)).show()
                             lock.notify()
                         }
                     }

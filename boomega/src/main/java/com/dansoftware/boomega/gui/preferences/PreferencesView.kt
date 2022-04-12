@@ -18,7 +18,6 @@
 
 package com.dansoftware.boomega.gui.preferences
 
-import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.gui.base.BaseView
 import com.dansoftware.boomega.gui.preferences.pane.*
 import com.dansoftware.boomega.gui.util.styleClass

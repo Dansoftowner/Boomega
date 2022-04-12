@@ -18,8 +18,7 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.gui.action.impl.*
-import com.dansoftware.boomega.gui.action.menuItemOf
+import com.dansoftware.boomega.gui.action.*
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.gui.util.separator

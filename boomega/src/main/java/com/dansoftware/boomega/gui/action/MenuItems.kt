@@ -17,6 +17,7 @@
  */
 package com.dansoftware.boomega.gui.action
 
+import com.dansoftware.boomega.gui.action.api.Action
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.keybinding.keyBinding
 import com.dansoftware.boomega.gui.util.action

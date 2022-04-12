@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.databaseview
 
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import javafx.scene.layout.VBox
 
 /**

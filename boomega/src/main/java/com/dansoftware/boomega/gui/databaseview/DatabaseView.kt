@@ -20,10 +20,10 @@ package com.dansoftware.boomega.gui.databaseview
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.database.api.ReadOnlyDatabase
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.base.BaseView
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import com.dansoftware.boomega.gui.google.GoogleBooksImportModule
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import com.dansoftware.boomega.plugin.api.ModulePlugin

@@ -28,7 +28,7 @@ plugins {
 }
 
 repositories {
-    maven { url "https://sandec.jfrog.io/artifactory/repo" } // repository for MDFX
+    maven { url "https://sandec.jfrog.io/artifactory/repo" } // repository for MDFX TODO: shouldn't be here?
     maven { url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2" } // repository for JUnique
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
@@ -81,10 +81,7 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'ch.qos.logback:logback-core:1.2.11'
 
-    implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.8'
     implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
-    implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
-    implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
 
     // Common utilities
@@ -98,14 +95,7 @@ dependencies {
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6' // Caching utilities
     implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
 
-    implementation('org.jfxtras:jmetro:11.6.15') { exclude group: 'org.openjfx' }
-    implementation('io.github.typhon0:AnimateFX:1.2.2') { exclude group: 'org.openjfx' }
-    implementation('com.sandec:mdfx:0.2.6') { exclude group: 'org.openjfx' }
-    implementation('de.jangassen:nsmenufx:3.1.0') { exclude group: 'org.openjfx' }
-    implementation('com.dlsc.formsfx:formsfx-core:11.5.0') { exclude group: 'org.openjfx' }
     implementation('net.kurobako:gesturefx:0.7.1') { exclude group: 'org.openjfx' }
-    implementation('com.dlsc.workbenchfx:workbenchfx-core:11.1.0') { exclude group: 'org.openjfx' }
-    implementation('org.fxmisc.richtext:richtextfx:0.10.9') { exclude group: 'org.openjfx' }
 
     //implementation from the local file system
     implementation fileTree(dir: '../external-libraries', include: '*.jar')

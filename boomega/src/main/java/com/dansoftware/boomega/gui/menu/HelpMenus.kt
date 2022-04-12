@@ -18,9 +18,9 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.gui.action.impl.OpenAppInfoAction
-import com.dansoftware.boomega.gui.action.impl.OpenContactInfoAction
-import com.dansoftware.boomega.gui.action.impl.SearchForUpdatesAction
+import com.dansoftware.boomega.gui.action.OpenAppInfoAction
+import com.dansoftware.boomega.gui.action.OpenContactInfoAction
+import com.dansoftware.boomega.gui.action.SearchForUpdatesAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.api.i18n

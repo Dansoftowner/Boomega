@@ -18,8 +18,8 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.gui.action.impl.FullScreenAction
-import com.dansoftware.boomega.gui.action.impl.MaximizeWindowAction
+import com.dansoftware.boomega.gui.action.FullScreenAction
+import com.dansoftware.boomega.gui.action.MaximizeWindowAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.menuItem

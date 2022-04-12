@@ -19,9 +19,9 @@ package com.dansoftware.boomega.gui.databaseview
 
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import com.dansoftware.boomega.gui.menu.getPreferredApplicationMenuBar
 import javafx.stage.WindowEvent
 import java.lang.ref.WeakReference

@@ -20,9 +20,9 @@ package com.dansoftware.boomega.gui.launch
 
 import com.dansoftware.boomega.config.LOGIN_DATA
 import com.dansoftware.boomega.database.api.DatabaseMeta
-import com.dansoftware.boomega.database.tracking.DatabaseTracker
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import com.dansoftware.boomega.gui.login.config.LoginData
 import com.dansoftware.boomega.main.parseArguments
 

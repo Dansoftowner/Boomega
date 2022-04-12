@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.gui.action.impl.OpenClipboardViewerAction
+import com.dansoftware.boomega.gui.action.OpenClipboardViewerAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.menuItem
