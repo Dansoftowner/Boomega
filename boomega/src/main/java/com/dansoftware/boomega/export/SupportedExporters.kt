@@ -26,7 +26,7 @@ import com.dansoftware.boomega.export.txtable.TXTableExporter
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.plugin.api.RecordExporterPlugin
 import com.dansoftware.boomega.plugin.api.of
-import okhttp3.internal.toImmutableList
+import com.dansoftware.boomega.util.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.*

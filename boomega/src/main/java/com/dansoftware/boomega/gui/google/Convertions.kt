@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.service.googlebooks
+package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.database.api.data.ServiceConnection
+import com.dansoftware.boomega.service.googlebooks.Volume
+import com.dansoftware.boomega.service.googlebooks.getPublishedDateObject
+import com.dansoftware.boomega.service.googlebooks.isMagazine
 import java.util.*
 
 /**

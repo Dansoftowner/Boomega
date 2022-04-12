@@ -22,7 +22,7 @@ import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.plugin.api.ThemePlugin
 import com.dansoftware.boomega.plugin.api.of
-import okhttp3.internal.toImmutableList
+import com.dansoftware.boomega.util.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

@@ -25,7 +25,6 @@ import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
 import com.dansoftware.boomega.service.googlebooks.Volume
-import com.dansoftware.boomega.service.googlebooks.asRecord
 import javafx.beans.binding.Bindings
 import javafx.scene.control.Button
 import javafx.scene.control.MenuItem
