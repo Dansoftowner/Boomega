@@ -61,10 +61,22 @@ class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory:
                     .map(JarEntry::getName)
                     .map { it.substring(0, it.length - 6) } // We cut out the '.class' part
                     .map { it.replace('/', '.') }
-                    .map(::findClass)
+                    .mapNotNull { findClass(jar, it) }
                     .filter(predicate)
             }
             .toList()
+
+    private fun findClass(jar: JarFile, name: String?): Class<*>? {
+        return try {
+            super.findClass(name)
+        } catch (classDefNotFound: NoClassDefFoundError) {
+            logger.error("Plugin '${jar.name}' may use dependencies aren't available for the JVM", classDefNotFound)
+            null
+        } catch (e: Exception) {
+            logger.error("Exception while loading plugin '${jar.name}'", e)
+            null
+        }
+    }
 
     companion object {
         @JvmStatic
