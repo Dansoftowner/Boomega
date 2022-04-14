@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.plugin
+package com.dansoftware.boomega.simulation.util
 
 import com.dansoftware.boomega.plugin.api.BoomegaPlugin
 import com.dansoftware.boomega.plugin.api.PluginService

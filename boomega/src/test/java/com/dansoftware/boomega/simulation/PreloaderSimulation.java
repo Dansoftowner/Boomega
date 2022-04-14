@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.main;
+package com.dansoftware.boomega.simulation;
 
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader;
+import com.dansoftware.boomega.main.PropertiesSetup;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;

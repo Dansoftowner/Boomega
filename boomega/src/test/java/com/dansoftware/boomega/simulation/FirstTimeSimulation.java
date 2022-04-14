@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.main;
+package com.dansoftware.boomega.simulation;
 
 import com.dansoftware.boomega.config.DummyConfigSource;
 import com.dansoftware.boomega.config.source.ConfigSource;
@@ -24,9 +24,10 @@ import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler;
 import com.dansoftware.boomega.gui.app.BaseBoomegaApplication;
 import com.dansoftware.boomega.gui.app.BoomegaApp;
+import com.dansoftware.boomega.main.PropertiesSetup;
 import com.dansoftware.boomega.main.bindings.ConcurrencyModule;
-import com.dansoftware.boomega.plugin.DummyPluginService;
 import com.dansoftware.boomega.plugin.api.PluginService;
+import com.dansoftware.boomega.simulation.util.DummyPluginService;
 import com.dansoftware.boomega.update.UpdateSearcher;
 import com.google.inject.AbstractModule;
 

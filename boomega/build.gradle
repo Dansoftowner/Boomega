@@ -77,6 +77,8 @@ dependencies {
 
     //implementation from the local file system
     implementation fileTree(dir: '../external-libraries', include: '*.jar')
+
+    testImplementation testFixtures(project(':boomega-preferences'))
 }
 
 /* ----------------------- Simulation executions -------------------------- */
@@ -88,7 +90,7 @@ task runUpdateSimulation(type: JavaExec) {
     description = "Runs a fake update simulation"
     systemProperty('boomega.version', '0.0.0')
     systemProperty('update.next_version', '1.0.0')
-    mainClass.set('com.dansoftware.boomega.update.UpdateSimulation')
+    mainClass.set('com.dansoftware.boomega.simulation.UpdateSimulation')
 }
 
 task runFirstTimeSimulation(type: JavaExec) {
@@ -96,7 +98,7 @@ task runFirstTimeSimulation(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     jvmArgs = applicationDefaultJvmArgs
     description = "Runs a fake first-time running simulation"
-    mainClass.set('com.dansoftware.boomega.main.FirstTimeSimulation')
+    mainClass.set('com.dansoftware.boomega.simulation.FirstTimeSimulation')
 }
 
 task runInMemoryDatabaseSimulation(type: JavaExec) {
@@ -104,7 +106,7 @@ task runInMemoryDatabaseSimulation(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     jvmArgs = applicationDefaultJvmArgs
     description = 'Runs a fake database activity that doesn\'t save data anywhere'
-    mainClass.set('com.dansoftware.boomega.main.InMemoryDatabaseSimulation')
+    mainClass.set('com.dansoftware.boomega.simulation.InMemoryDatabaseSimulation')
 }
 
 task runPreloaderSimulation(type: JavaExec) {
@@ -112,7 +114,7 @@ task runPreloaderSimulation(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     jvmArgs = applicationDefaultJvmArgs
     description = "Shows the preloader"
-    mainClass.set('com.dansoftware.boomega.main.PreloaderSimulation')
+    mainClass.set('com.dansoftware.boomega.simulation.PreloaderSimulation')
 }
 
 /* -------------------------- Distribution -------------------------- */

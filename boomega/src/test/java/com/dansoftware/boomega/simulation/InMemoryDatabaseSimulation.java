@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.main;
+package com.dansoftware.boomega.simulation;
 
 import com.dansoftware.boomega.config.DummyConfigSource;
 import com.dansoftware.boomega.config.source.ConfigSource;
@@ -26,8 +26,8 @@ import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
 import com.dansoftware.boomega.main.bindings.ConcurrencyModule;
-import com.dansoftware.boomega.plugin.DummyPluginService;
 import com.dansoftware.boomega.plugin.api.PluginService;
+import com.dansoftware.boomega.simulation.util.DummyPluginService;
 import com.google.inject.AbstractModule;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyObjectProperty;
