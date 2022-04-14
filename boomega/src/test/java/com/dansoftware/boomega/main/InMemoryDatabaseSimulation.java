@@ -25,6 +25,7 @@ import com.dansoftware.boomega.database.api.data.Record;
 import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.databaseview.DatabaseActivity;
+import com.dansoftware.boomega.main.bindings.ConcurrencyModule;
 import com.dansoftware.boomega.plugin.DummyPluginService;
 import com.dansoftware.boomega.plugin.api.PluginService;
 import com.google.inject.AbstractModule;

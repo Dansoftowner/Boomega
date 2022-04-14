@@ -16,28 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:JvmName("Main")
+package com.dansoftware.boomega.main.bindings
 
-package com.dansoftware.boomega.main
-
-import com.dansoftware.boomega.di.DIService
-import com.dansoftware.boomega.exception.UncaughtExceptionHandler
-import com.dansoftware.boomega.gui.app.BaseBoomegaApplication
 import com.dansoftware.boomega.instance.ApplicationInstanceService
-import com.dansoftware.boomega.main.bindings.RealtimeAppModule
+import com.google.inject.AbstractModule
+import com.google.inject.Provides
+import javafx.application.Platform
+import javax.inject.Named
 
-fun main(args: Array<String>) {
-    init(args)
-    launch(args)
-}
+/**
+ * DI module that provides the default policies for the [com.dansoftware.boomega.gui.app.ApplicationRestart] entity.
+ */
+class ApplicationRestartPolicyModule : AbstractModule() {
+    @Provides
+    @Named("preProcessCreation")
+    @Suppress("unused")
+    fun providePreProcessCreation() = Runnable { ApplicationInstanceService.release() }
 
-private fun launch(args: Array<String>) {
-    BaseBoomegaApplication.launchApp(RealtimeApp::class.java, *args)
-}
-
-private fun init(args: Array<String>) {
-    PropertiesSetup.setupSystemProperties()
-    Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler())
-    DIService.initModules(RealtimeAppModule())
-    ApplicationInstanceService.open(args)
+    @Provides
+    @Named("terminationPolicy")
+    @Suppress("unused")
+    fun provideTerminationPolicy() = Runnable { Platform.exit() }
 }

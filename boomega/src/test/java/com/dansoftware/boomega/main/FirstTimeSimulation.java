@@ -24,6 +24,7 @@ import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler;
 import com.dansoftware.boomega.gui.app.BaseBoomegaApplication;
 import com.dansoftware.boomega.gui.app.BoomegaApp;
+import com.dansoftware.boomega.main.bindings.ConcurrencyModule;
 import com.dansoftware.boomega.plugin.DummyPluginService;
 import com.dansoftware.boomega.plugin.api.PluginService;
 import com.dansoftware.boomega.update.UpdateSearcher;
