@@ -32,6 +32,7 @@ dependencies {
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.8'
+    implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
 
     api('com.dlsc.workbenchfx:workbenchfx-core:11.1.0') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
     api('io.github.typhon0:AnimateFX:1.2.2') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed

@@ -19,11 +19,11 @@
 package com.dansoftware.boomega.gui.preferences.pane
 
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.app.ApplicationRestart
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.LOCALE
 import com.dansoftware.boomega.i18n.api.I18N
-import com.dansoftware.boomega.main.ApplicationRestart
 import javafx.scene.Node
 import javafx.scene.control.ButtonType
 import javafx.scene.control.ChoiceBox

@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.main
 
+import com.dansoftware.boomega.instance.ApplicationInstanceService
 import com.dansoftware.boomega.plugin.RealtimePluginService
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.update.GithubReleasesFetcher
@@ -31,6 +32,7 @@ import com.google.inject.Module
 import com.google.inject.Provides
 import com.google.inject.name.Names
 import com.google.inject.util.Modules
+import javafx.application.Platform
 import java.io.File
 import java.util.concurrent.ExecutorService
 import javax.inject.Named
@@ -39,16 +41,19 @@ class RealtimeAppModule : Module by Modules.combine(
     PreferencesModule(),
     UpdateModule(),
     PluginModule(),
-    ConcurrencyModule()
+    ConcurrencyModule(),
+    ApplicationRestartPolicyModule()
 )
 
 class PreferencesModule : AbstractModule() {
     override fun configure() {
-        bind(com.dansoftware.boomega.config.source.ConfigSource::class.java).to(com.dansoftware.boomega.config.source.JsonFileSource::class.java)
+        bind(com.dansoftware.boomega.config.source.ConfigSource::class.java)
+            .to(com.dansoftware.boomega.config.source.JsonFileSource::class.java)
     }
 
     @Provides
     @Named("configFilePath")
+    @Suppress("unused")
     fun provideConfigFilePath() = joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg")
 }
 
@@ -74,6 +79,7 @@ class PluginModule : AbstractModule() {
 
     @Provides
     @Named("jarDirectory")
+    @Suppress("unused")
     fun providePluginDirectory() = File(System.getProperty("boomega.plugin.dir"))
 }
 
@@ -86,4 +92,16 @@ class ConcurrencyModule : AbstractModule() {
             .annotatedWith(Names.named("cachedExecutor"))
             .to(CachedExecutor::class.java)
     }
+}
+
+class ApplicationRestartPolicyModule : AbstractModule() {
+    @Provides
+    @Named("preProcessCreation")
+    @Suppress("unused")
+    fun providePreProcessCreation() = Runnable { ApplicationInstanceService.release() }
+
+    @Provides
+    @Named("terminationPolicy")
+    @Suppress("unused")
+    fun provideTerminationPolicy() = Runnable { Platform.exit() }
 }

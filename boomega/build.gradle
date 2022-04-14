@@ -81,7 +81,6 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'ch.qos.logback:logback-core:1.2.11'
 
-    implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
     implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
 
     // Common utilities

@@ -20,11 +20,11 @@ package com.dansoftware.boomega.gui.action
 
 import com.dansoftware.boomega.gui.action.api.Action
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.app.ApplicationRestart
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.api.I18N
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.main.ApplicationRestart
 import javafx.scene.control.ButtonType
 
 object RestartApplicationAction : Action(

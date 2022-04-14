@@ -22,6 +22,7 @@ import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.action.OpenSettingsAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.app.ApplicationRestart
 import com.dansoftware.boomega.gui.theme.THEME
 import com.dansoftware.boomega.gui.theme.Theme
 import com.dansoftware.boomega.gui.util.graphic
@@ -31,7 +32,6 @@ import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.LOCALE
 import com.dansoftware.boomega.i18n.api.I18N
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.main.ApplicationRestart
 import javafx.scene.control.ButtonType
 import javafx.scene.control.Menu
 import javafx.scene.control.RadioMenuItem
