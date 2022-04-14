@@ -1,6 +1,6 @@
 allprojects {
     javafx {
-        modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls' ]
+        modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.web' ]
     }
 
     dependencies {
@@ -16,10 +16,6 @@ allprojects {
     }
 }
 
-repositories {
-    maven { url "https://sandec.jfrog.io/artifactory/repo" } // repository for MDFX
-}
-
 dependencies {
     implementation project(':boomega-gui:api')
     implementation project(':boomega-gui:utils')
@@ -28,17 +24,29 @@ dependencies {
     implementation project(':boomega-plugin')
     implementation project(':boomega-database')
     implementation project(':boomega-update')
+    implementation project(':boomega-rest')
+
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
     implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
     implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.8'
     implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
+    implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
 
     api('com.dlsc.workbenchfx:workbenchfx-core:11.1.0') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
     api('io.github.typhon0:AnimateFX:1.2.2') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
     implementation('de.jangassen:nsmenufx:3.1.0') { exclude group: 'org.openjfx' }
     api('org.jfxtras:jmetro:11.6.15') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
     api('com.sandec:mdfx:0.2.6') { exclude group: 'org.openjfx' }
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6' // Caching utilities
+    implementation('net.kurobako:gesturefx:0.7.1') { exclude group: 'org.openjfx' }
+
+    // TODO: remove these from here (move to the record-export module)
+    implementation 'org.apache.poi:poi-ooxml:5.2.2' // Microsoft Documents
+    implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
+    implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
 
     implementation fileTree(dir: '../external-libraries', include: 'fontawesomefx-11.0.jar')
+    implementation fileTree(dir: '../external-libraries', include: 'jHTML2Md.jar')
 }

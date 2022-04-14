@@ -16,15 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.exception
+package com.dansoftware.boomega.gui.databaseview
 
-import com.dansoftware.boomega.i18n.api.i18n
-import org.controlsfx.dialog.ExceptionDialog
+import javafx.scene.layout.VBox
 
-class UncaughtExceptionDialog(e: Throwable) : ExceptionDialog(e) {
+/**
+ * The core of a [DatabaseView]. It includes the [DatabaseViewToolbar] and the [TabView].
+ */
+class DatabaseViewBase(view: DatabaseView) : VBox() {
+
+    private val toolbar = DatabaseViewToolbar(view)
+    private val tabView = TabView(ModuleView.getTabItem(view))
+
     init {
-        title = i18n("dialog.uncaught.title")
-        headerText = i18n("dialog.uncaught.header_text")
-        contentText = i18n("dialog.uncaught.content_text")
+        buildUI()
     }
+
+    private fun buildUI() {
+        children.add(toolbar)
+        children.add(tabView)
+    }
+
+    fun openTab(tabItem: TabItem) = tabView.openTab(tabItem)
+
+    fun closeTab(tabItem: TabItem) = tabView.closeTab(tabItem)
 }

@@ -27,12 +27,6 @@ plugins {
     id 'org.panteleyev.jpackageplugin' version '1.3.1' // for jpackage
 }
 
-repositories {
-    maven { url "https://sandec.jfrog.io/artifactory/repo" } // repository for MDFX TODO: shouldn't be here?
-    maven { url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2" } // repository for JUnique
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-}
-
 mainClassName = 'com.dansoftware.boomega.main.Main'
 applicationDefaultJvmArgs = [
         '-Dhttps.protocols=TLSv1.2,TLSv1.1,TLSv1', // See #144: https://github.com/Dansoftowner/Boomega/issues/144
@@ -53,48 +47,33 @@ applicationDefaultJvmArgs = [
 ]
 
 javafx {
-    version = JAVAFX_VERSION
     modules = [
             'javafx.base',
-            'javafx.controls',
             'javafx.graphics',
-            'javafx.media',
-            'javafx.web'
+            'javafx.controls',
     ]
 }
 
 dependencies {
 
     implementation project(':boomega-di')
-    implementation project(':boomega-plugin')
     implementation project(':boomega-gui')
-    implementation project(':boomega-gui:api')
-    implementation project(':boomega-gui:utils')
     implementation project(':boomega-i18n')
-    implementation project(':boomega-utils')
     implementation project(':boomega-database')
     implementation project(':boomega-preferences')
     implementation project(':boomega-update')
-    implementation project(':boomega-rest')
+    implementation project(':boomega-gui:api')
+    implementation project(':boomega-plugin')
+    implementation project(':boomega-utils')
 
     // logging
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'ch.qos.logback:logback-core:1.2.11'
 
-    implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
-
     // Common utilities
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-collections:commons-collections:3.2.2'
 
-    implementation 'org.apache.poi:poi-ooxml:5.2.2' // Microsoft Documents
-    implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
-    implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
-
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6' // Caching utilities
     implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
-
-    implementation('net.kurobako:gesturefx:0.7.1') { exclude group: 'org.openjfx' }
 
     //implementation from the local file system
     implementation fileTree(dir: '../external-libraries', include: '*.jar')

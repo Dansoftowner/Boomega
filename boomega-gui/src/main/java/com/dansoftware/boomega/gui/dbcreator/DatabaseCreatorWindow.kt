@@ -16,15 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.exception
+package com.dansoftware.boomega.gui.dbcreator
 
+import com.dansoftware.boomega.database.api.DatabaseMeta
+import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.api.i18n
-import org.controlsfx.dialog.ExceptionDialog
+import javafx.stage.Modality
+import javafx.stage.Window
 
-class UncaughtExceptionDialog(e: Throwable) : ExceptionDialog(e) {
+class DatabaseCreatorWindow(owner: Window? = null) : BaseWindow<DatabaseCreatorView>(
+    i18n("window.dbcreator.title"),
+    DatabaseCreatorView()
+) {
+
     init {
-        title = i18n("dialog.uncaught.title")
-        headerText = i18n("dialog.uncaught.header_text")
-        contentText = i18n("dialog.uncaught.content_text")
+        initModality(Modality.APPLICATION_MODAL)
+        initOwner(owner)
+        width = 741.0
+        height = 435.0
+        centerOnScreen()
+    }
+
+    /**
+     * Waits the current thread until a result is available
+     *
+     * @return the [DatabaseMeta] representing the registered database
+     */
+    fun showAndGetResult(): DatabaseMeta? {
+        showAndWait()
+        return content!!.createdDatabase
     }
 }

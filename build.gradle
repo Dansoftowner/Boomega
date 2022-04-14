@@ -37,6 +37,9 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url "https://jitpack.io" }
+        maven { url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2" } // repository for JUnique
+        maven { url "https://sandec.jfrog.io/artifactory/repo" } // repository for MDFX
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
     [compileJava, compileTestJava].forEach {
@@ -54,6 +57,10 @@ subprojects {
 
     test {
         useJUnitPlatform()
+    }
+
+    javafx {
+        version = JAVAFX_VERSION
     }
 
     dependencies {

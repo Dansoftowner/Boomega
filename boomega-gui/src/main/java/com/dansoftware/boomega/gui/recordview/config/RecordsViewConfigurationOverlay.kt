@@ -16,15 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.exception
+package com.dansoftware.boomega.gui.recordview.config
 
+import com.dansoftware.boomega.gui.base.TitledOverlayBox
+import com.dansoftware.boomega.gui.recordview.RecordsView
+import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n
-import org.controlsfx.dialog.ExceptionDialog
 
-class UncaughtExceptionDialog(e: Throwable) : ExceptionDialog(e) {
-    init {
-        title = i18n("dialog.uncaught.title")
-        headerText = i18n("dialog.uncaught.header_text")
-        contentText = i18n("dialog.uncaught.content_text")
-    }
-}
+class RecordsViewConfigurationOverlay(view: RecordsView, preferences: com.dansoftware.boomega.config.Preferences) : TitledOverlayBox(
+    i18n("record.panel_config"), icon("tune-icon"), RecordsViewConfigurationPanel(view)
+)

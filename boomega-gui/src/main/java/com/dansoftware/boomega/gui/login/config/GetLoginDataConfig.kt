@@ -16,15 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.exception
+package com.dansoftware.boomega.gui.login.config
 
-import com.dansoftware.boomega.i18n.api.i18n
-import org.controlsfx.dialog.ExceptionDialog
+import com.dansoftware.boomega.config.PreferenceKey
 
-class UncaughtExceptionDialog(e: Throwable) : ExceptionDialog(e) {
-    init {
-        title = i18n("dialog.uncaught.title")
-        headerText = i18n("dialog.uncaught.header_text")
-        contentText = i18n("dialog.uncaught.content_text")
-    }
-}
+/**
+ * Key for accessing the login data
+ */
+@JvmField
+val LOGIN_DATA = PreferenceKey(
+    "loginData",
+    LoginData::class.java,
+    LoginDataAdapter(),
+    ::LoginData
+)

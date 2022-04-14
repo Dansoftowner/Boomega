@@ -16,15 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.exception
+package com.dansoftware.boomega.gui.menu
 
-import com.dansoftware.boomega.i18n.api.i18n
-import org.controlsfx.dialog.ExceptionDialog
+import com.dansoftware.boomega.gui.action.*
+import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.util.menuItem
+import com.dansoftware.boomega.gui.util.separator
+import javafx.scene.control.Menu
 
-class UncaughtExceptionDialog(e: Throwable) : ExceptionDialog(e) {
+/**
+ * The application menu that's used only in the macOS menu-bar.
+ */
+class MacOsApplicationMenu(context: Context) : Menu(System.getProperty("app.name")) {
+
     init {
-        title = i18n("dialog.uncaught.title")
-        headerText = i18n("dialog.uncaught.header_text")
-        contentText = i18n("dialog.uncaught.content_text")
+        this.menuItem(menuItemOf(OpenAppInfoAction, context))
+            .menuItem(menuItemOf(SearchForUpdatesAction, context))
+            .separator()
+            .menuItem(menuItemOf(CloseWindowAction, context))
+            .menuItem(menuItemOf(RestartApplicationAction, context))
+            .menuItem(menuItemOf(QuitAppAction, context))
     }
 }

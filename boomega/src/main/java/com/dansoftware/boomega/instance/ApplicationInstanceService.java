@@ -29,7 +29,6 @@ import com.dansoftware.boomega.main.Arguments;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import it.sauronsoftware.junique.MessageHandler;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -42,8 +41,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.dansoftware.boomega.config.CommonPreferences.LOGIN_DATA;
 import static com.dansoftware.boomega.di.DIService.get;
+import static com.dansoftware.boomega.gui.login.config.GetLoginDataConfigKt.LOGIN_DATA;
 
 /**
  * Responsible for listening to application instances
@@ -79,7 +78,7 @@ public class ApplicationInstanceService implements MessageHandler {
                 }
             });
 
-            if (ArrayUtils.isEmpty(args)) {
+            if (isEmpty(args)) {
                 JUnique.sendMessage(APPLICATION_ID, Integer.toString(EMPTY_ARGS_MESSAGE));
             } else {
                 try {
@@ -147,6 +146,10 @@ public class ApplicationInstanceService implements MessageHandler {
 
     public static synchronized void release() {
         JUnique.releaseLock(APPLICATION_ID);
+    }
+
+    private static boolean isEmpty(String[] array) {
+        return array == null || array.length == 0;
     }
 
     private static class ActivityLauncherImpl extends ActivityLauncher {

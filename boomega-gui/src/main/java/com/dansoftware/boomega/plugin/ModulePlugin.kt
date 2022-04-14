@@ -16,15 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.exception
+package com.dansoftware.boomega.plugin
 
-import com.dansoftware.boomega.i18n.api.i18n
-import org.controlsfx.dialog.ExceptionDialog
+import com.dansoftware.boomega.database.api.Database
+import com.dansoftware.boomega.gui.api.Context
+import com.dansoftware.boomega.gui.databaseview.Module
+import com.dansoftware.boomega.plugin.api.BoomegaPlugin
 
-class UncaughtExceptionDialog(e: Throwable) : ExceptionDialog(e) {
-    init {
-        title = i18n("dialog.uncaught.title")
-        headerText = i18n("dialog.uncaught.header_text")
-        contentText = i18n("dialog.uncaught.content_text")
-    }
+/**
+ * Allows to add a custom [Module] to the [com.dansoftware.boomega.gui.databaseview.DatabaseView]
+ */
+interface ModulePlugin : BoomegaPlugin {
+    fun getModule(context: Context, database: Database): Module
 }

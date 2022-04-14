@@ -25,7 +25,8 @@ import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
 import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
-import com.dansoftware.boomega.gui.launch.initActivityLauncher
+import com.dansoftware.boomega.gui.launch.LauncherMode
+import com.dansoftware.boomega.gui.launch.activityLauncher
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader.MessageNotification.Priority
 import com.dansoftware.boomega.gui.theme.THEME
@@ -34,6 +35,7 @@ import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.LOCALE
 import com.dansoftware.boomega.i18n.api.i18n
+import com.dansoftware.boomega.main.parseArguments
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.update.LAST_UPDATE_SEARCH
 import com.dansoftware.boomega.update.Release
@@ -248,10 +250,11 @@ open class BoomegaApp : BaseBoomegaApplication() {
      */
     private fun launchGUI(update: Release?) {
         notifyPreloader("preloader.gui.build")
-        initActivityLauncher(
+        activityLauncher(
+            mode = LauncherMode.INITIAL,
             preferences = get(Preferences::class),
             databaseTracker = get(DatabaseTracker::class),
-            applicationArgs = applicationArgs,
+            initialDatabase = parseArguments(applicationArgs),
             onLaunched = { context, launched ->
                 update?.let {
                     val updateActivity =
