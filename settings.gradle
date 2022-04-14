@@ -1,5 +1,5 @@
 rootProject.name = 'Boomega'
-include 'boomega',
+include 'boomega-app',
         'boomega-di',
         'boomega-gui',
         'boomega-gui:api',
