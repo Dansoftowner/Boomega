@@ -16,15 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.database.tracking;
+package com.dansoftware.boomega.gui.dbmanager;
 
-import com.dansoftware.boomega.config.CommonPreferences;
 import com.dansoftware.boomega.config.DummyConfigSource;
 import com.dansoftware.boomega.config.Preferences;
 import com.dansoftware.boomega.config.source.ConfigSource;
 import com.dansoftware.boomega.database.api.DatabaseMeta;
 import com.dansoftware.boomega.di.DIService;
-import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
@@ -35,6 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;
 
+import static com.dansoftware.boomega.gui.login.config.GetLoginDataConfigKt.LOGIN_DATA;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -66,7 +65,7 @@ public class DatabaseTrackerPreferencesTest {
     void itShouldAddDatabaseToLoginData() {
         var dbMeta = mock(DatabaseMeta.class);
         underTest.saveDatabase(dbMeta);
-        assertThat(preferences.get(CommonPreferences.LOGIN_DATA).getSavedDatabases()).contains(dbMeta);
+        assertThat(preferences.get(LOGIN_DATA).getSavedDatabases()).contains(dbMeta);
     }
 
     @Test
@@ -75,6 +74,6 @@ public class DatabaseTrackerPreferencesTest {
         var dbMeta = mock(DatabaseMeta.class);
         underTest.saveDatabase(dbMeta);
         underTest.removeDatabase(dbMeta);
-        assertThat(preferences.get(CommonPreferences.LOGIN_DATA).getSavedDatabases()).doesNotContain(dbMeta);
+        assertThat(preferences.get(LOGIN_DATA).getSavedDatabases()).doesNotContain(dbMeta);
     }
 }
