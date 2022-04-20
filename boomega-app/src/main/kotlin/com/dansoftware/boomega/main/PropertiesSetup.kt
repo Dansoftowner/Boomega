@@ -49,7 +49,7 @@ object PropertiesSetup {
     /**
      * The log-file's path without the extension (for the logback configuration)
      */
-    private val LOG_FILE_PATH_VALUE = File(tempDirectory, "boomega").toString()
+    private val LOG_FILE_PATH_VALUE = File(tempDirectory, "com/dansoftware/boomega").toString()
 
     /**
      * The log-file's path with the extension
