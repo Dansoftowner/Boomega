@@ -20,6 +20,7 @@
 
 ### Changes
 * 💄 New application icon
+* ✨ Login-view menu-bar
 * ➖ Removed embedded third-party software viewer
 * ♻️ Plugin API improvements, simplified plugin management
 
