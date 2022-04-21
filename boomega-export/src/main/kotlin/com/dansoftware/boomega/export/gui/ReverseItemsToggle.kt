@@ -16,13 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.recordview.config
+package com.dansoftware.boomega.export.gui
 
-import com.dansoftware.boomega.gui.control.TitledOverlayBox
-import com.dansoftware.boomega.gui.recordview.RecordsView
+import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n
+import javafx.scene.control.ToggleButton
+import javafx.scene.control.Tooltip
 
-class RecordsViewConfigurationOverlay(view: RecordsView) : TitledOverlayBox(
-    i18n("record.panel_config"), icon("tune-icon"), RecordsViewConfigurationPanel(view)
-)
+class ReverseItemsToggle(exportConfiguration: RecordExportConfiguration) : ToggleButton() {
+    init {
+        tooltip = Tooltip(i18n("record.export.reverse_order"))
+        graphic = icon("rotate-icon")
+        selectedProperty().addListener { _, _, isSelected ->
+            exportConfiguration.reverseItems = isSelected
+        }
+    }
+}

@@ -161,7 +161,7 @@ class RecordsViewToolbar(
 
     private fun buildOptionsItem() =
         buildToolbarItem("tune-icon", "record.panel_config") {
-            context.showOverlay(RecordsViewConfigurationOverlay(view, preferences))
+            context.showOverlay(RecordsViewConfigurationOverlay(view))
         }
 
     private fun buildToolbarItem(

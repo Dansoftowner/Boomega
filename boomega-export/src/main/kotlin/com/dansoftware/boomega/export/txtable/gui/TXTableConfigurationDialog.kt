@@ -16,13 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.recordview.config
+package com.dansoftware.boomega.export.txtable.gui
 
-import com.dansoftware.boomega.gui.control.TitledOverlayBox
-import com.dansoftware.boomega.gui.recordview.RecordsView
-import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.i18n.api.i18n
+import com.dansoftware.boomega.export.api.ConfigurationDialog
+import com.dansoftware.boomega.export.txtable.TXTableConfiguration
+import com.dansoftware.boomega.gui.api.Context
 
-class RecordsViewConfigurationOverlay(view: RecordsView) : TitledOverlayBox(
-    i18n("record.panel_config"), icon("tune-icon"), RecordsViewConfigurationPanel(view)
-)
+class TXTableConfigurationDialog : ConfigurationDialog<TXTableConfiguration> {
+    override fun show(context: Context, onFinished: (TXTableConfiguration) -> Unit) {
+        var overlay: TXTableConfigurationOverlay? = null
+        overlay = TXTableConfigurationOverlay {
+            context.hideOverlay(overlay!!)
+            onFinished(it)
+        }
+        context.showOverlay(overlay)
+    }
+}

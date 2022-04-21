@@ -1,0 +1,17 @@
+javafx {
+    modules = [ 'javafx.controls' ]
+}
+
+dependencies {
+    implementation project(':boomega-di')
+    implementation project(':boomega-gui:api')
+    implementation project(':boomega-gui:utils')
+    implementation project(':boomega-database')
+    implementation project(':boomega-i18n')
+    implementation project(':boomega-plugin')
+    implementation project(':boomega-utils')
+
+    implementation 'org.apache.poi:poi-ooxml:5.2.2' // Microsoft Documents
+    implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
+    implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
+}

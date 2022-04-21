@@ -21,6 +21,8 @@ package com.dansoftware.boomega.gui.base;
 import com.dansoftware.boomega.gui.api.Context;
 import com.dansoftware.boomega.gui.api.ContextDialog;
 import com.dansoftware.boomega.gui.control.ExceptionDisplayPane;
+import com.dansoftware.boomega.gui.control.NotificationNode;
+import com.dansoftware.boomega.gui.control.NotificationsBox;
 import com.dansoftware.boomega.gui.util.EventUtils;
 import com.dansoftware.boomega.gui.util.I18NButtonTypes;
 import com.dansoftware.boomega.gui.util.WindowUtils;
@@ -154,70 +156,70 @@ public class BaseView extends StackPane implements Context {
     }
 
     @Override
-    public void showOverlay(Region region, boolean blocking) {
+    public void showOverlay(@NotNull Region region, boolean blocking) {
         workbench.showOverlay(region, blocking);
     }
 
     @Override
-    public void hideOverlay(Region region) {
+    public void hideOverlay(@NotNull Region region) {
         workbench.hideOverlay(region);
     }
 
     @Override
-    public @NotNull ContextDialog showErrorDialog(String title, String message, Consumer<ButtonType> onResult) {
+    public @NotNull ContextDialog showErrorDialog(String title, String message, @NotNull Consumer<ButtonType> onResult) {
         return showErrorDialog(title, message, null, onResult);
     }
 
     @Override
-    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception cause, Consumer<ButtonType> onResult) {
+    public @NotNull ContextDialog showErrorDialog(String title, String message, Exception cause, @NotNull Consumer<ButtonType> onResult) {
         return new WorkbenchDialogContextDialog(workbench.showDialog(buildErrorDialog(title, message, cause, onResult)), ContextDialog.Type.ERROR);
     }
 
     @Override
-    public @NotNull ContextDialog showInformationDialog(String title, String message, Consumer<ButtonType> onResult) {
+    public @NotNull ContextDialog showInformationDialog(String title, String message, @NotNull Consumer<ButtonType> onResult) {
         return new WorkbenchDialogContextDialog(workbench.showDialog(buildInformationDialog(title, message, onResult)), ContextDialog.Type.INFORMATION);
     }
 
     @Override
-    public ContextDialog showConfirmationDialog(String title, String message, Consumer<ButtonType> onResult) {
+    public @NotNull ContextDialog showConfirmationDialog(String title, String message, @NotNull Consumer<ButtonType> onResult) {
         return new WorkbenchDialogContextDialog(workbench.showDialog(buildConfirmationDialog(title, message, onResult)), ContextDialog.Type.CONFIRMATION);
     }
 
     @Override
-    public @NotNull ContextDialog showDialog(String title, Node content, Consumer<ButtonType> onResult, ButtonType... buttonTypes) {
+    public @NotNull ContextDialog showDialog(String title, @NotNull Node content, @NotNull Consumer<ButtonType> onResult, ButtonType @NotNull ... buttonTypes) {
         return new WorkbenchDialogContextDialog(workbench.showDialog(WorkbenchDialog.builder(title, content, buttonTypes).onResult(onResult).build()));
     }
 
     @Override
-    public ButtonType showErrorDialogAndWait(String title, String message) {
+    public @NotNull ButtonType showErrorDialogAndWait(String title, String message) {
         final var key = new Object();
         showErrorDialog(title, message, buttonType -> Platform.exitNestedEventLoop(key, buttonType));
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
-    public ButtonType showErrorDialogAndWait(String title, String message, Exception e) {
+    public @NotNull ButtonType showErrorDialogAndWait(String title, String message, Exception e) {
         final var key = new Object();
         showErrorDialog(title, message, e, buttonType -> Platform.exitNestedEventLoop(key, buttonType));
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
-    public ButtonType showInformationDialogAndWait(String title, String message) {
+    public @NotNull ButtonType showInformationDialogAndWait(String title, String message) {
         final var key = new Object();
         showInformationDialog(title, message, buttonType -> Platform.exitNestedEventLoop(key, buttonType));
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
-    public ButtonType showConfirmationDialogAndWait(String title, String message) {
+    public @NotNull ButtonType showConfirmationDialogAndWait(String title, String message) {
         final var key = new Object();
         showConfirmationDialog(title, message, buttonType -> Platform.exitNestedEventLoop(key, buttonType));
         return (ButtonType) Platform.enterNestedEventLoop(key);
     }
 
     @Override
-    public ButtonType showDialogAndWait(String title, Node content, ButtonType... buttonTypes) {
+    public @NotNull ButtonType showDialogAndWait(String title, @NotNull Node content, ButtonType @NotNull ... buttonTypes) {
         final var key = new Object();
         this.showDialog(title, content, buttonType -> Platform.exitNestedEventLoop(key, buttonType), buttonTypes);
         return (ButtonType) Platform.enterNestedEventLoop(key);
@@ -273,17 +275,17 @@ public class BaseView extends StackPane implements Context {
     }
 
     @Override
-    public void showErrorNotification(String title, String message, EventHandler<MouseEvent> onClicked) {
+    public void showErrorNotification(String title, String message, @NotNull EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.ERROR, title, message, null, onClicked);
     }
 
     @Override
-    public void showErrorNotification(String title, String message, Duration duration) {
+    public void showErrorNotification(String title, String message, @NotNull Duration duration) {
         showNotification(NotificationNode.NotificationType.ERROR, title, message, duration, null);
     }
 
     @Override
-    public void showErrorNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
+    public void showErrorNotification(String title, String message, @NotNull Duration duration, @NotNull EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.ERROR, title, message, duration, onClicked);
     }
 
@@ -293,17 +295,17 @@ public class BaseView extends StackPane implements Context {
     }
 
     @Override
-    public void showWarningNotification(String title, String message, EventHandler<MouseEvent> onClicked) {
+    public void showWarningNotification(String title, String message, @NotNull EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.WARNING, title, message, null, onClicked);
     }
 
     @Override
-    public void showWarningNotification(String title, String message, Duration duration) {
+    public void showWarningNotification(String title, String message, @NotNull Duration duration) {
         showNotification(NotificationNode.NotificationType.WARNING, title, message, duration, null);
     }
 
     @Override
-    public void showWarningNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
+    public void showWarningNotification(String title, String message, @NotNull Duration duration, @NotNull EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.WARNING, title, message, duration, onClicked);
     }
 
@@ -313,22 +315,22 @@ public class BaseView extends StackPane implements Context {
     }
 
     @Override
-    public void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked) {
+    public void showInformationNotification(String title, String message, @NotNull EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.INFO, title, message, null, onClicked);
     }
 
     @Override
-    public void showInformationNotification(String title, String message, EventHandler<MouseEvent> onClicked, Hyperlink... hyperlinks) {
+    public void showInformationNotification(String title, String message, @NotNull EventHandler<MouseEvent> onClicked, Hyperlink @NotNull ... hyperlinks) {
         showNotification(NotificationNode.NotificationType.INFO, title, message, null, hyperlinks, onClicked);
     }
 
     @Override
-    public void showInformationNotification(String title, String message, Duration duration) {
+    public void showInformationNotification(String title, String message, @NotNull Duration duration) {
         showNotification(NotificationNode.NotificationType.INFO, title, message, duration, null);
     }
 
     @Override
-    public void showInformationNotification(String title, String message, Duration duration, EventHandler<MouseEvent> onClicked) {
+    public void showInformationNotification(String title, String message, @NotNull Duration duration, @NotNull EventHandler<MouseEvent> onClicked) {
         showNotification(NotificationNode.NotificationType.INFO, title, message, duration, onClicked);
     }
 
@@ -352,8 +354,7 @@ public class BaseView extends StackPane implements Context {
     @Override
     public void toFrontRequest() {
         javafx.stage.Window contextWindow = getContextWindow();
-        if (contextWindow instanceof Stage) {
-            Stage stage = (Stage) contextWindow;
+        if (contextWindow instanceof Stage stage) {
             stage.setIconified(false);
             stage.toFront();
         }
@@ -386,7 +387,7 @@ public class BaseView extends StackPane implements Context {
     }
 
     @Override
-    public void onWindowPresent(Consumer<Window> action) {
+    public void onWindowPresent(@NotNull Consumer<Window> action) {
         EventUtils.onWindowPresent(workbench, action);
     }
 

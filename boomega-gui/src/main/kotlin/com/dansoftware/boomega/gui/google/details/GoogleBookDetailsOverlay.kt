@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.google.details
 
 import com.dansoftware.boomega.gui.api.Context
-import com.dansoftware.boomega.gui.base.TitledOverlayBox
+import com.dansoftware.boomega.gui.control.TitledOverlayBox
 import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.service.googlebooks.Volume
 import javafx.scene.image.ImageView

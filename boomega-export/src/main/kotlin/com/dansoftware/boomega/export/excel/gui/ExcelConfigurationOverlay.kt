@@ -16,13 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.recordview.config
+package com.dansoftware.boomega.export.excel.gui
 
+import com.dansoftware.boomega.export.excel.ExcelExportConfiguration
 import com.dansoftware.boomega.gui.control.TitledOverlayBox
-import com.dansoftware.boomega.gui.recordview.RecordsView
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n
 
-class RecordsViewConfigurationOverlay(view: RecordsView) : TitledOverlayBox(
-    i18n("record.panel_config"), icon("tune-icon"), RecordsViewConfigurationPanel(view)
+class ExcelConfigurationOverlay(onFinished: (ExcelExportConfiguration) -> Unit) : TitledOverlayBox(
+    i18n("record.export.excel.title"),
+    icon("excel-icon"),
+    ExcelConfigurationView(onFinished)
 )

@@ -16,13 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.recordview.config
+package com.dansoftware.boomega.export.api
 
-import com.dansoftware.boomega.gui.control.TitledOverlayBox
-import com.dansoftware.boomega.gui.recordview.RecordsView
-import com.dansoftware.boomega.gui.util.icon
-import com.dansoftware.boomega.i18n.api.i18n
+import com.dansoftware.boomega.gui.api.Context
 
-class RecordsViewConfigurationOverlay(view: RecordsView) : TitledOverlayBox(
-    i18n("record.panel_config"), icon("tune-icon"), RecordsViewConfigurationPanel(view)
-)
+/**
+ * A [ConfigurationDialog] is provided by a particular [RecordExporter].
+ * It has the ability to show a configuration-panel on the GUI that allows to
+ * create a [RecordExportConfiguration].
+ *
+ * @param C the [RecordExportConfiguration] this dialog creates
+ * @see RecordExporter.configurationDialog
+ */
+interface ConfigurationDialog<C : RecordExportConfiguration> {
+
+    /**
+     * Requests the dialog to be shown.
+     *
+     * @param context the [Context] that provides access to the UI
+     * @param onFinished the callback that will receive the configuration
+     */
+    fun show(context: Context, onFinished: (C) -> Unit)
+}

@@ -18,8 +18,8 @@
 
 package com.dansoftware.boomega.gui.info.contact
 
-import com.dansoftware.boomega.gui.base.TitledOverlayBox
 import com.dansoftware.boomega.gui.control.HighlightableLabel
+import com.dansoftware.boomega.gui.control.TitledOverlayBox
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.I18N
 import javafx.geometry.Insets
