@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+@file:[JvmName("GsonUtils") Suppress("NOTHING_TO_INLINE")]
 
 package com.dansoftware.boomega.util
 

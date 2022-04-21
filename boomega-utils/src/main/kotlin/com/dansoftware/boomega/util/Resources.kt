@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:JvmName("Resources")
+
 package com.dansoftware.boomega.util
 
 import java.io.InputStream

@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:JvmName("Collections")
+
 package com.dansoftware.boomega.util
 
 import java.util.*
 
-fun <T> List<T>.toImmutableList(): List<T> =
-    Collections.unmodifiableList(this)
+fun <T> Iterable<T>.toImmutableList(): List<T> = Collections.unmodifiableList(this.toList())
