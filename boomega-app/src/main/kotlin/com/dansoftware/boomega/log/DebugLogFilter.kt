@@ -29,7 +29,7 @@ import ch.qos.logback.core.spi.FilterReply
 class DebugLogFilter : Filter<ILoggingEvent>() {
 
     private val acceptDebugLogs by lazy {
-        System.getProperty("accept.debug.logs").toBoolean()
+        System.getProperty("boomega.accept.debug.logs").toBoolean()
     }
 
     override fun decide(event: ILoggingEvent): FilterReply {
