@@ -9,10 +9,9 @@ allprojects {
         implementation project(':boomega-i18n')
         implementation project(':boomega-preferences')
 
-        api('net.synedra:validatorfx:0.3.1') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
-        api('org.controlsfx:controlsfx:11.1.1') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
-        api('com.dlsc.formsfx:formsfx-core:11.5.0') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
-
+        api('org.controlsfx:controlsfx:11.1.1') { exclude group: 'org.openjfx' }
+        api('net.synedra:validatorfx:0.3.1') { exclude group: 'org.openjfx' }
+        implementation('com.dlsc.formsfx:formsfx-core:11.5.0') { exclude group: 'org.openjfx' }
     }
 }
 
@@ -34,11 +33,11 @@ dependencies {
     implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
     implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
 
-    api('com.dlsc.workbenchfx:workbenchfx-core:11.1.0') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
-    api('io.github.typhon0:AnimateFX:1.2.2') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
+    implementation('com.dlsc.workbenchfx:workbenchfx-core:11.1.0') { exclude group: 'org.openjfx' }
+    implementation('io.github.typhon0:AnimateFX:1.2.2') { exclude group: 'org.openjfx' }
     implementation('de.jangassen:nsmenufx:3.1.0') { exclude group: 'org.openjfx' }
-    api('org.jfxtras:jmetro:11.6.15') { exclude group: 'org.openjfx' } // TODO: shouldn't be exposed
-    api('com.sandec:mdfx:0.2.6') { exclude group: 'org.openjfx' }
+    implementation('org.jfxtras:jmetro:11.6.15') { exclude group: 'org.openjfx' }
+    implementation('com.sandec:mdfx:0.2.6') { exclude group: 'org.openjfx' }
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6' // Caching utilities
     implementation('net.kurobako:gesturefx:0.7.1') { exclude group: 'org.openjfx' }
 
