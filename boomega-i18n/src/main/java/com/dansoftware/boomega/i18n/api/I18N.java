@@ -172,8 +172,10 @@ public class I18N {
      * Registers the internal language-packs.
      */
     private static void registerBasePacks() {
-        for (var pack : listInternalLanguagePacks())
+        for (var pack : listInternalLanguagePacks()) {
+            logger.debug("Registering internal language-pack '{}'", pack.getClass().getName());
             putPack(pack.getLocale(), pack);
+        }
     }
 
     /**
@@ -207,10 +209,12 @@ public class I18N {
      * @return the list of internal/base language-packs
      */
     private static List<LanguagePack> listInternalLanguagePacks() {
-        return toImmutableList(resJson(INTERNAL_LANGUAGE_PACKS).getAsJsonArray())
+        return toImmutableList(resJson(INTERNAL_LANGUAGE_PACKS, I18N.class).getAsJsonArray())
                 .stream()
                 .map(JsonElement::getAsString)
+                .map(ReflectionUtils::forName)
                 .map(ReflectionUtils::tryConstructObject)
+                .map(LanguagePack.class::cast)
                 .toList();
     }
 
