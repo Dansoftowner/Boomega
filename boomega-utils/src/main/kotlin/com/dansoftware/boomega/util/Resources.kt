@@ -20,6 +20,8 @@
 
 package com.dansoftware.boomega.util
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import java.io.InputStream
 import java.net.URL
 import kotlin.reflect.KClass
@@ -28,15 +30,37 @@ import kotlin.reflect.KClass
  * Gives the resource as a [URL].
  */
 @JvmOverloads
-fun res(path: String, clazz: KClass<*> = R::class): URL? =
-    clazz.java.getResource(path)
+fun res(path: String, clazz: Class<*> = R::class.java): URL? = clazz.getResource(path)
+
+/**
+ * Gives the resource as a [URL].
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun res(path: String, clazz: KClass<*> = R::class): URL? = res(path, clazz.java)
 
 /**
  * Gives the resource as an [java.io.InputStream].
  */
 @JvmOverloads
-fun resStream(path: String, clazz: KClass<*> = R::class): InputStream? =
-    clazz.java.getResourceAsStream(path)
+fun resStream(path: String, clazz: Class<*> = R::class.java): InputStream? = clazz.getResourceAsStream(path)
+
+/**
+ * Gives the resource as an [java.io.InputStream].
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun resStream(path: String, clazz: KClass<*> = R::class): InputStream? = resStream(path, clazz.java)
+
+/**
+ * Loads the resource into a [JsonElement]. Asserts that the resource has the json format.
+ */
+@JvmOverloads
+fun resJson(path: String, clazz: Class<*> = R::class.java): JsonElement =
+    resStream(path, clazz)!!.use { Gson().fromJson(it.bufferedReader(), JsonElement::class.java) }
+
+/**
+ * Loads the resource into a [JsonElement]. Asserts that the resource has the json format.
+ */
+fun resJson(path: String, clazz: KClass<*> = R::class) = resJson(path, clazz.java)
 
 /**
  * Utility class used for loading resources
