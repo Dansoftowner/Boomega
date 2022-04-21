@@ -19,10 +19,10 @@
 package com.dansoftware.boomega.i18n.api;
 
 import com.dansoftware.boomega.i18n.EnglishLanguagePack;
-import com.dansoftware.boomega.i18n.HungarianLanguagePack;
-import com.dansoftware.boomega.i18n.TurkishLanguagePack;
 import com.dansoftware.boomega.plugin.LanguagePlugin;
 import com.dansoftware.boomega.plugin.api.PluginService;
+import com.dansoftware.boomega.util.ReflectionUtils;
+import com.google.gson.JsonElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.PropertyKey;
@@ -36,6 +36,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.dansoftware.boomega.di.DIService.get;
+import static com.dansoftware.boomega.util.Collections.toImmutableList;
+import static com.dansoftware.boomega.util.Resources.resJson;
 
 /**
  * Used as a central gateway for accessing localized messages/values.
@@ -44,6 +46,11 @@ import static com.dansoftware.boomega.di.DIService.get;
 public class I18N {
 
     private static final Logger logger = LoggerFactory.getLogger(I18N.class);
+
+    /**
+     * The path of the resource containing the internal language pack names
+     */
+    private static final String INTERNAL_LANGUAGE_PACKS = "internal_lang_packs.json";
 
     /**
      * Stores all the loaded language packs
@@ -200,11 +207,11 @@ public class I18N {
      * @return the list of internal/base language-packs
      */
     private static List<LanguagePack> listInternalLanguagePacks() {
-        return List.of(
-                new EnglishLanguagePack(),
-                new HungarianLanguagePack(),
-                new TurkishLanguagePack()
-        );
+        return toImmutableList(resJson(INTERNAL_LANGUAGE_PACKS).getAsJsonArray())
+                .stream()
+                .map(JsonElement::getAsString)
+                .map(ReflectionUtils::tryConstructObject)
+                .toList();
     }
 
     /**
