@@ -18,13 +18,21 @@
 
 package com.dansoftware.boomega.gui.font;
 
+import com.dansoftware.boomega.util.Collections;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import javafx.scene.text.Font;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.io.UncheckedIOException;
+import java.net.URL;
+import java.util.stream.Stream;
+
+import static com.dansoftware.boomega.util.Resources.resJson;
 
 /**
  * Utility for loading the custom javaFX fonts.
@@ -39,70 +47,39 @@ import java.util.List;
 public class CustomFontsLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomFontsLoader.class);
+    private static final String FONT_PATHS_CONFIG = "fonts_to_load.json";
 
-    private static final String FONT_DIR = "/com/dansoftware/boomega/gui/font/poppins";
-
-    private static final List<String> fontPaths = List.of(
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Bold.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-BoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ExtraBold.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ExtraBoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ExtraLight.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ExtraLightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Italic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Light.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-LightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Medium.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-MediumItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Regular.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-Thin.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMono-ThinItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Bold.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-BoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ExtraBold.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ExtraBoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ExtraLight.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ExtraLightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Italic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Light.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-LightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Medium.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-MediumItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Regular.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-Thin.ttf",
-            "/com/dansoftware/boomega/gui/font/jetbrains_mono/JetBrainsMonoNL-ThinItalic.ttf",
-
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Black.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-BlackItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Bold.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-BoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ExtraBold.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ExtraBoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ExtraLight.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ExtraLightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Italic.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Light.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-LightItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Medium.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-MediumItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Regular.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-SemiBold.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-SemiBoldItalic.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-Thin.ttf",
-            "/com/dansoftware/boomega/gui/font/poppins/Poppins-ThinItalic.ttf"
-
-    );
-
-    private CustomFontsLoader() {
+    private static Stream<String> getFontPaths() {
+        JsonArray jsonArray = resJson(FONT_PATHS_CONFIG, CustomFontsLoader.class).getAsJsonArray();
+        return Collections.toImmutableList(jsonArray).stream().map(JsonElement::getAsString);
     }
 
     @SuppressWarnings("ConstantConditions")
     public static void loadFonts() {
-        fontPaths.stream().map(CustomFontsLoader.class::getResourceAsStream)
-                .forEach(CustomFontsLoader::loadFont);
+        try {
+            getFontPaths()
+                    .map(CustomFontsLoader.class::getResource)
+                    .peek(it -> logger.debug("Loading font '{}'", it.toExternalForm()))
+                    .map(CustomFontsLoader::openStream)
+                    .forEach(CustomFontsLoader::loadFont);
+        } catch (UncheckedIOException | NullPointerException e) {
+            logger.error("Couldn't load internal fonts", e);
+        }
+    }
+
+    private static InputStream openStream(URL url) {
+        try {
+            return url.openStream();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     private static void loadFont(@NotNull InputStream source) {
         Font.loadFont(source, 12);
+    }
+
+    private CustomFontsLoader() {
+        // Do not instantiate
     }
 }
