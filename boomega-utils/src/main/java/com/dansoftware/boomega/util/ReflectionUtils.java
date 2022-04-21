@@ -26,13 +26,12 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * Utility class for making some reflection tasks easier.
- *
- * @author Daniel Gyorffy
+ * Utilities for making some reflection tasks easier.
  */
 public final class ReflectionUtils {
 
     private ReflectionUtils() {
+        // Don't instantiate
     }
 
     /**
@@ -72,7 +71,7 @@ public final class ReflectionUtils {
      *
      * @param classRef the class-reference
      * @param args     the constructor arguments; empty if you want to call the default constructor
-     * @param <O>      the type of the object that should constructed
+     * @param <O>      the type of the object that should be constructed
      * @return the object instance
      * @throws ReflectiveOperationException if some reflection-exception occurs
      */
@@ -88,6 +87,13 @@ public final class ReflectionUtils {
         return constructor.newInstance(args);
     }
 
+    /**
+     * Constructs the instance of the given {@link Class} with the default constructor.
+     *
+     * @param classRef the object representing the class we want to instantiate
+     * @return the instance object
+     * @throws ReflectiveOperationException if the reflecive operation fails (e.g. No default constructor available)
+     */
     public static <O> O constructObject(@NotNull Class<? extends O> classRef)
             throws ReflectiveOperationException {
         Objects.requireNonNull(classRef);
@@ -104,9 +110,17 @@ public final class ReflectionUtils {
         }
     }
 
-    @SuppressWarnings({"unchecked", "UnusedReturnValue"})
-    public static <T> Class<T> forName(@NotNull Class<T> classRef)
-            throws ClassNotFoundException {
-        return (Class<T>) Class.forName(classRef.getName());
+    /**
+     * Returns the {@link Class} object associated with the class or interface with the given string name
+     * without throwing any checked exceptions.
+     *
+     * @see Class#forName(String)
+     */
+    public static Class<?> forName(@NotNull String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
