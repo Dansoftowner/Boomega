@@ -13,7 +13,7 @@
           <option value="run" />
         </list>
       </option>
-      <option name="vmOptions" />
+      <option name="vmOptions" value="-Dboomega.accept.debug.logs=true" />
     </ExternalSystemSettings>
     <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
     <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
