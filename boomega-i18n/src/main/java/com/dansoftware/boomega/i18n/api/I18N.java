@@ -18,11 +18,8 @@
 
 package com.dansoftware.boomega.i18n.api;
 
-import com.dansoftware.boomega.i18n.EnglishLanguagePack;
 import com.dansoftware.boomega.plugin.LanguagePlugin;
 import com.dansoftware.boomega.plugin.api.PluginService;
-import com.dansoftware.boomega.util.ReflectionUtils;
-import com.google.gson.JsonElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.PropertyKey;
@@ -36,8 +33,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.dansoftware.boomega.di.DIService.get;
-import static com.dansoftware.boomega.util.Collections.toImmutableList;
-import static com.dansoftware.boomega.util.Resources.resJson;
 
 /**
  * Used as a central gateway for accessing localized messages/values.
@@ -48,9 +43,9 @@ public class I18N {
     private static final Logger logger = LoggerFactory.getLogger(I18N.class);
 
     /**
-     * The path of the resource containing the internal language pack names
+     * @see InternalLanguagePacksConfig
      */
-    private static final String INTERNAL_LANGUAGE_PACKS = "internal_lang_packs.json";
+    private static final InternalLanguagePacksConfig internalConfig = InternalLanguagePacksConfig.getDefaultInstance();
 
     /**
      * Stores all the loaded language packs
@@ -80,7 +75,7 @@ public class I18N {
     public static Locale defaultLocale() {
         Set<Locale> available = getAvailableLocales();
         Locale systemDefault = Locale.getDefault();
-        return available.contains(systemDefault) ? systemDefault : Locale.ENGLISH;
+        return available.contains(systemDefault) ? systemDefault : internalConfig.getFallbackLocale();
     }
 
     /**
@@ -157,7 +152,8 @@ public class I18N {
      */
     private static void recognizeLanguagePack() {
         if (languagePack == null || !languagePack.getLocale().equals(Locale.getDefault()))
-            languagePack = getLanguagePackForLocale(Locale.getDefault()).orElseGet(EnglishLanguagePack::new);
+            languagePack = getLanguagePackForLocale(Locale.getDefault())
+                    .orElseGet(internalConfig::getFallbackLanguagePack);
     }
 
     /**
@@ -172,7 +168,7 @@ public class I18N {
      * Registers the internal language-packs.
      */
     private static void registerBasePacks() {
-        for (var pack : listInternalLanguagePacks()) {
+        for (var pack : internalConfig.getLanguagePacks()) {
             logger.debug("Registering internal language-pack '{}'", pack.getClass().getName());
             putPack(pack.getLocale(), pack);
         }
@@ -206,19 +202,6 @@ public class I18N {
     }
 
     /**
-     * @return the list of internal/base language-packs
-     */
-    private static List<LanguagePack> listInternalLanguagePacks() {
-        return toImmutableList(resJson(INTERNAL_LANGUAGE_PACKS, I18N.class).getAsJsonArray())
-                .stream()
-                .map(JsonElement::getAsString)
-                .map(ReflectionUtils::forName)
-                .map(ReflectionUtils::tryConstructObject)
-                .map(LanguagePack.class::cast)
-                .toList();
-    }
-
-    /**
      * Gets the default ABC collator for the given locale.
      */
     public static Optional<Collator> getABCCollator(@Nullable Locale locale) {
@@ -238,4 +221,5 @@ public class I18N {
     public static Set<Locale> getAvailableLocales() {
         return loadedLanguagePacks.keySet();
     }
+
 }
