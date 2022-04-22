@@ -1,6 +1,6 @@
 /*
- * Boomega
- * Copyright (C)  2021  Daniel Gyoerffy
+ * Boomega - A modern book explorer & catalog application
+ * Copyright (C) 2020-2022  Daniel Gyoerffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version "$KOTLIN_VERSION"
-    id 'org.openjfx.javafxplugin' version "$JAVAFX_PLUGIN_VERSION"
-    id 'com.github.ben-manes.versions' version '0.42.0' // for detecting dependency updates
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
+        classpath "org.openjfx:javafx-plugin:$JAVAFX_PLUGIN_VERSION"
+        classpath "com.github.ben-manes:gradle-versions-plugin:0.42.0"
+    }
 }
 
 allprojects {
