@@ -105,7 +105,6 @@ subprojects {
 
         poi = 'org.apache.poi:poi-ooxml:5.2.2'
         text_tables = 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT'
-        jsoup = 'org.jsoup:jsoup:1.14.3'
 
         okhttp = 'com.squareup.okhttp3:okhttp:4.9.3'
         version_compare = 'io.github.g00fy2:versioncompare:1.5.0'
