@@ -8,17 +8,12 @@ allprojects {
         implementation project(':boomega-utils')
         implementation project(':boomega-i18n')
         implementation project(':boomega-preferences')
-
-        api('org.controlsfx:controlsfx:11.1.1') { exclude group: 'org.openjfx' }
-        api('net.synedra:validatorfx:0.3.1') { exclude group: 'org.openjfx' }
-        implementation('com.dlsc.formsfx:formsfx-core:11.5.0') { exclude group: 'org.openjfx' }
     }
 }
 
 dependencies {
     implementation project(':boomega-gui:api')
     implementation project(':boomega-gui:utils')
-
     implementation project(':boomega-di')
     implementation project(':boomega-plugin')
     implementation project(':boomega-database')
@@ -26,20 +21,25 @@ dependencies {
     implementation project(':boomega-rest')
     implementation project(':boomega-export')
 
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-
-    implementation 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
-    implementation 'com.github.Dansoftowner:SegmentDialogFX:2.0'
-    implementation 'com.github.Dansoftowner:jSystemThemeDetector:3.8'
-    implementation 'com.github.Dansoftowner:Restart4j:1.4.7'
-    implementation 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
-
-    implementation('com.dlsc.workbenchfx:workbenchfx-core:11.1.0') { exclude group: 'org.openjfx' }
-    implementation('de.jangassen:nsmenufx:3.1.0') { exclude group: 'org.openjfx' }
-    implementation('org.jfxtras:jmetro:11.6.15') { exclude group: 'org.openjfx' }
-    implementation('com.sandec:mdfx:0.2.6') { exclude group: 'org.openjfx' }
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6' // Caching utilities
-    implementation('net.kurobako:gesturefx:0.7.1') { exclude group: 'org.openjfx' }
+    implementation commons_lang
+    implementation caffeine
+    implementation oshi
+    implementation gson
+    implementation jthemedetector
+    implementation juser_directories
+    implementation restart4j
+    implementation(fxtaskbarprogressbar) { exclude group: 'org.openjfx' }
+    implementation(segmentdialogfx) { exclude group: 'org.openjfx' }
+    implementation(mdeditorcontrolfx) { exclude group: 'org.openjfx' }
+    implementation(controlsfx) { exclude group: 'org.openjfx' }
+    implementation(validatorfx) { exclude group: 'org.openjfx' }
+    implementation(formsfx) { exclude group: 'org.openjfx' }
+    implementation(animatefx) { exclude group: 'org.openjfx' }
+    implementation(workbenchfx) { exclude group: 'org.openjfx' }
+    implementation(nsmenufx) { exclude group: 'org.openjfx' }
+    implementation(jmetro) { exclude group: 'org.openjfx' }
+    implementation(mdfx) { exclude group: 'org.openjfx' }
+    implementation(gesturefx) { exclude group: 'org.openjfx' }
 
     implementation fileTree(dir: '../external-libraries', include: 'fontawesomefx-11.0.jar')
     implementation fileTree(dir: '../external-libraries', include: 'jHTML2Md.jar')

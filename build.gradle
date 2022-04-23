@@ -74,6 +74,9 @@ subprojects {
         //logging
         implementation 'org.slf4j:slf4j-api:1.7.36'
 
+        // common annotations
+        implementation 'org.jetbrains:annotations:23.0.0'
+
         //Testing
         testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
         testImplementation 'org.assertj:assertj-core:3.22.0'
@@ -81,4 +84,47 @@ subprojects {
         testImplementation 'org.mockito:mockito-junit-jupiter:4.3.1'
         testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
     }
+
+    project.ext {
+        logback_classic = 'ch.qos.logback:logback-classic:1.2.11'
+        logback_core = 'ch.qos.logback:logback-core:1.2.11'
+
+        commons_lang = 'org.apache.commons:commons-lang3:3.12.0'
+        commons_collections = 'commons-collections:commons-collections:3.2.2'
+        commons_io = 'commons-io:commons-io:2.11.0'
+        guice = 'com.google.inject:guice:5.1.0'
+        gson = 'com.google.code.gson:gson:2.9.0'
+        caffeine = 'com.github.ben-manes.caffeine:caffeine:3.0.6'
+        junique = 'it.sauronsoftware:junique:1.0.4'
+        oshi = 'com.github.oshi:oshi-core:6.1.5'
+        juser_directories = 'com.github.Dansoftowner:jUserDirectories:1.0'
+
+        nitrite = 'org.dizitart:nitrite:3.4.4'
+        hibernate = 'org.hibernate:hibernate-core:5.6.7.Final'
+        jdbcmysql = 'mysql:mysql-connector-java:8.0.28'
+
+        poi = 'org.apache.poi:poi-ooxml:5.2.2'
+        text_tables = 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT'
+        jsoup = 'org.jsoup:jsoup:1.14.3'
+
+        okhttp = 'com.squareup.okhttp3:okhttp:4.9.3'
+        version_compare = 'io.github.g00fy2:versioncompare:1.5.0'
+
+        controlsfx = 'org.controlsfx:controlsfx:11.1.1'
+        validatorfx = 'net.synedra:validatorfx:0.3.1'
+        formsfx = 'com.dlsc.formsfx:formsfx-core:11.5.0'
+        animatefx = 'io.github.typhon0:AnimateFX:1.2.2'
+        workbenchfx = 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
+        nsmenufx = 'de.jangassen:nsmenufx:3.1.0'
+        gesturefx = 'net.kurobako:gesturefx:0.7.1'
+        jmetro = 'org.jfxtras:jmetro:11.6.15'
+        mdfx = 'com.sandec:mdfx:0.2.6'
+        richtextfx = 'org.fxmisc.richtext:richtextfx:0.10.9'
+        fxtaskbarprogressbar = 'com.github.Dansoftowner:FXTaskbarProgressBar:v11.4'
+        segmentdialogfx = 'com.github.Dansoftowner:SegmentDialogFX:2.0'
+        mdeditorcontrolfx = 'com.github.Dansoftowner:MarkdownEditorControlFX:0.6.9.2'
+        jthemedetector = 'com.github.Dansoftowner:jSystemThemeDetector:3.8'
+        restart4j = 'com.github.Dansoftowner:Restart4j:1.4.7'
+    }
+
 }

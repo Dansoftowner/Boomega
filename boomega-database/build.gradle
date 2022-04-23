@@ -11,10 +11,12 @@ dependencies {
     implementation project(':boomega-gui:api')
     implementation project(':boomega-gui:utils')
 
+    implementation(validatorfx) { exclude group: 'org.openjfx' }
+
     // Embedded NoSql database management
-    implementation 'org.dizitart:nitrite:3.4.4'
+    implementation nitrite
 
     // Relational database management
-    implementation 'org.hibernate:hibernate-core:5.6.7.Final'
-    implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation hibernate
+    implementation jdbcmysql
 }

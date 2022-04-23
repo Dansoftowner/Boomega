@@ -3,4 +3,5 @@ dependencies {
     implementation project(':boomega-plugin')
     implementation project(':boomega-utils')
     implementation project(':boomega-preferences')
+    implementation gson
 }

@@ -5,4 +5,5 @@ plugins {
 dependencies {
     implementation project(':boomega-di')
     implementation project(':boomega-utils')
+    implementation gson
 }

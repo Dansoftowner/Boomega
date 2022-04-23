@@ -73,13 +73,14 @@ dependencies {
     implementation project(':boomega-utils')
 
     // logging
-    implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'ch.qos.logback:logback-core:1.2.11'
+    implementation logback_classic
+    implementation logback_core
 
     // Common utilities
-    implementation 'commons-collections:commons-collections:3.2.2'
+    implementation commons_collections
 
-    implementation 'it.sauronsoftware:junique:1.0.4'  // Singleton application instance
+    implementation(controlsfx) { exclude group: 'org.openjfx' }
+    implementation junique
 
     //implementation from the local file system
     implementation fileTree(dir: '../external-libraries', include: '*.jar')

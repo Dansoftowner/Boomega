@@ -1,7 +1,11 @@
 dependencies {
-    api('io.github.typhon0:AnimateFX:1.2.2') { exclude group: 'org.openjfx' }
-
     implementation project(':boomega-gui:api')
-    implementation('org.fxmisc.richtext:richtextfx:0.10.9') { exclude group: 'org.openjfx' }
+
+    implementation(animatefx) { exclude group: 'org.openjfx' }
+    implementation(controlsfx) { exclude group: 'org.openjfx' }
+    implementation(validatorfx) { exclude group: 'org.openjfx' }
+    implementation(formsfx) { exclude group: 'org.openjfx' }
+
+    implementation(richtextfx) { exclude group: 'org.openjfx' }
     implementation fileTree(dir: '../../external-libraries', include: 'fontawesomefx-11.0.jar')
 }

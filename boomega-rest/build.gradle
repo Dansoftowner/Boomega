@@ -1,4 +1,5 @@
 dependencies {
     implementation project(':boomega-utils')
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation okhttp
+    implementation gson
 }

@@ -11,7 +11,9 @@ dependencies {
     implementation project(':boomega-plugin')
     implementation project(':boomega-utils')
 
-    implementation 'org.apache.poi:poi-ooxml:5.2.2' // Microsoft Documents
-    implementation 'com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT' // Text tables
-    implementation 'org.jsoup:jsoup:1.14.3' // HTML parsing
+    implementation(controlsfx) { exclude group: 'org.openjfx' }
+    implementation poi // Microsoft Documents
+    implementation text_tables // Text tables
+    implementation jsoup // HTML parsing
+    implementation gson
 }
