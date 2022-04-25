@@ -35,6 +35,11 @@ your [LanguagePack](/boomega-i18n/src/main/java/com/dansoftware/boomega/i18n/api
 Boomega provides the `ResourceBundle` (representing the .properties file)
 and other things needed for defining a language.
 
+**This applies to you only if you're contributing to the core project:**
+
+* Locate your LanguagePack to
+  the [`com.dansofware.boomega.i18n`](/boomega-i18n/src/main/java/com/dansoftware/boomega/i18n) package
+
 A simple example:
 
 <table>
@@ -103,11 +108,6 @@ public class PortugueseLanguagePack extends LanguagePack {
 </tr>
 </table>
 
-**This applies to you only if you're contributing to the core project:**
-
-* Locate your LanguagePack to
-  the [`com.dansofware.boomega.i18n`](/boomega-i18n/src/main/java/com/dansoftware/boomega/i18n) package
-
 ### Specifying the alphabetical order
 
 Knowing the alphabetical order for Boomega is crucial for several features (e.g. sorting records in a table-view).  
@@ -156,7 +156,8 @@ also follow this practice with your own collator.
 
 **This page applies to you only if you're contributing to the core project.**
 
-After you've created your pack implementation you have to register it in
+After you've created your pack implementation you have to register it's
+full [class-name](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getName()) in
 the [internal_lang_packs.json](/boomega-i18n/src/main/resources/com/dansoftware/boomega/i18n/api/internal_lang_packs.json)
 config file.
 
@@ -164,7 +165,7 @@ Like this:
 
 ```json
 {
-  ...,
+  ...
   "classNames": [
     ...
     "com.dansofware.boomega.i18n.PortugueseLanguagePack"
@@ -183,5 +184,5 @@ in the [`com.dansoftware.boomega.i18n`](/boomega-i18n/src/main/java/com/dansoftw
 
 ---
 
-Now, if you want to develop a **language-plugin** with this knowledge, check out
-the [plugin guide](../PLUGIN_GUIDE.md#language-plugins) for further instructions.
+**Now, if you want to develop a **language-plugin** with this knowledge, check out
+the [plugin guide](../PLUGIN_GUIDE.md#language-plugins) for further instructions.**
