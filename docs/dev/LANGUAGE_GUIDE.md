@@ -1,14 +1,15 @@
 # Adding custom languages to Boomega
 
-This page will guide you how to **contribute languages** to the app, and also gives a basis for developing **
-language-plugins**.
+This page will guide you how to **contribute languages** to the app, and also gives you a basis for developing
+**language-plugins**.
 
 ## Prerequisites
 
-* Understand the concept of ResourceBundles in java (this article might help you
-  in [this](https://www.baeldung.com/java-resourcebundle))
+* Understand the concept
+  of [ResourceBundle](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ResourceBundle.html)s in
+  java (this article might help you in [this](https://www.baeldung.com/java-resourcebundle))
 
-These apply to you only if you're contributing to the core project:
+**These apply to you only if you're contributing to the core project:**
 
 * Make sure you've read the [contribution guideline](/CONTRIBUTING.md)
 * Work in the [`boomega-i18n`](/boomega-i18n) subproject
@@ -19,7 +20,7 @@ Firstly, create your own `.properties` file that contains the translations. View
 the [default resource file](/boomega-i18n/src/main/resources/com/dansoftware/boomega/i18n/Values.properties) to have an
 idea.
 
-These apply to you only if you're contributing to the core project:
+**These apply to you only if you're contributing to the core project:**
 
 * Name your property files according to this pattern: `Values<postfix>.properties`
 * Make sure you add the locale-specific postfix to your file (e.g `Values_en_US.properties`)
@@ -116,7 +117,7 @@ the `LanguagePack.getABCCollator()` method you can specify the `Collator` for yo
 *If you don't specify any collator for your pack, the default collator will be used which is `Collator.getInstance()`.*
 
 Look at this simplified snippet from the
-internal [HungarianLanguagePack](/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java):
+internal [HungarianLanguagePack](/boomega-i18n/src/main/java/com/dansoftware/boomega/i18n/HungarianLanguagePack.java):
 
 ```java
 public class HungarianLanguagePack extends LanguagePack {
@@ -151,6 +152,26 @@ a [NullHandlingCollator](/boomega-i18n/src/main/kotlin/com/dansoftware/boomega/i
 for preventing possible null-pointer exceptions when comparing `null` values with the collator in the future. You should
 also follow this practice with your own collator.
 
+### Registering your language-pack
+
+**This page applies to you only if you're contributing to the core project.**
+
+After you've created your pack implementation you have to register it in
+the [internal_lang_packs.json](/boomega-i18n/src/main/resources/com/dansoftware/boomega/i18n/api/internal_lang_packs.json)
+config file.
+
+Like this:
+
+```json
+{
+  ...,
+  "classNames": [
+    ...
+    "com.dansofware.boomega.i18n.PortugueseLanguagePack"
+  ]
+}
+```
+
 #### Other examples
 
 You can view the internal LanguagePack implementations (for understanding the concepts better)
@@ -162,5 +183,5 @@ in the [`com.dansoftware.boomega.i18n`](/boomega-i18n/src/main/java/com/dansoftw
 
 ---
 
-If you want to develop a **language-plugin** with this knowledge, check out
-the [plugin guide](../PLUGIN_GUIDE.md#language-plugins).
+Now, if you want to develop a **language-plugin** with this knowledge, check out
+the [plugin guide](../PLUGIN_GUIDE.md#language-plugins) for further instructions.
