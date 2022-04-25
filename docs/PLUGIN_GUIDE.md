@@ -236,7 +236,7 @@ Before we start, make sure you have read the [language guide](dev/LANGUAGE_GUIDE
 
 ### The `LanguagePlugin` interface
 
-To make your language-pack recognized by Boomega you have to supply it in your 
+To make your [LanguagePack](dev/LANGUAGE_GUIDE.md#the-languagepack-class) recognized by Boomega you have to supply it in your 
 [LanguagePlugin](/boomega-i18n/src/main/kotlin/com/dansoftware/boomega/plugin/LanguagePlugin.kt) implementation:
 
 <table>
