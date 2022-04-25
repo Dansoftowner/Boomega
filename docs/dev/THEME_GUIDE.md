@@ -210,4 +210,4 @@ in the [`com.dansoftware.boomega.gui.theme`](/boomega-gui/src/main/java/com/dans
 ---
 
 You are free to contribute your own theme to be included in the core Boomega itself. However, if you want to add your
-theme as a plugin, let's go to the next section!
+theme as a plugin, go to the [plugin guide](../PLUGIN_GUIDE.md#theme-plugins)!
