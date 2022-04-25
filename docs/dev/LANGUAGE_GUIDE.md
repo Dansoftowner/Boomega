@@ -184,5 +184,5 @@ in the [`com.dansoftware.boomega.i18n`](/boomega-i18n/src/main/java/com/dansoftw
 
 ---
 
-**Now, if you want to develop a **language-plugin** with this knowledge, check out
+**Now, if you want to add your language through plugins, check out
 the [plugin guide](../PLUGIN_GUIDE.md#language-plugins) for further instructions.**
