@@ -22,6 +22,7 @@ import com.dansoftware.boomega.i18n.api.LanguagePack;
 import com.dansoftware.boomega.util.Person;
 import org.jetbrains.annotations.Nullable;
 
+import javax.inject.Singleton;
 import java.util.Locale;
 
 /**
@@ -29,6 +30,7 @@ import java.util.Locale;
  *
  * @author Daniel Gyorffy
  */
+@Singleton // make sure it's constructed only once if used through DI framework
 public class EnglishLanguagePack extends InternalLanguagePack {
 
     public EnglishLanguagePack() {

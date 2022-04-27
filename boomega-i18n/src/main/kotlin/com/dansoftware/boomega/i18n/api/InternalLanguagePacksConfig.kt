@@ -18,7 +18,7 @@
 
 package com.dansoftware.boomega.i18n.api
 
-import com.dansoftware.boomega.util.ReflectionUtils
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.util.resJson
 import com.dansoftware.boomega.util.toImmutableList
 import com.google.gson.JsonElement
@@ -46,24 +46,17 @@ internal open class InternalLanguagePacksConfig @TestOnly constructor(json: Json
     lateinit var languagePackClassNames: List<String> private set
 
     /**
-     * Used as a cache for preventing multiple instances to be created from the same language-pack classes
-     */
-    private val instanceCache = mutableMapOf<String, LanguagePack>()
-
-    /**
      * The default language-pack instantiated
      */
     val fallbackLanguagePack: LanguagePack by lazy {
-        construct(fallbackLanguagePackClassName).also(::cacheInstance)
+        construct(fallbackLanguagePackClassName)
     }
 
     /**
      * The list of the internal instantiated language-packs
      */
     val languagePacks: List<LanguagePack> by lazy {
-        languagePackClassNames.map {
-            instanceCache[it] ?: construct(it).also(::cacheInstance)
-        }
+        languagePackClassNames.map(::construct)
     }
 
     /**
@@ -86,11 +79,7 @@ internal open class InternalLanguagePacksConfig @TestOnly constructor(json: Json
         }
     }
 
-    private fun cacheInstance(instance: LanguagePack) {
-        instanceCache[instance::class.qualifiedName!!] = instance
-    }
-
-    private fun construct(className: String): LanguagePack = ReflectionUtils.constructObject(parseClass(className))
+    private fun construct(className: String): LanguagePack = get(parseClass(className))
 
     @Suppress("UNCHECKED_CAST")
     private fun parseClass(className: String) = Class.forName(className) as Class<out LanguagePack>
