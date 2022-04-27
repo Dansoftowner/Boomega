@@ -18,7 +18,11 @@
 
 package com.dansoftware.boomega.gui.firsttime.segment.theme
 
-import com.dansoftware.boomega.gui.theme.*
+import com.dansoftware.boomega.gui.theme.DarkTheme
+import com.dansoftware.boomega.gui.theme.LightTheme
+import com.dansoftware.boomega.gui.theme.OsSynchronizedTheme
+import com.dansoftware.boomega.gui.theme.Theme
+import com.dansoftware.boomega.gui.theme.config.THEME
 import com.dansoftware.boomega.i18n.api.I18N
 import javafx.geometry.Insets
 import javafx.scene.Group

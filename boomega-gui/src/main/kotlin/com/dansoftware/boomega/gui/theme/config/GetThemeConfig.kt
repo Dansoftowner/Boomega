@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.gui.theme
+package com.dansoftware.boomega.gui.theme.config
 
 import com.dansoftware.boomega.config.PreferenceKey
-import com.dansoftware.boomega.gui.theme.config.ThemeAdapter
+import com.dansoftware.boomega.gui.theme.Theme
 
 /**
  * Key for accessing the configured theme

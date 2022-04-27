@@ -23,8 +23,8 @@ import com.dansoftware.boomega.gui.action.OpenSettingsAction
 import com.dansoftware.boomega.gui.action.menuItemOf
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.app.ApplicationRestart
-import com.dansoftware.boomega.gui.theme.THEME
 import com.dansoftware.boomega.gui.theme.Theme
+import com.dansoftware.boomega.gui.theme.config.THEME
 import com.dansoftware.boomega.gui.util.graphic
 import com.dansoftware.boomega.gui.util.menuItem
 import com.dansoftware.boomega.gui.util.separator

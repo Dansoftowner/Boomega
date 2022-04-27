@@ -29,8 +29,8 @@ import com.dansoftware.boomega.gui.launch.LauncherMode
 import com.dansoftware.boomega.gui.launch.activityLauncher
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader
 import com.dansoftware.boomega.gui.preloader.BoomegaPreloader.MessageNotification.Priority
-import com.dansoftware.boomega.gui.theme.THEME
 import com.dansoftware.boomega.gui.theme.Theme
+import com.dansoftware.boomega.gui.theme.config.THEME
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.LOCALE
