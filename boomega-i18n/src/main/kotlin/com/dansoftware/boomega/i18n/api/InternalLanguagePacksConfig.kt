@@ -24,6 +24,7 @@ import com.dansoftware.boomega.util.toImmutableList
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.inject.ImplementedBy
+import com.google.inject.Singleton
 import org.jetbrains.annotations.TestOnly
 
 /**
@@ -103,6 +104,7 @@ internal open class InternalLanguagePacksConfig @TestOnly constructor(json: Json
 /**
  * The language-pack config that reads from the default configuration file.
  */
+@Singleton
 private class DefaultLanguagePacksConfig : InternalLanguagePacksConfig(resJson(INTERNAL_LANGUAGE_PACKS, this::class)) {
     companion object {
         /**
