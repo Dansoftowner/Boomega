@@ -45,7 +45,7 @@ public class I18N {
     /**
      * @see InternalLanguagePacksConfig
      */
-    private static final InternalLanguagePacksConfig internalConfig = InternalLanguagePacksConfig.getDefaultInstance();
+    private static final InternalLanguagePacksConfig internalConfig = get(InternalLanguagePacksConfig.class);
 
     /**
      * Stores all the loaded language packs

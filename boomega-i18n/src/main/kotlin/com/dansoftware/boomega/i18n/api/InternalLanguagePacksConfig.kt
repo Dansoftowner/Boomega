@@ -23,6 +23,7 @@ import com.dansoftware.boomega.util.resJson
 import com.dansoftware.boomega.util.toImmutableList
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.google.inject.ImplementedBy
 import org.jetbrains.annotations.TestOnly
 
 /**
@@ -30,7 +31,8 @@ import org.jetbrains.annotations.TestOnly
  * It defines what language-packs should be included by default, what's the fallback language pack
  * and so on.
  */
-internal class InternalLanguagePacksConfig @TestOnly constructor(json: JsonElement) {
+@ImplementedBy(DefaultLanguagePacksConfig::class)
+internal open class InternalLanguagePacksConfig @TestOnly constructor(json: JsonElement) {
 
     /**
      * The class-name of the default internal language pack
@@ -93,21 +95,19 @@ internal class InternalLanguagePacksConfig @TestOnly constructor(json: JsonEleme
     private fun parseClass(className: String) = Class.forName(className) as Class<out LanguagePack>
 
     companion object {
-
         const val FALLBACK_PACK_KEY = "fallback"
         const val ALL_PACKS_KEY = "classNames"
+    }
+}
 
+/**
+ * The language-pack config that reads from the default configuration file.
+ */
+private class DefaultLanguagePacksConfig : InternalLanguagePacksConfig(resJson(INTERNAL_LANGUAGE_PACKS, this::class)) {
+    companion object {
         /**
          * The path of the resource containing the internal language pack names
          */
         private const val INTERNAL_LANGUAGE_PACKS = "internal_lang_packs.json"
-
-        /**
-         * The configuration object parsed from the default config file
-         */
-        @JvmStatic
-        val defaultInstance by lazy {
-            InternalLanguagePacksConfig(resJson(INTERNAL_LANGUAGE_PACKS, this::class))
-        }
     }
 }
