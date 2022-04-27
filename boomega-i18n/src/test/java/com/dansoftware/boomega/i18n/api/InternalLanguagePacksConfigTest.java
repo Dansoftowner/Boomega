@@ -18,9 +18,11 @@
 
 package com.dansoftware.boomega.i18n.api;
 
+import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.i18n.EnglishLanguagePack;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -32,6 +34,11 @@ import static com.dansoftware.boomega.i18n.api.InternalLanguagePacksConfig.FALLB
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class InternalLanguagePacksConfigTest {
+
+    @BeforeAll
+    static void prepareDIService() {
+        DIService.init();
+    }
 
     @Test
     void testItStoresDefaultPackClassName() {
