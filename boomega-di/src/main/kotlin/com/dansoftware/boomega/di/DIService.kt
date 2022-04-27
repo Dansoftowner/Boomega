@@ -51,11 +51,24 @@ object DIService {
      */
     @Synchronized
     @JvmStatic
-    fun initModules(vararg modules: Module) {
+    fun init(vararg modules: Module) {
         check(DIService.modules == null) { "Modules has been specified once" }
         DIService.modules = listOf(*modules)
         injector = Guice.createInjector(*modules)
     }
+
+    /**
+     * @see init
+     */
+    @Deprecated(
+        "Use the init() method instead",
+        ReplaceWith("DIService.init(*modules)", "com.dansoftware.boomega.di.DIService")
+    )
+    @JvmStatic
+    fun initModules(vararg modules: Module) {
+        init(*modules)
+    }
+
 
     /**
      * Constructs an object for the given type.
