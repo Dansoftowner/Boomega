@@ -20,8 +20,6 @@ package com.dansoftware.boomega.i18n.api
 
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.util.resJson
-import com.dansoftware.boomega.util.toImmutableList
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.inject.ImplementedBy
 import com.google.inject.Singleton
@@ -33,17 +31,19 @@ import org.jetbrains.annotations.TestOnly
  * and so on.
  */
 @ImplementedBy(DefaultLanguagePacksConfig::class)
-internal open class InternalLanguagePacksConfig @TestOnly constructor(json: JsonElement) {
+internal open class InternalLanguagePacksConfig @TestOnly constructor(json: JsonObject) {
 
     /**
      * The class-name of the default internal language pack
      */
-    lateinit var fallbackLanguagePackClassName: String private set
+    val fallbackLanguagePackClassName: String = json[FALLBACK_PACK_KEY].asString
 
     /**
      * The list of class-names of the internal language packs
      */
-    lateinit var languagePackClassNames: List<String> private set
+    val languagePackClassNames: List<String> by lazy {
+        listOf(fallbackLanguagePackClassName) + json[ALL_PACKS_KEY].asJsonArray.map { it.asString }
+    }
 
     /**
      * The default language-pack instantiated
@@ -64,21 +64,6 @@ internal open class InternalLanguagePacksConfig @TestOnly constructor(json: Json
      */
     val fallbackLocale get() = fallbackLanguagePack.locale
 
-    init {
-        parseJson(json.asJsonObject)
-    }
-
-    private fun parseJson(json: JsonObject) {
-        with(json) {
-            fallbackLanguagePackClassName = asJsonObject[FALLBACK_PACK_KEY].asString
-            languagePackClassNames = asJsonObject[ALL_PACKS_KEY].asJsonArray
-                .map { it.asString }
-                .toMutableList()
-                .apply { add(0, fallbackLanguagePackClassName) }
-                .toImmutableList()
-        }
-    }
-
     private fun construct(className: String): LanguagePack = get(parseClass(className))
 
     @Suppress("UNCHECKED_CAST")
@@ -94,7 +79,9 @@ internal open class InternalLanguagePacksConfig @TestOnly constructor(json: Json
  * The language-pack config that reads from the default configuration file.
  */
 @Singleton
-private class DefaultLanguagePacksConfig : InternalLanguagePacksConfig(resJson(INTERNAL_LANGUAGE_PACKS, this::class)) {
+private class DefaultLanguagePacksConfig : InternalLanguagePacksConfig(
+    resJson(INTERNAL_LANGUAGE_PACKS, this::class).asJsonObject
+) {
     companion object {
         /**
          * The path of the resource containing the internal language pack names
