@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.firsttime.segment.theme
 
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.theme.DarkTheme
 import com.dansoftware.boomega.gui.theme.LightTheme
 import com.dansoftware.boomega.gui.theme.OsSynchronizedTheme
@@ -47,13 +48,14 @@ class ThemeSegmentView(private val preferences: com.dansoftware.boomega.config.P
     }
 
     private fun buildHBox() = HBox(10.0).apply {
+        // TODO: build these dynamically
         buildRadioGroup().also { group ->
             children.add(
                 buildToggle(
                     "segment.theme.light",
                     "/com/dansoftware/boomega/image/firsttime/ThemeLight.png",
                     group,
-                    LightTheme.INSTANCE
+                    get(LightTheme::class)
                 )
             )
 
@@ -62,7 +64,7 @@ class ThemeSegmentView(private val preferences: com.dansoftware.boomega.config.P
                     "segment.theme.dark",
                     "/com/dansoftware/boomega/image/firsttime/ThemeDark.png",
                     group,
-                    DarkTheme.INSTANCE
+                    get(DarkTheme::class)
                 )
             )
 
@@ -71,7 +73,7 @@ class ThemeSegmentView(private val preferences: com.dansoftware.boomega.config.P
                     "segment.theme.sync",
                     "/com/dansoftware/boomega/image/firsttime/ThemeSynchronized.png",
                     group,
-                    OsSynchronizedTheme.INSTANCE
+                    get(OsSynchronizedTheme::class)
                 )
             )
         }

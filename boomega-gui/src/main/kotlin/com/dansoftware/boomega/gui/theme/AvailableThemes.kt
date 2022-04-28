@@ -46,12 +46,7 @@ private fun loadThemes(): List<Theme> =
 /**
  * Gives a [Sequence] of built-in themes
  */
-private fun builtInThemes(): Sequence<Theme> =
-    sequenceOf(
-        LightTheme.INSTANCE,
-        DarkTheme.INSTANCE,
-        OsSynchronizedTheme.INSTANCE
-    )
+private fun builtInThemes(): Sequence<Theme> = get(InternalThemesConfig::class).themes.asSequence()
 
 /**
  * Gives a [Sequence] of third-party themes read from plugins

@@ -23,10 +23,12 @@ import com.dansoftware.boomega.util.res
 import javafx.scene.Parent
 import javafx.scene.Scene
 import jfxtras.styles.jmetro.Style
+import javax.inject.Singleton
 
 /**
  * Applies dark appearance to the UI components.
  */
+@Singleton
 open class DarkTheme : JMetroTheme(Style.DARK) {
 
     override val name: String
@@ -53,13 +55,6 @@ open class DarkTheme : JMetroTheme(Style.DARK) {
     }
 
     companion object {
-
         private val STYLE_SHEET = res("dark.css", DarkTheme::class)!!.toExternalForm()
-
-        /**
-         * A global instance of the [DarkTheme]
-         */
-        @JvmField
-        val INSTANCE = DarkTheme()
     }
 }

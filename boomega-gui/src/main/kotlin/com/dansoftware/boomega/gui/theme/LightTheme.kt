@@ -23,10 +23,12 @@ import com.dansoftware.boomega.util.res
 import javafx.scene.Parent
 import javafx.scene.Scene
 import jfxtras.styles.jmetro.Style
+import javax.inject.Singleton
 
 /**
  * Applies light appearance to the UI components.
  */
+@Singleton
 open class LightTheme : JMetroTheme(Style.LIGHT) {
 
     override val name: String
@@ -53,13 +55,6 @@ open class LightTheme : JMetroTheme(Style.LIGHT) {
     }
 
     companion object {
-
         private val STYLE_SHEET = res("light.css", LightTheme::class)!!.toExternalForm()
-
-        /**
-         * A global instance of the [LightTheme]
-         */
-        @JvmField
-        val INSTANCE = LightTheme()
     }
 }

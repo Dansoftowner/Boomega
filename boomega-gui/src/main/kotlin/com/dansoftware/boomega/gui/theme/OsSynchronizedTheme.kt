@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.theme
 
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.i18n.api.i18n
 import com.jthemedetecor.OsThemeDetector
 import javafx.application.Platform
@@ -28,10 +29,12 @@ import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
 import java.util.Collections.synchronizedList
 import java.util.function.Consumer
+import javax.inject.Singleton
 
 /**
  * Synchronizes the appearance of the UI components based on what's the system's preferred theme (dark/ light).
  */
+@Singleton
 open class OsSynchronizedTheme : Theme() {
 
     override val name: String
@@ -40,14 +43,12 @@ open class OsSynchronizedTheme : Theme() {
     /**
      * Specifies the [Theme] should be used when the system is in dark mode
      */
-    open val darkTheme: Theme
-        get() = DarkTheme.INSTANCE
+    open val darkTheme: Theme = get(DarkTheme::class)
 
     /**
      * Specifies the [Theme] should be used when the system is in light mode
      */
-    open val lightTheme: Theme
-        get() = LightTheme.INSTANCE
+    open val lightTheme: Theme = get(DarkTheme::class)
 
     /**
      * The list of functions that should be invoked by the os theme detection listener, when
@@ -127,13 +128,6 @@ open class OsSynchronizedTheme : Theme() {
         if (isDark) darkTheme else lightTheme
 
     companion object {
-
         private val logger: Logger = LoggerFactory.getLogger(OsSynchronizedTheme::class.java)
-
-        /**
-         * A global instance of the [OsSynchronizedTheme]
-         */
-        @JvmField
-        val INSTANCE = OsSynchronizedTheme()
     }
 }

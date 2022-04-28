@@ -1,0 +1,7 @@
+{
+  "defaultThemeClassName" : "com.dansoftware.boomega.gui.theme.OsSynchronizedTheme",
+  "themeClassNames" : [
+    "com.dansoftware.boomega.gui.theme.LightTheme",
+    "com.dansoftware.boomega.gui.theme.DarkTheme"
+  ]
+}

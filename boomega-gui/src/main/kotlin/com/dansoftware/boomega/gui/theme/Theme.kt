@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.gui.theme
 
+import com.dansoftware.boomega.di.DIService.get
 import javafx.scene.Parent
 import javafx.scene.Scene
 import org.jetbrains.annotations.MustBeInvokedByOverriders
@@ -134,7 +135,7 @@ abstract class Theme {
             return default?.apply {
                 if (!isInitialized)
                     init()
-            } ?: OsSynchronizedTheme.INSTANCE
+            } ?: get(InternalThemesConfig::class).defaultTheme
         }
 
         @Synchronized
