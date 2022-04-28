@@ -154,13 +154,19 @@ public class NordTheme extends Theme {
 
 After you've created your theme implementation you have to register it's
 full [class-name](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getName()) in
-the TODO
+the [internal_themes.json](/boomega-gui/src/main/resources/com/dansoftware/boomega/gui/theme/internal_themes.json)
 config file.
 
 Like this:
 
 ```json
-TODO
+{
+  ...
+  "themeClassNames" : [
+    ...
+    "com.dansoftware.boomega.gui.theme.NordTheme"
+  ]
+}
 ```
 
 ### Creating themes on top of JMetro
