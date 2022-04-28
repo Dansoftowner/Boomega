@@ -65,16 +65,15 @@ public class InternalLanguagePacksConfigTest {
 
     @Test
     void testFallbackLanguagePackInstantiation() {
-        String className = EnglishLanguagePack.class.getName();
+        // TODO: use dynamic class creation (e.g Byte Buddy)?
+        Class<? extends LanguagePack> languagePackClass = EnglishLanguagePack.class;
+        String className = languagePackClass.getName();
 
         var json = buildJson(className);
         var config = new InternalLanguagePacksConfig(json);
 
         LanguagePack actual = config.getFallbackLanguagePack();
-        assertThat(actual).isExactlyInstanceOf(EnglishLanguagePack.class);
-
-        // test caching
-        assertThat(config.getFallbackLanguagePack() == actual).isTrue();
+        assertThat(actual).isExactlyInstanceOf(languagePackClass);
     }
 
     private JsonObject buildJson(String defaultPack) {
