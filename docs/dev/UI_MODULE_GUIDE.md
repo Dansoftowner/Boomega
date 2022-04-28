@@ -22,7 +22,8 @@ And when you click on a tile, it opens a tab for the module's content:
 ### The `Module` class
 
 If you want to create your own, you should extend
-the [`com.dansoftware.boomega.gui.databaseview.Module`](/boomega-gui/src/main/kotlin/com/dansoftware/boomega/gui/databaseview/Module.kt) class.
+the [`com.dansoftware.boomega.gui.databaseview.Module`](/boomega-gui/src/main/kotlin/com/dansoftware/boomega/gui/databaseview/Module.kt)
+class.
 
 The members you must override are:
 
@@ -108,6 +109,12 @@ We've just created a module that will display the text "Hello" on the screen.
 further instructions!**
 
 ---
-**Result:**  
-![Result on the home screen](/docs/img/pluginguide/module_plugins/ResultOnHomeScreen.png)   
+**Result:**
+
+On the Home Page:
+
+![Result on the home screen](/docs/img/pluginguide/module_plugins/ResultOnHomeScreen.png)
+
+After opened:
+
 ![Result opened](/docs/img/pluginguide/module_plugins/ResultOpened.png)
