@@ -13,13 +13,8 @@
 * [Setting up a plugin project](#setting-up-a-plugin-project)
 * [Plugin development tutorials & examples](#plugin-development-tutorials--examples)
     * [Language plugins](#language-plugins)
-      * [Property files](#property-files) 
-      * [The LanguagePack class](#the-languagepack-class) 
-        * [Specifying the alphabetical order](#specifying-the-alphabetical-order)
       * [The LanguagePlugin interface](#the-languageplugin-interface)
     * [Theme plugins](#theme-plugins)
-      * [Stylesheets](#stylesheets)
-      * [The Theme class](#the-theme-class)
       * [The ThemePlugin interface](#the-themeplugin-interface)
     * [Module plugins](#module-plugins)
       * [What are modules in Boomega?](#what-are-modules-in-boomega)
@@ -60,24 +55,24 @@ If you want to load your plugin into Boomega, you should place the jar file into
 # API overview
 
 The root of the Boomega plugin hierarchy is:
-[`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt)
+[`com.dansoftware.boomega.plugin.api.BoomegaPlugin`](/boomega-plugin/src/main/kotlin/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt)
 .
 
 All other plugin classes should implement this interface.
 
 **BoomegaPlugin subtypes:**
 
-* [`LanguagePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/LanguagePlugin.kt) - for adding support for a new
+* [`com.dansoftware.boomega.plugin.LanguagePlugin`](/boomega-i18n/src/main/kotlin/com/dansoftware/boomega/plugin/LanguagePlugin.kt) - for adding support for a new
   language
-* [`ThemePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ThemePlugin.kt) - for adding a new UI theme
-* [`RecordExporterPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/RecordExporterPlugin.kt) - for adding new
+* [`com.dansoftware.boomega.plugin.ThemePlugin`](/boomega-gui/src/main/kotlin/com/dansoftware/boomega/plugin/ThemePlugin.kt) - for adding a new UI theme
+* [`com.dansoftware.boomega.plugin.RecordExporterPlugin`](/boomega-export/src/main/kotlin/com/dansoftware/boomega/plugin/RecordExporterPlugin.kt) - for adding new
   record exporting option
-* [`ModulePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ModulePlugin.kt) - for adding new UI modules
-* [`DatabaseProviderPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/DatabaseProviderPlugin.kt) - for adding custom database support
+* [`com.dansoftware.boomega.plugin.ModulePlugin`](/boomega-gui/src/main/kotlin/com/dansoftware/boomega/plugin/ModulePlugin.kt) - for adding new UI modules
+* [`com.dansoftware.boomega.plugin.DatabaseProviderPlugin`](/boomega-database/src/main/kotlin/com/dansoftware/boomega/plugin/DatabaseProviderPlugin.kt) - for adding custom database support
 
 **The DisabledPlugin annotation:**
 
-The [`@DisabledPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/DisabledPlugin.java) annotation can be used
+The [`@DisabledPlugin`](/boomega-plugin/src/main/kotlin/com/dansoftware/boomega/plugin/api/DisabledPlugin.java) annotation can be used
 for preventing Boomega to load a plugin class.
 
 Example:
@@ -125,11 +120,11 @@ shuts down, the `destroy()` method is invoked on the plugin instance.
 
 ## Required plugin metadata
 
-Every [`BoomegaPlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt) should provide this
+Every [`BoomegaPlugin`](/boomega-plugin/src/main/kotlin/com/dansoftware/boomega/plugin/api/BoomegaPlugin.kt) should provide this
 information:
 
 * `name`: `String` - defines the plugin's name
-* `author`: [`Person`](/src/main/java/com/dansoftware/boomega/util/Person.kt) - information about the plugin's author
+* `author`: [`Person`](/boomega-utils/src/main/kotlin/com/dansoftware/boomega/util/Person.kt) - information about the plugin's author
 * `version`: `String` - defines the plugin's version
 * _Optional_: `icon`: [`Image`](https://openjfx.io/javadoc/17/javafx.graphics/javafx/scene/image/Image.html) - the
   plugin's icon (as a JavaFX image)
@@ -356,7 +351,7 @@ And when you click on a tile, it opens a tab for the module's content:
 
 ### The `Module` class
 
-If you want to create your own, you should extend the [`Module`](/src/main/java/com/dansoftware/boomega/gui/databaseview/Module.kt) class.
+If you want to create your own, you should extend the [`Module`](/boomega-gui/src/main/kotlin/com/dansoftware/boomega/gui/databaseview/Module.kt) class.
 
 The members you must override are:
 
@@ -438,7 +433,7 @@ But we have one more step to take.
 
 ### The `ModulePlugin` interface
 
-To make Boomega recognize the plugin, you have to implement the [`ModulePlugin`](/src/main/java/com/dansoftware/boomega/plugin/api/ModulePlugin.kt) interface:
+To make Boomega recognize the plugin, you have to implement the [`ModulePlugin`](/boomega-gui/src/main/kotlin/com/dansoftware/boomega/plugin/ModulePlugin.kt) interface:
 
 <table>
 
@@ -479,8 +474,8 @@ public class HelloModule extends ModulePlugin {
 </table>
 
 You might have noticed that the `getModule` method takes two arguments:
-- context: [`Context`](/src/main/java/com/dansoftware/boomega/gui/api/Context.kt) - you can use it for interacting with the UI (making alerts, notifications, etc..)
-- database: [`Database`](/src/main/java/com/dansoftware/boomega/database/api/Database.kt) - the object can be used to communicate with the opened database; might be just read-only
+- context: [`Context`](/boomega-gui/api/src/main/kotlin/com/dansoftware/boomega/gui/api/Context.kt) - you can use it for interacting with the UI (making alerts, notifications, etc..)
+- database: [`Database`](/boomega-database/src/main/kotlin/com/dansoftware/boomega/database/api/Database.kt) - the object can be used to communicate with the opened database; might be just read-only
 
 If your module doesn't need these, you can simply ignore them.
 
@@ -493,13 +488,13 @@ If your module doesn't need these, you can simply ignore them.
 
 > Incomplete and not reliable because the API is not reliable yet
 
-Boomega allows users to export their [Record](/src/main/java/com/dansoftware/boomega/database/api/data/Record.kt)s into
+Boomega allows users to export their [Record](/boomega-database/src/main/kotlin/com/dansoftware/boomega/database/api/data/Record.kt)s into
 some output formats (like JSON and Excel spreadsheet). The list options are expandable by writing plugins.
 
 ### The `RecordExporter` interface
 
 The entities directly responsible for exporting records into a specific format
-are [RecordExporter](/src/main/java/com/dansoftware/boomega/export/api/RecordExporter.kt)s.
+are [RecordExporter](/boomega-export/src/main/kotlin/com/dansoftware/boomega/export/api/RecordExporter.kt)s.
 
 Simple example:
 
@@ -507,7 +502,7 @@ Simple example:
 ### The `RecordExporterPlugin` interface
 
 If you want to add your record-exporter through a plugin, you have to implement
-the [RecordExporterPlugin](/src/main/java/com/dansoftware/boomega/plugin/api/RecordExporterPlugin.kt) interface.
+the [RecordExporterPlugin](/boomega-export/src/main/kotlin/com/dansoftware/boomega/plugin/RecordExporterPlugin.kt) interface.
 
 Here you have to supply your previously created record-exporter.
 
