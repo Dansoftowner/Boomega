@@ -7,7 +7,7 @@
 
 ### Enhancements/features
 
-* 🚧 Turkish language support (incomplete)
+* 🚧 Turkish language support (incomplete) by [Turab](https://github.com/Turab)
 * 💥 Refactored database api for allowing integrating other database managements systems into the app
 * ✨ MySQL support
 * ✨ Exporting to txt tables
