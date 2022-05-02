@@ -46,6 +46,19 @@ abstract class Theme {
         private set
 
     /**
+     * Provides stylesheets should be applied on the embedded web-content.
+     *
+     * These stylesheets should not follow the JavaFX specific syntax
+     * since they will be applied on simple web-pages.
+     *
+     * The main purpose of this is to make the internal web-content (e.g. the description in a Google Book's details)
+     * fit to the UI-theme.
+     *
+     * @return list of stylesheet urls
+     */
+    open val embeddedWebStylesheets: List<String> get() = emptyList()
+
+    /**
      * Applies the theme on the given [Scene]
      */
     abstract fun apply(scene: Scene)
