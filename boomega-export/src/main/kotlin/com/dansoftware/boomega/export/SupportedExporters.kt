@@ -20,13 +20,9 @@ package com.dansoftware.boomega.export
 
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.export.api.RecordExporter
-import com.dansoftware.boomega.export.excel.ExcelExporter
-import com.dansoftware.boomega.export.json.JsonExporter
-import com.dansoftware.boomega.export.txtable.TXTableExporter
 import com.dansoftware.boomega.plugin.RecordExporterPlugin
 import com.dansoftware.boomega.plugin.api.PluginService
 import com.dansoftware.boomega.plugin.api.of
-import com.dansoftware.boomega.util.toImmutableList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -36,19 +32,15 @@ private val logger: Logger = LoggerFactory.getLogger("SupportedExporters")
  * An immutable list of [RecordExporter]s can be used by the other parts of the app.
  * It includes exporters collected from plugins.
  */
-object SupportedExporters :
-    List<RecordExporter<*>> by loadExporters().toImmutableList()
+object SupportedExporters : List<RecordExporter<*>> by loadExporters()
 
 private fun loadExporters() =
     loadBuiltInExporters().plus(loadExportersFromPlugins())
         .onEach { logger.debug("Found exporter '{}'", it.javaClass.name) }
         .toList()
 
-private fun loadBuiltInExporters() = sequenceOf(
-    JsonExporter(),
-    TXTableExporter(),
-    ExcelExporter()
-)
+private fun loadBuiltInExporters(): Sequence<RecordExporter<*>> =
+    get(InternalExportersConfig::class).exporters.asSequence()
 
 private fun loadExportersFromPlugins() =
     get(PluginService::class)

@@ -1,0 +1,5 @@
+[
+  "com.dansoftware.boomega.export.json.JsonExporter",
+  "com.dansoftware.boomega.export.excel.ExcelExporter",
+  "com.dansoftware.boomega.export.txtable.TXTableExporter"
+]
