@@ -20,10 +20,14 @@ package com.dansoftware.boomega.i18n.api;
 
 import com.dansoftware.boomega.di.DIService;
 import com.dansoftware.boomega.i18n.EnglishLanguagePack;
+import com.dansoftware.boomega.i18n.HungarianLanguagePack;
+import com.dansoftware.boomega.i18n.TurkishLanguagePack;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,40 +44,62 @@ public class InternalLanguagePacksConfigTest {
         DIService.init();
     }
 
-    @Test
-    void testItStoresDefaultPackClassName() {
-        String expected = "com.x.x.Pack";
-
-        var json = buildJson(expected);
+    @ParameterizedTest
+    @MethodSource("provideArgumentsForItStoresAllPacks")
+    void testItStoresAllPacks(String defaultPack, List<String> otherPacks, List<String> expected) {
+        var json = buildJson(defaultPack, otherPacks);
         var config = new InternalLanguagePacksConfig(json);
 
-        assertThat(config.getFallbackLanguagePackClassName()).isEqualTo(expected);
-        assertThat(config.getLanguagePackClassNames()).isEqualTo(List.of(expected));
-    }
-
-    @Test
-    void testItStoresAllPacks() {
-        String defaultPack = "x";
-        List<String> packs = List.of("a", "b", "c");
-
-        var json = buildJson(defaultPack, packs);
-        var config = new InternalLanguagePacksConfig(json);
-
-        List<String> expected = Stream.of(List.of(defaultPack), packs).flatMap(List::stream).toList();
         assertThat(config.getLanguagePackClassNames()).isEqualTo(expected);
     }
 
-    @Test
-    void testFallbackLanguagePackInstantiation() {
-        // TODO: use dynamic class creation (e.g Byte Buddy)?
-        Class<? extends LanguagePack> languagePackClass = EnglishLanguagePack.class;
-        String className = languagePackClass.getName();
+    @ParameterizedTest
+    @MethodSource("provideArgumentsForPackInstantiation")
+    void testLanguagePackInstantiation(
+            Class<? extends LanguagePack> defaultPack,
+            List<Class<? extends LanguagePack>> otherPacks,
+            List<Class<? extends LanguagePack>> expected
+    ) {
+        String className = defaultPack.getName();
 
-        var json = buildJson(className);
+        var json = buildJson(className, otherPacks.stream().map(Class::getName).toList());
         var config = new InternalLanguagePacksConfig(json);
 
-        LanguagePack actual = config.getFallbackLanguagePack();
-        assertThat(actual).isExactlyInstanceOf(languagePackClass);
+        LanguagePack actualDefault = config.getFallbackLanguagePack();
+        List<LanguagePack> actualPacks = config.getLanguagePacks();
+
+        assertThat(actualDefault).isExactlyInstanceOf(defaultPack);
+        assertThat(actualPacks.stream().map(Object::getClass).toList()).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideArgumentsForItStoresAllPacks() {
+        return Stream.of(
+                Arguments.of("x", Collections.emptyList(), List.of("x")),
+                Arguments.of("x2", List.of("a"), List.of("x2", "a")),
+                Arguments.of("x3", List.of("a", "b"), List.of("x3", "a", "b")),
+                Arguments.of("x4", List.of("a", "b", "c"), List.of("x4", "a", "b", "c"))
+        );
+    }
+
+    private static Stream<Arguments> provideArgumentsForPackInstantiation() {
+        // TODO: use dynamic class creation (e.g Byte Buddy)?
+        return Stream.of(
+                Arguments.of(
+                        EnglishLanguagePack.class,
+                        Collections.emptyList(),
+                        List.of(EnglishLanguagePack.class)
+                ),
+                Arguments.of(
+                        HungarianLanguagePack.class,
+                        List.of(EnglishLanguagePack.class),
+                        List.of(HungarianLanguagePack.class, EnglishLanguagePack.class)
+                ),
+                Arguments.of(
+                        TurkishLanguagePack.class,
+                        List.of(EnglishLanguagePack.class, HungarianLanguagePack.class),
+                        List.of(TurkishLanguagePack.class, EnglishLanguagePack.class, HungarianLanguagePack.class)
+                )
+        );
     }
 
     private JsonObject buildJson(String defaultPack) {

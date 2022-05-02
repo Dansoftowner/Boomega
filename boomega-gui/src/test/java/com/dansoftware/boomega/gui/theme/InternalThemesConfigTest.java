@@ -22,7 +22,9 @@ import com.dansoftware.boomega.di.DIService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,43 +39,63 @@ public class InternalThemesConfigTest {
         DIService.init();
     }
 
-    @Test
-    void testItStoresDefaultThemeClassName() {
-        String expected = "com.x.x.Theme";
-
-        var json = buildJson(expected);
+    @ParameterizedTest
+    @MethodSource("provideArgumentsForItStoresAllThemes")
+    void testItStoresAllTheme(String defaultTheme, List<String> otherThemes, List<String> expected) {
+        var json = buildJson(defaultTheme, otherThemes);
         var config = new InternalThemesConfig(json);
 
-        assertThat(config.getDefaultThemeClassName()).isEqualTo(expected);
-        assertThat(config.getThemeClassNames()).isEqualTo(List.of(expected));
-    }
-
-    @Test
-    void testItStoresAllPacks() {
-        String defaultTheme = "x";
-        List<String> themes = List.of("a", "b", "c");
-
-        var json = buildJson(defaultTheme, themes);
-        var config = new InternalThemesConfig(json);
-
-        List<String> expected = Stream.of(List.of(defaultTheme), themes).flatMap(List::stream).toList();
         assertThat(config.getThemeClassNames()).isEqualTo(expected);
     }
 
-    @Test
-    void testDefaultThemeInstantiation() {
-        Class<? extends Theme> clazz = LightTheme.class;
-        String className = clazz.getName();
+    @ParameterizedTest
+    @MethodSource("provideArgumentsForThemeInstantiation")
+    void testThemeInstantiation(
+            Class<? extends Theme> defaultTheme,
+            List<Class<? extends Theme>> otherThemes,
+            List<Class<? extends Theme>> expected
+    ) {
+        String className = defaultTheme.getName();
+        List<String> otherClassNames = otherThemes.stream().map(Class::getName).toList();
 
-        var json = buildJson(className);
+        var json = buildJson(className, otherClassNames);
         var config = new InternalThemesConfig(json);
 
-        Theme actual = config.getDefaultTheme();
-        assertThat(actual).isExactlyInstanceOf(clazz);
+        Theme actualDefault = config.getDefaultTheme();
+        List<Theme> actualThemes = config.getThemes();
+
+        assertThat(actualDefault).isExactlyInstanceOf(defaultTheme);
+        assertThat(actualThemes.stream().map(Object::getClass).toList()).isEqualTo(expected);
     }
 
-    private JsonObject buildJson(String defaultTheme) {
-        return buildJson(defaultTheme, Collections.emptyList());
+    private static Stream<Arguments> provideArgumentsForItStoresAllThemes() {
+        return Stream.of(
+                Arguments.of("x", Collections.emptyList(), List.of("x")),
+                Arguments.of("x2", List.of("a"), List.of("x2", "a")),
+                Arguments.of("x3", List.of("a", "b"), List.of("x3", "a", "b")),
+                Arguments.of("x4", List.of("a", "b", "c"), List.of("x4", "a", "b", "c"))
+        );
+    }
+
+    private static Stream<Arguments> provideArgumentsForThemeInstantiation() {
+        // TODO: use dynamic class creation (e.g Byte Buddy)?
+        return Stream.of(
+                Arguments.of(
+                        LightTheme.class,
+                        Collections.emptyList(),
+                        List.of(LightTheme.class)
+                ),
+                Arguments.of(
+                        LightTheme.class,
+                        List.of(DarkTheme.class),
+                        List.of(LightTheme.class, DarkTheme.class)
+                ),
+                Arguments.of(
+                        OsSynchronizedTheme.class,
+                        List.of(LightTheme.class, DarkTheme.class),
+                        List.of(OsSynchronizedTheme.class, LightTheme.class, DarkTheme.class)
+                )
+        );
     }
 
     private JsonObject buildJson(String defaultTheme, List<String> themeClassNames) {
