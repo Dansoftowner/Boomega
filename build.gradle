@@ -16,6 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+import com.dansoftware.buildscript.SourceFileType
+
+import static com.dansoftware.buildscript.CheckIllegalSourceFiles.checkIllegalSourceFiles
+
 buildscript {
     repositories {
         gradlePluginPortal()
@@ -45,6 +50,17 @@ subprojects {
         maven { url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2" } // repository for JUnique
         maven { url "https://sandec.jfrog.io/artifactory/repo" } // repository for MDFX
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+
+    task findIllegalSourceFiles {
+        checkIllegalSourceFiles(fileTree(dir: 'src/main/kotlin'), SourceFileType.KOTLIN)
+        checkIllegalSourceFiles(fileTree(dir: 'src/test/kotlin'), SourceFileType.KOTLIN)
+        checkIllegalSourceFiles(fileTree(dir: 'src/main/java'), SourceFileType.JAVA)
+        checkIllegalSourceFiles(fileTree(dir: 'src/test/java'), SourceFileType.JAVA)
+    }
+
+    [compileJava, compileTestJava, compileKotlin, compileTestKotlin].forEach {
+        it.dependsOn(tasks.findIllegalSourceFiles)
     }
 
     [compileJava, compileTestJava].forEach {
