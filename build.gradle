@@ -71,7 +71,7 @@ subprojects {
     [compileKotlin, compileTestKotlin].forEach {
         it.kotlinOptions {
             jvmTarget = JAVA_VERSION
-            freeCompilerArgs += '-Xjvm-default=all'
+            freeCompilerArgs += ['-Xjvm-default=all', '-opt-in=kotlin.RequiresOptIn']
         }
     }
 
