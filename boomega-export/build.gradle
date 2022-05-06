@@ -13,6 +13,5 @@ dependencies {
 
     implementation(controlsfx) { exclude group: 'org.openjfx' }
     implementation poi // Microsoft Documents
-    implementation text_tables // Text tables
     implementation gson
 }
