@@ -10,7 +10,6 @@
 * 🚧 Turkish language support (incomplete) by [Turab](https://github.com/Turab)
 * 💥 Refactored database api for allowing integrating other database managements systems into the app
 * ✨ MySQL support
-* ✨ Exporting to txt tables
 * ⬆️Migrate to OpenJDK 17
 * ⬆️JavaFX 18 
 * ✨ MacOS specific menu-bar
