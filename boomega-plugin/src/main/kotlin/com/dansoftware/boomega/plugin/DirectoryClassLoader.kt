@@ -67,6 +67,7 @@ class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory:
             .toList()
 
     private fun findClass(jar: JarFile, name: String?): Class<*>? {
+        // We are catching all possible exceptions/errors (we don't want the app to crash just because a plugin is corrupt)
         return try {
             super.findClass(name)
         } catch (classDefNotFound: NoClassDefFoundError) {
@@ -74,6 +75,9 @@ class DirectoryClassLoader @Inject constructor(@Named("jarDirectory") directory:
             null
         } catch (e: Exception) {
             logger.error("Exception while loading plugin '${jar.name}'", e)
+            null
+        } catch(e: Error) {
+            logger.error("Error while loading plugin '${jar.name}'", e)
             null
         }
     }
