@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.export
 
 import com.dansoftware.boomega.di.DIService.get
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.util.resJson
 import com.google.gson.JsonArray
@@ -29,6 +30,7 @@ import com.google.inject.Singleton
  * The entity representing the internal-exporters config file.
  * Gives the list of record-exporters should be loaded by default.
  */
+@OptIn(RecordExportAPI::class)
 @ImplementedBy(DefaultInternalExportersConfig::class)
 internal open class InternalExportersConfig(json: JsonArray) {
 

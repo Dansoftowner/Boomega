@@ -28,6 +28,7 @@ import java.io.OutputStream
  *
  * @param C specifies the [RecordExportConfiguration] the exporter requires
  */
+@RecordExportAPI
 interface RecordExporter<C : RecordExportConfiguration> {
 
     /**

@@ -18,12 +18,14 @@
 
 package com.dansoftware.boomega.export.gui
 
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n
 import javafx.scene.control.ToggleButton
 import javafx.scene.control.Tooltip
 
+@RecordExportAPI
 class ReverseItemsToggle(exportConfiguration: RecordExportConfiguration) : ToggleButton() {
     init {
         tooltip = Tooltip(i18n("record.export.reverse_order"))

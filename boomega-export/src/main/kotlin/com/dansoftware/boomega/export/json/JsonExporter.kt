@@ -24,6 +24,7 @@ import com.dansoftware.boomega.database.api.data.ServiceConnection
 import com.dansoftware.boomega.export.api.BaseExporter
 import com.dansoftware.boomega.export.api.ConfigurationDialog
 import com.dansoftware.boomega.export.api.ExportProcessObserver
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.json.gui.JsonConfigurationDialog
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n
@@ -38,6 +39,7 @@ import java.lang.reflect.Type
 /**
  * A [JsonExporter] allows to export [Record]s into json format.
  */
+@OptIn(RecordExportAPI::class)
 class JsonExporter : BaseExporter<JsonExportConfiguration>() {
 
     override val contentType: String

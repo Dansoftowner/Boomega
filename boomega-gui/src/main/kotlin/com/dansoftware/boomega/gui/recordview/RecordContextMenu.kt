@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.export.SupportedExporters
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.keybinding.keyBinding
 import com.dansoftware.boomega.gui.util.action
@@ -83,6 +84,7 @@ class RecordContextMenu(private val recordsView: RecordsView) : ContextMenu() {
             .keyCombination(KeyBindings.pasteRecord.keyCombinationProperty)
             .apply { disableProperty().bind(recordsView.clipboardEmptyProperty()) }
 
+    @OptIn(RecordExportAPI::class)
     private fun buildExportItem() =
         Menu(i18n("record.context_menu.export"), icon("file-export-icon")).apply {
             items.addAll(

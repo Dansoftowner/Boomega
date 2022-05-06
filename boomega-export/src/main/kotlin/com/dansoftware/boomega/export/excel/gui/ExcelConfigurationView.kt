@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.export.excel.gui
 
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.excel.ExcelExportConfiguration
 import com.dansoftware.boomega.export.gui.BaseConfigurationView
 import com.dansoftware.boomega.gui.control.FontNamePicker
@@ -29,6 +30,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
 
+@OptIn(RecordExportAPI::class)
 class ExcelConfigurationView(
     private val onFinished: (ExcelExportConfiguration) -> Unit
 ) : BorderPane() {

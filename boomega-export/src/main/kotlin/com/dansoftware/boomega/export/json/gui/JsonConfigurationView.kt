@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.export.json.gui
 
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.gui.BaseConfigurationView
 import com.dansoftware.boomega.export.json.JsonExportConfiguration
 import com.dansoftware.boomega.gui.util.addRow
@@ -30,6 +31,7 @@ import javafx.scene.control.Label
 import javafx.scene.layout.Priority
 import org.controlsfx.control.CheckListView
 
+@OptIn(RecordExportAPI::class)
 class JsonConfigurationView(
     private val onFinished: (JsonExportConfiguration) -> Unit
 ) : BaseConfigurationView<JsonExportConfiguration>(JsonExportConfiguration()) {

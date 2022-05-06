@@ -16,21 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.export.excel.gui
+package com.dansoftware.boomega.export.api
 
-import com.dansoftware.boomega.export.api.ConfigurationDialog
-import com.dansoftware.boomega.export.api.RecordExportAPI
-import com.dansoftware.boomega.export.excel.ExcelExportConfiguration
-import com.dansoftware.boomega.gui.api.Context
-
-@OptIn(RecordExportAPI::class)
-class ExcelConfigurationDialog : ConfigurationDialog<ExcelExportConfiguration> {
-    override fun show(context: Context, onFinished: (ExcelExportConfiguration) -> Unit) {
-        var overlay: ExcelConfigurationOverlay? = null
-        overlay = ExcelConfigurationOverlay() {
-            context.hideOverlay(overlay!!)
-            onFinished(it)
-        }
-        context.showOverlay(overlay)
-    }
-}
+@RequiresOptIn(message = "This API is experimental. It may be changed in the future without notice.")
+annotation class RecordExportAPI

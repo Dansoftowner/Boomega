@@ -18,12 +18,14 @@
 
 package com.dansoftware.boomega.plugin
 
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.plugin.api.BoomegaPlugin
 
 /**
  * Allows adding custom a [RecordExporter] to the application
  */
+@OptIn(RecordExportAPI::class)
 interface RecordExporterPlugin : BoomegaPlugin {
     val exporter: RecordExporter<*>
 }

@@ -18,11 +18,13 @@
 
 package com.dansoftware.boomega.export.json
 
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 
 /**
  * A [JsonExportConfiguration] allows to specify configurations for a [JsonExporter].
  */
+@OptIn(RecordExportAPI::class)
 class JsonExportConfiguration : RecordExportConfiguration() {
 
     /**

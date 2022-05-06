@@ -20,7 +20,7 @@ package com.dansoftware.boomega.export.api
 
 import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.i18n.api.I18N
-
+@RecordExportAPI
 abstract class BaseExporter<C : RecordExportConfiguration> : RecordExporter<C> {
     protected fun sortRecords(items: List<Record>, config: C): List<Record> {
         val sortedItems = config.fieldToSortBy?.let { field ->

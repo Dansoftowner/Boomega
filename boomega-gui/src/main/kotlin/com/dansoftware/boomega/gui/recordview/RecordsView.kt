@@ -21,6 +21,7 @@ package com.dansoftware.boomega.gui.recordview
 import com.dansoftware.boomega.database.api.Database
 import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.di.DIService.get
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.gui.api.Context
@@ -295,10 +296,12 @@ class RecordsView(
     /**
      * Exports the selected table-items with the given [RecordExporter]
      */
+    @OptIn(RecordExportAPI::class)
     fun <C : RecordExportConfiguration> exportSelected(exporter: RecordExporter<C>) {
         export(exporter, table.selectedItems.map(Record::copy))
     }
 
+    @OptIn(RecordExportAPI::class)
     private fun <C : RecordExportConfiguration> export(exporter: RecordExporter<C>, items: List<Record>) {
         exporter.configurationDialog.show(context) { config ->
             val fileExplorer = FileChooser()

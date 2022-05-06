@@ -21,6 +21,7 @@ package com.dansoftware.boomega.export.api
 /**
  * Handles the progress-updates and messages from a [RecordExporter].
  */
+@RecordExportAPI
 interface ExportProcessObserver {
     fun updateMessage(message: String?)
     fun updateProgress(workDone: Double, max: Double)

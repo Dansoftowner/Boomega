@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.export.gui
 
 import com.dansoftware.boomega.database.api.data.RecordProperty
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.gui.util.checkedItems
 import javafx.collections.FXCollections
@@ -30,6 +31,7 @@ import org.controlsfx.control.CheckListView
 /**
  * List-view that allows to select the exportable record properties
  */
+@RecordExportAPI
 class RecordPropertyChecker(exportConfiguration: RecordExportConfiguration) :
     CheckListView<RecordProperty<*>>(FXCollections.observableArrayList(exportConfiguration.availableFields)) {
 

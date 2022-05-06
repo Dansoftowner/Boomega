@@ -25,6 +25,7 @@ import java.util.*
  * A [RecordExportConfiguration] allows to specify configurations
  * for a particular [RecordExporter].
  */
+@RecordExportAPI
 abstract class RecordExportConfiguration {
 
     /**

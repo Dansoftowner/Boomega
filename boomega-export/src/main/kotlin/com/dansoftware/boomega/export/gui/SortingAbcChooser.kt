@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.export.gui
 
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.gui.util.onValuePresent
 import com.dansoftware.boomega.gui.util.selectedItem
@@ -32,6 +33,7 @@ import java.util.*
 /**
  * The choice-box that allows to select the abc to sort with
  */
+@RecordExportAPI
 class SortingAbcChooser(exportConfiguration: RecordExportConfiguration) : ChoiceBox<Locale>() {
     init {
         GridPane.setHgrow(this, Priority.ALWAYS)

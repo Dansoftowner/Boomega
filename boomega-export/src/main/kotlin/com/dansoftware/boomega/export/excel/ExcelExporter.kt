@@ -22,6 +22,7 @@ import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.export.api.BaseExporter
 import com.dansoftware.boomega.export.api.ConfigurationDialog
 import com.dansoftware.boomega.export.api.ExportProcessObserver
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.excel.gui.ExcelConfigurationDialog
 import com.dansoftware.boomega.gui.util.icon
 import javafx.scene.Node
@@ -37,6 +38,7 @@ import java.time.LocalDate
 /**
  * An [ExcelExporter] allows to export [Record]s into Excel (.xlsx) format.
  */
+@OptIn(RecordExportAPI::class)
 class ExcelExporter : BaseExporter<ExcelExportConfiguration>() {
 
     override val name: String

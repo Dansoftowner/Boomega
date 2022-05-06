@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.export.gui
 
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.gui.util.addRow
 import com.dansoftware.boomega.i18n.api.i18n
@@ -28,6 +29,7 @@ import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 
+@RecordExportAPI
 open class BaseConfigurationView<C : RecordExportConfiguration>(
     protected val exportConfiguration: C
 ) : GridPane() {

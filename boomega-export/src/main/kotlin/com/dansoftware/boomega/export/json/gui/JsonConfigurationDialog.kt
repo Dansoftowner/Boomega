@@ -19,9 +19,11 @@
 package com.dansoftware.boomega.export.json.gui
 
 import com.dansoftware.boomega.export.api.ConfigurationDialog
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.json.JsonExportConfiguration
 import com.dansoftware.boomega.gui.api.Context
 
+@OptIn(RecordExportAPI::class)
 class JsonConfigurationDialog : ConfigurationDialog<JsonExportConfiguration> {
     override fun show(context: Context, onFinished: (JsonExportConfiguration) -> Unit) {
         var overlay: JsonConfigurationOverlay? = null

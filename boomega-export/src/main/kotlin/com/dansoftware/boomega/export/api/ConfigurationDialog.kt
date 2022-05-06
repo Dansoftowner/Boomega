@@ -28,6 +28,7 @@ import com.dansoftware.boomega.gui.api.Context
  * @param C the [RecordExportConfiguration] this dialog creates
  * @see RecordExporter.configurationDialog
  */
+@RecordExportAPI
 interface ConfigurationDialog<C : RecordExportConfiguration> {
 
     /**

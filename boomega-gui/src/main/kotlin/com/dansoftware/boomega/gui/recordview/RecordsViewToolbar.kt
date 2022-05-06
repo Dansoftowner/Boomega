@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.gui.recordview
 
 import com.dansoftware.boomega.export.SupportedExporters
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.control.BiToolBar
 import com.dansoftware.boomega.gui.keybinding.KeyBinding
@@ -147,6 +148,7 @@ class RecordsViewToolbar(
             KeyBindings.refreshPage
         ) { view.refresh() }
 
+    @OptIn(RecordExportAPI::class)
     private fun buildExportItem() =
         MenuButton(null, icon("file-export-icon")).apply {
             styleClass("options-item")

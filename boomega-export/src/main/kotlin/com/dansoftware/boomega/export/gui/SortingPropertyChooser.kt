@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.export.gui
 
 import com.dansoftware.boomega.database.api.data.RecordProperty
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExportConfiguration
 import com.dansoftware.boomega.gui.util.selectedItem
 import com.dansoftware.boomega.gui.util.selectedItemProperty
@@ -28,6 +29,7 @@ import javafx.scene.control.ChoiceBox
 /**
  * The choice-box that allows to select the record-property to sort with
  */
+@RecordExportAPI
 class SortingPropertyChooser(
     exportConfiguration: RecordExportConfiguration
 ) : ChoiceBox<RecordProperty<Comparable<*>>?>(

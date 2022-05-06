@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(RecordExportAPI::class)
+
 package com.dansoftware.boomega.export
 
 import com.dansoftware.boomega.di.DIService.get
+import com.dansoftware.boomega.export.api.RecordExportAPI
 import com.dansoftware.boomega.export.api.RecordExporter
 import com.dansoftware.boomega.plugin.RecordExporterPlugin
 import com.dansoftware.boomega.plugin.api.PluginService
