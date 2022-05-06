@@ -11,6 +11,12 @@ allprojects {
     }
 }
 
+subprojects {
+    jar {
+        archiveBaseName.set("${project.parent.name}-${project.name}")
+    }
+}
+
 dependencies {
     implementation project(':boomega-gui:api')
     implementation project(':boomega-gui:utils')
