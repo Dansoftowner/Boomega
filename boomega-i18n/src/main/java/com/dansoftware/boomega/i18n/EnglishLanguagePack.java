@@ -20,10 +20,14 @@ package com.dansoftware.boomega.i18n;
 
 import com.dansoftware.boomega.i18n.api.LanguagePack;
 import com.dansoftware.boomega.util.Person;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Singleton;
 import java.util.Locale;
+import java.util.ResourceBundle;
+
+import static com.dansoftware.boomega.i18n.DefaultResourceBundle.DEFAULT_RESOURCE_BUNDLE_NAME;
 
 /**
  * An {@link EnglishLanguagePack} is a {@link LanguagePack} that provides english translation
@@ -31,7 +35,7 @@ import java.util.Locale;
  * @author Daniel Gyorffy
  */
 @Singleton // make sure it's constructed only once if used through DI framework
-public class EnglishLanguagePack extends InternalLanguagePack {
+public class EnglishLanguagePack extends LanguagePack {
 
     public EnglishLanguagePack() {
         super(Locale.ENGLISH);
@@ -41,6 +45,11 @@ public class EnglishLanguagePack extends InternalLanguagePack {
     @Override
     public Person getTranslator() {
         return new Person("Györffy", "Dániel", "dansoftwareowner@gmail.com");
+    }
+
+    @Override
+    public @NotNull ResourceBundle getValues() {
+        return ResourceBundle.getBundle(DEFAULT_RESOURCE_BUNDLE_NAME);
     }
 
     @Override

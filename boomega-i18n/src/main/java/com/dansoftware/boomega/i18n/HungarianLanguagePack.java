@@ -27,13 +27,16 @@ import java.text.Collator;
 import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.Locale;
+import java.util.ResourceBundle;
+
+import static com.dansoftware.boomega.i18n.DefaultResourceBundle.DEFAULT_RESOURCE_BUNDLE_NAME;
 
 /**
  * A {@link HungarianLanguagePack} is a {@link LanguagePack} that provides translation for the Hungarian language.
  *
  * @author Daniel Gyorffy
  */
-public class HungarianLanguagePack extends InternalLanguagePack {
+public class HungarianLanguagePack extends LanguagePack {
 
     private static final Locale LOCALE = new Locale("hu", "HU");
 
@@ -53,6 +56,11 @@ public class HungarianLanguagePack extends InternalLanguagePack {
     @Override
     public Person getTranslator() {
         return new Person("Györffy", "Dániel", "dansoftwareowner@gmail.com");
+    }
+
+    @Override
+    public @NotNull ResourceBundle getValues() {
+        return ResourceBundle.getBundle(DEFAULT_RESOURCE_BUNDLE_NAME);
     }
 
     @Override

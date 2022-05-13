@@ -16,31 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.i18n;
+@file:JvmName("DefaultResourceBundle")
 
-import com.dansoftware.boomega.i18n.api.LanguagePack;
-import com.dansoftware.boomega.util.Person;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+package com.dansoftware.boomega.i18n
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-abstract class InternalLanguagePack extends LanguagePack {
-
-    private static final String VALUES = "com.dansoftware.boomega.i18n.Values";
-
-    protected InternalLanguagePack(@NotNull Locale locale) {
-        super(locale);
-    }
-
-    @Override
-    public @Nullable Person getTranslator() {
-        return null;
-    }
-
-    @Override
-    public @NotNull ResourceBundle getValues() {
-        return super.getBundle(VALUES);
-    }
-}
+internal const val DEFAULT_RESOURCE_BUNDLE_NAME = "com.dansoftware.boomega.i18n.Values"

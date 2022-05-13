@@ -19,6 +19,7 @@
 package com.dansoftware.boomega.i18n;
 
 import com.dansoftware.boomega.i18n.api.LanguagePack;
+import com.dansoftware.boomega.util.Person;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,13 +27,16 @@ import java.text.Collator;
 import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.Locale;
+import java.util.ResourceBundle;
+
+import static com.dansoftware.boomega.i18n.DefaultResourceBundle.DEFAULT_RESOURCE_BUNDLE_NAME;
 
 /**
  * A {@link TurkishLanguagePack} is a {@link LanguagePack} that provides translation for Turkish language.
  *
  * @author Turab Garip
  */
-public class TurkishLanguagePack extends InternalLanguagePack {
+public class TurkishLanguagePack extends LanguagePack {
 
     private static final Locale LOCALE = new Locale("tr", "TR", "tr_TR");
 
@@ -46,6 +50,11 @@ public class TurkishLanguagePack extends InternalLanguagePack {
         } catch (ParseException e) {
             return Collator.getInstance(LOCALE);
         }
+    }
+
+    @Override
+    public @NotNull ResourceBundle getValues() {
+        return ResourceBundle.getBundle(DEFAULT_RESOURCE_BUNDLE_NAME);
     }
 
     @Override
