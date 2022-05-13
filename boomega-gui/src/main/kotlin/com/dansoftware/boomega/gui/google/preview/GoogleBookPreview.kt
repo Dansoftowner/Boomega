@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.google.preview
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.I18N
-import com.dansoftware.boomega.service.googlebooks.Volume
+import com.dansoftware.boomega.rest.google.books.Volume
 import javafx.scene.Group
 import javafx.scene.control.Label
 import javafx.scene.layout.BorderPane

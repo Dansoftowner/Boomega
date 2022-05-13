@@ -20,7 +20,7 @@ package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
+import com.dansoftware.boomega.rest.google.books.GoogleBooksQuery
 import javafx.scene.Node
 import javafx.scene.layout.StackPane
 

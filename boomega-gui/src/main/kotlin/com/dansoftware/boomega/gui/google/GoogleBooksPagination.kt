@@ -24,9 +24,9 @@ import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsOverlay
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
-import com.dansoftware.boomega.service.googlebooks.Volume
-import com.dansoftware.boomega.service.googlebooks.Volumes
+import com.dansoftware.boomega.rest.google.books.GoogleBooksQuery
+import com.dansoftware.boomega.rest.google.books.Volume
+import com.dansoftware.boomega.rest.google.books.Volumes
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.ContextMenu

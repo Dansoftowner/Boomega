@@ -19,7 +19,7 @@
 package com.dansoftware.boomega.gui.recordview;
 
 import com.dansoftware.boomega.database.api.data.Record;
-import com.dansoftware.boomega.service.googlebooks.Volume;
+import com.dansoftware.boomega.rest.google.books.Volume;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

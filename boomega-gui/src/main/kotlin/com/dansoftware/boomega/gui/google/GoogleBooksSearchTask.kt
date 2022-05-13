@@ -18,8 +18,8 @@
 
 package com.dansoftware.boomega.gui.google
 
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
-import com.dansoftware.boomega.service.googlebooks.Volumes
+import com.dansoftware.boomega.rest.google.books.GoogleBooksQuery
+import com.dansoftware.boomega.rest.google.books.Volumes
 import javafx.concurrent.Task
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

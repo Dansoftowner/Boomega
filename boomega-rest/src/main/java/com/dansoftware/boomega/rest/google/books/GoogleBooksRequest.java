@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.service.googlebooks;
+package com.dansoftware.boomega.rest.google.books;
 
 import com.google.gson.Gson;
 

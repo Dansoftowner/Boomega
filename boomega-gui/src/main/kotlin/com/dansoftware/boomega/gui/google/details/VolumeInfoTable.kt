@@ -24,7 +24,7 @@ import com.dansoftware.boomega.gui.control.ReadOnlyRating
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.I18N
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.service.googlebooks.Volume
+import com.dansoftware.boomega.rest.google.books.Volume
 import javafx.beans.property.*
 import javafx.scene.control.Label
 import javafx.scene.control.Tooltip

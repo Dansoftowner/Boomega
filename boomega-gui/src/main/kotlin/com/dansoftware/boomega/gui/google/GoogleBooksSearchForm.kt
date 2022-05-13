@@ -26,7 +26,7 @@ import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.onScenePresent
 import com.dansoftware.boomega.i18n.api.I18N
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
+import com.dansoftware.boomega.rest.google.books.GoogleBooksQuery
 import com.dlsc.formsfx.model.structure.Field
 import com.dlsc.formsfx.model.structure.Form
 import com.dlsc.formsfx.model.util.BindingMode

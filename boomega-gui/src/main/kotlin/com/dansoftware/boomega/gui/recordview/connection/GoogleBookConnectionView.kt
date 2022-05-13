@@ -31,8 +31,8 @@ import com.dansoftware.boomega.gui.util.asCentered
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.gui.util.typeEquals
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
-import com.dansoftware.boomega.service.googlebooks.Volume
+import com.dansoftware.boomega.rest.google.books.GoogleBooksQuery
+import com.dansoftware.boomega.rest.google.books.Volume
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import javafx.beans.value.ObservableBooleanValue

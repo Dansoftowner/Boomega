@@ -21,7 +21,7 @@ package com.dansoftware.boomega.gui.google.details
 import com.dansoftware.boomega.gui.control.PropertyTable
 import com.dansoftware.boomega.gui.control.WebsiteHyperLink
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.service.googlebooks.Volume
+import com.dansoftware.boomega.rest.google.books.Volume
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 

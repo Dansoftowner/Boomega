@@ -23,8 +23,8 @@ import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.recordview.RecordsViewModule
 import com.dansoftware.boomega.gui.util.icon
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.service.googlebooks.GoogleBooksQuery
-import com.dansoftware.boomega.service.googlebooks.Volume
+import com.dansoftware.boomega.rest.google.books.GoogleBooksQuery
+import com.dansoftware.boomega.rest.google.books.Volume
 import javafx.beans.binding.Bindings
 import javafx.scene.control.Button
 import javafx.scene.control.MenuItem

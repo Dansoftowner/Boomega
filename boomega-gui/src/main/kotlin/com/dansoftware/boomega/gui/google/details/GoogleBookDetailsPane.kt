@@ -25,7 +25,7 @@ import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerWindow
 import com.dansoftware.boomega.gui.util.*
 import com.dansoftware.boomega.i18n.api.i18n
-import com.dansoftware.boomega.service.googlebooks.Volume
+import com.dansoftware.boomega.rest.google.books.Volume
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.pnikosis.html2markdown.HTML2Md

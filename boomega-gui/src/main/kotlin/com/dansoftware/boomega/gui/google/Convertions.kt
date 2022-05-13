@@ -20,9 +20,9 @@ package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.database.api.data.ServiceConnection
-import com.dansoftware.boomega.service.googlebooks.Volume
-import com.dansoftware.boomega.service.googlebooks.getPublishedDateObject
-import com.dansoftware.boomega.service.googlebooks.isMagazine
+import com.dansoftware.boomega.rest.google.books.Volume
+import com.dansoftware.boomega.rest.google.books.getPublishedDateObject
+import com.dansoftware.boomega.rest.google.books.isMagazine
 import java.util.*
 
 /**

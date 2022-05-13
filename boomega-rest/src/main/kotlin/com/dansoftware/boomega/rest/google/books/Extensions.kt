@@ -18,7 +18,7 @@
 
 @file:JvmName("VolumeUtils")
 
-package com.dansoftware.boomega.service.googlebooks
+package com.dansoftware.boomega.rest.google.books
 
 import com.dansoftware.boomega.util.parseToDate
 import org.slf4j.Logger
