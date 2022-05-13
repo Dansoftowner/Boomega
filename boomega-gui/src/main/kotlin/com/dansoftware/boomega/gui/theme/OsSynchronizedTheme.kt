@@ -48,7 +48,7 @@ open class OsSynchronizedTheme : Theme() {
     /**
      * Specifies the [Theme] should be used when the system is in light mode
      */
-    open val lightTheme: Theme = get(DarkTheme::class)
+    open val lightTheme: Theme = get(LightTheme::class)
 
     /**
      * The list of functions that should be invoked by the os theme detection listener, when
