@@ -53,6 +53,11 @@ public class TurkishLanguagePack extends LanguagePack {
     }
 
     @Override
+    public @Nullable Person getTranslator() {
+        return new Person("Garip", "Turab", null);
+    }
+
+    @Override
     public @NotNull ResourceBundle getValues() {
         return ResourceBundle.getBundle(DEFAULT_RESOURCE_BUNDLE_NAME);
     }
