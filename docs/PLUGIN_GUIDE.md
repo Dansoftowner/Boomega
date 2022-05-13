@@ -17,8 +17,6 @@
     * [Theme plugins](#theme-plugins)
       * [The ThemePlugin interface](#the-themeplugin-interface)
     * [Module plugins](#module-plugins)
-      * [What are modules in Boomega?](#what-are-modules-in-boomega)
-      * [The Module class](#the-module-class)
       * [The ModulePlugin interface](#the-moduleplugin-interface)
     * [Record exporting plugins](#record-exporting-plugins)
     * [Database provider plugins](#database-provider-plugins)
@@ -386,26 +384,19 @@ If your module doesn't need these, you can simply ignore them.
 
 ## Record exporting plugins
 
-> Incomplete and not reliable because the API is not reliable yet
-
-Boomega allows users to export their [Record](/boomega-database/src/main/kotlin/com/dansoftware/boomega/database/api/data/Record.kt)s into
-some output formats (like JSON and Excel spreadsheet). The list options are expandable by writing plugins.
-
-### The `RecordExporter` interface
-
-The entities directly responsible for exporting records into a specific format
-are [RecordExporter](/boomega-export/src/main/kotlin/com/dansoftware/boomega/export/api/RecordExporter.kt)s.
-
-Simple example:
-
+Read the [record export guide](dev/RECORD_EXPORT_GUIDE.md) before you go forward.
 
 ### The `RecordExporterPlugin` interface
 
 If you want to add your record-exporter through a plugin, you have to implement
 the [RecordExporterPlugin](/boomega-export/src/main/kotlin/com/dansoftware/boomega/plugin/RecordExporterPlugin.kt) interface.
 
-Here you have to supply your previously created record-exporter.
-
-Simple example:
+#### Example plugin
+Look at the [txt-table-export-plugin](https://github.com/boomegapp/txt-table-export-plugin), a record export plugin allows
+to export records into text tables.
 
 ## Database provider plugins
+
+Read the [databases guide](dev/DATABASES_GUIDE.md) before you continue.
+
+> Documentation in progress
