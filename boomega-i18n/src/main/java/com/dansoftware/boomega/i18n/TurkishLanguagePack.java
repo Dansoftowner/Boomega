@@ -38,7 +38,7 @@ import static com.dansoftware.boomega.i18n.DefaultResourceBundle.DEFAULT_RESOURC
  */
 public class TurkishLanguagePack extends LanguagePack {
 
-    private static final Locale LOCALE = new Locale("tr", "TR", "tr_TR");
+    private static final Locale LOCALE = new Locale("tr", "TR");
 
     public TurkishLanguagePack() {
         super(LOCALE);
@@ -59,7 +59,7 @@ public class TurkishLanguagePack extends LanguagePack {
 
     @Override
     public @NotNull ResourceBundle getValues() {
-        return ResourceBundle.getBundle(DEFAULT_RESOURCE_BUNDLE_NAME);
+        return getBundle(DEFAULT_RESOURCE_BUNDLE_NAME);
     }
 
     @Override

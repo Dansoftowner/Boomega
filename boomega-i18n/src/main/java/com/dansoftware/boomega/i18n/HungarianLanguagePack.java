@@ -60,7 +60,7 @@ public class HungarianLanguagePack extends LanguagePack {
 
     @Override
     public @NotNull ResourceBundle getValues() {
-        return ResourceBundle.getBundle(DEFAULT_RESOURCE_BUNDLE_NAME);
+        return getBundle(DEFAULT_RESOURCE_BUNDLE_NAME);
     }
 
     @Override
