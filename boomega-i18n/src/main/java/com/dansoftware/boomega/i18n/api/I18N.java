@@ -59,6 +59,9 @@ public class I18N {
 
     static {
         loadPacks();
+
+        // initializing the languagePack (for preventing null pointer exceptions)
+        setLocale(Locale.getDefault());
     }
 
     private I18N() {
@@ -76,6 +79,49 @@ public class I18N {
         Set<Locale> available = getAvailableLocales();
         Locale systemDefault = Locale.getDefault();
         return available.contains(systemDefault) ? systemDefault : internalConfig.getFallbackLocale();
+    }
+
+    /**
+     * Sets the default locale for this instance of the Java Virtual Machine (see {@link Locale#setDefault(Locale)}),
+     * and searches for the right {@link LanguagePack} mapped to it. If no language-pack found for the given locale,
+     * a fallback language-pack will be configured.
+     *
+     * @param locale the locale representing the language/area
+     */
+    public static synchronized void setLocale(@NotNull Locale locale) {
+        logger.debug("Setting locale '{}' as default", locale);
+        Locale.setDefault(locale);
+        languagePack = recognizeLanguagePack();
+    }
+
+    /**
+     * Recognizes the required {@link LanguagePack} for the default {@link Locale}.
+     */
+    private static LanguagePack recognizeLanguagePack() {
+        Locale currentLocale = Locale.getDefault();
+        if (languagePack == null || !languagePack.getLocale().equals(currentLocale)) {
+            Optional<LanguagePack> foundLanguagePack = getLanguagePackForLocale(currentLocale);
+            if (foundLanguagePack.isPresent()) {
+                logger.debug("Found language-pack for locale '{}': '{}'", currentLocale, foundLanguagePack.get());
+                return foundLanguagePack.get();
+            } else {
+                LanguagePack fallback = internalConfig.getFallbackLanguagePack();
+                logger.debug(
+                        "Couldn't find language-pack for locale '{}'; setting '{}' as default.",
+                        currentLocale,
+                        fallback.getClass().getName()
+                );
+                return fallback;
+            }
+        }
+        return languagePack;
+    }
+
+    /**
+     * Maps the given locale to the language-pack
+     */
+    private static Optional<LanguagePack> getLanguagePackForLocale(Locale locale) {
+        return loadedLanguagePacks.getOrDefault(locale, Collections.emptyList()).stream().findFirst();
     }
 
     /**
@@ -105,7 +151,6 @@ public class I18N {
      */
     @NotNull
     public static ResourceBundle getValues() {
-        recognizeLanguagePack();
         return languagePack.getValues();
     }
 
@@ -140,20 +185,11 @@ public class I18N {
 
     /**
      * @return {@code true} if the configured language is an RTL (right-to-left) language (e.g. Hebrew);
-     *         {@link false} otherwise.
+     * {@code false} otherwise.
      * @see LanguagePack#isRTL()
      */
     public static boolean isRTL() {
         return getLanguagePack().isRTL();
-    }
-
-    /**
-     * Recognizes the required {@link LanguagePack} for the default {@link Locale}.
-     */
-    private static void recognizeLanguagePack() {
-        if (languagePack == null || !languagePack.getLocale().equals(Locale.getDefault()))
-            languagePack = getLanguagePackForLocale(Locale.getDefault())
-                    .orElseGet(internalConfig::getFallbackLanguagePack);
     }
 
     /**
@@ -192,13 +228,6 @@ public class I18N {
         List<LanguagePack> list = loadedLanguagePacks.getOrDefault(locale, new ArrayList<>());
         list.add(pack);
         loadedLanguagePacks.put(locale, list);
-    }
-
-    /**
-     * Maps the given locale to the language-pack
-     */
-    private static Optional<LanguagePack> getLanguagePackForLocale(Locale locale) {
-        return loadedLanguagePacks.getOrDefault(locale, Collections.emptyList()).stream().findFirst();
     }
 
     /**

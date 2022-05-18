@@ -34,6 +34,8 @@ import com.dansoftware.boomega.gui.theme.config.THEME
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
 import com.dansoftware.boomega.gui.window.BaseWindow
 import com.dansoftware.boomega.i18n.LOCALE
+import com.dansoftware.boomega.i18n.api.I18N
+import com.dansoftware.boomega.i18n.api.LanguagePack
 import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.main.parseArguments
 import com.dansoftware.boomega.plugin.api.PluginService
@@ -100,7 +102,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
     override fun stop() {
         //writing all configurations
         logger.info("Saving configurations")
-        get(com.dansoftware.boomega.config.Preferences::class).editor.commit()
+        get(Preferences::class).editor.commit()
 
         logger.info("Closing down plugin service")
         get(PluginService::class).close()
@@ -128,10 +130,10 @@ open class BoomegaApp : BaseBoomegaApplication() {
         }
     }
 
-    private fun readConfigurations(): com.dansoftware.boomega.config.Preferences {
+    private fun readConfigurations(): Preferences {
         notifyPreloader("preloader.preferences.read")
         return try {
-            get(com.dansoftware.boomega.config.Preferences::class).also {
+            get(Preferences::class).also {
                 logger.info("Configurations has been read successfully!")
             }
         } catch (e: RuntimeException) {
@@ -149,7 +151,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
                     }
                 )
             }
-            com.dansoftware.boomega.config.Preferences.empty()
+            Preferences.empty()
         }
     }
 
@@ -158,9 +160,9 @@ open class BoomegaApp : BaseBoomegaApplication() {
      * It should be only invoked if the [FirstTimeActivity] was not shown.
      */
     private fun applyBaseConfigurations() {
-        val preferences = get(com.dansoftware.boomega.config.Preferences::class)
+        val preferences = get(Preferences::class)
         notifyPreloader("preloader.lang")
-        Locale.setDefault(preferences[LOCALE])
+        I18N.setLocale(preferences[LOCALE])
         notifyPreloader("preloader.theme")
         Theme.default = preferences[THEME]
     }
@@ -169,7 +171,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
      * Applies some configurations should be applied even if no [FirstTimeActivity] was shown.
      */
     private fun applyAdditionalConfigurations() {
-        val preferences = get(com.dansoftware.boomega.config.Preferences::class)
+        val preferences = get(Preferences::class)
         fun applyWindowsOpacity() {
             val opacity = preferences[BaseWindow.GLOBAL_OPACITY_CONFIG_KEY]
             logger.debug("Global window opacity read: {}", opacity)
@@ -183,7 +185,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
      * Searches for updates if necessary
      */
     private fun searchForUpdates(): Release? {
-        val preferences = get(com.dansoftware.boomega.config.Preferences::class)
+        val preferences = get(Preferences::class)
         return when {
             preferences[SEARCH_UPDATES] -> {
                 notifyPreloader("preloader.update.search")
@@ -226,7 +228,7 @@ open class BoomegaApp : BaseBoomegaApplication() {
         val lock = Any()
         return synchronized(lock) {
             when {
-                FirstTimeActivity.isNeeded(get(com.dansoftware.boomega.config.Preferences::class)) -> {
+                FirstTimeActivity.isNeeded(get(Preferences::class)) -> {
                     hidePreloader()
                     logger.debug("First time dialog is needed")
                     Platform.runLater {
