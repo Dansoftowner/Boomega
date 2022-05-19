@@ -34,10 +34,12 @@ class LoginData(
 
     var selectedDatabase: DatabaseMeta? = selectedDatabase
         set(value) {
-            if (value !in savedDatabases)
-                throw IllegalStateException(
-                    "The given database intended to be selected is not present in the saved databases"
-                )
+            value?.let {
+                if (value !in savedDatabases)
+                    throw IllegalStateException(
+                        "The given database intended to be selected is not present in the saved databases"
+                    )
+            }
             field = value
         }
 
