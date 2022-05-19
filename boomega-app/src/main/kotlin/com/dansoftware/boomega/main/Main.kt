@@ -21,10 +21,12 @@
 package com.dansoftware.boomega.main
 
 import com.dansoftware.boomega.di.DIService
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.exception.UncaughtExceptionHandler
 import com.dansoftware.boomega.gui.app.BaseBoomegaApplication
 import com.dansoftware.boomega.instance.ApplicationInstanceService
 import com.dansoftware.boomega.main.bindings.RealtimeAppModule
+import com.dansoftware.boomega.process.SingletonProcessService
 
 fun main(args: Array<String>) {
     init(args)
@@ -38,6 +40,6 @@ private fun launch(args: Array<String>) {
 private fun init(args: Array<String>) {
     PropertiesSetup.setupSystemProperties()
     Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler())
-    DIService.initModules(RealtimeAppModule())
-    ApplicationInstanceService.open(args)
+    DIService.init(RealtimeAppModule())
+    get(SingletonProcessService::class).open(args)
 }
