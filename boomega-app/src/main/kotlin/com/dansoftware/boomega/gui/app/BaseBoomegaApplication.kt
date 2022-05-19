@@ -52,11 +52,13 @@ abstract class BaseBoomegaApplication : Application() {
     abstract override fun init()
 
     /**
-     * Sends a message to the preloader
+     * Sends a message to the preloader.
+     *
+     * > It's public to make it available for extension functions
      *
      * @param i18n the non-internationalized message
      */
-    protected fun notifyPreloader(@PropertyKey(resourceBundle = "com.dansoftware.boomega.i18n.Values") i18n: String) {
+    fun notifyPreloader(@PropertyKey(resourceBundle = "com.dansoftware.boomega.i18n.Values") i18n: String) {
         notifyPreloader(MessageNotification(i18n(i18n)))
     }
 
@@ -66,20 +68,24 @@ abstract class BaseBoomegaApplication : Application() {
      * @param value the progress state between 0 and 1
      */
     protected fun progress(value: Double) {
-        notifyPreloader(BoomegaPreloader.ProgressNotification(value))
+        notifyPreloader(ProgressNotification(value))
     }
 
     /**
-     * Sends hide-request to the preloader
+     * Sends hide-request to the preloader.
+     *
+     * > It's public to make it available for extension functions
      */
-    protected fun hidePreloader() {
+    fun hidePreloader() {
         notifyPreloader(HideNotification())
     }
 
     /**
-     * Sends show-request to the preloader
+     * Sends show-request to the preloader.
+     *
+     * > It's public to make it available for extension functions
      */
-    protected fun showPreloader() {
+    fun showPreloader() {
         notifyPreloader(ShowNotification())
     }
 

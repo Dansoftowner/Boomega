@@ -40,7 +40,6 @@ class LanguageSegmentView(private val preferences: com.dansoftware.boomega.confi
         selectionModel.selectedItemProperty().addListener { _, oldItem, newItem ->
             newItem?.let {
                 preferences.editor().put(LOCALE, it.locale)
-                Locale.setDefault(it.locale)
             } ?: selectionModel.select(oldItem) //we don't allow the user to choose no items
         }
         fillListView()

@@ -23,33 +23,16 @@ import com.dansoftware.boomega.database.api.DatabaseMeta
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.dbmanager.DatabaseTracker
-import com.dansoftware.boomega.gui.firsttime.FirstTimeActivity
-import com.dansoftware.boomega.gui.keybinding.KeyBindings
 import com.dansoftware.boomega.gui.launch.LauncherMode
 import com.dansoftware.boomega.gui.launch.activityLauncher
-import com.dansoftware.boomega.gui.preloader.BoomegaPreloader
-import com.dansoftware.boomega.gui.preloader.BoomegaPreloader.MessageNotification.Priority
 import com.dansoftware.boomega.gui.theme.Theme
-import com.dansoftware.boomega.gui.theme.config.THEME
 import com.dansoftware.boomega.gui.updatedialog.UpdateActivity
-import com.dansoftware.boomega.gui.window.BaseWindow
-import com.dansoftware.boomega.i18n.LOCALE
-import com.dansoftware.boomega.i18n.api.I18N
-import com.dansoftware.boomega.i18n.api.LanguagePack
 import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.main.parseArguments
 import com.dansoftware.boomega.plugin.api.PluginService
-import com.dansoftware.boomega.update.LAST_UPDATE_SEARCH
 import com.dansoftware.boomega.update.Release
-import com.dansoftware.boomega.update.SEARCH_UPDATES
-import com.dansoftware.boomega.update.UpdateSearcher
-import com.dansoftware.boomega.util.concurrent.notify
-import com.dansoftware.boomega.util.concurrent.wait
-import javafx.application.Platform
-import javafx.util.Duration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 import java.util.*
 
 /**
@@ -65,9 +48,10 @@ open class BoomegaApp : BaseBoomegaApplication() {
     private val postLaunchQueue: Queue<(context: Context, launchedDatabase: DatabaseMeta?) -> Unit> = LinkedList()
 
     /**
-     * Queues the given action to be executed after the application launches successfully
+     * Queues the given action to be executed after the application launches successfully.
+     * > It's public to make it available for extension functions.
      */
-    protected fun postLaunch(action: (context: Context, launchedDatabase: DatabaseMeta?) -> Unit) {
+    fun postLaunch(action: (context: Context, launchedDatabase: DatabaseMeta?) -> Unit) {
         postLaunchQueue.offer(action)
     }
 
@@ -82,9 +66,8 @@ open class BoomegaApp : BaseBoomegaApplication() {
         readConfigurations()
         progress(0.6)
 
-        if (showFirstTimeActivity().not())
-            applyBaseConfigurations()
-        applyAdditionalConfigurations()
+        showSetupWizard()
+        applyConfigurations()
         progress(0.8)
 
         logger.debug("Theme is: {}", Theme.default)
@@ -106,28 +89,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
 
         logger.info("Closing down plugin service")
         get(PluginService::class).close()
-    }
-
-    private fun handleApplicationArgument() {
-        // Showing message on the preloader about the launched database
-        launchedDatabase?.let {
-            notifyPreloader(
-                BoomegaPreloader.MessageNotification(
-                    message = i18n("preloader.file.open", it.name),
-                    priority = Priority.HIGH
-                )
-            )
-        }
-
-        // Showing a notification after the application starts about the launched database
-        postLaunch { context, launched ->
-            launched?.let {
-                context.showInformationNotification(
-                    title = i18n("database.file.launched", launched.name),
-                    message = null
-                )
-            }
-        }
     }
 
     private fun readConfigurations(): Preferences {
@@ -152,98 +113,6 @@ open class BoomegaApp : BaseBoomegaApplication() {
                 )
             }
             Preferences.empty()
-        }
-    }
-
-    /**
-     * Reads some configurations from the [Preferences] and applies them.
-     * It should be only invoked if the [FirstTimeActivity] was not shown.
-     */
-    private fun applyBaseConfigurations() {
-        val preferences = get(Preferences::class)
-        notifyPreloader("preloader.lang")
-        I18N.setLocale(preferences[LOCALE])
-        notifyPreloader("preloader.theme")
-        Theme.default = preferences[THEME]
-    }
-
-    /**
-     * Applies some configurations should be applied even if no [FirstTimeActivity] was shown.
-     */
-    private fun applyAdditionalConfigurations() {
-        val preferences = get(Preferences::class)
-        fun applyWindowsOpacity() {
-            val opacity = preferences[BaseWindow.GLOBAL_OPACITY_CONFIG_KEY]
-            logger.debug("Global window opacity read: {}", opacity)
-            BaseWindow.globalOpacity.set(opacity)
-        }
-        applyWindowsOpacity()
-        KeyBindings.loadFrom(preferences)
-    }
-
-    /**
-     * Searches for updates if necessary
-     */
-    private fun searchForUpdates(): Release? {
-        val preferences = get(Preferences::class)
-        return when {
-            preferences[SEARCH_UPDATES] -> {
-                notifyPreloader("preloader.update.search")
-                val updateSearcher = get(UpdateSearcher::class)
-                preferences.editor[LAST_UPDATE_SEARCH] = LocalDateTime.now()
-                updateSearcher.trySearch { e -> logger.error("Couldn't search for updates", e) }
-            }
-            else -> null
-        }
-    }
-
-    /**
-     * Loads plugins into the memory
-     */
-    private fun loadPlugins() {
-        notifyPreloader("preloader.plugins.load")
-
-        val pluginService = get(PluginService::class)
-        pluginService.load()
-
-        val pluginFileCount = pluginService.pluginFileCount
-        if (pluginFileCount > 0)
-            postLaunch { context, _ ->
-                context.showInformationNotification(
-                    title = i18n("plugins.read.count.title", pluginFileCount),
-                    message = null,
-                    Duration.minutes(1.0)
-                )
-            }
-
-        logger.info("Plugins loaded successfully!")
-    }
-
-    /**
-     * Shows the [FirstTimeActivity] if needed and hides/resumes the Preloader when necessary.
-     *
-     * @return `true` if the first time dialog was shown; `false` otherwise
-     */
-    private fun showFirstTimeActivity(): Boolean {
-        val lock = Any()
-        return synchronized(lock) {
-            when {
-                FirstTimeActivity.isNeeded(get(Preferences::class)) -> {
-                    hidePreloader()
-                    logger.debug("First time dialog is needed")
-                    Platform.runLater {
-                        synchronized(lock) {
-                            FirstTimeActivity(get(Preferences::class)).show()
-                            lock.notify()
-                        }
-                    }
-                    // waiting till the first time dialog completes
-                    lock.wait()
-                    showPreloader()
-                    true
-                }
-                else -> false
-            }
         }
     }
 
