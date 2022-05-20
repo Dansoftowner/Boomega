@@ -78,6 +78,7 @@ dependencies {
 
     // Common utilities
     implementation commons_collections
+    implementation gson
 
     implementation(controlsfx) { exclude group: 'org.openjfx' }
     implementation junique

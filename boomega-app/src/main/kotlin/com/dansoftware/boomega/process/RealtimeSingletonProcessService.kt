@@ -21,19 +21,23 @@ package com.dansoftware.boomega.process
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.di.DIService.get
+import com.google.gson.Gson
 import javax.inject.Singleton
 import kotlin.system.exitProcess
 
 @Singleton
 class RealtimeSingletonProcessService : SocketBasedSingletonProcessService() {
+
     override val port: Int get() = get(Preferences::class)[PORT_KEY]
 
+    private val gson by lazy(::Gson)
+
     override fun serializeArguments(args: Array<String>): String {
-        return args.joinToString(separator = "|")
+        return gson.toJson(args)
     }
 
     override fun deserializeMessage(message: String): Array<String> {
-        return message.split("|").toTypedArray()
+        return gson.fromJson(message, Array<String>::class.java)
     }
 
     override fun persistPort(port: Int) {

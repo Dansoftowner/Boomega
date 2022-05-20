@@ -84,8 +84,10 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
 
     override fun open(args: Array<String>) {
         try {
+            val port = this.port // local cache
             val server = ServerSocket(port).also { this.server = it }
-            persistPort(server.localPort)
+            if (port == 0) // the port was detected dynamically
+                persistPort(server.localPort)
             logger.debug("Created server-socket")
             listeningThread { startListeningProcedure(server) }.start()
             Runtime.getRuntime().addShutdownHook(Thread(::release))
