@@ -25,27 +25,58 @@ import java.net.ServerSocket
 import java.net.Socket
 import java.nio.charset.Charset
 
+/**
+ * A socket based [SingletonProcessService] prevents multiple application instances by
+ * opening a socket for this purpose, and listening to new requests.
+ */
 abstract class SocketBasedSingletonProcessService : SingletonProcessService {
 
     @Volatile
     private var server: ServerSocket? = null
 
+    /**
+     * The port should the service run on.
+     * - Should be `0` if there is need to search an open port.
+     * - Or it should be the port persisted earlier (see [persistPort])
+     */
     protected abstract val port: Int
+
+    /**
+     * The charset the sockets should use for communication.
+     */
     protected open val charset: Charset = charset("UTF-8")
 
     /**
-     *
+     * Should persist the port used for running the service on.
+     * It only has a role if the port is determined dynamically.
      */
     protected abstract fun persistPort(port: Int)
 
+    /**
+     * Called when a new process notifies the already running application.
+     *
+     * @param args the application arguments the external process received
+     */
     protected abstract fun handleRequest(args: Array<String>)
 
-    protected abstract fun serializeArguments(args: Array<String>): String
-
-    protected abstract fun deserializeMessage(message: String): Array<String>
-
+    /**
+     * Defines how to terminate the current process if there is an already running application.
+     */
     protected abstract fun terminate()
 
+    /**
+     * Serializes the application arguments to be sent to the already running application process.
+     */
+    protected abstract fun serializeArguments(args: Array<String>): String
+
+    /**
+     * Deserializes the serialized message (application arguments) received from an external process.
+     */
+    protected abstract fun deserializeMessage(message: String): Array<String>
+
+    /**
+     * Creates the thread object that should run the listening procedure in the background.
+     */
     protected open fun listeningThread(runnable: Runnable) = Thread(runnable).apply {
         name = "SingletonProcessService-Thread"
         isDaemon = true
@@ -73,6 +104,9 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
         server = null
     }
 
+    /**
+     * Starts the listening procedure, but not on a background thread (so it has to be wrapped).
+     */
     private fun startListeningProcedure(server: ServerSocket) {
         while (true) {
             try {
@@ -92,6 +126,9 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
         logger.debug("Listening procedure terminates.")
     }
 
+    /**
+     * Notifies the already running process and sends the arguments to it.
+     */
     private fun notifyRunningProcess(args: Array<String>) {
         val client = Socket("localhost", port)
         client.getOutputStream().bufferedWriter(charset).use {
