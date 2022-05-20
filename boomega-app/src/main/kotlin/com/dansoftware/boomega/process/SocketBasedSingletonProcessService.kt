@@ -27,50 +27,42 @@ import java.nio.charset.Charset
 
 abstract class SocketBasedSingletonProcessService : SingletonProcessService {
 
+    @Volatile
     private var server: ServerSocket? = null
 
-    abstract val port: Int
-    open val charset: Charset = charset("UTF-8")
+    protected abstract val port: Int
+    protected open val charset: Charset = charset("UTF-8")
 
-    abstract fun persistPort(port: Int)
+    /**
+     *
+     */
+    protected abstract fun persistPort(port: Int)
 
-    abstract fun handleRequest(args: Array<String>)
+    protected abstract fun handleRequest(args: Array<String>)
 
-    abstract fun serializeArguments(args: Array<String>): String
+    protected abstract fun serializeArguments(args: Array<String>): String
 
-    abstract fun deserializeMessage(message: String): Array<String>
+    protected abstract fun deserializeMessage(message: String): Array<String>
 
-    abstract fun terminate()
+    protected abstract fun terminate()
 
-    open fun listeningThread(runnable: Runnable) = Thread(runnable).apply {
+    protected open fun listeningThread(runnable: Runnable) = Thread(runnable).apply {
         name = "SingletonProcessService-Thread"
         isDaemon = true
     }
 
     override fun open(args: Array<String>) {
         try {
-            server = ServerSocket(port)
-            persistPort(server!!.localPort)
+            val server = ServerSocket(port).also { this.server = it }
+            persistPort(server.localPort)
             logger.debug("Created server-socket")
-            listeningThread {
-                while (true) {
-                    logger.debug("Listening to requests...")
-                    val connected: Socket = server!!.accept()
-
-                    logger.debug("Socket connected, handling request...")
-                    connected.getInputStream().bufferedReader(charset).use {
-                        handleRequest(deserializeMessage(it.readText()))
-                    }
-                }
-            }.start()
+            listeningThread { startListeningProcedure(server) }.start()
+            Runtime.getRuntime().addShutdownHook(Thread(::release))
         } catch (e: IOException) {
             logger.debug("Couldn't create server-socket", e)
             logger.debug("Assuming an application instance is already running")
             logger.debug("Sending arguments to the running instance...")
-            val client = Socket("localhost", port)
-            client.getOutputStream().bufferedWriter(charset).use {
-                it.write(serializeArguments(args))
-            }
+            notifyRunningProcess(args)
             terminate()
         }
     }
@@ -79,6 +71,32 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
         logger.debug("Closing server-socket...")
         server?.close()
         server = null
+    }
+
+    private fun startListeningProcedure(server: ServerSocket) {
+        while (true) {
+            try {
+                logger.debug("Listening to requests...")
+                val connected: Socket = server.accept()
+
+                logger.debug("Socket connected, handling request...")
+                connected.getInputStream().bufferedReader(charset).use {
+                    handleRequest(deserializeMessage(it.readText()))
+                }
+            } catch (e: IOException) {
+                if (server.isClosed)
+                    break
+                logger.error("Couldn't accept socket-request", e)
+            }
+        }
+        logger.debug("Listening procedure terminates.")
+    }
+
+    private fun notifyRunningProcess(args: Array<String>) {
+        val client = Socket("localhost", port)
+        client.getOutputStream().bufferedWriter(charset).use {
+            it.write(serializeArguments(args))
+        }
     }
 
     companion object {

@@ -18,8 +18,10 @@
 
 package com.dansoftware.boomega.main
 
+import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.app.BoomegaApp
 import com.dansoftware.boomega.instance.ApplicationInstanceService
+import com.dansoftware.boomega.process.SingletonProcessService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
@@ -34,7 +36,7 @@ class RealtimeApp : BoomegaApp() {
         super.stop()
 
         logger.info("Shutting down application instance service")
-        ApplicationInstanceService.release()
+        get(SingletonProcessService::class).release()
 
         //We wait 5 seconds for the background processes to terminate, then we shut down explicitly the application
         //ExploitativeExecutor.INSTANCE.awaitTermination(1500, TimeUnit.MILLISECONDS);

@@ -21,8 +21,10 @@ package com.dansoftware.boomega.process
 import com.dansoftware.boomega.config.PreferenceKey
 import com.dansoftware.boomega.config.Preferences
 import com.dansoftware.boomega.di.DIService.get
+import javax.inject.Singleton
 import kotlin.system.exitProcess
 
+@Singleton
 class RealtimeSingletonProcessService : SocketBasedSingletonProcessService() {
     override val port: Int get() = get(Preferences::class)[PORT_KEY]
 

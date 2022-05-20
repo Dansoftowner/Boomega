@@ -20,8 +20,28 @@ package com.dansoftware.boomega.process
 
 import com.google.inject.ImplementedBy
 
+/**
+ * A [SingletonProcessService] is responsible for preventing multiple application processes.
+ */
 @ImplementedBy(RealtimeSingletonProcessService::class)
 interface SingletonProcessService {
+
+    /**
+     * Opens the singleton-process service. Normally, it consists of these steps:
+     * - Deciding the application is already running or not
+     * - If yes, somehow sending the arguments to the already running process and terminating the current process
+     *
+     * > Should be called when the application starts running, as early as possible.
+     *
+     * @param args the application arguments received
+     */
     fun open(args: Array<String>)
+
+    /**
+     * Closes the singleton-process service.
+     * It releases possible resources/background working threads.
+     *
+     * > Should be called before the application terminates.
+     */
     fun release()
 }
