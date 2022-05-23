@@ -18,17 +18,24 @@
 
 package com.dansoftware.boomega.main.bindings
 
-import com.google.inject.Module
-import com.google.inject.util.Modules
+import com.dansoftware.boomega.process.RealtimeSingletonProcessService
+import com.dansoftware.boomega.process.SingletonProcessService
+import com.dansoftware.boomega.util.userDirectoryPath
+import com.google.inject.AbstractModule
+import com.google.inject.Provides
+import java.nio.file.Path
+import java.nio.file.Paths
+import javax.inject.Named
 
-/**
- * The default (real-time) DI modules combined.
- */
-class RealtimeAppModule : Module by Modules.combine(
-    SingletonProcessServiceModule(),
-    PreferencesModule(),
-    UpdateModule(),
-    PluginModule(),
-    ConcurrencyModule(),
-    ApplicationRestartPolicyModule()
-)
+class SingletonProcessServiceModule : AbstractModule() {
+
+    override fun configure() {
+        bind(SingletonProcessService::class.java).to(RealtimeSingletonProcessService::class.java)
+    }
+
+    @Provides
+    @Named("portFile")
+    private fun providePortFile(): Path {
+        return Paths.get(userDirectoryPath, ".libraryapp2020", "port.prt")
+    }
+}

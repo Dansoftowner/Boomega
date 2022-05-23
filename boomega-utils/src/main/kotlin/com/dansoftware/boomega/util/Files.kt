@@ -27,7 +27,9 @@ import org.apache.commons.io.FileUtils
 import java.awt.Desktop
 import java.io.File
 import java.net.URL
+import java.nio.channels.FileLock
 import java.nio.file.InvalidPathException
+import java.nio.file.Path
 import java.util.concurrent.ExecutorService
 import java.awt.Desktop.getDesktop as desktop
 import java.lang.Runtime.getRuntime as runtime

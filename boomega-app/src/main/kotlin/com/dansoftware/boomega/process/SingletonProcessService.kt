@@ -18,12 +18,9 @@
 
 package com.dansoftware.boomega.process
 
-import com.google.inject.ImplementedBy
-
 /**
  * A [SingletonProcessService] is responsible for preventing multiple application processes.
  */
-@ImplementedBy(RealtimeSingletonProcessService::class)
 interface SingletonProcessService {
 
     /**

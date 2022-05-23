@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.process
 
+import org.jetbrains.annotations.MustBeInvokedByOverriders
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.IOException
@@ -100,6 +101,7 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
         }
     }
 
+    @MustBeInvokedByOverriders
     override fun release() {
         logger.debug("Closing server-socket...")
         server?.close()
@@ -116,9 +118,7 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
                 val connected: Socket = server.accept()
 
                 logger.debug("Socket connected, handling request...")
-                connected.getInputStream().bufferedReader(charset).use {
-                    handleRequest(deserializeMessage(it.readText()))
-                }
+                handleRequest(deserializeMessage(connected.readMessage()))
             } catch (e: IOException) {
                 if (server.isClosed)
                     break
@@ -133,9 +133,23 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
      */
     private fun notifyRunningProcess(args: Array<String>) {
         val client = Socket("localhost", port)
-        client.getOutputStream().bufferedWriter(charset).use {
-            it.write(serializeArguments(args))
+        client.sendMessage(serializeArguments(args))
+    }
+
+    /**
+     * Sends the string message to the socket receiver
+     */
+    private fun Socket.sendMessage(msg: String) {
+        getOutputStream().bufferedWriter(charset).use {
+            it.write(msg)
         }
+    }
+
+    /**
+     * Reads the string message the socket sent
+     */
+    private fun Socket.readMessage(): String {
+        return getInputStream().bufferedReader(charset).use { it.readText() }
     }
 
     companion object {

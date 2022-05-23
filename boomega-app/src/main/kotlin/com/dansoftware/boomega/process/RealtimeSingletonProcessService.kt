@@ -18,19 +18,45 @@
 
 package com.dansoftware.boomega.process
 
-import com.dansoftware.boomega.config.PreferenceKey
-import com.dansoftware.boomega.config.Preferences
-import com.dansoftware.boomega.di.DIService.get
+import com.dansoftware.boomega.util.isLocked
 import com.google.gson.Gson
+import java.io.File
+import java.io.IOException
+import java.io.RandomAccessFile
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
+import java.nio.channels.FileLock
+import java.nio.file.Files
+import java.nio.file.Path
+import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.system.exitProcess
 
 @Singleton
-class RealtimeSingletonProcessService : SocketBasedSingletonProcessService() {
-
-    override val port: Int get() = get(Preferences::class)[PORT_KEY]
+class RealtimeSingletonProcessService @Inject constructor(
+    @Named("portFile") private val portFile: Path
+) : SocketBasedSingletonProcessService() {
 
     private val gson by lazy(::Gson)
+
+    private val randomAccessFile by lazy { RandomAccessFile(portFile.toFile(), "rw") }
+    private val portFileChannel: FileChannel by lazy { randomAccessFile.channel }
+    private var portFileLock: FileLock? = null
+
+    override val port: Int
+        get() {
+            val foundPort: Int = try {
+                if (isPortFileLocked()) Files.readString(portFile).toInt() else 0
+            } catch (e: java.io.IOException) {
+                0
+            }
+            return foundPort.also { if (it == 0) lockPortFile() }
+        }
+
+    init {
+        createPortFileIfNotExists()
+    }
 
     override fun serializeArguments(args: Array<String>): String {
         return gson.toJson(args)
@@ -41,7 +67,8 @@ class RealtimeSingletonProcessService : SocketBasedSingletonProcessService() {
     }
 
     override fun persistPort(port: Int) {
-        get(Preferences::class).editor.put(PORT_KEY, port).tryCommit()
+        portFileChannel.write(ByteBuffer.wrap(port.toString().toByteArray()))
+        portFileChannel.force(false)
     }
 
     override fun handleRequest(args: Array<String>) {
@@ -52,8 +79,29 @@ class RealtimeSingletonProcessService : SocketBasedSingletonProcessService() {
         exitProcess(0)
     }
 
-    companion object {
-        private val PORT_KEY = PreferenceKey("singletonProcessServerPort", Int::class.java) { 0 }
+    override fun release() {
+        super.release()
+        portFileChannel?.close()
+        portFileLock?.release()
     }
 
+    private fun createPortFileIfNotExists() {
+        portFile.toFile().apply {
+            parentFile.mkdirs()
+            createNewFile()
+        }
+    }
+
+    private fun lockPortFile() {
+        portFileLock = portFileChannel.tryLock()
+    }
+
+    private fun isPortFileLocked(): Boolean {
+        return try {
+            portFileChannel.write(ByteBuffer.wrap("0".toByteArray()))
+            false
+        } catch (e: IOException) {
+            true
+        }
+    }
 }
