@@ -76,6 +76,11 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
     protected abstract fun deserializeMessage(message: String): Array<String>
 
     /**
+     * Executed when the given [port] is used by another application
+     */
+    protected abstract fun onPortWasUsedByAnotherApp()
+
+    /**
      * Creates the thread object that should run the listening procedure in the background.
      */
     protected open fun listeningThread(runnable: Runnable) = Thread(runnable).apply {
@@ -96,16 +101,27 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
             logger.debug("Couldn't create server-socket", e)
             logger.debug("Assuming an application instance is already running")
             logger.debug("Sending arguments to the running instance...")
-            notifyRunningProcess(args)
+            if (!notifyRunningProcess(args)) {
+                onPortWasUsedByAnotherApp()
+                open(args)
+                return
+            }
             terminate()
         }
     }
 
+
+    final override fun release() {
+        release(true)
+    }
+
     @MustBeInvokedByOverriders
-    override fun release() {
-        logger.debug("Closing server-socket...")
-        server?.close()
-        server = null
+    open fun release(value: Boolean) { // TODO: more appropriate name
+        if (value) {
+            logger.debug("Closing server-socket...")
+            server?.close()
+            server = null
+        }
     }
 
     /**
@@ -119,6 +135,7 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
 
                 logger.debug("Socket connected, handling request...")
                 handleRequest(deserializeMessage(connected.readMessage()))
+                connected.sendMessage(BOOMEGA_REPLY_MSG)
             } catch (e: IOException) {
                 if (server.isClosed)
                     break
@@ -131,9 +148,10 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
     /**
      * Notifies the already running process and sends the arguments to it.
      */
-    private fun notifyRunningProcess(args: Array<String>) {
+    private fun notifyRunningProcess(args: Array<String>): Boolean {
         val client = Socket("localhost", port)
         client.sendMessage(serializeArguments(args))
+        return client.readMessage() == BOOMEGA_REPLY_MSG
     }
 
     /**
@@ -154,5 +172,7 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(SingletonProcessService::class.java)
+
+        private const val BOOMEGA_REPLY_MSG = "BOOMEGA_REPLY_MESSAGE"
     }
 }
