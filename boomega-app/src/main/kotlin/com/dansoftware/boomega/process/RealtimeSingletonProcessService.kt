@@ -37,7 +37,8 @@ class RealtimeSingletonProcessService @Inject constructor(
 
     private var shouldReadPortFile: Boolean = true
 
-    override val port: Int get() = if (shouldReadPortFile && Files.exists(portFile)) Files.readString(portFile).toInt() else 0
+    override val port: Int
+        get() = if (shouldReadPortFile && Files.exists(portFile)) Files.readString(portFile).toIntOrNull() ?: 0 else 0
 
     init {
         createPortFileIfNotExists()
@@ -48,7 +49,11 @@ class RealtimeSingletonProcessService @Inject constructor(
     }
 
     override fun deserializeMessage(message: String): Array<String> {
-        return gson.fromJson(message, Array<String>::class.java)
+        return try {
+            gson.fromJson(message, Array<String>::class.java) ?: throw RuntimeException()
+        } catch (e: Exception) {
+            emptyArray()
+        }
     }
 
     override fun onPortWasUsedByAnotherApp() {
