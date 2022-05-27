@@ -35,10 +35,22 @@ class RealtimeSingletonProcessService @Inject constructor(
 
     private val gson by lazy(::Gson)
 
+    /**
+     * An additional switch for controlling whether the port file should be read or not
+     */
     private var shouldReadPortFile: Boolean = true
 
     override val port: Int
-        get() = if (shouldReadPortFile && Files.exists(portFile)) Files.readString(portFile).toIntOrNull() ?: 0 else 0
+        get() {
+            // if port file contained a wrong port number, but it couldn't be deleted
+            if (shouldReadPortFile.not())
+                return ZERO
+
+            if (Files.exists(portFile))
+                return Files.readString(portFile).toIntOrNull() ?: ZERO
+
+            return ZERO
+        }
 
     init {
         createPortFileIfNotExists()
@@ -56,7 +68,8 @@ class RealtimeSingletonProcessService @Inject constructor(
         }
     }
 
-    override fun onPortWasUsedByAnotherApp() {
+    override fun onPortWasUsedByAnotherApp(port: Int) {
+        logger.debug("The port '{}' is used by a non-Boomega process", port)
         // the file contained a port number used by another app
         deletePortFile {
             logger.debug("Couldn't delete port file, singleton process mechanism failed!", it)
@@ -72,13 +85,10 @@ class RealtimeSingletonProcessService @Inject constructor(
         ActivityLauncherImpl(args).launch()
     }
 
-    override fun terminate() {
-        exitProcess(0)
-    }
-
-    override fun release(value: Boolean) {
-        super.release()
-        if (value) deletePortFile { logger.debug("Port file couldn't be deleted!", it) }
+    override fun release(mainProcess: Boolean) {
+        super.release(mainProcess)
+        if (mainProcess) deletePortFile { logger.debug("Port file couldn't be deleted!", it) }
+        else exitProcess(0)
     }
 
     private fun createPortFileIfNotExists() {
@@ -98,5 +108,7 @@ class RealtimeSingletonProcessService @Inject constructor(
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(RealtimeSingletonProcessService::class.java)
+
+        private const val ZERO = 0
     }
 }
