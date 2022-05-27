@@ -35,6 +35,10 @@ import java.util.Set;
 import static com.dansoftware.boomega.di.DIService.get;
 import static com.dansoftware.boomega.gui.login.config.GetLoginDataConfigKt.LOGIN_DATA;
 
+/**
+ * Activity launcher used for launching the right window when the user requested it by running a
+ * redundant process.
+ */
 class ActivityLauncherImpl extends ActivityLauncher {
 
     private final LoginData loginData;

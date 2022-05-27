@@ -47,7 +47,6 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven { url "https://raw.githubusercontent.com/terjedahl/junique/master/maven2" } // repository for JUnique
         maven { url "https://sandec.jfrog.io/artifactory/repo" } // repository for MDFX
     }
 
@@ -110,7 +109,6 @@ subprojects {
         guice = 'com.google.inject:guice:5.1.0'
         gson = 'com.google.code.gson:gson:2.9.0'
         caffeine = 'com.github.ben-manes.caffeine:caffeine:3.0.6'
-        junique = 'it.sauronsoftware:junique:1.0.4'
         oshi = 'com.github.oshi:oshi-core:6.1.5'
         juser_directories = 'com.github.Dansoftowner:jUserDirectories:1.0'
 

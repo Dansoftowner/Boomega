@@ -36,6 +36,6 @@ class SingletonProcessServiceModule : AbstractModule() {
     @Provides
     @Named("portFile")
     private fun providePortFile(): Path {
-        return Paths.get(userDirectoryPath, ".libraryapp2020", "port.prt")
+        return Paths.get(userDirectoryPath, ".libraryapp2020", ".port")
     }
 }

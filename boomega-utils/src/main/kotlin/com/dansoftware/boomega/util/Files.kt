@@ -27,7 +27,7 @@ import org.apache.commons.io.FileUtils
 import java.awt.Desktop
 import java.io.File
 import java.net.URL
-import java.nio.channels.FileLock
+import java.nio.file.Files
 import java.nio.file.InvalidPathException
 import java.nio.file.Path
 import java.util.concurrent.ExecutorService
@@ -195,3 +195,16 @@ fun byteCountToDisplaySize(size: Long): String {
 fun Array<File>?.toURLS(): Array<URL> = this?.let {
     Array(size) { this[it].toURI().toURL() }
 } ?: emptyArray()
+
+/**
+ * Makes the file hidden in the file-system (it has a role only on Windows).
+ */
+fun Path.hide() {
+    if (OsInfo.isWindows)
+        Files.setAttribute(this, "dos:hidden", true)
+}
+
+/**
+ * @see Path.hide
+ */
+fun File.hide() = toPath().hide()

@@ -18,6 +18,7 @@
 
 package com.dansoftware.boomega.process
 
+import com.dansoftware.boomega.util.hide
 import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -95,6 +96,7 @@ class RealtimeSingletonProcessService @Inject constructor(
         portFile.toFile().apply {
             parentFile.mkdirs()
             createNewFile()
+            hide() // make the file hidden on Windows
         }
     }
 
