@@ -137,8 +137,11 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
      */
     private fun notifyRunningProcess(args: Array<String>): Boolean {
         return Socket("localhost", port).use {
-            it.sendMessage(serializeArguments(args))
-            it.readMessage() == BOOMEGA_REPLY_MSG
+            val writer = (it.getOutputStream().bufferedWriter(charset))
+            val reader = it.getInputStream().bufferedReader(charset)
+
+            writer.use { w -> w.write(serializeArguments(args)) }
+            reader.use { r -> r.readText() } == BOOMEGA_REPLY_MSG
 
         }
     }
