@@ -57,6 +57,7 @@ javafx {
             'javafx.base',
             'javafx.graphics',
             'javafx.controls',
+            'javafx.web'
     ]
 }
 

@@ -18,25 +18,24 @@
 
 package com.dansoftware.boomega.gui.google.details
 
-import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
 import com.dansoftware.boomega.gui.imgviewer.ImageViewerWindow
-import com.dansoftware.boomega.gui.util.*
+import com.dansoftware.boomega.gui.util.SystemBrowser
+import com.dansoftware.boomega.gui.util.action
+import com.dansoftware.boomega.gui.util.icon
+import com.dansoftware.boomega.gui.util.styleClass
 import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.rest.google.books.Volume
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.pnikosis.html2markdown.HTML2Md
-import com.sandec.mdfx.MarkdownView
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
-import javafx.concurrent.Task
 import javafx.geometry.NodeOrientation
 import javafx.geometry.Side
 import javafx.scene.Cursor
@@ -50,7 +49,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.TimeUnit
 
 class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
@@ -69,11 +67,6 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
             .expireAfterWrite(1, TimeUnit.MINUTES)
             .build()
 
-    private val descriptionCache: Cache<Volume, String> =
-        Caffeine.newBuilder()
-            .expireAfterWrite(1, TimeUnit.MINUTES)
-            .build()
-
     init {
         VBox.setVgrow(this, Priority.ALWAYS)
         styleClass.add("google-book-details-pane")
@@ -88,7 +81,7 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
 
     private fun handleNewVolume(volume: Volume?) {
         retrieveThumbnail(volume) { value -> thumbnail.set(value) }
-        retrieveDescription(volume) { value -> description.set(value) }
+        description.set(volume?.volumeInfo?.description)
     }
 
     private fun retrieveThumbnail(volume: Volume?, onAvailable: (Image?) -> Unit) {
@@ -98,22 +91,6 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                 onAvailable(image)
             }
         } ?: onAvailable(null)
-    }
-
-    private fun retrieveDescription(volume: Volume?, onAvailable: (String?) -> Unit) {
-        descriptionCache.getIfPresent(volume)?.let { onAvailable(it) }
-            ?: volume?.volumeInfo?.description.let { description ->
-                get(ExecutorService::class, "cachedExecutor").submit(
-                    object : Task<String>() {
-                        override fun call(): String? = description?.let(HTML2Md::convert)
-                    }.apply {
-                        setOnSucceeded {
-                            value?.let { descriptionCache.put(volume, it) }
-                            onAvailable(value)
-                        }
-                    }
-                )
-            }
     }
 
     private fun buildUI() {
@@ -192,7 +169,11 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
 
         private fun initTabs() {
             tabs.add(Tab(i18n("google.books.details.sale"), SalePane()))
-            tabs.add(Tab(i18n("google.books.table.column.desc"), DescriptionPane()))
+            tabs.add(
+                Tab(
+                    i18n("google.books.table.column.desc"),
+                    DescriptionPane().apply { descriptionProperty().bind(description) })
+            )
             tabs.add(Tab(i18n("google.books.details.info"), VolumeInfoTable(volume)))
         }
 
@@ -210,59 +191,6 @@ class GoogleBookDetailsPane(private val context: Context) : HBox(15.0) {
                 }
 
             })
-        }
-    }
-
-    private inner class DescriptionPane : ScrollPane() {
-        private val mdfxNode = object : MarkdownView() {
-            init {
-                mdStringProperty().bind(description)
-                maxWidthProperty().bind(this@GoogleBookDetailsPane.prefWidthProperty())
-                buildContextMenu()
-            }
-
-            private fun buildContextMenu() {
-                contextMenu = ContextMenu(
-                    MenuItem(i18n("record.copy"), icon("copy-icon")).action {
-                        mdString.putToSystemClipboard()
-                    }
-                )
-            }
-
-            override fun setLink(node: Node, link: String, description: String?) {
-                node.cursor = Cursor.HAND
-                node.setOnMouseClicked {
-                    if (it.button == MouseButton.PRIMARY) {
-                        SystemBrowser.browse(link)
-                    }
-                }
-
-            }
-        }
-
-        init {
-            isFitToWidth = true
-            prefWidth = 500.0
-            initPlaceHolderPolicy()
-        }
-
-        private fun initPlaceHolderPolicy() {
-            placeHolder()
-            volume.addListener { _, _, newVolume ->
-                newVolume?.volumeInfo?.description?.let {
-                    normalContent()
-                } ?: placeHolder()
-            }
-        }
-
-        private fun normalContent() {
-            content = mdfxNode
-            isFitToHeight = false
-        }
-
-        private fun placeHolder() {
-            content = StackPane(Label(i18n("google.book.description.empty")))
-            isFitToHeight = true
         }
     }
 
