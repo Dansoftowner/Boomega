@@ -19,6 +19,9 @@
 package com.dansoftware.boomega.gui.google.details
 
 import com.dansoftware.boomega.i18n.api.i18n
+import com.dansoftware.boomega.rest.google.books.Volume
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.css.*
@@ -29,6 +32,9 @@ import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.web.WebView
 
+/**
+ * Responsible for displaying a Google Book's description in an easy-to-read format.
+ */
 class DescriptionPane : StackPane() {
 
     private var content: Node
@@ -37,10 +43,28 @@ class DescriptionPane : StackPane() {
             children.setAll(value)
         }
 
+    /**
+     * The observable value representing the actual HTML description text
+     */
     private val description: StringProperty = SimpleStringProperty()
 
+    /**
+     * The observable value representing the current volume that's description is displayed
+     */
+    private val volume: ObjectProperty<Volume> = object : SimpleObjectProperty<Volume>() {
+        override fun invalidated() {
+            description.set(get()?.volumeInfo?.description)
+        }
+    }
+
+    /**
+     * The observable value representing the WebView user-stylesheet configured in the current JavaFX CSS scope
+     */
     private val webViewCssProperty: StyleableStringProperty = SimpleStyleableStringProperty(webViewCSSPropertyMetaData)
 
+    /**
+     * The [WebView] responsible for displaying the HTML content
+     */
     private val webView = WebView().apply {
         pageFill = Color.TRANSPARENT
         webViewCssProperty.addListener { _, _, webViewCssResource ->
@@ -48,6 +72,9 @@ class DescriptionPane : StackPane() {
         }
     }
 
+    /**
+     * The place-holder displayed in place of the web-view
+     */
     private val placeHolder = Label(i18n("google.book.description.empty"))
 
     init {
@@ -64,7 +91,7 @@ class DescriptionPane : StackPane() {
         }
     }
 
-    fun descriptionProperty() = description
+    fun volumeProperty() = volume
 
     override fun getCssMetaData(): List<CssMetaData<out Styleable, *>> {
         return super.getCssMetaData() + listOf(webViewCSSPropertyMetaData)

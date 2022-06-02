@@ -23,7 +23,7 @@ import com.dansoftware.boomega.database.api.data.Record
 import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
-import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsPane
+import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsView
 import com.dansoftware.boomega.gui.recordview.RecordTable
 import com.dansoftware.boomega.gui.recordview.util.MultipleSelectionPlaceHolder
 import com.dansoftware.boomega.gui.util.I18NButtonTypes
@@ -66,7 +66,7 @@ class GoogleBookConnectionView(
 ) : StackPane() {
 
     private val vBox: VBox = buildVBox()
-    private val detailsPane: GoogleBookDetailsPane = GoogleBookDetailsPane(context)
+    private val detailsPane: GoogleBookDetailsView = GoogleBookDetailsView(context)
     private val volumeCache: Cache<String, Volume> = buildCache()
 
     var onRefreshed: Runnable? = null
