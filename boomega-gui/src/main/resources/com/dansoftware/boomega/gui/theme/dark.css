@@ -381,7 +381,7 @@
 }
 
 .google-book-details-pane .description-pane {
-    -web-view-css: url("embedded-web-dark.css");
+    -web-view-user-stylesheet: url("embedded-web-dark.css");
 }
 
 /*******************************************************************************

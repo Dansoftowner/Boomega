@@ -529,6 +529,10 @@
     -fx-padding: 0;
 }
 
+.google-book-details-pane .web-view {
+    -fx-page-fill: transparent;
+}
+
 /*******************************************************************************
  *                                                                             *
  *                           Google book import view                           *

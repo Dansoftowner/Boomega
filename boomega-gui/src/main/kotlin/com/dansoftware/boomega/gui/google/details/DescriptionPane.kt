@@ -20,10 +20,8 @@ package com.dansoftware.boomega.gui.google.details
 
 import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.rest.google.books.Volume
-import javafx.beans.property.ObjectProperty
-import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
+import javafx.beans.binding.Bindings
+import javafx.beans.property.*
 import javafx.css.*
 import javafx.css.converter.StringConverter
 import javafx.scene.Node
@@ -34,6 +32,11 @@ import javafx.scene.web.WebView
 
 /**
  * Responsible for displaying a Google Book's description in an easy-to-read format.
+ *
+ * Since it uses a [WebView] for displaying the Google Book's description, it has a
+ * CSS property called `-web-view-user-stylesheet` that allows to configure a custom
+ * `user-stylesheet` for the web-view (*to make the web-view synchronizable with the
+ * UI-theme*).
  */
 class DescriptionPane : StackPane() {
 
@@ -44,32 +47,27 @@ class DescriptionPane : StackPane() {
         }
 
     /**
-     * The observable value representing the actual HTML description text
-     */
-    private val description: StringProperty = SimpleStringProperty()
-
-    /**
      * The observable value representing the current volume that's description is displayed
      */
-    private val volume: ObjectProperty<Volume> = object : SimpleObjectProperty<Volume>() {
-        override fun invalidated() {
-            description.set(get()?.volumeInfo?.description)
-        }
+    private val volume: ObjectProperty<Volume> = SimpleObjectProperty()
+
+    /**
+     * The observable value representing the actual HTML description text
+     */
+    private val description: ReadOnlyStringProperty = SimpleStringProperty().apply {
+        bind(Bindings.createStringBinding({ volume.get()?.volumeInfo?.description }, volume))
     }
 
     /**
      * The observable value representing the WebView user-stylesheet configured in the current JavaFX CSS scope
      */
-    private val webViewCssProperty: StyleableStringProperty = SimpleStyleableStringProperty(webViewCSSPropertyMetaData)
+    private val webViewUserStylesheet: StyleableStringProperty = SimpleStyleableStringProperty(WEB_VIEW_USER_STYLESHEET)
 
     /**
      * The [WebView] responsible for displaying the HTML content
      */
     private val webView = WebView().apply {
-        pageFill = Color.TRANSPARENT
-        webViewCssProperty.addListener { _, _, webViewCssResource ->
-            engine.userStyleSheetLocation = webViewCssResource
-        }
+        engine.userStyleSheetLocationProperty().bind(webViewUserStylesheet)
     }
 
     /**
@@ -80,32 +78,52 @@ class DescriptionPane : StackPane() {
     init {
         styleClass.add("description-pane")
         prefWidth = 500.0
-        initPlaceHolderPolicy()
-    }
-
-    private fun initPlaceHolderPolicy() {
-        description.addListener { _, _, newDesc ->
-            content = newDesc?.let {
-                webView.apply { engine.loadContent(newDesc, "text/html") }
-            } ?: placeHolder
-        }
+        description.addListener { _, _, newDesc -> updateContent(newDesc) }
     }
 
     fun volumeProperty() = volume
 
-    override fun getCssMetaData(): List<CssMetaData<out Styleable, *>> {
-        return super.getCssMetaData() + listOf(webViewCSSPropertyMetaData)
+    /**
+     * Fits the appropriate content into the description pane:
+     * - the [webView] if the description is not null
+     * - The [placeHolder] if no description is available
+     */
+    private fun updateContent(newDescription: String?) {
+        content = newDescription?.let {
+            webView.load(it)
+            webView
+        } ?: run {
+            webView.clear()
+            placeHolder
+        }
     }
 
-    companion object {
-        private val webViewCSSPropertyMetaData =
-            object : CssMetaData<DescriptionPane, String>("-web-view-css", StringConverter.getInstance()) {
+    private fun WebView.load(html: String) {
+        engine.loadContent(html, "text/html")
+    }
+
+    private fun WebView.clear() {
+        engine.loadContent(null)
+    }
+
+    override fun getCssMetaData(): List<CssMetaData<out Styleable, *>> {
+        return super.getCssMetaData() + listOf(WEB_VIEW_USER_STYLESHEET)
+    }
+
+    companion object StyleableProperties {
+
+        /**
+         * Represents the JavaFX CSS property available for the [DescriptionPane] that allows to configure the [webView]'s
+         * `user-stylesheet`.
+         */
+        private val WEB_VIEW_USER_STYLESHEET =
+            object : CssMetaData<DescriptionPane, String>("-web-view-user-stylesheet", StringConverter.getInstance()) {
                 override fun isSettable(styleable: DescriptionPane?): Boolean {
-                    return styleable?.webViewCssProperty?.isBound?.not() ?: false
+                    return styleable?.webViewUserStylesheet?.isBound?.not() ?: false
                 }
 
                 override fun getStyleableProperty(styleable: DescriptionPane?): StyleableProperty<String> {
-                    return styleable!!.webViewCssProperty
+                    return styleable!!.webViewUserStylesheet
                 }
             }
     }
