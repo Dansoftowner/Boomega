@@ -23,10 +23,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.io.PrintWriter
-import java.net.ServerSocket
-import java.net.Socket
-import java.net.SocketException
-import java.net.SocketTimeoutException
+import java.net.*
 import java.nio.charset.Charset
 
 /**
@@ -97,7 +94,8 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
     override fun open(args: Array<String>) {
         val port = this.port // local cache
         try {
-            val server = ServerSocket(port).also { this.server = it }
+            val server = ServerSocket().also { this.server = it }
+            server.bind(InetSocketAddress("localhost", port)) // accepting connections from localhost only
             if (port == 0) // the port was detected dynamically
                 persistPort(server.localPort)
             logger.debug("Created server-socket on port '{}'", server.localPort)
@@ -137,12 +135,8 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
      */
     private fun notifyRunningProcess(args: Array<String>): Boolean {
         return Socket("localhost", port).use {
-            val writer = (it.getOutputStream().bufferedWriter(charset))
-            val reader = it.getInputStream().bufferedReader(charset)
-
-            writer.use { w -> w.write(serializeArguments(args)) }
-            reader.use { r -> r.readText() } == BOOMEGA_REPLY_MSG
-
+            it.sendMessage(serializeArguments(args))
+            it.readMessage() == BOOMEGA_REPLY_MSG
         }
     }
 
@@ -151,9 +145,8 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
      */
     private fun Socket.sendMessage(msg: String) {
         try {
-            getOutputStream().bufferedWriter(charset).use {
-                it.write(msg)
-            }
+            val writer = PrintWriter(getOutputStream().bufferedWriter(charset), true)
+            writer.println(msg)
         } catch (e: SocketException) {
             logger.debug("Couldn't write to socket", e)
         }
@@ -164,7 +157,8 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
      */
     private fun Socket.readMessage(): String {
         return try {
-            getInputStream().bufferedReader(charset).readText()
+            val reader = getInputStream().bufferedReader(charset)
+            reader.readLine()
         } catch (e: SocketException) {
             logger.debug("Couldn't read client message", e)
             String()
@@ -201,8 +195,8 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
      */
     private inner class ClientConnectionHandler(private val client: Socket) : Runnable {
         override fun run() {
-            client.let/*.use*/ {
-                // client.soTimeout = this@SocketBasedSingletonProcessService.timeout
+            client.use {
+                client.soTimeout = this@SocketBasedSingletonProcessService.timeout
                 logger.debug("Socket connected, handling request...")
                 handleRequest(
                     deserializeMessage(
@@ -216,7 +210,6 @@ abstract class SocketBasedSingletonProcessService : SingletonProcessService {
                 )
                 it.sendMessage(BOOMEGA_REPLY_MSG)
             }
-
         }
     }
 }

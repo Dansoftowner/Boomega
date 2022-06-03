@@ -16,26 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dansoftware.boomega.main.bindings
+/* Styles for the embedded web-content in light mode */
 
-import com.dansoftware.boomega.process.RealtimeSingletonProcessService
-import com.dansoftware.boomega.process.SingletonProcessService
-import com.dansoftware.boomega.util.userDirectoryPath
-import com.google.inject.AbstractModule
-import com.google.inject.Provides
-import java.nio.file.Path
-import java.nio.file.Paths
-import javax.inject.Named
-
-class SingletonProcessServiceModule : AbstractModule() {
-
-    override fun configure() {
-        bind(SingletonProcessService::class.java).to(RealtimeSingletonProcessService::class.java)
-    }
-
-    @Provides
-    @Named("portFile")
-    private fun providePortFile(): Path {
-        return Paths.get(userDirectoryPath, ".libraryapp2020", ".port")
-    }
+body {
+    padding: 5px 10px 10px 10px;
+    font-family: "Jetbrains Mono";
+    text-align: justify;
 }

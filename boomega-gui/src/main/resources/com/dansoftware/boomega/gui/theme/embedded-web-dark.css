@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * This package is about preventing the application to run in multiple
- * instances and handling the arguments passed to new instances of the application.
- */
-package com.dansoftware.boomega.instance;
+/* Styles for the embedded web-content in dark mode */
+
+body {
+    padding: 5px 10px 10px 10px;
+    color: white;
+    font-family: "Jetbrains Mono";
+    text-align: justify;
+}

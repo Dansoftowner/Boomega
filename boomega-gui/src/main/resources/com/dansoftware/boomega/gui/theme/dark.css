@@ -380,6 +380,10 @@
     -fx-background-color: #252525, #252525, #252525;
 }
 
+.google-book-details-pane .description-pane {
+    -web-view-css: url("embedded-web-dark.css");
+}
+
 /*******************************************************************************
  *                                                                             *
  *                           Google book import view                           *

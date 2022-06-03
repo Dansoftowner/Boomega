@@ -18,7 +18,8 @@
 
 package com.dansoftware.boomega.main.bindings
 
-import com.dansoftware.boomega.instance.ApplicationInstanceService
+import com.dansoftware.boomega.di.DIService.get
+import com.dansoftware.boomega.process.SingletonProcessService
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
 import javafx.application.Platform
@@ -31,7 +32,7 @@ class ApplicationRestartPolicyModule : AbstractModule() {
     @Provides
     @Named("preProcessCreation")
     @Suppress("unused")
-    fun providePreProcessCreation() = Runnable { ApplicationInstanceService.release() }
+    fun providePreProcessCreation() = Runnable { get(SingletonProcessService::class).release() }
 
     @Provides
     @Named("terminationPolicy")

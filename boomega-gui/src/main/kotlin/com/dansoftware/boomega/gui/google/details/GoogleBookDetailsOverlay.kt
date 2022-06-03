@@ -25,12 +25,12 @@ import com.dansoftware.boomega.rest.google.books.Volume
 import javafx.scene.image.ImageView
 
 /**
- * Used for displaying a [GoogleBookDetailsPane] as an overlay
+ * Used for displaying a [GoogleBookDetailsView] as an overlay
  *
  * @author Daniel Gyorffy
  */
 class GoogleBookDetailsOverlay(context: Context, volume: Volume) : TitledOverlayBox(
     i18n("google.books.detail.title"),
     ImageView("/com/dansoftware/boomega/image/util/google_12px.png"),
-    GoogleBookDetailsPane(context, volume).apply { minHeight = 300.0 }
+    GoogleBookDetailsView(context, volume).apply { minHeight = 300.0 }
 )

@@ -42,7 +42,7 @@ object PropertiesSetup {
     private const val DEFAULT_DIRECTORY_PATH = "boomega.dir.default.path"
 
     private const val APP_NAME_VALUE = "Boomega"
-    private const val BOOMEGA_VERSION_VALUE = "0.8.0"
+    private const val BOOMEGA_VERSION_VALUE = "0.8.0-SNAPSHOT"
     private const val BOOMEGA_FILE_EXTENSION_VALUE = "bmdb"
     private const val BOOMEGA_DOCUMENTS_FOLDER = "BoomegaDocuments"
 

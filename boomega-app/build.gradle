@@ -57,6 +57,7 @@ javafx {
             'javafx.base',
             'javafx.graphics',
             'javafx.controls',
+            'javafx.web'
     ]
 }
 
@@ -81,7 +82,6 @@ dependencies {
     implementation gson
 
     implementation(controlsfx) { exclude group: 'org.openjfx' }
-    implementation junique
 
     //implementation from the local file system
     implementation fileTree(dir: '../external-libraries', include: '*.jar')
