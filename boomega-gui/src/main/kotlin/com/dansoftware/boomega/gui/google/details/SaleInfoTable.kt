@@ -24,6 +24,8 @@ import com.dansoftware.boomega.i18n.api.i18n
 import com.dansoftware.boomega.rest.google.books.Volume
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
+import javafx.scene.control.Label
+import javafx.scene.layout.StackPane
 
 class SaleInfoTable(volume: ObjectProperty<Volume>) : PropertyTable() {
 
@@ -34,16 +36,23 @@ class SaleInfoTable(volume: ObjectProperty<Volume>) : PropertyTable() {
     private val buyLink: StringProperty = SimpleStringProperty()
 
     init {
+        placeholder = StackPane(Label(i18n("google.books.details.notforsale")))
         volume.addListener { _, _, newVolume -> handleNewVolume(newVolume) }
         buildEntries()
     }
 
     private fun handleNewVolume(volume: Volume?) {
-        eBook.value = volume?.saleInfo?.isEbook
-        country.value = volume?.saleInfo?.country
-        listPrice.value = volume?.saleInfo?.listPrice.toString()
-        retailPrice.value = volume?.saleInfo?.retailPrice.toString()
-        buyLink.value = volume?.saleInfo?.buyLink
+        when (volume?.saleInfo?.saleability) {
+            Volume.SaleInfo.FOR_SALE -> {
+                if (items.isEmpty()) buildEntries()
+                eBook.value = volume.saleInfo?.isEbook
+                country.value = volume.saleInfo?.country
+                listPrice.value = volume.saleInfo?.listPrice.toString()
+                retailPrice.value = volume.saleInfo?.retailPrice.toString()
+                buyLink.value = volume.saleInfo?.buyLink
+            }
+            else -> items.clear()
+        }
     }
 
     private fun buildEntries() {

@@ -27,22 +27,27 @@ import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.geometry.NodeOrientation
 import javafx.geometry.Side
-import javafx.scene.Node
-import javafx.scene.control.*
+import javafx.scene.control.Skin
+import javafx.scene.control.Tab
+import javafx.scene.control.TabPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
-import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import jfxtras.styles.jmetro.JMetroStyleClass
 
+/**
+ * Displays all details of a Google Book volume.
+ */
 class GoogleBookDetailsView(private val context: Context) : HBox(15.0) {
 
+    /**
+     * The observable value representing the volume that is displayed
+     */
     private val volume: ObjectProperty<Volume> = SimpleObjectProperty()
 
     init {
         VBox.setVgrow(this, Priority.ALWAYS)
-        styleClass.add("google-book-details-pane")
-        styleClass.add(JMetroStyleClass.BACKGROUND)
+        styleClass.addAll("background", "google-book-details-pane")
         minHeight = 0.0
         buildUI()
     }
@@ -59,28 +64,32 @@ class GoogleBookDetailsView(private val context: Context) : HBox(15.0) {
     fun volumeProperty() = volume
 
     private inner class TabArea : TabPane() {
-        init {
-            styleClass.add(JMetroStyleClass.UNDERLINE_TAB_PANE)
-            setHgrow(this, Priority.ALWAYS)
-            initUI()
-            initTabs()
-            selectionModel.selectLast()
-        }
 
-        private fun initUI() {
+        // TODO: make tab initializations lazy
+
+        private val tabElements = listOf(
+            Tab(
+                i18n("google.books.details.sale"),
+                SaleInfoTable(volume)
+            ),
+            Tab(
+                i18n("google.books.table.column.desc"),
+                DescriptionPane().apply { volumeProperty().bind(volume) }
+            ),
+            Tab(
+                i18n("google.books.details.info"),
+                VolumeInfoTable(volume)
+            )
+        )
+
+        init {
+            setHgrow(this, Priority.ALWAYS)
+            styleClass.add(JMetroStyleClass.UNDERLINE_TAB_PANE)
             side = Side.BOTTOM
             tabClosingPolicy = TabClosingPolicy.UNAVAILABLE
             initOrientation()
-        }
-
-        private fun initTabs() {
-            tabs.add(Tab(i18n("google.books.details.sale"), SalePane()))
-            tabs.add(
-                Tab(
-                    i18n("google.books.table.column.desc"),
-                    DescriptionPane().apply { volumeProperty().bind(volume) })
-            )
-            tabs.add(Tab(i18n("google.books.details.info"), VolumeInfoTable(volume)))
+            tabs.addAll(tabElements)
+            selectionModel.selectLast()
         }
 
         private fun initOrientation() {
@@ -99,32 +108,4 @@ class GoogleBookDetailsView(private val context: Context) : HBox(15.0) {
             })
         }
     }
-
-    private inner class SalePane : ScrollPane() {
-
-        private var table: SaleInfoTable? = null
-            get() = field ?: SaleInfoTable(volume).also {
-                field = it
-            }
-
-        init {
-            isFitToWidth = true
-            isFitToHeight = true
-            initPlaceHolderPolicy()
-        }
-
-        private fun initPlaceHolderPolicy() {
-            content = buildNotSaleablePlaceHolder()
-            volume.addListener { _, _, volume ->
-                content = when (volume.saleInfo?.saleability) {
-                    Volume.SaleInfo.FOR_SALE -> table!!
-                    else -> buildNotSaleablePlaceHolder()
-                }
-            }
-        }
-
-        private fun buildNotSaleablePlaceHolder(): Node =
-            StackPane(Label(i18n("google.books.details.notforsale")))
-    }
-
 }
