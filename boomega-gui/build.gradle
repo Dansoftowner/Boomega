@@ -45,7 +45,6 @@ dependencies {
     implementation(nsmenufx) { exclude group: 'org.openjfx' }
     implementation(jmetro) { exclude group: 'org.openjfx' }
     implementation(mdfx) { exclude group: 'org.openjfx' }
-    implementation(gesturefx) { exclude group: 'org.openjfx' }
 
     implementation fileTree(dir: '../external-libraries', include: 'fontawesomefx-11.0.jar')
     implementation fileTree(dir: '../external-libraries', include: 'jHTML2Md.jar')

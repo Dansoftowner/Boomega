@@ -52,7 +52,7 @@ class GoogleBookDetailsView(private val context: Context) : HBox(15.0) {
     }
 
     private fun buildUI() {
-        children.add(ThumbnailArea(context))
+        children.add(ThumbnailArea(context).apply { volumeProperty().bind(volume) })
         children.add(TabArea())
     }
 

@@ -127,7 +127,6 @@ subprojects {
         animatefx = 'io.github.typhon0:AnimateFX:1.2.2'
         workbenchfx = 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
         nsmenufx = 'de.jangassen:nsmenufx:3.1.0'
-        gesturefx = 'net.kurobako:gesturefx:0.7.1'
         jmetro = 'org.jfxtras:jmetro:11.6.15'
         mdfx = 'com.sandec:mdfx:0.2.6'
         richtextfx = 'org.fxmisc.richtext:richtextfx:0.10.9'

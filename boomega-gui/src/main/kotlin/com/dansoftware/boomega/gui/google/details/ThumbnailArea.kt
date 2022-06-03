@@ -21,7 +21,6 @@ package com.dansoftware.boomega.gui.google.details
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.preview.GoogleBookPreviewTabItem
-import com.dansoftware.boomega.gui.imgviewer.ImageViewerWindow
 import com.dansoftware.boomega.gui.util.SystemBrowser
 import com.dansoftware.boomega.gui.util.action
 import com.dansoftware.boomega.gui.util.icon
@@ -33,25 +32,42 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Cursor
+import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import java.util.concurrent.TimeUnit
 
+/**
+ * Responsible for displaying a Google Book's thumbnail and providing the ability to open the [GoogleBookPreviewTabItem].
+ *
+ * It takes care of caching and loading of the images.
+ */
 class ThumbnailArea(private val context: Context) : VBox(10.0) {
 
+    /**
+     * The observable-value representing the actual thumbnail [Image]
+     */
     private val thumbnail: ObjectProperty<Image?> = SimpleObjectProperty()
+
+    /**
+     * The observable-value representing the current volume that's thumbnail is displayed
+     */
     private val volume: ObjectProperty<Volume> = object : SimpleObjectProperty<Volume>() {
         override fun invalidated() {
             retrieveThumbnail(get()) { thumbnail.set(it) }
         }
     }
 
+    /**
+     * The cache for the loaded thumbnails. The unused thumbnails will be expired after 1 minute.
+     */
     private val thumbnailCache: Cache<Volume, Image> =
         Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.MINUTES)
@@ -60,6 +76,8 @@ class ThumbnailArea(private val context: Context) : VBox(10.0) {
     init {
         buildUI()
     }
+
+    fun volumeProperty() = volume
 
     private fun buildUI() {
         children.add(Thumbnail())
@@ -79,40 +97,67 @@ class ThumbnailArea(private val context: Context) : VBox(10.0) {
         }
     }
 
+    /**
+     * Checks the cache and retrieves the thumbnail for the given volume
+     *
+     * @param volume the volume we want the thumbnail of
+     * @param onAvailable the function called when the image is available
+     */
     private fun retrieveThumbnail(volume: Volume?, onAvailable: (Image?) -> Unit) {
-        thumbnailCache.getIfPresent(volume)?.let(onAvailable) ?: volume?.volumeInfo?.imageLinks?.thumbnail?.let {
-            Image(it, true).also { image ->
+        volume?.let {
+            thumbnailCache.getIfPresent(volume)?.let(onAvailable) ?: volume.volumeInfo?.imageLinks?.thumbnail?.let {
+                val image = Image(it, true)
                 thumbnailCache.put(volume, image)
                 onAvailable(image)
             }
         } ?: onAvailable(null)
     }
 
-    private inner class Thumbnail() : StackPane() {
-        init {
-            placeholder()
-            thumbnail.addListener { _, _, newImage ->
-                newImage?.let {
-                    children.setAll(
-                        StackPane(ImageView(it).apply {
-                            cursor = Cursor.HAND
-                            setOnMouseClicked { event ->
-                                when {
-                                    event.button == MouseButton.PRIMARY && event.clickCount == 2 ->
-                                        ImageViewerWindow(
-                                            content = Image(volume.get()?.volumeInfo?.imageLinks?.getLargest()),
-                                            owner = context.contextWindow
-                                        ).show()
-                                }
-                            }
-                        })
-                    )
-                } ?: placeholder()
+    /**
+     * The area where the image is displayed
+     */
+    private inner class Thumbnail : StackPane() {
+
+        private var content: Node
+            get() = children[0]
+            set(value) {
+                children.setAll(value)
             }
+
+        /**
+         * Gives back `true` if the mouse-event represents a double-click
+         */
+        private val MouseEvent.isDoubleClick get() = button == MouseButton.PRIMARY && clickCount == 2
+
+        /**
+         * The place-holder displayed when the image is not available
+         */
+        private val placeHolder = icon("image-icon").styleClass("thumbnail-place-holder")
+
+        init {
+            content = placeHolder
+            thumbnail.addListener { _, _, newImage -> updateContent(newImage) }
         }
 
-        private fun placeholder() {
-            children.setAll(icon("image-icon").styleClass("thumbnail-place-holder"))
+        /**
+         * Places the appropriate content depending on the image is available or not (puts the [placeHolder] if needed)
+         */
+        private fun updateContent(image: Image?) {
+            content = image?.wrapToImageView() ?: placeHolder
         }
+
+        /**
+         * Wraps the image into an [ImageView]
+         */
+        private fun Image.wrapToImageView() =
+            ImageView(this).apply {
+                cursor = Cursor.HAND
+                setOnMouseClicked { event ->
+                    when {
+                        // Opening the Image in the browser for double-clicks
+                        event.isDoubleClick -> SystemBrowser.browse(volume.get()?.volumeInfo?.imageLinks?.getLargest()!!)
+                    }
+                }
+            }
     }
 }
