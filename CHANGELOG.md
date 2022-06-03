@@ -17,6 +17,7 @@
 * 💄 Look and feel updates
 * ✨ Native system info view
 * ✨ RTL language support on UI implemented
+* [#166](https://github.com/Dansoftowner/Boomega/issues/166): Allow text highlighting in Google Book Preview
 
 ### Changes
 * 💄 New application icon
