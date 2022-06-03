@@ -22,6 +22,7 @@
 ### Changes
 * 💄 New application icon
 * ✨ Login-view menu-bar
+* ➖ Removed embedded image-viewer (for Google Book thumbnails)
 * ➖ Removed embedded third-party software viewer
 * ♻️ Plugin API improvements, simplified plugin management
 
