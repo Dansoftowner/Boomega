@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:JvmName("VolumeRecordConversions")
+
 package com.dansoftware.boomega.gui.google
 
 import com.dansoftware.boomega.database.api.data.Record
@@ -24,6 +26,19 @@ import com.dansoftware.boomega.rest.google.books.Volume
 import com.dansoftware.boomega.rest.google.books.getPublishedDateObject
 import com.dansoftware.boomega.rest.google.books.isMagazine
 import java.util.*
+
+/**
+ * Retrieves and allows access for the `google.book.handle` entry.
+ *
+ * It's intended to hold a [Volume]'s id.
+ *
+ * @see Volume.id
+ */
+var ServiceConnection.googleBookHandle: String?
+    get() = this["google.book.handle"]?.toString()
+    set(value) {
+        this["google.book.handle"] = value
+    }
 
 /**
  * Converts a [Volume] to a Boomega-record.

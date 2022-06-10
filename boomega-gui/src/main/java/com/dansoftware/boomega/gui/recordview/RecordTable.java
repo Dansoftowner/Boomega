@@ -24,6 +24,7 @@ import com.dansoftware.boomega.database.api.data.ServiceConnection;
 import com.dansoftware.boomega.gui.control.BaseTable;
 import com.dansoftware.boomega.gui.control.ReadOnlyRating;
 import com.dansoftware.boomega.gui.control.TableViewPlaceHolder;
+import com.dansoftware.boomega.gui.google.VolumeRecordConversions;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.property.IntegerProperty;
@@ -388,7 +389,7 @@ public class RecordTable extends BaseTable<Record> {
                         setGraphic(null);
                     } else {
                         Optional.ofNullable(item.getServiceConnection())
-                                .map(ServiceConnection::getGoogleBookHandle)
+                                .map(VolumeRecordConversions::getGoogleBookHandle)
                                 .map(value -> StringUtils.getIfBlank(value, null))
                                 .ifPresentOrElse(
                                         value -> setGraphic(buildGoogleBooksIcon()),

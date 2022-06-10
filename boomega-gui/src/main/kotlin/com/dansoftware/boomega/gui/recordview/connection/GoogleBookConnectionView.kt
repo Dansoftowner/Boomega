@@ -24,6 +24,7 @@ import com.dansoftware.boomega.di.DIService.get
 import com.dansoftware.boomega.gui.api.Context
 import com.dansoftware.boomega.gui.databaseview.DatabaseView
 import com.dansoftware.boomega.gui.google.details.GoogleBookDetailsView
+import com.dansoftware.boomega.gui.google.googleBookHandle
 import com.dansoftware.boomega.gui.recordview.RecordTable
 import com.dansoftware.boomega.gui.recordview.util.MultipleSelectionPlaceHolder
 import com.dansoftware.boomega.gui.util.I18NButtonTypes

@@ -117,5 +117,7 @@ class JsonExporter : BaseExporter<JsonExportConfiguration>() {
                 }
             }
         }
+
+        private fun ServiceConnection.entries(): List<Pair<String, String>> = map { Pair(it.key, it.value.toString()) }
     }
 }
