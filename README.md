@@ -19,6 +19,7 @@
 * Cross-platform
 * Dark/Light theme, modern UI
 * Multiple UI languages
+* Flexible to support multiple Database Management Systems (e.g MySql)
 * Exporting to several formats like **Excel Spreadsheets**, **JSON**, etc...
 * Custom notes with **Markdown** support
 * **Google Books** synchronization
@@ -37,6 +38,8 @@
 [![Downloads](https://img.shields.io/github/downloads/DansoftOwner/Boomega/total)](https://github.com/Dansoftowner/Boomega/releases)
 [![Version](https://img.shields.io/github/v/release/Dansoftowner/Boomega?include_prereleases)](https://github.com/Dansoftowner/Boomega/releases)
 [![GitHub Release Date](https://img.shields.io/github/release-date-pre/Dansoftowner/Boomega?logo=googlecalendar&logoColor=white)](https://github.com/Dansoftowner/Boomega/releases)
+
+> Note: If you want to try the latest version, you should [build](#-build) the project yourself!
 
 <table>
 
