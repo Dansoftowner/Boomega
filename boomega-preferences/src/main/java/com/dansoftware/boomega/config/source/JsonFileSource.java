@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 /**
  * A {@link JsonFileSource} is a {@link ConfigSource} that allows to read/write configurations
@@ -48,8 +49,8 @@ public class JsonFileSource extends JsonSource {
     private final boolean created;
 
     @Inject
-    public JsonFileSource(@NotNull @Named("configFilePath") String filePath) {
-        this(new File(filePath));
+    public JsonFileSource(@NotNull @Named("configFilePath") Path file) {
+        this(file.toFile());
     }
 
     public JsonFileSource(@NotNull File file) {

@@ -20,10 +20,16 @@ package com.dansoftware.boomega.main.bindings
 
 import com.dansoftware.boomega.config.source.ConfigSource
 import com.dansoftware.boomega.config.source.JsonFileSource
+import com.dansoftware.boomega.util.hide
 import com.dansoftware.boomega.util.joinToFilePath
 import com.dansoftware.boomega.util.userDirectoryPath
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.inject.Named
 
 /**
@@ -38,5 +44,21 @@ class PreferencesModule : AbstractModule() {
     @Provides
     @Named("configFilePath")
     @Suppress("unused")
-    fun provideConfigFilePath() = joinToFilePath(userDirectoryPath, ".libraryapp2020", "bmcfg")
+    fun provideConfigFilePath(): Path = Paths.get(configDirectory.toString(), "bmcfg")
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(PreferencesModule::class.java)
+
+        private val configDirectory: Path
+            get() {
+                val path = Paths.get(userDirectoryPath, ".libraryapp2020")
+                try {
+                    if (!Files.exists(path)) Files.createDirectory(path)
+                    path.hide() // make file hidden
+                } catch (e: Exception) {
+                    logger.debug("", e)
+                }
+                return path
+            }
+    }
 }
