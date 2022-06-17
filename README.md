@@ -146,7 +146,7 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/Dansoftowner/Boomega)](https://github.com/Dansoftowner/Boomega)
 
 * The repo has two important branches:
-  * `master` - for permanent versions
+  * `master` - usually for permanent versions
   * `dev` - for developing the app further
 * The code is written in `Java` and `Kotlin` mixed.
 * The GUI toolkit used is [JavaFX](https://openjfx.io/)
